@@ -263,7 +263,6 @@ Partial Class Form1
         Me.TextBoxInputDirectory.Name = "TextBoxInputDirectory"
         Me.TextBoxInputDirectory.Size = New System.Drawing.Size(500, 22)
         Me.TextBoxInputDirectory.TabIndex = 3
-        Me.TextBoxInputDirectory.Text = "D:\Projects"
         '
         'ButtonInputDirectory
         '
