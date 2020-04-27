@@ -4,7 +4,7 @@ Robert McAnany 2020
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
 
 ## DESCRIPTION
-This tool is designed to help you find little annoying errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
+This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
 ## OPERATION
 Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process by navigating to the desired input folder, and clicking the desired search type.
