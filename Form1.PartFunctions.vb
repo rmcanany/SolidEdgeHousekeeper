@@ -352,7 +352,7 @@ Partial Class Form1
             End If
         Next
 
-        System.Threading.Thread.Sleep(1000)
+        'System.Threading.Thread.Sleep(1000)
         SEApp.DoIdle()
 
         Windows = SEDoc.Windows

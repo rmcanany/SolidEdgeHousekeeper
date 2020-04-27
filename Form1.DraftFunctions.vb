@@ -350,7 +350,7 @@ Partial Class Form1
         'Maximizes the window in the application
         If SheetWindow.WindowState <> 2 Then
             SheetWindow.WindowState = 2
-            System.Threading.Thread.Sleep(1000)
+            'System.Threading.Thread.Sleep(1000)
             SEApp.DoIdle()
         End If
 
