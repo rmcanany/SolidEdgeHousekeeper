@@ -88,6 +88,7 @@ Partial Class Form1
                 End If
             Next
         Catch ex As Exception
+            TextBoxInputDirectory.Text = Application.StartupPath
             'MsgBox("Exception" + ex.ToString)
         End Try
 
@@ -168,7 +169,6 @@ Partial Class Form1
         Names.Add("### Part")
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
-
 
         msg.Add("# Solid Edge Housekeeper")
         msg.Add("Robert McAnany 2020")

@@ -40,8 +40,7 @@ Partial Class Form1
             End If
         End If
 
-        TextBoxStatus.Text = "Found " + FoundFilesArray.Count.ToString + " file(s)"
-
+        'TextBoxStatus.Text = "Found " + FoundFilesArray.Count.ToString + " file(s)"
         Return FoundFilesList
     End Function
 
@@ -124,13 +123,15 @@ Partial Class Form1
 
         ListBoxFiles.Items.Clear()
 
-        FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+        If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     GetActiveFileExtensions())
 
-        For Each FoundFile In FoundFiles
-            ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
-        Next
+            For Each FoundFile In FoundFiles
+                ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+            Next
+        End If
 
     End Sub
 
