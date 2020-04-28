@@ -6,6 +6,11 @@ Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
+## INSTALLATION
+There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
+
+Not everyone can do that, so the compiled executable is provided.  To get it, click the bin/Release folder above and select Housekeeper.exe.  On that page, click Download and save it to a convenient location.  Double-click the executable to run.
+
 ## OPERATION
 Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process by navigating to the desired input folder, and clicking the desired search type.
 
