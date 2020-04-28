@@ -163,7 +163,7 @@ Partial Class Form1
             ErrorMessage = "    PartNumberPropertyName: '" + TextBoxPartNumberPropertyName.Text + "'"
             ErrorMessage += " not found in PartNumberPropertySet: '" + ComboBoxPartNumberPropertySet.Text + "'" + Chr(13)
             If TextBoxPartNumberPropertyName.Text = "" Then
-                ErrorMessage += "    Check the Options tab for valid entries" + Chr(13)
+                ErrorMessage += "    Check the Configuration tab for valid entries" + Chr(13)
             End If
         End If
 

@@ -188,7 +188,7 @@ Partial Class Form1
         msg.Add("")
         msg.Add("If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.")
         msg.Add("")
-        msg.Add("The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Options Tab.")
+        msg.Add("The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Configuration Tab.")
         msg.Add("")
         msg.Add("## CAVEATS")
         msg.Add("Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  ")
@@ -207,12 +207,12 @@ Partial Class Form1
         Next
         msg.Add("")
         msg.Add("## CODE ORGANIZATION")
-        msg.Add("Processing starts in Form1.vb.  A short description of the code's organization may be found there.")
+        msg.Add("Processing starts in Form1.vb.  A short description of the code's organization can be found there.")
 
         For Each s As String In msg
             msg2.Add(s.Replace("# ", "").Replace("#", ""))
         Next
-        TextBoxAbout.Lines = msg2.ToArray
+        TextBoxReadme.Lines = msg2.ToArray
 
         FilenameList = System.IO.Path.GetDirectoryName(DefaultsFilename).Split("\").ToList
         For i As Integer = 0 To 1  ' Remove the last two directories

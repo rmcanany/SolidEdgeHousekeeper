@@ -185,7 +185,7 @@ Partial Class Form1
 
             If Not ActiveMaterialLibraryPresent Then
                 msg = "ActiveMaterialLibrary " + TextBoxActiveMaterialLibrary.Text + " not found.  Exiting..." + Chr(13)
-                msg += "Please update the Material Table on the Options tab." + Chr(13)
+                msg += "Please update the Material Table on the Configuration tab." + Chr(13)
                 MsgBox(msg)
                 SEApp.Quit()
                 End
@@ -305,7 +305,7 @@ Partial Class Form1
             ErrorMessage = "    PartNumberPropertyName: '" + TextBoxPartNumberPropertyName.Text + "'"
             ErrorMessage += " not found in PartNumberPropertySet: '" + ComboBoxPartNumberPropertySet.Text + "'" + Chr(13)
             If TextBoxPartNumberPropertyName.Text = "" Then
-                ErrorMessage += "    Check the Options tab for valid entries"
+                ErrorMessage += "    Check the Configuration tab for valid entries"
             End If
         End If
 

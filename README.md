@@ -16,7 +16,7 @@ Select which errors to detect by clicking the appropriate checkboxes on each fil
 
 If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
 
-The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Options Tab.
+The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Configuration Tab.
 
 ## CAVEATS
 Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  
@@ -64,4 +64,4 @@ Comprehensive list of implemented tests and actions.
     Save as PDF
 
 ## CODE ORGANIZATION
-Processing starts in Form1.vb.  A short description of the code's organization may be found there.
+Processing starts in Form1.vb.  A short description of the code's organization can be found there.

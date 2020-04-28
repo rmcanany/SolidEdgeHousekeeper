@@ -50,7 +50,7 @@ Partial Class Form1
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
-        Me.TabPageOptions = New System.Windows.Forms.TabPage()
+        Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TextBoxRestartAfter = New System.Windows.Forms.TextBox()
         Me.LabelRestartAfter = New System.Windows.Forms.Label()
         Me.TextBoxPartNumberPropertyName = New System.Windows.Forms.TextBox()
@@ -73,7 +73,7 @@ Partial Class Form1
         Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
         Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPageReadme = New System.Windows.Forms.TabPage()
-        Me.TextBoxAbout = New System.Windows.Forms.TextBox()
+        Me.TextBoxReadme = New System.Windows.Forms.TextBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.ButtonCancel = New System.Windows.Forms.Button()
@@ -88,7 +88,7 @@ Partial Class Form1
         Me.TabPagePart.SuspendLayout()
         Me.TabPageSheetmetal.SuspendLayout()
         Me.TabPageDraft.SuspendLayout()
-        Me.TabPageOptions.SuspendLayout()
+        Me.TabPageConfiguration.SuspendLayout()
         Me.TabPageReadme.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -99,7 +99,7 @@ Partial Class Form1
         Me.TabControl1.Controls.Add(Me.TabPagePart)
         Me.TabControl1.Controls.Add(Me.TabPageSheetmetal)
         Me.TabControl1.Controls.Add(Me.TabPageDraft)
-        Me.TabControl1.Controls.Add(Me.TabPageOptions)
+        Me.TabControl1.Controls.Add(Me.TabPageConfiguration)
         Me.TabControl1.Controls.Add(Me.TabPageReadme)
         Me.TabControl1.Location = New System.Drawing.Point(-4, -5)
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
@@ -402,38 +402,38 @@ Partial Class Form1
         Me.CheckedListBoxDraft.Size = New System.Drawing.Size(600, 242)
         Me.CheckedListBoxDraft.TabIndex = 2
         '
-        'TabPageOptions
+        'TabPageConfiguration
         '
-        Me.TabPageOptions.AutoScroll = True
-        Me.TabPageOptions.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPageOptions.Controls.Add(Me.TextBoxRestartAfter)
-        Me.TabPageOptions.Controls.Add(Me.LabelRestartAfter)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxPartNumberPropertyName)
-        Me.TabPageOptions.Controls.Add(Me.LabelPartNumberPropertyName)
-        Me.TabPageOptions.Controls.Add(Me.ComboBoxPartNumberPropertySet)
-        Me.TabPageOptions.Controls.Add(Me.LabelPartNumberPropertySet)
-        Me.TabPageOptions.Controls.Add(Me.ButtonActiveMaterialLibrary)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxActiveMaterialLibrary)
-        Me.TabPageOptions.Controls.Add(Me.LabelActiveMaterialLibrary)
-        Me.TabPageOptions.Controls.Add(Me.ButtonTemplateAssembly)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxTemplateAssembly)
-        Me.TabPageOptions.Controls.Add(Me.LabelTemplateAssembly)
-        Me.TabPageOptions.Controls.Add(Me.ButtonTemplatePart)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxTemplatePart)
-        Me.TabPageOptions.Controls.Add(Me.LabelTemplatePart)
-        Me.TabPageOptions.Controls.Add(Me.ButtonTemplateSheetmetal)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxTemplateSheetmetal)
-        Me.TabPageOptions.Controls.Add(Me.LabelTemplateSheetmetal)
-        Me.TabPageOptions.Controls.Add(Me.ButtonTemplateDraft)
-        Me.TabPageOptions.Controls.Add(Me.TextBoxTemplateDraft)
-        Me.TabPageOptions.Controls.Add(Me.LabelTemplateDraft)
-        Me.TabPageOptions.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageOptions.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPageOptions.Name = "TabPageOptions"
-        Me.TabPageOptions.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPageOptions.Size = New System.Drawing.Size(643, 371)
-        Me.TabPageOptions.TabIndex = 5
-        Me.TabPageOptions.Text = "Options"
+        Me.TabPageConfiguration.AutoScroll = True
+        Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxRestartAfter)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelRestartAfter)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxPartNumberPropertyName)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelPartNumberPropertyName)
+        Me.TabPageConfiguration.Controls.Add(Me.ComboBoxPartNumberPropertySet)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelPartNumberPropertySet)
+        Me.TabPageConfiguration.Controls.Add(Me.ButtonActiveMaterialLibrary)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxActiveMaterialLibrary)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelActiveMaterialLibrary)
+        Me.TabPageConfiguration.Controls.Add(Me.ButtonTemplateAssembly)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxTemplateAssembly)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelTemplateAssembly)
+        Me.TabPageConfiguration.Controls.Add(Me.ButtonTemplatePart)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxTemplatePart)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelTemplatePart)
+        Me.TabPageConfiguration.Controls.Add(Me.ButtonTemplateSheetmetal)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxTemplateSheetmetal)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelTemplateSheetmetal)
+        Me.TabPageConfiguration.Controls.Add(Me.ButtonTemplateDraft)
+        Me.TabPageConfiguration.Controls.Add(Me.TextBoxTemplateDraft)
+        Me.TabPageConfiguration.Controls.Add(Me.LabelTemplateDraft)
+        Me.TabPageConfiguration.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4)
+        Me.TabPageConfiguration.Name = "TabPageConfiguration"
+        Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(643, 371)
+        Me.TabPageConfiguration.TabIndex = 5
+        Me.TabPageConfiguration.Text = "Configuration"
         '
         'TextBoxRestartAfter
         '
@@ -627,7 +627,7 @@ Partial Class Form1
         '
         Me.TabPageReadme.AutoScroll = True
         Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPageReadme.Controls.Add(Me.TextBoxAbout)
+        Me.TabPageReadme.Controls.Add(Me.TextBoxReadme)
         Me.TabPageReadme.Location = New System.Drawing.Point(4, 25)
         Me.TabPageReadme.Name = "TabPageReadme"
         Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(3)
@@ -635,16 +635,16 @@ Partial Class Form1
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
         '
-        'TextBoxAbout
+        'TextBoxReadme
         '
-        Me.TextBoxAbout.BackColor = System.Drawing.SystemColors.Control
-        Me.TextBoxAbout.Location = New System.Drawing.Point(7, 6)
-        Me.TextBoxAbout.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBoxAbout.Multiline = True
-        Me.TextBoxAbout.Name = "TextBoxAbout"
-        Me.TextBoxAbout.Size = New System.Drawing.Size(600, 1300)
-        Me.TextBoxAbout.TabIndex = 0
-        Me.TextBoxAbout.Text = resources.GetString("TextBoxAbout.Text")
+        Me.TextBoxReadme.BackColor = System.Drawing.SystemColors.Control
+        Me.TextBoxReadme.Location = New System.Drawing.Point(7, 6)
+        Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
+        Me.TextBoxReadme.Multiline = True
+        Me.TextBoxReadme.Name = "TextBoxReadme"
+        Me.TextBoxReadme.Size = New System.Drawing.Size(600, 1300)
+        Me.TextBoxReadme.TabIndex = 0
+        Me.TextBoxReadme.Text = resources.GetString("TextBoxReadme.Text")
         '
         'TextBoxStatus
         '
@@ -704,8 +704,8 @@ Partial Class Form1
         Me.TabPageSheetmetal.ResumeLayout(False)
         Me.TabPageSheetmetal.PerformLayout()
         Me.TabPageDraft.ResumeLayout(False)
-        Me.TabPageOptions.ResumeLayout(False)
-        Me.TabPageOptions.PerformLayout()
+        Me.TabPageConfiguration.ResumeLayout(False)
+        Me.TabPageConfiguration.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
         Me.TabPageReadme.PerformLayout()
         Me.ResumeLayout(False)
@@ -754,8 +754,8 @@ Partial Class Form1
     Friend WithEvents LabelTemplateDraft As Label
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents TabPageOptions As TabPage
-    Friend WithEvents TextBoxAbout As TextBox
+    Friend WithEvents TabPageConfiguration As TabPage
+    Friend WithEvents TextBoxReadme As TextBox
     Friend WithEvents TabPageReadme As TabPage
     Friend WithEvents LabelActiveMaterialLibrary As Label
     Friend WithEvents ButtonActiveMaterialLibrary As Button
