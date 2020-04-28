@@ -151,7 +151,7 @@ Partial Class Form1
 
     End Sub
 
-    Private Sub LoadTextBoxAbout()
+    Private Sub LoadTextBoxReadme()
         Dim msg As New List(Of String)
         Dim msg2 As New List(Of String)
         Dim ReadmeFileName As String = ""

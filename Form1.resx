@@ -117,48 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="TextBoxReadme.Text" xml:space="preserve">
-    <value>Solid Edge Housekeeper
-Robert McAnany 2020
-
-Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
-
-DESCRIPTION
-This tool is designed to help you find little annoying errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
-
-OPERATION
-Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process by navigating to the desired input folder, and clicking the desired search type.
-
-If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
-
-CAVEATS
-Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  
-
-However, problems can arise.  Those cases will also be reported in the text file with the message "Error processing file".  A stack trace will be included, which may be useful for program debugging.
-
-Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
-
-SITE-SPECIFIC SETTINGS
-A couple of the functions require site-specific information.  These are stored in the same directory as the program executable, SolidEdgeHousekeeper.exe, in a file called settings.txt.  The file is created upon first launching SolidEdgeHousekeeper.exe.
-
-Contents
-RestartAfter=50
-ActiveMaterialLibrary=YourMaterials
-PartNumberPropertyName=YourPartNumberPropertyName
-PartNumberPropertySet=Custom
-
-Description
-RestartAfter controls how many files are processed between restarts.
-
-ActiveMaterialLibrary is the named of the material library for your site.  It is stored in the installation directory of Solid Edge, probably:
-C:\Program Files\Siemens\Solid Edge 2020\Preferences\Materials\YourMaterials.mtl
-In that example, the entry in settings.txt would be: 
-ActiveMaterialLibrary=YourMaterials
-
-PartNumberPropertyName is the name of the property field in a Solid Edge model file where you enter your part number.  It is accessed through the File Properties dialog, or with Property Manager.
-
-PartNumberPropertySet is the name of the collection of properties that contains your PartNumberPropertyName.  It can take one of two values, either Custom or Default.</value>
-  </data>
   <metadata name="FolderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

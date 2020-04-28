@@ -307,20 +307,20 @@ Public Class Form1
     Private Sub Startup()
         BuildListToActions()
         LoadDefaults()
-        LoadTextBoxAbout()
+        LoadTextBoxReadme()
         UpdateFileTypes()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
     End Sub
 
     Private Sub CheckOrUncheckAll(ByVal CheckedListBoxX As CheckedListBox)
-        Dim AnyChecked As Boolean
+        Dim NoneChecked As Boolean
 
-        'If no items are checked, AnyChecked will be True
-        AnyChecked = CheckedListBoxX.CheckedItems.Count = 0
+        'If no items are checked, NoneChecked will be True
+        NoneChecked = CheckedListBoxX.CheckedItems.Count = 0
 
         For i As Integer = 0 To CheckedListBoxX.Items.Count - 1
-            CheckedListBoxX.SetItemChecked(i, AnyChecked)
+            CheckedListBoxX.SetItemChecked(i, NoneChecked)
         Next
 
         UpdateFileTypes()

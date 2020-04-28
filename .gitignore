@@ -4,7 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # This project
-defaults.txt
+bin\Release\defaults.txt
+
 # User-specific files
 *.rsuser
 *.suo

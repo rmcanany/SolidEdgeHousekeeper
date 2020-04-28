@@ -23,7 +23,6 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.GroupBoxFileTypes = New System.Windows.Forms.GroupBox()
@@ -642,9 +641,9 @@ Partial Class Form1
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.Size = New System.Drawing.Size(600, 1300)
+        Me.TextBoxReadme.Size = New System.Drawing.Size(600, 1600)
         Me.TextBoxReadme.TabIndex = 0
-        Me.TextBoxReadme.Text = resources.GetString("TextBoxReadme.Text")
+        Me.TextBoxReadme.Text = "Populated at build time."
         '
         'TextBoxStatus
         '
