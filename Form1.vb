@@ -97,8 +97,6 @@ Public Class Form1
         '    End If
 
         '    For j As Integer = 1 To reps
-        '        FilesToProcessCompleted = 0
-        '        LogfileSetName()
         '        'MsgBox(CheckedListBoxDraft.CheckedItems(0))
         '        LogfileAppend(CheckedListBoxDraft.CheckedItems(0), "D:\something", Chr(13))
         '        'MsgBox(CheckedListBoxDraft.Items.Count.ToString)
@@ -113,6 +111,10 @@ Public Class Form1
 
         '    Next
         'Next
+
+        FilesToProcessCompleted = 0
+        LogfileSetName()
+
         SEStart()
 
         If CheckBoxFileTypePart.Checked Then

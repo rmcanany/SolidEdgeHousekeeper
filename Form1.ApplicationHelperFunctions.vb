@@ -38,7 +38,7 @@ Partial Class Form1
             SEApp = Nothing
         End If
 
-        TextBoxStatus.Text = ""
+        System.Threading.Thread.Sleep(3000)
     End Sub
 
     Private Sub SEGarbageCollect(ByVal obj As Object)
