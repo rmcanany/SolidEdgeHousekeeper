@@ -9,10 +9,10 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-Not everyone can do that, so the compiled executable is provided.  To get it, click the bin/Release folder above and select Housekeeper.exe.  On that page, click Download and save it to a convenient location.  Double-click the executable to run.
+Not everyone can do that, however, so the compiled executable is provided.  To get it, click the bin/Release folder above and select Housekeeper.exe.  On that page, click Download and save it to a convenient location.  Double-click the executable to run.
 
 ## OPERATION
-Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process by navigating to the desired input folder, and clicking the desired search type.
+Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process, on the General tab, by navigating to the desired input folder, and then clicking the desired search type.
 
 If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
 

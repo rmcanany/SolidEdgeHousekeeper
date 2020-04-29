@@ -1,4 +1,4 @@
-TextBoxInputDirectory=D:\CAD\scripts\test_files\20181212_auto_cube_fill\7481-00000 AUTO CUBE FILL RELEASED\7481-10000_stacker\7481-11000_stacker_base
+TextBoxInputDirectory=D:\CAD\scripts\test_files\robert_assemblies
 TextBoxTemplateAssembly=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch assembly.asm
 TextBoxTemplatePart=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch part.par
 TextBoxTemplateSheetmetal=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch sheet metal.psm
@@ -37,4 +37,4 @@ Draft.Detached dimensions or annotations=Unchecked
 Draft.File name does not match model file name=Unchecked
 Draft.Update drawing border from template=Unchecked
 Draft.Fit view=Unchecked
-Draft.Save as PDF=Checked
+Draft.Save as PDF=Unchecked
