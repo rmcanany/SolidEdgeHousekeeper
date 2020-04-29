@@ -219,6 +219,7 @@ Partial Class Form1
         For Each Sheet In SectionSheets
             If TemplateSheetNames.Contains(Sheet.Name) Then
                 Sheet.ReplaceBackground(TemplateFilename, Sheet.Name)
+                System.Threading.Thread.Sleep(1000)
             Else
                 ExitStatus = "1"
                 ErrorMessage += "    Template has no background named '" + Sheet.Name + "'" + Chr(13)
@@ -274,7 +275,7 @@ Partial Class Form1
         SETemplateDoc.Close()
         SEApp.DoIdle()
 
-        'Update dimensions and callouts with overrides.  They are not automatically updated to the new style.
+        'Dimensions and callouts with overrides are not automatically updated to the new style.
         Sections = SEDoc.Sections
 
         For Each Section In Sections
@@ -295,6 +296,11 @@ Partial Class Form1
                 Next
             Next
         Next
+
+        Section = Nothing
+        SectionSheets = Nothing
+        Sheet = Nothing
+        SEApp.DoIdle()
 
         For Each Section In Sections
             SectionSheets = Section.Sheets
@@ -317,7 +323,14 @@ Partial Class Form1
             Next
         Next
 
+        Section = Nothing
+        SectionSheets = Nothing
+        Sheet = Nothing
+        SEApp.DoIdle()
+
         Section = Sections.WorkingSection
+
+        SEApp.DoIdle()
 
         SEDoc.Save()
         SEApp.DoIdle()
@@ -357,6 +370,7 @@ Partial Class Form1
         For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
             SheetWindow.ActiveSheet = Sheet
             SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitSheet)
+            System.Threading.Thread.Sleep(1000)
         Next
 
         SheetWindow.ActiveSheet = SectionSheets.OfType(Of SolidEdgeDraft.Sheet)().ElementAt(0)
@@ -368,6 +382,7 @@ Partial Class Form1
         ErrorMessageList.Add(ErrorMessage)
         Return ErrorMessageList
     End Function
+
     Private Function DraftSaveAsPDF(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument) As List(Of String)
         Dim ErrorMessageList As New List(Of String)

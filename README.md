@@ -59,7 +59,6 @@ Comprehensive list of implemented tests and actions.
     Detached dimensions or annotations
     File name does not match model file name
     Update drawing border from template
-    Update dimension styles from template
     Fit view
     Save as PDF
 

@@ -79,30 +79,61 @@ Public Class Form1
         FilesToProcessTotal = GetTotalFilesToProcess()
         FilesToProcessCompleted = 0
 
-        LogfileSetName()
-
         StopProcess = False
         ButtonCancel.Text = "Stop"
 
-        SEStart()
+        OleMessageFilter.Register()
 
-        If CheckBoxFileTypePart.Checked Then
-            ProcessFiles("Part")
-        End If
+        Dim WaitSeconds As Integer = 3
+        Dim reps As Integer = 2
+        Dim msg As String
+        For i As Integer = 0 To CheckedListBoxDraft.Items.Count - 1
+            For k As Integer = 0 To CheckedListBoxDraft.Items.Count - 1
+                CheckedListBoxDraft.SetItemChecked(k, False)
+            Next
+            CheckedListBoxDraft.SetItemChecked(i, True)
+            If i > 0 Then
+                System.Threading.Thread.Sleep(1000 * WaitSeconds)
+            End If
 
-        If CheckBoxFileTypeSheetmetal.Checked Then
-            ProcessFiles("Sheetmetal")
-        End If
+            For j As Integer = 1 To reps
+                FilesToProcessCompleted = 0
+                LogfileSetName()
+                'MsgBox(CheckedListBoxDraft.CheckedItems(0))
+                LogfileAppend(CheckedListBoxDraft.CheckedItems(0), "D:\something", Chr(13))
+                'MsgBox(CheckedListBoxDraft.Items.Count.ToString)
+                msg = "Checkbox " + (i + 1).ToString + "/" + CheckedListBoxDraft.Items.Count.ToString
+                msg += ", Rep " + (j).ToString + "/" + reps.ToString
+                LabelInputDirectory.Text = msg
+                If j > 1 Then
+                    'TextBoxStatus.Text = "Sleeping 30 s before Rep " + j.ToString
+                    System.Threading.Thread.Sleep(1000 * WaitSeconds)
+                End If
 
-        If CheckBoxFileTypeAssembly.Checked Then
-            ProcessFiles("Assembly")
-        End If
 
-        If CheckBoxFileTypeDraft.Checked Then
-            ProcessFiles("Draft")
-        End If
+                SEStart()
 
-        SEStop()
+                If CheckBoxFileTypePart.Checked Then
+                    ProcessFiles("Part")
+                End If
+
+                If CheckBoxFileTypeSheetmetal.Checked Then
+                    ProcessFiles("Sheetmetal")
+                End If
+
+                If CheckBoxFileTypeAssembly.Checked Then
+                    ProcessFiles("Assembly")
+                End If
+
+                If CheckBoxFileTypeDraft.Checked Then
+                    ProcessFiles("Draft")
+                End If
+
+                SEStop()
+            Next
+        Next
+
+        OleMessageFilter.Revoke()
 
         If StopProcess Then
             TextBoxStatus.Text = "Processing aborted"
@@ -286,7 +317,7 @@ Public Class Form1
         Try
             RunTasks()
         Catch ex As Exception
-            'LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13))
+            LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13) + ex.ToString + Chr(13))
             SEStop()
             SEStart()
 

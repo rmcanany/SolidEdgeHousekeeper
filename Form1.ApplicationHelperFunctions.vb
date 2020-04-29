@@ -1,4 +1,5 @@
 Imports System.Runtime.InteropServices
+'Imports System.ServiceModel.Dispatcher
 
 Partial Class Form1
 

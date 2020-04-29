@@ -170,9 +170,9 @@ Partial Class Form1
         Action.Add(AddressOf DraftUpdateBackgroundFromTemplate)
         Template.Add(True)
 
-        Check.Add("Update dimension styles from template")
-        Action.Add(AddressOf DraftUpdateDimensionStylesFromTemplate)
-        Template.Add(True)
+        'Check.Add("Update dimension styles from template")
+        'Action.Add(AddressOf DraftUpdateDimensionStylesFromTemplate)
+        'Template.Add(True)
 
         Check.Add("Fit view")
         Action.Add(AddressOf DraftFitView)
