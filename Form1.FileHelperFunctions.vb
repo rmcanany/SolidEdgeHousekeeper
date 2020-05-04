@@ -73,103 +73,103 @@ Partial Class Form1
         Return TF
     End Function
 
-    Private Function GetActiveFileExtensions() As String()
-        Dim ActiveFileExtensionsList As New List(Of String)
+    'Private Function GetActiveFileExtensions() As String()
+    '    Dim ActiveFileExtensionsList As New List(Of String)
 
-        If CheckBoxFileTypeAssembly.Checked Then
-            ActiveFileExtensionsList.Add("*.asm")
-        End If
-        If CheckBoxFileTypePart.Checked Then
-            ActiveFileExtensionsList.Add("*.par")
-        End If
-        If CheckBoxFileTypeSheetmetal.Checked Then
-            ActiveFileExtensionsList.Add("*.psm")
-        End If
-        If CheckBoxFileTypeDraft.Checked Then
-            ActiveFileExtensionsList.Add("*.dft")
-        End If
+    '    If CheckBoxFileTypeAssembly.Checked Then
+    '        ActiveFileExtensionsList.Add("*.asm")
+    '    End If
+    '    If CheckBoxFileTypePart.Checked Then
+    '        ActiveFileExtensionsList.Add("*.par")
+    '    End If
+    '    If CheckBoxFileTypeSheetmetal.Checked Then
+    '        ActiveFileExtensionsList.Add("*.psm")
+    '    End If
+    '    If CheckBoxFileTypeDraft.Checked Then
+    '        ActiveFileExtensionsList.Add("*.dft")
+    '    End If
 
-        Return ActiveFileExtensionsList.ToArray
-    End Function
+    '    Return ActiveFileExtensionsList.ToArray
+    'End Function
 
-    Private Sub UpdateFileTypes()
-        If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
-            CheckBoxFileTypeAssembly.Checked = True
-        Else
-            CheckBoxFileTypeAssembly.Checked = False
-        End If
-        If CheckedListBoxPart.CheckedItems.Count > 0 Then
-            CheckBoxFileTypePart.Checked = True
-        Else
-            CheckBoxFileTypePart.Checked = False
-        End If
-        If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
-            CheckBoxFileTypeSheetmetal.Checked = True
-        Else
-            CheckBoxFileTypeSheetmetal.Checked = False
-        End If
-        If CheckedListBoxDraft.CheckedItems.Count > 0 Then
-            CheckBoxFileTypeDraft.Checked = True
-        Else
-            CheckBoxFileTypeDraft.Checked = False
-        End If
+    'Private Sub UpdateFileTypes()
+    '    If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
+    '        CheckBoxFileTypeAssembly.Checked = True
+    '    Else
+    '        CheckBoxFileTypeAssembly.Checked = False
+    '    End If
+    '    If CheckedListBoxPart.CheckedItems.Count > 0 Then
+    '        CheckBoxFileTypePart.Checked = True
+    '    Else
+    '        CheckBoxFileTypePart.Checked = False
+    '    End If
+    '    If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
+    '        CheckBoxFileTypeSheetmetal.Checked = True
+    '    Else
+    '        CheckBoxFileTypeSheetmetal.Checked = False
+    '    End If
+    '    If CheckedListBoxDraft.CheckedItems.Count > 0 Then
+    '        CheckBoxFileTypeDraft.Checked = True
+    '    Else
+    '        CheckBoxFileTypeDraft.Checked = False
+    '    End If
 
-        UpdateListBoxFiles()
-    End Sub
+    '    UpdateListBoxFiles()
+    'End Sub
 
-    Private Sub UpdateListBoxFiles()
-        Dim FoundFiles As IReadOnlyCollection(Of String)
-        Dim FoundFile As String
+    'Private Sub UpdateListBoxFiles()
+    '    Dim FoundFiles As IReadOnlyCollection(Of String)
+    '    Dim FoundFile As String
 
-        ListBoxFiles.Items.Clear()
+    '    ListBoxFiles.Items.Clear()
 
-        If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
-            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
-                                    FileIO.SearchOption.SearchTopLevelOnly,
-                                    GetActiveFileExtensions())
+    '    If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+    '        FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+    '                                FileIO.SearchOption.SearchTopLevelOnly,
+    '                                GetActiveFileExtensions())
 
-            For Each FoundFile In FoundFiles
-                ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
-            Next
-        End If
+    '        For Each FoundFile In FoundFiles
+    '            ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+    '        Next
+    '    End If
 
-    End Sub
+    'End Sub
 
-    Private Sub UpdateTemplateRequired()
-        'Go through CheckedListBox items to see if any require a template
-        Dim LabelText As String
+    'Private Sub UpdateTemplateRequired()
+    '    'Go through CheckedListBox items to see if any require a template
+    '    Dim LabelText As String
 
-        'Assembly
-        TemplateRequiredAssembly = False
-        For Each LabelText In CheckedListBoxAssembly.CheckedItems
-            If ListToTemplateAssembly(LabelText) Then
-                TemplateRequiredAssembly = True
-            End If
-        Next
+    '    'Assembly
+    '    TemplateRequiredAssembly = False
+    '    For Each LabelText In CheckedListBoxAssembly.CheckedItems
+    '        If ListToTemplateAssembly(LabelText) Then
+    '            TemplateRequiredAssembly = True
+    '        End If
+    '    Next
 
-        'Part
-        TemplateRequiredPart = False
-        For Each LabelText In CheckedListBoxPart.CheckedItems
-            If ListToTemplatePart(LabelText) Then
-                TemplateRequiredPart = True
-            End If
-        Next
+    '    'Part
+    '    TemplateRequiredPart = False
+    '    For Each LabelText In CheckedListBoxPart.CheckedItems
+    '        If ListToTemplatePart(LabelText) Then
+    '            TemplateRequiredPart = True
+    '        End If
+    '    Next
 
-        'Sheetmetal
-        TemplateRequiredSheetmetal = False
-        For Each LabelText In CheckedListBoxSheetmetal.CheckedItems
-            If ListToTemplateSheetmetal(LabelText) Then
-                TemplateRequiredSheetmetal = True
-            End If
-        Next
+    '    'Sheetmetal
+    '    TemplateRequiredSheetmetal = False
+    '    For Each LabelText In CheckedListBoxSheetmetal.CheckedItems
+    '        If ListToTemplateSheetmetal(LabelText) Then
+    '            TemplateRequiredSheetmetal = True
+    '        End If
+    '    Next
 
-        'Draft
-        TemplateRequiredDraft = False
-        For Each LabelText In CheckedListBoxDraft.CheckedItems
-            If ListToTemplateDraft(LabelText) Then
-                TemplateRequiredDraft = True
-            End If
-        Next
-    End Sub
+    '    'Draft
+    '    TemplateRequiredDraft = False
+    '    For Each LabelText In CheckedListBoxDraft.CheckedItems
+    '        If ListToTemplateDraft(LabelText) Then
+    '            TemplateRequiredDraft = True
+    '        End If
+    '    Next
+    'End Sub
 
 End Class

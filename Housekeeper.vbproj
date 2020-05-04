@@ -89,6 +89,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyTasks.vb" />
+    <Compile Include="DraftTasks.vb" />
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +141,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="OleMessageFilter.vb" />
+    <Compile Include="PartTasks.vb" />
+    <Compile Include="SheetmetalTasks.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">

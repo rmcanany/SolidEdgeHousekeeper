@@ -1,10 +1,11 @@
 ﻿Imports System.Runtime.InteropServices
 
 Public Class Form1
-    Private SEApp As SolidEdgeFramework.Application
+    Public SEApp As SolidEdgeFramework.Application
 
     Private DefaultsFilename As String
     Private LogfileName As String
+    Private Configuration As New Dictionary(Of String, String)
 
     Private ErrorsOccurred As Boolean
 
@@ -340,11 +341,116 @@ Public Class Form1
     Private Sub Startup()
         BuildListToActions()
         LoadDefaults()
+        UpdateConfiguration() addtoeventhandlers
+
         LoadTextBoxReadme()
         UpdateFileTypes()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
     End Sub
+
+    Private Sub ReconcileFormChanges()
+        ' Update configuration
+        Configuration(TextBoxInputDirectory.Name) = TextBoxInputDirectory.Text
+        Configuration(TextBoxTemplateAssembly.Name) = TextBoxTemplateAssembly.Text
+        Configuration(TextBoxTemplatePart.Name) = TextBoxTemplatePart.Text
+        Configuration(TextBoxTemplateSheetmetal.Name) = TextBoxTemplateSheetmetal.Text
+        Configuration(TextBoxTemplateDraft.Name) = TextBoxTemplateDraft.Text
+        Configuration(TextBoxActiveMaterialLibrary.Name) = TextBoxActiveMaterialLibrary.Text
+        Configuration(TextBoxLaserOutputDirectory.Name) = TextBoxLaserOutputDirectory.Text
+        Configuration(ComboBoxPartNumberPropertySet.Name) = ComboBoxPartNumberPropertySet.Text
+        Configuration(TextBoxPartNumberPropertyName.Name) = TextBoxPartNumberPropertyName.Text
+
+        ' Update file types
+        If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeAssembly.Checked = True
+        Else
+            CheckBoxFileTypeAssembly.Checked = False
+        End If
+        If CheckedListBoxPart.CheckedItems.Count > 0 Then
+            CheckBoxFileTypePart.Checked = True
+        Else
+            CheckBoxFileTypePart.Checked = False
+        End If
+        If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeSheetmetal.Checked = True
+        Else
+            CheckBoxFileTypeSheetmetal.Checked = False
+        End If
+        If CheckedListBoxDraft.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeDraft.Checked = True
+        Else
+            CheckBoxFileTypeDraft.Checked = False
+        End If
+
+        ' Update ListBoxFiles
+        Dim FoundFiles As IReadOnlyCollection(Of String)
+        Dim FoundFile As String
+        Dim ActiveFileExtensionsList As New List(Of String)
+
+        If CheckBoxFileTypeAssembly.Checked Then
+            ActiveFileExtensionsList.Add("*.asm")
+        End If
+        If CheckBoxFileTypePart.Checked Then
+            ActiveFileExtensionsList.Add("*.par")
+        End If
+        If CheckBoxFileTypeSheetmetal.Checked Then
+            ActiveFileExtensionsList.Add("*.psm")
+        End If
+        If CheckBoxFileTypeDraft.Checked Then
+            ActiveFileExtensionsList.Add("*.dft")
+        End If
+
+        ListBoxFiles.Items.Clear()
+
+        If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                                    FileIO.SearchOption.SearchTopLevelOnly,
+                                    ActiveFileExtensionsList.ToArray)
+
+            For Each FoundFile In FoundFiles
+                ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+            Next
+        End If
+
+        ' Update template required
+        'Go through CheckedListBox items to see if any require a template
+        Dim LabelText As String
+
+        'Assembly
+        TemplateRequiredAssembly = False
+        For Each LabelText In CheckedListBoxAssembly.CheckedItems
+            If ListToTemplateAssembly(LabelText) Then
+                TemplateRequiredAssembly = True
+            End If
+        Next
+
+        'Part
+        TemplateRequiredPart = False
+        For Each LabelText In CheckedListBoxPart.CheckedItems
+            If ListToTemplatePart(LabelText) Then
+                TemplateRequiredPart = True
+            End If
+        Next
+
+        'Sheetmetal
+        TemplateRequiredSheetmetal = False
+        For Each LabelText In CheckedListBoxSheetmetal.CheckedItems
+            If ListToTemplateSheetmetal(LabelText) Then
+                TemplateRequiredSheetmetal = True
+            End If
+        Next
+
+        'Draft
+        TemplateRequiredDraft = False
+        For Each LabelText In CheckedListBoxDraft.CheckedItems
+            If ListToTemplateDraft(LabelText) Then
+                TemplateRequiredDraft = True
+            End If
+        Next
+
+    End Sub
+
 
     Private Sub CheckOrUncheckAll(ByVal CheckedListBoxX As CheckedListBox)
         Dim NoneChecked As Boolean
@@ -356,7 +462,7 @@ Public Class Form1
             CheckedListBoxX.SetItemChecked(i, NoneChecked)
         Next
 
-        UpdateFileTypes()
+        ReconcileFormChanges()
 
     End Sub
 
@@ -379,8 +485,7 @@ Public Class Form1
     End Sub
 
     Private Sub CheckedListBoxAssembly_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxAssembly.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
 
     Private Sub CheckedListBoxAssembly_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxAssembly.DoubleClick
@@ -388,24 +493,21 @@ Public Class Form1
     End Sub
 
     Private Sub CheckedListBoxPart_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxPart.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxPart_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxPart.DoubleClick
         CheckOrUncheckAll(CheckedListBoxPart)
     End Sub
 
     Private Sub CheckedListBoxSheetmetal_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxSheetmetal.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxSheetmetal_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxSheetmetal.DoubleClick
         CheckOrUncheckAll(CheckedListBoxSheetmetal)
     End Sub
 
     Private Sub CheckedListBoxDraft_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxDraft.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxDraft_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxDraft.DoubleClick
         CheckOrUncheckAll(CheckedListBoxDraft)
@@ -415,7 +517,7 @@ Public Class Form1
         FolderBrowserDialog1.ShowDialog()
         TextBoxInputDirectory.Text = FolderBrowserDialog1.SelectedPath
         ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
-        UpdateListBoxFiles()
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ListBoxFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBoxFiles.SelectedIndexChanged
@@ -429,6 +531,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateAssembly.Text = OpenFileDialog1.FileName
         End If
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplatePart_Click(sender As Object, e As EventArgs) Handles ButtonTemplatePart.Click
@@ -438,6 +541,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplatePart.Text = OpenFileDialog1.FileName
         End If
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplateSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonTemplateSheetmetal.Click
@@ -447,7 +551,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateSheetmetal.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplateDraft_Click(sender As Object, e As EventArgs) Handles ButtonTemplateDraft.Click
@@ -457,7 +561,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateDraft.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonActiveMaterialLibrary_Click(sender As Object, e As EventArgs) Handles ButtonActiveMaterialLibrary.Click
@@ -467,7 +571,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxActiveMaterialLibrary.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonLaserOutputDirectory.Click
@@ -475,6 +579,14 @@ Public Class Form1
         TextBoxLaserOutputDirectory.Text = FolderBrowserDialog1.SelectedPath
         'ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
         'UpdateListBoxFiles()
+        ReconcileFormChanges()
+    End Sub
 
+    Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
+        ReconcileFormChanges()
     End Sub
 End Class
