@@ -19,19 +19,32 @@ Public Class Form1
 
     Private StopProcess As Boolean
 
-    Delegate Function SEOpAssembly(ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument)
+    Delegate Function SEOpAssembly(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application)
+
     Private ListToActionAssembly As New Dictionary(Of String, SEOpAssembly)
     Private ListToTemplateAssembly As New Dictionary(Of String, Boolean)
 
-    Delegate Function SEOpPart(ByVal SEDoc As SolidEdgePart.PartDocument)
+    Delegate Function SEOpPart(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application)
     Private ListToActionPart As New Dictionary(Of String, SEOpPart)
     Private ListToTemplatePart As New Dictionary(Of String, Boolean)
 
-    Delegate Function SEOpSheetmetal(ByVal SEDoc As SolidEdgePart.SheetMetalDocument)
+    Delegate Function SEOpSheetmetal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application)
     Private ListToActionSheetmetal As New Dictionary(Of String, SEOpSheetmetal)
     Private ListToTemplateSheetmetal As New Dictionary(Of String, Boolean)
 
-    Delegate Function SEOpDraft(ByVal SEDoc As SolidEdgeDraft.DraftDocument)
+    Delegate Function SEOpDraft(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application)
     Private ListToActionDraft As New Dictionary(Of String, SEOpDraft)
     Private ListToTemplateDraft As New Dictionary(Of String, Boolean)
 
@@ -296,13 +309,17 @@ Public Class Form1
                                'Also, ListToActionPart.Item(LabelText), etc.
                                'See BuiltListToAction() for details.
                                If Filetype = "Assembly" Then
-                                   ErrorMessageList = ListToActionAssembly.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = ListToActionAssembly.Item(LabelText)(SEDoc,
+                                       Configuration, SEApp)
                                ElseIf Filetype = "Part" Then
-                                   ErrorMessageList = ListToActionPart.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = ListToActionPart.Item(LabelText)(SEDoc,
+                                       Configuration, SEApp)
                                ElseIf Filetype = "Sheetmetal" Then
-                                   ErrorMessageList = ListToActionSheetmetal.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = ListToActionSheetmetal.Item(LabelText)(SEDoc,
+                                       Configuration, SEApp)
                                Else
-                                   ErrorMessageList = ListToActionDraft.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = ListToActionDraft.Item(LabelText)(SEDoc,
+                                       Configuration, SEApp)
                                End If
 
                                ExitStatus = ErrorMessageList(0)
@@ -341,10 +358,8 @@ Public Class Form1
     Private Sub Startup()
         BuildListToActions()
         LoadDefaults()
-        UpdateConfiguration() addtoeventhandlers
-
+        ReconcileFormChanges()
         LoadTextBoxReadme()
-        UpdateFileTypes()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
     End Sub

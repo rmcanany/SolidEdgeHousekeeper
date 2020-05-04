@@ -1,5 +1,5 @@
 ﻿Public Class SheetmetalTasks
-    Private Function SheetmetalFailedOrWarnedFeatures(
+    Public Function SheetmetalFailedOrWarnedFeatures(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -46,7 +46,7 @@
 
     End Function
 
-    Private Function SheetmetalSuppressedOrRolledBackFeatures(
+    Public Function SheetmetalSuppressedOrRolledBackFeatures(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -93,7 +93,7 @@
 
     End Function
 
-    Private Function SheetmetalUnderconstrainedProfiles(
+    Public Function SheetmetalUnderconstrainedProfiles(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -119,7 +119,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function SheetmetalFlatPatternMissingOrOutOfDate(
+    Public Function SheetmetalFlatPatternMissingOrOutOfDate(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -148,7 +148,7 @@
 
     End Function
 
-    Private Function SheetmetalMaterialNotInMaterialTable(
+    Public Function SheetmetalMaterialNotInMaterialTable(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -259,7 +259,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function SheetmetalPartNumberDoesNotMatchFilename(
+    Public Function SheetmetalPartNumberDoesNotMatchFilename(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -336,7 +336,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function SheetmetalGenerateLaserDXFAndPDF(
+    Public Function SheetmetalGenerateLaserDXFAndPDF(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -429,7 +429,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function SheetmetalUpdateFaceAndViewStylesFromTemplate(
+    Public Function SheetmetalUpdateFaceAndViewStylesFromTemplate(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -528,7 +528,7 @@
 
     End Function
 
-    Private Function SheetmetalFitIsometricView(
+    Public Function SheetmetalFitIsometricView(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -561,7 +561,7 @@
 
     End Function
 
-    Private Function TruncateFullPath(ByVal Path As String,
+    Public Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)
         ) As String
 

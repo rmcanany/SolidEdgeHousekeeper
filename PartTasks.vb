@@ -1,5 +1,5 @@
 ﻿Public Class PartTasks
-    Private Function PartFailedOrWarnedFeatures(
+    Public Function PartFailedOrWarnedFeatures(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -54,7 +54,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function PartSuppressedOrRolledBackFeatures(
+    Public Function PartSuppressedOrRolledBackFeatures(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -102,7 +102,7 @@
 
     End Function
 
-    Private Function PartUnderconstrainedProfiles(
+    Public Function PartUnderconstrainedProfiles(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -128,7 +128,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function PartMaterialNotInMaterialTable(
+    Public Function PartMaterialNotInMaterialTable(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -237,7 +237,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function PartPartNumberDoesNotMatchFilename(
+    Public Function PartPartNumberDoesNotMatchFilename(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -314,7 +314,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function PartUpdateFaceAndViewStylesFromTemplate(
+    Public Function PartUpdateFaceAndViewStylesFromTemplate(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -413,7 +413,7 @@
 
     End Function
 
-    Private Function PartFitIsometricView(
+    Public Function PartFitIsometricView(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application

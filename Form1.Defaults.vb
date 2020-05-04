@@ -92,7 +92,7 @@ Partial Class Form1
             'MsgBox("Exception" + ex.ToString)
         End Try
 
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
 
     End Sub
 

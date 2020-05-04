@@ -12,33 +12,34 @@ Partial Class Form1
         Dim Check As New List(Of String)
         Dim Action As New List(Of SEOpAssembly)
         Dim Template As New List(Of Boolean)
+        Dim AssemblyTasks As New AssemblyTasks()
 
         Check.Add("Occurrence missing file")
-        Action.Add(AddressOf AssemblyMissingFiles)
+        Action.Add(AddressOf AssemblyTasks.AssemblyMissingFiles)
         Template.Add(False)
 
         Check.Add("Occurrence outside project directory")
-        Action.Add(AddressOf AssemblyOccurrenceOutsideProjectDirectory)
+        Action.Add(AddressOf AssemblyTasks.AssemblyOccurrenceOutsideProjectDirectory)
         Template.Add(False)
 
         Check.Add("Failed relationships")
-        Action.Add(AddressOf AssemblyFailedRelationships)
+        Action.Add(AddressOf AssemblyTasks.AssemblyFailedRelationships)
         Template.Add(False)
 
         Check.Add("Underconstrained relationships")
-        Action.Add(AddressOf AssemblyUnderconstrainedRelationships)
+        Action.Add(AddressOf AssemblyTasks.AssemblyUnderconstrainedRelationships)
         Template.Add(False)
 
         Check.Add("Part number does not match file name")
-        Action.Add(AddressOf AssemblyPartNumberDoesNotMatchFilename)
+        Action.Add(AddressOf AssemblyTasks.AssemblyPartNumberDoesNotMatchFilename)
         Template.Add(False)
 
         Check.Add("Update face and view styles from template")
-        Action.Add(AddressOf AssemblyUpdateFaceAndViewStylesFromTemplate)
+        Action.Add(AddressOf AssemblyTasks.AssemblyUpdateFaceAndViewStylesFromTemplate)
         Template.Add(True)
 
         Check.Add("Fit isometric view")
-        Action.Add(AddressOf AssemblyFitIsometricView)
+        Action.Add(AddressOf AssemblyTasks.AssemblyFitIsometricView)
         Template.Add(False)
 
         CheckedListBoxAssembly.Items.Clear()
@@ -55,33 +56,34 @@ Partial Class Form1
         Dim Check As New List(Of String)
         Dim Action As New List(Of SEOpPart)
         Dim Template As New List(Of Boolean)
+        Dim PartTasks As New PartTasks()
 
         Check.Add("Failed or warned features")
-        Action.Add(AddressOf PartFailedOrWarnedFeatures)
+        Action.Add(AddressOf PartTasks.PartFailedOrWarnedFeatures)
         Template.Add(False)
 
         Check.Add("Suppressed or rolled back features")
-        Action.Add(AddressOf PartSuppressedOrRolledBackFeatures)
+        Action.Add(AddressOf PartTasks.PartSuppressedOrRolledBackFeatures)
         Template.Add(False)
 
         Check.Add("Underconstrained profiles")
-        Action.Add(AddressOf PartUnderconstrainedProfiles)
+        Action.Add(AddressOf PartTasks.PartUnderconstrainedProfiles)
         Template.Add(False)
 
         Check.Add("Material not in material table")
-        Action.Add(AddressOf PartMaterialNotInMaterialTable)
+        Action.Add(AddressOf PartTasks.PartMaterialNotInMaterialTable)
         Template.Add(False)
 
         Check.Add("Part number does not match file name")
-        Action.Add(AddressOf PartPartNumberDoesNotMatchFilename)
+        Action.Add(AddressOf PartTasks.PartPartNumberDoesNotMatchFilename)
         Template.Add(False)
 
         Check.Add("Update face and view styles from template")
-        Action.Add(AddressOf PartUpdateFaceAndViewStylesFromTemplate)
+        Action.Add(AddressOf PartTasks.PartUpdateFaceAndViewStylesFromTemplate)
         Template.Add(True)
 
         Check.Add("Fit isometric view")
-        Action.Add(AddressOf PartFitIsometricView)
+        Action.Add(AddressOf PartTasks.PartFitIsometricView)
         Template.Add(False)
 
         CheckedListBoxPart.Items.Clear()
@@ -98,41 +100,42 @@ Partial Class Form1
         Dim Check As New List(Of String)
         Dim Action As New List(Of SEOpSheetmetal)
         Dim Template As New List(Of Boolean)
+        Dim SheetmetalTasks As New SheetmetalTasks()
 
         Check.Add("Failed or warned features")
-        Action.Add(AddressOf SheetmetalFailedOrWarnedFeatures)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalFailedOrWarnedFeatures)
         Template.Add(False)
 
         Check.Add("Suppressed or rolled back features")
-        Action.Add(AddressOf SheetmetalSuppressedOrRolledBackFeatures)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalSuppressedOrRolledBackFeatures)
         Template.Add(False)
 
         Check.Add("Underconstrained profiles")
-        Action.Add(AddressOf SheetmetalUnderconstrainedProfiles)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalUnderconstrainedProfiles)
         Template.Add(False)
 
         Check.Add("Flat pattern missing or out of date")
-        Action.Add(AddressOf SheetmetalFlatPatternMissingOrOutOfDate)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalFlatPatternMissingOrOutOfDate)
         Template.Add(False)
 
         Check.Add("Material not in material table")
-        Action.Add(AddressOf SheetmetalMaterialNotInMaterialTable)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalMaterialNotInMaterialTable)
         Template.Add(False)
 
         Check.Add("Part number does not match file name")
-        Action.Add(AddressOf SheetmetalPartNumberDoesNotMatchFilename)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalPartNumberDoesNotMatchFilename)
         Template.Add(False)
 
         Check.Add("Generate Laser DXF and PDF")
-        Action.Add(AddressOf SheetmetalGenerateLaserDXFAndPDF)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalGenerateLaserDXFAndPDF)
         Template.Add(False)
 
         Check.Add("Update face and view styles from template")
-        Action.Add(AddressOf SheetmetalUpdateFaceAndViewStylesFromTemplate)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalUpdateFaceAndViewStylesFromTemplate)
         Template.Add(True)
 
         Check.Add("Fit isometric view")
-        Action.Add(AddressOf SheetmetalFitIsometricView)
+        Action.Add(AddressOf SheetmetalTasks.SheetmetalFitIsometricView)
         Template.Add(False)
 
         CheckedListBoxSheetmetal.Items.Clear()
@@ -149,25 +152,26 @@ Partial Class Form1
         Dim Check As New List(Of String)
         Dim Action As New List(Of SEOpDraft)
         Dim Template As New List(Of Boolean)
+        Dim DraftTasks As New DraftTasks()
 
         Check.Add("Drawing views missing file")
-        Action.Add(AddressOf DraftViewsMissingFiles)
+        Action.Add(AddressOf DraftTasks.DraftViewsMissingFiles)
         Template.Add(False)
 
         Check.Add("Drawing views out of date")
-        Action.Add(AddressOf DraftViewsOutOfDate)
+        Action.Add(AddressOf DraftTasks.DraftViewsOutOfDate)
         Template.Add(False)
 
         Check.Add("Detached dimensions or annotations")
-        Action.Add(AddressOf DraftDetachedDimensionsOrAnnotations)
+        Action.Add(AddressOf DraftTasks.DraftDetachedDimensionsOrAnnotations)
         Template.Add(False)
 
         Check.Add("File name does not match model file name")
-        Action.Add(AddressOf DraftPartNumberDoesNotMatchFilename)
+        Action.Add(AddressOf DraftTasks.DraftPartNumberDoesNotMatchFilename)
         Template.Add(False)
 
         Check.Add("Update drawing border from template")
-        Action.Add(AddressOf DraftUpdateBackgroundFromTemplate)
+        Action.Add(AddressOf DraftTasks.DraftUpdateBackgroundFromTemplate)
         Template.Add(True)
 
         'Check.Add("Update dimension styles from template")
@@ -175,11 +179,11 @@ Partial Class Form1
         'Template.Add(True)
 
         Check.Add("Fit view")
-        Action.Add(AddressOf DraftFitView)
+        Action.Add(AddressOf DraftTasks.DraftFitView)
         Template.Add(False)
 
         Check.Add("Save as PDF")
-        Action.Add(AddressOf DraftSaveAsPDF)
+        Action.Add(AddressOf DraftTasks.DraftSaveAsPDF)
         Template.Add(False)
 
         CheckedListBoxDraft.Items.Clear()

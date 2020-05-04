@@ -1,5 +1,5 @@
 ﻿Public Class AssemblyTasks
-    Private Function AssemblyMissingFiles(
+    Public Function AssemblyMissingFiles(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -24,7 +24,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function AssemblyOccurrenceOutsideProjectDirectory(
+    Public Function AssemblyOccurrenceOutsideProjectDirectory(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -54,7 +54,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function AssemblyFailedRelationships(
+    Public Function AssemblyFailedRelationships(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -85,7 +85,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function AssemblyUnderconstrainedRelationships(
+    Public Function AssemblyUnderconstrainedRelationships(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -112,7 +112,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function AssemblyPartNumberDoesNotMatchFilename(
+    Public Function AssemblyPartNumberDoesNotMatchFilename(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -186,7 +186,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function AssemblyUpdateFaceAndViewStylesFromTemplate(
+    Public Function AssemblyUpdateFaceAndViewStylesFromTemplate(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -285,7 +285,7 @@
 
     End Function
 
-    Private Function AssemblyFitIsometricView(
+    Public Function AssemblyFitIsometricView(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application

@@ -94,13 +94,7 @@
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.AssemblyFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Form1.Defaults.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.DraftFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.FileHelperFunctions.vb">
@@ -110,12 +104,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.LogFile.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.PartFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.SheetmetalFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.vb">

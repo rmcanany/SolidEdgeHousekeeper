@@ -1,5 +1,5 @@
 ﻿Public Class DraftTasks
-    Private Function DraftViewsMissingFiles(
+    Public Function DraftViewsMissingFiles(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -67,7 +67,7 @@
 
     End Function
 
-    Private Function DraftDetachedDimensionsOrAnnotations(
+    Public Function DraftDetachedDimensionsOrAnnotations(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -142,7 +142,7 @@
 
     End Function
 
-    Private Function DraftPartNumberDoesNotMatchFilename(
+    Public Function DraftPartNumberDoesNotMatchFilename(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -194,7 +194,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function DraftUpdateBackgroundFromTemplate(
+    Public Function DraftUpdateBackgroundFromTemplate(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -251,7 +251,7 @@
 
     End Function
 
-    Private Function DraftUpdateDimensionStylesFromTemplate(
+    Public Function DraftUpdateDimensionStylesFromTemplate(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -357,7 +357,7 @@
 
     End Function
 
-    Private Function DraftFitView(
+    Public Function DraftFitView(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -402,7 +402,7 @@
         Return ErrorMessageList
     End Function
 
-    Private Function DraftSaveAsPDF(
+    Public Function DraftSaveAsPDF(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
