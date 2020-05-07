@@ -1,5 +1,32 @@
-﻿Public Class DraftTasks
-    Public Function DraftViewsMissingFiles(
+﻿Imports SolidEdgeCommunity
+
+Public Class DraftTasks
+    Inherits IsolatedTaskProxy
+
+
+    Public Function DrawingViewsMissingFile(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf DrawingViewsMissingFileInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function DrawingViewsMissingFileInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -29,7 +56,30 @@
 
     End Function
 
-    Public Function DraftViewsOutOfDate(
+
+    Public Function DrawingViewsOutOfDate(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf DrawingViewsOutOfDateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function DrawingViewsOutOfDateInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -67,7 +117,30 @@
 
     End Function
 
-    Public Function DraftDetachedDimensionsOrAnnotations(
+
+    Public Function DetachedDimensionsOrAnnotations(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf DetachedDimensionsOrAnnotationsInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function DetachedDimensionsOrAnnotationsInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -142,7 +215,30 @@
 
     End Function
 
-    Public Function DraftPartNumberDoesNotMatchFilename(
+
+    Public Function FileNameDoesNotMatchModelFilename(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FileNameDoesNotMatchModelFilenameInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FileNameDoesNotMatchModelFilenameInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -194,7 +290,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function DraftUpdateBackgroundFromTemplate(
+
+    Public Function UpdateDrawingBorderFromTemplate(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateDrawingBorderFromTemplateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateDrawingBorderFromTemplateInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -251,7 +370,30 @@
 
     End Function
 
-    Public Function DraftUpdateDimensionStylesFromTemplate(
+
+    Public Function UpdateDimensionStylesFromTemplate(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateDimensionStylesFromTemplateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateDimensionStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -357,7 +499,30 @@
 
     End Function
 
-    Public Function DraftFitView(
+
+    Public Function FitView(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FitViewInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FitViewInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -402,7 +567,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function DraftSaveAsPDF(
+
+    Public Function SaveAsPDF(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf SaveAsPDFInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function SaveAsPDFInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -429,6 +617,7 @@
         ErrorMessageList.Add(ErrorMessage)
         Return ErrorMessageList
     End Function
+
 
     Private Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)

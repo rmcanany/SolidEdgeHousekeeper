@@ -1,5 +1,31 @@
-﻿Public Class PartTasks
-    Public Function PartFailedOrWarnedFeatures(
+﻿Imports SolidEdgeCommunity
+
+Public Class PartTasks
+    Inherits IsolatedTaskProxy
+
+    Public Function FailedOrWarnedFeatures(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FailedOrWarnedFeaturesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FailedOrWarnedFeaturesInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -54,7 +80,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function PartSuppressedOrRolledBackFeatures(
+
+    Public Function SuppressedOrRolledBackFeatures(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf SuppressedOrRolledBackFeaturesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function SuppressedOrRolledBackFeaturesInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -102,7 +151,30 @@
 
     End Function
 
-    Public Function PartUnderconstrainedProfiles(
+
+    Public Function UnderconstrainedProfiles(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UnderconstrainedProfilesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UnderconstrainedProfilesInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -128,7 +200,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function PartMaterialNotInMaterialTable(
+
+    Public Function MaterialNotInMaterialTable(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf MaterialNotInMaterialTableInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function MaterialNotInMaterialTableInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -237,7 +332,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function PartPartNumberDoesNotMatchFilename(
+
+    Public Function PartNumberDoesNotMatchFilename(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf PartNumberDoesNotMatchFilenameInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function PartNumberDoesNotMatchFilenameInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -314,7 +432,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function PartUpdateFaceAndViewStylesFromTemplate(
+
+    Public Function UpdateFaceAndViewStylesFromTemplate(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateFaceAndViewStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -413,7 +554,30 @@
 
     End Function
 
-    Public Function PartFitIsometricView(
+
+    Public Function FitIsometricView(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FitIsometricViewInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FitIsometricViewInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application

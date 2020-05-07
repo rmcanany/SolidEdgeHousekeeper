@@ -1,5 +1,31 @@
-﻿Public Class AssemblyTasks
-    Public Function AssemblyMissingFiles(
+﻿Imports SolidEdgeCommunity
+
+Public Class AssemblyTasks
+    Inherits IsolatedTaskProxy
+
+    Public Function OccurrenceMissingFiles(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf OccurrenceMissingFilesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function OccurrenceMissingFilesInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -24,7 +50,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function AssemblyOccurrenceOutsideProjectDirectory(
+
+    Public Function OccurrenceOutsideProjectDirectory(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf OccurrenceOutsideProjectDirectoryInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function OccurrenceOutsideProjectDirectoryInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -54,7 +103,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function AssemblyFailedRelationships(
+
+    Public Function FailedRelationships(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FailedRelationshipsInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FailedRelationshipsInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -85,7 +157,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function AssemblyUnderconstrainedRelationships(
+
+    Public Function UnderconstrainedRelationships(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UnderconstrainedRelationshipsInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UnderconstrainedRelationshipsInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -112,7 +207,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function AssemblyPartNumberDoesNotMatchFilename(
+
+    Public Function PartNumberDoesNotMatchFilename(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf PartNumberDoesNotMatchFilenameInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function PartNumberDoesNotMatchFilenameInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -186,7 +304,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function AssemblyUpdateFaceAndViewStylesFromTemplate(
+
+    Public Function UpdateFaceAndViewStylesFromTemplate(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateFaceAndViewStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -285,7 +426,30 @@
 
     End Function
 
-    Public Function AssemblyFitIsometricView(
+
+    Public Function FitIsometricView(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FitIsometricViewInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FitIsometricViewInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application

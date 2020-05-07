@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports SolidEdgeCommunity
 
 Public Class Form1
     Public SEApp As SolidEdgeFramework.Application
@@ -19,34 +20,42 @@ Public Class Form1
 
     Private StopProcess As Boolean
 
-    Delegate Function SEOpAssembly(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application)
+    'Delegate Function SEOpAssembly(
+    '    ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application)
 
-    Private ListToActionAssembly As New Dictionary(Of String, SEOpAssembly)
-    Private ListToTemplateAssembly As New Dictionary(Of String, Boolean)
+    'Private ListToActionAssembly As New Dictionary(Of String, SEOpAssembly)
+    'Private ListToTemplateAssembly As New Dictionary(Of String, Boolean)
+    Public LabelToActionAssembly = New LabelToAction("Assembly")
 
-    Delegate Function SEOpPart(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application)
-    Private ListToActionPart As New Dictionary(Of String, SEOpPart)
-    Private ListToTemplatePart As New Dictionary(Of String, Boolean)
+    'Delegate Function SEOpPart(
+    '    ByVal SEDoc As SolidEdgePart.PartDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application)
+    'Private ListToActionPart As New Dictionary(Of String, SEOpPart)
+    'Private ListToTemplatePart As New Dictionary(Of String, Boolean)
+    Private LabelToActionPart = New LabelToAction("Part")
 
-    Delegate Function SEOpSheetmetal(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application)
-    Private ListToActionSheetmetal As New Dictionary(Of String, SEOpSheetmetal)
-    Private ListToTemplateSheetmetal As New Dictionary(Of String, Boolean)
+    'Delegate Function SEOpSheetmetal(
+    '    ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application)
+    'Private ListToActionSheetmetal As New Dictionary(Of String, SEOpSheetmetal)
+    'Private ListToTemplateSheetmetal As New Dictionary(Of String, Boolean)
+    Private LabelToActionSheetmetal = New LabelToAction("Sheetmetal")
 
-    Delegate Function SEOpDraft(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application)
-    Private ListToActionDraft As New Dictionary(Of String, SEOpDraft)
-    Private ListToTemplateDraft As New Dictionary(Of String, Boolean)
+
+    'Delegate Function SEOpDraft(
+    '    ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application)
+    'Private ListToActionDraft As New Dictionary(Of String, SEOpDraft)
+    'Private ListToTemplateDraft As New Dictionary(Of String, Boolean)
+    Private LabelToActionDraft = New LabelToAction("Draft")
+
+    Private LaunchTask = New LaunchTask()
+
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -281,20 +290,16 @@ Public Class Form1
 
         Dim RunTasks = Sub()
                            If Filetype = "Assembly" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgeAssembly.AssemblyDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeAssembly.AssemblyDocument)
                                CheckedListBoxX = CheckedListBoxAssembly
                            ElseIf Filetype = "Part" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgePart.PartDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.PartDocument)
                                CheckedListBoxX = CheckedListBoxPart
                            ElseIf Filetype = "Sheetmetal" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgePart.SheetMetalDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.SheetMetalDocument)
                                CheckedListBoxX = CheckedListBoxSheetmetal
                            ElseIf Filetype = "Draft" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgeDraft.DraftDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeDraft.DraftDocument)
                                CheckedListBoxX = CheckedListBoxDraft
                            Else
                                MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
@@ -304,22 +309,14 @@ Public Class Form1
                            For Each LabelText As String In CheckedListBoxX.CheckedItems
                                'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
-                               'Call the function of the checked item
-                               'Note, ListToActionAssembly.Item(LabelText) is a function.
-                               'Also, ListToActionPart.Item(LabelText), etc.
-                               'See BuiltListToAction() for details.
                                If Filetype = "Assembly" Then
-                                   ErrorMessageList = ListToActionAssembly.Item(LabelText)(SEDoc,
-                                       Configuration, SEApp)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                                ElseIf Filetype = "Part" Then
-                                   ErrorMessageList = ListToActionPart.Item(LabelText)(SEDoc,
-                                       Configuration, SEApp)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                                ElseIf Filetype = "Sheetmetal" Then
-                                   ErrorMessageList = ListToActionSheetmetal.Item(LabelText)(SEDoc,
-                                       Configuration, SEApp)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                                Else
-                                   ErrorMessageList = ListToActionDraft.Item(LabelText)(SEDoc,
-                                       Configuration, SEApp)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                                End If
 
                                ExitStatus = ErrorMessageList(0)
@@ -356,12 +353,37 @@ Public Class Form1
 
 
     Private Sub Startup()
-        BuildListToActions()
+        PopulateCheckedListBoxes()
         LoadDefaults()
         ReconcileFormChanges()
         LoadTextBoxReadme()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
+
+        Dim msg As String = ""
+        For Each Key As String In LabelToActionAssembly.L2A.Keys
+            msg += Key + Chr(13)
+            For Each Key2 As String In LabelToActionAssembly.L2A(Key).Keys
+                msg += "    " + Key2 + ": " + LabelToActionAssembly.L2A(Key)(Key2).ToString + Chr(13)
+            Next
+            MsgBox(msg)
+            msg = ""
+        Next
+    End Sub
+
+    Private Sub PopulateCheckedListBoxes()
+        For Each Label In LabelToActionAssembly.L2A.Keys
+            CheckedListBoxAssembly.Items.Add(Label)
+        Next
+        For Each Label In LabelToActionPart.L2A.Keys
+            CheckedListBoxPart.Items.Add(Label)
+        Next
+        For Each Label In LabelToActionSheetmetal.L2A.Keys
+            CheckedListBoxSheetmetal.Items.Add(Label)
+        Next
+        For Each Label In LabelToActionDraft.L2A.Keys
+            CheckedListBoxDraft.Items.Add(Label)
+        Next
     End Sub
 
     Private Sub ReconcileFormChanges()
@@ -435,7 +457,7 @@ Public Class Form1
         'Assembly
         TemplateRequiredAssembly = False
         For Each LabelText In CheckedListBoxAssembly.CheckedItems
-            If ListToTemplateAssembly(LabelText) Then
+            If LabelToActionAssembly.L2A(LabelText)("TemplateRequired") Then
                 TemplateRequiredAssembly = True
             End If
         Next
@@ -443,7 +465,7 @@ Public Class Form1
         'Part
         TemplateRequiredPart = False
         For Each LabelText In CheckedListBoxPart.CheckedItems
-            If ListToTemplatePart(LabelText) Then
+            If LabelToActionPart(LabelText)("TemplateRequired") Then
                 TemplateRequiredPart = True
             End If
         Next
@@ -451,7 +473,7 @@ Public Class Form1
         'Sheetmetal
         TemplateRequiredSheetmetal = False
         For Each LabelText In CheckedListBoxSheetmetal.CheckedItems
-            If ListToTemplateSheetmetal(LabelText) Then
+            If LabelToActionSheetmetal(LabelText)("TemplateRequired") Then
                 TemplateRequiredSheetmetal = True
             End If
         Next
@@ -459,7 +481,7 @@ Public Class Form1
         'Draft
         TemplateRequiredDraft = False
         For Each LabelText In CheckedListBoxDraft.CheckedItems
-            If ListToTemplateDraft(LabelText) Then
+            If LabelToActionDraft(LabelText)("TemplateRequired") Then
                 TemplateRequiredDraft = True
             End If
         Next

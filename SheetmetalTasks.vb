@@ -1,5 +1,31 @@
-﻿Public Class SheetmetalTasks
-    Public Function SheetmetalFailedOrWarnedFeatures(
+﻿Imports SolidEdgeCommunity
+
+Public Class SheetmetalTasks
+    Inherits IsolatedTaskProxy
+
+    Public Function FailedOrWarnedFeatures(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FailedOrWarnedFeaturesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FailedOrWarnedFeaturesInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -46,7 +72,30 @@
 
     End Function
 
-    Public Function SheetmetalSuppressedOrRolledBackFeatures(
+
+    Public Function SuppressedOrRolledBackFeatures(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf SuppressedOrRolledBackFeaturesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function SuppressedOrRolledBackFeaturesInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -93,7 +142,30 @@
 
     End Function
 
-    Public Function SheetmetalUnderconstrainedProfiles(
+
+    Public Function UnderconstrainedProfiles(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UnderconstrainedProfilesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UnderconstrainedProfilesInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -119,7 +191,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function SheetmetalFlatPatternMissingOrOutOfDate(
+
+    Public Function FlatPatternMissingOrOutOfDate(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FlatPatternMissingOrOutOfDateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FlatPatternMissingOrOutOfDateInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -148,7 +243,30 @@
 
     End Function
 
-    Public Function SheetmetalMaterialNotInMaterialTable(
+
+    Public Function MaterialNotInMaterialTable(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf MaterialNotInMaterialTableInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function MaterialNotInMaterialTableInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -259,7 +377,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function SheetmetalPartNumberDoesNotMatchFilename(
+
+    Public Function PartNumberDoesNotMatchFilename(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf PartNumberDoesNotMatchFilenameInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function PartNumberDoesNotMatchFilenameInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -336,7 +477,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function SheetmetalGenerateLaserDXFAndPDF(
+
+    Public Function GenerateLaserDXFAndPDF(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf GenerateLaserDXFAndPDFInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function GenerateLaserDXFAndPDFInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -385,7 +549,7 @@
         DXFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".dxf")
         PDFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".pdf")
 
-        ErrorMessageList = SheetmetalFlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
+        ErrorMessageList = FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
         If ExitStatus = "0" Then
             ExitStatus = ErrorMessageList(0)
         End If
@@ -395,7 +559,7 @@
         End If
 
         If Not DraftFileMissing Then
-            ErrorMessageList = DraftTasks.DraftViewsOutOfDate(SEDraftDoc, Configuration, SEApp)
+            ErrorMessageList = DraftTasks.DrawingViewsOutOfDate(SEDraftDoc, Configuration, SEApp)
             If ExitStatus = "0" Then
                 ExitStatus = ErrorMessageList(0)
             End If
@@ -429,7 +593,30 @@
         Return ErrorMessageList
     End Function
 
-    Public Function SheetmetalUpdateFaceAndViewStylesFromTemplate(
+
+    Public Function UpdateFaceAndViewStylesFromTemplate(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateFaceAndViewStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -528,7 +715,30 @@
 
     End Function
 
-    Public Function SheetmetalFitIsometricView(
+
+    Public Function FitIsometricView(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf FitIsometricViewInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function FitIsometricViewInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -561,7 +771,8 @@
 
     End Function
 
-    Public Function TruncateFullPath(ByVal Path As String,
+
+    Private Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)
         ) As String
 
