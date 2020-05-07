@@ -26,7 +26,7 @@
 
         Label = "Occurrence missing files"
         L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "OcccurrenceMissingFiles")
+        L2A(Label).Add("MethodName", "OccurrenceMissingFiles")
         L2A(Label).Add("RequiresTemplate", False)
         L2A(Label).Add("RequiresMaterialTable", False)
         L2A(Label).Add("RequiresLaserOutputDirectory", False)

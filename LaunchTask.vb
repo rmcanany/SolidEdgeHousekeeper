@@ -3,7 +3,7 @@
 Public Class LaunchTask
 
     Public Function Launch(
-                ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+                ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
                 ByVal Configuration As Dictionary(Of String, String),
                 ByVal SEApp As SolidEdgeFramework.Application,
                 Filetype As String,
@@ -43,6 +43,7 @@ Public Class LaunchTask
 
         Using task = New IsolatedTask(Of AssemblyTasks)()
 
+            'MsgBox(LabelToActionX.L2A(LabelText)("MethodName").ToString)
             Select Case LabelToActionX.L2A(LabelText)("MethodName")
                 Case "OccurrenceMissingFiles"
                     ErrorMessageList = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
@@ -54,7 +55,7 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.UnderconstrainedRelationships(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
-                Case "AssemblyUpdateFaceAndViewStylesFromTemplate"
+                Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
@@ -70,7 +71,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchPart(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
@@ -108,7 +109,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchSheetmetal(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
@@ -150,7 +151,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchDraft(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
