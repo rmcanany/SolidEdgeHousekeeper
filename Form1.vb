@@ -6,7 +6,6 @@ Public Class Form1
 
     Private DefaultsFilename As String
     Private LogfileName As String
-    Private Configuration As New Dictionary(Of String, String)
 
     Private ErrorsOccurred As Boolean
 
@@ -14,6 +13,8 @@ Public Class Form1
     Private FilesToProcessCompleted As Integer
 
     Private StopProcess As Boolean
+
+    Private Configuration As New Dictionary(Of String, String)
 
     Public LabelToActionAssembly = New LabelToAction("Assembly")
     Private LabelToActionPart = New LabelToAction("Part")
@@ -28,6 +29,7 @@ Public Class Form1
     'Robert McAnany 2020
     '
     'Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
+    'Most of the rest was copied verbatim from Jason's repo or Tushar's blog.
     '
     'This description is about the organization of the code.  To read how to use it, see the 
     'Readme Tab on Form1.
@@ -36,20 +38,22 @@ Public Class Form1
     'contained in a separate Function.  
     '
     'The basic flow is Process() -> ProcessFiles() -> ProcessFile().  The ProcessFile() routine 
-    'calls, in turn, each task that has been checked on the form.
+    'calls, in turn, each task that has been checked on the form.  The call is handled in the
+    'LaunchTask class, which in turn calls the file type's respective tasks.  These are housed
+    'in AssemblyTasks, PartTasks, etc.
     '
     'Error handling is localized in the ProcessFile() routine.  Running hundreds or thousands of 
     'files in a row can sometimes cause an Application malfunction.  In such cases, ProcessFile() 
     'retries the tasks.  Most of the time it succeeds on the second attempt.
+    'UPDATE 20200507:  Implementing Jason's IsolatedTask scheme seems to have fixed the Application
+    'malfunctions.  
     '
-    'The mapping between checkboxes and tasks is (somewhat opaquely) done with dictionaries, one 
-    'for each file type.  The naming convention is ListToAction<file type>, e.g., 
-    'ListToActionAssembly, ListToActionPart, etc.  The dictionary keys are the checkbox labels, 
-    'the values are pointers to the desired Function.  The mapping happens in the 
-    'BuildListToAction() routine.  
+    'The mapping between checkboxes and tasks is done in the LabelToAction class.  It creates one 
+    'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
+    'LabelToActionAssembly, LabelToActionPart, etc.  
     '
-    'The main processing is done in this file.  Ancillary related routines are housed in their 
-    'own *.vb file.
+    'The main processing is done in this file.  Some ancillary routines are housed in their own
+    'Partial Class, Form1.*.vb file.
 
     Private Sub Process()
         Dim ErrorMessage As String
@@ -124,7 +128,7 @@ Public Class Form1
 
         SEStop()
 
-        OleMessageFilter.Revoke()
+        OleMessageFilter.Unregister()
 
         If StopProcess Then
             TextBoxStatus.Text = "Processing aborted"

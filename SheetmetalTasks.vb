@@ -577,11 +577,13 @@ Public Class SheetmetalTasks
             SEApp.DoIdle()
         End If
 
-        'Don't save if the flat pattern or draft is out of date
+        'Don't save PDF if the flat pattern or draft is out of date
         If (Not DraftFileMissing) And (Not FlatPatternOutOfDate) And (Not DraftOutOfDate) Then
             SEDraftDoc.SaveAs(PDFFilename)
             SEApp.DoIdle()
+        End If
 
+        If SEDraftDoc IsNot Nothing Then
             SEDraftDoc.Close(False)
             SEApp.DoIdle()
         End If

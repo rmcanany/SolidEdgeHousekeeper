@@ -133,7 +133,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="OleMessageFilter.vb" />
     <Compile Include="PartTasks.vb" />
     <Compile Include="SheetmetalTasks.vb" />
   </ItemGroup>
