@@ -63,6 +63,12 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.SolidEdge, Version=220.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Interop.SolidEdge.220.2.0\lib\net45\Interop.SolidEdge.dll</HintPath>
+    </Reference>
+    <Reference Include="SolidEdge.Community, Version=219.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SolidEdge.Community.219.0.0\lib\net45\SolidEdge.Community.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -89,31 +95,18 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyTasks.vb" />
+    <Compile Include="DraftTasks.vb" />
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.AssemblyFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Defaults.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.DraftFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Form1.FileHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.ListToAction.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Form1.LogFile.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.PartFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.SheetmetalFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.vb">
@@ -123,6 +116,8 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="LabelToAction.vb" />
+    <Compile Include="LaunchTask.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -138,7 +133,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="OleMessageFilter.vb" />
+    <Compile Include="PartTasks.vb" />
+    <Compile Include="SheetmetalTasks.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
@@ -162,80 +158,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="DesignManager">
-      <Guid>{427C71BD-B200-4421-AB49-12DA610B369E}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeAssembly">
-      <Guid>{3E2B3BD4-F0B9-11D1-BDFD-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeConstants">
-      <Guid>{C467A6F5-27ED-11D2-BE30-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeDraft">
-      <Guid>{3E2B3BDC-F0B9-11D1-BDFD-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeFramework">
-      <Guid>{8A7EFA3A-F000-11D1-BDFC-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeFrameworkSupport">
-      <Guid>{943AC5C6-F4DB-11D1-BE00-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgeGeometry">
-      <Guid>{3E2B3BE1-F0B9-11D1-BDFD-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="SolidEdgePart">
-      <Guid>{8A7EFA42-F000-11D1-BDFC-080036B4D502}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

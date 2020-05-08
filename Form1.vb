@@ -1,7 +1,8 @@
 ﻿Imports System.Runtime.InteropServices
+Imports SolidEdgeCommunity
 
 Public Class Form1
-    Private SEApp As SolidEdgeFramework.Application
+    Public SEApp As SolidEdgeFramework.Application
 
     Private DefaultsFilename As String
     Private LogfileName As String
@@ -11,34 +12,24 @@ Public Class Form1
     Private FilesToProcessTotal As Integer
     Private FilesToProcessCompleted As Integer
 
-    Private TemplateRequiredAssembly As Boolean
-    Private TemplateRequiredPart As Boolean
-    Private TemplateRequiredSheetmetal As Boolean
-    Private TemplateRequiredDraft As Boolean
-
     Private StopProcess As Boolean
 
-    Delegate Function SEOpAssembly(ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument)
-    Private ListToActionAssembly As New Dictionary(Of String, SEOpAssembly)
-    Private ListToTemplateAssembly As New Dictionary(Of String, Boolean)
+    Private Configuration As New Dictionary(Of String, String)
 
-    Delegate Function SEOpPart(ByVal SEDoc As SolidEdgePart.PartDocument)
-    Private ListToActionPart As New Dictionary(Of String, SEOpPart)
-    Private ListToTemplatePart As New Dictionary(Of String, Boolean)
+    Public LabelToActionAssembly = New LabelToAction("Assembly")
+    Private LabelToActionPart = New LabelToAction("Part")
+    Private LabelToActionSheetmetal = New LabelToAction("Sheetmetal")
+    Private LabelToActionDraft = New LabelToAction("Draft")
 
-    Delegate Function SEOpSheetmetal(ByVal SEDoc As SolidEdgePart.SheetMetalDocument)
-    Private ListToActionSheetmetal As New Dictionary(Of String, SEOpSheetmetal)
-    Private ListToTemplateSheetmetal As New Dictionary(Of String, Boolean)
+    Private LaunchTask = New LaunchTask()
 
-    Delegate Function SEOpDraft(ByVal SEDoc As SolidEdgeDraft.DraftDocument)
-    Private ListToActionDraft As New Dictionary(Of String, SEOpDraft)
-    Private ListToTemplateDraft As New Dictionary(Of String, Boolean)
 
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020
     '
     'Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
+    'Most of the rest was copied verbatim from Jason's repo or Tushar's blog.
     '
     'This description is about the organization of the code.  To read how to use it, see the 
     'Readme Tab on Form1.
@@ -47,20 +38,22 @@ Public Class Form1
     'contained in a separate Function.  
     '
     'The basic flow is Process() -> ProcessFiles() -> ProcessFile().  The ProcessFile() routine 
-    'calls, in turn, each task that has been checked on the form.
+    'calls, in turn, each task that has been checked on the form.  The call is handled in the
+    'LaunchTask class, which in turn calls the file type's respective tasks.  These are housed
+    'in AssemblyTasks, PartTasks, etc.
     '
     'Error handling is localized in the ProcessFile() routine.  Running hundreds or thousands of 
     'files in a row can sometimes cause an Application malfunction.  In such cases, ProcessFile() 
     'retries the tasks.  Most of the time it succeeds on the second attempt.
+    'UPDATE 20200507:  Implementing Jason's IsolatedTask scheme seems to have fixed the Application
+    'malfunctions.  
     '
-    'The mapping between checkboxes and tasks is (somewhat opaquely) done with dictionaries, one 
-    'for each file type.  The naming convention is ListToAction<file type>, e.g., 
-    'ListToActionAssembly, ListToActionPart, etc.  The dictionary keys are the checkbox labels, 
-    'the values are pointers to the desired Function.  The mapping happens in the 
-    'BuildListToAction() routine.  
+    'The mapping between checkboxes and tasks is done in the LabelToAction class.  It creates one 
+    'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
+    'LabelToActionAssembly, LabelToActionPart, etc.  
     '
-    'The main processing is done in this file.  Ancillary related routines are housed in their 
-    'own *.vb file.
+    'The main processing is done in this file.  Some ancillary routines are housed in their own
+    'Partial Class, Form1.*.vb file.
 
     Private Sub Process()
         Dim ErrorMessage As String
@@ -135,7 +128,7 @@ Public Class Form1
 
         SEStop()
 
-        OleMessageFilter.Revoke()
+        OleMessageFilter.Unregister()
 
         If StopProcess Then
             TextBoxStatus.Text = "Processing aborted"
@@ -176,29 +169,129 @@ Public Class Form1
             msg += "    Select a valid input directory" + Chr(13)
         End If
 
-        If TemplateRequiredAssembly Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTemplateAssembly.Text) Then
-                msg += "    Select a valid assembly template" + Chr(13)
+        For Each Label In CheckedListBoxAssembly.CheckedItems
+            If LabelToActionAssembly.L2A(Label)("RequiresTemplate") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxTemplateAssembly.Text) Then
+                    If Not msg.Contains("Select a valid assembly template") Then
+                        msg += "    Select a valid assembly template" + Chr(13)
+                    End If
+                End If
             End If
-        End If
+            If LabelToActionAssembly.L2A(Label)("RequiresMaterialTable") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxActiveMaterialLibrary.Text) Then
+                    If Not msg.Contains("Select a valid material library") Then
+                        msg += "    Select a valid material library" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionAssembly.L2A(Label)("RequiresLaserOutputDirectory") Then
+                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                    If Not msg.Contains("Select a valid laser output directory") Then
+                        msg += "    Select a valid laser output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionAssembly.L2A(Label)("RequiresPartNumberFields") Then
+                If TextBoxPartNumberPropertyName.Text = "" Then
+                    If Not msg.Contains("Select a valid part number property name") Then
+                        msg += "    Select a valid part number property name" + Chr(13)
+                    End If
+                End If
+            End If
+        Next
 
-        If TemplateRequiredPart Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTemplatePart.Text) Then
-                msg += "    Select a valid part template" + Chr(13)
+        For Each Label In CheckedListBoxPart.CheckedItems
+            If LabelToActionPart.L2A(Label)("RequiresTemplate") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxTemplatePart.Text) Then
+                    If Not msg.Contains("Select a valid part template") Then
+                        msg += "    Select a valid part template" + Chr(13)
+                    End If
+                End If
             End If
-        End If
+            If LabelToActionPart.L2A(Label)("RequiresMaterialTable") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxActiveMaterialLibrary.Text) Then
+                    If Not msg.Contains("Select a valid material library") Then
+                        msg += "    Select a valid material library" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionPart.L2A(Label)("RequiresLaserOutputDirectory") Then
+                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                    If Not msg.Contains("Select a valid laser output directory") Then
+                        msg += "    Select a valid laser output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionPart.L2A(Label)("RequiresPartNumberFields") Then
+                If TextBoxPartNumberPropertyName.Text = "" Then
+                    If Not msg.Contains("Select a valid part number property name") Then
+                        msg += "    Select a valid part number property name" + Chr(13)
+                    End If
+                End If
+            End If
+        Next
 
-        If TemplateRequiredSheetmetal Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTemplateSheetmetal.Text) Then
-                msg += "    Select a valid sheetmetal template" + Chr(13)
+        For Each Label In CheckedListBoxSheetmetal.CheckedItems
+            If LabelToActionSheetmetal.L2A(Label)("RequiresTemplate") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxTemplateSheetmetal.Text) Then
+                    If Not msg.Contains("Select a valid sheetmetal template") Then
+                        msg += "    Select a valid sheetmetal template" + Chr(13)
+                    End If
+                End If
             End If
-        End If
+            If LabelToActionSheetmetal.L2A(Label)("RequiresMaterialTable") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxActiveMaterialLibrary.Text) Then
+                    If Not msg.Contains("Select a valid material library") Then
+                        msg += "    Select a valid material library" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionSheetmetal.L2A(Label)("RequiresLaserOutputDirectory") Then
+                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                    If Not msg.Contains("Select a valid laser output directory") Then
+                        msg += "    Select a valid laser output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionSheetmetal.L2A(Label)("RequiresPartNumberFields") Then
+                If TextBoxPartNumberPropertyName.Text = "" Then
+                    If Not msg.Contains("Select a valid part number property name") Then
+                        msg += "    Select a valid part number property name" + Chr(13)
+                    End If
+                End If
+            End If
+        Next
 
-        If TemplateRequiredDraft Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTemplateDraft.Text) Then
-                msg += "    Select a valid draft template" + Chr(13)
+        For Each Label In CheckedListBoxDraft.CheckedItems
+            If LabelToActionDraft.L2A(Label)("RequiresTemplate") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxTemplateDraft.Text) Then
+                    If Not msg.Contains("Select a valid draft template") Then
+                        msg += "    Select a valid draft template" + Chr(13)
+                    End If
+                End If
             End If
-        End If
+            If LabelToActionDraft.L2A(Label)("RequiresMaterialTable") Then
+                If Not FileIO.FileSystem.FileExists(TextBoxActiveMaterialLibrary.Text) Then
+                    If Not msg.Contains("Select a valid material library") Then
+                        msg += "    Select a valid material library" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionDraft.L2A(Label)("RequiresLaserOutputDirectory") Then
+                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                    If Not msg.Contains("Select a valid laser output directory") Then
+                        msg += "    Select a valid laser output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionDraft.L2A(Label)("RequiresPartNumberFields") Then
+                If TextBoxPartNumberPropertyName.Text = "" Then
+                    If Not msg.Contains("Select a valid part number property name") Then
+                        msg += "    Select a valid part number property name" + Chr(13)
+                    End If
+                End If
+            End If
+        Next
 
         If Len(msg) <> 0 Then
             msg = "Please correct the following before continuing" + Chr(13) + msg
@@ -267,20 +360,16 @@ Public Class Form1
 
         Dim RunTasks = Sub()
                            If Filetype = "Assembly" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgeAssembly.AssemblyDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeAssembly.AssemblyDocument)
                                CheckedListBoxX = CheckedListBoxAssembly
                            ElseIf Filetype = "Part" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgePart.PartDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.PartDocument)
                                CheckedListBoxX = CheckedListBoxPart
                            ElseIf Filetype = "Sheetmetal" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgePart.SheetMetalDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.SheetMetalDocument)
                                CheckedListBoxX = CheckedListBoxSheetmetal
                            ElseIf Filetype = "Draft" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path),
-                                                     SolidEdgeDraft.DraftDocument)
+                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeDraft.DraftDocument)
                                CheckedListBoxX = CheckedListBoxDraft
                            Else
                                MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
@@ -290,18 +379,14 @@ Public Class Form1
                            For Each LabelText As String In CheckedListBoxX.CheckedItems
                                'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
-                               'Call the function of the checked item
-                               'Note, ListToActionAssembly.Item(LabelText) is a function.
-                               'Also, ListToActionPart.Item(LabelText), etc.
-                               'See BuiltListToAction() for details.
                                If Filetype = "Assembly" Then
-                                   ErrorMessageList = ListToActionAssembly.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                                ElseIf Filetype = "Part" Then
-                                   ErrorMessageList = ListToActionPart.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                                ElseIf Filetype = "Sheetmetal" Then
-                                   ErrorMessageList = ListToActionSheetmetal.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                                Else
-                                   ErrorMessageList = ListToActionDraft.Item(LabelText)(SEDoc)
+                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                                End If
 
                                ExitStatus = ErrorMessageList(0)
@@ -319,7 +404,7 @@ Public Class Form1
         Try
             RunTasks()
         Catch ex As Exception
-            'LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13) + ex.ToString + Chr(13))
+            LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13) + ex.ToString + Chr(13))
             SEStop()
             SEStart()
 
@@ -338,13 +423,105 @@ Public Class Form1
 
 
     Private Sub Startup()
-        BuildListToActions()
+        PopulateCheckedListBoxes()
         LoadDefaults()
+        ReconcileFormChanges()
         LoadTextBoxReadme()
-        UpdateFileTypes()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
     End Sub
+
+    Private Sub PopulateCheckedListBoxes()
+
+        CheckedListBoxAssembly.Items.Clear()
+        For Each Label In LabelToActionAssembly.L2A.Keys
+            CheckedListBoxAssembly.Items.Add(Label)
+        Next
+
+        CheckedListBoxPart.Items.Clear()
+        For Each Label In LabelToActionPart.L2A.Keys
+            CheckedListBoxPart.Items.Add(Label)
+        Next
+
+        CheckedListBoxSheetmetal.Items.Clear()
+        For Each Label In LabelToActionSheetmetal.L2A.Keys
+            CheckedListBoxSheetmetal.Items.Add(Label)
+        Next
+
+        CheckedListBoxDraft.Items.Clear()
+        For Each Label In LabelToActionDraft.L2A.Keys
+            CheckedListBoxDraft.Items.Add(Label)
+        Next
+    End Sub
+
+    Private Sub ReconcileFormChanges()
+        ' Update configuration
+        Configuration(TextBoxInputDirectory.Name) = TextBoxInputDirectory.Text
+        Configuration(TextBoxTemplateAssembly.Name) = TextBoxTemplateAssembly.Text
+        Configuration(TextBoxTemplatePart.Name) = TextBoxTemplatePart.Text
+        Configuration(TextBoxTemplateSheetmetal.Name) = TextBoxTemplateSheetmetal.Text
+        Configuration(TextBoxTemplateDraft.Name) = TextBoxTemplateDraft.Text
+        Configuration(TextBoxActiveMaterialLibrary.Name) = TextBoxActiveMaterialLibrary.Text
+        Configuration(TextBoxLaserOutputDirectory.Name) = TextBoxLaserOutputDirectory.Text
+        Configuration(ComboBoxPartNumberPropertySet.Name) = ComboBoxPartNumberPropertySet.Text
+        Configuration(TextBoxPartNumberPropertyName.Name) = TextBoxPartNumberPropertyName.Text
+
+
+        ' Update file types
+        If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeAssembly.Checked = True
+        Else
+            CheckBoxFileTypeAssembly.Checked = False
+        End If
+        If CheckedListBoxPart.CheckedItems.Count > 0 Then
+            CheckBoxFileTypePart.Checked = True
+        Else
+            CheckBoxFileTypePart.Checked = False
+        End If
+        If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeSheetmetal.Checked = True
+        Else
+            CheckBoxFileTypeSheetmetal.Checked = False
+        End If
+        If CheckedListBoxDraft.CheckedItems.Count > 0 Then
+            CheckBoxFileTypeDraft.Checked = True
+        Else
+            CheckBoxFileTypeDraft.Checked = False
+        End If
+
+        ' Update ListBoxFiles
+        Dim FoundFiles As IReadOnlyCollection(Of String)
+        Dim FoundFile As String
+        Dim ActiveFileExtensionsList As New List(Of String)
+
+        If CheckBoxFileTypeAssembly.Checked Then
+            ActiveFileExtensionsList.Add("*.asm")
+        End If
+        If CheckBoxFileTypePart.Checked Then
+            ActiveFileExtensionsList.Add("*.par")
+        End If
+        If CheckBoxFileTypeSheetmetal.Checked Then
+            ActiveFileExtensionsList.Add("*.psm")
+        End If
+        If CheckBoxFileTypeDraft.Checked Then
+            ActiveFileExtensionsList.Add("*.dft")
+        End If
+
+        ListBoxFiles.Items.Clear()
+
+        If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+
+            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                                    FileIO.SearchOption.SearchTopLevelOnly,
+                                    ActiveFileExtensionsList.ToArray)
+
+            For Each FoundFile In FoundFiles
+                ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+            Next
+        End If
+
+    End Sub
+
 
     Private Sub CheckOrUncheckAll(ByVal CheckedListBoxX As CheckedListBox)
         Dim NoneChecked As Boolean
@@ -356,7 +533,7 @@ Public Class Form1
             CheckedListBoxX.SetItemChecked(i, NoneChecked)
         Next
 
-        UpdateFileTypes()
+        ReconcileFormChanges()
 
     End Sub
 
@@ -379,8 +556,7 @@ Public Class Form1
     End Sub
 
     Private Sub CheckedListBoxAssembly_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxAssembly.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
 
     Private Sub CheckedListBoxAssembly_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxAssembly.DoubleClick
@@ -388,24 +564,21 @@ Public Class Form1
     End Sub
 
     Private Sub CheckedListBoxPart_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxPart.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxPart_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxPart.DoubleClick
         CheckOrUncheckAll(CheckedListBoxPart)
     End Sub
 
     Private Sub CheckedListBoxSheetmetal_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxSheetmetal.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxSheetmetal_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxSheetmetal.DoubleClick
         CheckOrUncheckAll(CheckedListBoxSheetmetal)
     End Sub
 
     Private Sub CheckedListBoxDraft_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CheckedListBoxDraft.SelectedIndexChanged
-        UpdateFileTypes()
-        UpdateTemplateRequired()
+        ReconcileFormChanges()
     End Sub
     Private Sub CheckedListBoxDraft_DoubleClick(sender As Object, e As EventArgs) Handles CheckedListBoxDraft.DoubleClick
         CheckOrUncheckAll(CheckedListBoxDraft)
@@ -415,7 +588,7 @@ Public Class Form1
         FolderBrowserDialog1.ShowDialog()
         TextBoxInputDirectory.Text = FolderBrowserDialog1.SelectedPath
         ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
-        UpdateListBoxFiles()
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ListBoxFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBoxFiles.SelectedIndexChanged
@@ -429,6 +602,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateAssembly.Text = OpenFileDialog1.FileName
         End If
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplatePart_Click(sender As Object, e As EventArgs) Handles ButtonTemplatePart.Click
@@ -438,6 +612,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplatePart.Text = OpenFileDialog1.FileName
         End If
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplateSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonTemplateSheetmetal.Click
@@ -447,7 +622,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateSheetmetal.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonTemplateDraft_Click(sender As Object, e As EventArgs) Handles ButtonTemplateDraft.Click
@@ -457,7 +632,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateDraft.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonActiveMaterialLibrary_Click(sender As Object, e As EventArgs) Handles ButtonActiveMaterialLibrary.Click
@@ -467,7 +642,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxActiveMaterialLibrary.Text = OpenFileDialog1.FileName
         End If
-
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonLaserOutputDirectory.Click
@@ -475,6 +650,14 @@ Public Class Form1
         TextBoxLaserOutputDirectory.Text = FolderBrowserDialog1.SelectedPath
         'ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
         'UpdateListBoxFiles()
+        ReconcileFormChanges()
+    End Sub
 
+    Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
+        ReconcileFormChanges()
     End Sub
 End Class

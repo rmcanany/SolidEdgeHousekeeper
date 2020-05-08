@@ -1,7 +1,7 @@
 # Solid Edge Housekeeper
 Robert McAnany 2020
 
-Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
+Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -26,9 +26,9 @@ However, problems can arise.  Those cases will also be reported in the text file
 Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
 
 ## DETAILS
-Comprehensive list of implemented tests and actions.
+List of implemented tests and actions.
 ### Assembly
-    Occurrence missing file
+    Occurrence missing files
     Occurrence outside project directory
     Failed relationships
     Underconstrained relationships
@@ -59,6 +59,7 @@ Comprehensive list of implemented tests and actions.
     Detached dimensions or annotations
     File name does not match model file name
     Update drawing border from template
+    Update dimension styles from template
     Fit view
     Save as PDF
 
