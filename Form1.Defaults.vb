@@ -207,7 +207,7 @@ Partial Class Form1
         Dim msg1 As New List(Of String)
         Dim msg2 As New List(Of String)
         Dim msg3 As New List(Of String)
-        Dim ReadmeFileName As String = ""
+        Dim ReadmeFileName As String
         Dim FilenameList As New List(Of String)
 
         Dim CheckBoxList As New List(Of CheckedListBox)
@@ -326,17 +326,12 @@ Partial Class Form1
         Next
         TextBoxReadme.Lines = msg3.ToArray
 
-        ' Create README.md.  Need to remove the last two directories of the location of the executable.
-        FilenameList = System.IO.Path.GetDirectoryName(DefaultsFilename).Split("\").ToList
-        For i As Integer = 0 To 1  ' Remove the last two directories
-            FilenameList.RemoveAt(FilenameList.Count - 1)
-        Next
-        For i As Integer = 0 To FilenameList.Count - 1
-            ReadmeFileName += FilenameList(i) + "\"
-        Next
-        ReadmeFileName += "README.md"
+        ' ReadmeFileName hard coded.  Hopefully most users won't have this location on their machines.  
+        ReadmeFileName = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
 
-        IO.File.WriteAllLines(ReadmeFileName, msg1)
+        If FileIO.FileSystem.DirectoryExists(System.IO.Path.GetDirectoryName(ReadmeFileName)) Then
+            IO.File.WriteAllLines(ReadmeFileName, msg1)
+        End If
 
     End Sub
 
