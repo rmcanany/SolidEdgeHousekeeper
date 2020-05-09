@@ -52,8 +52,19 @@ Public Class Form1
     'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
     'LabelToActionAssembly, LabelToActionPart, etc.  
     '
-    'The main processing is done in this file.  Some ancillary routines are housed in their own
-    'Partial Class, Form1.*.vb file.
+    'The main processing is done in this file, Form1.vb.  Some ancillary routines are housed in 
+    'their own Partial Class, Form1.*.vb file.
+
+    'To add tasks to the program is a matter of adding the code to the appropriate Tasks class.  
+    'Note, each task has a Public and Private component.  The Public part sets up the IsolatedTask.
+    'The Private part does the actual task processing.  Getting the task to the form's 
+    'CheckedListBoxes is accomplished by adding a corresponding entry in the LabelToAction class 
+    'and updating LaunchTask accordingly.  
+
+    'To add new user-specific input entails first adding the appropriate control to the form.  
+    'The second step would be to add that information to the Configuration dictionary in the 
+    'ReconcileFormChanges routine.  Next would be to modify CheckStartConditions to validate 
+    'any user input.  Finally, the LoadDefaults would need to be updated as required.
 
     Private Sub Process()
         Dim ErrorMessage As String
@@ -76,34 +87,6 @@ Public Class Form1
         ButtonCancel.Text = "Stop"
 
         OleMessageFilter.Register()
-
-        'Dim WaitSeconds As Integer = 3
-        'Dim reps As Integer = 2
-        'Dim msg As String
-        'For i As Integer = 0 To CheckedListBoxDraft.Items.Count - 1
-        '    For k As Integer = 0 To CheckedListBoxDraft.Items.Count - 1
-        '        CheckedListBoxDraft.SetItemChecked(k, False)
-        '    Next
-        '    CheckedListBoxDraft.SetItemChecked(i, True)
-        '    If i > 0 Then
-        '        System.Threading.Thread.Sleep(1000 * WaitSeconds)
-        '    End If
-
-        '    For j As Integer = 1 To reps
-        '        'MsgBox(CheckedListBoxDraft.CheckedItems(0))
-        '        LogfileAppend(CheckedListBoxDraft.CheckedItems(0), "D:\something", Chr(13))
-        '        'MsgBox(CheckedListBoxDraft.Items.Count.ToString)
-        '        msg = "Checkbox " + (i + 1).ToString + "/" + CheckedListBoxDraft.Items.Count.ToString
-        '        msg += ", Rep " + (j).ToString + "/" + reps.ToString
-        '        LabelInputDirectory.Text = msg
-        '        If j > 1 Then
-        '            'TextBoxStatus.Text = "Sleeping 30 s before Rep " + j.ToString
-        '            System.Threading.Thread.Sleep(1000 * WaitSeconds)
-        '        End If
-
-
-        '    Next
-        'Next
 
         FilesToProcessCompleted = 0
         LogfileSetName()
@@ -169,6 +152,8 @@ Public Class Form1
             msg += "    Select a valid input directory" + Chr(13)
         End If
 
+        ' For the selected tasks, see if outside information, such as a template file, is required.
+        ' If so, verify that the outside information is valid.
         For Each Label In CheckedListBoxAssembly.CheckedItems
             For Each Item In LabelToActionAssembly
                 If Item.LabelText = Label Then
@@ -326,7 +311,6 @@ Public Class Form1
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
         Dim RestartAfter As Integer
-        'Dim Count As Integer = 0
         Dim msg As String
 
         Try
@@ -346,6 +330,7 @@ Public Class Form1
             FilesToProcess = GetFileNames("*.dft")
         Else
             MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
+            SEApp.Quit()
             End
         End If
 
@@ -380,6 +365,7 @@ Public Class Form1
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
         Dim CheckedListBoxX As CheckedListBox
 
+        ' Internal routine so the tasks can be retried in case of Application malfunction.
         Dim RunTasks = Sub()
                            If Filetype = "Assembly" Then
                                SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeAssembly.AssemblyDocument)
@@ -395,6 +381,7 @@ Public Class Form1
                                CheckedListBoxX = CheckedListBoxDraft
                            Else
                                MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
+                               SEApp.Quit()
                                End
                            End If
 
@@ -426,7 +413,7 @@ Public Class Form1
         Try
             RunTasks()
         Catch ex As Exception
-            LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13) + ex.ToString + Chr(13))
+            LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13))
             SEStop()
             SEStart()
 
@@ -451,28 +438,6 @@ Public Class Form1
         LoadTextBoxReadme()
         FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
-
-        'Dim msg As String = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        'For Each Item In LabelToActionAssembly
-        '    msg += Item.LabelText + " " + Item.MethodName + Chr(13)
-        'Next
-        'MsgBox(msg)
-        'msg = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        'For Each Item In LabelToActionPart
-        '    msg += Item.LabelText + " " + Item.MethodName + Chr(13)
-        'Next
-        'MsgBox(msg)
-        'msg = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        'For Each Item In LabelToActionSheetmetal
-        '    msg += Item.LabelText + " " + Item.MethodName + Chr(13)
-        'Next
-        'MsgBox(msg)
-        'msg = "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        'For Each Item In LabelToActionDraft
-        '    msg += Item.LabelText + " " + Item.MethodName + Chr(13)
-        'Next
-        'MsgBox(msg)
-        'msg = ""
     End Sub
 
     Private Sub PopulateCheckedListBoxes()
@@ -533,7 +498,8 @@ Public Class Form1
             CheckBoxFileTypeDraft.Checked = False
         End If
 
-        ' Update ListBoxFiles
+
+        ' Update ListBoxFiles on Form1
         Dim FoundFiles As IReadOnlyCollection(Of String)
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
@@ -692,8 +658,6 @@ Public Class Form1
     Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonLaserOutputDirectory.Click
         FolderBrowserDialog1.ShowDialog()
         TextBoxLaserOutputDirectory.Text = FolderBrowserDialog1.SelectedPath
-        'ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
-        'UpdateListBoxFiles()
         ReconcileFormChanges()
     End Sub
 

@@ -10,10 +10,6 @@
         Public Property RequiresPartNumberFields As Boolean
     End Class
 
-    'Public L2A As New Dictionary(Of String, Dictionary(Of String, Object))
-    'Private Label As String
-
-
     Public Sub New(Filetype As String)
         If Filetype = "Assembly" Then
             PopulateAssembly()
@@ -43,6 +39,7 @@
     End Sub
 
     Private Sub PopulateAssembly()
+
         Dim OccurrenceMissingFiles As New L2A
         PopulateList(OccurrenceMissingFiles, "OccurrenceMissingFiles",
                      "Occurrence missing files", False, False, False, False)

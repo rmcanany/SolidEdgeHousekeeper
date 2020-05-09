@@ -39,8 +39,6 @@ Public Class DraftTasks
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
-        Dim msg As String = ""
-
         ModelLinks = SEDoc.ModelLinks
 
         For Each ModelLink In ModelLinks
@@ -173,6 +171,7 @@ Public Class DraftTasks
         Section = Sections.WorkingSection
         SectionSheets = Section.Sheets
 
+        ' Callouts are 'Baloons' in Solid Edge.
         For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
             Balloons = Sheet.Balloons
             For Each Balloon In Balloons
@@ -323,7 +322,6 @@ Public Class DraftTasks
         Dim ExitStatus As String = "0"
         Dim ErrorMessage As String = ""
 
-        'Dim TemplateFilename As String = TextBoxTemplateDraft.Text
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
         Dim Sections As SolidEdgeDraft.Sections
@@ -547,7 +545,6 @@ Public Class DraftTasks
         'Maximizes the window in the application
         If SheetWindow.WindowState <> 2 Then
             SheetWindow.WindowState = 2
-            'System.Threading.Thread.Sleep(1000)
             SEApp.DoIdle()
         End If
 
@@ -623,7 +620,6 @@ Public Class DraftTasks
         Configuration As Dictionary(Of String, String)
         ) As String
 
-        'Dim Length As Integer = Len(TextBoxInputDirectory.Text)
         Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
         Dim NewPath As String
 

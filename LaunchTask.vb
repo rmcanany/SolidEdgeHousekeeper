@@ -15,7 +15,6 @@ Public Class LaunchTask
 
         If Filetype = "Assembly" Then
             ErrorMessageList = LaunchAssembly(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
-
         ElseIf Filetype = "Part" Then
             ErrorMessageList = LaunchPart(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Sheetmetal" Then
@@ -23,7 +22,8 @@ Public Class LaunchTask
         ElseIf Filetype = "Draft" Then
             ErrorMessageList = LaunchDraft(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         Else
-            MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
+            MsgBox("LaunchTask: Filetype not recognized: " + Filetype + ".  Exiting...")
+            SEApp.Quit()
             End
         End If
 
@@ -69,7 +69,8 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    SEApp.Quit()
                     End
             End Select
 
@@ -119,7 +120,8 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    SEApp.Quit()
                     End
             End Select
 
@@ -170,7 +172,8 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    SEApp.Quit()
                     End
             End Select
 
@@ -219,7 +222,8 @@ Public Class LaunchTask
                 Case "SaveAsPDF"
                     ErrorMessageList = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    SEApp.Quit()
                     End
             End Select
 

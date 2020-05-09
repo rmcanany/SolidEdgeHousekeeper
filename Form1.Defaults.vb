@@ -89,7 +89,6 @@ Partial Class Form1
             Next
         Catch ex As Exception
             TextBoxInputDirectory.Text = Application.StartupPath
-            'MsgBox("Exception" + ex.ToString)
         End Try
 
         ReconcileFormChanges()
@@ -326,7 +325,8 @@ Partial Class Form1
         Next
         TextBoxReadme.Lines = msg3.ToArray
 
-        ' ReadmeFileName hard coded.  Hopefully most users won't have this location on their machines.  
+        ' The readme file is not needed on the user's machine.  
+        ' The file name is hard coded, hopefully most users won't have this exact location on their machines.  
         ReadmeFileName = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
 
         If FileIO.FileSystem.DirectoryExists(System.IO.Path.GetDirectoryName(ReadmeFileName)) Then

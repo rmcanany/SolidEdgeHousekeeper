@@ -178,6 +178,7 @@ Public Class SheetmetalTasks
         Dim ProfileSets As SolidEdgePart.ProfileSets = SEDoc.ProfileSets
         Dim ProfileSet As SolidEdgePart.ProfileSet
 
+        ' Not applicable to sync models
         If SEDoc.ModelingMode.ToString = "seModelingModeOrdered" Then
             For Each ProfileSet In ProfileSets
                 If ProfileSet.IsUnderDefined Then
@@ -337,11 +338,16 @@ Public Class SheetmetalTasks
                         MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
                         MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
                         If DocPropValue <> LibPropValue Then
+                            ' Double types may have insignificant differences.
                             If (DocPropValue.GetType = GetType(Double)) And (DocPropValue.GetType = GetType(Double)) Then
-                                If Not Math.Abs(DocPropValue - LibPropValue) < 0.001 Then
+                                Dim PercentDifference As Double = (DocPropValue - LibPropValue) / ((DocPropValue + LibPropValue) / 2)
+                                If Not Math.Abs(PercentDifference) < 0.001 Then
                                     CurrentMaterialMatchesLibMaterial = False
                                     Exit For
                                 End If
+                            Else
+                                CurrentMaterialMatchesLibMaterial = False
+                                Exit For
                             End If
                         End If
                         DocPropValue = Nothing
@@ -429,10 +435,7 @@ Public Class SheetmetalTasks
         For Each Properties In PropertySets
             msg += Properties.Name + Chr(13)
             For Each Prop In Properties
-                'MsgBox(PartNumberPropertySet.ToLower + " " + Properties.Name.ToLower)
-                'TF = (ComboBoxPartNumberPropertySet.Text.ToLower = "custom") And (Properties.Name.ToLower = "custom")
                 TF = (Configuration("ComboBoxPartNumberPropertySet").ToLower = "custom") And (Properties.Name.ToLower = "custom")
-                'MsgBox("")
                 If TF Then
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
                         'If Prop.Name = TextBoxPartNumberPropertyName.Text Then
@@ -526,7 +529,6 @@ Public Class SheetmetalTasks
         Dim msg As String = ""
 
         If Not FileIO.FileSystem.DirectoryExists(Configuration("TextBoxLaserOutputDirectory")) Then
-            'msg = "Laser output directory not found: '" + TextBoxLaserOutputDirectory.Text + "'.  "
             msg = "Laser output directory not found: '" + Configuration("TextBoxLaserOutputDirectory") + "'.  "
             msg += "Please select a valid directory on the Sheetmetal Tab." + Chr(13)
             msg += "Exiting..."
@@ -778,7 +780,6 @@ Public Class SheetmetalTasks
         Configuration As Dictionary(Of String, String)
         ) As String
 
-        'Dim Length As Integer = Len(TextBoxInputDirectory.Text)
         Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
         Dim NewPath As String
 

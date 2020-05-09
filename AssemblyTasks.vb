@@ -260,7 +260,6 @@ Public Class AssemblyTasks
             msg += Properties.Name + Chr(13)
             For Each Prop In Properties
                 TF = (Configuration("ComboBoxPartNumberPropertySet").ToLower = "custom") And (Properties.Name.ToLower = "custom")
-                'MsgBox("")
                 If TF Then
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
                         PartNumber = Prop.Value.Trim
@@ -344,7 +343,6 @@ Public Class AssemblyTasks
         Dim ViewStyles As SolidEdgeFramework.ViewStyles
         Dim ViewStyle As SolidEdgeFramework.ViewStyle
 
-        'Dim TemplateFilename As String = TextBoxTemplateAssembly.Text
         Dim TemplateFilename As String = Configuration("TextBoxTemplateAssembly")
         Dim TemplateActiveStyleName As String = ""
         Dim TempViewStyleName As String = ""
@@ -387,7 +385,6 @@ Public Class AssemblyTasks
             End If
         Next
 
-        'System.Threading.Thread.Sleep(1000)
         SEApp.DoIdle()
 
         Windows = SEDoc.Windows

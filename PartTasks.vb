@@ -40,14 +40,11 @@ Public Class PartTasks
         Dim ExitStatus As String = "0"
         Dim ErrorMessage As String = ""
 
-        'igFeatureOK = 1216476310
-        'igFeatureFailed = 1216476311
-        'igFeatureWarned = 1216476312
-        'igFeatureSuppressed = 1216476313
-        'igFeatureRolledBack = 1216476314
-
         Models = SEDoc.Models
 
+        ' Some imported files can have lots of models.  Somehow each model's features contain all the models.
+        ' So if there are 100 models, there are 100*100 model-feature combinations.
+        ' That takes forever the chew through.  So instead, issue an error and let the user check the file manually.
         If (Models.Count > 0) And (Models.Count < 10) Then
             For Each Model In Models
                 Features = Model.Features
@@ -56,7 +53,6 @@ Public Class PartTasks
                     For i As Integer = 0 To Features.Count - 1
                         If Not Features(i).DisplayName.Contains("CopyConstruction") Then
                             Status = Features(i).Status
-                            ' MsgBox(Status.ToString)
                             If Status.ToString = "igFeatureFailed" Then
                                 ExitStatus = "1"
                                 ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
@@ -187,6 +183,7 @@ Public Class PartTasks
         Dim ProfileSets As SolidEdgePart.ProfileSets = SEDoc.ProfileSets
         Dim ProfileSet As SolidEdgePart.ProfileSet
 
+        ' Not applicable in sync models.
         If SEDoc.ModelingMode.ToString = "seModelingModeOrdered" Then
             For Each ProfileSet In ProfileSets
                 If ProfileSet.IsUnderDefined Then
@@ -245,7 +242,6 @@ Public Class PartTasks
         Dim DocPropValue As Object = Nothing
         Dim LibPropValue As Object = Nothing
 
-        'Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(TextBoxActiveMaterialLibrary.Text)
         Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
         Dim ActiveMaterialLibraryPresent As Boolean = False
         Dim CurrentMaterialName As String = ""
@@ -294,11 +290,16 @@ Public Class PartTasks
                         MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
                         MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
                         If DocPropValue <> LibPropValue Then
+                            ' Double types may have insignificant differences.
                             If (DocPropValue.GetType = GetType(Double)) And (DocPropValue.GetType = GetType(Double)) Then
-                                If Not Math.Abs(DocPropValue - LibPropValue) < 0.001 Then
+                                Dim PercentDifference As Double = (DocPropValue - LibPropValue) / ((DocPropValue + LibPropValue) / 2)
+                                If Not Math.Abs(PercentDifference) < 0.001 Then
                                     CurrentMaterialMatchesLibMaterial = False
                                     Exit For
                                 End If
+                            Else
+                                CurrentMaterialMatchesLibMaterial = False
+                                Exit For
                             End If
                         End If
                         DocPropValue = Nothing
@@ -384,8 +385,6 @@ Public Class PartTasks
         For Each Properties In PropertySets
             msg += Properties.Name + Chr(13)
             For Each Prop In Properties
-                'MsgBox(PartNumberPropertySet.ToLower + " " + Properties.Name.ToLower)
-                'TF = (ComboBoxPartNumberPropertySet.Text.ToLower = "custom") And (Properties.Name.ToLower = "custom")
                 TF = (Configuration("ComboBoxPartNumberPropertySet").ToLower = "custom") And (Properties.Name.ToLower = "custom")
                 'MsgBox("")
                 If TF Then
@@ -472,7 +471,6 @@ Public Class PartTasks
         Dim ViewStyles As SolidEdgeFramework.ViewStyles
         Dim ViewStyle As SolidEdgeFramework.ViewStyle
 
-        'Dim TemplateFilename As String = TextBoxTemplatePart.Text
         Dim TemplateFilename As String = Configuration("TextBoxTemplatePart")
         Dim TemplateActiveStyleName As String = ""
         Dim TempViewStyleName As String = ""
@@ -515,7 +513,6 @@ Public Class PartTasks
             End If
         Next
 
-        'System.Threading.Thread.Sleep(1000)
         SEApp.DoIdle()
 
         Windows = SEDoc.Windows
