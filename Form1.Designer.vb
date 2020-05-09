@@ -79,6 +79,7 @@ Partial Class Form1
         Me.ButtonProcess = New System.Windows.Forms.Button()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFileTypes.SuspendLayout()
@@ -101,7 +102,7 @@ Partial Class Form1
         Me.TabControl1.Controls.Add(Me.TabPageConfiguration)
         Me.TabControl1.Controls.Add(Me.TabPageReadme)
         Me.TabControl1.Location = New System.Drawing.Point(-3, -4)
-        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(488, 325)
@@ -118,9 +119,9 @@ Partial Class Form1
         Me.TabPageGeneral.Controls.Add(Me.TextBoxInputDirectory)
         Me.TabPageGeneral.Controls.Add(Me.ButtonInputDirectory)
         Me.TabPageGeneral.Location = New System.Drawing.Point(4, 22)
-        Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageGeneral.Name = "TabPageGeneral"
-        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPageGeneral.Size = New System.Drawing.Size(480, 299)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
@@ -132,9 +133,9 @@ Partial Class Form1
         Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypePart)
         Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypeAssembly)
         Me.GroupBoxFileTypes.Location = New System.Drawing.Point(244, 162)
-        Me.GroupBoxFileTypes.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBoxFileTypes.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxFileTypes.Name = "GroupBoxFileTypes"
-        Me.GroupBoxFileTypes.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBoxFileTypes.Padding = New System.Windows.Forms.Padding(2)
         Me.GroupBoxFileTypes.Size = New System.Drawing.Size(188, 102)
         Me.GroupBoxFileTypes.TabIndex = 7
         Me.GroupBoxFileTypes.TabStop = False
@@ -145,7 +146,7 @@ Partial Class Form1
         Me.CheckBoxFileTypeDraft.AutoSize = True
         Me.CheckBoxFileTypeDraft.Enabled = False
         Me.CheckBoxFileTypeDraft.Location = New System.Drawing.Point(11, 81)
-        Me.CheckBoxFileTypeDraft.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckBoxFileTypeDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileTypeDraft.Name = "CheckBoxFileTypeDraft"
         Me.CheckBoxFileTypeDraft.Size = New System.Drawing.Size(50, 19)
         Me.CheckBoxFileTypeDraft.TabIndex = 7
@@ -157,7 +158,7 @@ Partial Class Form1
         Me.CheckBoxFileTypeSheetmetal.AutoSize = True
         Me.CheckBoxFileTypeSheetmetal.Enabled = False
         Me.CheckBoxFileTypeSheetmetal.Location = New System.Drawing.Point(11, 61)
-        Me.CheckBoxFileTypeSheetmetal.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckBoxFileTypeSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileTypeSheetmetal.Name = "CheckBoxFileTypeSheetmetal"
         Me.CheckBoxFileTypeSheetmetal.Size = New System.Drawing.Size(61, 19)
         Me.CheckBoxFileTypeSheetmetal.TabIndex = 6
@@ -169,7 +170,7 @@ Partial Class Form1
         Me.CheckBoxFileTypePart.AutoSize = True
         Me.CheckBoxFileTypePart.Enabled = False
         Me.CheckBoxFileTypePart.Location = New System.Drawing.Point(11, 41)
-        Me.CheckBoxFileTypePart.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckBoxFileTypePart.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileTypePart.Name = "CheckBoxFileTypePart"
         Me.CheckBoxFileTypePart.Size = New System.Drawing.Size(55, 19)
         Me.CheckBoxFileTypePart.TabIndex = 5
@@ -181,7 +182,7 @@ Partial Class Form1
         Me.CheckBoxFileTypeAssembly.AutoSize = True
         Me.CheckBoxFileTypeAssembly.Enabled = False
         Me.CheckBoxFileTypeAssembly.Location = New System.Drawing.Point(11, 20)
-        Me.CheckBoxFileTypeAssembly.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckBoxFileTypeAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileTypeAssembly.Name = "CheckBoxFileTypeAssembly"
         Me.CheckBoxFileTypeAssembly.Size = New System.Drawing.Size(61, 19)
         Me.CheckBoxFileTypeAssembly.TabIndex = 4
@@ -194,9 +195,9 @@ Partial Class Form1
         Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoryOnly)
         Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoriesAndSubdirectories)
         Me.GroupBoxFilesToProcess.Location = New System.Drawing.Point(244, 61)
-        Me.GroupBoxFilesToProcess.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBoxFilesToProcess.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxFilesToProcess.Name = "GroupBoxFilesToProcess"
-        Me.GroupBoxFilesToProcess.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.GroupBoxFilesToProcess.Padding = New System.Windows.Forms.Padding(2)
         Me.GroupBoxFilesToProcess.Size = New System.Drawing.Size(188, 81)
         Me.GroupBoxFilesToProcess.TabIndex = 6
         Me.GroupBoxFilesToProcess.TabStop = False
@@ -206,7 +207,7 @@ Partial Class Form1
         '
         Me.RadioButtonFilesSelected.AutoSize = True
         Me.RadioButtonFilesSelected.Location = New System.Drawing.Point(11, 61)
-        Me.RadioButtonFilesSelected.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.RadioButtonFilesSelected.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonFilesSelected.Name = "RadioButtonFilesSelected"
         Me.RadioButtonFilesSelected.Size = New System.Drawing.Size(76, 19)
         Me.RadioButtonFilesSelected.TabIndex = 2
@@ -217,7 +218,7 @@ Partial Class Form1
         '
         Me.RadioButtonFilesDirectoryOnly.AutoSize = True
         Me.RadioButtonFilesDirectoryOnly.Location = New System.Drawing.Point(11, 41)
-        Me.RadioButtonFilesDirectoryOnly.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.RadioButtonFilesDirectoryOnly.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonFilesDirectoryOnly.Name = "RadioButtonFilesDirectoryOnly"
         Me.RadioButtonFilesDirectoryOnly.Size = New System.Drawing.Size(101, 19)
         Me.RadioButtonFilesDirectoryOnly.TabIndex = 1
@@ -228,7 +229,7 @@ Partial Class Form1
         '
         Me.RadioButtonFilesDirectoriesAndSubdirectories.AutoSize = True
         Me.RadioButtonFilesDirectoriesAndSubdirectories.Location = New System.Drawing.Point(11, 20)
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.RadioButtonFilesDirectoriesAndSubdirectories.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonFilesDirectoriesAndSubdirectories.Name = "RadioButtonFilesDirectoriesAndSubdirectories"
         Me.RadioButtonFilesDirectoriesAndSubdirectories.Size = New System.Drawing.Size(180, 19)
         Me.RadioButtonFilesDirectoriesAndSubdirectories.TabIndex = 0
@@ -239,7 +240,7 @@ Partial Class Form1
         '
         Me.ListBoxFiles.FormattingEnabled = True
         Me.ListBoxFiles.Location = New System.Drawing.Point(11, 61)
-        Me.ListBoxFiles.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ListBoxFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.ListBoxFiles.Name = "ListBoxFiles"
         Me.ListBoxFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
         Me.ListBoxFiles.Size = New System.Drawing.Size(226, 238)
@@ -258,7 +259,7 @@ Partial Class Form1
         'TextBoxInputDirectory
         '
         Me.TextBoxInputDirectory.Location = New System.Drawing.Point(11, 28)
-        Me.TextBoxInputDirectory.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxInputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxInputDirectory.Name = "TextBoxInputDirectory"
         Me.TextBoxInputDirectory.Size = New System.Drawing.Size(376, 20)
         Me.TextBoxInputDirectory.TabIndex = 3
@@ -266,7 +267,7 @@ Partial Class Form1
         'ButtonInputDirectory
         '
         Me.ButtonInputDirectory.Location = New System.Drawing.Point(394, 28)
-        Me.ButtonInputDirectory.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonInputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonInputDirectory.Name = "ButtonInputDirectory"
         Me.ButtonInputDirectory.Size = New System.Drawing.Size(75, 20)
         Me.ButtonInputDirectory.TabIndex = 2
@@ -279,9 +280,9 @@ Partial Class Form1
         Me.TabPageAssembly.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPageAssembly.Controls.Add(Me.CheckedListBoxAssembly)
         Me.TabPageAssembly.Location = New System.Drawing.Point(4, 22)
-        Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageAssembly.Name = "TabPageAssembly"
-        Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPageAssembly.Size = New System.Drawing.Size(480, 299)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
@@ -293,7 +294,7 @@ Partial Class Form1
         Me.CheckedListBoxAssembly.FormattingEnabled = True
         Me.CheckedListBoxAssembly.Items.AddRange(New Object() {"Fake name 1.  Real checkboxes populated at run time.", "Fake name 2", "Fake name 3"})
         Me.CheckedListBoxAssembly.Location = New System.Drawing.Point(19, 20)
-        Me.CheckedListBoxAssembly.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckedListBoxAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxAssembly.Name = "CheckedListBoxAssembly"
         Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxAssembly.TabIndex = 0
@@ -304,9 +305,9 @@ Partial Class Form1
         Me.TabPagePart.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPagePart.Controls.Add(Me.CheckedListBoxPart)
         Me.TabPagePart.Location = New System.Drawing.Point(4, 22)
-        Me.TabPagePart.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPagePart.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPagePart.Name = "TabPagePart"
-        Me.TabPagePart.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPagePart.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPagePart.Size = New System.Drawing.Size(480, 299)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
@@ -318,7 +319,7 @@ Partial Class Form1
         Me.CheckedListBoxPart.FormattingEnabled = True
         Me.CheckedListBoxPart.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
         Me.CheckedListBoxPart.Location = New System.Drawing.Point(19, 20)
-        Me.CheckedListBoxPart.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckedListBoxPart.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxPart.Name = "CheckedListBoxPart"
         Me.CheckedListBoxPart.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxPart.TabIndex = 1
@@ -332,9 +333,9 @@ Partial Class Form1
         Me.TabPageSheetmetal.Controls.Add(Me.LabelLaserOutputDirectory)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckedListBoxSheetmetal)
         Me.TabPageSheetmetal.Location = New System.Drawing.Point(4, 22)
-        Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageSheetmetal.Name = "TabPageSheetmetal"
-        Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPageSheetmetal.Size = New System.Drawing.Size(480, 299)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
@@ -342,7 +343,7 @@ Partial Class Form1
         'ButtonLaserOutputDirectory
         '
         Me.ButtonLaserOutputDirectory.Location = New System.Drawing.Point(382, 260)
-        Me.ButtonLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonLaserOutputDirectory.Name = "ButtonLaserOutputDirectory"
         Me.ButtonLaserOutputDirectory.Size = New System.Drawing.Size(75, 20)
         Me.ButtonLaserOutputDirectory.TabIndex = 5
@@ -352,7 +353,7 @@ Partial Class Form1
         'TextBoxLaserOutputDirectory
         '
         Me.TextBoxLaserOutputDirectory.Location = New System.Drawing.Point(8, 260)
-        Me.TextBoxLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxLaserOutputDirectory.Name = "TextBoxLaserOutputDirectory"
         Me.TextBoxLaserOutputDirectory.Size = New System.Drawing.Size(369, 20)
         Me.TextBoxLaserOutputDirectory.TabIndex = 4
@@ -374,7 +375,7 @@ Partial Class Form1
         Me.CheckedListBoxSheetmetal.FormattingEnabled = True
         Me.CheckedListBoxSheetmetal.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
         Me.CheckedListBoxSheetmetal.Location = New System.Drawing.Point(19, 20)
-        Me.CheckedListBoxSheetmetal.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckedListBoxSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxSheetmetal.Name = "CheckedListBoxSheetmetal"
         Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxSheetmetal.TabIndex = 2
@@ -385,9 +386,9 @@ Partial Class Form1
         Me.TabPageDraft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.TabPageDraft.Controls.Add(Me.CheckedListBoxDraft)
         Me.TabPageDraft.Location = New System.Drawing.Point(4, 22)
-        Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageDraft.Name = "TabPageDraft"
-        Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPageDraft.Size = New System.Drawing.Size(480, 299)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
@@ -399,7 +400,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft.FormattingEnabled = True
         Me.CheckedListBoxDraft.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
         Me.CheckedListBoxDraft.Location = New System.Drawing.Point(19, 20)
-        Me.CheckedListBoxDraft.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.CheckedListBoxDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxDraft.Name = "CheckedListBoxDraft"
         Me.CheckedListBoxDraft.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxDraft.TabIndex = 2
@@ -431,7 +432,7 @@ Partial Class Form1
         Me.TabPageConfiguration.Controls.Add(Me.LabelTemplateDraft)
         Me.TabPageConfiguration.Location = New System.Drawing.Point(4, 22)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
-        Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPageConfiguration.Size = New System.Drawing.Size(480, 299)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
@@ -439,7 +440,7 @@ Partial Class Form1
         'TextBoxRestartAfter
         '
         Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 317)
-        Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(76, 20)
         Me.TextBoxRestartAfter.TabIndex = 15
@@ -458,7 +459,7 @@ Partial Class Form1
         'TextBoxPartNumberPropertyName
         '
         Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 268)
-        Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
         Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(132, 20)
         Me.TextBoxPartNumberPropertyName.TabIndex = 13
@@ -478,7 +479,7 @@ Partial Class Form1
         Me.ComboBoxPartNumberPropertySet.FormattingEnabled = True
         Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"Default", "Custom"})
         Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(8, 268)
-        Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPartNumberPropertySet.Name = "ComboBoxPartNumberPropertySet"
         Me.ComboBoxPartNumberPropertySet.Size = New System.Drawing.Size(132, 21)
         Me.ComboBoxPartNumberPropertySet.TabIndex = 11
@@ -496,7 +497,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(382, 219)
-        Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
         Me.ButtonActiveMaterialLibrary.TabIndex = 9
@@ -506,7 +507,7 @@ Partial Class Form1
         'TextBoxActiveMaterialLibrary
         '
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(8, 219)
-        Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
         Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(368, 20)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
@@ -627,9 +628,9 @@ Partial Class Form1
         Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageReadme.Controls.Add(Me.TextBoxReadme)
         Me.TabPageReadme.Location = New System.Drawing.Point(4, 22)
-        Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageReadme.Name = "TabPageReadme"
-        Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPageReadme.Size = New System.Drawing.Size(480, 299)
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
@@ -648,7 +649,7 @@ Partial Class Form1
         '
         Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
         Me.TextBoxStatus.Location = New System.Drawing.Point(4, 325)
-        Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxStatus.Name = "TextBoxStatus"
         Me.TextBoxStatus.Size = New System.Drawing.Size(488, 20)
         Me.TextBoxStatus.TabIndex = 1
@@ -657,7 +658,7 @@ Partial Class Form1
         '
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ButtonCancel.Location = New System.Drawing.Point(410, 356)
-        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 20)
         Me.ButtonCancel.TabIndex = 2
@@ -667,7 +668,7 @@ Partial Class Form1
         'ButtonProcess
         '
         Me.ButtonProcess.Location = New System.Drawing.Point(316, 356)
-        Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonProcess.Name = "ButtonProcess"
         Me.ButtonProcess.Size = New System.Drawing.Size(75, 20)
         Me.ButtonProcess.TabIndex = 3
@@ -678,6 +679,13 @@ Partial Class Form1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
         '
+        'FakeFolderBrowserDialog
+        '
+        Me.FakeFolderBrowserDialog.CheckFileExists = False
+        Me.FakeFolderBrowserDialog.FileName = "Select Folder"
+        Me.FakeFolderBrowserDialog.Title = "Select Folder"
+        Me.FakeFolderBrowserDialog.ValidateNames = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -687,7 +695,7 @@ Partial Class Form1
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.TextBoxStatus)
         Me.Controls.Add(Me.TabControl1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Form1"
         Me.Text = "Solid Edge Housekeeper"
         Me.TabControl1.ResumeLayout(False)
@@ -767,4 +775,5 @@ Partial Class Form1
     Friend WithEvents ButtonLaserOutputDirectory As Button
     Friend WithEvents TextBoxLaserOutputDirectory As TextBox
     Friend WithEvents LabelLaserOutputDirectory As Label
+    Friend WithEvents FakeFolderBrowserDialog As OpenFileDialog
 End Class

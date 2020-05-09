@@ -436,7 +436,7 @@ Public Class Form1
         LoadDefaults()
         ReconcileFormChanges()
         LoadTextBoxReadme()
-        FolderBrowserDialog1.SelectedPath = TextBoxInputDirectory.Text
+        FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
     End Sub
 
@@ -595,9 +595,14 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonInputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonInputDirectory.Click
-        FolderBrowserDialog1.ShowDialog()
-        TextBoxInputDirectory.Text = FolderBrowserDialog1.SelectedPath
-        ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxInputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+
         ReconcileFormChanges()
     End Sub
 
@@ -656,8 +661,13 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonLaserOutputDirectory.Click
-        FolderBrowserDialog1.ShowDialog()
-        TextBoxLaserOutputDirectory.Text = FolderBrowserDialog1.SelectedPath
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxLaserOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
         ReconcileFormChanges()
     End Sub
 
