@@ -1,6 +1,17 @@
 ﻿Public Class LabelToAction
-    Public L2A As New Dictionary(Of String, Dictionary(Of String, Object))
-    Private Label As String
+    Inherits List(Of L2A)
+
+    Public Class L2A
+        Public Property MethodName As String
+        Public Property LabelText As String
+        Public Property RequiresTemplate As Boolean
+        Public Property RequiresMaterialTable As Boolean
+        Public Property RequiresLaserOutputDirectory As Boolean
+        Public Property RequiresPartNumberFields As Boolean
+    End Class
+
+    'Public L2A As New Dictionary(Of String, Dictionary(Of String, Object))
+    'Private Label As String
 
 
     Public Sub New(Filetype As String)
@@ -18,394 +29,156 @@
         End If
     End Sub
 
+    Public Sub PopulateList(Entry As L2A, MethodName As String, LabelText As String, RequiresTemplate As Boolean,
+                         RequiresMaterialTable As Boolean, RequiresLaserOutputDirectory As Boolean,
+                         RequiresPartNumberFields As Boolean)
+        Entry.MethodName = MethodName
+        Entry.LabelText = LabelText
+        Entry.RequiresTemplate = RequiresTemplate
+        Entry.RequiresMaterialTable = RequiresMaterialTable
+        Entry.RequiresLaserOutputDirectory = RequiresLaserOutputDirectory
+        Entry.RequiresPartNumberFields = RequiresPartNumberFields
+        Me.Add(Entry)
+
+    End Sub
+
     Private Sub PopulateAssembly()
+        Dim OccurrenceMissingFiles As New L2A
+        PopulateList(OccurrenceMissingFiles, "OccurrenceMissingFiles",
+                     "Occurrence missing files", False, False, False, False)
 
-        'Check.Add("Occurrence missing file")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyMissingFiles)
-        'Template.Add(False)
+        Dim OccurrenceOutsideProjectDirectory As New L2A
+        PopulateList(OccurrenceOutsideProjectDirectory, "OccurrenceOutsideProjectDirectory",
+                     "Occurrence outside project directory", False, False, False, False)
 
-        Label = "Occurrence missing files"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "OccurrenceMissingFiles")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim FailedRelationships As New L2A
+        PopulateList(FailedRelationships, "FailedRelationships",
+                     "Failed relationships", False, False, False, False)
 
-        'Check.Add("Occurrence outside project directory")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyOccurrenceOutsideProjectDirectory)
-        'Template.Add(False)
+        Dim UnderconstrainedRelationships As New L2A
+        PopulateList(UnderconstrainedRelationships, "UnderconstrainedRelationships",
+                     "Underconstrained relationships", False, False, False, False)
 
-        Label = "Occurrence outside project directory"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "OccurrenceOutsideProjectDirectory")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim PartNumberDoesNotMatchFilename As New L2A
+        PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
+                     "Part number does not match file name", False, False, False, True)
 
-        'Check.Add("Failed relationships")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyFailedRelationships)
-        'Template.Add(False)
+        Dim UpdateFaceAndViewStylesFromTemplate As New L2A
+        PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
+                     "Update face and view styles from template", True, False, False, False)
 
-        Label = "Failed relationships"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FailedRelationships")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Underconstrained relationships")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyUnderconstrainedRelationships)
-        'Template.Add(False)
-
-        Label = "Underconstrained relationships"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UnderconstrainedRelationships")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Part number does not match file name")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyPartNumberDoesNotMatchFilename)
-        'Template.Add(False)
-
-        Label = "Part number does not match file name"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "PartNumberDoesNotMatchFilename")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", True)
-
-        'Check.Add("Update face and view styles from template")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyUpdateFaceAndViewStylesFromTemplate)
-        'Template.Add(True)
-
-        Label = "Update face and view styles from template"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UpdateFaceAndViewStylesFromTemplate")
-        L2A(Label).Add("RequiresTemplate", True)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Fit isometric view")
-        'Action.Add(AddressOf AssemblyTasks.AssemblyFitIsometricView)
-        'Template.Add(False)
-
-        Label = "Fit isometric view"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FitIsometricView")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-
+        Dim FitIsometricView As New L2A
+        PopulateList(FitIsometricView, "FitIsometricView",
+                     "Fit isometric view", False, False, False, False)
 
     End Sub
 
     Private Sub PopulatePart()
-        'Check.Add("Failed or warned features")
-        'Action.Add(AddressOf PartTasks.PartFailedOrWarnedFeatures)
-        'Template.Add(False)
 
-        Label = "Failed or warned features"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FailedOrWarnedFeatures")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim FailedOrWarnedFeatures As New L2A
+        PopulateList(FailedOrWarnedFeatures, "FailedOrWarnedFeatures",
+                     "Failed or warned features", False, False, False, False)
 
-        'Check.Add("Suppressed or rolled back features")
-        'Action.Add(AddressOf PartTasks.PartSuppressedOrRolledBackFeatures)
-        'Template.Add(False)
+        Dim SuppressedOrRolledBackFeatures As New L2A
+        PopulateList(SuppressedOrRolledBackFeatures, "SuppressedOrRolledBackFeatures",
+                     "Suppressed or rolled back features", False, False, False, False)
 
-        Label = "Suppressed or rolled back features"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "SuppressedOrRolledBackFeatures")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim UnderconstrainedProfiles As New L2A
+        PopulateList(UnderconstrainedProfiles, "UnderconstrainedProfiles",
+                     "Underconstrained profiles", False, False, False, False)
 
-        'Check.Add("Underconstrained profiles")
-        'Action.Add(AddressOf PartTasks.PartUnderconstrainedProfiles)
-        'Template.Add(False)
+        Dim MaterialNotInMaterialTable As New L2A
+        PopulateList(MaterialNotInMaterialTable, "MaterialNotInMaterialTable",
+                     "Material not in material table", False, True, False, False)
 
-        Label = "Underconstrained profiles"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UnderconstrainedProfiles")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim PartNumberDoesNotMatchFilename As New L2A
+        PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
+                     "Part number does not match file name", False, False, False, True)
 
-        'Check.Add("Material not in material table")
-        'Action.Add(AddressOf PartTasks.PartMaterialNotInMaterialTable)
-        'Template.Add(False)
+        Dim UpdateFaceAndViewStylesFromTemplate As New L2A
+        PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
+                     "Update face and view styles from template", True, False, False, False)
 
-        Label = "Material not in material table"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "MaterialNotInMaterialTable")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", True)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Part number does not match file name")
-        'Action.Add(AddressOf PartTasks.PartPartNumberDoesNotMatchFilename)
-        'Template.Add(False)
-
-        Label = "Part number does not match file name"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "PartNumberDoesNotMatchFilename")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", True)
-
-        'Check.Add("Update face and view styles from template")
-        'Action.Add(AddressOf PartTasks.PartUpdateFaceAndViewStylesFromTemplate)
-        'Template.Add(True)
-
-        Label = "Update face and view styles from template"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UpdateFaceAndViewStylesFromTemplate")
-        L2A(Label).Add("RequiresTemplate", True)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Fit isometric view")
-        'Action.Add(AddressOf PartTasks.PartFitIsometricView)
-        'Template.Add(False)
-
-        Label = "Fit isometric view"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FitIsometricView")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
+        Dim FitIsometricView As New L2A
+        PopulateList(FitIsometricView, "FitIsometricView",
+                     "Fit isometric view", False, False, False, False)
 
     End Sub
 
-    Private Sub PopulateSheetmetal()
+    Public Sub PopulateSheetmetal()
 
-        'Check.Add("Failed or warned features")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalFailedOrWarnedFeatures)
-        'Template.Add(False)
+        Dim FailedOrWarnedFeatures As New L2A
+        PopulateList(FailedOrWarnedFeatures, "FailedOrWarnedFeatures",
+                     "Failed or warned features", False, False, False, False)
 
-        Label = "Failed or warned features"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FailedOrWarnedFeatures")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim SuppressedOrRolledBackFeatures As New L2A
+        PopulateList(SuppressedOrRolledBackFeatures, "SuppressedOrRolledBackFeatures",
+                     "Suppressed or rolled back features", False, False, False, False)
 
-        'Check.Add("Suppressed or rolled back features")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalSuppressedOrRolledBackFeatures)
-        'Template.Add(False)
+        Dim UnderconstrainedProfiles As New L2A
+        PopulateList(UnderconstrainedProfiles, "UnderconstrainedProfiles",
+                     "Underconstrained profiles", False, False, False, False)
 
-        Label = "Suppressed or rolled back features"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "SuppressedOrRolledBackFeatures")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
 
-        'Check.Add("Underconstrained profiles")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalUnderconstrainedProfiles)
-        'Template.Add(False)
+        Dim FlatPatternMissingOrOutOfDate As New L2A
+        PopulateList(FlatPatternMissingOrOutOfDate, "FlatPatternMissingOrOutOfDate",
+                     "Flat pattern missing or out of date", False, False, False, False)
 
-        Label = "Underconstrained profiles"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UnderconstrainedProfiles")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim MaterialNotInMaterialTable As New L2A
+        PopulateList(MaterialNotInMaterialTable, "MaterialNotInMaterialTable",
+                     "Material not in material table", False, True, False, False)
 
-        'Check.Add("Flat pattern missing or out of date")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalFlatPatternMissingOrOutOfDate)
-        'Template.Add(False)
+        Dim PartNumberDoesNotMatchFilename As New L2A
+        PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
+                     "Part number does not match file name", False, False, False, True)
 
-        Label = "Flat pattern missing or out of date"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FlatPatternMissingOrOutOfDate")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim GenerateLaserDXFAndPDF As New L2A
+        PopulateList(GenerateLaserDXFAndPDF, "GenerateLaserDXFAndPDF",
+                     "Generate Laser DXF and PDF", False, False, True, True)
 
-        'Check.Add("Material not in material table")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalMaterialNotInMaterialTable)
-        'Template.Add(False)
+        Dim UpdateFaceAndViewStylesFromTemplate As New L2A
+        PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
+                     "Update face and view styles from template", True, False, False, False)
 
-        Label = "Material not in material table"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "MaterialNotInMaterialTable")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", True)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Part number does not match file name")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalPartNumberDoesNotMatchFilename)
-        'Template.Add(False)
-
-        Label = "Part number does not match file name"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "PartNumberDoesNotMatchFilename")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", True)
-
-        'Check.Add("Generate Laser DXF and PDF")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalGenerateLaserDXFAndPDF)
-        'Template.Add(False)
-
-        Label = "Generate Laser DXF and PDF"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "GenerateLaserDXFAndPDF")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", True)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Update face and view styles from template")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalUpdateFaceAndViewStylesFromTemplate)
-        'Template.Add(True)
-
-        Label = "Update face and view styles from template"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UpdateFaceAndViewStylesFromTemplate")
-        L2A(Label).Add("RequiresTemplate", True)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Fit isometric view")
-        'Action.Add(AddressOf SheetmetalTasks.SheetmetalFitIsometricView)
-        'Template.Add(False)
-
-        Label = "Fit isometric view"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FitIsometricView")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim FitIsometricView As New L2A
+        PopulateList(FitIsometricView, "FitIsometricView",
+                     "Fit isometric view", False, False, False, False)
 
     End Sub
 
     Private Sub PopulateDraft()
 
-        'Check.Add("Drawing views missing file")
-        'Action.Add(AddressOf DraftTasks.DraftDrawingViewsMissingFiles)
-        'Template.Add(False)
+        Dim DrawingViewsMissingFile As New L2A
+        PopulateList(DrawingViewsMissingFile, "DrawingViewsMissingFile",
+                     "Drawing views missing file", False, False, False, False)
 
-        Label = "Drawing views missing file"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "DrawingViewsMissingFile")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim DrawingViewsOutOfDate As New L2A
+        PopulateList(DrawingViewsOutOfDate, "DrawingViewsOutOfDate",
+                     "Drawing views out of date", False, False, False, False)
 
-        'Check.Add("Drawing views out of date")
-        'Action.Add(AddressOf DraftTasks.DraftViewsOutOfDate)
-        'Template.Add(False)
+        Dim DetachedDimensionsOrAnnotations As New L2A
+        PopulateList(DetachedDimensionsOrAnnotations, "DetachedDimensionsOrAnnotations",
+                     "Detached dimensions or annotations", False, False, False, False)
 
-        Label = "Drawing views out of date"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "DrawingViewsOutOfDate")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim FileNameDoesNotMatchModelFilename As New L2A
+        PopulateList(FileNameDoesNotMatchModelFilename, "FileNameDoesNotMatchModelFilename",
+                     "File name does not match model file name", False, False, False, False)
 
-        'Check.Add("Detached dimensions or annotations")
-        'Action.Add(AddressOf DraftTasks.DraftDetachedDimensionsOrAnnotations)
-        'Template.Add(False)
+        Dim UpdateDrawingBorderFromTemplate As New L2A
+        PopulateList(UpdateDrawingBorderFromTemplate, "UpdateDrawingBorderFromTemplate",
+                     "Update drawing border from template", True, False, False, False)
 
-        Label = "Detached dimensions or annotations"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "DetachedDimensionsOrAnnotations")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
+        Dim UpdateDimensionStylesFromTemplate As New L2A
+        PopulateList(UpdateDimensionStylesFromTemplate, "UpdateDimensionStylesFromTemplate",
+                     "Update dimension styles from template", True, False, False, False)
 
-        'Check.Add("File name does not match model file name")
-        'Action.Add(AddressOf DraftTasks.DraftPartNumberDoesNotMatchFilename)
-        'Template.Add(False)
+        Dim FitView As New L2A
+        PopulateList(FitView, "FitView",
+                     "Fit view", False, False, False, False)
 
-        Label = "File name does not match model file name"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FileNameDoesNotMatchModelFilename")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Update drawing border from template")
-        'Action.Add(AddressOf DraftTasks.DraftUpdateBackgroundFromTemplate)
-        'Template.Add(True)
-
-        Label = "Update drawing border from template"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UpdateDrawingBorderFromTemplate")
-        L2A(Label).Add("RequiresTemplate", True)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        ''Check.Add("Update dimension styles from template")
-        ''Action.Add(AddressOf DraftUpdateDimensionStylesFromTemplate)
-        ''Template.Add(True)
-
-        Label = "Update dimension styles from template"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "UpdateDimensionStylesFromTemplate")
-        L2A(Label).Add("RequiresTemplate", True)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Fit view")
-        'Action.Add(AddressOf DraftTasks.DraftFitView)
-        'Template.Add(False)
-
-        Label = "Fit view"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "FitView")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
-        'Check.Add("Save as PDF")
-        'Action.Add(AddressOf DraftTasks.DraftSaveAsPDF)
-        'Template.Add(False)
-
-        Label = "Save as PDF"
-        L2A.Add(Label, New Dictionary(Of String, Object))
-        L2A(Label).Add("MethodName", "SaveAsPDF")
-        L2A(Label).Add("RequiresTemplate", False)
-        L2A(Label).Add("RequiresMaterialTable", False)
-        L2A(Label).Add("RequiresLaserOutputDirectory", False)
-        L2A(Label).Add("RequiresPartNumberFields", False)
-
+        Dim SaveAsPDF As New L2A
+        PopulateList(SaveAsPDF, "SaveAsPDF",
+                     "Save as PDF", False, False, False, False)
 
     End Sub
 

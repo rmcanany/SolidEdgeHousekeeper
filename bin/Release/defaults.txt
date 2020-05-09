@@ -1,4 +1,4 @@
-TextBoxInputDirectory=D:\CAD\scripts\test_files\shop
+TextBoxInputDirectory=D:\CAD\scripts\test_files\20181212_auto_cube_fill
 TextBoxTemplateAssembly=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch assembly.asm
 TextBoxTemplatePart=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch part.par
 TextBoxTemplateSheetmetal=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch sheet metal.psm
