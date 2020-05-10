@@ -350,7 +350,7 @@ Public Class DraftTasks
         For Each Sheet In SectionSheets
             If TemplateSheetNames.Contains(Sheet.Name) Then
                 Sheet.ReplaceBackground(TemplateFilename, Sheet.Name)
-                System.Threading.Thread.Sleep(1000)
+                'System.Threading.Thread.Sleep(1000)
             Else
                 ExitStatus = "1"
                 ErrorMessage += "    Template has no background named '" + Sheet.Name + "'" + Chr(13)
