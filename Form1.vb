@@ -603,6 +603,8 @@ Public Class Form1
             TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
         End If
 
+        ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
+
         ReconcileFormChanges()
     End Sub
 
@@ -617,6 +619,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateAssembly.Text = OpenFileDialog1.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxTemplateAssembly, TextBoxTemplateAssembly.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -627,6 +630,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplatePart.Text = OpenFileDialog1.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxTemplatePart, TextBoxTemplatePart.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -637,6 +641,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateSheetmetal.Text = OpenFileDialog1.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxTemplateSheetmetal, TextBoxTemplateSheetmetal.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -647,6 +652,7 @@ Public Class Form1
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             TextBoxTemplateDraft.Text = OpenFileDialog1.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxTemplateDraft, TextBoxTemplateDraft.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -668,6 +674,7 @@ Public Class Form1
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
             TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
         End If
+        ToolTip1.SetToolTip(TextBoxLaserOutputDirectory, TextBoxLaserOutputDirectory.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -677,5 +684,9 @@ Public Class Form1
 
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxStatus_TextChanged(sender As Object, e As EventArgs) Handles TextBoxStatus.TextChanged
+        ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
     End Sub
 End Class

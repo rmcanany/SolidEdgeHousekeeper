@@ -263,6 +263,7 @@ Partial Class Form1
         Me.TextBoxInputDirectory.Name = "TextBoxInputDirectory"
         Me.TextBoxInputDirectory.Size = New System.Drawing.Size(376, 20)
         Me.TextBoxInputDirectory.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.TextBoxInputDirectory, "Input Directory")
         '
         'ButtonInputDirectory
         '
@@ -298,6 +299,7 @@ Partial Class Form1
         Me.CheckedListBoxAssembly.Name = "CheckedListBoxAssembly"
         Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxAssembly.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.CheckedListBoxAssembly, "Double-click to check/uncheck all")
         '
         'TabPagePart
         '
@@ -323,6 +325,7 @@ Partial Class Form1
         Me.CheckedListBoxPart.Name = "CheckedListBoxPart"
         Me.CheckedListBoxPart.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxPart.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.CheckedListBoxPart, "Double-click to check/uncheck all")
         '
         'TabPageSheetmetal
         '
@@ -379,6 +382,7 @@ Partial Class Form1
         Me.CheckedListBoxSheetmetal.Name = "CheckedListBoxSheetmetal"
         Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxSheetmetal.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.CheckedListBoxSheetmetal, "Double-click to check/uncheck all")
         '
         'TabPageDraft
         '
@@ -404,6 +408,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft.Name = "CheckedListBoxDraft"
         Me.CheckedListBoxDraft.Size = New System.Drawing.Size(451, 184)
         Me.CheckedListBoxDraft.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.CheckedListBoxDraft, "Double-click to check/uncheck all")
         '
         'TabPageConfiguration
         '
@@ -511,6 +516,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
         Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(368, 20)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
+        Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
         'LabelActiveMaterialLibrary
         '
@@ -537,6 +543,7 @@ Partial Class Form1
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
         Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(369, 20)
         Me.TextBoxTemplateAssembly.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
         'LabelTemplateAssembly
         '
@@ -562,6 +569,7 @@ Partial Class Form1
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
         Me.TextBoxTemplatePart.Size = New System.Drawing.Size(369, 20)
         Me.TextBoxTemplatePart.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
         'LabelTemplatePart
         '
@@ -587,6 +595,7 @@ Partial Class Form1
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
         Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(369, 20)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
         'LabelTemplateSheetmetal
         '
@@ -612,6 +621,7 @@ Partial Class Form1
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
         Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(369, 20)
         Me.TextBoxTemplateDraft.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
         'LabelTemplateDraft
         '
@@ -653,6 +663,7 @@ Partial Class Form1
         Me.TextBoxStatus.Name = "TextBoxStatus"
         Me.TextBoxStatus.Size = New System.Drawing.Size(488, 20)
         Me.TextBoxStatus.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.TextBoxStatus, "Status")
         '
         'ButtonCancel
         '
@@ -678,6 +689,10 @@ Partial Class Form1
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.ShowAlways = True
         '
         'FakeFolderBrowserDialog
         '
