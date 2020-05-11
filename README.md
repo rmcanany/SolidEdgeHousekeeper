@@ -6,6 +6,11 @@ Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
+## INSTALLATION
+There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
+
+Not everyone is able to compile source code, however, so the compiled executable is provided.  To get it, at the top of this page, click the 'Release' tab.  On the releases page, click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+
 ## OPERATION
 Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process, on the General tab, by navigating to the desired input folder, and then clicking the desired search type.
 
