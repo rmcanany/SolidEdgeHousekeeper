@@ -246,16 +246,16 @@ Partial Class Form1
         msg = ""
         msg1.Add(msg)
         msg2.Add(msg)
-        'msg = "## INSTALLATION"
-        'msg1.Add(msg)
-        'msg = "There is no installation per se.  The preferred method is to download or clone the project and compile it yourself."
-        'msg1.Add(msg)
-        'msg = ""
-        'msg1.Add(msg)
-        'msg = "Not everyone can do that, however, so the compiled executable is provided.  To get it, click the bin/Release folder above and select Housekeeper.exe.  On that page, click Download and save it to a convenient location.  Double-click the executable to run."
-        'msg1.Add(msg)
-        'msg = ""
-        'msg1.Add(msg)
+        msg = "## INSTALLATION"
+        msg1.Add(msg)
+        msg = "There is no installation per se.  The preferred method is to download or clone the project and compile it yourself."
+        msg1.Add(msg)
+        msg = ""
+        msg1.Add(msg)
+        msg = "Not everyone is able to compile source code, however, so the compiled executable is provided.  To get it, at the top of this page, click the 'Release' tab.  On the releases page, click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run."
+        msg1.Add(msg)
+        msg = ""
+        msg1.Add(msg)
         msg = "## OPERATION"
         msg1.Add(msg)
         msg2.Add(msg)
