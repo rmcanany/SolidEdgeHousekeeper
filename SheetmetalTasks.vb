@@ -680,7 +680,6 @@ Public Class SheetmetalTasks
             End If
         Next
 
-        'System.Threading.Thread.Sleep(1000)
         SEApp.DoIdle()
 
         Windows = SEDoc.Windows

@@ -350,7 +350,6 @@ Public Class DraftTasks
         For Each Sheet In SectionSheets
             If TemplateSheetNames.Contains(Sheet.Name) Then
                 Sheet.ReplaceBackground(TemplateFilename, Sheet.Name)
-                'System.Threading.Thread.Sleep(1000)
             Else
                 ExitStatus = "1"
                 ErrorMessage += "    Template has no background named '" + Sheet.Name + "'" + Chr(13)
@@ -551,7 +550,6 @@ Public Class DraftTasks
         For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
             SheetWindow.ActiveSheet = Sheet
             SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitSheet)
-            System.Threading.Thread.Sleep(1000)
         Next
 
         SheetWindow.ActiveSheet = SectionSheets.OfType(Of SolidEdgeDraft.Sheet)().ElementAt(0)
