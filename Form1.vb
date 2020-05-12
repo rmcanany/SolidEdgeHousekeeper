@@ -436,8 +436,22 @@ Public Class Form1
         LoadDefaults()
         ReconcileFormChanges()
         LoadTextBoxReadme()
+
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
+        If Not TextBoxInputDirectory.Text = "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
+        End If
+
+        If Not TextBoxTemplateAssembly.Text = "" Then
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(TextBoxTemplateAssembly.Text)
+            'Else
+            '    If Not TextBoxInputDirectory.Text = "" Then
+            '        OpenFileDialog1.InitialDirectory = TextBoxInputDirectory.Text
+            '    End If
+        End If
+
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
+
     End Sub
 
     Private Sub PopulateCheckedListBoxes()
@@ -519,15 +533,17 @@ Public Class Form1
 
         ListBoxFiles.Items.Clear()
 
-        If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+        If ActiveFileExtensionsList.Count > 0 Then
+            If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
 
-            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
-            For Each FoundFile In FoundFiles
-                ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
-            Next
+                For Each FoundFile In FoundFiles
+                    ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+                Next
+            End If
         End If
 
     End Sub
