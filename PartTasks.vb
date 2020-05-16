@@ -209,6 +209,69 @@ Public Class PartTasks
     End Function
 
 
+    Public Function InterpartCopiesOutOfDate(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf InterpartCopiesOutOfDateInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function InterpartCopiesOutOfDateInternal(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+        Dim Models As SolidEdgePart.Models
+        Dim Model As SolidEdgePart.Model
+        Dim CopiedParts As SolidEdgePart.CopiedParts
+        Dim CopiedPart As SolidEdgePart.CopiedPart
+
+        Models = SEDoc.Models
+
+        If (Models.Count > 0) And (Models.Count < 10) Then
+            For Each Model In Models
+                CopiedParts = Model.CopiedParts
+                If CopiedParts.Count > 0 Then
+                    For Each CopiedPart In CopiedParts
+                        If Not CopiedPart.IsUpToDate Then
+                            ExitStatus = "1"
+                            ErrorMessage += "    " + CopiedPart.Name + Chr(13)
+                        End If
+                    Next
+                End If
+            Next
+        ElseIf Models.Count >= 10 Then
+            ExitStatus = "1"
+            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+        End If
+
+        ErrorMessageList.Add(ExitStatus)
+        ErrorMessageList.Add(ErrorMessage)
+        Return ErrorMessageList
+
+    End Function
+
+
     Public Function MaterialNotInMaterialTable(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -451,6 +514,72 @@ Public Class PartTasks
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
         Return ErrorMessageList
+    End Function
+
+
+    Public Function UpdateInterpartCopies(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateInterpartCopiesInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateInterpartCopiesInternal(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+        Dim Models As SolidEdgePart.Models
+        Dim Model As SolidEdgePart.Model
+        Dim CopiedParts As SolidEdgePart.CopiedParts
+        Dim CopiedPart As SolidEdgePart.CopiedPart
+
+        Models = SEDoc.Models
+
+        If (Models.Count > 0) And (Models.Count < 10) Then
+            For Each Model In Models
+                CopiedParts = Model.CopiedParts
+                If CopiedParts.Count > 0 Then
+                    For Each CopiedPart In CopiedParts
+                        If Not CopiedPart.IsUpToDate Then
+                            CopiedPart.Update()
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                            ExitStatus = "1"
+                            ErrorMessage += "    Updated interpart copy: " + CopiedPart.Name + Chr(13)
+                        End If
+                    Next
+                End If
+            Next
+        ElseIf Models.Count >= 10 Then
+            ExitStatus = "1"
+            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+        End If
+
+        ErrorMessageList.Add(ExitStatus)
+        ErrorMessageList.Add(ErrorMessage)
+        Return ErrorMessageList
+
     End Function
 
 

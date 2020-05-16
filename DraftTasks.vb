@@ -299,6 +299,66 @@ Public Class DraftTasks
     End Function
 
 
+    Public Function UpdateDrawingViews(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateDrawingViewsInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateDrawingViewsInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+        Dim Sections As SolidEdgeDraft.Sections = Nothing
+        Dim Section As SolidEdgeDraft.Section = Nothing
+        Dim SectionSheets As SolidEdgeDraft.SectionSheets = Nothing
+        Dim Sheet As SolidEdgeDraft.Sheet = Nothing
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
+        Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
+
+        Sections = SEDoc.Sections
+        Section = Sections.WorkingSection
+        SectionSheets = Section.Sheets
+
+        For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
+            DrawingViews = Sheet.DrawingViews
+            For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
+                If Not DrawingView.IsUpToDate Then
+                    DrawingView.Update()
+                End If
+            Next DrawingView
+
+        Next Sheet
+
+        ErrorMessageList.Add(ExitStatus)
+        ErrorMessageList.Add(ErrorMessage)
+        Return ErrorMessageList
+
+    End Function
+
+
     Public Function UpdateDrawingBorderFromTemplate(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),

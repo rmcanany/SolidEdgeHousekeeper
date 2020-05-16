@@ -1,4 +1,6 @@
-﻿Public Class LabelToAction
+﻿Option Strict On
+
+Public Class LabelToAction
     Inherits List(Of L2A)
 
     Public Class L2A
@@ -84,6 +86,10 @@
         PopulateList(UnderconstrainedProfiles, "UnderconstrainedProfiles",
                      "Underconstrained profiles", False, False, False, False)
 
+        Dim InterpartCopiesOutOfDate As New L2A
+        PopulateList(InterpartCopiesOutOfDate, "InterpartCopiesOutOfDate",
+                     "Interpart copies out of date", False, False, False, False)
+
         Dim MaterialNotInMaterialTable As New L2A
         PopulateList(MaterialNotInMaterialTable, "MaterialNotInMaterialTable",
                      "Material not in material table", False, True, False, False)
@@ -91,6 +97,10 @@
         Dim PartNumberDoesNotMatchFilename As New L2A
         PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
                      "Part number does not match file name", False, False, False, True)
+
+        Dim UpdateInterpartCopies As New L2A
+        PopulateList(UpdateInterpartCopies, "UpdateInterpartCopies",
+                     "Update interpart copies", False, False, False, True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
@@ -116,6 +126,9 @@
         PopulateList(UnderconstrainedProfiles, "UnderconstrainedProfiles",
                      "Underconstrained profiles", False, False, False, False)
 
+        Dim InterpartCopiesOutOfDate As New L2A
+        PopulateList(InterpartCopiesOutOfDate, "InterpartCopiesOutOfDate",
+                     "Interpart copies out of date", False, False, False, False)
 
         Dim FlatPatternMissingOrOutOfDate As New L2A
         PopulateList(FlatPatternMissingOrOutOfDate, "FlatPatternMissingOrOutOfDate",
@@ -132,6 +145,10 @@
         Dim GenerateLaserDXFAndPDF As New L2A
         PopulateList(GenerateLaserDXFAndPDF, "GenerateLaserDXFAndPDF",
                      "Generate Laser DXF and PDF", False, False, True, True)
+
+        Dim UpdateInterpartCopies As New L2A
+        PopulateList(UpdateInterpartCopies, "UpdateInterpartCopies",
+                     "Update interpart copies", False, False, False, True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
@@ -160,6 +177,10 @@
         Dim FileNameDoesNotMatchModelFilename As New L2A
         PopulateList(FileNameDoesNotMatchModelFilename, "FileNameDoesNotMatchModelFilename",
                      "File name does not match model file name", False, False, False, False)
+
+        Dim UpdateDrawingViews As New L2A
+        PopulateList(UpdateDrawingViews, "UpdateDrawingViews",
+                     "Update drawing views", False, False, False, False)
 
         Dim UpdateDrawingBorderFromTemplate As New L2A
         PopulateList(UpdateDrawingBorderFromTemplate, "UpdateDrawingBorderFromTemplate",

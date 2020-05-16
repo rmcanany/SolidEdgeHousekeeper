@@ -50,7 +50,7 @@ Public Class Form1
     'files in a row can sometimes cause an Application malfunction.  In such cases, ProcessFile() 
     'retries the tasks.  Most of the time it succeeds on the second attempt.
     'UPDATE 20200507:  Implementing Jason's IsolatedTask scheme seems to have fixed the Application
-    'malfunctions.  
+    'malfunctions.  Removed the retry functionality in ProcessFile().
     '
     'The mapping between checkboxes and tasks is done in the LabelToAction class.  It creates one 
     'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
@@ -333,7 +333,7 @@ Public Class Form1
         ElseIf Filetype = "Draft" Then
             FilesToProcess = GetFileNames("*.dft")
         Else
-            MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
+            MsgBox("In ProcessFiles(), Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()
             End
         End If
@@ -369,75 +369,60 @@ Public Class Form1
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim CheckedListBoxX As CheckedListBox
 
-        ' Internal routine so the tasks can be retried in case of Application malfunction.
-        Dim RunTasks = Sub()
-                           If Filetype = "Assembly" Then
-                               CheckedListBoxX = CheckedListBoxAssembly
-                           ElseIf Filetype = "Part" Then
-                               CheckedListBoxX = CheckedListBoxPart
-                           ElseIf Filetype = "Sheetmetal" Then
-                               CheckedListBoxX = CheckedListBoxSheetmetal
-                           ElseIf Filetype = "Draft" Then
-                               CheckedListBoxX = CheckedListBoxDraft
-                           Else
-                               MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
-                               SEApp.Quit()
-                               End
-                           End If
-
-                           For Each LabelText As String In CheckedListBoxX.CheckedItems
-                               'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
-
-                               If Filetype = "Assembly" Then
-                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
-                               ElseIf Filetype = "Part" Then
-                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
-                               ElseIf Filetype = "Sheetmetal" Then
-                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
-                               Else
-                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                                   ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
-                               End If
-
-                               ExitStatus = ErrorMessageList(0)
-                               SupplementalErrorMessage = ErrorMessageList(1)
-
-                               If ExitStatus <> "0" Then
-                                   LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
-                               End If
-                           Next
-
-                           SEDoc.Close(False)
-                           SEApp.DoIdle()
-                       End Sub
-
         Try
-            RunTasks()
+            If Filetype = "Assembly" Then
+                CheckedListBoxX = CheckedListBoxAssembly
+            ElseIf Filetype = "Part" Then
+                CheckedListBoxX = CheckedListBoxPart
+            ElseIf Filetype = "Sheetmetal" Then
+                CheckedListBoxX = CheckedListBoxSheetmetal
+            ElseIf Filetype = "Draft" Then
+                CheckedListBoxX = CheckedListBoxDraft
+            Else
+                MsgBox("In ProcessFile(), Filetype not recognized: " + Filetype + ".  Exiting...")
+                SEApp.Quit()
+                End
+            End If
+
+            For Each LabelText As String In CheckedListBoxX.CheckedItems
+                'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
+
+                If Filetype = "Assembly" Then
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
+                ElseIf Filetype = "Part" Then
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
+                ElseIf Filetype = "Sheetmetal" Then
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
+                Else
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
+                End If
+
+                ExitStatus = ErrorMessageList(0)
+                SupplementalErrorMessage = ErrorMessageList(1)
+
+                If ExitStatus <> "0" Then
+                    LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
+                End If
+            Next
+
+            SEDoc.Close(False)
+            SEApp.DoIdle()
+
         Catch ex As Exception
             TotalAborts += 1
-            LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13))
-            SEStop()
-            SEStart()
-
-            TextBoxStatus.Text = "Retrying " + TruncateFullPath(Path)
-
-            Try
-                RunTasks()
-            Catch ex2 As Exception
-                TotalAborts += 1
-                LogfileAppend("Error processing file", TruncateFullPath(Path), ex2.ToString + Chr(13))
+            LogfileAppend("Error processing file", TruncateFullPath(Path), ex.ToString + Chr(13))
+            If TotalAborts >= TotalAbortsMaximum Then
+                StopProcess = True
+                LogfileAppend(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum), "", "" + Chr(13))
+            Else
                 SEStop()
                 SEStart()
-            End Try
+            End If
         End Try
-
-        If TotalAborts >= TotalAbortsMaximum Then
-            StopProcess = True
-            LogfileAppend(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum), "", "" + Chr(13))
-        End If
 
     End Sub
 
