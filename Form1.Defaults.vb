@@ -1,3 +1,5 @@
+Option Strict On
+
 Partial Class Form1
 
     Private Sub LoadDefaults()
@@ -14,8 +16,8 @@ Partial Class Form1
             Defaults = IO.File.ReadAllLines(DefaultsFilename)
             Dim msg As String = ""
             For Each KVPair As String In Defaults
-                Key = KVPair.Split("=")(0)
-                Value = KVPair.Split("=")(1)
+                Key = KVPair.Split(("=").ToCharArray(0, 1))(0)
+                Value = KVPair.Split(("=").ToCharArray(0, 1))(1)
 
                 If Key = TextBoxInputDirectory.Name Then
                     If FileIO.FileSystem.DirectoryExists(Value) Then
@@ -67,12 +69,12 @@ Partial Class Form1
 
                 ElseIf Key = TextBoxRestartAfter.Name Then
                     If Value = "" Then
-                        TextBoxRestartAfter.Text = 50
+                        TextBoxRestartAfter.Text = "50"
                     Else
                         Try
-                            TextBoxRestartAfter.Text = Int(Value)
+                            TextBoxRestartAfter.Text = CStr(Value)
                         Catch ex As Exception
-                            TextBoxRestartAfter.Text = 50
+                            TextBoxRestartAfter.Text = "50"
                         End Try
                     End If
 
@@ -160,10 +162,10 @@ Partial Class Form1
         Dim ValueAsBoolean As Boolean
         Dim idx As Integer
 
-        KeyAndName = KVPair.Split("=")(0)
-        Key = KeyAndName.Split(".")(0)
-        CheckBoxName = KeyAndName.Split(".")(1)
-        Value = KVPair.Split("=")(1)
+        KeyAndName = KVPair.Split(("=").ToCharArray(0, 1))(0)
+        Key = KeyAndName.Split((".").ToCharArray(0, 1))(0)
+        CheckBoxName = KeyAndName.Split((".").ToCharArray(0, 1))(1)
+        Value = KVPair.Split(("=").ToCharArray(0, 1))(1)
 
         If Value = "Checked" Then
             ValueAsBoolean = True
@@ -232,6 +234,12 @@ Partial Class Form1
         msg1.Add(msg)
         msg2.Add(msg)
         msg = "Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog."
+        msg1.Add(msg)
+        msg2.Add(msg)
+        msg = ""
+        msg1.Add(msg)
+        msg2.Add(msg)
+        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku"
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
@@ -308,8 +316,8 @@ Partial Class Form1
             msg1.Add(Names(i))
             msg2.Add(Names(i))
             For Each Item In CheckBoxList(i).Items
-                msg1.Add("    " + Item)
-                msg2.Add("    " + Item)
+                msg1.Add("    " + CStr(Item))
+                msg2.Add("    " + CStr(Item))
             Next
         Next
         msg = ""

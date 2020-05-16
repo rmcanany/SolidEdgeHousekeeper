@@ -1,4 +1,6 @@
-﻿Imports SolidEdgeCommunity
+﻿Option Strict On
+
+Imports SolidEdgeCommunity
 
 Public Class DraftTasks
     Inherits IsolatedTaskProxy
@@ -173,7 +175,7 @@ Public Class DraftTasks
 
         ' Callouts are 'Baloons' in Solid Edge.
         For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
-            Balloons = Sheet.Balloons
+            Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
             For Each Balloon In Balloons
                 'Doesn't always work
                 Try
@@ -198,14 +200,21 @@ Public Class DraftTasks
 
         ' Process variables.
         For Each VariableListItem In VariableList.OfType(Of Object)()
-            'Not all VariableListItem objects have a StatusOfDimension property.
-            Try
-                If DimensionErrorConstants.Contains(VariableListItem.StatusOfDimension.ToString) Then
+            Dim VariableListItemType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+                Of SolidEdgeFramework.ObjectType)(VariableListItem, "Type", CType(0, SolidEdgeFramework.ObjectType))
+
+            If VariableListItemType = SolidEdgeFramework.ObjectType.igDimension Then
+                Dimension = DirectCast(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+                TF = Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusDetached
+                TF = TF Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusError
+                TF = TF Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
+
+                If TF Then
                     ExitStatus = "1"
-                    ErrorMessage += "    " + VariableListItem.DisplayName + Chr(13)
+                    ErrorMessage += "    " + Dimension.DisplayName + Chr(13)
                 End If
-            Catch ex As Exception
-            End Try
+            End If
+
         Next
 
         ErrorMessageList.Add(ExitStatus)
@@ -330,7 +339,7 @@ Public Class DraftTasks
         Dim Sheet As SolidEdgeDraft.Sheet
         Dim TemplateSheetNames As New List(Of String)
 
-        SETemplateDoc = SEApp.Documents.Open(TemplateFilename)
+        SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
 
         Sections = SETemplateDoc.Sections
         Section = Sections.BackgroundSection
@@ -403,6 +412,7 @@ Public Class DraftTasks
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
         Dim DimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
+        Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
         Dim DimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle
         Dim ActiveDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle = Nothing
         Dim PrimaryDecimalRoundOffThisDimension As SolidEdgeFrameworkSupport.DimDecimalRoundOffTypeConstants
@@ -419,12 +429,13 @@ Public Class DraftTasks
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
 
         'Copy DimensionStyles from template
-        SETemplateDoc = SEApp.Documents.Open(TemplateFilename)
+        SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
 
-        DimensionStyles = SETemplateDoc.DimensionStyles
+        DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+        DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
         For Each DimensionStyle In DimensionStyles
-            SEDoc.DimensionStyles.AddEx(DimensionStyle.Name, True, SETemplateDoc)
+            DocDimensionStyles.AddEx(DimensionStyle.Name, True, SETemplateDoc)
         Next
 
         SETemplateDoc.Close()
@@ -436,9 +447,9 @@ Public Class DraftTasks
         For Each Section In Sections
             SectionSheets = Section.Sheets
             For Each Sheet In SectionSheets
-                Dimensions = Sheet.Dimensions
+                Dimensions = CType(Sheet.Dimensions, SolidEdgeFrameworkSupport.Dimensions)
                 For Each Dimension In Dimensions
-                    For Each DimensionStyle In SEDoc.DimensionStyles
+                    For Each DimensionStyle In DocDimensionStyles
                         If DimensionStyle.Name = Dimension.Style.Name Then
                             ActiveDimensionStyle = DimensionStyle
                         End If
@@ -460,9 +471,9 @@ Public Class DraftTasks
         For Each Section In Sections
             SectionSheets = Section.Sheets
             For Each Sheet In SectionSheets
-                Balloons = Sheet.Balloons
+                Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
                 For Each Balloon In Balloons
-                    For Each DimensionStyle In SEDoc.DimensionStyles
+                    For Each DimensionStyle In DocDimensionStyles
                         If DimensionStyle.Name = Balloon.Style.Name Then
                             ActiveDimensionStyle = DimensionStyle
                         End If
@@ -539,7 +550,7 @@ Public Class DraftTasks
         Section = Sections.WorkingSection
         SectionSheets = Section.Sheets
 
-        SheetWindow = SEApp.ActiveWindow
+        SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
 
         'Maximizes the window in the application
         If SheetWindow.WindowState <> 2 Then

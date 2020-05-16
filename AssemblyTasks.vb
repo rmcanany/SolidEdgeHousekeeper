@@ -1,4 +1,6 @@
-﻿Imports SolidEdgeCommunity
+﻿Option Strict On
+
+Imports SolidEdgeCommunity
 
 Public Class AssemblyTasks
     Inherits IsolatedTaskProxy
@@ -254,7 +256,7 @@ Public Class AssemblyTasks
 
         Dim msg As String = ""
 
-        PropertySets = SEDoc.Properties
+        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
 
         For Each Properties In PropertySets
             msg += Properties.Name + Chr(13)
@@ -262,13 +264,13 @@ Public Class AssemblyTasks
                 TF = (Configuration("ComboBoxPartNumberPropertySet").ToLower = "custom") And (Properties.Name.ToLower = "custom")
                 If TF Then
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
-                        PartNumber = Prop.Value.Trim
+                        PartNumber = CType(Prop.Value, String).Trim
                         PartNumberPropertyFound = True
                         Exit For
                     End If
                 Else
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
-                        PartNumber = Prop.Value.Trim
+                        PartNumber = CType(Prop.Value, String).Trim
                         PartNumberPropertyFound = True
                         Exit For
                     End If
@@ -353,7 +355,7 @@ Public Class AssemblyTasks
         SEDoc.ImportStyles(TemplateFilename, True)
 
         ' Find the active ViewStyle in the template file.
-        SETemplateDoc = SEApp.Documents.Open(TemplateFilename)
+        SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeAssembly.AssemblyDocument)
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -361,7 +363,7 @@ Public Class AssemblyTasks
             TemplateActiveStyleName = View.Style.ToString
         Next
 
-        ViewStyles = SETemplateDoc.ViewStyles
+        ViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
 
         For Each ViewStyle In ViewStyles
             If ViewStyle.StyleName = TemplateActiveStyleName Then
@@ -376,7 +378,7 @@ Public Class AssemblyTasks
 
         ' If a style by the same name exists in the target file, delete it.
         ViewStyleAlreadyPresent = False
-        ViewStyles = SEDoc.ViewStyles
+        ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
         For Each ViewStyle In ViewStyles
             If ViewStyle.StyleName = TemplateActiveStyleName Then
                 ViewStyleAlreadyPresent = True
@@ -468,12 +470,12 @@ Public Class AssemblyTasks
                 AsmRefPlane.Visible = True
             Next
         Else
-            SEApp.StartCommand(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll)
-            SEApp.StartCommand(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes)
+            SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
         End If
 
-        SEApp.StartCommand(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView)
-        SEApp.StartCommand(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit)
+        SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         SEDoc.Save()
         SEApp.DoIdle()

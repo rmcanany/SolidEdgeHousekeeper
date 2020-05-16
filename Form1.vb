@@ -1,4 +1,6 @@
-﻿Imports System.Runtime.InteropServices
+﻿Option Strict On
+
+Imports System.Runtime.InteropServices
 Imports SolidEdgeCommunity
 
 Public Class Form1
@@ -8,6 +10,8 @@ Public Class Form1
     Private LogfileName As String
 
     Private ErrorsOccurred As Boolean
+    Private TotalAborts As Integer = 0
+    Private TotalAbortsMaximum As Integer = 4
 
     Private FilesToProcessTotal As Integer
     Private FilesToProcessCompleted As Integer
@@ -21,7 +25,7 @@ Public Class Form1
     Private LabelToActionSheetmetal As New LabelToAction("Sheetmetal")
     Private LabelToActionDraft As New LabelToAction("Draft")
 
-    Private LaunchTask = New LaunchTask()
+    Private LaunchTask As New LaunchTask()
 
 
     'DESCRIPTION
@@ -154,7 +158,7 @@ Public Class Form1
 
         ' For the selected tasks, see if outside information, such as a template file, is required.
         ' If so, verify that the outside information is valid.
-        For Each Label In CheckedListBoxAssembly.CheckedItems
+        For Each Label As String In CheckedListBoxAssembly.CheckedItems
             For Each Item In LabelToActionAssembly
                 If Item.LabelText = Label Then
                     If Item.RequiresTemplate Then
@@ -190,7 +194,7 @@ Public Class Form1
             Next
         Next
 
-        For Each Label In CheckedListBoxPart.CheckedItems
+        For Each Label As String In CheckedListBoxPart.CheckedItems
             For Each Item In LabelToActionPart
                 If Item.LabelText = Label Then
                     If Item.RequiresTemplate Then
@@ -226,7 +230,7 @@ Public Class Form1
             Next
         Next
 
-        For Each Label In CheckedListBoxSheetmetal.CheckedItems
+        For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
             For Each Item In LabelToActionSheetmetal
                 If Item.LabelText = Label Then
                     If Item.RequiresTemplate Then
@@ -263,7 +267,7 @@ Public Class Form1
             Next
         Next
 
-        For Each Label In CheckedListBoxDraft.CheckedItems
+        For Each Label As String In CheckedListBoxDraft.CheckedItems
             For Each Item In LabelToActionDraft
                 If Item.LabelText = Label Then
                     If Item.RequiresTemplate Then
@@ -314,10 +318,10 @@ Public Class Form1
         Dim msg As String
 
         Try
-            RestartAfter = Int(TextBoxRestartAfter.Text)
+            RestartAfter = CInt(TextBoxRestartAfter.Text)
         Catch ex As Exception
             RestartAfter = 50
-            TextBoxRestartAfter.Text = 50
+            TextBoxRestartAfter.Text = CStr(50)
         End Try
 
         If Filetype = "Assembly" Then
@@ -362,22 +366,18 @@ Public Class Form1
         Dim ExitStatus As String
         Dim SupplementalErrorMessage As String
 
-        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim CheckedListBoxX As CheckedListBox
 
         ' Internal routine so the tasks can be retried in case of Application malfunction.
         Dim RunTasks = Sub()
                            If Filetype = "Assembly" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeAssembly.AssemblyDocument)
                                CheckedListBoxX = CheckedListBoxAssembly
                            ElseIf Filetype = "Part" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.PartDocument)
                                CheckedListBoxX = CheckedListBoxPart
                            ElseIf Filetype = "Sheetmetal" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgePart.SheetMetalDocument)
                                CheckedListBoxX = CheckedListBoxSheetmetal
                            ElseIf Filetype = "Draft" Then
-                               SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeDraft.DraftDocument)
                                CheckedListBoxX = CheckedListBoxDraft
                            Else
                                MsgBox("Filetype not recognized: " + Filetype + ".  Exiting...")
@@ -389,12 +389,16 @@ Public Class Form1
                                'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
                                If Filetype = "Assembly" Then
+                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                                ElseIf Filetype = "Part" Then
+                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                                ElseIf Filetype = "Sheetmetal" Then
+                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                                Else
+                                   SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                                End If
 
@@ -413,6 +417,7 @@ Public Class Form1
         Try
             RunTasks()
         Catch ex As Exception
+            TotalAborts += 1
             LogfileAppend("Retrying", TruncateFullPath(Path), "" + Chr(13))
             SEStop()
             SEStart()
@@ -422,11 +427,17 @@ Public Class Form1
             Try
                 RunTasks()
             Catch ex2 As Exception
+                TotalAborts += 1
                 LogfileAppend("Error processing file", TruncateFullPath(Path), ex2.ToString + Chr(13))
                 SEStop()
                 SEStart()
             End Try
         End Try
+
+        If TotalAborts >= TotalAbortsMaximum Then
+            StopProcess = True
+            LogfileAppend(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum), "", "" + Chr(13))
+        End If
 
     End Sub
 

@@ -1,3 +1,5 @@
+Option Strict On
+
 Partial Class Form1
 
     Private Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
@@ -27,7 +29,7 @@ Partial Class Form1
         If RadioButtonFilesSelected.Checked Then
             If ListBoxFiles.SelectedItems.Count > 0 Then
                 For i As Integer = 0 To ListBoxFiles.SelectedItems.Count - 1
-                    Filename = ListBoxFiles.SelectedItems(i)
+                    Filename = CType(ListBoxFiles.SelectedItems(i), String)
                     If System.IO.Path.GetExtension(Filename) = FileExtension Then
                         Filename = TextBoxInputDirectory.Text + "\" + Filename
                         FoundFilesList.Add(Filename)
@@ -58,7 +60,7 @@ Partial Class Form1
         Return Count
     End Function
 
-    Private Function IsCheckedFilesToProcess()
+    Private Function IsCheckedFilesToProcess() As Boolean
         Dim TF As Boolean
 
         TF = RadioButtonFilesDirectoriesAndSubdirectories.Checked

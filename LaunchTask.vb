@@ -1,4 +1,6 @@
-﻿Imports SolidEdgeCommunity
+﻿Option Strict On
+
+Imports SolidEdgeCommunity
 
 Public Class LaunchTask
 
@@ -14,13 +16,13 @@ Public Class LaunchTask
         Dim ErrorMessageList As New List(Of String)
 
         If Filetype = "Assembly" Then
-            ErrorMessageList = LaunchAssembly(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchAssembly(CType(SEDoc, SolidEdgeAssembly.AssemblyDocument), Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Part" Then
-            ErrorMessageList = LaunchPart(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchPart(CType(SEDoc, SolidEdgePart.PartDocument), Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Sheetmetal" Then
-            ErrorMessageList = LaunchSheetmetal(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchSheetmetal(CType(SEDoc, SolidEdgePart.SheetMetalDocument), Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Draft" Then
-            ErrorMessageList = LaunchDraft(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchDraft(CType(SEDoc, SolidEdgeDraft.DraftDocument), Configuration, SEApp, LabelToActionX, LabelText)
         Else
             MsgBox("LaunchTask: Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()

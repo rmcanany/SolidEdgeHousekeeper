@@ -1,3 +1,5 @@
+Option Strict On
+
 Imports System.Runtime.InteropServices
 
 Partial Class Form1
@@ -6,7 +8,7 @@ Partial Class Form1
         ' Start Solid Edge.
         TextBoxStatus.Text = "Starting Solid Edge..."
         Try
-            SEApp = CreateObject("SolidEdge.Application")
+            SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             ' Make Solid Edge visible and turn off popups.
             SEApp.Visible = True
             SEApp.DisplayAlerts = False
@@ -101,9 +103,9 @@ Partial Class Form1
 
     End Function
 
-    Private Function SEIsRunning()
+    Private Function SEIsRunning() As Boolean
         Try
-            SEApp = GetObject(, "SolidEdge.Application")
+            SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
         Catch ex As Exception
         End Try
 

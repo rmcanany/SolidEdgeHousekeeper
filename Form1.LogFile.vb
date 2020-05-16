@@ -1,3 +1,5 @@
+Option Strict On
+
 Partial Class Form1
 
     Private Function TruncateFullPath(ByVal Path As String) As String

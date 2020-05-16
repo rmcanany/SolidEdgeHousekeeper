@@ -1,4 +1,6 @@
-﻿Imports SolidEdgeCommunity
+﻿Option Strict On
+
+Imports SolidEdgeCommunity
 
 Public Class SheetmetalTasks
     Inherits IsolatedTaskProxy
@@ -31,35 +33,42 @@ Public Class SheetmetalTasks
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
 
-        Dim Models As SolidEdgePart.Models
-        Dim Model As SolidEdgePart.Model
-        Dim Features As SolidEdgePart.Features
-        Dim Status As SolidEdgeConstants.FeatureStatusConstants
-
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As String = "0"
         Dim ErrorMessage As String = ""
+
+        Dim Models As SolidEdgePart.Models
+        Dim Model As SolidEdgePart.Model
+        Dim Features As SolidEdgePart.Features
+        Dim FeatureName As String
+        Dim Status As SolidEdgePart.FeatureStatusConstants
+
+        Dim TF As Boolean
 
         Models = SEDoc.Models
 
         If (Models.Count > 0) And (Models.Count < 10) Then
             For Each Model In Models
                 Features = Model.Features
-                'Some Sync part features don't have a Status field.
-                Try
-                    For i As Integer = 0 To Features.Count - 1
-                        Status = Features(i).Status
-                        If Status.ToString = "igFeatureFailed" Then
+                For Each Feature In Features
+                    'Some Sync part features don't have a Status field.
+                    Try
+                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+
+                        Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+                            Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status", CType(0, SolidEdgePart.FeatureStatusConstants))
+
+                        TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed
+                        TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned
+                        If TF Then
                             ExitStatus = "1"
-                            ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
+                            ErrorMessage += "    " + FeatureName + Chr(13)
                         End If
-                        If Status.ToString = "igFeatureWarned" Then
-                            ExitStatus = "1"
-                            ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
-                        End If
-                    Next
-                Catch ex As Exception
-                End Try
+
+                    Catch ex As Exception
+
+                    End Try
+                Next
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
@@ -101,35 +110,42 @@ Public Class SheetmetalTasks
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
 
-        Dim Models As SolidEdgePart.Models
-        Dim Model As SolidEdgePart.Model
-        Dim Features As SolidEdgePart.Features
-        Dim Status As SolidEdgeConstants.FeatureStatusConstants
-
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As String = "0"
         Dim ErrorMessage As String = ""
+
+        Dim Models As SolidEdgePart.Models
+        Dim Model As SolidEdgePart.Model
+        Dim Features As SolidEdgePart.Features
+        Dim FeatureName As String
+        Dim Status As SolidEdgePart.FeatureStatusConstants
+
+        Dim TF As Boolean
 
         Models = SEDoc.Models
 
         If (Models.Count > 0) And (Models.Count < 10) Then
             For Each Model In Models
                 Features = Model.Features
-                'Some Sync part features don't have a Status field.
-                Try
-                    For i As Integer = 0 To Features.Count - 1
-                        Status = Features(i).Status
-                        If Status.ToString = "igFeatureSuppressed" Then
+                For Each Feature In Features
+                    'Some Sync part features don't have a Status field.
+                    Try
+                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+
+                        Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+                            Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status", CType(0, SolidEdgePart.FeatureStatusConstants))
+
+                        TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed
+                        TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack
+                        If TF Then
                             ExitStatus = "1"
-                            ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
+                            ErrorMessage += "    " + FeatureName + Chr(13)
                         End If
-                        If Status.ToString = "igFeatureRolledBack" Then
-                            ExitStatus = "1"
-                            ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
-                        End If
-                    Next
-                Catch ex As Exception
-                End Try
+
+                    Catch ex As Exception
+
+                    End Try
+                Next
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
@@ -285,11 +301,10 @@ Public Class SheetmetalTasks
         Dim NumMaterials As Integer
 
         Dim MatTableProps As Array
-        Dim MatTableProp As SolidEdgeConstants.MatTablePropIndex
+        Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
         Dim DocPropValue As Object = Nothing
         Dim LibPropValue As Object = Nothing
 
-        'Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(TextBoxActiveMaterialLibrary.Text)
         Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
         Dim ActiveMaterialLibraryPresent As Boolean = False
         Dim CurrentMaterialName As String = ""
@@ -297,7 +312,7 @@ Public Class SheetmetalTasks
         Dim CurrentMaterialNameInLibrary As Boolean = False
         Dim CurrentMaterialMatchesLibMaterial As Boolean = True
 
-        Dim msg As String
+        Dim msg As String = ""
 
         Dim Models As SolidEdgePart.Models
 
@@ -311,7 +326,7 @@ Public Class SheetmetalTasks
             MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
 
             'Make sure the ActiveMaterialLibrary in settings.txt is present
-            For Each MatTableMaterial In MaterialLibList
+            For Each MatTableMaterial In CType(MaterialLibList, System.Array)
                 If MatTableMaterial.ToString = ActiveMaterialLibrary Then
                     ActiveMaterialLibraryPresent = True
                     Exit For
@@ -328,7 +343,7 @@ Public Class SheetmetalTasks
 
             'See if the CurrentMaterialName is in the ActiveLibrary
             MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
-            For Each MatTableMaterial In MaterialList
+            For Each MatTableMaterial In CType(MaterialList, System.Array)
                 If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
                     CurrentMaterialNameInLibrary = True
 
@@ -337,15 +352,26 @@ Public Class SheetmetalTasks
                     For Each MatTableProp In MatTableProps
                         MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
                         MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
-                        If DocPropValue <> LibPropValue Then
+
+                        ' MatTableProps are either Double or String.
+                        If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
                             ' Double types may have insignificant differences.
-                            If (DocPropValue.GetType = GetType(Double)) And (DocPropValue.GetType = GetType(Double)) Then
-                                Dim PercentDifference As Double = (DocPropValue - LibPropValue) / ((DocPropValue + LibPropValue) / 2)
-                                If Not Math.Abs(PercentDifference) < 0.001 Then
+                            Dim DPV As Double = CType(DocPropValue, Double)
+                            Dim LPV As Double = CType(LibPropValue, Double)
+
+                            If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
+                                Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
+                                If Not Math.Abs(NormalizedDifference) < 0.001 Then
+                                    msg += CStr(NormalizedDifference) + Chr(13)
                                     CurrentMaterialMatchesLibMaterial = False
                                     Exit For
                                 End If
-                            Else
+                            End If
+                        Else
+                            If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
+                                Dim a As String = CType(DocPropValue, String)
+                                Dim b As String = CType(LibPropValue, String)
+                                msg += a + " " + b + Chr(13)
                                 CurrentMaterialMatchesLibMaterial = False
                                 Exit For
                             End If
@@ -375,7 +401,6 @@ Public Class SheetmetalTasks
                 End If
             End If
         End If
-
 
 
         ErrorMessageList.Add(ExitStatus)
@@ -430,7 +455,7 @@ Public Class SheetmetalTasks
 
         Dim msg As String = ""
 
-        PropertySets = SEDoc.Properties
+        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
 
         For Each Properties In PropertySets
             msg += Properties.Name + Chr(13)
@@ -439,13 +464,13 @@ Public Class SheetmetalTasks
                 If TF Then
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
                         'If Prop.Name = TextBoxPartNumberPropertyName.Text Then
-                        PartNumber = Prop.Value.Trim
+                        PartNumber = CType(Prop.Value, String).Trim
                         PartNumberPropertyFound = True
                         Exit For
                     End If
                 Else
                     If Prop.Name = Configuration("TextBoxPartNumberPropertyName") Then
-                        PartNumber = Prop.Value.Trim
+                        PartNumber = CType(Prop.Value, String).Trim
                         PartNumberPropertyFound = True
                         Exit For
                     End If
@@ -543,7 +568,7 @@ Public Class SheetmetalTasks
             ExitStatus = "1"
             ErrorMessage += "    Draft document not found: " + TruncateFullPath(DraftFilename, Configuration) + Chr(13)
         Else
-            SEDraftDoc = SEApp.Documents.Open(DraftFilename)
+            SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
         End If
 
         SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
@@ -648,7 +673,7 @@ Public Class SheetmetalTasks
         SEDoc.ImportStyles(TemplateFilename, True)
 
         ' Find the active ViewStyle in the template file.
-        SETemplateDoc = SEApp.Documents.Open(TemplateFilename)
+        SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgePart.SheetMetalDocument)
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -656,7 +681,7 @@ Public Class SheetmetalTasks
             TemplateActiveStyleName = View.Style.ToString
         Next
 
-        ViewStyles = SETemplateDoc.ViewStyles
+        ViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
 
         For Each ViewStyle In ViewStyles
             If ViewStyle.StyleName = TemplateActiveStyleName Then
@@ -671,7 +696,7 @@ Public Class SheetmetalTasks
 
         ' If a style by the same name exists in the target file, delete it.
         ViewStyleAlreadyPresent = False
-        ViewStyles = SEDoc.ViewStyles
+        ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
         For Each ViewStyle In ViewStyles
             If ViewStyle.StyleName = TemplateActiveStyleName Then
                 ViewStyleAlreadyPresent = True
@@ -762,8 +787,8 @@ Public Class SheetmetalTasks
         SEDoc.Constructions.Visible = False
         SEDoc.CoordinateSystems.Visible = False
 
-        SEApp.StartCommand(SolidEdgeConstants.PartCommandConstants.PartViewISOView)
-        SEApp.StartCommand(SolidEdgeConstants.PartCommandConstants.PartViewFit)
+        SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         SEDoc.Save()
         SEApp.DoIdle()
