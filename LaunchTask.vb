@@ -66,6 +66,8 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.UnderconstrainedRelationships(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
+                Case "ActivateAndUpdateAll"
+                    ErrorMessageList = task.Proxy.ActivateAndUpdateAll(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"

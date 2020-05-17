@@ -35,6 +35,7 @@ List of implemented tests and actions.
     Failed relationships
     Underconstrained relationships
     Part number does not match file name
+    Activate and update all
     Update face and view styles from template
     Fit isometric view
 ### Part

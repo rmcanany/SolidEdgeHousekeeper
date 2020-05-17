@@ -62,6 +62,10 @@ Public Class LabelToAction
         PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
                      "Part number does not match file name", False, False, False, True)
 
+        Dim ActivateAndUpdateAll As New L2A
+        PopulateList(ActivateAndUpdateAll, "ActivateAndUpdateAll",
+                     "Activate and update all", False, False, False, False)
+
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
                      "Update face and view styles from template", True, False, False, False)

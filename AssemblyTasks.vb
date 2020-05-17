@@ -306,6 +306,50 @@ Public Class AssemblyTasks
     End Function
 
 
+    Public Function ActivateAndUpdateAll(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf ActivateAndUpdateAllInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function ActivateAndUpdateAllInternal(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+        SEDoc.ActivateAll()
+        SEDoc.UpdateAll()
+
+        SEDoc.Save()
+        SEApp.DoIdle()
+
+        ErrorMessageList.Add(ExitStatus)
+        ErrorMessageList.Add(ErrorMessage)
+        Return ErrorMessageList
+    End Function
+
+
     Public Function UpdateFaceAndViewStylesFromTemplate(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
