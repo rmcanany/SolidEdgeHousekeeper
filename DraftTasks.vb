@@ -342,15 +342,29 @@ Public Class DraftTasks
         Section = Sections.WorkingSection
         SectionSheets = Section.Sheets
 
-        For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
-            DrawingViews = Sheet.DrawingViews
-            For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
-                If Not DrawingView.IsUpToDate Then
-                    DrawingView.Update()
-                End If
-            Next DrawingView
+        Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
+        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
-        Next Sheet
+        ModelLinks = SEDoc.ModelLinks
+
+        For Each ModelLink In ModelLinks
+            If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
+                ExitStatus = "1"
+                ErrorMessage += "    " + TruncateFullPath(ModelLink.FileName, Configuration) + " not found" + Chr(13)
+            End If
+        Next
+
+        If Not ExitStatus = "1" Then
+            For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
+                DrawingViews = Sheet.DrawingViews
+                For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
+                    If Not DrawingView.IsUpToDate Then
+                        DrawingView.Update()
+                    End If
+                Next DrawingView
+
+            Next Sheet
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
