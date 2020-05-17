@@ -134,7 +134,16 @@ Public Class Form1
         ButtonCancel.Text = "Cancel"
 
         If ErrorsOccurred Then
-            MsgBox("Some checks did not pass.  See log file:" + Chr(13) + LogfileName)
+            Dim msg As String = ""
+            Dim indent As String = ""
+            Dim FancyPrint As List(Of String) = LogfileName.Split("\"c).ToList
+            msg += "Some checks did not pass and/or more feedback is available." + Chr(13)
+            msg += "Path to log file:" + Chr(13)
+            For Each s As String In FancyPrint
+                msg += indent + s + Chr(13)
+                indent += "    "
+            Next
+            MsgBox(msg)
         Else
             TextBoxStatus.Text = TextBoxStatus.Text + "  All checks passed."
         End If

@@ -328,6 +328,9 @@ Public Class PartTasks
         Dim Models As SolidEdgePart.Models
 
         Models = SEDoc.Models
+        Dim Model As SolidEdgePart.Model
+        Dim Body As SolidEdgeGeometry.Body
+
 
         If Models.Count > 0 Then
 
@@ -393,8 +396,17 @@ Public Class PartTasks
 
                     If Not CurrentMaterialMatchesLibMaterial Then
                         MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                        ' Changing material does not automatically update face styles
+                        For Each Model In Models
+                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                            Body.Style = Nothing
+                        Next
                         SEDoc.Save()
                         SEApp.DoIdle()
+
+                        ExitStatus = "1"
+                        ErrorMessage = "    Material was updated" + Chr(13)
+
                         Exit For
                     End If
                 End If
