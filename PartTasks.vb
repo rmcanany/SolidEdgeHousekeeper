@@ -316,11 +316,6 @@ Public Class PartTasks
         Dim MaterialList As Object = Nothing
         Dim NumMaterials As Integer
 
-        Dim MatTableProps As Array
-        Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
-        Dim DocPropValue As Object = Nothing
-        Dim LibPropValue As Object = Nothing
-
         Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
         Dim ActiveMaterialLibraryPresent As Boolean = False
         Dim CurrentMaterialName As String = ""
@@ -333,16 +328,12 @@ Public Class PartTasks
         Dim Models As SolidEdgePart.Models
 
         Models = SEDoc.Models
-        Dim Model As SolidEdgePart.Model
-        Dim Body As SolidEdgeGeometry.Body
-
 
         If Models.Count > 0 Then
 
             MatTable = SEApp.GetMaterialTable()
             MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
-            MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
 
             'Make sure the ActiveMaterialLibrary in settings.txt is present
             For Each MatTableMaterial In CType(MaterialLibList, System.Array)
@@ -365,57 +356,6 @@ Public Class PartTasks
             For Each MatTableMaterial In CType(MaterialList, System.Array)
                 If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
                     CurrentMaterialNameInLibrary = True
-
-                    'The names match.  Check if their properties do, too.
-                    MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
-                    For Each MatTableProp In MatTableProps
-                        MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
-                        MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
-
-                        ' MatTableProps are either Double or String.
-                        If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
-                            ' Double types may have insignificant differences.
-                            Dim DPV As Double = CType(DocPropValue, Double)
-                            Dim LPV As Double = CType(LibPropValue, Double)
-
-                            If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
-                                Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
-                                If Not Math.Abs(NormalizedDifference) < 0.001 Then
-                                    msg += CStr(NormalizedDifference) + Chr(13)
-                                    CurrentMaterialMatchesLibMaterial = False
-                                    Exit For
-                                End If
-                            End If
-                        Else
-                            If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
-                                Dim a As String = CType(DocPropValue, String)
-                                Dim b As String = CType(LibPropValue, String)
-                                msg += a + " " + b + Chr(13)
-                                CurrentMaterialMatchesLibMaterial = False
-                                Exit For
-                            End If
-                        End If
-                        DocPropValue = Nothing
-                        LibPropValue = Nothing
-                    Next
-
-                    If Not CurrentMaterialMatchesLibMaterial Then
-                        MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                        ' Changing material does not automatically update face styles
-                        For Each Model In Models
-                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                            Body.Style = Nothing
-                        Next
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-
-                        ExitStatus = "1"
-                        ErrorMessage = "    Material was updated" + Chr(13)
-
-                        Exit For
-                    End If
-                End If
-                If CurrentMaterialNameInLibrary Then
                     Exit For
                 End If
             Next
@@ -429,7 +369,6 @@ Public Class PartTasks
                 End If
             End If
         End If
-
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
@@ -604,6 +543,166 @@ Public Class PartTasks
         ErrorMessageList.Add(ErrorMessage)
         Return ErrorMessageList
 
+    End Function
+
+
+    Public Function UpdateMaterialFromMaterialTable(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        ErrorMessageList = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               List(Of String))(
+                                   AddressOf UpdateMaterialFromMaterialTableInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function UpdateMaterialFromMaterialTableInternal(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+        Dim MatTable As SolidEdgeFramework.MatTable
+
+        Dim MaterialLibList As Object = Nothing
+        Dim NumMaterialLibraries As Integer
+        Dim MaterialList As Object = Nothing
+        Dim NumMaterials As Integer
+
+        Dim MatTableProps As Array
+        Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
+        Dim DocPropValue As Object = Nothing
+        Dim LibPropValue As Object = Nothing
+
+        Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
+        Dim ActiveMaterialLibraryPresent As Boolean = False
+        Dim CurrentMaterialName As String = ""
+        Dim MatTableMaterial As Object
+        Dim CurrentMaterialNameInLibrary As Boolean = False
+        Dim CurrentMaterialMatchesLibMaterial As Boolean = True
+
+        Dim msg As String = ""
+
+        Dim Models As SolidEdgePart.Models
+
+        Models = SEDoc.Models
+        Dim Model As SolidEdgePart.Model
+        Dim Body As SolidEdgeGeometry.Body
+
+
+        If Models.Count > 0 Then
+
+            MatTable = SEApp.GetMaterialTable()
+            MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
+            MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
+            MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
+
+            'Make sure the ActiveMaterialLibrary in settings.txt is present
+            For Each MatTableMaterial In CType(MaterialLibList, System.Array)
+                If MatTableMaterial.ToString = ActiveMaterialLibrary Then
+                    ActiveMaterialLibraryPresent = True
+                    Exit For
+                End If
+            Next
+
+            If Not ActiveMaterialLibraryPresent Then
+                msg = "ActiveMaterialLibrary " + Configuration("TextBoxActiveMaterialLibrary") + " not found.  Exiting..." + Chr(13)
+                msg += "Please update the Material Table on the Configuration tab." + Chr(13)
+                MsgBox(msg)
+                SEApp.Quit()
+                End
+            End If
+
+            'See if the CurrentMaterialName is in the ActiveLibrary
+            MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
+            For Each MatTableMaterial In CType(MaterialList, System.Array)
+                If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
+                    CurrentMaterialNameInLibrary = True
+
+                    'The names match.  Check if their properties do, too.
+                    MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
+                    For Each MatTableProp In MatTableProps
+                        MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
+                        MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
+
+                        ' MatTableProps are either Double or String.
+                        If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
+                            ' Double types may have insignificant differences.
+                            Dim DPV As Double = CType(DocPropValue, Double)
+                            Dim LPV As Double = CType(LibPropValue, Double)
+
+                            If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
+                                Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
+                                If Not Math.Abs(NormalizedDifference) < 0.001 Then
+                                    msg += CStr(NormalizedDifference) + Chr(13)
+                                    CurrentMaterialMatchesLibMaterial = False
+                                    Exit For
+                                End If
+                            End If
+                        Else
+                            If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
+                                Dim a As String = CType(DocPropValue, String)
+                                Dim b As String = CType(LibPropValue, String)
+                                msg += a + " " + b + Chr(13)
+                                CurrentMaterialMatchesLibMaterial = False
+                                Exit For
+                            End If
+                        End If
+                        DocPropValue = Nothing
+                        LibPropValue = Nothing
+                    Next
+
+                    If Not CurrentMaterialMatchesLibMaterial Then
+                        MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                        ' Changing material does not automatically update face styles
+                        For Each Model In Models
+                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                            Body.Style = Nothing
+                        Next
+                        SEDoc.Save()
+                        SEApp.DoIdle()
+
+                        ExitStatus = "1"
+                        ErrorMessage = "    Material was updated" + Chr(13)
+
+                        Exit For
+                    End If
+                End If
+                If CurrentMaterialNameInLibrary Then
+                    Exit For
+                End If
+            Next
+
+            If Not CurrentMaterialNameInLibrary Then
+                ExitStatus = "1"
+                If CurrentMaterialName = "" Then
+                    ErrorMessage = "    Material " + "'None'" + " not in " + ActiveMaterialLibrary + Chr(13)
+                Else
+                    ErrorMessage = "    Material '" + CurrentMaterialName + "' not in " + ActiveMaterialLibrary + Chr(13)
+                End If
+            End If
+        End If
+
+
+        ErrorMessageList.Add(ExitStatus)
+        ErrorMessageList.Add(ErrorMessage)
+        Return ErrorMessageList
     End Function
 
 

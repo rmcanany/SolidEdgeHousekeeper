@@ -46,6 +46,7 @@ List of implemented tests and actions.
     Material not in material table
     Part number does not match file name
     Update insert part copies
+    Update material from material table
     Update face and view styles from template
     Fit isometric view
 ### Sheetmetal
@@ -58,6 +59,7 @@ List of implemented tests and actions.
     Part number does not match file name
     Generate Laser DXF and PDF
     Update insert part copies
+    Update material from material table
     Update face and view styles from template
     Fit isometric view
 ### Draft

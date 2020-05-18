@@ -98,7 +98,7 @@ Public Class LabelToAction
 
         Dim MaterialNotInMaterialTable As New L2A
         PopulateList(MaterialNotInMaterialTable, "MaterialNotInMaterialTable",
-                     "Material not in material table", False, True, False, False, True)
+                     "Material not in material table", False, True, False, False, False)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
@@ -107,6 +107,10 @@ Public Class LabelToAction
         Dim UpdateInsertPartCopies As New L2A
         PopulateList(UpdateInsertPartCopies, "UpdateInsertPartCopies",
                      "Update insert part copies", False, False, False, True, True)
+
+        Dim UpdateMaterialFromMaterialTable As New L2A
+        PopulateList(UpdateMaterialFromMaterialTable, "UpdateMaterialFromMaterialTable",
+                     "Update material from material table", False, True, False, False, True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",
@@ -142,7 +146,7 @@ Public Class LabelToAction
 
         Dim MaterialNotInMaterialTable As New L2A
         PopulateList(MaterialNotInMaterialTable, "MaterialNotInMaterialTable",
-                     "Material not in material table", False, True, False, False, True)
+                     "Material not in material table", False, True, False, False, False)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         PopulateList(PartNumberDoesNotMatchFilename, "PartNumberDoesNotMatchFilename",
@@ -155,6 +159,10 @@ Public Class LabelToAction
         Dim UpdateInsertPartCopies As New L2A
         PopulateList(UpdateInsertPartCopies, "UpdateInsertPartCopies",
                      "Update insert part copies", False, False, False, True, True)
+
+        Dim UpdateMaterialFromMaterialTable As New L2A
+        PopulateList(UpdateMaterialFromMaterialTable, "UpdateMaterialFromMaterialTable",
+                     "Update material from material table", False, True, False, False, True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate, "UpdateFaceAndViewStylesFromTemplate",

@@ -123,6 +123,8 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
                     ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
+                Case "UpdateMaterialFromMaterialTable"
+                    ErrorMessageList = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
@@ -179,6 +181,8 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
                     ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
+                Case "UpdateMaterialFromMaterialTable"
+                    ErrorMessageList = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"

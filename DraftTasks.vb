@@ -360,6 +360,8 @@ Public Class DraftTasks
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                     If Not DrawingView.IsUpToDate Then
                         DrawingView.Update()
+                        SEDoc.Save()
+                        SEApp.DoIdle()
                     End If
                 Next DrawingView
 
