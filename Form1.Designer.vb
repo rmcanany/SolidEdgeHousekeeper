@@ -80,6 +80,7 @@ Partial Class Form1
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFileTypes.SuspendLayout()
@@ -112,6 +113,7 @@ Partial Class Form1
         '
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxFileTypes)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxFilesToProcess)
         Me.TabPageGeneral.Controls.Add(Me.ListBoxFiles)
@@ -701,6 +703,18 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog.Title = "Select Folder"
         Me.FakeFolderBrowserDialog.ValidateNames = False
         '
+        'CheckBoxWarnSave
+        '
+        Me.CheckBoxWarnSave.AutoSize = True
+        Me.CheckBoxWarnSave.Checked = True
+        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(255, 271)
+        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(196, 19)
+        Me.CheckBoxWarnSave.TabIndex = 8
+        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
+        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -791,4 +805,5 @@ Partial Class Form1
     Friend WithEvents TextBoxLaserOutputDirectory As TextBox
     Friend WithEvents LabelLaserOutputDirectory As Label
     Friend WithEvents FakeFolderBrowserDialog As OpenFileDialog
+    Friend WithEvents CheckBoxWarnSave As CheckBox
 End Class

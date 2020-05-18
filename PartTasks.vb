@@ -209,7 +209,7 @@ Public Class PartTasks
     End Function
 
 
-    Public Function InterpartCopiesOutOfDate(
+    Public Function InsertPartCopiesOutOfDate(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -222,7 +222,7 @@ Public Class PartTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                List(Of String))(
-                                   AddressOf InterpartCopiesOutOfDateInternal,
+                                   AddressOf InsertPartCopiesOutOfDateInternal,
                                    SEDoc,
                                    Configuration,
                                    SEApp)
@@ -231,7 +231,7 @@ Public Class PartTasks
 
     End Function
 
-    Private Function InterpartCopiesOutOfDateInternal(
+    Private Function InsertPartCopiesOutOfDateInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -248,12 +248,17 @@ Public Class PartTasks
 
         Models = SEDoc.Models
 
+        Dim TF As Boolean
+
         If (Models.Count > 0) And (Models.Count < 10) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
                 If CopiedParts.Count > 0 Then
                     For Each CopiedPart In CopiedParts
-                        If Not CopiedPart.IsUpToDate Then
+                        TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
+                        TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
+                        TF = TF And CopiedPart.IsUpToDate
+                        If Not TF Then
                             ExitStatus = "1"
                             ErrorMessage += "    " + CopiedPart.Name + Chr(13)
                         End If
@@ -529,7 +534,7 @@ Public Class PartTasks
     End Function
 
 
-    Public Function UpdateInterpartCopies(
+    Public Function UpdateInsertPartCopies(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -542,7 +547,7 @@ Public Class PartTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                List(Of String))(
-                                   AddressOf UpdateInterpartCopiesInternal,
+                                   AddressOf UpdateInsertPartCopiesInternal,
                                    SEDoc,
                                    Configuration,
                                    SEApp)
@@ -551,7 +556,7 @@ Public Class PartTasks
 
     End Function
 
-    Private Function UpdateInterpartCopiesInternal(
+    Private Function UpdateInsertPartCopiesInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -568,17 +573,24 @@ Public Class PartTasks
 
         Models = SEDoc.Models
 
+        Dim TF As Boolean
+
         If (Models.Count > 0) And (Models.Count < 10) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
                 If CopiedParts.Count > 0 Then
                     For Each CopiedPart In CopiedParts
-                        If Not CopiedPart.IsUpToDate Then
+                        TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
+                        TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
+                        If Not TF Then
+                            ExitStatus = "1"
+                            ErrorMessage += "    Insert part copy file not found: " + CopiedPart.FileName + Chr(13)
+                        ElseIf Not CopiedPart.IsUpToDate Then
                             CopiedPart.Update()
                             SEDoc.Save()
                             SEApp.DoIdle()
                             ExitStatus = "1"
-                            ErrorMessage += "    Updated interpart copy: " + CopiedPart.Name + Chr(13)
+                            ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
                         End If
                     Next
                 End If

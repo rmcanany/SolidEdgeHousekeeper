@@ -85,6 +85,12 @@ Partial Class Form1
                         TextBoxLaserOutputDirectory.Text = ""
                     End If
 
+                ElseIf Key = CheckBoxWarnSave.Name Then
+                    If Value = "True" Then
+                        CheckBoxWarnSave.Checked = True
+                    Else
+                        CheckBoxWarnSave.Checked = False
+                    End If
                 Else
                     PopulateCheckboxDefault(KVPair)
                 End If
@@ -126,6 +132,7 @@ Partial Class Form1
         Defaults.Add(TextBoxPartNumberPropertyName.Name + "=" + TextBoxPartNumberPropertyName.Text)
         Defaults.Add(TextBoxRestartAfter.Name + "=" + TextBoxRestartAfter.Text)
         Defaults.Add(TextBoxLaserOutputDirectory.Name + "=" + TextBoxLaserOutputDirectory.Text)
+        Defaults.Add(CheckBoxWarnSave.Name + "=" + CheckBoxWarnSave.Checked.ToString)
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="

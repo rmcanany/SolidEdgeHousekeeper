@@ -115,14 +115,14 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
                 Case "UnderconstrainedProfiles"
                     ErrorMessageList = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
-                Case "InterpartCopiesOutOfDate"
-                    ErrorMessageList = task.Proxy.InterpartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                Case "InsertPartCopiesOutOfDate"
+                    ErrorMessageList = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessageList = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
-                Case "UpdateInterpartCopies"
-                    ErrorMessageList = task.Proxy.UpdateInterpartCopies(SEDoc, Configuration, SEApp)
+                Case "UpdateInsertPartCopies"
+                    ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
@@ -169,16 +169,16 @@ Public Class LaunchTask
                     ErrorMessageList = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "FlatPatternMissingOrOutOfDate"
                     ErrorMessageList = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
-                Case "InterpartCopiesOutOfDate"
-                    ErrorMessageList = task.Proxy.InterpartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                Case "InsertPartCopiesOutOfDate"
+                    ErrorMessageList = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessageList = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "GenerateLaserDXFAndPDF"
                     ErrorMessageList = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
-                Case "UpdateInterpartCopies"
-                    ErrorMessageList = task.Proxy.UpdateInterpartCopies(SEDoc, Configuration, SEApp)
+                Case "UpdateInsertPartCopies"
+                    ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"

@@ -80,8 +80,13 @@ Public Class Form1
 
         ErrorMessage = CheckStartConditions()
         If ErrorMessage <> "" Then
-            MsgBox(ErrorMessage)
-            Exit Sub
+            Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKCancel)
+            If result = MsgBoxResult.Cancel Then
+                Exit Sub
+            End If
+            If ErrorMessage.Contains("Please correct the following before continuing") Then
+                Exit Sub
+            End If
         End If
 
         FilesToProcessTotal = GetTotalFilesToProcess()
@@ -152,6 +157,7 @@ Public Class Form1
 
     Private Function CheckStartConditions() As String
         Dim msg As String = ""
+        Dim SaveMsg As String = ""
 
         If SEIsRunning() Then
             msg += "    Close Solid Edge" + Chr(13)
@@ -198,6 +204,9 @@ Public Class Form1
                             End If
                         End If
                     End If
+                    If Item.RequiresSave Then
+                        SaveMsg += "    Assembly: " + Item.LabelText + Chr(13)
+                    End If
                     Exit For
                 End If
             Next
@@ -233,6 +242,9 @@ Public Class Form1
                                 msg += "    Select a valid part number property name" + Chr(13)
                             End If
                         End If
+                    End If
+                    If Item.RequiresSave Then
+                        SaveMsg += "    Part: " + Item.LabelText + Chr(13)
                     End If
                     Exit For
                 End If
@@ -270,7 +282,9 @@ Public Class Form1
                             End If
                         End If
                     End If
-
+                    If Item.RequiresSave Then
+                        SaveMsg += "    Sheetmetal: " + Item.LabelText + Chr(13)
+                    End If
                     Exit For
                 End If
             Next
@@ -307,7 +321,9 @@ Public Class Form1
                             End If
                         End If
                     End If
-
+                    If Item.RequiresSave Then
+                        SaveMsg += "    Draft: " + Item.LabelText + Chr(13)
+                    End If
                     Exit For
                 End If
             Next
@@ -317,7 +333,16 @@ Public Class Form1
             msg = "Please correct the following before continuing" + Chr(13) + msg
         End If
 
-        Return msg
+        If (Len(SaveMsg) <> 0) And CheckBoxWarnSave.Checked Then
+            Dim s As String = "The following options require the original file to be saved." + Chr(13)
+            s += "Please verify you have a backup before continuing."
+            SaveMsg += Chr(13) + "Disable this warning on the General tab."
+            SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
+        Else
+            SaveMsg = ""
+        End If
+
+        Return SaveMsg + msg
     End Function
 
     Private Sub ProcessFiles(ByVal Filetype As String)
@@ -379,6 +404,7 @@ Public Class Form1
         Dim CheckedListBoxX As CheckedListBox
 
         Try
+            SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
             If Filetype = "Assembly" Then
                 CheckedListBoxX = CheckedListBoxAssembly
             ElseIf Filetype = "Part" Then
@@ -397,16 +423,16 @@ Public Class Form1
                 'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
                 If Filetype = "Assembly" Then
-                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                 ElseIf Filetype = "Part" Then
-                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                 ElseIf Filetype = "Sheetmetal" Then
-                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                 Else
-                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                 End If
 

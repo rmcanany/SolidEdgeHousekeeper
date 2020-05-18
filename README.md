@@ -42,22 +42,22 @@ List of implemented tests and actions.
     Failed or warned features
     Suppressed or rolled back features
     Underconstrained profiles
-    Interpart copies out of date
+    Insert part copies out of date
     Material not in material table
     Part number does not match file name
-    Update interpart copies
+    Update insert part copies
     Update face and view styles from template
     Fit isometric view
 ### Sheetmetal
     Failed or warned features
     Suppressed or rolled back features
     Underconstrained profiles
-    Interpart copies out of date
+    Insert part copies out of date
     Flat pattern missing or out of date
     Material not in material table
     Part number does not match file name
     Generate Laser DXF and PDF
-    Update interpart copies
+    Update insert part copies
     Update face and view styles from template
     Fit isometric view
 ### Draft
