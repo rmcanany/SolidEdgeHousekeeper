@@ -25,6 +25,7 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.GroupBoxFileTypes = New System.Windows.Forms.GroupBox()
         Me.CheckBoxFileTypeDraft = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFileTypeSheetmetal = New System.Windows.Forms.CheckBox()
@@ -80,7 +81,6 @@ Partial Class Form1
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFileTypes.SuspendLayout()
@@ -127,6 +127,18 @@ Partial Class Form1
         Me.TabPageGeneral.Size = New System.Drawing.Size(480, 299)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
+        '
+        'CheckBoxWarnSave
+        '
+        Me.CheckBoxWarnSave.AutoSize = True
+        Me.CheckBoxWarnSave.Checked = True
+        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(255, 271)
+        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(196, 19)
+        Me.CheckBoxWarnSave.TabIndex = 8
+        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
+        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
         'GroupBoxFileTypes
         '
@@ -484,7 +496,7 @@ Partial Class Form1
         'ComboBoxPartNumberPropertySet
         '
         Me.ComboBoxPartNumberPropertySet.FormattingEnabled = True
-        Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"Default", "Custom"})
+        Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"System", "Custom"})
         Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(8, 268)
         Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPartNumberPropertySet.Name = "ComboBoxPartNumberPropertySet"
@@ -702,18 +714,6 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog.FileName = "Select Folder"
         Me.FakeFolderBrowserDialog.Title = "Select Folder"
         Me.FakeFolderBrowserDialog.ValidateNames = False
-        '
-        'CheckBoxWarnSave
-        '
-        Me.CheckBoxWarnSave.AutoSize = True
-        Me.CheckBoxWarnSave.Checked = True
-        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(255, 271)
-        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(196, 19)
-        Me.CheckBoxWarnSave.TabIndex = 8
-        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
-        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
         'Form1
         '
