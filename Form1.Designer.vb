@@ -311,7 +311,7 @@ Partial Class Form1
         Me.CheckedListBoxAssembly.Location = New System.Drawing.Point(19, 20)
         Me.CheckedListBoxAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxAssembly.Name = "CheckedListBoxAssembly"
-        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(451, 184)
+        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(451, 214)
         Me.CheckedListBoxAssembly.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxAssembly, "Double-click to check/uncheck all")
         '
@@ -337,7 +337,7 @@ Partial Class Form1
         Me.CheckedListBoxPart.Location = New System.Drawing.Point(19, 20)
         Me.CheckedListBoxPart.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxPart.Name = "CheckedListBoxPart"
-        Me.CheckedListBoxPart.Size = New System.Drawing.Size(451, 184)
+        Me.CheckedListBoxPart.Size = New System.Drawing.Size(451, 214)
         Me.CheckedListBoxPart.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxPart, "Double-click to check/uncheck all")
         '
@@ -359,7 +359,7 @@ Partial Class Form1
         '
         'ButtonLaserOutputDirectory
         '
-        Me.ButtonLaserOutputDirectory.Location = New System.Drawing.Point(382, 260)
+        Me.ButtonLaserOutputDirectory.Location = New System.Drawing.Point(382, 270)
         Me.ButtonLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonLaserOutputDirectory.Name = "ButtonLaserOutputDirectory"
         Me.ButtonLaserOutputDirectory.Size = New System.Drawing.Size(75, 20)
@@ -369,7 +369,7 @@ Partial Class Form1
         '
         'TextBoxLaserOutputDirectory
         '
-        Me.TextBoxLaserOutputDirectory.Location = New System.Drawing.Point(8, 260)
+        Me.TextBoxLaserOutputDirectory.Location = New System.Drawing.Point(8, 270)
         Me.TextBoxLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxLaserOutputDirectory.Name = "TextBoxLaserOutputDirectory"
         Me.TextBoxLaserOutputDirectory.Size = New System.Drawing.Size(369, 20)
@@ -378,7 +378,7 @@ Partial Class Form1
         'LabelLaserOutputDirectory
         '
         Me.LabelLaserOutputDirectory.AutoSize = True
-        Me.LabelLaserOutputDirectory.Location = New System.Drawing.Point(8, 244)
+        Me.LabelLaserOutputDirectory.Location = New System.Drawing.Point(8, 254)
         Me.LabelLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelLaserOutputDirectory.Name = "LabelLaserOutputDirectory"
         Me.LabelLaserOutputDirectory.Size = New System.Drawing.Size(157, 15)
@@ -394,7 +394,7 @@ Partial Class Form1
         Me.CheckedListBoxSheetmetal.Location = New System.Drawing.Point(19, 20)
         Me.CheckedListBoxSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxSheetmetal.Name = "CheckedListBoxSheetmetal"
-        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(451, 184)
+        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(451, 214)
         Me.CheckedListBoxSheetmetal.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxSheetmetal, "Double-click to check/uncheck all")
         '
@@ -420,7 +420,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft.Location = New System.Drawing.Point(19, 20)
         Me.CheckedListBoxDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxDraft.Name = "CheckedListBoxDraft"
-        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(451, 184)
+        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(451, 214)
         Me.CheckedListBoxDraft.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxDraft, "Double-click to check/uncheck all")
         '
