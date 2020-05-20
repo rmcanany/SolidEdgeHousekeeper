@@ -588,6 +588,7 @@ Public Class SheetmetalTasks
             ErrorMessage += "    Draft document not found: " + TruncateFullPath(DraftFilename, Configuration) + Chr(13)
         Else
             SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
+            SEApp.DoIdle()
         End If
 
         SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
@@ -695,10 +696,15 @@ Public Class SheetmetalTasks
                             ErrorMessage += "    Insert part copy file not found: " + CopiedPart.FileName + Chr(13)
                         ElseIf Not CopiedPart.IsUpToDate Then
                             CopiedPart.Update()
-                            SEDoc.Save()
-                            SEApp.DoIdle()
-                            ExitStatus = "1"
-                            ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
+                            If SEDoc.ReadOnly Then
+                                ExitStatus = "1"
+                                ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                            Else
+                                SEDoc.Save()
+                                SEApp.DoIdle()
+                                ExitStatus = "1"
+                                ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
+                            End If
                         End If
                     Next
                 End If
@@ -843,11 +849,15 @@ Public Class SheetmetalTasks
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
                             Body.Style = Nothing
                         Next
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-
-                        ExitStatus = "1"
-                        ErrorMessage = "    Material was updated" + Chr(13)
+                        If SEDoc.ReadOnly Then
+                            ExitStatus = "1"
+                            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                        Else
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                            ExitStatus = "1"
+                            ErrorMessage = "    Material was updated" + Chr(13)
+                        End If
 
                         Exit For
                     End If
@@ -925,6 +935,7 @@ Public Class SheetmetalTasks
 
         ' Find the active ViewStyle in the template file.
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgePart.SheetMetalDocument)
+        SEApp.DoIdle()
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -984,9 +995,13 @@ Public Class SheetmetalTasks
             View.Style = TemplateActiveStyleName
         Next
 
-
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
@@ -1046,8 +1061,13 @@ Public Class SheetmetalTasks
         SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
         SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)

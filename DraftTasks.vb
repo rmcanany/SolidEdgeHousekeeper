@@ -95,6 +95,7 @@ Public Class DraftTasks
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
+        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
         Sections = SEDoc.Sections
         Section = Sections.WorkingSection
@@ -105,10 +106,19 @@ Public Class DraftTasks
             For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                 If Not DrawingView.IsUpToDate Then
                     ExitStatus = "1"
-                    'ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
+                    Exit For
+                End If
+                If DrawingView.ModelLink IsNot Nothing Then
+                    ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
+                    If ModelLink.ModelOutOfDate Then
+                        ExitStatus = "1"
+                        Exit For
+                    End If
                 End If
             Next DrawingView
-
+            If ExitStatus = "1" Then
+                Exit For
+            End If
         Next Sheet
 
         ErrorMessageList.Add(ExitStatus)
@@ -345,6 +355,8 @@ Public Class DraftTasks
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
+        Dim UpdatedView As Boolean = False
+
         ModelLinks = SEDoc.ModelLinks
 
         For Each ModelLink In ModelLinks
@@ -360,12 +372,19 @@ Public Class DraftTasks
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                     If Not DrawingView.IsUpToDate Then
                         DrawingView.Update()
-                        SEDoc.Save()
-                        SEApp.DoIdle()
+                        UpdatedView = True
                     End If
                 Next DrawingView
-
             Next Sheet
+            If UpdatedView Then
+                If SEDoc.ReadOnly Then
+                    ExitStatus = "1"
+                    ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                Else
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                End If
+            End If
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -416,6 +435,7 @@ Public Class DraftTasks
         Dim TemplateSheetNames As New List(Of String)
 
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
+        SEApp.DoIdle()
 
         Sections = SETemplateDoc.Sections
         Section = Sections.BackgroundSection
@@ -442,8 +462,13 @@ Public Class DraftTasks
         Next
 
         If ExitStatus = "0" Then
-            SEDoc.Save()
-            SEApp.DoIdle()
+            If SEDoc.ReadOnly Then
+                ExitStatus = "1"
+                ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -506,6 +531,7 @@ Public Class DraftTasks
 
         'Copy DimensionStyles from template
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
+        SEApp.DoIdle()
 
         DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
         DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
@@ -574,8 +600,13 @@ Public Class DraftTasks
 
         SEApp.DoIdle()
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
@@ -641,8 +672,13 @@ Public Class DraftTasks
 
         SheetWindow.ActiveSheet = SectionSheets.OfType(Of SolidEdgeDraft.Sheet)().ElementAt(0)
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)

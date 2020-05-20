@@ -341,8 +341,13 @@ Public Class AssemblyTasks
         SEDoc.ActivateAll()
         SEDoc.UpdateAll()
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
@@ -400,6 +405,7 @@ Public Class AssemblyTasks
 
         ' Find the active ViewStyle in the template file.
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeAssembly.AssemblyDocument)
+        SEApp.DoIdle()
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -459,9 +465,13 @@ Public Class AssemblyTasks
             View.Style = TemplateActiveStyleName
         Next
 
-
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)
@@ -521,8 +531,13 @@ Public Class AssemblyTasks
         SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
         SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = "1"
+            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessageList.Add(ExitStatus)
         ErrorMessageList.Add(ErrorMessage)

@@ -526,10 +526,15 @@ Public Class PartTasks
                             ErrorMessage += "    Insert part copy file not found: " + CopiedPart.FileName + Chr(13)
                         ElseIf Not CopiedPart.IsUpToDate Then
                             CopiedPart.Update()
-                            SEDoc.Save()
-                            SEApp.DoIdle()
-                            ExitStatus = "1"
-                            ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
+                            If SEDoc.ReadOnly Then
+                                ExitStatus = "1"
+                                ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                            Else
+                                SEDoc.Save()
+                                SEApp.DoIdle()
+                                ExitStatus = "1"
+                                ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
+                            End If
                         End If
                     Next
                 End If
@@ -675,11 +680,15 @@ Public Class PartTasks
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
                             Body.Style = Nothing
                         Next
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-
-                        ExitStatus = "1"
-                        ErrorMessage = "    Material was updated" + Chr(13)
+                        If SEDoc.ReadOnly Then
+                            ExitStatus = "1"
+                            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                        Else
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                            ExitStatus = "1"
+                            ErrorMessage = "    Material was updated" + Chr(13)
+                        End If
 
                         Exit For
                     End If
@@ -756,6 +765,7 @@ Public Class PartTasks
 
         ' Find the active ViewStyle in the template file.
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgePart.PartDocument)
+        SEApp.DoIdle()
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows

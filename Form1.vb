@@ -20,7 +20,7 @@ Public Class Form1
 
     Private Configuration As New Dictionary(Of String, String)
 
-    Public LabelToActionAssembly As New LabelToAction("Assembly")
+    Private LabelToActionAssembly As New LabelToAction("Assembly")
     Private LabelToActionPart As New LabelToAction("Part")
     Private LabelToActionSheetmetal As New LabelToAction("Sheetmetal")
     Private LabelToActionDraft As New LabelToAction("Draft")
@@ -405,6 +405,8 @@ Public Class Form1
 
         Try
             SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+            SEApp.DoIdle()
+
             If Filetype = "Assembly" Then
                 CheckedListBoxX = CheckedListBoxAssembly
             ElseIf Filetype = "Part" Then
@@ -423,16 +425,12 @@ Public Class Form1
                 'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
                 If Filetype = "Assembly" Then
-                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                 ElseIf Filetype = "Part" Then
-                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                 ElseIf Filetype = "Sheetmetal" Then
-                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                 Else
-                    'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                     ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                 End If
 
