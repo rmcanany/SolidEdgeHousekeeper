@@ -6,7 +6,7 @@ Public Class SheetmetalTasks
     Inherits IsolatedTaskProxy
 
     Public Function FailedOrWarnedFeatures(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -19,7 +19,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FailedOrWarnedFeaturesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -72,7 +72,7 @@ Public Class SheetmetalTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -83,7 +83,7 @@ Public Class SheetmetalTasks
 
 
     Public Function SuppressedOrRolledBackFeatures(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -96,7 +96,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf SuppressedOrRolledBackFeaturesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -149,7 +149,7 @@ Public Class SheetmetalTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -160,7 +160,7 @@ Public Class SheetmetalTasks
 
 
     Public Function UnderconstrainedProfiles(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -173,7 +173,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UnderconstrainedProfilesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -210,7 +210,7 @@ Public Class SheetmetalTasks
 
 
     Public Function InsertPartCopiesOutOfDate(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -223,7 +223,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf InsertPartCopiesOutOfDateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -267,7 +267,7 @@ Public Class SheetmetalTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -278,7 +278,7 @@ Public Class SheetmetalTasks
 
 
     Public Function FlatPatternMissingOrOutOfDate(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -291,7 +291,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FlatPatternMissingOrOutOfDateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -315,11 +315,11 @@ Public Class SheetmetalTasks
         If FlatpatternModels.Count > 0 Then
             If Not FlatpatternModels.Item(1).IsUpToDate Then
                 ExitStatus = "1"
-                'ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
+                'ErrorMessage += "    " + Features(i).DisplayName + Chr(13)
             End If
         Else
             ExitStatus = "1"
-            'ErrorMessage += "  " + Features(i).DisplayName + Chr(13)
+            'ErrorMessage += "    " + Features(i).DisplayName + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -330,7 +330,7 @@ Public Class SheetmetalTasks
 
 
     Public Function MaterialNotInMaterialTable(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -343,7 +343,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf MaterialNotInMaterialTableInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -429,7 +429,7 @@ Public Class SheetmetalTasks
 
 
     Public Function PartNumberDoesNotMatchFilename(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -442,7 +442,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf PartNumberDoesNotMatchFilenameInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -526,7 +526,7 @@ Public Class SheetmetalTasks
 
 
     Public Function GenerateLaserDXFAndPDF(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -539,7 +539,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf GenerateLaserDXFAndPDFInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -596,7 +596,7 @@ Public Class SheetmetalTasks
         DXFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".dxf")
         PDFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".pdf")
 
-        ErrorMessageList = FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
+        ErrorMessageList = FlatPatternMissingOrOutOfDate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
         If ExitStatus = "0" Then
             ExitStatus = ErrorMessageList(0)
         End If
@@ -606,7 +606,7 @@ Public Class SheetmetalTasks
         End If
 
         If Not DraftFileMissing Then
-            ErrorMessageList = DraftTasks.DrawingViewsOutOfDate(SEDraftDoc, Configuration, SEApp)
+            ErrorMessageList = DraftTasks.DrawingViewsOutOfDate(CType(SEDraftDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
             If ExitStatus = "0" Then
                 ExitStatus = ErrorMessageList(0)
             End If
@@ -644,7 +644,7 @@ Public Class SheetmetalTasks
 
 
     Public Function UpdateInsertPartCopies(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -657,7 +657,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateInsertPartCopiesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -711,7 +711,7 @@ Public Class SheetmetalTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -722,7 +722,7 @@ Public Class SheetmetalTasks
 
 
     Public Function UpdateMaterialFromMaterialTable(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -735,7 +735,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateMaterialFromMaterialTableInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -885,7 +885,7 @@ Public Class SheetmetalTasks
 
 
     Public Function UpdateFaceAndViewStylesFromTemplate(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -898,7 +898,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 
@@ -1011,7 +1011,7 @@ Public Class SheetmetalTasks
 
 
     Public Function FitIsometricView(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -1024,7 +1024,7 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FitIsometricViewInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
 

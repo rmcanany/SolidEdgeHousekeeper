@@ -7,7 +7,7 @@ Public Class DraftTasks
 
 
     Public Function DrawingViewsMissingFile(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -20,7 +20,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf DrawingViewsMissingFileInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -58,7 +58,7 @@ Public Class DraftTasks
 
 
     Public Function DrawingViewsOutOfDate(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -71,7 +71,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf DrawingViewsOutOfDateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -129,7 +129,7 @@ Public Class DraftTasks
 
 
     Public Function DetachedDimensionsOrAnnotations(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -142,7 +142,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf DetachedDimensionsOrAnnotationsInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -235,7 +235,7 @@ Public Class DraftTasks
 
 
     Public Function FileNameDoesNotMatchModelFilename(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -248,7 +248,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FileNameDoesNotMatchModelFilenameInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -310,7 +310,7 @@ Public Class DraftTasks
 
 
     Public Function UpdateDrawingViews(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -323,7 +323,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateDrawingViewsInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -395,7 +395,7 @@ Public Class DraftTasks
 
 
     Public Function UpdateDrawingBorderFromTemplate(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -408,7 +408,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateDrawingBorderFromTemplateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -479,7 +479,7 @@ Public Class DraftTasks
 
 
     Public Function UpdateDimensionStylesFromTemplate(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -492,7 +492,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateDimensionStylesFromTemplateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -616,7 +616,7 @@ Public Class DraftTasks
 
 
     Public Function FitView(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -629,7 +629,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FitViewInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
@@ -687,7 +687,7 @@ Public Class DraftTasks
 
 
     Public Function SaveAsPDF(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -700,7 +700,7 @@ Public Class DraftTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf SaveAsPDFInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 

@@ -6,7 +6,7 @@ Public Class PartTasks
     Inherits IsolatedTaskProxy
 
     Public Function FailedOrWarnedFeatures(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -19,7 +19,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FailedOrWarnedFeaturesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -73,7 +73,7 @@ Public Class PartTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -83,7 +83,7 @@ Public Class PartTasks
 
 
     Public Function SuppressedOrRolledBackFeatures(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -96,7 +96,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf SuppressedOrRolledBackFeaturesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -149,7 +149,7 @@ Public Class PartTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -160,7 +160,7 @@ Public Class PartTasks
 
 
     Public Function UnderconstrainedProfiles(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -173,7 +173,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UnderconstrainedProfilesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -210,7 +210,7 @@ Public Class PartTasks
 
 
     Public Function InsertPartCopiesOutOfDate(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -223,7 +223,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf InsertPartCopiesOutOfDateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -267,7 +267,7 @@ Public Class PartTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -278,7 +278,7 @@ Public Class PartTasks
 
 
     Public Function MaterialNotInMaterialTable(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -291,7 +291,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf MaterialNotInMaterialTableInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -377,7 +377,7 @@ Public Class PartTasks
 
 
     Public Function PartNumberDoesNotMatchFilename(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -390,7 +390,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf PartNumberDoesNotMatchFilenameInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -474,7 +474,7 @@ Public Class PartTasks
 
 
     Public Function UpdateInsertPartCopies(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -487,7 +487,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateInsertPartCopiesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -541,7 +541,7 @@ Public Class PartTasks
             Next
         ElseIf Models.Count >= 10 Then
             ExitStatus = "1"
-            ErrorMessage += "  " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
         End If
 
         ErrorMessageList.Add(ExitStatus)
@@ -552,7 +552,7 @@ Public Class PartTasks
 
 
     Public Function UpdateMaterialFromMaterialTable(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -565,7 +565,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateMaterialFromMaterialTableInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -716,7 +716,7 @@ Public Class PartTasks
 
 
     Public Function UpdateFaceAndViewStylesFromTemplate(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -729,7 +729,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
@@ -837,7 +837,7 @@ Public Class PartTasks
 
 
     Public Function FitIsometricView(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -850,7 +850,7 @@ Public Class PartTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FitIsometricViewInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 

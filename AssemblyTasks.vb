@@ -6,7 +6,7 @@ Public Class AssemblyTasks
     Inherits IsolatedTaskProxy
 
     Public Function OccurrenceMissingFiles(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -19,7 +19,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf OccurrenceMissingFilesInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -43,7 +43,7 @@ Public Class AssemblyTasks
         For Each Occurrence In Occurrences
             If Occurrence.FileMissing() Then
                 ExitStatus = "1"
-                ErrorMessage += "  " + Occurrence.Name + Chr(13)
+                ErrorMessage += "    " + Occurrence.Name + Chr(13)
             End If
         Next
 
@@ -54,7 +54,7 @@ Public Class AssemblyTasks
 
 
     Public Function OccurrenceOutsideProjectDirectory(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -67,7 +67,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf OccurrenceOutsideProjectDirectoryInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -95,7 +95,7 @@ Public Class AssemblyTasks
             If Not OccurrenceFilename.Contains(Configuration("TextBoxInputDirectory")) Then
                 ExitStatus = "1"
                 If Not ErrorMessage.Contains(OccurrenceFilename) Then
-                    ErrorMessage += "  " + OccurrenceFilename + Chr(13)
+                    ErrorMessage += "    " + OccurrenceFilename + Chr(13)
                 End If
             End If
         Next
@@ -107,7 +107,7 @@ Public Class AssemblyTasks
 
 
     Public Function FailedRelationships(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -120,7 +120,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FailedRelationshipsInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -145,11 +145,11 @@ Public Class AssemblyTasks
             If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
                 If Occurrence.Status.ToString() = "seOccurrenceStatusOverDefined" Then
                     ExitStatus = "1"
-                    ErrorMessage += "  " + Occurrence.Name + Chr(13)
+                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
                 End If
                 If Occurrence.Status.ToString() = "seOccurrenceStatusNotConsistent" Then
                     ExitStatus = "1"
-                    ErrorMessage += "  " + Occurrence.Name + Chr(13)
+                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
                 End If
             End If
         Next
@@ -161,7 +161,7 @@ Public Class AssemblyTasks
 
 
     Public Function UnderconstrainedRelationships(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -174,7 +174,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UnderconstrainedRelationshipsInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -199,7 +199,7 @@ Public Class AssemblyTasks
             If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
                 If Occurrence.Status.ToString() = "seOccurrenceStatusUnderDefined" Then
                     ExitStatus = "1"
-                    ErrorMessage += "  " + Occurrence.Name + Chr(13)
+                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
                 End If
             End If
         Next
@@ -211,7 +211,7 @@ Public Class AssemblyTasks
 
 
     Public Function PartNumberDoesNotMatchFilename(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -224,7 +224,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf PartNumberDoesNotMatchFilenameInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -307,7 +307,7 @@ Public Class AssemblyTasks
 
 
     Public Function ActivateAndUpdateAll(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -320,7 +320,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf ActivateAndUpdateAllInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -356,7 +356,7 @@ Public Class AssemblyTasks
 
 
     Public Function UpdateFaceAndViewStylesFromTemplate(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -369,7 +369,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
@@ -481,7 +481,7 @@ Public Class AssemblyTasks
 
 
     Public Function FitIsometricView(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As List(Of String)
@@ -494,7 +494,7 @@ Public Class AssemblyTasks
                                SolidEdgeFramework.Application,
                                List(Of String))(
                                    AddressOf FitIsometricViewInternal,
-                                   SEDoc,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 

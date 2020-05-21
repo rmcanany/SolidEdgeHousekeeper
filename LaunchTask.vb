@@ -5,24 +5,24 @@ Imports SolidEdgeCommunity
 Public Class LaunchTask
 
     Public Function Launch(
-                ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-                ByVal Configuration As Dictionary(Of String, String),
-                ByVal SEApp As SolidEdgeFramework.Application,
-                Filetype As String,
-                LabelToActionX As LabelToAction,
-                LabelText As String
-                ) As List(Of String)
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application,
+        Filetype As String,
+        LabelToActionX As LabelToAction,
+        LabelText As String
+        ) As List(Of String)
 
         Dim ErrorMessageList As New List(Of String)
 
         If Filetype = "Assembly" Then
-            ErrorMessageList = LaunchAssembly(CType(SEDoc, SolidEdgeAssembly.AssemblyDocument), Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchAssembly(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Part" Then
-            ErrorMessageList = LaunchPart(CType(SEDoc, SolidEdgePart.PartDocument), Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchPart(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Sheetmetal" Then
-            ErrorMessageList = LaunchSheetmetal(CType(SEDoc, SolidEdgePart.SheetMetalDocument), Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchSheetmetal(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Draft" Then
-            ErrorMessageList = LaunchDraft(CType(SEDoc, SolidEdgeDraft.DraftDocument), Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessageList = LaunchDraft(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         Else
             MsgBox("LaunchTask: Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()
@@ -34,7 +34,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchAssembly(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
@@ -85,7 +85,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchPart(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
@@ -142,7 +142,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchSheetmetal(
-        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
@@ -200,7 +200,7 @@ Public Class LaunchTask
     End Function
 
     Private Function LaunchDraft(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
