@@ -16,15 +16,22 @@ Partial Class Form1
     End Function
 
     Private Sub LogfileAppend(
-        ByVal ErrorMessage As String,
-        ByVal Path As String,
-        ByVal SupplementalErrorMessage As String
+        ByVal Filename As String,
+        ByVal ErrorMessagesCombined As Dictionary(Of String, List(Of String))
         )
 
         Try
             Using writer As New IO.StreamWriter(LogfileName, True)
-                writer.WriteLine(ErrorMessage + ": " + Path)
-                writer.WriteLine(SupplementalErrorMessage)
+                writer.WriteLine(TruncateFullPath(Filename))
+                For Each Key In ErrorMessagesCombined.Keys
+                    writer.WriteLine(String.Format("    {0}", Key))
+                    If ErrorMessagesCombined(Key).Count > 0 Then
+                        For Each Line In ErrorMessagesCombined(Key)
+                            writer.WriteLine(String.Format("        {0}", Line))
+                        Next
+                    End If
+                Next
+                writer.WriteLine("")
             End Using
         Catch ex As Exception
             MsgBox("Error saving logfile")

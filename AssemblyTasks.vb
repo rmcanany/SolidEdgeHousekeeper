@@ -9,21 +9,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf OccurrenceMissingFilesInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -31,25 +31,24 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
-
         For Each Occurrence In Occurrences
             If Occurrence.FileMissing() Then
-                ExitStatus = "1"
-                ErrorMessage += "    " + Occurrence.Name + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(Occurrence.Name)
             End If
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -57,21 +56,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf OccurrenceOutsideProjectDirectoryInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -79,30 +78,29 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
         Dim OccurrenceFilename As String
         Dim OccurrenceOutsideProjectError As Boolean = False
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
-
         For Each Occurrence In Occurrences
             OccurrenceFilename = Occurrence.OccurrenceFileName
             If Not OccurrenceFilename.Contains(Configuration("TextBoxInputDirectory")) Then
-                ExitStatus = "1"
-                If Not ErrorMessage.Contains(OccurrenceFilename) Then
-                    ErrorMessage += "    " + OccurrenceFilename + Chr(13)
+                ExitStatus = 1
+                If Not ErrorMessageList.Contains(OccurrenceFilename) Then
+                    ErrorMessageList.Add(OccurrenceFilename)
                 End If
             End If
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -110,21 +108,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FailedRelationshipsInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -132,31 +130,30 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
-
         For Each Occurrence In Occurrences
             If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
                 If Occurrence.Status.ToString() = "seOccurrenceStatusOverDefined" Then
-                    ExitStatus = "1"
-                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
+                    ExitStatus = 1
+                    ErrorMessageList.Add(Occurrence.Name)
                 End If
                 If Occurrence.Status.ToString() = "seOccurrenceStatusNotConsistent" Then
-                    ExitStatus = "1"
-                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
+                    ExitStatus = 1
+                    ErrorMessageList.Add(Occurrence.Name)
                 End If
             End If
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -164,21 +161,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UnderconstrainedRelationshipsInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -186,27 +183,26 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
-
         For Each Occurrence In Occurrences
             If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
                 If Occurrence.Status.ToString() = "seOccurrenceStatusUnderDefined" Then
-                    ExitStatus = "1"
-                    ErrorMessage += "    " + Occurrence.Name + Chr(13)
+                    ExitStatus = 1
+                    ErrorMessageList.Add(Occurrence.Name)
                 End If
             End If
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -214,21 +210,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf PartNumberDoesNotMatchFilenameInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -236,11 +232,12 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim msg As String = ""
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
         Dim Properties As SolidEdgeFramework.Properties = Nothing
@@ -253,8 +250,6 @@ Public Class AssemblyTasks
 
         'Get the bare file name without directory information
         Filename = System.IO.Path.GetFileName(SEDoc.FullName)
-
-        Dim msg As String = ""
 
         PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
 
@@ -283,26 +278,25 @@ Public Class AssemblyTasks
 
         If PartNumberPropertyFound Then
             If PartNumber.Trim = "" Then
-                ExitStatus = "1"
-                ErrorMessage = "    Part number not assigned" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add("Part number not assigned")
             End If
             If Not Filename.Contains(PartNumber) Then
-                ExitStatus = "1"
-                ErrorMessage = "    Part number '" + PartNumber
-                ErrorMessage += "' not found in filename '" + Filename + "'" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
             End If
         Else
-            ExitStatus = "1"
-            ErrorMessage = "    PartNumberPropertyName: '" + Configuration("TextBoxPartNumberPropertyName") + "'"
-            ErrorMessage += " not found in PartNumberPropertySet: '" + Configuration("ComboBoxPartNumberPropertySet") + "'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("PartNumberPropertyName: '{0}' not found in PartNumberPropertySet: '{1}'",
+                                     Configuration("TextBoxPartNumberPropertyName"),
+                                     Configuration("ComboBoxPartNumberPropertySet")))
             If Configuration("TextBoxPartNumberPropertyName") = "" Then
-                ErrorMessage += "    Check the Configuration tab for valid entries" + Chr(13)
+                ErrorMessageList.Add("Check the Configuration tab for valid entries")
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -310,21 +304,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf ActivateAndUpdateAllInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -332,26 +326,25 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         SEDoc.ActivateAll()
         SEDoc.UpdateAll()
 
         If SEDoc.ReadOnly Then
-            ExitStatus = "1"
-            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -359,21 +352,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -381,11 +374,11 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
         Dim Windows As SolidEdgeFramework.Windows
@@ -466,17 +459,15 @@ Public Class AssemblyTasks
         Next
 
         If SEDoc.ReadOnly Then
-            ExitStatus = "1"
-            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -484,21 +475,21 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeAssembly.AssemblyDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FitIsometricViewInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -506,16 +497,16 @@ Public Class AssemblyTasks
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
         Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
         'Dim Occurrence As SolidEdgeAssembly.Occurrence
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
 
         If Occurrences.Count = 0 Then
             AsmRefPlanes.Visible = True
@@ -532,16 +523,15 @@ Public Class AssemblyTasks
         SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         If SEDoc.ReadOnly Then
-            ExitStatus = "1"
-            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 

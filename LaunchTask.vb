@@ -11,25 +11,25 @@ Public Class LaunchTask
         Filetype As String,
         LabelToActionX As LabelToAction,
         LabelText As String
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         If Filetype = "Assembly" Then
-            ErrorMessageList = LaunchAssembly(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessage = LaunchAssembly(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Part" Then
-            ErrorMessageList = LaunchPart(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessage = LaunchPart(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Sheetmetal" Then
-            ErrorMessageList = LaunchSheetmetal(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessage = LaunchSheetmetal(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         ElseIf Filetype = "Draft" Then
-            ErrorMessageList = LaunchDraft(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
+            ErrorMessage = LaunchDraft(SEDoc, Configuration, SEApp, LabelToActionX, LabelText)
         Else
             MsgBox("LaunchTask: Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()
             End
         End If
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -39,29 +39,29 @@ Public Class LaunchTask
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
         LabelText As String
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Using task = New IsolatedTask(Of AssemblyTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OccurrenceMissingFiles"
-                    ErrorMessageList = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
                 Case "OccurrenceOutsideProjectDirectory"
-                    ErrorMessageList = task.Proxy.OccurrenceOutsideProjectDirectory(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.OccurrenceOutsideProjectDirectory(SEDoc, Configuration, SEApp)
                 Case "FailedRelationships"
-                    ErrorMessageList = task.Proxy.FailedRelationships(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FailedRelationships(SEDoc, Configuration, SEApp)
                 Case "UnderconstrainedRelationships"
-                    ErrorMessageList = task.Proxy.UnderconstrainedRelationships(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UnderconstrainedRelationships(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
-                    ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "ActivateAndUpdateAll"
-                    ErrorMessageList = task.Proxy.ActivateAndUpdateAll(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.ActivateAndUpdateAll(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
-                    ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
-                    ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -70,7 +70,7 @@ Public Class LaunchTask
 
         End Using
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -80,33 +80,33 @@ Public Class LaunchTask
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
         LabelText As String
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Using task = New IsolatedTask(Of PartTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
                 Case "FailedOrWarnedFeatures"
-                    ErrorMessageList = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
-                    ErrorMessageList = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
                 Case "UnderconstrainedProfiles"
-                    ErrorMessageList = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
-                    ErrorMessageList = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
-                    ErrorMessageList = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
-                    ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
-                    ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateMaterialFromMaterialTable"
-                    ErrorMessageList = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
-                    ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
-                    ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -115,7 +115,7 @@ Public Class LaunchTask
 
         End Using
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -125,37 +125,37 @@ Public Class LaunchTask
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
         LabelText As String
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Using task = New IsolatedTask(Of SheetmetalTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
                 Case "FailedOrWarnedFeatures"
-                    ErrorMessageList = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
-                    ErrorMessageList = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
                 Case "UnderconstrainedProfiles"
-                    ErrorMessageList = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "FlatPatternMissingOrOutOfDate"
-                    ErrorMessageList = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
-                    ErrorMessageList = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
-                    ErrorMessageList = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
-                    ErrorMessageList = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "GenerateLaserDXFAndPDF"
-                    ErrorMessageList = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
-                    ErrorMessageList = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateMaterialFromMaterialTable"
-                    ErrorMessageList = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
-                    ErrorMessageList = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
-                    ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -164,7 +164,7 @@ Public Class LaunchTask
 
         End Using
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -174,31 +174,31 @@ Public Class LaunchTask
         ByVal SEApp As SolidEdgeFramework.Application,
         ByVal LabelToActionX As LabelToAction,
         LabelText As String
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Using task = New IsolatedTask(Of DraftTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
                 Case "DrawingViewsMissingFile"
-                    ErrorMessageList = task.Proxy.DrawingViewsMissingFile(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.DrawingViewsMissingFile(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
-                    ErrorMessageList = task.Proxy.DrawingViewsOutOfDate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.DrawingViewsOutOfDate(SEDoc, Configuration, SEApp)
                 Case "DetachedDimensionsOrAnnotations"
-                    ErrorMessageList = task.Proxy.DetachedDimensionsOrAnnotations(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.DetachedDimensionsOrAnnotations(SEDoc, Configuration, SEApp)
                 Case "FileNameDoesNotMatchModelFilename"
-                    ErrorMessageList = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingViews"
-                    ErrorMessageList = task.Proxy.UpdateDrawingViews(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateDrawingViews(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingBorderFromTemplate"
-                    ErrorMessageList = task.Proxy.UpdateDrawingBorderFromTemplate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateDrawingBorderFromTemplate(SEDoc, Configuration, SEApp)
                 Case "UpdateDimensionStylesFromTemplate"
-                    ErrorMessageList = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitView"
-                    ErrorMessageList = task.Proxy.FitView(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.FitView(SEDoc, Configuration, SEApp)
                 Case "SaveAsPDF"
-                    ErrorMessageList = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
+                    ErrorMessage = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -207,7 +207,7 @@ Public Class LaunchTask
 
         End Using
 
-        Return ErrorMessageList
+        Return ErrorMessage
     End Function
 
 End Class

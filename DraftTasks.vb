@@ -10,21 +10,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf DrawingViewsMissingFileInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -32,11 +32,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
@@ -45,15 +45,13 @@ Public Class DraftTasks
 
         For Each ModelLink In ModelLinks
             If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
-                ExitStatus = "1"
-                ErrorMessage += "    " + TruncateFullPath(ModelLink.FileName, Configuration) + " not found" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0} not found", TruncateFullPath(ModelLink.FileName, Configuration)))
             End If
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -61,21 +59,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf DrawingViewsOutOfDateInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -83,11 +81,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Sections As SolidEdgeDraft.Sections = Nothing
         Dim Section As SolidEdgeDraft.Section = Nothing
@@ -105,26 +103,24 @@ Public Class DraftTasks
             DrawingViews = Sheet.DrawingViews
             For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                 If Not DrawingView.IsUpToDate Then
-                    ExitStatus = "1"
+                    ExitStatus = 1
                     Exit For
                 End If
                 If DrawingView.ModelLink IsNot Nothing Then
                     ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
                     If ModelLink.ModelOutOfDate Then
-                        ExitStatus = "1"
+                        ExitStatus = 1
                         Exit For
                     End If
                 End If
             Next DrawingView
-            If ExitStatus = "1" Then
+            If ExitStatus = 1 Then
                 Exit For
             End If
         Next Sheet
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -132,21 +128,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf DetachedDimensionsOrAnnotationsInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -154,11 +150,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim msg As String = ""
         Dim DimensionErrorConstants As String = "125"
@@ -192,8 +188,8 @@ Public Class DraftTasks
                     TF = Not Balloon.IsTerminatorAttachedToEntity
                     TF = TF And Balloon.VertexCount > 0
                     If TF Then
-                        ExitStatus = "1"
-                        ErrorMessage += "    " + Balloon.BalloonDisplayedText + Chr(13)
+                        ExitStatus = 1
+                        ErrorMessageList.Add(Balloon.BalloonDisplayedText)
                     End If
                 Catch ex As Exception
                 End Try
@@ -220,17 +216,15 @@ Public Class DraftTasks
                 TF = TF Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
 
                 If TF Then
-                    ExitStatus = "1"
-                    ErrorMessage += "    " + Dimension.DisplayName + Chr(13)
+                    ExitStatus = 1
+                    ErrorMessageList.Add(Dimension.DisplayName)
                 End If
             End If
 
         Next
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -238,21 +232,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FileNameDoesNotMatchModelFilenameInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -260,11 +254,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
@@ -294,18 +288,16 @@ Public Class DraftTasks
                 End If
             Next
             If Not PartNumberFound Then
-                ExitStatus = "1"
-                ErrorMessage = "    Drawing file name '" + Filename + "'"
-                ErrorMessage += " not the same as any model file name in the drawing:" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Drawing file name '{0}' not the same as any model file name:", Filename))
                 For Each ModelLinkFilename In ModelLinkFilenames
-                    ErrorMessage += "    '" + ModelLinkFilename + "'" + Chr(13)
+                    ErrorMessageList.Add(String.Format("    {0}", ModelLinkFilename))
                 Next
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -313,21 +305,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateDrawingViewsInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -335,11 +327,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Sections As SolidEdgeDraft.Sections = Nothing
         Dim Section As SolidEdgeDraft.Section = Nothing
@@ -361,12 +353,12 @@ Public Class DraftTasks
 
         For Each ModelLink In ModelLinks
             If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
-                ExitStatus = "1"
-                ErrorMessage += "    " + TruncateFullPath(ModelLink.FileName, Configuration) + " not found" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0} not found", TruncateFullPath(ModelLink.FileName, Configuration)))
             End If
         Next
 
-        If Not ExitStatus = "1" Then
+        If Not ExitStatus = 1 Then
             For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
                 DrawingViews = Sheet.DrawingViews
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
@@ -378,8 +370,8 @@ Public Class DraftTasks
             Next Sheet
             If UpdatedView Then
                 If SEDoc.ReadOnly Then
-                    ExitStatus = "1"
-                    ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
                 Else
                     SEDoc.Save()
                     SEApp.DoIdle()
@@ -387,10 +379,8 @@ Public Class DraftTasks
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -398,21 +388,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateDrawingBorderFromTemplateInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -420,11 +410,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
@@ -456,25 +446,23 @@ Public Class DraftTasks
             If TemplateSheetNames.Contains(Sheet.Name) Then
                 Sheet.ReplaceBackground(TemplateFilename, Sheet.Name)
             Else
-                ExitStatus = "1"
-                ErrorMessage += "    Template has no background named '" + Sheet.Name + "'" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Template has no background named '{0}'", Sheet.Name))
             End If
         Next
 
-        If ExitStatus = "0" Then
+        If ExitStatus = 0 Then
             If SEDoc.ReadOnly Then
-                ExitStatus = "1"
-                ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -482,21 +470,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateDimensionStylesFromTemplateInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -504,11 +492,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
@@ -601,17 +589,15 @@ Public Class DraftTasks
         SEApp.DoIdle()
 
         If SEDoc.ReadOnly Then
-            ExitStatus = "1"
-            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -619,21 +605,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FitViewInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -641,17 +627,17 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim SheetWindow As SolidEdgeDraft.SheetWindow
         Dim Sections As SolidEdgeDraft.Sections = Nothing
         Dim Section As SolidEdgeDraft.Section = Nothing
         Dim SectionSheets As SolidEdgeDraft.SectionSheets = Nothing
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
 
         Sections = SEDoc.Sections
         Section = Sections.WorkingSection
@@ -673,16 +659,15 @@ Public Class DraftTasks
         SheetWindow.ActiveSheet = SectionSheets.OfType(Of SolidEdgeDraft.Sheet)().ElementAt(0)
 
         If SEDoc.ReadOnly Then
-            ExitStatus = "1"
-            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -690,21 +675,21 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgeDraft.DraftDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf SaveAsPDFInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -712,11 +697,11 @@ Public Class DraftTasks
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim PDFFilename As String = ""
 
@@ -727,13 +712,12 @@ Public Class DraftTasks
             SEDoc.SaveAs(PDFFilename)
             SEApp.DoIdle()
         Catch ex As Exception
-            ExitStatus = "1"
-            ErrorMessage = "    Error saving " + TruncateFullPath(PDFFilename, Configuration)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(PDFFilename, Configuration)))
         End Try
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 

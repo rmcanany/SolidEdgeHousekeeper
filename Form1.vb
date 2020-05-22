@@ -332,6 +332,7 @@ Public Class Form1
         Dim FileToProcess As String
         Dim RestartAfter As Integer
         Dim msg As String
+        Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
         Try
             RestartAfter = CInt(TextBoxRestartAfter.Text)
@@ -372,15 +373,20 @@ Public Class Form1
             msg += TruncateFullPath(FileToProcess)
             TextBoxStatus.Text = msg
 
-            ProcessFile(FileToProcess, Filetype)
+            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
+
+            If ErrorMessagesCombined.Count > 0 Then
+                LogfileAppend(FileToProcess, ErrorMessagesCombined)
+            End If
 
         Next
     End Sub
 
-    Private Sub ProcessFile(ByVal Path As String, ByVal Filetype As String)
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String
-        Dim SupplementalErrorMessage As String
+    Private Function ProcessFile(ByVal Path As String, ByVal Filetype As String) As Dictionary(Of String, List(Of String))
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer
+        'Dim SupplementalErrorMessage As String
+        Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim CheckedListBoxX As CheckedListBox
@@ -407,20 +413,21 @@ Public Class Form1
                 'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
 
                 If Filetype = "Assembly" Then
-                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
+                    ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                 ElseIf Filetype = "Part" Then
-                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
+                    ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
                 ElseIf Filetype = "Sheetmetal" Then
-                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
+                    ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
                 Else
-                    ErrorMessageList = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
+                    ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
                 End If
 
-                ExitStatus = ErrorMessageList(0)
-                SupplementalErrorMessage = ErrorMessageList(1)
+                ExitStatus = ErrorMessage.Keys(0)
+                'SupplementalErrorMessage = ErrorMessage(1)
 
-                If ExitStatus <> "0" Then
-                    LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
+                If ExitStatus <> 0 Then
+                    ErrorMessagesCombined(LabelText) = ErrorMessage(ErrorMessage.Keys(0))
+                    'LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
                 End If
             Next
 
@@ -428,18 +435,23 @@ Public Class Form1
             SEApp.DoIdle()
 
         Catch ex As Exception
+            Dim AbortList As New List(Of String)
+
+            AbortList.Add(ex.ToString)
+
             TotalAborts += 1
-            LogfileAppend("Error processing file", TruncateFullPath(Path), ex.ToString + Chr(13))
             If TotalAborts >= TotalAbortsMaximum Then
                 StopProcess = True
-                LogfileAppend(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum), "", "" + Chr(13))
+                AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
                 SEStop()
                 SEStart()
             End If
+            ErrorMessagesCombined("Error processing file") = AbortList
         End Try
 
-    End Sub
+        Return ErrorMessagesCombined
+    End Function
 
 
     Private Sub Startup()

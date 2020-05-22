@@ -9,21 +9,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FailedOrWarnedFeaturesInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -31,12 +31,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
-
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -62,8 +61,8 @@ Public Class PartTasks
                         TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed
                         TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned
                         If TF Then
-                            ExitStatus = "1"
-                            ErrorMessage += "    " + FeatureName + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add(FeatureName)
                         End If
 
                     Catch ex As Exception
@@ -72,13 +71,12 @@ Public Class PartTasks
                 Next
             Next
         ElseIf Models.Count >= 10 Then
-            ExitStatus = "1"
-            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -86,21 +84,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf SuppressedOrRolledBackFeaturesInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -108,11 +106,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -138,8 +136,8 @@ Public Class PartTasks
                         TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed
                         TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack
                         If TF Then
-                            ExitStatus = "1"
-                            ErrorMessage += "    " + FeatureName + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add(FeatureName)
                         End If
 
                     Catch ex As Exception
@@ -148,14 +146,12 @@ Public Class PartTasks
                 Next
             Next
         ElseIf Models.Count >= 10 Then
-            ExitStatus = "1"
-            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -163,21 +159,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UnderconstrainedProfilesInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -185,11 +181,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ProfileSets As SolidEdgePart.ProfileSets = SEDoc.ProfileSets
         Dim ProfileSet As SolidEdgePart.ProfileSet
@@ -198,14 +194,13 @@ Public Class PartTasks
         If SEDoc.ModelingMode.ToString = "seModelingModeOrdered" Then
             For Each ProfileSet In ProfileSets
                 If ProfileSet.IsUnderDefined Then
-                    ExitStatus = "1"
+                    ExitStatus = 1
                 End If
             Next
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -213,21 +208,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf InsertPartCopiesOutOfDateInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -235,11 +230,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -259,21 +254,19 @@ Public Class PartTasks
                         TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                         TF = TF And CopiedPart.IsUpToDate
                         If Not TF Then
-                            ExitStatus = "1"
-                            ErrorMessage += "    " + CopiedPart.Name + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add(CopiedPart.Name)
                         End If
                     Next
                 End If
             Next
         ElseIf Models.Count >= 10 Then
-            ExitStatus = "1"
-            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -281,21 +274,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf MaterialNotInMaterialTableInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -303,11 +296,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim MatTable As SolidEdgeFramework.MatTable
 
@@ -361,18 +354,17 @@ Public Class PartTasks
             Next
 
             If Not CurrentMaterialNameInLibrary Then
-                ExitStatus = "1"
+                ExitStatus = 1
                 If CurrentMaterialName = "" Then
-                    ErrorMessage = "    Material " + "'None'" + " not in " + ActiveMaterialLibrary + Chr(13)
+                    ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
                 Else
-                    ErrorMessage = "    Material '" + CurrentMaterialName + "' not in " + ActiveMaterialLibrary + Chr(13)
+                    ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
                 End If
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -380,21 +372,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf PartNumberDoesNotMatchFilenameInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -402,11 +394,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
         Dim Properties As SolidEdgeFramework.Properties = Nothing
@@ -450,26 +442,25 @@ Public Class PartTasks
 
         If PartNumberPropertyFound Then
             If PartNumber.Trim = "" Then
-                ExitStatus = "1"
-                ErrorMessage = "    Part number not assigned" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add("Part number not assigned")
             End If
             If Not Filename.Contains(PartNumber) Then
-                ExitStatus = "1"
-                ErrorMessage = "    Part number '" + PartNumber
-                ErrorMessage += "' not found in filename '" + Filename + "'" + Chr(13)
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
             End If
         Else
-            ExitStatus = "1"
-            ErrorMessage = "    PartNumberPropertyName: '" + Configuration("TextBoxPartNumberPropertyName") + "'"
-            ErrorMessage += " not found in PartNumberPropertySet: '" + Configuration("ComboBoxPartNumberPropertySet") + "'" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("PartNumberPropertyName: '{0}' not found in PartNumberPropertySet: '{1}'",
+                                     Configuration("TextBoxPartNumberPropertyName"),
+                                     Configuration("ComboBoxPartNumberPropertySet")))
             If Configuration("TextBoxPartNumberPropertyName") = "" Then
-                ErrorMessage += "    Check the Configuration tab for valid entries"
+                ErrorMessageList.Add("Check the Configuration tab for valid entries")
             End If
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -477,21 +468,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateInsertPartCopiesInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -499,11 +490,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -522,32 +513,30 @@ Public Class PartTasks
                         TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
                         TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                         If Not TF Then
-                            ExitStatus = "1"
-                            ErrorMessage += "    Insert part copy file not found: " + CopiedPart.FileName + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Insert part copy file not found: {0}", CopiedPart.FileName))
                         ElseIf Not CopiedPart.IsUpToDate Then
                             CopiedPart.Update()
                             If SEDoc.ReadOnly Then
-                                ExitStatus = "1"
-                                ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
                             Else
                                 SEDoc.Save()
                                 SEApp.DoIdle()
-                                ExitStatus = "1"
-                                ErrorMessage += "    Updated insert part copy: " + CopiedPart.Name + Chr(13)
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
                             End If
                         End If
                     Next
                 End If
             Next
         ElseIf Models.Count >= 10 Then
-            ExitStatus = "1"
-            ErrorMessage += "    " + Models.Count.ToString + " models in file exceeds maximum to process" + Chr(13)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -555,21 +544,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateMaterialFromMaterialTableInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -577,11 +566,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim MatTable As SolidEdgeFramework.MatTable
 
@@ -681,13 +670,13 @@ Public Class PartTasks
                             Body.Style = Nothing
                         Next
                         If SEDoc.ReadOnly Then
-                            ExitStatus = "1"
-                            ErrorMessage += "    Cannot save document marked 'Read Only'" + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
                         Else
                             SEDoc.Save()
                             SEApp.DoIdle()
-                            ExitStatus = "1"
-                            ErrorMessage = "    Material was updated" + Chr(13)
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Material was updated")
                         End If
 
                         Exit For
@@ -699,19 +688,18 @@ Public Class PartTasks
             Next
 
             If Not CurrentMaterialNameInLibrary Then
-                ExitStatus = "1"
+                ExitStatus = 1
                 If CurrentMaterialName = "" Then
-                    ErrorMessage = "    Material " + "'None'" + " not in " + ActiveMaterialLibrary + Chr(13)
+                    ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
                 Else
-                    ErrorMessage = "    Material '" + CurrentMaterialName + "' not in " + ActiveMaterialLibrary + Chr(13)
+                    ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
                 End If
             End If
         End If
 
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -719,21 +707,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf UpdateFaceAndViewStylesFromTemplateInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -741,11 +729,11 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim SETemplateDoc As SolidEdgePart.PartDocument
         Dim Windows As SolidEdgeFramework.Windows
@@ -825,14 +813,11 @@ Public Class PartTasks
             View.Style = TemplateActiveStyleName
         Next
 
-
         SEDoc.Save()
         SEApp.DoIdle()
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
-
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
@@ -840,21 +825,21 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessageList = InvokeSTAThread(
+        ErrorMessage = InvokeSTAThread(
                                Of SolidEdgePart.PartDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
-                               List(Of String))(
+                               Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FitIsometricViewInternal,
                                    CType(SEDoc, SolidEdgePart.PartDocument),
                                    Configuration,
                                    SEApp)
 
-        Return ErrorMessageList
+        Return ErrorMessage
 
     End Function
 
@@ -862,15 +847,15 @@ Public Class PartTasks
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim RefPlanes As SolidEdgePart.RefPlanes
         Dim RefPlane As SolidEdgePart.RefPlane
         Dim Models As SolidEdgePart.Models
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As String = "0"
-        Dim ErrorMessage As String = ""
 
         Models = SEDoc.Models
 
@@ -900,9 +885,8 @@ Public Class PartTasks
         SEDoc.Save()
         SEApp.DoIdle()
 
-        ErrorMessageList.Add(ExitStatus)
-        ErrorMessageList.Add(ErrorMessage)
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 
