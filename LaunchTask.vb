@@ -43,19 +43,9 @@ Public Class LaunchTask
 
         Dim ErrorMessageList As New List(Of String)
 
-        Dim MethodName As String = ""
-
-        For Each Item In LabelToActionX
-            If Item.LabelText = LabelText Then
-                MethodName = Item.MethodName
-                Exit For
-            End If
-        Next
-
         Using task = New IsolatedTask(Of AssemblyTasks)()
 
-            'MsgBox(LabelToActionX.L2A(LabelText)("MethodName").ToString)
-            Select Case MethodName
+            Select Case LabelToActionX(LabelText).TaskName
                 Case "OccurrenceMissingFiles"
                     ErrorMessageList = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
                 Case "OccurrenceOutsideProjectDirectory"
@@ -73,7 +63,7 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
                     End
             End Select
@@ -94,21 +84,9 @@ Public Class LaunchTask
 
         Dim ErrorMessageList As New List(Of String)
 
-        Dim MethodName As String = ""
-
-        Dim msg As String = LabelText + Chr(13)
-        For Each Item In LabelToActionX
-            msg += Item.LabelText + ":" + Item.MethodName + Chr(13)
-            If Item.LabelText = LabelText Then
-                MethodName = Item.MethodName
-                Exit For
-            End If
-        Next
-        'MsgBox(msg)
-
         Using task = New IsolatedTask(Of PartTasks)()
 
-            Select Case MethodName
+            Select Case LabelToActionX(LabelText).TaskName
                 Case "FailedOrWarnedFeatures"
                     ErrorMessageList = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
@@ -130,7 +108,7 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
                     End
             End Select
@@ -151,18 +129,9 @@ Public Class LaunchTask
 
         Dim ErrorMessageList As New List(Of String)
 
-        Dim MethodName As String = ""
-
-        For Each Item In LabelToActionX
-            If Item.LabelText = LabelText Then
-                MethodName = Item.MethodName
-                Exit For
-            End If
-        Next
-
         Using task = New IsolatedTask(Of SheetmetalTasks)()
 
-            Select Case MethodName
+            Select Case LabelToActionX(LabelText).TaskName
                 Case "FailedOrWarnedFeatures"
                     ErrorMessageList = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
@@ -188,7 +157,7 @@ Public Class LaunchTask
                 Case "FitIsometricView"
                     ErrorMessageList = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
                     End
             End Select
@@ -209,18 +178,9 @@ Public Class LaunchTask
 
         Dim ErrorMessageList As New List(Of String)
 
-        Dim MethodName As String = ""
-
-        For Each Item In LabelToActionX
-            If Item.LabelText = LabelText Then
-                MethodName = Item.MethodName
-                Exit For
-            End If
-        Next
-
         Using task = New IsolatedTask(Of DraftTasks)()
 
-            Select Case MethodName
+            Select Case LabelToActionX(LabelText).TaskName
                 Case "DrawingViewsMissingFile"
                     ErrorMessageList = task.Proxy.DrawingViewsMissingFile(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
@@ -240,7 +200,7 @@ Public Class LaunchTask
                 Case "SaveAsPDF"
                     ErrorMessageList = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
                 Case Else
-                    MsgBox("LaunchTask: Method not recognized: " + MethodName + ".  Exiting...")
+                    MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
                     End
             End Select
