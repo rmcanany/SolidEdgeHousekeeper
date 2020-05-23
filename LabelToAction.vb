@@ -47,7 +47,24 @@ Public Class LabelToAction
     End Sub
 
     Private Sub PopulateAssembly()
-        Dim AssemblyTasks As New AssemblyTasks
+
+        Dim ActivateAndUpdateAll As New L2A
+        PopulateList(ActivateAndUpdateAll,
+                     "Activate and update all",
+                     "ActivateAndUpdateAll",
+                     False, False, False, False, True)
+
+        Dim UpdateFaceAndViewStylesFromTemplate As New L2A
+        PopulateList(UpdateFaceAndViewStylesFromTemplate,
+                     "Update face and view styles from template",
+                     "UpdateFaceAndViewStylesFromTemplate",
+                     True, False, False, False, True)
+
+        Dim FitIsometricView As New L2A
+        PopulateList(FitIsometricView,
+                     "Fit isometric view",
+                     "FitIsometricView",
+                     False, False, False, False, True)
 
         Dim OccurrenceMissingFiles As New L2A
         PopulateList(OccurrenceMissingFiles,
@@ -79,11 +96,21 @@ Public Class LabelToAction
                      "PartNumberDoesNotMatchFilename",
                      False, False, False, True, False)
 
-        Dim ActivateAndUpdateAll As New L2A
-        PopulateList(ActivateAndUpdateAll,
-                     "Activate and update all",
-                     "ActivateAndUpdateAll",
-                     False, False, False, False, True)
+    End Sub
+
+    Private Sub PopulatePart()
+
+        Dim UpdateInsertPartCopies As New L2A
+        PopulateList(UpdateInsertPartCopies,
+                     "Update insert part copies",
+                     "UpdateInsertPartCopies",
+                     False, False, False, True, True)
+
+        Dim UpdateMaterialFromMaterialTable As New L2A
+        PopulateList(UpdateMaterialFromMaterialTable,
+                     "Update material from material table",
+                     "UpdateMaterialFromMaterialTable",
+                     False, True, False, False, True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
@@ -96,11 +123,6 @@ Public Class LabelToAction
                      "Fit isometric view",
                      "FitIsometricView",
                      False, False, False, False, True)
-
-    End Sub
-
-    Private Sub PopulatePart()
-        Dim PartTasks As New PartTasks
 
         Dim FailedOrWarnedFeatures As New L2A
         PopulateList(FailedOrWarnedFeatures,
@@ -138,6 +160,10 @@ Public Class LabelToAction
                      "PartNumberDoesNotMatchFilename",
                      False, False, False, True, False)
 
+    End Sub
+
+    Public Sub PopulateSheetmetal()
+
         Dim UpdateInsertPartCopies As New L2A
         PopulateList(UpdateInsertPartCopies,
                      "Update insert part copies",
@@ -161,11 +187,6 @@ Public Class LabelToAction
                      "Fit isometric view",
                      "FitIsometricView",
                      False, False, False, False, True)
-
-    End Sub
-
-    Public Sub PopulateSheetmetal()
-        Dim SheetmetalTasks As New SheetmetalTasks
 
         Dim FailedOrWarnedFeatures As New L2A
         PopulateList(FailedOrWarnedFeatures,
@@ -215,58 +236,9 @@ Public Class LabelToAction
                      "GenerateLaserDXFAndPDF",
                      False, False, True, True, False)
 
-        Dim UpdateInsertPartCopies As New L2A
-        PopulateList(UpdateInsertPartCopies,
-                     "Update insert part copies",
-                     "UpdateInsertPartCopies",
-                     False, False, False, True, True)
-
-        Dim UpdateMaterialFromMaterialTable As New L2A
-        PopulateList(UpdateMaterialFromMaterialTable,
-                     "Update material from material table",
-                     "UpdateMaterialFromMaterialTable",
-                     False, True, False, False, True)
-
-        Dim UpdateFaceAndViewStylesFromTemplate As New L2A
-        PopulateList(UpdateFaceAndViewStylesFromTemplate,
-                     "Update face and view styles from template",
-                     "UpdateFaceAndViewStylesFromTemplate",
-                     True, False, False, False, True)
-
-        Dim FitIsometricView As New L2A
-        PopulateList(FitIsometricView,
-                     "Fit isometric view",
-                     "FitIsometricView",
-                     False, False, False, False, True)
-
     End Sub
 
     Private Sub PopulateDraft()
-        Dim DraftTasks As New DraftTasks
-
-        Dim DrawingViewsMissingFile As New L2A
-        PopulateList(DrawingViewsMissingFile,
-                     "Drawing views missing file",
-                     "DrawingViewsMissingFile",
-                     False, False, False, False, False)
-
-        Dim DrawingViewsOutOfDate As New L2A
-        PopulateList(DrawingViewsOutOfDate,
-                     "Drawing views out of date",
-                     "DrawingViewsOutOfDate",
-                     False, False, False, False, False)
-
-        Dim DetachedDimensionsOrAnnotations As New L2A
-        PopulateList(DetachedDimensionsOrAnnotations,
-                     "Detached dimensions or annotations",
-                     "DetachedDimensionsOrAnnotations",
-                     False, False, False, False, False)
-
-        Dim FileNameDoesNotMatchModelFilename As New L2A
-        PopulateList(FileNameDoesNotMatchModelFilename,
-                     "File name does not match model file name",
-                     "FileNameDoesNotMatchModelFilename",
-                     False, False, False, False, False)
 
         Dim UpdateDrawingViews As New L2A
         PopulateList(UpdateDrawingViews,
@@ -291,6 +263,30 @@ Public Class LabelToAction
                      "Fit view",
                      "FitView",
                      False, False, False, False, True)
+
+        Dim DrawingViewsMissingFile As New L2A
+        PopulateList(DrawingViewsMissingFile,
+                     "Drawing views missing file",
+                     "DrawingViewsMissingFile",
+                     False, False, False, False, False)
+
+        Dim DrawingViewsOutOfDate As New L2A
+        PopulateList(DrawingViewsOutOfDate,
+                     "Drawing views out of date",
+                     "DrawingViewsOutOfDate",
+                     False, False, False, False, False)
+
+        Dim DetachedDimensionsOrAnnotations As New L2A
+        PopulateList(DetachedDimensionsOrAnnotations,
+                     "Detached dimensions or annotations",
+                     "DetachedDimensionsOrAnnotations",
+                     False, False, False, False, False)
+
+        Dim FileNameDoesNotMatchModelFilename As New L2A
+        PopulateList(FileNameDoesNotMatchModelFilename,
+                     "File name does not match model file name",
+                     "FileNameDoesNotMatchModelFilename",
+                     False, False, False, False, False)
 
         Dim SaveAsPDF As New L2A
         PopulateList(SaveAsPDF,

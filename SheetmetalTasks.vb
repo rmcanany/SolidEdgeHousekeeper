@@ -499,7 +499,7 @@ Public Class SheetmetalTasks
             End If
         Else
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("PartNumberPropertyName: '{0}' not found in PartNumberPropertySet: '{1}'",
+            ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
                                      Configuration("TextBoxPartNumberPropertyName"),
                                      Configuration("ComboBoxPartNumberPropertySet")))
             If Configuration("TextBoxPartNumberPropertyName") = "" Then
@@ -842,7 +842,7 @@ Public Class SheetmetalTasks
                             SEDoc.Save()
                             SEApp.DoIdle()
                             ExitStatus = 1
-                            ErrorMessageList.Add("Material was updated")
+                            ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
                         End If
 
                         Exit For

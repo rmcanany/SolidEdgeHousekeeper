@@ -451,7 +451,7 @@ Public Class PartTasks
             End If
         Else
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("PartNumberPropertyName: '{0}' not found in PartNumberPropertySet: '{1}'",
+            ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
                                      Configuration("TextBoxPartNumberPropertyName"),
                                      Configuration("ComboBoxPartNumberPropertySet")))
             If Configuration("TextBoxPartNumberPropertyName") = "" Then
@@ -607,7 +607,7 @@ Public Class PartTasks
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
             MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
 
-            'Make sure the ActiveMaterialLibrary in settings.txt is present
+            'Make sure the ActiveMaterialLibrary is present
             For Each MatTableMaterial In CType(MaterialLibList, System.Array)
                 If MatTableMaterial.ToString = ActiveMaterialLibrary Then
                     ActiveMaterialLibraryPresent = True
@@ -676,7 +676,7 @@ Public Class PartTasks
                             SEDoc.Save()
                             SEApp.DoIdle()
                             ExitStatus = 1
-                            ErrorMessageList.Add("Material was updated")
+                            ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
                         End If
 
                         Exit For

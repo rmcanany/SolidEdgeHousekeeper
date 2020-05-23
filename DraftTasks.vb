@@ -106,11 +106,13 @@ Public Class DraftTasks
                     ExitStatus = 1
                     Exit For
                 End If
-                If DrawingView.ModelLink IsNot Nothing Then
-                    ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
-                    If ModelLink.ModelOutOfDate Then
-                        ExitStatus = 1
-                        Exit For
+                If DrawingView.DrawingViewType <> SolidEdgeDraft.DrawingViewTypeConstants.igUserView Then
+                    If DrawingView.ModelLink IsNot Nothing Then
+                        ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
+                        If ModelLink.ModelOutOfDate Then
+                            ExitStatus = 1
+                            Exit For
+                        End If
                     End If
                 End If
             Next DrawingView
@@ -291,7 +293,7 @@ Public Class DraftTasks
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Drawing file name '{0}' not the same as any model file name:", Filename))
                 For Each ModelLinkFilename In ModelLinkFilenames
-                    ErrorMessageList.Add(String.Format("    {0}", ModelLinkFilename))
+                    ErrorMessageList.Add(String.Format("    '{0}'", ModelLinkFilename))
                 Next
             End If
         End If

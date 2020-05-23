@@ -30,26 +30,30 @@ Please note this is not a perfect program.  It is not guaranteed not to mess up 
 ## DETAILS
 List of implemented tests and actions.
 ### Assembly
+    Activate and update all
+    Update face and view styles from template
+    Fit isometric view
     Occurrence missing files
     Occurrence outside project directory
     Failed relationships
     Underconstrained relationships
     Part number does not match file name
-    Activate and update all
+### Part
+    Update insert part copies
+    Update material from material table
     Update face and view styles from template
     Fit isometric view
-### Part
     Failed or warned features
     Suppressed or rolled back features
     Underconstrained profiles
     Insert part copies out of date
     Material not in material table
     Part number does not match file name
+### Sheetmetal
     Update insert part copies
     Update material from material table
     Update face and view styles from template
     Fit isometric view
-### Sheetmetal
     Failed or warned features
     Suppressed or rolled back features
     Underconstrained profiles
@@ -58,19 +62,15 @@ List of implemented tests and actions.
     Material not in material table
     Part number does not match file name
     Generate Laser DXF and PDF
-    Update insert part copies
-    Update material from material table
-    Update face and view styles from template
-    Fit isometric view
 ### Draft
-    Drawing views missing file
-    Drawing views out of date
-    Detached dimensions or annotations
-    File name does not match model file name
     Update drawing views
     Update drawing border from template
     Update dimension styles from template
     Fit view
+    Drawing views missing file
+    Drawing views out of date
+    Detached dimensions or annotations
+    File name does not match model file name
     Save as PDF
 
 ## CODE ORGANIZATION
