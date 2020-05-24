@@ -106,7 +106,8 @@ Public Class DraftTasks
                     ExitStatus = 1
                     Exit For
                 End If
-                If DrawingView.DrawingViewType <> SolidEdgeDraft.DrawingViewTypeConstants.igUserView Then
+                ' Some drawing views do not have a ModelLink
+                Try
                     If DrawingView.ModelLink IsNot Nothing Then
                         ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
                         If ModelLink.ModelOutOfDate Then
@@ -114,7 +115,8 @@ Public Class DraftTasks
                             Exit For
                         End If
                     End If
-                End If
+                Catch ex As Exception
+                End Try
             Next DrawingView
             If ExitStatus = 1 Then
                 Exit For

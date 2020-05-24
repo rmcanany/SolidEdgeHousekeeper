@@ -979,8 +979,13 @@ Public Class SheetmetalTasks
             View.Style = TemplateActiveStyleName
         Next
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -1048,8 +1053,13 @@ Public Class SheetmetalTasks
         SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
         SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
-        SEDoc.Save()
-        SEApp.DoIdle()
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
