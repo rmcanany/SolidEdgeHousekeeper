@@ -20,6 +20,8 @@ If any errors are found, a text file will be written to the input folder.  It wi
 
 The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Configuration Tab.
 
+You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click the Stop button to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times.
+
 ## CAVEATS
 Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  
 

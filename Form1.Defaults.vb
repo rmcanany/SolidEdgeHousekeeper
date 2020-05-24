@@ -292,6 +292,12 @@ Partial Class Form1
         msg = ""
         msg1.Add(msg)
         msg2.Add(msg)
+        msg = "You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click the Stop button to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times."
+        msg1.Add(msg)
+        msg2.Add(msg)
+        msg = ""
+        msg1.Add(msg)
+        msg2.Add(msg)
         msg = "## CAVEATS"
         msg1.Add(msg)
         msg2.Add(msg)
