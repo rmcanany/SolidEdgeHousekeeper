@@ -372,7 +372,6 @@ Public Class SheetmetalTasks
                         Exit For
                     End If
                 Next
-
                 Return False
             End Function
 
@@ -397,7 +396,6 @@ Public Class SheetmetalTasks
                         Return False
                     End If
                 End If
-
                 Return True
             End Function
 
@@ -902,43 +900,164 @@ Public Class SheetmetalTasks
         Dim MaterialList As Object = Nothing
         Dim NumMaterials As Integer
 
-        Dim MatTableProps As Array
-        Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
-        Dim DocPropValue As Object = Nothing
-        Dim LibPropValue As Object = Nothing
-
         Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
-        Dim ActiveMaterialLibraryPresent As Boolean = False
         Dim CurrentMaterialName As String = ""
         Dim MatTableMaterial As Object
-        Dim CurrentMaterialNameInLibrary As Boolean = False
-        Dim CurrentMaterialMatchesLibMaterial As Boolean = True
 
-        Dim msg As String = ""
+        Dim Models As SolidEdgePart.Models = SEDoc.Models
 
-        Dim Models As SolidEdgePart.Models
 
-        Models = SEDoc.Models
-        Dim Model As SolidEdgePart.Model
-        Dim Body As SolidEdgeGeometry.Body
+        Dim IsActiveMaterialLibraryPresent As Func(Of Object, String, Boolean) =
+            Function(_MaterialLibList, _ActiveMaterialLibrary)
+                For Each MatTableLibrary In CType(_MaterialLibList, System.Array)
+                    If MatTableLibrary.ToString = _ActiveMaterialLibrary Then
+                        Return True
+                        Exit For
+                    End If
+                Next
+
+                Return False
+            End Function
+
+        Dim CurrentMaterialNameInLibrary As Func(Of String, Object, Boolean) =
+            Function(_CurrentMaterialName, _MaterialList)
+                For Each MatTableMaterial In CType(_MaterialList, System.Array)
+                    If MatTableMaterial.ToString.ToLower.Trim = _CurrentMaterialName.ToLower.Trim Then
+                        Return True
+                    End If
+                Next
+                Return False
+            End Function
+
+        Dim CloseEnough As Func(Of Double, Double, Boolean) =
+            Function(_DocPropValue, _LibPropValue)
+                Dim DPV As Double = _DocPropValue
+                Dim LPV As Double = _LibPropValue
+
+                If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
+                    Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
+                    If Not Math.Abs(NormalizedDifference) < 0.001 Then
+                        Return False
+                    End If
+                End If
+
+                Return True
+            End Function
+
+        Dim MaterialPropertiesMatch As Func(Of SolidEdgeFramework.MatTable, Object, Boolean) =
+            Function(_MatTable, _MatTableMaterial)
+                Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
+                Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
+                Dim DocPropValue As Object = Nothing
+                Dim LibPropValue As Object = Nothing
+
+                For Each MatTableProp In MatTableProps
+                    ' This function populates 'LibPropValue'
+                    _MatTable.GetMaterialPropValueFromLibrary(_MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
+
+                    ' This function populates 'DocPropValue'
+                    _MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
+
+                    ' MatTableProps are either Double or String.
+                    If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
+                        ' Double types may have insignificant differences.
+                        If Not CloseEnough(CType(DocPropValue, Double), CType(LibPropValue, Double)) Then
+                            Return False
+                        End If
+                    Else
+                        If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
+                            Return False
+                        End If
+                    End If
+                    DocPropValue = Nothing
+                    LibPropValue = Nothing
+                Next
+
+                Return True
+            End Function
+
+        Dim CurrentMaterialFaceStyle As Func(Of SolidEdgeFramework.MatTable, Object, SolidEdgeFramework.FaceStyle) =
+            Function(_MatTable, _MatTableMaterial)
+                Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
+                Dim LibPropValue As Object = Nothing
+                Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
+                Dim FaceStyle As SolidEdgeFramework.FaceStyle
+
+                For Each MatTableProp In MatTableProps
+                    ' This function populates 'LibPropValue'
+                    _MatTable.GetMaterialPropValueFromLibrary(_MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
+
+                    'MsgBox(String.Format("{0} {1}", MatTableProp.ToString, LibPropValue.ToString))
+                    If MatTableProp.ToString = "seFaceStyle" Then
+                        For Each FaceStyle In CType(SEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+                            If FaceStyle.StyleName = LibPropValue.ToString Then
+                                Return FaceStyle
+                            End If
+                        Next
+
+                    End If
+
+                    LibPropValue = Nothing
+                Next
+                Return Nothing
+            End Function
+
+        Dim UpdateFaces As Action(Of SolidEdgeFramework.FaceStyle) =
+            Sub(_CurrentMaterialFaceStyle)
+                Dim Model As SolidEdgePart.Model
+                Dim Body As SolidEdgeGeometry.Body
+                Dim Faces As SolidEdgeGeometry.Faces
+                Dim Face As SolidEdgeGeometry.Face
+
+                If (Models.Count > 0) And (Models.Count < 10) Then
+                    For Each Model In Models
+                        ' Some Models do not have a Body
+                        Try
+                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                            Body.Style = _CurrentMaterialFaceStyle
+                            'If Body.Style Is Nothing Then
+                            '    Body.Style = _CurrentMaterialFaceStyle
+                            'End If
+
+                            Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                            If Faces.Count < 500 Then
+                                For Each Face In Faces
+                                    If Face.Style Is Nothing Then
+                                        Face.Style = _CurrentMaterialFaceStyle
+                                        Face.Style.ClearSurfaceProperties()
+                                        Face.Style = Nothing
+                                    End If
+                                Next
+                            Else
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("{0} faces exceeds maximum to process", Faces.Count.ToString))
+                            End If
+                        Catch ex As Exception
+                        End Try
+                    Next
+
+                ElseIf Models.Count >= 10 Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+                End If
+
+            End Sub
+
 
 
         If Models.Count > 0 Then
 
             MatTable = SEApp.GetMaterialTable()
+
+            ' This function populates 'CurrentMaterialName'
             MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
+
+            ' This function populates 'MaterialLibList' and 'NumMaterialLibraries'
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
-            MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
 
-            'Make sure the ActiveMaterialLibrary in settings.txt is present
-            For Each MatTableMaterial In CType(MaterialLibList, System.Array)
-                If MatTableMaterial.ToString = ActiveMaterialLibrary Then
-                    ActiveMaterialLibraryPresent = True
-                    Exit For
-                End If
-            Next
-
-            If Not ActiveMaterialLibraryPresent Then
+            'Make sure the ActiveMaterialLibrary exists
+            If Not IsActiveMaterialLibraryPresent(MaterialLibList, ActiveMaterialLibrary) Then
+                Dim msg As String
                 msg = "ActiveMaterialLibrary " + Configuration("TextBoxActiveMaterialLibrary") + " not found.  Exiting..." + Chr(13)
                 msg += "Please update the Material Table on the Configuration tab." + Chr(13)
                 MsgBox(msg)
@@ -946,78 +1065,49 @@ Public Class SheetmetalTasks
                 End
             End If
 
-            'See if the CurrentMaterialName is in the ActiveLibrary
+            ' This function populates 'NumMaterials' and 'MaterialList'
             MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
-            For Each MatTableMaterial In CType(MaterialList, System.Array)
-                If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
-                    CurrentMaterialNameInLibrary = True
 
-                    'The names match.  Check if their properties do, too.
-                    MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
-                    For Each MatTableProp In MatTableProps
-                        MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
-                        MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
-
-                        ' MatTableProps are either Double or String.
-                        If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
-                            ' Double types may have insignificant differences.
-                            Dim DPV As Double = CType(DocPropValue, Double)
-                            Dim LPV As Double = CType(LibPropValue, Double)
-
-                            If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
-                                Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
-                                If Not Math.Abs(NormalizedDifference) < 0.001 Then
-                                    msg += CStr(NormalizedDifference) + Chr(13)
-                                    CurrentMaterialMatchesLibMaterial = False
-                                    Exit For
-                                End If
-                            End If
-                        Else
-                            If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
-                                Dim a As String = CType(DocPropValue, String)
-                                Dim b As String = CType(LibPropValue, String)
-                                msg += a + " " + b + Chr(13)
-                                CurrentMaterialMatchesLibMaterial = False
-                                Exit For
-                            End If
-                        End If
-                        DocPropValue = Nothing
-                        LibPropValue = Nothing
-                    Next
-
-                    If Not CurrentMaterialMatchesLibMaterial Then
-                        MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                        ' Changing material does not automatically update face styles
-                        For Each Model In Models
-                            Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                            Body.Style = Nothing
-                        Next
-                        If SEDoc.ReadOnly Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-                        Else
-                            SEDoc.Save()
-                            SEApp.DoIdle()
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
-                        End If
-
-                        Exit For
-                    End If
-                End If
-                If CurrentMaterialNameInLibrary Then
-                    Exit For
-                End If
-            Next
-
-            If Not CurrentMaterialNameInLibrary Then
+            If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
                 ExitStatus = 1
                 If CurrentMaterialName = "" Then
                     ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
                 Else
                     ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
                 End If
+            Else
+                For Each MatTableMaterial In CType(MaterialList, System.Array)
+                    If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
+
+                        ' Names match, check if their properties do.
+                        If Not MaterialPropertiesMatch(MatTable, MatTableMaterial) Then
+
+                            ' Properties do not match.  Update the document's material to match the library version.
+                            MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
+                        End If
+
+                        ' Face styles are not always updated, especially on imported files.
+                        UpdateFaces(CurrentMaterialFaceStyle(MatTable, MatTableMaterial))
+
+                        If SEDoc.ReadOnly Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+                        Else
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                        End If
+
+                        Exit For
+                    End If
+                Next
+
             End If
+
+        ElseIf Models.Count >= 10 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
 

@@ -693,9 +693,10 @@ Public Class PartTasks
                         ' Some Models do not have a Body
                         Try
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                            If Body.Style Is Nothing Then
-                                Body.Style = _CurrentMaterialFaceStyle
-                            End If
+                            Body.Style = _CurrentMaterialFaceStyle
+                            'If Body.Style Is Nothing Then
+                            '    Body.Style = _CurrentMaterialFaceStyle
+                            'End If
 
                             Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
                             If Faces.Count < 500 Then
@@ -791,140 +792,6 @@ Public Class PartTasks
 
 
 
-        '    For Each MatTableMaterial In CType(MaterialList, System.Array)
-        '        If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
-        '            CurrentMaterialNameInLibrary = True
-
-        '            'The names match.  Check if their properties do, too.
-        '            'MatTableProps = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
-        '            'For Each MatTableProp In MatTableProps
-        '            '    MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
-        '            '    MatTable.GetMaterialPropValueFromDoc(SEDoc, MatTableProp, DocPropValue)
-
-        '            '    ' MatTableProps are either Double or String.
-        '            '    If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
-        '            '        ' Double types may have insignificant differences.
-        '            '        Dim DPV As Double = CType(DocPropValue, Double)
-        '            '        Dim LPV As Double = CType(LibPropValue, Double)
-
-        '            '        If Not ((DPV = 0) And (LPV = 0)) Then  ' Avoid divide by 0.  Anyway, they match.
-        '            '            Dim NormalizedDifference As Double = (DPV - LPV) / (DPV + LPV) / 2
-        '            '            If Not Math.Abs(NormalizedDifference) < 0.001 Then
-        '            '                msg += CStr(NormalizedDifference) + Chr(13)
-        '            '                CurrentMaterialMatchesLibMaterial = False
-        '            '                Exit For
-        '            '            End If
-        '            '        End If
-        '            '    Else
-        '            '        Dim a As String = CType(DocPropValue, String)
-        '            '        Dim b As String = CType(LibPropValue, String)
-        '            '        Dim c As String = MatTableProp.ToString
-        '            '        'MsgBox(String.Format("{0} {1} {2}", c, a, b))
-        '            '        If c = "seFaceStyle" Then
-        '            '            For Each FaceStyle In CType(SEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-        '            '                If FaceStyle.StyleName = b Then
-        '            '                    CurrentMaterialFaceStyle = FaceStyle
-        '            '                End If
-        '            '            Next
-        '            '        End If
-        '            '        If a <> b Then
-        '            '            CurrentMaterialMatchesLibMaterial = False
-        '            '            Exit For
-        '            '        End If
-        '            '    End If
-        '            '    DocPropValue = Nothing
-        '            '    LibPropValue = Nothing
-        '            'Next
-
-        '            ' Changing material does not automatically update face styles
-        '            If (Models.Count > 0) And (Models.Count < 10) Then
-        '                For Each Model In Models
-        '                    Body = CType(Model.Body, SolidEdgeGeometry.Body)
-        '                    If Body.Style Is Nothing Then
-        '                        Body.Style = CurrentMaterialFaceStyle
-        '                    End If
-
-        '                    Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-        '                    If Faces.Count < 500 Then
-        '                        For Each Face In Faces
-        '                            If Face.Style Is Nothing Then
-        '                                Face.Style = CurrentMaterialFaceStyle
-        '                                Face.Style.ClearSurfaceProperties()
-        '                                Face.Style = Nothing
-        '                            End If
-        '                        Next
-        '                        'MsgBox("Face styles cleared.")
-
-        '                        'If Body.Style Is CurrentMaterialFaceStyle Then
-        '                        '    Body.Style.ClearSurfaceProperties()
-        '                        '    Body.Style = Nothing
-        '                        'End If
-        '                        'MsgBox("Body style cleared.")
-        '                    Else
-        '                        ExitStatus = 1
-        '                        ErrorMessageList.Add(String.Format("{0} faces exceeds maximum to process", Faces.Count.ToString))
-        '                    End If
-        '                Next
-
-        '                If Not SEDoc.ReadOnly Then
-        '                    SEDoc.Save()
-        '                    SEApp.DoIdle()
-        '                End If
-
-        '            ElseIf Models.Count >= 10 Then
-        '                ExitStatus = 1
-        '                ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-        '            End If
-
-        '            If Not CurrentMaterialMatchesLibMaterial Then
-        '                MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-        '                If SEDoc.ReadOnly Then
-        '                    ExitStatus = 1
-        '                    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        '                Else
-        '                    SEDoc.Save()
-        '                    SEApp.DoIdle()
-        '                    ExitStatus = 1
-        '                    ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
-        '                End If
-        '            End If
-
-
-        '            '' Changing material does not automatically update face styles
-        '            'If (Models.Count > 0) And (Models.Count < 10) Then
-        '            '    For Each Model In Models
-        '            '        Body = CType(Model.Body, SolidEdgeGeometry.Body)
-        '            '        Body.Style = Nothing
-        '            '        Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-        '            '        If Faces.Count < 200 Then
-        '            '            For Each Face In Faces
-        '            '                Face.Style = Nothing
-        '            '            Next
-        '            '        End If
-        '            '    Next
-        '            'End If
-
-        '            'If Not SEDoc.ReadOnly Then
-        '            '    SEDoc.Save()
-        '            '    SEApp.DoIdle()
-        '            'End If
-        '            Exit For
-        '        End If
-
-        '        If CurrentMaterialNameInLibrary Then
-        '            Exit For
-        '        End If
-        '    Next
-
-        '    If Not CurrentMaterialNameInLibrary Then
-        '        ExitStatus = 1
-        '        If CurrentMaterialName = "" Then
-        '            ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-        '        Else
-        '            ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-        '        End If
-        '    End If
-        'End If
 
 
         ErrorMessage(ExitStatus) = ErrorMessageList
