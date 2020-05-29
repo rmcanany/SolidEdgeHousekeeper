@@ -44,33 +44,42 @@ Public Class SheetmetalTasks
         Dim Status As SolidEdgePart.FeatureStatusConstants
 
         Dim TF As Boolean
+        Dim FeatureSystemNames As New List(Of String)
+        Dim FeatureSystemName As String
 
         Models = SEDoc.Models
 
-        If (Models.Count > 0) And (Models.Count < 10) Then
+        If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 Features = Model.Features
                 For Each Feature In Features
-                    'Some Sync part features don't have a Status field.
-                    Try
-                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                    FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "SystemName")
 
-                        Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+                    If Not FeatureSystemNames.Contains(FeatureSystemName) Then
+                        FeatureSystemNames.Add(FeatureSystemName)
+
+                        'Some Sync part features don't have a Status field.
+                        Try
+                            FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+
+                            Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
                             Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status", CType(0, SolidEdgePart.FeatureStatusConstants))
 
-                        TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed
-                        TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned
-                        If TF Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(FeatureName)
-                        End If
+                            TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed
+                            TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned
+                            If TF Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(FeatureName)
+                            End If
 
-                    Catch ex As Exception
+                        Catch ex As Exception
 
-                    End Try
+                        End Try
+                    End If
+
                 Next
             Next
-        ElseIf Models.Count >= 10 Then
+        ElseIf Models.Count >= 300 Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
@@ -119,33 +128,41 @@ Public Class SheetmetalTasks
         Dim Status As SolidEdgePart.FeatureStatusConstants
 
         Dim TF As Boolean
+        Dim FeatureSystemNames As New List(Of String)
+        Dim FeatureSystemName As String
 
         Models = SEDoc.Models
 
-        If (Models.Count > 0) And (Models.Count < 10) Then
+        If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 Features = Model.Features
                 For Each Feature In Features
-                    'Some Sync part features don't have a Status field.
-                    Try
-                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                    FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "SystemName")
 
-                        Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+                    If Not FeatureSystemNames.Contains(FeatureSystemName) Then
+                        FeatureSystemNames.Add(FeatureSystemName)
+
+                        'Some Sync part features don't have a Status field.
+                        Try
+                            FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+
+                            Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
                             Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status", CType(0, SolidEdgePart.FeatureStatusConstants))
 
-                        TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed
-                        TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack
-                        If TF Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(FeatureName)
-                        End If
+                            TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed
+                            TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack
+                            If TF Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(FeatureName)
+                            End If
 
-                    Catch ex As Exception
+                        Catch ex As Exception
 
-                    End Try
+                        End Try
+                    End If
                 Next
             Next
-        ElseIf Models.Count >= 10 Then
+        ElseIf Models.Count >= 300 Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
@@ -245,7 +262,7 @@ Public Class SheetmetalTasks
 
         Dim TF As Boolean
 
-        If (Models.Count > 0) And (Models.Count < 10) Then
+        If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
                 If CopiedParts.Count > 0 Then
@@ -260,7 +277,7 @@ Public Class SheetmetalTasks
                     Next
                 End If
             Next
-        ElseIf Models.Count >= 10 Then
+        ElseIf Models.Count >= 300 Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
@@ -543,7 +560,13 @@ Public Class SheetmetalTasks
                         End If
 
                         ' Face styles are not always updated, especially on imported files.
-                        UpdateFaces(CurrentMaterialFaceStyle(MatTable, MatTableMaterial))
+                        ' Some imported files have trouble with face updates.
+                        Try
+                            UpdateFaces(CurrentMaterialFaceStyle(MatTable, MatTableMaterial))
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Model check interrupted.  Please verify results.")
+                        End Try
 
                         If SEDoc.ReadOnly Then
                             ExitStatus = 1
@@ -778,8 +801,6 @@ Public Class SheetmetalTasks
             SEApp.DoIdle()
         End If
 
-        'ErrorMessageList.Clear()
-
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
@@ -826,7 +847,7 @@ Public Class SheetmetalTasks
 
         Dim TF As Boolean
 
-        If (Models.Count > 0) And (Models.Count < 10) Then
+        If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
                 If CopiedParts.Count > 0 Then
@@ -851,7 +872,7 @@ Public Class SheetmetalTasks
                     Next
                 End If
             Next
-        ElseIf Models.Count >= 10 Then
+        ElseIf Models.Count >= 300 Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
@@ -1009,34 +1030,62 @@ Public Class SheetmetalTasks
                 Dim Faces As SolidEdgeGeometry.Faces
                 Dim Face As SolidEdgeGeometry.Face
 
-                If (Models.Count > 0) And (Models.Count < 10) Then
+                Dim FaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
+                Dim BodyOverride As SolidEdgeFramework.FaceStyle = Nothing
+
+                If (Models.Count > 0) And (Models.Count < 300) Then
                     For Each Model In Models
                         ' Some Models do not have a Body
                         Try
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                            Body.Style = _CurrentMaterialFaceStyle
-                            'If Body.Style Is Nothing Then
-                            '    Body.Style = _CurrentMaterialFaceStyle
-                            'End If
-
-                            Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
-                            If Faces.Count < 500 Then
-                                For Each Face In Faces
-                                    If Face.Style Is Nothing Then
-                                        Face.Style = _CurrentMaterialFaceStyle
-                                        Face.Style.ClearSurfaceProperties()
-                                        Face.Style = Nothing
-                                    End If
-                                Next
-                            Else
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("{0} faces exceeds maximum to process", Faces.Count.ToString))
+                            If Body.Style IsNot Nothing Then
+                                BodyOverride = Body.Style
                             End If
+
+                            'Body.Faces
+                            Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+
+                            For Each Face In Faces
+                                If Face.Style IsNot Nothing Then
+                                    FaceOverrides(Face.ID) = Face.Style
+                                End If
+                            Next
+
+                            ' Crashes on some imported files
+                            Try
+                                Body.ClearOverrides()
+                                Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                                Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                            Catch ex As Exception
+                                Exit Sub
+                            End Try
+
+                            SEApp.DoIdle()
+
+                            If BodyOverride IsNot Nothing Then
+                                Body.Style = BodyOverride
+                                BodyOverride = Nothing
+                            End If
+
+                            If FaceOverrides.Count > 0 Then
+                                For Each Face In Faces
+                                    If FaceOverrides.Keys.Contains(Face.ID) Then
+                                        Face.Style = FaceOverrides(Face.ID)
+                                    End If
+
+                                Next
+                                FaceOverrides.Clear()
+
+                            End If
+
                         Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Face check interrupted.  Please verify results.")
+                            Exit Sub
                         End Try
                     Next
 
-                ElseIf Models.Count >= 10 Then
+                ElseIf Models.Count >= 300 Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
                 End If
