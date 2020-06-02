@@ -118,6 +118,8 @@
     </Compile>
     <Compile Include="LabelToAction.vb" />
     <Compile Include="LaunchTask.vb" />
+    <Compile Include="MaterialDoctorPart.vb" />
+    <Compile Include="MaterialDoctorSheetmetal.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

@@ -159,9 +159,9 @@ Public Class Form1
         Dim msg As String = ""
         Dim SaveMsg As String = ""
 
-        If SEIsRunning() Then
-            msg += "    Close Solid Edge" + Chr(13)
-        End If
+        'If SEIsRunning() Then
+        '    msg += "    Close Solid Edge" + Chr(13)
+        'End If
 
         If Not IsCheckedFilesToProcess() Then
             msg += "    Select an option on Files To Process" + Chr(13)
