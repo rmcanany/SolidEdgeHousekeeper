@@ -8,48 +8,49 @@ Partial Class Form1
         ' Start Solid Edge.
         TextBoxStatus.Text = "Starting Solid Edge..."
 
+        'Try
+        '    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+        '    SEApp.Visible = True
+        '    SEApp.DisplayAlerts = False
+        '    'SEApp.DisplayAlerts = True
+        '    SEApp.WindowState = 2  'Maximizes Solid Edge
+        'Catch ex As Exception
+        'End Try
+
         Try
-            SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+            SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            ' Make Solid Edge visible and turn off popups.
             SEApp.Visible = True
             SEApp.DisplayAlerts = False
             'SEApp.DisplayAlerts = True
             SEApp.WindowState = 2  'Maximizes Solid Edge
         Catch ex As Exception
+            Activate()
+            MsgBox("Could not start Solid Edge.  Exiting...")
+            End
         End Try
-
-        'Try
-        '    SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    ' Make Solid Edge visible and turn off popups.
-        '    SEApp.Visible = True
-        '    SEApp.DisplayAlerts = False
-        '    SEApp.WindowState = 2  'Maximizes Solid Edge
-        'Catch ex As Exception
-        '    Activate()
-        '    MsgBox("Could not start Solid Edge.  Exiting...")
-        '    End
-        'End Try
 
         Activate()
 
     End Sub
 
     Private Sub SEStop()
-        'TextBoxStatus.Text = "Closing Solid Edge..."
-        'If (Not (SEApp Is Nothing)) Then
-        '    Try
-        '        SEApp.Quit()
-        '    Catch ex As Exception
-        '        SEKillProcess("edge")
-        '    End Try
-        'End If
-        'SEGarbageCollect(SEApp)
-        'System.Threading.Thread.Sleep(100)
+        TextBoxStatus.Text = "Closing Solid Edge..."
+        If (Not (SEApp Is Nothing)) Then
+            Try
+                SEApp.Quit()
+            Catch ex As Exception
+                SEKillProcess("edge")
+            End Try
+        End If
+        SEGarbageCollect(SEApp)
+        System.Threading.Thread.Sleep(100)
 
-        'If Not SEApp Is Nothing Then
-        '    SEApp = Nothing
-        'End If
+        If Not SEApp Is Nothing Then
+            SEApp = Nothing
+        End If
 
-        'System.Threading.Thread.Sleep(3000)
+        System.Threading.Thread.Sleep(3000)
     End Sub
 
     Private Sub SEGarbageCollect(ByVal obj As Object)

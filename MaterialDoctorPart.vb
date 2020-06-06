@@ -2,6 +2,81 @@
 
 Public Class MaterialDoctorPart
 
+    Public Function MaterialNotInMaterialTable(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim MatTable As SolidEdgeFramework.MatTable
+
+        Dim MaterialLibList As Object = Nothing
+        Dim NumMaterialLibraries As Integer
+        Dim MaterialList As Object = Nothing
+        Dim NumMaterials As Integer
+
+        Dim ActiveMaterialLibrary As String = System.IO.Path.GetFileNameWithoutExtension(Configuration("TextBoxActiveMaterialLibrary"))
+        Dim ActiveMaterialLibraryPresent As Boolean = False
+        Dim CurrentMaterialName As String = ""
+        Dim MatTableMaterial As Object
+        Dim CurrentMaterialNameInLibrary As Boolean = False
+        Dim CurrentMaterialMatchesLibMaterial As Boolean = True
+
+        Dim msg As String = ""
+
+        Dim Models As SolidEdgePart.Models
+
+        Models = SEDoc.Models
+
+        If Models.Count > 0 Then
+
+            MatTable = SEApp.GetMaterialTable()
+            MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
+            MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
+
+            'Make sure the ActiveMaterialLibrary in settings.txt is present
+            For Each MatTableMaterial In CType(MaterialLibList, System.Array)
+                If MatTableMaterial.ToString = ActiveMaterialLibrary Then
+                    ActiveMaterialLibraryPresent = True
+                    Exit For
+                End If
+            Next
+
+            If Not ActiveMaterialLibraryPresent Then
+                msg = "ActiveMaterialLibrary " + Configuration("TextBoxActiveMaterialLibrary") + " not found.  Exiting..." + Chr(13)
+                msg += "Please update the Material Table on the Configuration tab." + Chr(13)
+                MsgBox(msg)
+                SEApp.Quit()
+                End
+            End If
+
+            'See if the CurrentMaterialName is in the ActiveLibrary
+            MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
+            For Each MatTableMaterial In CType(MaterialList, System.Array)
+                If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
+                    CurrentMaterialNameInLibrary = True
+                    Exit For
+                End If
+            Next
+
+            If Not CurrentMaterialNameInLibrary Then
+                ExitStatus = 1
+                If CurrentMaterialName = "" Then
+                    ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+                Else
+                    ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+                End If
+            End If
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
 
     Public Function UpdateMaterialFromMaterialTable(
         ByVal SEDoc As SolidEdgePart.PartDocument,

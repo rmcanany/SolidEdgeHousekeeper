@@ -10,7 +10,7 @@ Public Class Form1
     Private LogfileName As String
 
     Private ErrorsOccurred As Boolean
-    Private TotalAborts As Integer = 0
+    Private TotalAborts As Double
     Private TotalAbortsMaximum As Integer = 4
 
     Private FilesToProcessTotal As Integer
@@ -99,6 +99,8 @@ Public Class Form1
 
         FilesToProcessCompleted = 0
         LogfileSetName()
+
+        TotalAborts = 0
 
         SEStart()
 
@@ -390,6 +392,12 @@ Public Class Form1
 
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim CheckedListBoxX As CheckedListBox
+
+        ' Account for infrequent malfunctions on a large number of files.
+        TotalAborts -= 0.1
+        If TotalAborts < 0 Then
+            TotalAborts = 0
+        End If
 
         Try
             SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
