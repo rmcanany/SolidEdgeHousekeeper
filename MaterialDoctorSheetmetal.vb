@@ -2,6 +2,7 @@
 
 Public Class MaterialDoctorSheetmetal
 
+
     Public Function UpdateMaterialFromMaterialTable(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -226,24 +227,6 @@ Public Class MaterialDoctorSheetmetal
 
         If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
-                Features = Model.Features
-                For Each Feature In Features
-                    FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
-                    If Not FeatureNames.Contains(FeatureName) Then
-                        FeatureNames.Add(FeatureName)
-
-                        FeatureFaceOverrides = GetFeatureFaceStyle(Feature)
-
-                        If FeatureFaceOverrides.Count > 0 Then
-                            For Each Key In FeatureFaceOverrides.Keys
-                                FaceOverrides(Key) = FeatureFaceOverrides(Key)
-                            Next
-                        End If
-
-                        FeatureFaceOverrides.Clear()
-                    End If
-
-                Next
 
                 ' Some Models do not have a Body
                 Try
@@ -256,9 +239,31 @@ Public Class MaterialDoctorSheetmetal
                     Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
 
                     For Each Face In Faces
-                        If Face.Style IsNot Nothing Then
-                            FaceOverrides(Face.ID) = Face.Style
+                        FaceOverrides(Face.ID) = Face.Style
+                        'If Face.Style IsNot Nothing Then
+                        '    FaceOverrides(Face.ID) = Face.Style
+                        'End If
+                    Next
+
+                    Features = Model.Features
+                    For Each Feature In Features
+                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        If Not FeatureNames.Contains(FeatureName) Then
+                            FeatureNames.Add(FeatureName)
+
+                            FeatureFaceOverrides = GetFeatureFaceStyle(Feature)
+
+                            If FeatureFaceOverrides.Count > 0 Then
+                                For Each Key In FeatureFaceOverrides.Keys
+                                    If FaceOverrides(Key) Is Nothing Then
+                                        FaceOverrides(Key) = FeatureFaceOverrides(Key)
+                                    End If
+                                Next
+                            End If
+
+                            FeatureFaceOverrides.Clear()
                         End If
+
                     Next
 
                     Dim MaxFacesToProcess As Integer = 500
@@ -266,9 +271,28 @@ Public Class MaterialDoctorSheetmetal
                     If (FaceOverrides.Count > 0) And (FaceOverrides.Count <= MaxFacesToProcess) Then
                         ' Crashes on some imported files
                         Try
+                            ' Body.ClearOverrides() apparently makes a new body, rendeering the previous Body invalid.
+                            ' It also, at least in one case, increments the Face.ID for certain Faces.
+                            ' Hopefully it does not change the order of the Faces.
+
+                            Dim FaceStyleList As New List(Of SolidEdgeFramework.FaceStyle)
+                            For Each Key In FaceOverrides.Keys
+                                FaceStyleList.Add(FaceOverrides(Key))
+                            Next
+                            FaceOverrides.Clear()
+
                             Body.ClearOverrides()
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
                             Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+
+                            Dim i As Integer = 0
+                            For Each Face In Faces
+                                If FaceStyleList(i) IsNot Nothing Then
+                                    FaceOverrides(Face.ID) = FaceStyleList(i)
+                                End If
+                                i += 1
+                            Next
+
                         Catch ex As Exception
                             UpdatesComplete = False
                             Return UpdatesComplete
@@ -341,6 +365,7 @@ Public Class MaterialDoctorSheetmetal
                 FeatureFaceStyle = Feature_.GetStyle()
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -349,6 +374,7 @@ Public Class MaterialDoctorSheetmetal
                 FeatureFaceStyle = Feature_.GetStyle()
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -361,6 +387,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                                    SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -370,6 +397,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -379,6 +407,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -388,6 +417,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -397,6 +427,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -406,6 +437,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -417,6 +449,7 @@ Public Class MaterialDoctorSheetmetal
                     Try
                         FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                        Feature_.SetStyle(Nothing)
                         Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                     Catch ex As Exception
                     End Try
@@ -428,6 +461,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -437,6 +471,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -446,6 +481,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -455,6 +491,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -464,6 +501,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -473,6 +511,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -482,6 +521,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -491,6 +531,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -500,6 +541,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -509,6 +551,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -521,6 +564,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -530,6 +574,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -539,6 +584,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -548,6 +594,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -557,6 +604,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -566,6 +614,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -575,6 +624,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -584,6 +634,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -593,6 +644,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -602,6 +654,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -611,6 +664,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -620,6 +674,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -629,6 +684,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -638,6 +694,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -647,6 +704,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -656,6 +714,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -665,6 +724,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -674,6 +734,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -683,6 +744,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -695,6 +757,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -704,6 +767,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -713,6 +777,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -722,6 +787,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -731,6 +797,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -743,6 +810,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -752,6 +820,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -761,6 +830,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -770,6 +840,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -779,6 +850,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -788,6 +860,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -797,6 +870,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -806,6 +880,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -815,6 +890,7 @@ Public Class MaterialDoctorSheetmetal
                 If FeatureFaceStyle IsNot Nothing Then
                     FeatureFaces = CType(Feature_.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll),
                            SolidEdgeGeometry.Faces)
+                    Feature_.SetStyle(Nothing)
                     Return PopulateFeatureFaceOverrides(FeatureFaces, FeatureFaceStyle)
                 End If
 
@@ -824,7 +900,7 @@ Public Class MaterialDoctorSheetmetal
                                 ' These features do not have a FaceStyle override.
 
                     Case "1737031522"  'ConvertToSM
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.ConvToSM)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -834,7 +910,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "1245666020"  'FaceSet
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.FaceSet)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -844,7 +920,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "69347334"  'Hem
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Hem)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -854,7 +930,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "1477405962"  'Subtract
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Subtract)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -864,7 +940,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "-127107951"  'Thread
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.Thread)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -874,7 +950,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "451898536"  'Transform.  Guessing it's ConvertPartToSM.
-                                ' Doesn't work.
+                                ' Seems like it should work.  It doesn't.
                                 'Dim Feature_ = CType(Feature, SolidEdgePart.ConvertPartToSM)
                                 'FeatureFaceStyle = Feature_.GetStyle()
                                 'If FeatureFaceStyle IsNot Nothing Then
@@ -884,7 +960,7 @@ Public Class MaterialDoctorSheetmetal
                                 'End If
 
                     Case "1385450842"  'Union
-                        ' Doesn't work.
+                        ' Seems like it should work.  It doesn't.
                         'Dim Feature_ = CType(Feature, SolidEdgePart.Union)
                         'FeatureFaceStyle = Feature_.GetStyle()
                         'If FeatureFaceStyle IsNot Nothing Then
@@ -905,5 +981,4 @@ Public Class MaterialDoctorSheetmetal
 
 
     End Function
-
 End Class
