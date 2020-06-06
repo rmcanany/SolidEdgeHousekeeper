@@ -54,17 +54,6 @@ Public Class PartTasks
                 Features = Model.Features
                 For Each Feature In Features
 
-
-                    'Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Feature)
-                    'ExitStatus = 1
-                    'ErrorMessageList.Add(String.Format("{0}", FeatureType.ToString))
-                    'If FeatureType.ToString = "SolidEdgePart.ExtrudedProtrusion" Then
-                    '    Dim FaceStyle As SolidEdgeFramework.FaceStyle = CType(FeatureType, SolidEdgePart.ExtrudedProtrusion).GetStyle()
-                    'End If
-
-
-
-                    'FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "SystemName")
                     FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
 
                     If Not FeatureSystemNames.Contains(FeatureSystemName) Then
@@ -149,7 +138,7 @@ Public Class PartTasks
             For Each Model In Models
                 Features = Model.Features
                 For Each Feature In Features
-                    FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "SystemName")
+                    FeatureSystemName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
 
                     If Not FeatureSystemNames.Contains(FeatureSystemName) Then
                         FeatureSystemNames.Add(FeatureSystemName)

@@ -3,7 +3,7 @@ Robert McAnany 2020
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @ar-l
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -11,16 +11,16 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-Not everyone is able to compile source code, however, so the compiled executable is provided.  To get it, at the top of this page, click the 'Release' tab.  On the releases page, click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+If you can't compile source code, you can use the latest released version.  At the top of this page, there is a 'Release' tab.  Click it, then click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
-Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process, on the General tab, by navigating to the desired input folder, and then clicking the desired search type.
+On each file type's tab, select which errors to detect.  On the General tab, select which files to process by navigating to the desired input folder, and then clicking the desired directory search option.
 
 If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
 
 The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Configuration Tab.
 
-You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click the Stop button to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times.
+You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
 ## CAVEATS
 Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  

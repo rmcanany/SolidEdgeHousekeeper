@@ -246,7 +246,7 @@ Partial Class Form1
         msg = ""
         msg1.Add(msg)
         msg2.Add(msg)
-        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku"
+        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @ar-l"
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
@@ -267,14 +267,14 @@ Partial Class Form1
         msg1.Add(msg)
         msg = ""
         msg1.Add(msg)
-        msg = "Not everyone is able to compile source code, however, so the compiled executable is provided.  To get it, at the top of this page, click the 'Release' tab.  On the releases page, click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run."
+        msg = "If you can't compile source code, you can use the latest released version.  At the top of this page, there is a 'Release' tab.  Click it, then click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run."
         msg1.Add(msg)
         msg = ""
         msg1.Add(msg)
         msg = "## OPERATION"
         msg1.Add(msg)
         msg2.Add(msg)
-        msg = "Select which errors to detect by clicking the appropriate checkboxes on each file type's tab.  Select which files to process, on the General tab, by navigating to the desired input folder, and then clicking the desired search type."
+        msg = "On each file type's tab, select which errors to detect.  On the General tab, select which files to process by navigating to the desired input folder, and then clicking the desired directory search option."
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
@@ -292,7 +292,7 @@ Partial Class Form1
         msg = ""
         msg1.Add(msg)
         msg2.Add(msg)
-        msg = "You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click the Stop button to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times."
+        msg = "You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times."
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
