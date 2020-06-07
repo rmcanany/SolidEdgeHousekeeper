@@ -11,21 +11,21 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-If you can't compile source code, you can use the latest released version.  At the top of this page, there is a 'Release' tab.  Click it, then click the Assets dropdown.  Select SolidEdgeHousekeeper.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Navigate to the zip file and extract it (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+The other option is to use the latest released version.  At the top of file list above, click the 'Releases' tab.  On that page, click the Assets dropdown.  Select the most recent SolidEdgeHousekeeper-vX.X.X.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
-On each file type's tab, select which errors to detect.  On the General tab, select which files to process by navigating to the desired input folder, and then clicking the desired directory search option.
+On each file type's tab, select which errors to detect.  On the General tab, select whick files to process.  This is done by browsing to the desired input folder, then clicking the desired directory search option.
 
-If any errors are found, a text file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
+If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
 
-The first time you use the program, you need to supply some user-specific information.  This includes the location of your templates, material table, and the like.  These are accessed on the Configuration Tab.
+The first time you use the program, some site-specific information is needed.  This includes the location of your templates, material table, etc.  These are accessed on the Configuration Tab.
 
-You can interrupt the program before it is finished.  When processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take the program several seconds to register the request.  It doesn't hurt to click it a couple of times.
+You can interrupt the program before it finishes.  While processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
 ## CAVEATS
 Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  
 
-However, problems can arise.  Those cases will also be reported in the text file with the message 'Error processing file'.  A stack trace will be included, which may be useful for program debugging.
+However, problems can arise.  Those cases will also be reported in the log file with the message 'Error processing file'.  A stack trace will be included, which may be useful for program debugging.
 
 Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
 
