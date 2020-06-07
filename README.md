@@ -14,7 +14,7 @@ There is no installation per se.  The preferred method is to download or clone t
 The other option is to use the latest released version.  At the top of file list above, click the 'Releases' tab.  On that page, click the Assets dropdown.  Select the most recent SolidEdgeHousekeeper-vX.X.X.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
-On each file type's tab, select which errors to detect.  On the General tab, select whick files to process.  This is done by browsing to the desired input folder, then clicking the desired directory search option.
+On each file type's tab, select which errors to detect.  On the General tab, select which files to process.  Do this by browsing to the desired input folder, then clicking the desired directory search option.
 
 If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
 

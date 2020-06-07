@@ -274,7 +274,7 @@ Partial Class Form1
         msg = "## OPERATION"
         msg1.Add(msg)
         msg2.Add(msg)
-        msg = "On each file type's tab, select which errors to detect.  On the General tab, select whick files to process.  This is done by browsing to the desired input folder, then clicking the desired directory search option."
+        msg = "On each file type's tab, select which errors to detect.  On the General tab, select which files to process.  Do this by browsing to the desired input folder, then clicking the desired directory search option."
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
