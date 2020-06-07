@@ -471,6 +471,59 @@ Public Class AssemblyTasks
     End Function
 
 
+    Public Function RemoveFaceStyleOverrides(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf RemoveFaceStyleOverridesInternal,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function RemoveFaceStyleOverridesInternal(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
+        Dim Occurrence As SolidEdgeAssembly.Occurrence
+
+        For Each Occurrence In Occurrences
+            If Occurrence.FaceStyle IsNot Nothing Then
+                Occurrence.PutStyleNone()
+            End If
+        Next
+
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
     Public Function FitIsometricView(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),

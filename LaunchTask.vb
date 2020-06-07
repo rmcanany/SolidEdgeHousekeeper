@@ -60,6 +60,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.ActivateAndUpdateAll(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
+                Case "RemoveFaceStyleOverrides"
+                    ErrorMessage = task.Proxy.RemoveFaceStyleOverrides(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
                     ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
                 Case Else

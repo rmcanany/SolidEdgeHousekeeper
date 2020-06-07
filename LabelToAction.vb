@@ -60,6 +60,12 @@ Public Class LabelToAction
                      "UpdateFaceAndViewStylesFromTemplate",
                      True, False, False, False, True)
 
+        Dim RemoveFaceStyleOverrides As New L2A
+        PopulateList(RemoveFaceStyleOverrides,
+                     "Remove face style overrides",
+                     "RemoveFaceStyleOverrides",
+                     False, False, False, False, True)
+
         Dim FitIsometricView As New L2A
         PopulateList(FitIsometricView,
                      "Fit isometric view",

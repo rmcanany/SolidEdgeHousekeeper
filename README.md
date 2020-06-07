@@ -34,6 +34,7 @@ List of implemented tests and actions.
 ### Assembly
     Activate and update all
     Update face and view styles from template
+    Remove face style overrides
     Fit isometric view
     Occurrence missing files
     Occurrence outside project directory
