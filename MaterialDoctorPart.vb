@@ -77,7 +77,6 @@ Public Class MaterialDoctorPart
         Return ErrorMessage
     End Function
 
-
     Public Function UpdateMaterialFromMaterialTable(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),

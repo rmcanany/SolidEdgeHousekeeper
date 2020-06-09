@@ -507,9 +507,14 @@ Public Class AssemblyTasks
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
         For Each Occurrence In Occurrences
-            If Occurrence.FaceStyle IsNot Nothing Then
-                Occurrence.PutStyleNone()
-            End If
+            ' Fails at 'Occurrence.FaceStyle IsNot Nothing' on some files.  Reason not known.
+            Try
+                If Occurrence.FaceStyle IsNot Nothing Then
+                    Occurrence.PutStyleNone()
+                End If
+            Catch ex As Exception
+                ' No FaceStyle should mean no override.  Error message not warranted.
+            End Try
         Next
 
         If SEDoc.ReadOnly Then
