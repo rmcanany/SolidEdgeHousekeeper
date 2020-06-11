@@ -95,6 +95,22 @@ Public Class DraftTasks
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
+        Dim PartsLists As SolidEdgeDraft.PartsLists
+        Dim PartsList As SolidEdgeDraft.PartsList
+
+        PartsLists = SEDoc.PartsLists
+
+        ' Not all draft files have PartsLists
+        Try
+            For Each PartsList In PartsLists
+                If Not PartsList.IsUpToDate Then
+                    ExitStatus = 1
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+        End Try
+
         Sections = SEDoc.Sections
         Section = Sections.WorkingSection
         SectionSheets = Section.Sheets
@@ -352,6 +368,21 @@ Public Class DraftTasks
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
         Dim UpdatedView As Boolean = False
+
+        Dim PartsLists As SolidEdgeDraft.PartsLists
+        Dim PartsList As SolidEdgeDraft.PartsList
+
+        PartsLists = SEDoc.PartsLists
+
+        ' Not all draft files have PartsLists
+        Try
+            For Each PartsList In PartsLists
+                If Not PartsList.IsUpToDate Then
+                    PartsList.Update()
+                End If
+            Next
+        Catch ex As Exception
+        End Try
 
         ModelLinks = SEDoc.ModelLinks
 
