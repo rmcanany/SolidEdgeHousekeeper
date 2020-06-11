@@ -246,7 +246,7 @@ Partial Class Form1
         msg = ""
         msg1.Add(msg)
         msg2.Add(msg)
-        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @ar-l"
+        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson"
         msg1.Add(msg)
         msg2.Add(msg)
         msg = ""
