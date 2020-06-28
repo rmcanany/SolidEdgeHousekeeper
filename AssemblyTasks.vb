@@ -394,11 +394,25 @@ Public Class AssemblyTasks
         Dim TemplateSkyboxName(5) As String
         Dim msg As String = ""
 
+        ' Dim PartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+
+
         SEDoc.ImportStyles(TemplateFilename, True)
 
         ' Find the active ViewStyle in the template file.
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeAssembly.AssemblyDocument)
         SEApp.DoIdle()
+
+        '' Get the template base styles
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle, ConstructionBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle, ThreadBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle, WeldbeadBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle, CurveBaseStyle)
+        'msg = ConstructionBaseStyle.StyleName
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -418,6 +432,12 @@ Public Class AssemblyTasks
 
         SETemplateDoc.Close(False)
         SEApp.DoIdle()
+
+        '' Set the document base styles
+        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle, ConstructionBaseStyle)
+        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle, ThreadBaseStyle)
+        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle, WeldbeadBaseStyle)
+        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle, CurveBaseStyle)
 
         ' If a style by the same name exists in the target file, delete it.
         ViewStyleAlreadyPresent = False
@@ -439,31 +459,39 @@ Public Class AssemblyTasks
                 View = Window.View
                 View.Style = TempViewStyleName
             Next
-            ViewStyles.Remove(TemplateActiveStyleName)
+            ' ViewStyles can sometimes be flagged 'in use' even if they are not
+            Try
+                ViewStyles.Remove(TemplateActiveStyleName)
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("View style not updated")
+            End Try
         End If
 
-        ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
+        If ExitStatus = 0 Then
+            ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
 
-        For Each ViewStyle In ViewStyles
-            If ViewStyle.StyleName = TemplateActiveStyleName Then
-                ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
-                For i As Integer = 0 To 5
-                    ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
-                Next
+            For Each ViewStyle In ViewStyles
+                If ViewStyle.StyleName = TemplateActiveStyleName Then
+                    ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
+                    For i As Integer = 0 To 5
+                        ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
+                    Next
+                End If
+            Next
+
+            For Each Window In Windows
+                View = Window.View
+                View.Style = TemplateActiveStyleName
+            Next
+
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
             End If
-        Next
-
-        For Each Window In Windows
-            View = Window.View
-            View.Style = TemplateActiveStyleName
-        Next
-
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList

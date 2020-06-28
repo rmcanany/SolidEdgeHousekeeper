@@ -792,31 +792,39 @@ Public Class SheetmetalTasks
                 View = Window.View
                 View.Style = TempViewStyleName
             Next
-            ViewStyles.Remove(TemplateActiveStyleName)
+            ' ViewStyles can sometimes be flagged 'in use' even if they are not
+            Try
+                ViewStyles.Remove(TemplateActiveStyleName)
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to update view style")
+            End Try
         End If
 
-        ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
+        If ExitStatus = 0 Then
+            ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
 
-        For Each ViewStyle In ViewStyles
-            If ViewStyle.StyleName = TemplateActiveStyleName Then
-                ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
-                For i As Integer = 0 To 5
-                    ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
-                Next
+            For Each ViewStyle In ViewStyles
+                If ViewStyle.StyleName = TemplateActiveStyleName Then
+                    ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
+                    For i As Integer = 0 To 5
+                        ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
+                    Next
+                End If
+            Next
+
+            For Each Window In Windows
+                View = Window.View
+                View.Style = TemplateActiveStyleName
+            Next
+
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
             End If
-        Next
-
-        For Each Window In Windows
-            View = Window.View
-            View.Style = TemplateActiveStyleName
-        Next
-
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
