@@ -3,7 +3,7 @@ Robert McAnany 2020
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.

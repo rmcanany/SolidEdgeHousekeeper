@@ -571,9 +571,18 @@ Public Class Form1
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
+                Dim MaxFilenameLength As Integer
+                MaxFilenameLength = 0
+                Dim BaseFilename As String
                 For Each FoundFile In FoundFiles
-                    ListBoxFiles.Items.Add(System.IO.Path.GetFileName(FoundFile))
+                    BaseFilename = System.IO.Path.GetFileName(FoundFile)
+                    If Len(BaseFilename) > MaxFilenameLength Then
+                        MaxFilenameLength = Len(BaseFilename)
+                    End If
+                    ListBoxFiles.Items.Add(BaseFilename)
                 Next
+                ListBoxFiles.ColumnWidth = CInt(5.5 * MaxFilenameLength)
+                ' MsgBox(MaxFilenameLength)
             End If
         End If
 
