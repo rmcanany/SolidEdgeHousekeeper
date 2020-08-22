@@ -739,8 +739,11 @@ Public Class DraftTasks
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim PDFFilename As String = ""
+        Dim DraftBaseFilename As String
 
-        PDFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".pdf")
+        DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+
+        PDFFilename = Configuration("TextBoxPdfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".pdf")
 
         'Capturing a fault to update ExitStatus
         Try
@@ -755,6 +758,57 @@ Public Class DraftTasks
         Return ErrorMessage
     End Function
 
+    Public Function SaveAsDXF(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf SaveAsDXFInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function SaveAsDXFInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim DXFFilename As String = ""
+        Dim DraftBaseFilename As String
+
+        DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+
+        DXFFilename = Configuration("TextBoxDxfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".dxf")
+
+        'Capturing a fault to update ExitStatus
+        Try
+            SEDoc.SaveAs(DXFFilename)
+            SEApp.DoIdle()
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(DXFFilename, Configuration)))
+        End Try
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
     Private Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)

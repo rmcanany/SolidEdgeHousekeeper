@@ -41,6 +41,7 @@ List of implemented tests and actions.
     Failed relationships
     Underconstrained relationships
     Part number does not match file name
+    Save as STEP
 ### Part
     Update insert part copies
     Update material from material table
@@ -52,6 +53,7 @@ List of implemented tests and actions.
     Insert part copies out of date
     Material not in material table
     Part number does not match file name
+    Save as STEP
 ### Sheetmetal
     Update insert part copies
     Update material from material table
@@ -65,6 +67,7 @@ List of implemented tests and actions.
     Material not in material table
     Part number does not match file name
     Generate Laser DXF and PDF
+    Save as STEP
 ### Draft
     Update drawing views
     Update drawing border from template
@@ -75,6 +78,7 @@ List of implemented tests and actions.
     Detached dimensions or annotations
     File name does not match model file name
     Save as PDF
+    Save as DXF
 
 ## CODE ORGANIZATION
 Processing starts in Form1.vb.  A short description of the code's organization can be found there.

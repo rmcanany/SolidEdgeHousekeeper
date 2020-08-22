@@ -757,6 +757,73 @@ Public Class PartTasks
         Return ErrorMessage
     End Function
 
+    Public Function SaveAsSTEP(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.PartDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf SaveAsSTEPInternal,
+                                   CType(SEDoc, SolidEdgePart.PartDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function SaveAsSTEPInternal(
+        ByVal SEDoc As SolidEdgePart.PartDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim STEPFilename As String = ""
+        Dim PartBaseFilename As String
+
+        PartBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+
+        STEPFilename = Configuration("TextBoxStepPartOutputDirectory") + "\" + System.IO.Path.ChangeExtension(PartBaseFilename, ".stp")
+
+        'Capturing a fault to update ExitStatus
+        Try
+            SEDoc.SaveAs(STEPFilename)
+            SEApp.DoIdle()
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(STEPFilename, Configuration)))
+        End Try
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function TruncateFullPath(ByVal Path As String,
+         Configuration As Dictionary(Of String, String)
+         ) As String
+
+        Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
+        Dim NewPath As String
+
+        If Path.Contains(Configuration("TextBoxInputDirectory")) Then
+            NewPath = Path.Remove(0, Length)
+            NewPath = "~" + NewPath
+        Else
+            NewPath = Path
+        End If
+        Return NewPath
+    End Function
 
 
 End Class

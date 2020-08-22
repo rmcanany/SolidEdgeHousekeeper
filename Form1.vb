@@ -208,6 +208,13 @@ Public Class Form1
             If LabelToActionAssembly(Label).RequiresSave Then
                 SaveMsg += "    Assembly: " + Label + Chr(13)
             End If
+            If LabelToActionAssembly(Label).RequiresStepOutputDirectory Then
+                If TextBoxStepAssemblyOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid STEP assembly output directory") Then
+                        msg += "    Select a valid STEP assembly output directory" + Chr(13)
+                    End If
+                End If
+            End If
 
         Next
 
@@ -243,6 +250,14 @@ Public Class Form1
             If LabelToActionPart(Label).RequiresSave Then
                 SaveMsg += "    Part: " + Label + Chr(13)
             End If
+            If LabelToActionPart(Label).RequiresStepOutputDirectory Then
+                If TextBoxStepPartOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid STEP part output directory") Then
+                        msg += "    Select a valid STEP part output directory" + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
@@ -277,6 +292,14 @@ Public Class Form1
             If LabelToActionSheetmetal(Label).RequiresSave Then
                 SaveMsg += "    Sheetmetal: " + Label + Chr(13)
             End If
+            If LabelToActionSheetmetal(Label).RequiresStepOutputDirectory Then
+                If TextBoxStepSheetmetalOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid STEP sheetmetal output directory") Then
+                        msg += "    Select a valid STEP sheetmetal output directory" + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         For Each Label As String In CheckedListBoxDraft.CheckedItems
@@ -310,6 +333,27 @@ Public Class Form1
             End If
             If LabelToActionDraft(Label).RequiresSave Then
                 SaveMsg += "    Draft: " + Label + Chr(13)
+            End If
+            'If LabelToActionDraft(Label).RequiresStepOutputDirectory Then
+            '    If TextBoxStepDraftOutputDirectory.Text = "" Then
+            '        If Not msg.Contains("Select a valid STEP output directory") Then
+            '            msg += "    Select a valid STEP output directory" + Chr(13)
+            '        End If
+            '    End If
+            'End If
+            If LabelToActionDraft(Label).RequiresPdfOutputDirectory Then
+                If TextBoxPdfDraftOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid PDF draft output directory") Then
+                        msg += "    Select a valid PDF draft output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionDraft(Label).RequiresDxfOutputDirectory Then
+                If TextBoxDxfDraftOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid DXF draft output directory") Then
+                        msg += "    Select a valid DXF draft output directory" + Chr(13)
+                    End If
+                End If
             End If
         Next
 
