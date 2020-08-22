@@ -519,6 +519,11 @@ Public Class Form1
         Configuration(TextBoxLaserOutputDirectory.Name) = TextBoxLaserOutputDirectory.Text
         Configuration(ComboBoxPartNumberPropertySet.Name) = ComboBoxPartNumberPropertySet.Text
         Configuration(TextBoxPartNumberPropertyName.Name) = TextBoxPartNumberPropertyName.Text
+        Configuration(TextBoxStepAssemblyOutputDirectory.Name) = TextBoxStepAssemblyOutputDirectory.Text
+        Configuration(TextBoxStepPartOutputDirectory.Name) = TextBoxStepPartOutputDirectory.Text
+        Configuration(TextBoxStepSheetmetalOutputDirectory.Name) = TextBoxStepSheetmetalOutputDirectory.Text
+        Configuration(TextBoxPdfDraftOutputDirectory.Name) = TextBoxPdfDraftOutputDirectory.Text
+        Configuration(TextBoxDxfDraftOutputDirectory.Name) = TextBoxDxfDraftOutputDirectory.Text
 
 
         ' Update file types
@@ -745,4 +750,67 @@ Public Class Form1
     Private Sub TextBoxStatus_TextChanged(sender As Object, e As EventArgs) Handles TextBoxStatus.TextChanged
         ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
     End Sub
+
+    Private Sub ButtonStepAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepAssemblyOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxStepAssemblyOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepAssemblyOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxStepAssemblyOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+        ToolTip1.SetToolTip(TextBoxStepAssemblyOutputDirectory, TextBoxStepAssemblyOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonStepPartOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepPartOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxStepPartOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepPartOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxStepPartOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+        ToolTip1.SetToolTip(TextBoxStepPartOutputDirectory, TextBoxStepPartOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonStepSheetmetalOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepSheetmetalOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxStepSheetmetalOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepSheetmetalOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxStepSheetmetalOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+        ToolTip1.SetToolTip(TextBoxStepSheetmetalOutputDirectory, TextBoxStepSheetmetalOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonPdfDraftOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxPdfDraftOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxPdfDraftOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxPdfDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+        ToolTip1.SetToolTip(TextBoxPdfDraftOutputDirectory, TextBoxPdfDraftOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonDxfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonDxfDraftOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxDxfDraftOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxDxfDraftOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxDxfDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+        End If
+        ToolTip1.SetToolTip(TextBoxDxfDraftOutputDirectory, TextBoxDxfDraftOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+
+
 End Class

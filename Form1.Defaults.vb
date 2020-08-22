@@ -91,6 +91,43 @@ Partial Class Form1
                     Else
                         CheckBoxWarnSave.Checked = False
                     End If
+
+                ElseIf Key = TextBoxStepAssemblyOutputDirectory.Name Then
+                    If FileIO.FileSystem.DirectoryExists(Value) Then
+                        TextBoxStepAssemblyOutputDirectory.Text = Value
+                    Else
+                        TextBoxStepAssemblyOutputDirectory.Text = ""
+                    End If
+
+                ElseIf Key = TextBoxStepPartOutputDirectory.Name Then
+                    If FileIO.FileSystem.DirectoryExists(Value) Then
+                        TextBoxStepPartOutputDirectory.Text = Value
+                    Else
+                        TextBoxStepPartOutputDirectory.Text = ""
+                    End If
+
+                ElseIf Key = TextBoxStepSheetmetalOutputDirectory.Name Then
+                    If FileIO.FileSystem.DirectoryExists(Value) Then
+                        TextBoxStepSheetmetalOutputDirectory.Text = Value
+                    Else
+                        TextBoxStepSheetmetalOutputDirectory.Text = ""
+                    End If
+
+                ElseIf Key = TextBoxPdfDraftOutputDirectory.Name Then
+                    If FileIO.FileSystem.DirectoryExists(Value) Then
+                        TextBoxPdfDraftOutputDirectory.Text = Value
+                    Else
+                        TextBoxPdfDraftOutputDirectory.Text = ""
+                    End If
+
+                ElseIf Key = TextBoxDxfDraftOutputDirectory.Name Then
+                    If FileIO.FileSystem.DirectoryExists(Value) Then
+                        TextBoxDxfDraftOutputDirectory.Text = Value
+                    Else
+                        TextBoxDxfDraftOutputDirectory.Text = ""
+                    End If
+
+
                 Else
                     PopulateCheckboxDefault(KVPair)
                 End If
@@ -133,6 +170,12 @@ Partial Class Form1
         Defaults.Add(TextBoxRestartAfter.Name + "=" + TextBoxRestartAfter.Text)
         Defaults.Add(TextBoxLaserOutputDirectory.Name + "=" + TextBoxLaserOutputDirectory.Text)
         Defaults.Add(CheckBoxWarnSave.Name + "=" + CheckBoxWarnSave.Checked.ToString)
+        Defaults.Add(TextBoxStepAssemblyOutputDirectory.Name + "=" + TextBoxStepAssemblyOutputDirectory.Text)
+        Defaults.Add(TextBoxStepPartOutputDirectory.Name + "=" + TextBoxStepPartOutputDirectory.Text)
+        Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
+        Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
+        Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
+
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="
