@@ -8,21 +8,12 @@ Partial Class Form1
         ' Start Solid Edge.
         TextBoxStatus.Text = "Starting Solid Edge..."
 
-        'Try
-        '    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
-        '    SEApp.Visible = True
-        '    SEApp.DisplayAlerts = False
-        '    'SEApp.DisplayAlerts = True
-        '    SEApp.WindowState = 2  'Maximizes Solid Edge
-        'Catch ex As Exception
-        'End Try
-
         Try
             SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             ' Make Solid Edge visible and turn off popups.
             SEApp.Visible = True
             SEApp.DisplayAlerts = False
-            'SEApp.DisplayAlerts = True
+            'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
             SEApp.WindowState = 2  'Maximizes Solid Edge
         Catch ex As Exception
             Activate()

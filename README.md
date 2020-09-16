@@ -70,8 +70,7 @@ List of implemented tests and actions.
     Save as STEP
 ### Draft
     Update drawing views
-    Update drawing border from template
-    Update dimension styles from template
+    Move drawing to new template
     Fit view
     Drawing views missing file
     Drawing views out of date

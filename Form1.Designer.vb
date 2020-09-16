@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Form1
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -40,18 +40,33 @@ Partial Class Form1
         Me.TextBoxInputDirectory = New System.Windows.Forms.TextBox()
         Me.ButtonInputDirectory = New System.Windows.Forms.Button()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.ButtonStepAssemblyOutputDirectory = New System.Windows.Forms.Button()
+        Me.TextBoxStepAssemblyOutputDirectory = New System.Windows.Forms.TextBox()
+        Me.LabelStepAssemblyOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.ButtonStepPartOutputDirectory = New System.Windows.Forms.Button()
+        Me.TextBoxStepPartOutputDirectory = New System.Windows.Forms.TextBox()
+        Me.LabelStepPartOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.ButtonStepSheetmetalOutputDirectory = New System.Windows.Forms.Button()
+        Me.TextBoxStepSheetmetalOutputDirectory = New System.Windows.Forms.TextBox()
+        Me.LabelStepSheetmetalOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelSheetmetalTabNote = New System.Windows.Forms.Label()
         Me.ButtonLaserOutputDirectory = New System.Windows.Forms.Button()
         Me.TextBoxLaserOutputDirectory = New System.Windows.Forms.TextBox()
         Me.LabelLaserOutputDirectory = New System.Windows.Forms.Label()
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
+        Me.ButtonDxfDraftOutputDirectory = New System.Windows.Forms.Button()
+        Me.ButtonPdfDraftOutputDirectory = New System.Windows.Forms.Button()
+        Me.TextBoxDxfDraftOutputDirectory = New System.Windows.Forms.TextBox()
+        Me.TextBoxPdfDraftOutputDirectory = New System.Windows.Forms.TextBox()
+        Me.LabelDxfDraftOutputDirectory = New System.Windows.Forms.Label()
+        Me.LabelPdfDraftOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
@@ -85,21 +100,6 @@ Partial Class Form1
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
-        Me.LabelStepAssemblyOutputDirectory = New System.Windows.Forms.Label()
-        Me.TextBoxStepAssemblyOutputDirectory = New System.Windows.Forms.TextBox()
-        Me.ButtonStepAssemblyOutputDirectory = New System.Windows.Forms.Button()
-        Me.LabelStepPartOutputDirectory = New System.Windows.Forms.Label()
-        Me.TextBoxStepPartOutputDirectory = New System.Windows.Forms.TextBox()
-        Me.ButtonStepPartOutputDirectory = New System.Windows.Forms.Button()
-        Me.LabelStepSheetmetalOutputDirectory = New System.Windows.Forms.Label()
-        Me.TextBoxStepSheetmetalOutputDirectory = New System.Windows.Forms.TextBox()
-        Me.ButtonStepSheetmetalOutputDirectory = New System.Windows.Forms.Button()
-        Me.LabelPdfDraftOutputDirectory = New System.Windows.Forms.Label()
-        Me.LabelDxfDraftOutputDirectory = New System.Windows.Forms.Label()
-        Me.TextBoxPdfDraftOutputDirectory = New System.Windows.Forms.TextBox()
-        Me.TextBoxDxfDraftOutputDirectory = New System.Windows.Forms.TextBox()
-        Me.ButtonPdfDraftOutputDirectory = New System.Windows.Forms.Button()
-        Me.ButtonDxfDraftOutputDirectory = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFileTypes.SuspendLayout()
@@ -128,7 +128,7 @@ Partial Class Form1
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(651, 450)
+        Me.TabControl1.Size = New System.Drawing.Size(651, 550)
         Me.TabControl1.TabIndex = 0
         '
         'TabPageGeneral
@@ -146,7 +146,7 @@ Partial Class Form1
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(643, 396)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(643, 521)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
         '
@@ -289,7 +289,8 @@ Partial Class Form1
         Me.ListBoxFiles.MultiColumn = True
         Me.ListBoxFiles.Name = "ListBoxFiles"
         Me.ListBoxFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBoxFiles.Size = New System.Drawing.Size(300, 308)
+        Me.ListBoxFiles.Size = New System.Drawing.Size(300, 388)
+        Me.ListBoxFiles.Sorted = True
         Me.ListBoxFiles.TabIndex = 5
         '
         'LabelInputDirectory
@@ -336,9 +337,37 @@ Partial Class Form1
         Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageAssembly.Name = "TabPageAssembly"
         Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageAssembly.Size = New System.Drawing.Size(643, 421)
+        Me.TabPageAssembly.Size = New System.Drawing.Size(643, 521)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
+        '
+        'ButtonStepAssemblyOutputDirectory
+        '
+        Me.ButtonStepAssemblyOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonStepAssemblyOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonStepAssemblyOutputDirectory.Name = "ButtonStepAssemblyOutputDirectory"
+        Me.ButtonStepAssemblyOutputDirectory.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonStepAssemblyOutputDirectory.TabIndex = 4
+        Me.ButtonStepAssemblyOutputDirectory.Text = "Browse"
+        Me.ButtonStepAssemblyOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'TextBoxStepAssemblyOutputDirectory
+        '
+        Me.TextBoxStepAssemblyOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxStepAssemblyOutputDirectory.Name = "TextBoxStepAssemblyOutputDirectory"
+        Me.TextBoxStepAssemblyOutputDirectory.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxStepAssemblyOutputDirectory.TabIndex = 3
+        '
+        'LabelStepAssemblyOutputDirectory
+        '
+        Me.LabelStepAssemblyOutputDirectory.AutoSize = True
+        Me.LabelStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelStepAssemblyOutputDirectory.Name = "LabelStepAssemblyOutputDirectory"
+        Me.LabelStepAssemblyOutputDirectory.Size = New System.Drawing.Size(178, 17)
+        Me.LabelStepAssemblyOutputDirectory.TabIndex = 2
+        Me.LabelStepAssemblyOutputDirectory.Text = "Step Files Output Directory"
         '
         'LabelAssemblyTabNote
         '
@@ -375,9 +404,37 @@ Partial Class Form1
         Me.TabPagePart.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPagePart.Name = "TabPagePart"
         Me.TabPagePart.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPagePart.Size = New System.Drawing.Size(643, 421)
+        Me.TabPagePart.Size = New System.Drawing.Size(643, 521)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
+        '
+        'ButtonStepPartOutputDirectory
+        '
+        Me.ButtonStepPartOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonStepPartOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonStepPartOutputDirectory.Name = "ButtonStepPartOutputDirectory"
+        Me.ButtonStepPartOutputDirectory.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonStepPartOutputDirectory.TabIndex = 5
+        Me.ButtonStepPartOutputDirectory.Text = "Browse"
+        Me.ButtonStepPartOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'TextBoxStepPartOutputDirectory
+        '
+        Me.TextBoxStepPartOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxStepPartOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxStepPartOutputDirectory.Name = "TextBoxStepPartOutputDirectory"
+        Me.TextBoxStepPartOutputDirectory.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxStepPartOutputDirectory.TabIndex = 4
+        '
+        'LabelStepPartOutputDirectory
+        '
+        Me.LabelStepPartOutputDirectory.AutoSize = True
+        Me.LabelStepPartOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelStepPartOutputDirectory.Name = "LabelStepPartOutputDirectory"
+        Me.LabelStepPartOutputDirectory.Size = New System.Drawing.Size(169, 17)
+        Me.LabelStepPartOutputDirectory.TabIndex = 3
+        Me.LabelStepPartOutputDirectory.Text = "Step files output directory"
         '
         'LabelPartTabNote
         '
@@ -417,9 +474,37 @@ Partial Class Form1
         Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageSheetmetal.Name = "TabPageSheetmetal"
         Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageSheetmetal.Size = New System.Drawing.Size(643, 421)
+        Me.TabPageSheetmetal.Size = New System.Drawing.Size(643, 521)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'ButtonStepSheetmetalOutputDirectory
+        '
+        Me.ButtonStepSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(509, 392)
+        Me.ButtonStepSheetmetalOutputDirectory.Name = "ButtonStepSheetmetalOutputDirectory"
+        Me.ButtonStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonStepSheetmetalOutputDirectory.TabIndex = 9
+        Me.ButtonStepSheetmetalOutputDirectory.Text = "Browse"
+        Me.ButtonStepSheetmetalOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'TextBoxStepSheetmetalOutputDirectory
+        '
+        Me.TextBoxStepSheetmetalOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 392)
+        Me.TextBoxStepSheetmetalOutputDirectory.Name = "TextBoxStepSheetmetalOutputDirectory"
+        Me.TextBoxStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxStepSheetmetalOutputDirectory.TabIndex = 8
+        '
+        'LabelStepSheetmetalOutputDirectory
+        '
+        Me.LabelStepSheetmetalOutputDirectory.AutoSize = True
+        Me.LabelStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 373)
+        Me.LabelStepSheetmetalOutputDirectory.Name = "LabelStepSheetmetalOutputDirectory"
+        Me.LabelStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(169, 17)
+        Me.LabelStepSheetmetalOutputDirectory.TabIndex = 7
+        Me.LabelStepSheetmetalOutputDirectory.Text = "Step files output directory"
         '
         'LabelSheetmetalTabNote
         '
@@ -489,9 +574,59 @@ Partial Class Form1
         Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageDraft.Name = "TabPageDraft"
         Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageDraft.Size = New System.Drawing.Size(643, 421)
+        Me.TabPageDraft.Size = New System.Drawing.Size(643, 521)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
+        '
+        'ButtonDxfDraftOutputDirectory
+        '
+        Me.ButtonDxfDraftOutputDirectory.Location = New System.Drawing.Point(509, 392)
+        Me.ButtonDxfDraftOutputDirectory.Name = "ButtonDxfDraftOutputDirectory"
+        Me.ButtonDxfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonDxfDraftOutputDirectory.TabIndex = 9
+        Me.ButtonDxfDraftOutputDirectory.Text = "Browse"
+        Me.ButtonDxfDraftOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'ButtonPdfDraftOutputDirectory
+        '
+        Me.ButtonPdfDraftOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonPdfDraftOutputDirectory.Name = "ButtonPdfDraftOutputDirectory"
+        Me.ButtonPdfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonPdfDraftOutputDirectory.TabIndex = 8
+        Me.ButtonPdfDraftOutputDirectory.Text = "Browse"
+        Me.ButtonPdfDraftOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'TextBoxDxfDraftOutputDirectory
+        '
+        Me.TextBoxDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 392)
+        Me.TextBoxDxfDraftOutputDirectory.Name = "TextBoxDxfDraftOutputDirectory"
+        Me.TextBoxDxfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxDxfDraftOutputDirectory.TabIndex = 7
+        '
+        'TextBoxPdfDraftOutputDirectory
+        '
+        Me.TextBoxPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxPdfDraftOutputDirectory.Name = "TextBoxPdfDraftOutputDirectory"
+        Me.TextBoxPdfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxPdfDraftOutputDirectory.TabIndex = 6
+        '
+        'LabelDxfDraftOutputDirectory
+        '
+        Me.LabelDxfDraftOutputDirectory.AutoSize = True
+        Me.LabelDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 372)
+        Me.LabelDxfDraftOutputDirectory.Name = "LabelDxfDraftOutputDirectory"
+        Me.LabelDxfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
+        Me.LabelDxfDraftOutputDirectory.TabIndex = 5
+        Me.LabelDxfDraftOutputDirectory.Text = "DXF files output directory"
+        '
+        'LabelPdfDraftOutputDirectory
+        '
+        Me.LabelPdfDraftOutputDirectory.AutoSize = True
+        Me.LabelPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelPdfDraftOutputDirectory.Name = "LabelPdfDraftOutputDirectory"
+        Me.LabelPdfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
+        Me.LabelPdfDraftOutputDirectory.TabIndex = 4
+        Me.LabelPdfDraftOutputDirectory.Text = "PDF files output directory"
         '
         'LabelDraftTabNote
         '
@@ -544,7 +679,7 @@ Partial Class Form1
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(643, 396)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(643, 521)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
@@ -770,7 +905,7 @@ Partial Class Form1
         Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageReadme.Name = "TabPageReadme"
         Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageReadme.Size = New System.Drawing.Size(643, 396)
+        Me.TabPageReadme.Size = New System.Drawing.Size(643, 521)
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
         '
@@ -783,7 +918,7 @@ Partial Class Form1
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.Size = New System.Drawing.Size(579, 1600)
+        Me.TextBoxReadme.Size = New System.Drawing.Size(516, 1600)
         Me.TextBoxReadme.TabIndex = 0
         Me.TextBoxReadme.Text = "Populated at build time."
         '
@@ -792,7 +927,7 @@ Partial Class Form1
         Me.TextBoxStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.TextBoxStatus.Location = New System.Drawing.Point(5, 450)
+        Me.TextBoxStatus.Location = New System.Drawing.Point(5, 550)
         Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBoxStatus.Name = "TextBoxStatus"
         Me.TextBoxStatus.Size = New System.Drawing.Size(649, 22)
@@ -803,7 +938,7 @@ Partial Class Form1
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ButtonCancel.Location = New System.Drawing.Point(547, 488)
+        Me.ButtonCancel.Location = New System.Drawing.Point(547, 588)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(100, 25)
@@ -814,7 +949,7 @@ Partial Class Form1
         'ButtonProcess
         '
         Me.ButtonProcess.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonProcess.Location = New System.Drawing.Point(421, 488)
+        Me.ButtonProcess.Location = New System.Drawing.Point(421, 588)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonProcess.Name = "ButtonProcess"
         Me.ButtonProcess.Size = New System.Drawing.Size(100, 25)
@@ -837,145 +972,11 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog.Title = "Select Folder"
         Me.FakeFolderBrowserDialog.ValidateNames = False
         '
-        'LabelStepAssemblyOutputDirectory
-        '
-        Me.LabelStepAssemblyOutputDirectory.AutoSize = True
-        Me.LabelStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 313)
-        Me.LabelStepAssemblyOutputDirectory.Name = "LabelStepAssemblyOutputDirectory"
-        Me.LabelStepAssemblyOutputDirectory.Size = New System.Drawing.Size(178, 17)
-        Me.LabelStepAssemblyOutputDirectory.TabIndex = 2
-        Me.LabelStepAssemblyOutputDirectory.Text = "Step Files Output Directory"
-        '
-        'TextBoxStepAssemblyOutputDirectory
-        '
-        Me.TextBoxStepAssemblyOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 332)
-        Me.TextBoxStepAssemblyOutputDirectory.Name = "TextBoxStepAssemblyOutputDirectory"
-        Me.TextBoxStepAssemblyOutputDirectory.Size = New System.Drawing.Size(491, 22)
-        Me.TextBoxStepAssemblyOutputDirectory.TabIndex = 3
-        '
-        'ButtonStepAssemblyOutputDirectory
-        '
-        Me.ButtonStepAssemblyOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepAssemblyOutputDirectory.Location = New System.Drawing.Point(509, 332)
-        Me.ButtonStepAssemblyOutputDirectory.Name = "ButtonStepAssemblyOutputDirectory"
-        Me.ButtonStepAssemblyOutputDirectory.Size = New System.Drawing.Size(100, 25)
-        Me.ButtonStepAssemblyOutputDirectory.TabIndex = 4
-        Me.ButtonStepAssemblyOutputDirectory.Text = "Browse"
-        Me.ButtonStepAssemblyOutputDirectory.UseVisualStyleBackColor = True
-        '
-        'LabelStepPartOutputDirectory
-        '
-        Me.LabelStepPartOutputDirectory.AutoSize = True
-        Me.LabelStepPartOutputDirectory.Location = New System.Drawing.Point(11, 313)
-        Me.LabelStepPartOutputDirectory.Name = "LabelStepPartOutputDirectory"
-        Me.LabelStepPartOutputDirectory.Size = New System.Drawing.Size(169, 17)
-        Me.LabelStepPartOutputDirectory.TabIndex = 3
-        Me.LabelStepPartOutputDirectory.Text = "Step files output directory"
-        '
-        'TextBoxStepPartOutputDirectory
-        '
-        Me.TextBoxStepPartOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepPartOutputDirectory.Location = New System.Drawing.Point(11, 332)
-        Me.TextBoxStepPartOutputDirectory.Name = "TextBoxStepPartOutputDirectory"
-        Me.TextBoxStepPartOutputDirectory.Size = New System.Drawing.Size(491, 22)
-        Me.TextBoxStepPartOutputDirectory.TabIndex = 4
-        '
-        'ButtonStepPartOutputDirectory
-        '
-        Me.ButtonStepPartOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepPartOutputDirectory.Location = New System.Drawing.Point(509, 332)
-        Me.ButtonStepPartOutputDirectory.Name = "ButtonStepPartOutputDirectory"
-        Me.ButtonStepPartOutputDirectory.Size = New System.Drawing.Size(100, 25)
-        Me.ButtonStepPartOutputDirectory.TabIndex = 5
-        Me.ButtonStepPartOutputDirectory.Text = "Browse"
-        Me.ButtonStepPartOutputDirectory.UseVisualStyleBackColor = True
-        '
-        'LabelStepSheetmetalOutputDirectory
-        '
-        Me.LabelStepSheetmetalOutputDirectory.AutoSize = True
-        Me.LabelStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 373)
-        Me.LabelStepSheetmetalOutputDirectory.Name = "LabelStepSheetmetalOutputDirectory"
-        Me.LabelStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(169, 17)
-        Me.LabelStepSheetmetalOutputDirectory.TabIndex = 7
-        Me.LabelStepSheetmetalOutputDirectory.Text = "Step files output directory"
-        '
-        'TextBoxStepSheetmetalOutputDirectory
-        '
-        Me.TextBoxStepSheetmetalOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 392)
-        Me.TextBoxStepSheetmetalOutputDirectory.Name = "TextBoxStepSheetmetalOutputDirectory"
-        Me.TextBoxStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(491, 22)
-        Me.TextBoxStepSheetmetalOutputDirectory.TabIndex = 8
-        '
-        'ButtonStepSheetmetalOutputDirectory
-        '
-        Me.ButtonStepSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(509, 392)
-        Me.ButtonStepSheetmetalOutputDirectory.Name = "ButtonStepSheetmetalOutputDirectory"
-        Me.ButtonStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(100, 25)
-        Me.ButtonStepSheetmetalOutputDirectory.TabIndex = 9
-        Me.ButtonStepSheetmetalOutputDirectory.Text = "Browse"
-        Me.ButtonStepSheetmetalOutputDirectory.UseVisualStyleBackColor = True
-        '
-        'LabelPdfDraftOutputDirectory
-        '
-        Me.LabelPdfDraftOutputDirectory.AutoSize = True
-        Me.LabelPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 313)
-        Me.LabelPdfDraftOutputDirectory.Name = "LabelPdfDraftOutputDirectory"
-        Me.LabelPdfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
-        Me.LabelPdfDraftOutputDirectory.TabIndex = 4
-        Me.LabelPdfDraftOutputDirectory.Text = "PDF files output directory"
-        '
-        'LabelDxfDraftOutputDirectory
-        '
-        Me.LabelDxfDraftOutputDirectory.AutoSize = True
-        Me.LabelDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 372)
-        Me.LabelDxfDraftOutputDirectory.Name = "LabelDxfDraftOutputDirectory"
-        Me.LabelDxfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
-        Me.LabelDxfDraftOutputDirectory.TabIndex = 5
-        Me.LabelDxfDraftOutputDirectory.Text = "DXF files output directory"
-        '
-        'TextBoxPdfDraftOutputDirectory
-        '
-        Me.TextBoxPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 332)
-        Me.TextBoxPdfDraftOutputDirectory.Name = "TextBoxPdfDraftOutputDirectory"
-        Me.TextBoxPdfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
-        Me.TextBoxPdfDraftOutputDirectory.TabIndex = 6
-        '
-        'TextBoxDxfDraftOutputDirectory
-        '
-        Me.TextBoxDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 392)
-        Me.TextBoxDxfDraftOutputDirectory.Name = "TextBoxDxfDraftOutputDirectory"
-        Me.TextBoxDxfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
-        Me.TextBoxDxfDraftOutputDirectory.TabIndex = 7
-        '
-        'ButtonPdfDraftOutputDirectory
-        '
-        Me.ButtonPdfDraftOutputDirectory.Location = New System.Drawing.Point(509, 332)
-        Me.ButtonPdfDraftOutputDirectory.Name = "ButtonPdfDraftOutputDirectory"
-        Me.ButtonPdfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
-        Me.ButtonPdfDraftOutputDirectory.TabIndex = 8
-        Me.ButtonPdfDraftOutputDirectory.Text = "Browse"
-        Me.ButtonPdfDraftOutputDirectory.UseVisualStyleBackColor = True
-        '
-        'ButtonDxfDraftOutputDirectory
-        '
-        Me.ButtonDxfDraftOutputDirectory.Location = New System.Drawing.Point(509, 392)
-        Me.ButtonDxfDraftOutputDirectory.Name = "ButtonDxfDraftOutputDirectory"
-        Me.ButtonDxfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
-        Me.ButtonDxfDraftOutputDirectory.TabIndex = 9
-        Me.ButtonDxfDraftOutputDirectory.Text = "Browse"
-        Me.ButtonDxfDraftOutputDirectory.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(657, 528)
+        Me.ClientSize = New System.Drawing.Size(657, 628)
         Me.Controls.Add(Me.ButtonProcess)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.TextBoxStatus)

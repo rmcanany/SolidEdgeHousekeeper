@@ -160,10 +160,11 @@ Public Class Form1
     Private Function CheckStartConditions() As String
         Dim msg As String = ""
         Dim SaveMsg As String = ""
+        Dim TF As Boolean
 
-        'If SEIsRunning() Then
-        '    msg += "    Close Solid Edge" + Chr(13)
-        'End If
+        If SEIsRunning() Then
+            msg += "    Close Solid Edge" + Chr(13)
+        End If
 
         If Not IsCheckedFilesToProcess() Then
             msg += "    Select an option on Files To Process" + Chr(13)
@@ -355,6 +356,18 @@ Public Class Form1
                     End If
                 End If
             End If
+            If LabelToActionDraft(Label).IncompatibleWithOtherTasks Then
+                TF = CheckedListBoxDraft.CheckedItems.Count > 1
+                TF = TF Or CheckedListBoxAssembly.CheckedItems.Count > 0
+                TF = TF Or CheckedListBoxPart.CheckedItems.Count > 0
+                TF = TF Or CheckedListBoxSheetmetal.CheckedItems.Count > 0
+
+                If TF Then
+                    If Not msg.Contains(Label + " cannot be performed with any other tasks selected") Then
+                        msg += "    " + Label + " cannot be performed with any other tasks selected"
+                    End If
+                End If
+            End If
         Next
 
         If Len(msg) <> 0 Then
@@ -434,8 +447,15 @@ Public Class Form1
         'Dim SupplementalErrorMessage As String
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
+        Dim LabelText As String = ""
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
         Dim CheckedListBoxX As CheckedListBox
+        Dim ModifiedFilename As String = ""
+        Dim OriginalFilename As String = ""
+        Dim RemnantsFilename As String = ""
+
+        Dim ActiveWindow As SolidEdgeFramework.Window
+        Dim ActiveSheetWindow As SolidEdgeDraft.SheetWindow
 
         ' Account for infrequent malfunctions on a large number of files.
         TotalAborts -= 0.1
@@ -445,7 +465,17 @@ Public Class Form1
 
         Try
             SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+            SEDoc.Activate()
             SEApp.DoIdle()
+
+            ' Maximize the window in the application
+            If Filetype = "Draft" Then
+                ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                ActiveSheetWindow.WindowState = 2
+            Else
+                ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                ActiveWindow.WindowState = 2
+            End If
 
             If Filetype = "Assembly" Then
                 CheckedListBoxX = CheckedListBoxAssembly
@@ -461,8 +491,9 @@ Public Class Form1
                 End
             End If
 
-            For Each LabelText As String In CheckedListBoxX.CheckedItems
+            For Each LabelText In CheckedListBoxX.CheckedItems
                 'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
+                'MsgBox("Trying " + LabelText + " " + Path)
 
                 If Filetype = "Assembly" Then
                     ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
@@ -483,8 +514,36 @@ Public Class Form1
                 End If
             Next
 
+            If LabelText = "Move drawing to new template" Then
+                OriginalFilename = SEDoc.FullName
+                ModifiedFilename = String.Format("{0}\{1}-Housekeeper.dft",
+                                            System.IO.Path.GetDirectoryName(SEDoc.FullName),
+                                            System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+                RemnantsFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
+                                            System.IO.Path.GetDirectoryName(SEDoc.FullName),
+                                            System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+            End If
+
             SEDoc.Close(False)
             SEApp.DoIdle()
+
+            If LabelText = "Move drawing to new template" Then
+                If ExitStatus = 0 Then
+                    System.IO.File.Delete(OriginalFilename)
+                    FileSystem.Rename(ModifiedFilename, OriginalFilename)
+                ElseIf ExitStatus = 1 Then
+                    If System.IO.File.Exists(RemnantsFilename) Then
+                        System.IO.File.Delete(RemnantsFilename)
+                    End If
+                    If System.IO.File.Exists(ModifiedFilename) Then  ' Not created if a task-generated file was processed
+                        FileSystem.Rename(OriginalFilename, RemnantsFilename)
+                        FileSystem.Rename(ModifiedFilename, OriginalFilename)
+                    End If
+                ElseIf ExitStatus = 2 Then
+                    ' Nothing was saved.  Leave SEDoc unmodified.
+                End If
+
+            End If
 
         Catch ex As Exception
             Dim AbortList As New List(Of String)
@@ -568,6 +627,9 @@ Public Class Form1
         Configuration(TextBoxStepSheetmetalOutputDirectory.Name) = TextBoxStepSheetmetalOutputDirectory.Text
         Configuration(TextBoxPdfDraftOutputDirectory.Name) = TextBoxPdfDraftOutputDirectory.Text
         Configuration(TextBoxDxfDraftOutputDirectory.Name) = TextBoxDxfDraftOutputDirectory.Text
+        'Configuration(ComboBoxPartsListStyle.Name) = ComboBoxPartsListStyle.Text
+        'Configuration(ComboBoxPartsListAutoballoon.Name) = ComboBoxPartsListAutoballoon.Text
+        'Configuration(ComboBoxPartsListCreateList.Name) = ComboBoxPartsListCreateList.Text
 
 
         ' Update file types

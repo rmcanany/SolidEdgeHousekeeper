@@ -19,6 +19,7 @@ Partial Class Form1
                 Key = KVPair.Split(("=").ToCharArray(0, 1))(0)
                 Value = KVPair.Split(("=").ToCharArray(0, 1))(1)
 
+                'MsgBox(Key + " " + Value)
                 If Key = TextBoxInputDirectory.Name Then
                     If FileIO.FileSystem.DirectoryExists(Value) Then
                         TextBoxInputDirectory.Text = Value
@@ -127,18 +128,89 @@ Partial Class Form1
                         TextBoxDxfDraftOutputDirectory.Text = ""
                     End If
 
+                    'ElseIf Key = ComboBoxPartsListStyle.Name Then
+                    '    Dim PartsListStyles As New List(Of String)
+                    '    Dim Style As String
+
+                    '    PartsListStyles = GetPartsListStyles()
+
+                    '    ComboBoxPartsListStyle.Items.Clear()
+
+                    '    For Each Style In PartsListStyles
+                    '        ComboBoxPartsListStyle.Items.Add(Style)
+                    '    Next
+
+                    '    Try
+                    '        ComboBoxPartsListStyle.SelectedItem = Value
+                    '    Catch ex As Exception
+                    '    End Try
+
+                    'ElseIf Key = ComboBoxPartsListAutoballoon.Name Then
+                    '    ComboBoxPartsListAutoballoon.Items.Clear()
+                    '    ComboBoxPartsListAutoballoon.Items.Add("True")
+                    '    ComboBoxPartsListAutoballoon.Items.Add("False")
+                    '    Try
+                    '        ComboBoxPartsListAutoballoon.SelectedItem = Value
+                    '    Catch ex As Exception
+                    '    End Try
+
+                    'ElseIf Key = ComboBoxPartsListCreateList.Name Then
+                    '    ComboBoxPartsListCreateList.Items.Clear()
+                    '    ComboBoxPartsListCreateList.Items.Add("True")
+                    '    ComboBoxPartsListCreateList.Items.Add("False")
+                    '    Try
+                    '        ComboBoxPartsListCreateList.SelectedItem = Value
+                    '    Catch ex As Exception
+                    '    End Try
 
                 Else
                     PopulateCheckboxDefault(KVPair)
                 End If
             Next
         Catch ex As Exception
+            'MsgBox("Exception")
             TextBoxInputDirectory.Text = Application.StartupPath
         End Try
 
         ReconcileFormChanges()
 
     End Sub
+
+    'Private Function GetPartsListStyles() As List(Of String)
+    '    Dim PartsListStyles As New List(Of String)
+    '    '<install dir>/Template/Reports/DraftList.txt
+    '    ' Dim InstallData As SEInstallDataLib.SEInstallData = Nothing
+    '    Dim InstallData As New SEInstallDataLib.SEInstallDataClass
+    '    Dim InstallPath As String
+    '    Dim DraftListPath As String
+    '    Dim DraftList As String() = Nothing
+    '    Dim Key As String
+    '    Dim Value As String
+    '    Dim InstallPathList As List(Of String)
+
+    '    InstallPath = InstallData.GetInstalledPath  ' "C:\Program Files\Siemens\Solid Edge 2020\Program"
+    '    ' Need to get rid of the last directory
+    '    InstallPathList = InstallPath.Split("\"c).ToList
+    '    InstallPathList.RemoveAt(InstallPathList.Count - 1)
+    '    InstallPath = String.Join("\", InstallPathList)
+    '    DraftListPath = String.Format("{0}\Template\Reports\DraftList.txt", InstallPath)
+    '    Try
+    '        DraftList = IO.File.ReadAllLines(DraftListPath)
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '    End Try
+    '    ' MsgBox(DraftListPath)
+
+    '    For Each KVPair As String In DraftList
+    '        If KVPair.Contains("CONFIGNAME") Then
+    '            Key = KVPair.Split("="c).ToList(0)
+    '            Value = KVPair.Split("="c).ToList(1)
+    '            PartsListStyles.Add(Value)
+    '        End If
+    '    Next
+    '    'MsgBox("GetPartsListStyles end")
+    '    Return PartsListStyles
+    'End Function
 
     Private Sub SaveDefaults()
         'Format Example
@@ -160,6 +232,7 @@ Partial Class Form1
         Dim msg As String
 
         Defaults.Add(TextBoxInputDirectory.Name + "=" + TextBoxInputDirectory.Text)
+        'MsgBox(TextBoxInputDirectory.Text)
         Defaults.Add(TextBoxTemplateAssembly.Name + "=" + TextBoxTemplateAssembly.Text)
         Defaults.Add(TextBoxTemplatePart.Name + "=" + TextBoxTemplatePart.Text)
         Defaults.Add(TextBoxTemplateSheetmetal.Name + "=" + TextBoxTemplateSheetmetal.Text)
@@ -175,7 +248,10 @@ Partial Class Form1
         Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
         Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
         Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
-
+        'MsgBox(ComboBoxPartsListStyle.SelectedText)
+        'Defaults.Add(ComboBoxPartsListStyle.Name + "=" + ComboBoxPartsListStyle.SelectedItem.ToString)
+        'Defaults.Add(ComboBoxPartsListAutoballoon.Name + "=" + ComboBoxPartsListAutoballoon.SelectedItem.ToString)
+        'Defaults.Add(ComboBoxPartsListCreateList.Name + "=" + ComboBoxPartsListCreateList.SelectedItem.ToString)
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="

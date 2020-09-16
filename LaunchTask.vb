@@ -203,6 +203,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateDrawingBorderFromTemplate(SEDoc, Configuration, SEApp)
                 Case "UpdateDimensionStylesFromTemplate"
                     ErrorMessage = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
+                Case "MoveDrawingToNewTemplate"
+                    ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
                 Case "FitView"
                     ErrorMessage = task.Proxy.FitView(SEDoc, Configuration, SEApp)
                 Case "SaveAsPDF"
