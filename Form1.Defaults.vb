@@ -162,6 +162,17 @@ Partial Class Form1
                     '        ComboBoxPartsListCreateList.SelectedItem = Value
                     '    Catch ex As Exception
                     '    End Try
+                ElseIf Key = TextBoxColumnWidth.Name Then
+                    If Value = "" Then
+                        TextBoxColumnWidth.Text = "5.5"
+                    Else
+                        Try
+                            TextBoxColumnWidth.Text = CStr(Value)
+                        Catch ex As Exception
+                            TextBoxColumnWidth.Text = "5.5"
+                        End Try
+                    End If
+
 
                 Else
                     PopulateCheckboxDefault(KVPair)
@@ -248,6 +259,7 @@ Partial Class Form1
         Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
         Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
         Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
+        Defaults.Add(TextBoxColumnWidth.Name + "=" + TextBoxColumnWidth.Text)
         'MsgBox(ComboBoxPartsListStyle.SelectedText)
         'Defaults.Add(ComboBoxPartsListStyle.Name + "=" + ComboBoxPartsListStyle.SelectedItem.ToString)
         'Defaults.Add(ComboBoxPartsListAutoballoon.Name + "=" + ComboBoxPartsListAutoballoon.SelectedItem.ToString)

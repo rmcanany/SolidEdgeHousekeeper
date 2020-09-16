@@ -15,6 +15,7 @@ Public Class Form1
 
     Private FilesToProcessTotal As Integer
     Private FilesToProcessCompleted As Integer
+    Dim StartTime As DateTime
 
     Private StopProcess As Boolean
 
@@ -72,9 +73,10 @@ Public Class Form1
 
     Private Sub Process()
         Dim ErrorMessage As String
-        Dim StartTime As DateTime = Now
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
+
+        StartTime = Now
 
         SaveDefaults()
 
@@ -97,7 +99,6 @@ Public Class Form1
 
         OleMessageFilter.Register()
 
-        FilesToProcessCompleted = 0
         LogfileSetName()
 
         TotalAborts = 0
@@ -386,6 +387,25 @@ Public Class Form1
         Return SaveMsg + msg
     End Function
 
+    Private Sub UpdateTimeRemaining()
+        Dim ElapsedTime As Double
+        Dim RemainingTime As Double
+        Dim TotalEstimatedTime As Double
+
+        If FilesToProcessCompleted > 2 Then
+            ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+
+            TotalEstimatedTime = ElapsedTime * CDbl(FilesToProcessTotal) / CDbl(FilesToProcessCompleted)
+            RemainingTime = TotalEstimatedTime - ElapsedTime
+
+            If RemainingTime < 60 Then
+                LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} min.", RemainingTime.ToString("0.0"))
+            Else
+                LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} hr.", (RemainingTime / 60).ToString("0.0"))
+            End If
+        End If
+    End Sub
+
     Private Sub ProcessFiles(ByVal Filetype As String)
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
@@ -561,6 +581,8 @@ Public Class Form1
             ErrorMessagesCombined("Error processing file") = AbortList
         End Try
 
+        UpdateTimeRemaining()
+
         Return ErrorMessagesCombined
     End Function
 
@@ -692,7 +714,7 @@ Public Class Form1
                     End If
                     ListBoxFiles.Items.Add(BaseFilename)
                 Next
-                ListBoxFiles.ColumnWidth = CInt(5.5 * MaxFilenameLength)
+                ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
                 ' MsgBox(MaxFilenameLength)
             End If
         End If
@@ -917,6 +939,13 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-
-
+    Private Sub TextBoxColumnWidth_TextChanged(sender As Object, e As EventArgs) Handles TextBoxColumnWidth.TextChanged
+        Dim ColCharPixels As Double = 5.5
+        Try
+            ColCharPixels = CDbl(TextBoxColumnWidth.Text)
+        Catch ex As Exception
+            TextBoxColumnWidth.Text = CStr(ColCharPixels)
+        End Try
+        ReconcileFormChanges()
+    End Sub
 End Class

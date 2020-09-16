@@ -25,6 +25,8 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.TextBoxColumnWidth = New System.Windows.Forms.TextBox()
+        Me.LabelColumnWidth = New System.Windows.Forms.Label()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.GroupBoxFileTypes = New System.Windows.Forms.GroupBox()
         Me.CheckBoxFileTypeDraft = New System.Windows.Forms.CheckBox()
@@ -100,6 +102,7 @@ Partial Class Form1
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
+        Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFileTypes.SuspendLayout()
@@ -135,6 +138,8 @@ Partial Class Form1
         '
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageGeneral.Controls.Add(Me.TextBoxColumnWidth)
+        Me.TabPageGeneral.Controls.Add(Me.LabelColumnWidth)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxFileTypes)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxFilesToProcess)
@@ -149,6 +154,25 @@ Partial Class Form1
         Me.TabPageGeneral.Size = New System.Drawing.Size(643, 521)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
+        '
+        'TextBoxColumnWidth
+        '
+        Me.TextBoxColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(15, 475)
+        Me.TextBoxColumnWidth.Name = "TextBoxColumnWidth"
+        Me.TextBoxColumnWidth.Size = New System.Drawing.Size(75, 22)
+        Me.TextBoxColumnWidth.TabIndex = 11
+        Me.TextBoxColumnWidth.Text = "5.5"
+        '
+        'LabelColumnWidth
+        '
+        Me.LabelColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelColumnWidth.AutoSize = True
+        Me.LabelColumnWidth.Location = New System.Drawing.Point(100, 477)
+        Me.LabelColumnWidth.Name = "LabelColumnWidth"
+        Me.LabelColumnWidth.Size = New System.Drawing.Size(204, 17)
+        Me.LabelColumnWidth.TabIndex = 9
+        Me.LabelColumnWidth.Text = "Column width (pixels/character)"
         '
         'CheckBoxWarnSave
         '
@@ -918,7 +942,7 @@ Partial Class Form1
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.Size = New System.Drawing.Size(516, 1600)
+        Me.TextBoxReadme.Size = New System.Drawing.Size(474, 1600)
         Me.TextBoxReadme.TabIndex = 0
         Me.TextBoxReadme.Text = "Populated at build time."
         '
@@ -972,11 +996,22 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog.Title = "Select Folder"
         Me.FakeFolderBrowserDialog.ValidateNames = False
         '
+        'LabelTimeRemaining
+        '
+        Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelTimeRemaining.AutoSize = True
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(5, 585)
+        Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
+        Me.LabelTimeRemaining.Size = New System.Drawing.Size(166, 17)
+        Me.LabelTimeRemaining.TabIndex = 4
+        Me.LabelTimeRemaining.Text = "Estimated time remaining"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(657, 628)
+        Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.ButtonProcess)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.TextBoxStatus)
@@ -1085,4 +1120,7 @@ Partial Class Form1
     Friend WithEvents TextBoxPdfDraftOutputDirectory As TextBox
     Friend WithEvents LabelDxfDraftOutputDirectory As Label
     Friend WithEvents LabelPdfDraftOutputDirectory As Label
+    Friend WithEvents TextBoxColumnWidth As TextBox
+    Friend WithEvents LabelColumnWidth As Label
+    Friend WithEvents LabelTimeRemaining As Label
 End Class
