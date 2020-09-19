@@ -942,7 +942,7 @@ Partial Class Form1
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.Size = New System.Drawing.Size(474, 1600)
+        Me.TextBoxReadme.Size = New System.Drawing.Size(550, 1600)
         Me.TextBoxReadme.TabIndex = 0
         Me.TextBoxReadme.Text = "Populated at build time."
         '
@@ -1002,9 +1002,8 @@ Partial Class Form1
         Me.LabelTimeRemaining.AutoSize = True
         Me.LabelTimeRemaining.Location = New System.Drawing.Point(5, 585)
         Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
-        Me.LabelTimeRemaining.Size = New System.Drawing.Size(166, 17)
+        Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 17)
         Me.LabelTimeRemaining.TabIndex = 4
-        Me.LabelTimeRemaining.Text = "Estimated time remaining"
         '
         'Form1
         '

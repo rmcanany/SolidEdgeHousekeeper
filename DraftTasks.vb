@@ -1218,7 +1218,7 @@ Public Class DraftTasks
                                    For Each BackgroundSheet In GetSheets(SourceDoc, "Background")
                                        If BackgroundSheet.DrawingViews.Count > 0 Then
                                            ExitStatus = 1
-                                           msg2 = String.Format("Drawing view found on sheet '{0}'.  Moved to sheet '{1}'.", BackgroundSheet.Name, DummyName)
+                                           msg2 = String.Format("Drawing view found on background '{0}'.  Moved to sheet '{1}'.", BackgroundSheet.Name, DummyName)
                                            ErrorMessageList.Add(msg2)
                                            msg2 = "Verify all items were transferred from "
                                            msg2 += String.Format("{0}", System.IO.Path.GetFileName(GetRemnantsDocFilename(SEDoc)))
@@ -1517,6 +1517,7 @@ Public Class DraftTasks
         Return ErrorMessage
     End Function
 
+
     Public Function SaveAsDXF(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1568,6 +1569,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
     Private Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)

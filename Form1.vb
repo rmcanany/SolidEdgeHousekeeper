@@ -399,7 +399,11 @@ Public Class Form1
             RemainingTime = TotalEstimatedTime - ElapsedTime
 
             If RemainingTime < 60 Then
-                LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} min.", RemainingTime.ToString("0.0"))
+                If RemainingTime < 0.1 Then
+                    LabelTimeRemaining.Text = ""
+                Else
+                    LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} min.", RemainingTime.ToString("0.0"))
+                End If
             Else
                 LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} hr.", (RemainingTime / 60).ToString("0.0"))
             End If
