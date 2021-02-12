@@ -458,7 +458,7 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         msg = "The other option is to use the latest released version here "
-        msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.5  "
+        msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.6  "
         msg += "From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  "
         msg += "Choose a convenient location on your machine.  "
         msg += "Extract the zip file (probably by right-clicking and selecting Extract All).  "
