@@ -11,7 +11,7 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.5  From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.6  From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
 On each file type's tab, select which errors to detect.  On the General tab, browse to the desired input folder, then select the desired directory search option.  
