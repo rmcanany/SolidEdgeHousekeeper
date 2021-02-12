@@ -517,13 +517,16 @@ Public Class SheetmetalTasks
 
         Dim msg As String = ""
 
-        If Not FileIO.FileSystem.DirectoryExists(Configuration("TextBoxLaserOutputDirectory")) Then
-            msg = "Laser output directory not found: '" + Configuration("TextBoxLaserOutputDirectory") + "'.  "
-            msg += "Please select a valid directory on the Sheetmetal Tab." + Chr(13)
-            msg += "Exiting..."
-            MsgBox(msg)
-            SEApp.Quit()
-            End
+        ' CheckBoxLaserOutputDirectory
+        If Configuration("CheckBoxLaserOutputDirectory") = "False" Then
+            If Not FileIO.FileSystem.DirectoryExists(Configuration("TextBoxLaserOutputDirectory")) Then
+                msg = "Laser output directory not found: '" + Configuration("TextBoxLaserOutputDirectory") + "'.  "
+                msg += "Please select a valid directory on the Sheetmetal Tab." + Chr(13)
+                msg += "Exiting..."
+                MsgBox(msg)
+                SEApp.Quit()
+                End
+            End If
         End If
 
         DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
@@ -537,9 +540,13 @@ Public Class SheetmetalTasks
         End If
 
         SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
-
-        DXFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".dxf")
-        PDFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".pdf")
+        If Configuration("CheckBoxLaserOutputDirectory") = "False" Then
+            DXFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".dxf")
+            PDFFilename = Configuration("TextBoxLaserOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".pdf")
+        Else
+            DXFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dxf")
+            PDFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".pdf")
+        End If
 
         ErrorMessageTemp = FlatPatternMissingOrOutOfDate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
         If ExitStatus = 0 Then
@@ -942,7 +949,12 @@ Public Class SheetmetalTasks
 
         SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
-        STEPFilename = Configuration("TextBoxStepSheetmetalOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".stp")
+        ' CheckBoxStepSheetmetalOutputDirectory
+        If Configuration("CheckBoxStepSheetmetalOutputDirectory") = "False" Then
+            STEPFilename = Configuration("TextBoxStepSheetmetalOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".stp")
+        Else
+            STEPFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".stp")
+        End If
 
         'Capturing a fault to update ExitStatus
         Try

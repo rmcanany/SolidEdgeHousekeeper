@@ -2,7 +2,7 @@ Option Strict On
 
 Partial Class Form1
 
-    Private Function TruncateFullPath(ByVal Path As String) As String
+    Public Function TruncateFullPath(ByVal Path As String) As String
         Dim Length As Integer = Len(TextBoxInputDirectory.Text)
         Dim NewPath As String
 

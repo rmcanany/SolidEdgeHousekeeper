@@ -2,9 +2,104 @@ Option Strict On
 
 Partial Class Form1
 
+    Private Sub UpdateListBoxFiles()
+        ' Update ListBoxFiles on Form1
+
+        Dim FoundFiles As IReadOnlyCollection(Of String)
+        Dim FoundFile As String
+        Dim ActiveFileExtensionsList As New List(Of String)
+        Dim tf As Boolean
+
+        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked = False
+        tf = tf And RadioButtonFilesDirectoryOnly.Checked = False
+        tf = tf And RadioButtonTopLevelAssembly.Checked = False
+        If tf Then
+            MsgBox("Select an option for files to process")
+            Exit Sub
+        End If
+
+        StopProcess = False
+        ButtonCancel.Text = "Stop"
+
+        ActiveFileExtensionsList.Add("*.asm")
+        ActiveFileExtensionsList.Add("*.par")
+        ActiveFileExtensionsList.Add("*.psm")
+        ActiveFileExtensionsList.Add("*.dft")
+
+        ListBoxFiles.Items.Clear()
+
+        If ActiveFileExtensionsList.Count > 0 Then
+            If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
+                If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
+                    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                                    FileIO.SearchOption.SearchAllSubDirectories,
+                                    ActiveFileExtensionsList.ToArray)
+
+                ElseIf RadioButtonFilesDirectoryOnly.Checked Then
+                    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                                    FileIO.SearchOption.SearchTopLevelOnly,
+                                    ActiveFileExtensionsList.ToArray)
+
+                ElseIf RadioButtonTopLevelAssembly.Checked Then
+                    Dim TLAU As New TopLevelAssemblyUtilities(Me)
+
+                    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                    If RadioButtonTLABottomUp.Checked Then
+                        FoundFiles = TLAU.GetLinks("BottomUp", TextBoxInputDirectory.Text,
+                                               TextBoxTopLevelAssembly.Text,
+                                               ActiveFileExtensionsList)
+                    Else
+                        FoundFiles = TLAU.GetLinks("TopDown", TextBoxInputDirectory.Text,
+                                               TextBoxTopLevelAssembly.Text,
+                                               ActiveFileExtensionsList,
+                                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                    End If
+
+                    TextBoxStatus.Text = ""
+
+                Else  ' No RadioButton on FilesToProcess checked
+                    FoundFiles = Nothing
+                End If
+
+                If Not FoundFiles Is Nothing Then
+
+                    If CheckBoxEnablePropertyFilter.Checked Then
+                        System.Threading.Thread.Sleep(1000)
+                        Dim PropertyFilter As New PropertyFilter(Me)
+                        FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
+                    End If
+
+                    Dim MaxFilenameLength As Integer
+                    MaxFilenameLength = 0
+                    Dim BaseFilename As String
+                    For Each FoundFile In FoundFiles
+                        BaseFilename = FoundFile.Replace(TextBoxInputDirectory.Text, "")
+                        'BaseFilename = System.IO.Path.GetFileName(FoundFile)
+                        If Len(BaseFilename) > MaxFilenameLength Then
+                            MaxFilenameLength = Len(BaseFilename)
+                        End If
+                        ListBoxFiles.Items.Add(BaseFilename)
+                    Next
+                    ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
+                    ' MsgBox(MaxFilenameLength)
+
+                    TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
+
+                End If
+            End If
+        End If
+
+        StopProcess = False
+        ButtonCancel.Text = "Cancel"
+
+
+
+    End Sub
+
     Private Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
         ' Build up list of files to process depending on which option was selected.
-        Dim FoundFiles As ObjectModel.ReadOnlyCollection(Of String)
+        ' Dim FoundFiles As ObjectModel.ReadOnlyCollection(Of String)
         Dim FoundFilesArray As String() = {}
         Dim FoundFilesList As New List(Of String)
         Dim FileExtension As String = FileWildcard.Replace("*", "")
@@ -12,30 +107,37 @@ Partial Class Form1
 
         TextBoxStatus.Text = "Getting files..."
 
-        If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
-                                    FileIO.SearchOption.SearchAllSubDirectories,
-                                    FileWildcard)
-            FoundFilesList = FoundFiles.ToList
-        End If
+        If ListBoxFiles.SelectedItems.Count > 0 Then
+            For i As Integer = 0 To ListBoxFiles.SelectedItems.Count - 1
+                Filename = CType(ListBoxFiles.SelectedItems(i), String)
+                If System.IO.Path.GetExtension(Filename) = FileExtension Then
+                    Filename = TextBoxInputDirectory.Text + Filename
+                    FoundFilesList.Add(Filename)
+                End If
+            Next
+        Else
+            For i As Integer = 0 To ListBoxFiles.Items.Count - 1
+                Filename = CType(ListBoxFiles.Items(i), String)
+                If System.IO.Path.GetExtension(Filename) = FileExtension Then
+                    'Filename = TextBoxInputDirectory.Text + "\" + Filename
+                    Filename = TextBoxInputDirectory.Text + Filename
+                    FoundFilesList.Add(Filename)
+                End If
+            Next
+            'If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
+            '    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+            '                        FileIO.SearchOption.SearchAllSubDirectories,
+            '                        FileWildcard)
+            '    FoundFilesList = FoundFiles.ToList
+            'End If
 
-        If RadioButtonFilesDirectoryOnly.Checked Then
-            FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
-                                    FileIO.SearchOption.SearchTopLevelOnly,
-                                    FileWildcard)
-            FoundFilesList = FoundFiles.ToList
-        End If
+            'If RadioButtonFilesDirectoryOnly.Checked Then
+            '    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+            '                        FileIO.SearchOption.SearchTopLevelOnly,
+            '                        FileWildcard)
+            '    FoundFilesList = FoundFiles.ToList
+            'End If
 
-        If RadioButtonFilesSelected.Checked Then
-            If ListBoxFiles.SelectedItems.Count > 0 Then
-                For i As Integer = 0 To ListBoxFiles.SelectedItems.Count - 1
-                    Filename = CType(ListBoxFiles.SelectedItems(i), String)
-                    If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                        Filename = TextBoxInputDirectory.Text + "\" + Filename
-                        FoundFilesList.Add(Filename)
-                    End If
-                Next
-            End If
         End If
 
         Return FoundFilesList
@@ -44,16 +146,16 @@ Partial Class Form1
     Private Function GetTotalFilesToProcess() As Integer
         Dim Count As Integer = 0
 
-        If CheckBoxFileTypeAssembly.Checked Then
+        If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
             Count += GetFileNames("*.asm").Count
         End If
-        If CheckBoxFileTypePart.Checked Then
+        If CheckedListBoxPart.CheckedItems.Count > 0 Then
             Count += GetFileNames("*.par").Count
         End If
-        If CheckBoxFileTypeSheetmetal.Checked Then
+        If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
             Count += GetFileNames("*.psm").Count
         End If
-        If CheckBoxFileTypeDraft.Checked Then
+        If CheckedListBoxDraft.CheckedItems.Count > 0 Then
             Count += GetFileNames("*.dft").Count
         End If
 
@@ -65,7 +167,7 @@ Partial Class Form1
 
         TF = RadioButtonFilesDirectoriesAndSubdirectories.Checked
         TF = TF Or RadioButtonFilesDirectoryOnly.Checked
-        TF = TF Or RadioButtonFilesSelected.Checked
+        TF = TF Or RadioButtonTopLevelAssembly.Checked
 
         Return TF
     End Function

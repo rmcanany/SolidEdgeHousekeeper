@@ -794,7 +794,12 @@ Public Class PartTasks
 
         PartBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
-        STEPFilename = Configuration("TextBoxStepPartOutputDirectory") + "\" + System.IO.Path.ChangeExtension(PartBaseFilename, ".stp")
+        ' CheckBoxStepPartOutputDirectory
+        If Configuration("CheckBoxStepPartOutputDirectory") = "False" Then
+            STEPFilename = Configuration("TextBoxStepPartOutputDirectory") + "\" + System.IO.Path.ChangeExtension(PartBaseFilename, ".stp")
+        Else
+            STEPFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".stp")
+        End If
 
         'Capturing a fault to update ExitStatus
         Try

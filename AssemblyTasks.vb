@@ -657,7 +657,12 @@ Public Class AssemblyTasks
 
         AssemblyBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
-        STEPFilename = Configuration("TextBoxStepAssemblyOutputDirectory") + "\" + System.IO.Path.ChangeExtension(AssemblyBaseFilename, ".stp")
+        ' CheckBoxStepAssemblyOutputDirectory
+        If Configuration("CheckBoxStepAssemblyOutputDirectory") = "False" Then
+            STEPFilename = Configuration("TextBoxStepAssemblyOutputDirectory") + "\" + System.IO.Path.ChangeExtension(AssemblyBaseFilename, ".stp")
+        Else
+            STEPFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".stp")
+        End If
 
         'Capturing a fault to update ExitStatus
         Try

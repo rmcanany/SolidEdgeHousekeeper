@@ -25,16 +25,17 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxEnablePropertyFilter = New System.Windows.Forms.CheckBox()
+        Me.ButtonUpdateListBoxFiles = New System.Windows.Forms.Button()
+        Me.ButtonPropertyFilter = New System.Windows.Forms.Button()
+        Me.ButtonTopLevelAssembly = New System.Windows.Forms.Button()
+        Me.LabelTopLevelAssembly = New System.Windows.Forms.Label()
+        Me.TextBoxTopLevelAssembly = New System.Windows.Forms.TextBox()
+        Me.LabelListboxFiles = New System.Windows.Forms.Label()
         Me.TextBoxColumnWidth = New System.Windows.Forms.TextBox()
         Me.LabelColumnWidth = New System.Windows.Forms.Label()
-        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
-        Me.GroupBoxFileTypes = New System.Windows.Forms.GroupBox()
-        Me.CheckBoxFileTypeDraft = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFileTypeSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFileTypePart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFileTypeAssembly = New System.Windows.Forms.CheckBox()
         Me.GroupBoxFilesToProcess = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonFilesSelected = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonTopLevelAssembly = New System.Windows.Forms.RadioButton()
         Me.RadioButtonFilesDirectoryOnly = New System.Windows.Forms.RadioButton()
         Me.RadioButtonFilesDirectoriesAndSubdirectories = New System.Windows.Forms.RadioButton()
         Me.ListBoxFiles = New System.Windows.Forms.ListBox()
@@ -42,18 +43,22 @@ Partial Class Form1
         Me.TextBoxInputDirectory = New System.Windows.Forms.TextBox()
         Me.ButtonInputDirectory = New System.Windows.Forms.Button()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.CheckBoxStepAssemblyOutputDirectory = New System.Windows.Forms.CheckBox()
         Me.ButtonStepAssemblyOutputDirectory = New System.Windows.Forms.Button()
         Me.TextBoxStepAssemblyOutputDirectory = New System.Windows.Forms.TextBox()
         Me.LabelStepAssemblyOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.CheckBoxStepPartOutputDirectory = New System.Windows.Forms.CheckBox()
         Me.ButtonStepPartOutputDirectory = New System.Windows.Forms.Button()
         Me.TextBoxStepPartOutputDirectory = New System.Windows.Forms.TextBox()
         Me.LabelStepPartOutputDirectory = New System.Windows.Forms.Label()
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.CheckBoxStepSheetmetalOutputDirectory = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxLaserOutputDirectory = New System.Windows.Forms.CheckBox()
         Me.ButtonStepSheetmetalOutputDirectory = New System.Windows.Forms.Button()
         Me.TextBoxStepSheetmetalOutputDirectory = New System.Windows.Forms.TextBox()
         Me.LabelStepSheetmetalOutputDirectory = New System.Windows.Forms.Label()
@@ -63,6 +68,8 @@ Partial Class Form1
         Me.LabelLaserOutputDirectory = New System.Windows.Forms.Label()
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
+        Me.CheckBoxDxfDraftOutputDirectory = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPdfDraftOutputDirectory = New System.Windows.Forms.CheckBox()
         Me.ButtonDxfDraftOutputDirectory = New System.Windows.Forms.Button()
         Me.ButtonPdfDraftOutputDirectory = New System.Windows.Forms.Button()
         Me.TextBoxDxfDraftOutputDirectory = New System.Windows.Forms.TextBox()
@@ -72,6 +79,13 @@ Partial Class Form1
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
+        Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
+        Me.GroupBoxTLAOptions = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxTLAReportUnrelatedFiles = New System.Windows.Forms.CheckBox()
+        Me.RadioButtonTLATopDown = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonTLABottomUp = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.TextBoxRestartAfter = New System.Windows.Forms.TextBox()
         Me.LabelRestartAfter = New System.Windows.Forms.Label()
         Me.TextBoxPartNumberPropertyName = New System.Windows.Forms.TextBox()
@@ -105,13 +119,13 @@ Partial Class Form1
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
-        Me.GroupBoxFileTypes.SuspendLayout()
         Me.GroupBoxFilesToProcess.SuspendLayout()
         Me.TabPageAssembly.SuspendLayout()
         Me.TabPagePart.SuspendLayout()
         Me.TabPageSheetmetal.SuspendLayout()
         Me.TabPageDraft.SuspendLayout()
         Me.TabPageConfiguration.SuspendLayout()
+        Me.GroupBoxTLAOptions.SuspendLayout()
         Me.TabPageReadme.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -131,17 +145,22 @@ Partial Class Form1
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(651, 550)
+        Me.TabControl1.Size = New System.Drawing.Size(651, 750)
         Me.TabControl1.TabIndex = 0
         '
         'TabPageGeneral
         '
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxEnablePropertyFilter)
+        Me.TabPageGeneral.Controls.Add(Me.ButtonUpdateListBoxFiles)
+        Me.TabPageGeneral.Controls.Add(Me.ButtonPropertyFilter)
+        Me.TabPageGeneral.Controls.Add(Me.ButtonTopLevelAssembly)
+        Me.TabPageGeneral.Controls.Add(Me.LabelTopLevelAssembly)
+        Me.TabPageGeneral.Controls.Add(Me.TextBoxTopLevelAssembly)
+        Me.TabPageGeneral.Controls.Add(Me.LabelListboxFiles)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxColumnWidth)
         Me.TabPageGeneral.Controls.Add(Me.LabelColumnWidth)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
-        Me.TabPageGeneral.Controls.Add(Me.GroupBoxFileTypes)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxFilesToProcess)
         Me.TabPageGeneral.Controls.Add(Me.ListBoxFiles)
         Me.TabPageGeneral.Controls.Add(Me.LabelInputDirectory)
@@ -151,14 +170,83 @@ Partial Class Form1
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(643, 721)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
+        '
+        'CheckBoxEnablePropertyFilter
+        '
+        Me.CheckBoxEnablePropertyFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBoxEnablePropertyFilter.AutoSize = True
+        Me.CheckBoxEnablePropertyFilter.Location = New System.Drawing.Point(15, 690)
+        Me.CheckBoxEnablePropertyFilter.Name = "CheckBoxEnablePropertyFilter"
+        Me.CheckBoxEnablePropertyFilter.Size = New System.Drawing.Size(162, 21)
+        Me.CheckBoxEnablePropertyFilter.TabIndex = 20
+        Me.CheckBoxEnablePropertyFilter.Text = "Enable property filter"
+        Me.CheckBoxEnablePropertyFilter.UseVisualStyleBackColor = True
+        '
+        'ButtonUpdateListBoxFiles
+        '
+        Me.ButtonUpdateListBoxFiles.Location = New System.Drawing.Point(15, 70)
+        Me.ButtonUpdateListBoxFiles.Name = "ButtonUpdateListBoxFiles"
+        Me.ButtonUpdateListBoxFiles.Size = New System.Drawing.Size(125, 25)
+        Me.ButtonUpdateListBoxFiles.TabIndex = 19
+        Me.ButtonUpdateListBoxFiles.Text = "Update File List"
+        Me.ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
+        '
+        'ButtonPropertyFilter
+        '
+        Me.ButtonPropertyFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPropertyFilter.Enabled = False
+        Me.ButtonPropertyFilter.Location = New System.Drawing.Point(200, 690)
+        Me.ButtonPropertyFilter.Name = "ButtonPropertyFilter"
+        Me.ButtonPropertyFilter.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonPropertyFilter.TabIndex = 18
+        Me.ButtonPropertyFilter.Text = "Configure"
+        Me.ButtonPropertyFilter.UseVisualStyleBackColor = True
+        '
+        'ButtonTopLevelAssembly
+        '
+        Me.ButtonTopLevelAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonTopLevelAssembly.Location = New System.Drawing.Point(525, 660)
+        Me.ButtonTopLevelAssembly.Name = "ButtonTopLevelAssembly"
+        Me.ButtonTopLevelAssembly.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonTopLevelAssembly.TabIndex = 15
+        Me.ButtonTopLevelAssembly.Text = "Browse"
+        Me.ButtonTopLevelAssembly.UseVisualStyleBackColor = True
+        '
+        'LabelTopLevelAssembly
+        '
+        Me.LabelTopLevelAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelTopLevelAssembly.AutoSize = True
+        Me.LabelTopLevelAssembly.Location = New System.Drawing.Point(15, 635)
+        Me.LabelTopLevelAssembly.Name = "LabelTopLevelAssembly"
+        Me.LabelTopLevelAssembly.Size = New System.Drawing.Size(129, 17)
+        Me.LabelTopLevelAssembly.TabIndex = 14
+        Me.LabelTopLevelAssembly.Text = "Top level assembly"
+        '
+        'TextBoxTopLevelAssembly
+        '
+        Me.TextBoxTopLevelAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxTopLevelAssembly.Location = New System.Drawing.Point(15, 660)
+        Me.TextBoxTopLevelAssembly.Name = "TextBoxTopLevelAssembly"
+        Me.TextBoxTopLevelAssembly.Size = New System.Drawing.Size(500, 22)
+        Me.TextBoxTopLevelAssembly.TabIndex = 13
+        '
+        'LabelListboxFiles
+        '
+        Me.LabelListboxFiles.AutoSize = True
+        Me.LabelListboxFiles.Location = New System.Drawing.Point(196, 73)
+        Me.LabelListboxFiles.Name = "LabelListboxFiles"
+        Me.LabelListboxFiles.Size = New System.Drawing.Size(348, 17)
+        Me.LabelListboxFiles.TabIndex = 12
+        Me.LabelListboxFiles.Text = "Select file(s) to process OR Select none to process all"
         '
         'TextBoxColumnWidth
         '
         Me.TextBoxColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(15, 475)
+        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(10, 550)
         Me.TextBoxColumnWidth.Name = "TextBoxColumnWidth"
         Me.TextBoxColumnWidth.Size = New System.Drawing.Size(75, 22)
         Me.TextBoxColumnWidth.TabIndex = 11
@@ -168,120 +256,42 @@ Partial Class Form1
         '
         Me.LabelColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelColumnWidth.AutoSize = True
-        Me.LabelColumnWidth.Location = New System.Drawing.Point(100, 477)
+        Me.LabelColumnWidth.Location = New System.Drawing.Point(96, 555)
         Me.LabelColumnWidth.Name = "LabelColumnWidth"
         Me.LabelColumnWidth.Size = New System.Drawing.Size(204, 17)
         Me.LabelColumnWidth.TabIndex = 9
         Me.LabelColumnWidth.Text = "Column width (pixels/character)"
         '
-        'CheckBoxWarnSave
-        '
-        Me.CheckBoxWarnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxWarnSave.AutoSize = True
-        Me.CheckBoxWarnSave.Checked = True
-        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(340, 334)
-        Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(225, 21)
-        Me.CheckBoxWarnSave.TabIndex = 8
-        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
-        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
-        '
-        'GroupBoxFileTypes
-        '
-        Me.GroupBoxFileTypes.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypeDraft)
-        Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypeSheetmetal)
-        Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypePart)
-        Me.GroupBoxFileTypes.Controls.Add(Me.CheckBoxFileTypeAssembly)
-        Me.GroupBoxFileTypes.Location = New System.Drawing.Point(325, 199)
-        Me.GroupBoxFileTypes.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.GroupBoxFileTypes.Name = "GroupBoxFileTypes"
-        Me.GroupBoxFileTypes.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.GroupBoxFileTypes.Size = New System.Drawing.Size(251, 126)
-        Me.GroupBoxFileTypes.TabIndex = 7
-        Me.GroupBoxFileTypes.TabStop = False
-        Me.GroupBoxFileTypes.Text = "File Types"
-        '
-        'CheckBoxFileTypeDraft
-        '
-        Me.CheckBoxFileTypeDraft.AutoSize = True
-        Me.CheckBoxFileTypeDraft.Enabled = False
-        Me.CheckBoxFileTypeDraft.Location = New System.Drawing.Point(15, 100)
-        Me.CheckBoxFileTypeDraft.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.CheckBoxFileTypeDraft.Name = "CheckBoxFileTypeDraft"
-        Me.CheckBoxFileTypeDraft.Size = New System.Drawing.Size(55, 21)
-        Me.CheckBoxFileTypeDraft.TabIndex = 7
-        Me.CheckBoxFileTypeDraft.Text = "*.dft"
-        Me.CheckBoxFileTypeDraft.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFileTypeSheetmetal
-        '
-        Me.CheckBoxFileTypeSheetmetal.AutoSize = True
-        Me.CheckBoxFileTypeSheetmetal.Enabled = False
-        Me.CheckBoxFileTypeSheetmetal.Location = New System.Drawing.Point(15, 75)
-        Me.CheckBoxFileTypeSheetmetal.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.CheckBoxFileTypeSheetmetal.Name = "CheckBoxFileTypeSheetmetal"
-        Me.CheckBoxFileTypeSheetmetal.Size = New System.Drawing.Size(65, 21)
-        Me.CheckBoxFileTypeSheetmetal.TabIndex = 6
-        Me.CheckBoxFileTypeSheetmetal.Text = "*.psm"
-        Me.CheckBoxFileTypeSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFileTypePart
-        '
-        Me.CheckBoxFileTypePart.AutoSize = True
-        Me.CheckBoxFileTypePart.Enabled = False
-        Me.CheckBoxFileTypePart.Location = New System.Drawing.Point(15, 50)
-        Me.CheckBoxFileTypePart.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.CheckBoxFileTypePart.Name = "CheckBoxFileTypePart"
-        Me.CheckBoxFileTypePart.Size = New System.Drawing.Size(60, 21)
-        Me.CheckBoxFileTypePart.TabIndex = 5
-        Me.CheckBoxFileTypePart.Text = "*.par"
-        Me.CheckBoxFileTypePart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFileTypeAssembly
-        '
-        Me.CheckBoxFileTypeAssembly.AutoSize = True
-        Me.CheckBoxFileTypeAssembly.Enabled = False
-        Me.CheckBoxFileTypeAssembly.Location = New System.Drawing.Point(15, 25)
-        Me.CheckBoxFileTypeAssembly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.CheckBoxFileTypeAssembly.Name = "CheckBoxFileTypeAssembly"
-        Me.CheckBoxFileTypeAssembly.Size = New System.Drawing.Size(65, 21)
-        Me.CheckBoxFileTypeAssembly.TabIndex = 4
-        Me.CheckBoxFileTypeAssembly.Text = "*.asm"
-        Me.CheckBoxFileTypeAssembly.UseVisualStyleBackColor = True
-        '
         'GroupBoxFilesToProcess
         '
-        Me.GroupBoxFilesToProcess.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesSelected)
+        Me.GroupBoxFilesToProcess.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonTopLevelAssembly)
         Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoryOnly)
         Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoriesAndSubdirectories)
-        Me.GroupBoxFilesToProcess.Location = New System.Drawing.Point(325, 75)
+        Me.GroupBoxFilesToProcess.Location = New System.Drawing.Point(15, 580)
         Me.GroupBoxFilesToProcess.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.GroupBoxFilesToProcess.Name = "GroupBoxFilesToProcess"
         Me.GroupBoxFilesToProcess.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.GroupBoxFilesToProcess.Size = New System.Drawing.Size(251, 100)
+        Me.GroupBoxFilesToProcess.Size = New System.Drawing.Size(605, 50)
         Me.GroupBoxFilesToProcess.TabIndex = 6
         Me.GroupBoxFilesToProcess.TabStop = False
-        Me.GroupBoxFilesToProcess.Text = "Search Type"
+        Me.GroupBoxFilesToProcess.Text = "Files to process"
         '
-        'RadioButtonFilesSelected
+        'RadioButtonTopLevelAssembly
         '
-        Me.RadioButtonFilesSelected.AutoSize = True
-        Me.RadioButtonFilesSelected.Location = New System.Drawing.Point(15, 75)
-        Me.RadioButtonFilesSelected.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.RadioButtonFilesSelected.Name = "RadioButtonFilesSelected"
-        Me.RadioButtonFilesSelected.Size = New System.Drawing.Size(84, 21)
-        Me.RadioButtonFilesSelected.TabIndex = 2
-        Me.RadioButtonFilesSelected.Text = "Selected"
-        Me.RadioButtonFilesSelected.UseVisualStyleBackColor = True
+        Me.RadioButtonTopLevelAssembly.AutoSize = True
+        Me.RadioButtonTopLevelAssembly.Location = New System.Drawing.Point(400, 25)
+        Me.RadioButtonTopLevelAssembly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.RadioButtonTopLevelAssembly.Name = "RadioButtonTopLevelAssembly"
+        Me.RadioButtonTopLevelAssembly.Size = New System.Drawing.Size(150, 21)
+        Me.RadioButtonTopLevelAssembly.TabIndex = 2
+        Me.RadioButtonTopLevelAssembly.Text = "Top level assembly"
+        Me.RadioButtonTopLevelAssembly.UseVisualStyleBackColor = True
         '
         'RadioButtonFilesDirectoryOnly
         '
         Me.RadioButtonFilesDirectoryOnly.AutoSize = True
-        Me.RadioButtonFilesDirectoryOnly.Location = New System.Drawing.Point(15, 50)
+        Me.RadioButtonFilesDirectoryOnly.Location = New System.Drawing.Point(250, 25)
         Me.RadioButtonFilesDirectoryOnly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.RadioButtonFilesDirectoryOnly.Name = "RadioButtonFilesDirectoryOnly"
         Me.RadioButtonFilesDirectoryOnly.Size = New System.Drawing.Size(116, 21)
@@ -308,12 +318,12 @@ Partial Class Form1
         Me.ListBoxFiles.ColumnWidth = 200
         Me.ListBoxFiles.FormattingEnabled = True
         Me.ListBoxFiles.ItemHeight = 16
-        Me.ListBoxFiles.Location = New System.Drawing.Point(15, 75)
+        Me.ListBoxFiles.Location = New System.Drawing.Point(15, 100)
         Me.ListBoxFiles.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ListBoxFiles.MultiColumn = True
         Me.ListBoxFiles.Name = "ListBoxFiles"
         Me.ListBoxFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.ListBoxFiles.Size = New System.Drawing.Size(300, 388)
+        Me.ListBoxFiles.Size = New System.Drawing.Size(610, 436)
         Me.ListBoxFiles.Sorted = True
         Me.ListBoxFiles.TabIndex = 5
         '
@@ -352,6 +362,7 @@ Partial Class Form1
         '
         Me.TabPageAssembly.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageAssembly.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageAssembly.Controls.Add(Me.CheckBoxStepAssemblyOutputDirectory)
         Me.TabPageAssembly.Controls.Add(Me.ButtonStepAssemblyOutputDirectory)
         Me.TabPageAssembly.Controls.Add(Me.TextBoxStepAssemblyOutputDirectory)
         Me.TabPageAssembly.Controls.Add(Me.LabelStepAssemblyOutputDirectory)
@@ -361,14 +372,24 @@ Partial Class Form1
         Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageAssembly.Name = "TabPageAssembly"
         Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageAssembly.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageAssembly.Size = New System.Drawing.Size(643, 721)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
+        '
+        'CheckBoxStepAssemblyOutputDirectory
+        '
+        Me.CheckBoxStepAssemblyOutputDirectory.AutoSize = True
+        Me.CheckBoxStepAssemblyOutputDirectory.Location = New System.Drawing.Point(225, 350)
+        Me.CheckBoxStepAssemblyOutputDirectory.Name = "CheckBoxStepAssemblyOutputDirectory"
+        Me.CheckBoxStepAssemblyOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxStepAssemblyOutputDirectory.TabIndex = 5
+        Me.CheckBoxStepAssemblyOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxStepAssemblyOutputDirectory.UseVisualStyleBackColor = True
         '
         'ButtonStepAssemblyOutputDirectory
         '
         Me.ButtonStepAssemblyOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepAssemblyOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonStepAssemblyOutputDirectory.Location = New System.Drawing.Point(509, 370)
         Me.ButtonStepAssemblyOutputDirectory.Name = "ButtonStepAssemblyOutputDirectory"
         Me.ButtonStepAssemblyOutputDirectory.Size = New System.Drawing.Size(100, 25)
         Me.ButtonStepAssemblyOutputDirectory.TabIndex = 4
@@ -379,7 +400,7 @@ Partial Class Form1
         '
         Me.TextBoxStepAssemblyOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxStepAssemblyOutputDirectory.Location = New System.Drawing.Point(10, 375)
         Me.TextBoxStepAssemblyOutputDirectory.Name = "TextBoxStepAssemblyOutputDirectory"
         Me.TextBoxStepAssemblyOutputDirectory.Size = New System.Drawing.Size(491, 22)
         Me.TextBoxStepAssemblyOutputDirectory.TabIndex = 3
@@ -387,11 +408,11 @@ Partial Class Form1
         'LabelStepAssemblyOutputDirectory
         '
         Me.LabelStepAssemblyOutputDirectory.AutoSize = True
-        Me.LabelStepAssemblyOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelStepAssemblyOutputDirectory.Location = New System.Drawing.Point(10, 350)
         Me.LabelStepAssemblyOutputDirectory.Name = "LabelStepAssemblyOutputDirectory"
-        Me.LabelStepAssemblyOutputDirectory.Size = New System.Drawing.Size(178, 17)
+        Me.LabelStepAssemblyOutputDirectory.Size = New System.Drawing.Size(169, 17)
         Me.LabelStepAssemblyOutputDirectory.TabIndex = 2
-        Me.LabelStepAssemblyOutputDirectory.Text = "Step Files Output Directory"
+        Me.LabelStepAssemblyOutputDirectory.Text = "Step files output directory"
         '
         'LabelAssemblyTabNote
         '
@@ -411,7 +432,7 @@ Partial Class Form1
         Me.CheckedListBoxAssembly.Location = New System.Drawing.Point(25, 35)
         Me.CheckedListBoxAssembly.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.CheckedListBoxAssembly.Name = "CheckedListBoxAssembly"
-        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(600, 259)
+        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(600, 293)
         Me.CheckedListBoxAssembly.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxAssembly, "Double-click to check/uncheck all")
         '
@@ -419,6 +440,7 @@ Partial Class Form1
         '
         Me.TabPagePart.BackColor = System.Drawing.SystemColors.Control
         Me.TabPagePart.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPagePart.Controls.Add(Me.CheckBoxStepPartOutputDirectory)
         Me.TabPagePart.Controls.Add(Me.ButtonStepPartOutputDirectory)
         Me.TabPagePart.Controls.Add(Me.TextBoxStepPartOutputDirectory)
         Me.TabPagePart.Controls.Add(Me.LabelStepPartOutputDirectory)
@@ -428,14 +450,24 @@ Partial Class Form1
         Me.TabPagePart.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPagePart.Name = "TabPagePart"
         Me.TabPagePart.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPagePart.Size = New System.Drawing.Size(643, 521)
+        Me.TabPagePart.Size = New System.Drawing.Size(643, 721)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
+        '
+        'CheckBoxStepPartOutputDirectory
+        '
+        Me.CheckBoxStepPartOutputDirectory.AutoSize = True
+        Me.CheckBoxStepPartOutputDirectory.Location = New System.Drawing.Point(225, 350)
+        Me.CheckBoxStepPartOutputDirectory.Name = "CheckBoxStepPartOutputDirectory"
+        Me.CheckBoxStepPartOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxStepPartOutputDirectory.TabIndex = 6
+        Me.CheckBoxStepPartOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxStepPartOutputDirectory.UseVisualStyleBackColor = True
         '
         'ButtonStepPartOutputDirectory
         '
         Me.ButtonStepPartOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepPartOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonStepPartOutputDirectory.Location = New System.Drawing.Point(509, 370)
         Me.ButtonStepPartOutputDirectory.Name = "ButtonStepPartOutputDirectory"
         Me.ButtonStepPartOutputDirectory.Size = New System.Drawing.Size(100, 25)
         Me.ButtonStepPartOutputDirectory.TabIndex = 5
@@ -446,7 +478,7 @@ Partial Class Form1
         '
         Me.TextBoxStepPartOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepPartOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxStepPartOutputDirectory.Location = New System.Drawing.Point(10, 375)
         Me.TextBoxStepPartOutputDirectory.Name = "TextBoxStepPartOutputDirectory"
         Me.TextBoxStepPartOutputDirectory.Size = New System.Drawing.Size(491, 22)
         Me.TextBoxStepPartOutputDirectory.TabIndex = 4
@@ -454,7 +486,7 @@ Partial Class Form1
         'LabelStepPartOutputDirectory
         '
         Me.LabelStepPartOutputDirectory.AutoSize = True
-        Me.LabelStepPartOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelStepPartOutputDirectory.Location = New System.Drawing.Point(10, 350)
         Me.LabelStepPartOutputDirectory.Name = "LabelStepPartOutputDirectory"
         Me.LabelStepPartOutputDirectory.Size = New System.Drawing.Size(169, 17)
         Me.LabelStepPartOutputDirectory.TabIndex = 3
@@ -478,7 +510,7 @@ Partial Class Form1
         Me.CheckedListBoxPart.Location = New System.Drawing.Point(25, 35)
         Me.CheckedListBoxPart.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.CheckedListBoxPart.Name = "CheckedListBoxPart"
-        Me.CheckedListBoxPart.Size = New System.Drawing.Size(600, 259)
+        Me.CheckedListBoxPart.Size = New System.Drawing.Size(600, 293)
         Me.CheckedListBoxPart.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxPart, "Double-click to check/uncheck all")
         '
@@ -486,6 +518,8 @@ Partial Class Form1
         '
         Me.TabPageSheetmetal.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageSheetmetal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxStepSheetmetalOutputDirectory)
+        Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxLaserOutputDirectory)
         Me.TabPageSheetmetal.Controls.Add(Me.ButtonStepSheetmetalOutputDirectory)
         Me.TabPageSheetmetal.Controls.Add(Me.TextBoxStepSheetmetalOutputDirectory)
         Me.TabPageSheetmetal.Controls.Add(Me.LabelStepSheetmetalOutputDirectory)
@@ -498,14 +532,34 @@ Partial Class Form1
         Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageSheetmetal.Name = "TabPageSheetmetal"
         Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageSheetmetal.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageSheetmetal.Size = New System.Drawing.Size(643, 721)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'CheckBoxStepSheetmetalOutputDirectory
+        '
+        Me.CheckBoxStepSheetmetalOutputDirectory.AutoSize = True
+        Me.CheckBoxStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(225, 410)
+        Me.CheckBoxStepSheetmetalOutputDirectory.Name = "CheckBoxStepSheetmetalOutputDirectory"
+        Me.CheckBoxStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxStepSheetmetalOutputDirectory.TabIndex = 11
+        Me.CheckBoxStepSheetmetalOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxStepSheetmetalOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'CheckBoxLaserOutputDirectory
+        '
+        Me.CheckBoxLaserOutputDirectory.AutoSize = True
+        Me.CheckBoxLaserOutputDirectory.Location = New System.Drawing.Point(225, 350)
+        Me.CheckBoxLaserOutputDirectory.Name = "CheckBoxLaserOutputDirectory"
+        Me.CheckBoxLaserOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxLaserOutputDirectory.TabIndex = 10
+        Me.CheckBoxLaserOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxLaserOutputDirectory.UseVisualStyleBackColor = True
         '
         'ButtonStepSheetmetalOutputDirectory
         '
         Me.ButtonStepSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(509, 392)
+        Me.ButtonStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(509, 430)
         Me.ButtonStepSheetmetalOutputDirectory.Name = "ButtonStepSheetmetalOutputDirectory"
         Me.ButtonStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(100, 25)
         Me.ButtonStepSheetmetalOutputDirectory.TabIndex = 9
@@ -516,7 +570,7 @@ Partial Class Form1
         '
         Me.TextBoxStepSheetmetalOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 392)
+        Me.TextBoxStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(10, 435)
         Me.TextBoxStepSheetmetalOutputDirectory.Name = "TextBoxStepSheetmetalOutputDirectory"
         Me.TextBoxStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(491, 22)
         Me.TextBoxStepSheetmetalOutputDirectory.TabIndex = 8
@@ -524,7 +578,7 @@ Partial Class Form1
         'LabelStepSheetmetalOutputDirectory
         '
         Me.LabelStepSheetmetalOutputDirectory.AutoSize = True
-        Me.LabelStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(11, 373)
+        Me.LabelStepSheetmetalOutputDirectory.Location = New System.Drawing.Point(10, 410)
         Me.LabelStepSheetmetalOutputDirectory.Name = "LabelStepSheetmetalOutputDirectory"
         Me.LabelStepSheetmetalOutputDirectory.Size = New System.Drawing.Size(169, 17)
         Me.LabelStepSheetmetalOutputDirectory.TabIndex = 7
@@ -542,7 +596,7 @@ Partial Class Form1
         'ButtonLaserOutputDirectory
         '
         Me.ButtonLaserOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonLaserOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonLaserOutputDirectory.Location = New System.Drawing.Point(509, 370)
         Me.ButtonLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonLaserOutputDirectory.Name = "ButtonLaserOutputDirectory"
         Me.ButtonLaserOutputDirectory.Size = New System.Drawing.Size(100, 25)
@@ -554,7 +608,7 @@ Partial Class Form1
         '
         Me.TextBoxLaserOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxLaserOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxLaserOutputDirectory.Location = New System.Drawing.Point(10, 375)
         Me.TextBoxLaserOutputDirectory.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBoxLaserOutputDirectory.Name = "TextBoxLaserOutputDirectory"
         Me.TextBoxLaserOutputDirectory.Size = New System.Drawing.Size(491, 22)
@@ -563,11 +617,11 @@ Partial Class Form1
         'LabelLaserOutputDirectory
         '
         Me.LabelLaserOutputDirectory.AutoSize = True
-        Me.LabelLaserOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelLaserOutputDirectory.Location = New System.Drawing.Point(10, 350)
         Me.LabelLaserOutputDirectory.Name = "LabelLaserOutputDirectory"
-        Me.LabelLaserOutputDirectory.Size = New System.Drawing.Size(185, 17)
+        Me.LabelLaserOutputDirectory.Size = New System.Drawing.Size(176, 17)
         Me.LabelLaserOutputDirectory.TabIndex = 3
-        Me.LabelLaserOutputDirectory.Text = "Laser Files Output Directory"
+        Me.LabelLaserOutputDirectory.Text = "Laser files output directory"
         '
         'CheckedListBoxSheetmetal
         '
@@ -578,7 +632,7 @@ Partial Class Form1
         Me.CheckedListBoxSheetmetal.Location = New System.Drawing.Point(25, 35)
         Me.CheckedListBoxSheetmetal.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.CheckedListBoxSheetmetal.Name = "CheckedListBoxSheetmetal"
-        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(600, 259)
+        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(600, 293)
         Me.CheckedListBoxSheetmetal.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxSheetmetal, "Double-click to check/uncheck all")
         '
@@ -586,6 +640,8 @@ Partial Class Form1
         '
         Me.TabPageDraft.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageDraft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageDraft.Controls.Add(Me.CheckBoxDxfDraftOutputDirectory)
+        Me.TabPageDraft.Controls.Add(Me.CheckBoxPdfDraftOutputDirectory)
         Me.TabPageDraft.Controls.Add(Me.ButtonDxfDraftOutputDirectory)
         Me.TabPageDraft.Controls.Add(Me.ButtonPdfDraftOutputDirectory)
         Me.TabPageDraft.Controls.Add(Me.TextBoxDxfDraftOutputDirectory)
@@ -598,13 +654,34 @@ Partial Class Form1
         Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageDraft.Name = "TabPageDraft"
         Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageDraft.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageDraft.Size = New System.Drawing.Size(643, 721)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
         '
+        'CheckBoxDxfDraftOutputDirectory
+        '
+        Me.CheckBoxDxfDraftOutputDirectory.AutoSize = True
+        Me.CheckBoxDxfDraftOutputDirectory.Location = New System.Drawing.Point(225, 410)
+        Me.CheckBoxDxfDraftOutputDirectory.Name = "CheckBoxDxfDraftOutputDirectory"
+        Me.CheckBoxDxfDraftOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxDxfDraftOutputDirectory.TabIndex = 11
+        Me.CheckBoxDxfDraftOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxDxfDraftOutputDirectory.UseVisualStyleBackColor = True
+        '
+        'CheckBoxPdfDraftOutputDirectory
+        '
+        Me.CheckBoxPdfDraftOutputDirectory.AutoSize = True
+        Me.CheckBoxPdfDraftOutputDirectory.Location = New System.Drawing.Point(225, 350)
+        Me.CheckBoxPdfDraftOutputDirectory.Name = "CheckBoxPdfDraftOutputDirectory"
+        Me.CheckBoxPdfDraftOutputDirectory.Size = New System.Drawing.Size(194, 21)
+        Me.CheckBoxPdfDraftOutputDirectory.TabIndex = 10
+        Me.CheckBoxPdfDraftOutputDirectory.Text = "Same as original directory"
+        Me.CheckBoxPdfDraftOutputDirectory.UseVisualStyleBackColor = True
+        '
         'ButtonDxfDraftOutputDirectory
         '
-        Me.ButtonDxfDraftOutputDirectory.Location = New System.Drawing.Point(509, 392)
+        Me.ButtonDxfDraftOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonDxfDraftOutputDirectory.Location = New System.Drawing.Point(509, 430)
         Me.ButtonDxfDraftOutputDirectory.Name = "ButtonDxfDraftOutputDirectory"
         Me.ButtonDxfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
         Me.ButtonDxfDraftOutputDirectory.TabIndex = 9
@@ -613,7 +690,8 @@ Partial Class Form1
         '
         'ButtonPdfDraftOutputDirectory
         '
-        Me.ButtonPdfDraftOutputDirectory.Location = New System.Drawing.Point(509, 332)
+        Me.ButtonPdfDraftOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPdfDraftOutputDirectory.Location = New System.Drawing.Point(509, 370)
         Me.ButtonPdfDraftOutputDirectory.Name = "ButtonPdfDraftOutputDirectory"
         Me.ButtonPdfDraftOutputDirectory.Size = New System.Drawing.Size(100, 25)
         Me.ButtonPdfDraftOutputDirectory.TabIndex = 8
@@ -622,14 +700,18 @@ Partial Class Form1
         '
         'TextBoxDxfDraftOutputDirectory
         '
-        Me.TextBoxDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 392)
+        Me.TextBoxDxfDraftOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxDxfDraftOutputDirectory.Location = New System.Drawing.Point(10, 435)
         Me.TextBoxDxfDraftOutputDirectory.Name = "TextBoxDxfDraftOutputDirectory"
         Me.TextBoxDxfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
         Me.TextBoxDxfDraftOutputDirectory.TabIndex = 7
         '
         'TextBoxPdfDraftOutputDirectory
         '
-        Me.TextBoxPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 332)
+        Me.TextBoxPdfDraftOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPdfDraftOutputDirectory.Location = New System.Drawing.Point(10, 375)
         Me.TextBoxPdfDraftOutputDirectory.Name = "TextBoxPdfDraftOutputDirectory"
         Me.TextBoxPdfDraftOutputDirectory.Size = New System.Drawing.Size(491, 22)
         Me.TextBoxPdfDraftOutputDirectory.TabIndex = 6
@@ -637,7 +719,7 @@ Partial Class Form1
         'LabelDxfDraftOutputDirectory
         '
         Me.LabelDxfDraftOutputDirectory.AutoSize = True
-        Me.LabelDxfDraftOutputDirectory.Location = New System.Drawing.Point(11, 372)
+        Me.LabelDxfDraftOutputDirectory.Location = New System.Drawing.Point(10, 410)
         Me.LabelDxfDraftOutputDirectory.Name = "LabelDxfDraftOutputDirectory"
         Me.LabelDxfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
         Me.LabelDxfDraftOutputDirectory.TabIndex = 5
@@ -646,7 +728,7 @@ Partial Class Form1
         'LabelPdfDraftOutputDirectory
         '
         Me.LabelPdfDraftOutputDirectory.AutoSize = True
-        Me.LabelPdfDraftOutputDirectory.Location = New System.Drawing.Point(11, 313)
+        Me.LabelPdfDraftOutputDirectory.Location = New System.Drawing.Point(10, 350)
         Me.LabelPdfDraftOutputDirectory.Name = "LabelPdfDraftOutputDirectory"
         Me.LabelPdfDraftOutputDirectory.Size = New System.Drawing.Size(167, 17)
         Me.LabelPdfDraftOutputDirectory.TabIndex = 4
@@ -670,7 +752,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft.Location = New System.Drawing.Point(25, 35)
         Me.CheckedListBoxDraft.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.CheckedListBoxDraft.Name = "CheckedListBoxDraft"
-        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(600, 259)
+        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(600, 293)
         Me.CheckedListBoxDraft.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxDraft, "Double-click to check/uncheck all")
         '
@@ -678,6 +760,10 @@ Partial Class Form1
         '
         Me.TabPageConfiguration.AutoScroll = True
         Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxRememberTasks)
+        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxMoveDrawingViewAllowPartialSuccess)
+        Me.TabPageConfiguration.Controls.Add(Me.GroupBoxTLAOptions)
+        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxWarnSave)
         Me.TabPageConfiguration.Controls.Add(Me.TextBoxRestartAfter)
         Me.TabPageConfiguration.Controls.Add(Me.LabelRestartAfter)
         Me.TabPageConfiguration.Controls.Add(Me.TextBoxPartNumberPropertyName)
@@ -703,9 +789,88 @@ Partial Class Form1
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(643, 721)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
+        '
+        'CheckBoxRememberTasks
+        '
+        Me.CheckBoxRememberTasks.AutoSize = True
+        Me.CheckBoxRememberTasks.Checked = True
+        Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(11, 625)
+        Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
+        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(309, 21)
+        Me.CheckBoxRememberTasks.TabIndex = 19
+        Me.CheckBoxRememberTasks.Text = "Remember selected tasks between sessions"
+        Me.CheckBoxRememberTasks.UseVisualStyleBackColor = True
+        '
+        'CheckBoxMoveDrawingViewAllowPartialSuccess
+        '
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(11, 595)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(368, 21)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.TabIndex = 18
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Text = "Move drawing to new template -- Allow partial success"
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.UseVisualStyleBackColor = True
+        '
+        'GroupBoxTLAOptions
+        '
+        Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
+        Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
+        Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(11, 435)
+        Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(492, 112)
+        Me.GroupBoxTLAOptions.TabIndex = 17
+        Me.GroupBoxTLAOptions.TabStop = False
+        Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
+        '
+        'CheckBoxTLAReportUnrelatedFiles
+        '
+        Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(15, 75)
+        Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
+        Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(302, 21)
+        Me.CheckBoxTLAReportUnrelatedFiles.TabIndex = 2
+        Me.CheckBoxTLAReportUnrelatedFiles.Text = "Report files unrelated to top level assembly"
+        Me.CheckBoxTLAReportUnrelatedFiles.UseVisualStyleBackColor = True
+        '
+        'RadioButtonTLATopDown
+        '
+        Me.RadioButtonTLATopDown.AutoSize = True
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(15, 50)
+        Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
+        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(368, 21)
+        Me.RadioButtonTLATopDown.TabIndex = 1
+        Me.RadioButtonTLATopDown.TabStop = True
+        Me.RadioButtonTLATopDown.Text = "Top down -- Best for self-contained project directories"
+        Me.RadioButtonTLATopDown.UseVisualStyleBackColor = True
+        '
+        'RadioButtonTLABottomUp
+        '
+        Me.RadioButtonTLABottomUp.AutoSize = True
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(15, 25)
+        Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
+        Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(340, 21)
+        Me.RadioButtonTLABottomUp.TabIndex = 0
+        Me.RadioButtonTLABottomUp.TabStop = True
+        Me.RadioButtonTLABottomUp.Text = "Bottom Up -- Best for general purpose directories"
+        Me.RadioButtonTLABottomUp.UseVisualStyleBackColor = True
+        '
+        'CheckBoxWarnSave
+        '
+        Me.CheckBoxWarnSave.AutoSize = True
+        Me.CheckBoxWarnSave.Checked = True
+        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(11, 565)
+        Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4)
+        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(225, 21)
+        Me.CheckBoxWarnSave.TabIndex = 16
+        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
+        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
         'TextBoxRestartAfter
         '
@@ -764,7 +929,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(488, 270)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(510, 270)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(100, 25)
@@ -779,7 +944,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(11, 270)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(468, 22)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(480, 22)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
@@ -795,7 +960,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(488, 30)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(510, 30)
         Me.ButtonTemplateAssembly.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(100, 25)
@@ -810,7 +975,7 @@ Partial Class Form1
         Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(11, 30)
         Me.TextBoxTemplateAssembly.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(470, 22)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(480, 22)
         Me.TextBoxTemplateAssembly.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
@@ -827,7 +992,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(488, 90)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(510, 90)
         Me.ButtonTemplatePart.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(100, 25)
@@ -842,7 +1007,7 @@ Partial Class Form1
         Me.TextBoxTemplatePart.Location = New System.Drawing.Point(11, 90)
         Me.TextBoxTemplatePart.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(470, 22)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(480, 22)
         Me.TextBoxTemplatePart.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
@@ -859,7 +1024,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(488, 150)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(510, 150)
         Me.ButtonTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(100, 25)
@@ -874,7 +1039,7 @@ Partial Class Form1
         Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(11, 150)
         Me.TextBoxTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(470, 22)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(480, 22)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
@@ -891,7 +1056,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(488, 210)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(510, 210)
         Me.ButtonTemplateDraft.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(100, 25)
@@ -906,7 +1071,7 @@ Partial Class Form1
         Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(11, 210)
         Me.TextBoxTemplateDraft.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(470, 22)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(480, 22)
         Me.TextBoxTemplateDraft.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
@@ -929,20 +1094,22 @@ Partial Class Form1
         Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TabPageReadme.Name = "TabPageReadme"
         Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.TabPageReadme.Size = New System.Drawing.Size(643, 521)
+        Me.TabPageReadme.Size = New System.Drawing.Size(643, 721)
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
         '
         'TextBoxReadme
         '
-        Me.TextBoxReadme.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBoxReadme.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxReadme.BackColor = System.Drawing.SystemColors.Control
+        Me.TextBoxReadme.BackColor = System.Drawing.SystemColors.Window
         Me.TextBoxReadme.Location = New System.Drawing.Point(7, 6)
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.Size = New System.Drawing.Size(550, 1600)
+        Me.TextBoxReadme.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBoxReadme.Size = New System.Drawing.Size(629, 700)
         Me.TextBoxReadme.TabIndex = 0
         Me.TextBoxReadme.Text = "Populated at build time."
         '
@@ -951,7 +1118,7 @@ Partial Class Form1
         Me.TextBoxStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.TextBoxStatus.Location = New System.Drawing.Point(5, 550)
+        Me.TextBoxStatus.Location = New System.Drawing.Point(5, 750)
         Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBoxStatus.Name = "TextBoxStatus"
         Me.TextBoxStatus.Size = New System.Drawing.Size(649, 22)
@@ -962,7 +1129,7 @@ Partial Class Form1
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ButtonCancel.Location = New System.Drawing.Point(547, 588)
+        Me.ButtonCancel.Location = New System.Drawing.Point(547, 788)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(100, 25)
@@ -973,7 +1140,7 @@ Partial Class Form1
         'ButtonProcess
         '
         Me.ButtonProcess.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonProcess.Location = New System.Drawing.Point(421, 588)
+        Me.ButtonProcess.Location = New System.Drawing.Point(421, 788)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonProcess.Name = "ButtonProcess"
         Me.ButtonProcess.Size = New System.Drawing.Size(100, 25)
@@ -1000,7 +1167,7 @@ Partial Class Form1
         '
         Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelTimeRemaining.AutoSize = True
-        Me.LabelTimeRemaining.Location = New System.Drawing.Point(5, 585)
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(5, 785)
         Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
         Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 17)
         Me.LabelTimeRemaining.TabIndex = 4
@@ -1009,7 +1176,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(657, 628)
+        Me.ClientSize = New System.Drawing.Size(657, 828)
         Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.ButtonProcess)
         Me.Controls.Add(Me.ButtonCancel)
@@ -1021,8 +1188,6 @@ Partial Class Form1
         Me.TabControl1.ResumeLayout(False)
         Me.TabPageGeneral.ResumeLayout(False)
         Me.TabPageGeneral.PerformLayout()
-        Me.GroupBoxFileTypes.ResumeLayout(False)
-        Me.GroupBoxFileTypes.PerformLayout()
         Me.GroupBoxFilesToProcess.ResumeLayout(False)
         Me.GroupBoxFilesToProcess.PerformLayout()
         Me.TabPageAssembly.ResumeLayout(False)
@@ -1035,6 +1200,8 @@ Partial Class Form1
         Me.TabPageDraft.PerformLayout()
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabPageConfiguration.PerformLayout()
+        Me.GroupBoxTLAOptions.ResumeLayout(False)
+        Me.GroupBoxTLAOptions.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
         Me.TabPageReadme.PerformLayout()
         Me.ResumeLayout(False)
@@ -1049,7 +1216,7 @@ Partial Class Form1
     Friend WithEvents TabPageSheetmetal As TabPage
     Friend WithEvents TabPageDraft As TabPage
     Friend WithEvents GroupBoxFilesToProcess As GroupBox
-    Friend WithEvents RadioButtonFilesSelected As RadioButton
+    Friend WithEvents RadioButtonTopLevelAssembly As RadioButton
     Friend WithEvents RadioButtonFilesDirectoryOnly As RadioButton
     Friend WithEvents RadioButtonFilesDirectoriesAndSubdirectories As RadioButton
     Friend WithEvents ListBoxFiles As ListBox
@@ -1060,15 +1227,10 @@ Partial Class Form1
     Friend WithEvents TextBoxStatus As TextBox
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ButtonProcess As Button
-    Friend WithEvents GroupBoxFileTypes As GroupBox
     Friend WithEvents CheckedListBoxAssembly As CheckedListBox
     Friend WithEvents CheckedListBoxPart As CheckedListBox
     Friend WithEvents CheckedListBoxSheetmetal As CheckedListBox
     Friend WithEvents CheckedListBoxDraft As CheckedListBox
-    Friend WithEvents CheckBoxFileTypeDraft As CheckBox
-    Friend WithEvents CheckBoxFileTypeSheetmetal As CheckBox
-    Friend WithEvents CheckBoxFileTypePart As CheckBox
-    Friend WithEvents CheckBoxFileTypeAssembly As CheckBox
     Friend WithEvents ButtonTemplateAssembly As Button
     Friend WithEvents TextBoxTemplateAssembly As TextBox
     Friend WithEvents LabelTemplateAssembly As Label
@@ -1099,7 +1261,6 @@ Partial Class Form1
     Friend WithEvents TextBoxLaserOutputDirectory As TextBox
     Friend WithEvents LabelLaserOutputDirectory As Label
     Friend WithEvents FakeFolderBrowserDialog As OpenFileDialog
-    Friend WithEvents CheckBoxWarnSave As CheckBox
     Friend WithEvents LabelAssemblyTabNote As Label
     Friend WithEvents LabelPartTabNote As Label
     Friend WithEvents LabelSheetmetalTabNote As Label
@@ -1122,4 +1283,24 @@ Partial Class Form1
     Friend WithEvents TextBoxColumnWidth As TextBox
     Friend WithEvents LabelColumnWidth As Label
     Friend WithEvents LabelTimeRemaining As Label
+    Friend WithEvents LabelListboxFiles As Label
+    Friend WithEvents ButtonPropertyFilter As Button
+    Friend WithEvents ButtonTopLevelAssembly As Button
+    Friend WithEvents LabelTopLevelAssembly As Label
+    Friend WithEvents TextBoxTopLevelAssembly As TextBox
+    Friend WithEvents ButtonUpdateListBoxFiles As Button
+    Friend WithEvents CheckBoxStepAssemblyOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxStepPartOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxStepSheetmetalOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxLaserOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxDxfDraftOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxPdfDraftOutputDirectory As CheckBox
+    Friend WithEvents CheckBoxEnablePropertyFilter As CheckBox
+    Friend WithEvents GroupBoxTLAOptions As GroupBox
+    Friend WithEvents CheckBoxTLAReportUnrelatedFiles As CheckBox
+    Friend WithEvents RadioButtonTLATopDown As RadioButton
+    Friend WithEvents RadioButtonTLABottomUp As RadioButton
+    Friend WithEvents CheckBoxWarnSave As CheckBox
+    Friend WithEvents CheckBoxMoveDrawingViewAllowPartialSuccess As CheckBox
+    Friend WithEvents CheckBoxRememberTasks As CheckBox
 End Class

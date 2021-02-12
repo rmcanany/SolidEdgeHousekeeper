@@ -116,6 +116,12 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormPropertyFilter.Designer.vb">
+      <DependentUpon>FormPropertyFilter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormPropertyFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="LabelToAction.vb" />
     <Compile Include="LaunchTask.vb" />
     <Compile Include="MaterialDoctorPart.vb" />
@@ -135,12 +141,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
     <Compile Include="PartTasks.vb" />
+    <Compile Include="PropertyFilter.vb" />
     <Compile Include="SheetmetalTasks.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPropertyFilter.resx">
+      <DependentUpon>FormPropertyFilter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -173,6 +184,17 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSScriptControl">
+      <Guid>{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

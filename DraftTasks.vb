@@ -869,12 +869,23 @@ Public Class DraftTasks
                                   Dim Sheet As SolidEdgeDraft.Sheet
                                   Dim DrawingView As SolidEdgeDraft.DrawingView
                                   Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(SourceDoc, "UserGenerated", SourceDocDummySheetName)
+                                  Dim msg2 As String
 
                                   For Each Sheet In GetSheets(SourceDoc, "UserGenerated")
                                       If Not Sheet.Name = SourceDocDummySheetName Then
                                           For Each DrawingView In Sheet.DrawingViews
                                               DVSheetNames.Add(Sheet.Name)
-                                              DrawingView.Sheet = TargetSheet
+                                              Dim Name As String = DrawingView.Name
+                                              ' Issue with broken out section view
+                                              Try
+                                                  DrawingView.Sheet = TargetSheet
+                                              Catch ex As Exception
+                                                  ExitStatus = 1
+                                                  msg2 = "Some drawing views may not have transferred"
+                                                  If Not ErrorMessageList.Contains(msg2) Then
+                                                      ErrorMessageList.Add(msg2)
+                                                  End If
+                                              End Try
                                           Next
                                       End If
                                   Next
@@ -930,12 +941,26 @@ Public Class DraftTasks
 
                                     Dim DummySheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
                                     Dim count As Integer = 0
+                                    Dim msg2 As String
+                                    Dim tf2 As Boolean
 
                                     If DrawingViewSheetNames.Count > 0 Then
                                         TargetDoc.Activate()
 
                                         For Each DrawingView In DummySheet.DrawingViews
-                                            DrawingView.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DrawingViewSheetNames(count))
+                                            Dim Name As String = DrawingView.Name
+
+                                            tf2 = DrawingView.IsBrokenOutSectionTarget
+                                            ' Issue with broken out section view
+                                            Try
+                                                DrawingView.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DrawingViewSheetNames(count))
+                                            Catch ex As Exception
+                                                ExitStatus = 1
+                                                msg2 = "Some drawing views may not have transferred"
+                                                If Not ErrorMessageList.Contains(msg2) Then
+                                                    ErrorMessageList.Add(msg2)
+                                                End If
+                                            End Try
                                             count += 1
                                         Next
                                     End If
@@ -1316,6 +1341,7 @@ Public Class DraftTasks
         Dim SEDocDVSheetNames As New List(Of String)  ' List of sheet names in order of drawing views
 
         Dim msg As String = ""
+        Dim tf As Boolean
 
         Dim SEDocUserSheetGroupSheetNames As New List(Of String)
         Dim SEDocAutoSheetGroupSheetNames As New List(Of String)
@@ -1371,7 +1397,12 @@ Public Class DraftTasks
                             ' Tidy up
                             TidyUp(SEDoc, NewDoc, DummySheetName)
 
-                            NewDoc.SaveAs(NewDocFilename)
+                            tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
+                            tf = tf And ExitStatus = 1
+                            tf = tf Or ExitStatus = 0
+                            If tf Then
+                                NewDoc.SaveAs(NewDocFilename)
+                            End If
                         End If
                     End If
                 End If
@@ -1381,7 +1412,10 @@ Public Class DraftTasks
         NewDoc.Close()
         SEApp.DoIdle()
 
-        If ExitStatus = 1 Then
+        tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
+        tf = tf And ExitStatus = 1
+
+        If tf Then
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
@@ -1391,9 +1425,14 @@ Public Class DraftTasks
                 msg = String.Format("After correcting issues, please delete {0}", System.IO.Path.GetFileName(GetRemnantsDocFilename(SEDoc)))
                 ErrorMessageList.Add(msg)
             End If
-        ElseIf ExitStatus = 2 Then
-            ' Botched cut/paste.  Don't save anything.
-            ErrorMessageList.Add("Problem with cut/paste.  No changes made.  Please try again.")
+        ElseIf (Not tf) Or (ExitStatus = 2) Then
+            If Not tf Then
+                ErrorMessageList.Add("Partial success, but no changes made.  If desired, change this behavior on the Configuration tab.")
+            Else
+                ' Botched cut/paste.  Don't save anything.
+                ErrorMessageList.Add("Problem with cut/paste.  No changes made.  Please try again or transfer manually.")
+            End If
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -1502,7 +1541,12 @@ Public Class DraftTasks
 
         DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
-        PDFFilename = Configuration("TextBoxPdfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".pdf")
+        ' CheckBoxPdfDraftOutputDirectory
+        If Configuration("CheckBoxPdfDraftOutputDirectory") = "False" Then
+            PDFFilename = Configuration("TextBoxPdfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".pdf")
+        Else
+            PDFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".pdf")
+        End If
 
         'Capturing a fault to update ExitStatus
         Try
@@ -1555,7 +1599,12 @@ Public Class DraftTasks
 
         DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
-        DXFFilename = Configuration("TextBoxDxfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".dxf")
+        ' CheckBoxDxfDraftOutputDirectory
+        If Configuration("CheckBoxDxfDraftOutputDirectory") = "False" Then
+            DXFFilename = Configuration("TextBoxDxfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".dxf")
+        Else
+            DXFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dxf")
+        End If
 
         'Capturing a fault to update ExitStatus
         Try

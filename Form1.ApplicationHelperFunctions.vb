@@ -119,4 +119,21 @@ Partial Class Form1
         End If
     End Function
 
+    Private Function DMIsRunning() As Boolean
+        Dim DMApp As DesignManager.Application = Nothing
+
+        Try
+            DMApp = CType(GetObject(, "DesignManager.Application"), DesignManager.Application)
+        Catch ex As Exception
+        End Try
+
+        If Not DMApp Is Nothing Then
+            DMApp = Nothing
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
+
 End Class

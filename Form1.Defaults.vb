@@ -2,6 +2,134 @@ Option Strict On
 
 Partial Class Form1
 
+    Private Function GetConfiguration() As Dictionary(Of String, String)
+        Dim Configuration As New Dictionary(Of String, String)
+        Dim ControlDict As New Dictionary(Of String, Control)
+        Dim Ctrl As Control
+
+        ControlDict = RecurseFormControls(Me, ControlDict, False)
+
+        For Each Key In ControlDict.Keys
+            Ctrl = ControlDict(Key)
+
+            If TypeOf Ctrl Is TextBox Then
+                Dim c As TextBox = CType(Ctrl, TextBox)
+                Configuration.Add(c.Name, c.Text)
+
+            ElseIf TypeOf Ctrl Is CheckBox Then
+                Dim c As CheckBox = CType(Ctrl, CheckBox)
+                Configuration.Add(c.Name, c.Checked.ToString)
+
+            ElseIf TypeOf Ctrl Is RadioButton Then
+                Dim c As RadioButton = CType(Ctrl, RadioButton)
+                Configuration.Add(c.Name, c.Checked.ToString)
+
+            ElseIf TypeOf Ctrl Is ComboBox Then
+                Dim c As ComboBox = CType(Ctrl, ComboBox)
+                Configuration.Add(c.Name, c.Text)
+            End If
+        Next
+
+
+        Return Configuration
+    End Function
+    Private Function RecurseFormControls(Ctrl As Control,
+                                         ControlDict As Dictionary(Of String, Control),
+                                         Exclude As Boolean
+                                         ) As Dictionary(Of String, Control)
+
+        Dim ChildControl As Control
+        Dim tf As Boolean
+        Dim ExcludeControls As New List(Of String)
+
+        ExcludeControls.Add(RadioButtonFilesDirectoriesAndSubdirectories.Name)
+        ExcludeControls.Add(RadioButtonFilesDirectoryOnly.Name)
+        ExcludeControls.Add(RadioButtonTopLevelAssembly.Name)
+        ExcludeControls.Add(CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(TextBoxReadme.Name)
+        ExcludeControls.Add(ListBoxFiles.Name)
+
+        tf = TypeOf Ctrl Is ContainerControl
+        tf = tf Or TypeOf Ctrl Is TabControl
+        tf = tf Or TypeOf Ctrl Is TabPage
+        tf = tf Or TypeOf Ctrl Is GroupBox
+
+        If tf Then
+            For Each ChildControl In Ctrl.Controls
+                ControlDict = RecurseFormControls(ChildControl, ControlDict, Exclude)
+            Next
+        Else
+            tf = TypeOf Ctrl Is Button
+            tf = tf Or TypeOf Ctrl Is Label
+            If Exclude Then
+                tf = tf Or ExcludeControls.Contains(Ctrl.Name)
+            End If
+
+            If Not tf Then
+                ControlDict.Add(Ctrl.Name, Ctrl)
+            End If
+        End If
+
+        Return ControlDict
+    End Function
+
+    Private Sub PopulateTextBox(tb As TextBox, Value As String, StartupPath As String)
+        Dim tf As Boolean
+
+        tf = tb.Name.ToLower.Contains("directory")
+        If tf Then
+            If FileIO.FileSystem.DirectoryExists(Value) Then
+                tb.Text = Value
+            Else
+                tb.Text = StartupPath
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("template")
+        tf = tf Or tb.Name.ToLower.Contains("materiallibrary")
+        tf = tf Or tb.Name.ToLower.Contains("toplevelassembly")
+        If tf Then
+            If FileIO.FileSystem.FileExists(Value) Then
+                tb.Text = Value
+            Else
+                tb.Text = ""
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("colwidth")
+        If tf Then
+            If Value = "" Then
+                tb.Text = "5.5"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "50"
+                End Try
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("restartafter")
+        If tf Then
+            If Value = "" Then
+                tb.Text = "250"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "250"
+                End Try
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("propertyname")
+        If tf Then
+            tb.Text = Value
+        End If
+
+
+    End Sub
+
     Private Sub LoadDefaults()
         'See format example in SaveDefaults()
 
@@ -9,177 +137,68 @@ Partial Class Form1
         Dim Defaults As String() = Nothing
         Dim Key As String
         Dim Value As String
+        Dim msg As String
+        Dim tf As Boolean
+
+        Dim ControlDict As New Dictionary(Of String, Control)
+        Dim Ctrl As Control
 
         DefaultsFilename = StartupPath + "\" + "defaults.txt"
 
+        ControlDict = RecurseFormControls(Me, ControlDict, True)
+
         Try
             Defaults = IO.File.ReadAllLines(DefaultsFilename)
-            Dim msg As String = ""
+            msg = ""
             For Each KVPair As String In Defaults
-                Key = KVPair.Split(("=").ToCharArray(0, 1))(0)
-                Value = KVPair.Split(("=").ToCharArray(0, 1))(1)
+                If Not KVPair.Contains("=") Then
+                    Continue For
+                End If
 
-                'MsgBox(Key + " " + Value)
-                If Key = TextBoxInputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxInputDirectory.Text = Value
-                    Else
-                        TextBoxInputDirectory.Text = Application.StartupPath
+                Key = KVPair.Split("="c)(0)
+                Value = KVPair.Split("="c)(1)
+
+                If ControlDict.Keys.Contains(Key) Then
+                    Ctrl = ControlDict(Key)
+
+                    If TypeOf Ctrl Is TextBox Then
+                        Dim c As TextBox = CType(Ctrl, TextBox)
+                        PopulateTextBox(c, Value, Application.StartupPath)
+
+                    ElseIf TypeOf Ctrl Is CheckBox Then
+                        Dim c As CheckBox = CType(Ctrl, CheckBox)
+                        If Value.ToLower = "true" Then
+                            c.Checked = True
+                        Else
+                            c.Checked = False
+                        End If
+
+                    ElseIf TypeOf Ctrl Is RadioButton Then
+                        Dim c As RadioButton = CType(Ctrl, RadioButton)
+                        If Value.ToLower = "true" Then
+                            c.Checked = True
+                        Else
+                            c.Checked = False
+                        End If
+
+                    ElseIf TypeOf Ctrl Is ComboBox Then
+                        Dim c As ComboBox = CType(Ctrl, ComboBox)
+                        c.Text = Value
                     End If
-
-                ElseIf Key = TextBoxTemplateAssembly.Name Then
-                    If FileIO.FileSystem.FileExists(Value) Then
-                        TextBoxTemplateAssembly.Text = Value
-                    Else
-                        TextBoxTemplateAssembly.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxTemplatePart.Name Then
-                    If FileIO.FileSystem.FileExists(Value) Then
-                        TextBoxTemplatePart.Text = Value
-                    Else
-                        TextBoxTemplatePart.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxTemplateSheetmetal.Name Then
-                    If FileIO.FileSystem.FileExists(Value) Then
-                        TextBoxTemplateSheetmetal.Text = Value
-                    Else
-                        TextBoxTemplateSheetmetal.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxTemplateDraft.Name Then
-                    If FileIO.FileSystem.FileExists(Value) Then
-                        TextBoxTemplateDraft.Text = Value
-                    Else
-                        TextBoxTemplateDraft.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxActiveMaterialLibrary.Name Then
-                    If FileIO.FileSystem.FileExists(Value) Then
-                        TextBoxActiveMaterialLibrary.Text = Value
-                    Else
-                        TextBoxActiveMaterialLibrary.Text = ""
-                    End If
-
-                ElseIf Key = ComboBoxPartNumberPropertySet.Name Then
-                    ComboBoxPartNumberPropertySet.Text = Value
-
-                ElseIf Key = TextBoxPartNumberPropertyName.Name Then
-                    TextBoxPartNumberPropertyName.Text = Value
-
-                ElseIf Key = TextBoxRestartAfter.Name Then
-                    If Value = "" Then
-                        TextBoxRestartAfter.Text = "50"
-                    Else
-                        Try
-                            TextBoxRestartAfter.Text = CStr(Value)
-                        Catch ex As Exception
-                            TextBoxRestartAfter.Text = "50"
-                        End Try
-                    End If
-
-                ElseIf Key = TextBoxLaserOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxLaserOutputDirectory.Text = Value
-                    Else
-                        TextBoxLaserOutputDirectory.Text = ""
-                    End If
-
-                ElseIf Key = CheckBoxWarnSave.Name Then
-                    If Value = "True" Then
-                        CheckBoxWarnSave.Checked = True
-                    Else
-                        CheckBoxWarnSave.Checked = False
-                    End If
-
-                ElseIf Key = TextBoxStepAssemblyOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxStepAssemblyOutputDirectory.Text = Value
-                    Else
-                        TextBoxStepAssemblyOutputDirectory.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxStepPartOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxStepPartOutputDirectory.Text = Value
-                    Else
-                        TextBoxStepPartOutputDirectory.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxStepSheetmetalOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxStepSheetmetalOutputDirectory.Text = Value
-                    Else
-                        TextBoxStepSheetmetalOutputDirectory.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxPdfDraftOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxPdfDraftOutputDirectory.Text = Value
-                    Else
-                        TextBoxPdfDraftOutputDirectory.Text = ""
-                    End If
-
-                ElseIf Key = TextBoxDxfDraftOutputDirectory.Name Then
-                    If FileIO.FileSystem.DirectoryExists(Value) Then
-                        TextBoxDxfDraftOutputDirectory.Text = Value
-                    Else
-                        TextBoxDxfDraftOutputDirectory.Text = ""
-                    End If
-
-                    'ElseIf Key = ComboBoxPartsListStyle.Name Then
-                    '    Dim PartsListStyles As New List(Of String)
-                    '    Dim Style As String
-
-                    '    PartsListStyles = GetPartsListStyles()
-
-                    '    ComboBoxPartsListStyle.Items.Clear()
-
-                    '    For Each Style In PartsListStyles
-                    '        ComboBoxPartsListStyle.Items.Add(Style)
-                    '    Next
-
-                    '    Try
-                    '        ComboBoxPartsListStyle.SelectedItem = Value
-                    '    Catch ex As Exception
-                    '    End Try
-
-                    'ElseIf Key = ComboBoxPartsListAutoballoon.Name Then
-                    '    ComboBoxPartsListAutoballoon.Items.Clear()
-                    '    ComboBoxPartsListAutoballoon.Items.Add("True")
-                    '    ComboBoxPartsListAutoballoon.Items.Add("False")
-                    '    Try
-                    '        ComboBoxPartsListAutoballoon.SelectedItem = Value
-                    '    Catch ex As Exception
-                    '    End Try
-
-                    'ElseIf Key = ComboBoxPartsListCreateList.Name Then
-                    '    ComboBoxPartsListCreateList.Items.Clear()
-                    '    ComboBoxPartsListCreateList.Items.Add("True")
-                    '    ComboBoxPartsListCreateList.Items.Add("False")
-                    '    Try
-                    '        ComboBoxPartsListCreateList.SelectedItem = Value
-                    '    Catch ex As Exception
-                    '    End Try
-                ElseIf Key = TextBoxColumnWidth.Name Then
-                    If Value = "" Then
-                        TextBoxColumnWidth.Text = "5.5"
-                    Else
-                        Try
-                            TextBoxColumnWidth.Text = CStr(Value)
-                        Catch ex As Exception
-                            TextBoxColumnWidth.Text = "5.5"
-                        End Try
-                    End If
-
-
                 Else
-                    PopulateCheckboxDefault(KVPair)
+                    tf = Key.Contains("Assembly.")
+                    tf = tf Or Key.Contains("Part.")
+                    tf = tf Or Key.Contains("Sheetmetal.")
+                    tf = tf Or Key.Contains("Draft.")
+                    tf = tf And CheckBoxRememberTasks.Checked
+                    If tf Then
+                        PopulateCheckboxDefault(KVPair)
+                    End If
                 End If
             Next
+
         Catch ex As Exception
-            'MsgBox("Exception")
+            ' MsgBox(ex.ToString)
             TextBoxInputDirectory.Text = Application.StartupPath
         End Try
 
@@ -227,10 +246,6 @@ Partial Class Form1
         'Format Example
         'TextBoxInputDirectory=D:\CAD\scripts\test_files
         'TextBoxTemplateAssembly=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch assembly.asm
-        'TextBoxTemplatePart=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch part.par
-        'TextBoxTemplateSheetmetal=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch sheet metal.psm
-        'TextBoxTemplateDraft=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\Hallmark_B.dft
-        'TextBoxActiveMaterialLibrary=C:\Program Files\Siemens\Solid Edge 2020\Preferences\Materials\hmk_Materials.mtl
         'ComboBoxPartNumberPropertySet=Custom
         'TextBoxPartNumberPropertyName=hmk_Part_Number
         'TextBoxRestartAfter=50
@@ -241,29 +256,69 @@ Partial Class Form1
 
         Dim Defaults As New List(Of String)
         Dim msg As String
+        Dim ControlDict As New Dictionary(Of String, Control)
+        Dim Key As String
+        Dim Ctrl As Control
 
-        Defaults.Add(TextBoxInputDirectory.Name + "=" + TextBoxInputDirectory.Text)
-        'MsgBox(TextBoxInputDirectory.Text)
-        Defaults.Add(TextBoxTemplateAssembly.Name + "=" + TextBoxTemplateAssembly.Text)
-        Defaults.Add(TextBoxTemplatePart.Name + "=" + TextBoxTemplatePart.Text)
-        Defaults.Add(TextBoxTemplateSheetmetal.Name + "=" + TextBoxTemplateSheetmetal.Text)
-        Defaults.Add(TextBoxTemplateDraft.Name + "=" + TextBoxTemplateDraft.Text)
-        Defaults.Add(TextBoxActiveMaterialLibrary.Name + "=" + TextBoxActiveMaterialLibrary.Text)
-        Defaults.Add(ComboBoxPartNumberPropertySet.Name + "=" + ComboBoxPartNumberPropertySet.Text)
-        Defaults.Add(TextBoxPartNumberPropertyName.Name + "=" + TextBoxPartNumberPropertyName.Text)
-        Defaults.Add(TextBoxRestartAfter.Name + "=" + TextBoxRestartAfter.Text)
-        Defaults.Add(TextBoxLaserOutputDirectory.Name + "=" + TextBoxLaserOutputDirectory.Text)
-        Defaults.Add(CheckBoxWarnSave.Name + "=" + CheckBoxWarnSave.Checked.ToString)
-        Defaults.Add(TextBoxStepAssemblyOutputDirectory.Name + "=" + TextBoxStepAssemblyOutputDirectory.Text)
-        Defaults.Add(TextBoxStepPartOutputDirectory.Name + "=" + TextBoxStepPartOutputDirectory.Text)
-        Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
-        Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
-        Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
-        Defaults.Add(TextBoxColumnWidth.Name + "=" + TextBoxColumnWidth.Text)
-        'MsgBox(ComboBoxPartsListStyle.SelectedText)
-        'Defaults.Add(ComboBoxPartsListStyle.Name + "=" + ComboBoxPartsListStyle.SelectedItem.ToString)
-        'Defaults.Add(ComboBoxPartsListAutoballoon.Name + "=" + ComboBoxPartsListAutoballoon.SelectedItem.ToString)
-        'Defaults.Add(ComboBoxPartsListCreateList.Name + "=" + ComboBoxPartsListCreateList.SelectedItem.ToString)
+        ControlDict = RecurseFormControls(Me, ControlDict, True)
+
+        For Each Key In ControlDict.Keys
+            Ctrl = ControlDict(Key)
+
+            If TypeOf Ctrl Is TextBox Then
+                Dim c As TextBox = CType(Ctrl, TextBox)
+                Defaults.Add(String.Format("{0}={1}", c.Name, c.Text))
+
+            ElseIf TypeOf Ctrl Is CheckBox Then
+                Dim c As CheckBox = CType(Ctrl, CheckBox)
+                Defaults.Add(String.Format("{0}={1}", c.Name, c.Checked.ToString))
+
+            ElseIf TypeOf Ctrl Is RadioButton Then
+                Dim c As RadioButton = CType(Ctrl, RadioButton)
+                Defaults.Add(String.Format("{0}={1}", c.Name, c.Checked.ToString))
+
+            ElseIf TypeOf Ctrl Is ComboBox Then
+                Dim c As ComboBox = CType(Ctrl, ComboBox)
+                Defaults.Add(String.Format("{0}={1}", c.Name, c.Text))
+            End If
+        Next
+
+        'Defaults.Add(TextBoxInputDirectory.Name + "=" + TextBoxInputDirectory.Text)
+        ''MsgBox(TextBoxInputDirectory.Text)
+        'Defaults.Add(TextBoxTemplateAssembly.Name + "=" + TextBoxTemplateAssembly.Text)
+        'Defaults.Add(TextBoxTemplatePart.Name + "=" + TextBoxTemplatePart.Text)
+        'Defaults.Add(TextBoxTemplateSheetmetal.Name + "=" + TextBoxTemplateSheetmetal.Text)
+        'Defaults.Add(TextBoxTemplateDraft.Name + "=" + TextBoxTemplateDraft.Text)
+        'Defaults.Add(TextBoxActiveMaterialLibrary.Name + "=" + TextBoxActiveMaterialLibrary.Text)
+        'Defaults.Add(ComboBoxPartNumberPropertySet.Name + "=" + ComboBoxPartNumberPropertySet.Text)
+        'Defaults.Add(TextBoxPartNumberPropertyName.Name + "=" + TextBoxPartNumberPropertyName.Text)
+        'Defaults.Add(TextBoxRestartAfter.Name + "=" + TextBoxRestartAfter.Text)
+        'Defaults.Add(TextBoxLaserOutputDirectory.Name + "=" + TextBoxLaserOutputDirectory.Text)
+        'Defaults.Add(CheckBoxWarnSave.Name + "=" + CheckBoxWarnSave.Checked.ToString)
+        'Defaults.Add(TextBoxStepAssemblyOutputDirectory.Name + "=" + TextBoxStepAssemblyOutputDirectory.Text)
+        'Defaults.Add(TextBoxStepPartOutputDirectory.Name + "=" + TextBoxStepPartOutputDirectory.Text)
+        'Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
+        'Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
+        'Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
+        'Defaults.Add(TextBoxColumnWidth.Name + "=" + TextBoxColumnWidth.Text)
+        'Defaults.Add(TextBoxTopLevelAssembly.Name + "=" + TextBoxTopLevelAssembly.Text)
+        '' Defaults.Add(TextBoxPropertyFilter.Name + "=" + TextBoxPropertyFilter.Text)
+
+        'Defaults.Add(CheckBoxStepAssemblyOutputDirectory.Name + "=" + CheckBoxStepAssemblyOutputDirectory.Checked.ToString)
+        'Defaults.Add(CheckBoxStepPartOutputDirectory.Name + "=" + CheckBoxStepPartOutputDirectory.Checked.ToString)
+        'Defaults.Add(CheckBoxLaserOutputDirectory.Name + "=" + CheckBoxLaserOutputDirectory.Checked.ToString)
+        'Defaults.Add(CheckBoxStepSheetmetalOutputDirectory.Name + "=" + CheckBoxStepSheetmetalOutputDirectory.Checked.ToString)
+        'Defaults.Add(CheckBoxPdfDraftOutputDirectory.Name + "=" + CheckBoxPdfDraftOutputDirectory.Checked.ToString)
+        'Defaults.Add(CheckBoxDxfDraftOutputDirectory.Name + "=" + CheckBoxDxfDraftOutputDirectory.Checked.ToString)
+
+        'Defaults.Add(RadioButtonTLABottomUp.Name + "=" + RadioButtonTLABottomUp.Checked.ToString)
+        'Defaults.Add(RadioButtonTLATopDown.Name + "=" + RadioButtonTLATopDown.Checked.ToString)
+        'Defaults.Add(CheckBoxTLAReportUnrelatedFiles.Name + "=" + CheckBoxTLAReportUnrelatedFiles.Checked.ToString)
+
+        ''MsgBox(ComboBoxPartsListStyle.SelectedText)
+        ''Defaults.Add(ComboBoxPartsListStyle.Name + "=" + ComboBoxPartsListStyle.SelectedItem.ToString)
+        ''Defaults.Add(ComboBoxPartsListAutoballoon.Name + "=" + ComboBoxPartsListAutoballoon.SelectedItem.ToString)
+        ''Defaults.Add(ComboBoxPartsListCreateList.Name + "=" + ComboBoxPartsListCreateList.SelectedItem.ToString)
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="
@@ -343,9 +398,9 @@ Partial Class Form1
 
     Private Sub LoadTextBoxReadme()
         Dim msg As String
-        Dim msg1 As New List(Of String)
-        Dim msg2 As New List(Of String)
-        Dim msg3 As New List(Of String)
+        Dim readme_github As New List(Of String)  ' Used to create the Readme file for GitHub
+        Dim readme_tab As New List(Of String)  ' Used to create the Readme tab on Form1
+        Dim msg3 As New List(Of String)  ' Reformats msg2 to eliminate Markdown directives
         Dim ReadmeFileName As String
         Dim FilenameList As New List(Of String)
 
@@ -363,116 +418,256 @@ Partial Class Form1
         Names.Add("### Draft")
 
         msg = "# Solid Edge Housekeeper"
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "Robert McAnany 2020"
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "Robert McAnany 2021"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar"
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @Jean-Louis"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "## DESCRIPTION"
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "This tool is designed to help you find annoying little errors in your project.  "
+        msg += "It can identify failed features in 3D models, detached dimensions in drawings, "
+        msg += "missing parts in assemblies, and more.  It can also update certain individual "
+        msg += "file settings to match those in a template you specify."
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "## INSTALLATION"
-        msg1.Add(msg)
-        msg = "There is no installation per se.  The preferred method is to download or clone the project and compile it yourself."
-        msg1.Add(msg)
+        readme_github.Add(msg)
+        msg = "There is no installation per se.  The preferred method is to download or clone "
+        msg += "the project and compile it yourself."
+        readme_github.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg = "The other option is to use the latest released version.  At the top of file list above, click the 'Releases' tab.  On that page, click the Assets dropdown.  Select the most recent SolidEdgeHousekeeper-vX.X.X.zip.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run."
-        msg1.Add(msg)
+        readme_github.Add(msg)
+        msg = "The other option is to use the latest released version here "
+        msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.5  "
+        msg += "From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  "
+        msg += "Choose a convenient location on your machine.  "
+        msg += "Extract the zip file (probably by right-clicking and selecting Extract All).  "
+        msg += "Double-click the .exe file to run."
+        readme_github.Add(msg)
         msg = ""
-        msg1.Add(msg)
+        readme_github.Add(msg)
         msg = "## OPERATION"
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "On each file type's tab, select which errors to detect.  On the General tab, select which files to process.  Do this by browsing to the desired input folder, then clicking the desired directory search option."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "On each file type's tab, select which errors to detect.  "
+        msg += "On the General tab, browse to the desired input folder, "
+        msg += "then select the desired directory search option.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "You can further refine the search using a property filter.  "
+        msg += "For details, see the Property Filter Readme tab.  "
+        msg += "Note, if 'Top level assembly' is the chosen search option, or a property filter is set, "
+        msg += "click 'Update File List' to populate the list.  "
+        msg += "On large assemblies, this can take some time."
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "The first time you use the program, some site-specific information is needed.  This includes the location of your templates, material table, etc.  These are accessed on the Configuration Tab."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "You can interrupt the program before it finishes.  While processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "## CAVEATS"
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  "
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "However, problems can arise.  Those cases will also be reported in the log file with the message 'Error processing file'.  A stack trace will be included, which may be useful for program debugging."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "However, problems can arise.  "
+        msg += "Those cases will be reported in the log file with the message 'Error processing file'.  "
+        msg += "A stack trace will be included, which looks scary, but may be useful for program debugging.  "
+        msg += "If four of these errors are detected in a run, the programs halts processing."
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it."
-        msg1.Add(msg)
-        msg2.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "## DETAILS"
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "List of implemented tests and actions."
-        msg1.Add(msg)
-        msg2.Add(msg)
-        For i As Integer = 0 To 3
-            msg1.Add(Names(i))
-            msg2.Add(Names(i))
-            For Each Item In CheckBoxList(i).Items
-                msg1.Add("    " + CStr(Item))
-                msg2.Add("    " + CStr(Item))
-            Next
-        Next
-        msg = ""
-        msg1.Add(msg)
-        msg2.Add(msg)
-        msg = "## CODE ORGANIZATION"
-        msg1.Add(msg)
-        msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
-        msg1.Add(msg)
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
 
-        For Each s As String In msg2
+        msg = "## KNOWN ISSUES"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "Does not support managed files.  Cause: Unknown.  "
+        msg += "Possible workaround: Process the files in an unmanaged workspace.   "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "Some tasks may not support versions of Solid Edge prior to SE2020.  "
+        msg += "Cause: Maybe an API call not available in previous versions.  "
+        msg += "Possible workaround: Use SE2020 or later.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "May not support multiple installed Solid Edge versions on the same machine.  "
+        msg += "Cause: Unknown.  "
+        msg += "Possible workaround: Use the version that was 'silently' installed.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+
+        msg = "## DETAILS"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "FILE SELECTION"
+        readme_tab.Add(msg)
+        msg = "Select individual files to process OR Select none to process all."
+        readme_tab.Add(msg)
+        msg = vbCrLf + "If 'Top level assembly' is checked, "
+        msg += "the search can be conducted in one of two ways, bottom up or top down.  "
+        msg += "These options are set on the Configuration tab."
+        readme_tab.Add(msg)
+        msg = vbCrLf + "Bottom up is meant for general purpose directories (e.g., \\BIG_SERVER\every file we have\).  "
+        readme_tab.Add(msg)
+        msg = vbCrLf + "Top down is meant for self-contained project directories (e.g., C:\Projects\Project123\).  "
+        msg += "A top down search can optionally report files with no links to the top level assembly.  "
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "PROPERTY FILTER"
+        readme_tab.Add(msg)
+        msg = "See the Readme tab on the Property Filter form."
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "TESTS AND ACTIONS"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        readme_tab.Add("")
+        For i As Integer = 0 To 3
+            readme_github.Add(Names(i))
+            readme_tab.Add(Names(i).ToUpper)
+            readme_tab.Add("")
+            'For Each Item In CheckBoxList(i).Items
+            '    msg1.Add("    " + CStr(Item))
+            '    msg2.Add("    " + CStr(Item))
+            'Next
+            If i = 0 Then
+                For Each Key In LabelToActionAssembly.Keys
+                    readme_github.Add("    " + Key)
+                    readme_tab.Add("--" + Key)
+                    If LabelToActionAssembly(Key).HelpText <> "" Then
+                        readme_tab.Add(LabelToActionAssembly(Key).HelpText)
+                    End If
+                    readme_tab.Add("")
+                Next
+            ElseIf i = 1 Then
+                For Each Key In LabelToActionPart.Keys
+                    readme_github.Add("    " + Key)
+                    readme_tab.Add("--" + Key)
+                    If LabelToActionPart(Key).HelpText <> "" Then
+                        readme_tab.Add(LabelToActionPart(Key).HelpText)
+                    End If
+                    readme_tab.Add("")
+                Next
+            ElseIf i = 2 Then
+                For Each Key In LabelToActionSheetmetal.Keys
+                    readme_github.Add("    " + Key)
+                    readme_tab.Add("--" + Key)
+                    If LabelToActionSheetmetal(Key).HelpText <> "" Then
+                        readme_tab.Add(LabelToActionSheetmetal(Key).HelpText)
+                    End If
+                    readme_tab.Add("")
+                Next
+            Else  ' i = 3
+                For Each Key In LabelToActionDraft.Keys
+                    readme_github.Add("    " + Key)
+                    readme_tab.Add("--" + Key)
+                    If LabelToActionDraft(Key).HelpText <> "" Then
+                        readme_tab.Add(LabelToActionDraft(Key).HelpText)
+                    End If
+                    readme_tab.Add("")
+                Next
+
+
+            End If
+
+        Next
+
+        'CheckedListBoxAssembly.Items.Clear()
+        'For Each Key In LabelToActionAssembly.Keys
+        '    CheckedListBoxAssembly.Items.Add(Key)
+        'Next
+
+        'CheckedListBoxPart.Items.Clear()
+        'For Each Key In LabelToActionPart.Keys
+        '    CheckedListBoxPart.Items.Add(Key)
+        'Next
+
+        'CheckedListBoxSheetmetal.Items.Clear()
+        'For Each Key In LabelToActionSheetmetal.Keys
+        '    CheckedListBoxSheetmetal.Items.Add(Key)
+        'Next
+
+        'CheckedListBoxDraft.Items.Clear()
+        'For Each Key In LabelToActionDraft.Keys
+        '    CheckedListBoxDraft.Items.Add(Key)
+        'Next
+
+
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "## CODE ORGANIZATION"
+        readme_github.Add(msg)
+        msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
+        readme_github.Add(msg)
+
+        For Each s As String In readme_tab
             msg3.Add(s.Replace("# ", "").Replace("#", ""))
         Next
         TextBoxReadme.Lines = msg3.ToArray
@@ -482,7 +677,7 @@ Partial Class Form1
         ReadmeFileName = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
 
         If FileIO.FileSystem.DirectoryExists(System.IO.Path.GetDirectoryName(ReadmeFileName)) Then
-            IO.File.WriteAllLines(ReadmeFileName, msg1)
+            IO.File.WriteAllLines(ReadmeFileName, readme_github)
         End If
 
     End Sub
