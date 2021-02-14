@@ -403,6 +403,8 @@ Partial Class Form1
         Dim msg3 As New List(Of String)  ' Reformats msg2 to eliminate Markdown directives
         Dim ReadmeFileName As String
         Dim FilenameList As New List(Of String)
+        Dim tf As Boolean
+        Dim StartupPath As String
 
         Dim CheckBoxList As New List(Of CheckedListBox)
         Dim Names As New List(Of String)
@@ -432,7 +434,8 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @Jean-Louis"
+        msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
+        msg += "@Jean-Louis, @Jan_Bos"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -458,8 +461,9 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         msg = "The other option is to use the latest released version here "
-        msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.6  "
-        msg += "From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  "
+        msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases  "
+        msg += "Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  "
+        msg += "It should prompt you to save it.  "
         msg += "Choose a convenient location on your machine.  "
         msg += "Extract the zip file (probably by right-clicking and selecting Extract All).  "
         msg += "Double-click the .exe file to run."
@@ -487,7 +491,9 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name."
+        msg = "If any errors are found, a log file will be written to the input folder.  "
+        msg += "It will identify each error and the file in which it occurred.  "
+        msg += "When processing is complete, a message box will give you the file name."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -508,7 +514,10 @@ Partial Class Form1
         msg = "## CAVEATS"
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge.  To maintain a clean environment, the program restarts Solid Edge periodically.  This is by design and does not necessarily indicate a problem.  "
+        msg = "Since the program can process a large number of files in a short amount of time, "
+        msg += "it can be very taxing on Solid Edge.  "
+        msg += "To maintain a clean environment, the program restarts Solid Edge periodically.  "
+        msg += "This is by design and does not necessarily indicate a problem."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -516,8 +525,9 @@ Partial Class Form1
         readme_tab.Add(msg)
         msg = "However, problems can arise.  "
         msg += "Those cases will be reported in the log file with the message 'Error processing file'.  "
-        msg += "A stack trace will be included, which looks scary, but may be useful for program debugging.  "
-        msg += "If four of these errors are detected in a run, the programs halts processing."
+        msg += "A stack trace will be included.  The stack trace looks scary, but may be useful for program debugging.  "
+        msg += "If four of these errors are detected in a run, the programs halts with the "
+        msg += "Status Bar message 'Processing aborted'."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -584,7 +594,7 @@ Partial Class Form1
         msg = "See the Readme tab on the Property Filter form."
         readme_tab.Add(msg)
 
-        msg = vbCrLf + "TESTS AND ACTIONS"
+        msg = vbCrLf + "### TESTS AND ACTIONS"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         readme_tab.Add("")
@@ -676,7 +686,9 @@ Partial Class Form1
         ' The file name is hard coded, hopefully most users won't have this exact location on their machines.  
         ReadmeFileName = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
 
-        If FileIO.FileSystem.DirectoryExists(System.IO.Path.GetDirectoryName(ReadmeFileName)) Then
+        StartupPath = "D:\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+        tf = FileIO.FileSystem.DirectoryExists(StartupPath)
+        If tf Then
             IO.File.WriteAllLines(ReadmeFileName, readme_github)
         End If
 

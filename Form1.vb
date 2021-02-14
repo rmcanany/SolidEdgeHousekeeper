@@ -693,35 +693,6 @@ Public Class Form1
         ' Update configuration
         Configuration = GetConfiguration()
 
-        'Configuration(TextBoxInputDirectory.Name) = TextBoxInputDirectory.Text
-        'Configuration(TextBoxTemplateAssembly.Name) = TextBoxTemplateAssembly.Text
-        'Configuration(TextBoxTemplatePart.Name) = TextBoxTemplatePart.Text
-        'Configuration(TextBoxTemplateSheetmetal.Name) = TextBoxTemplateSheetmetal.Text
-        'Configuration(TextBoxTemplateDraft.Name) = TextBoxTemplateDraft.Text
-        'Configuration(TextBoxActiveMaterialLibrary.Name) = TextBoxActiveMaterialLibrary.Text
-        'Configuration(TextBoxLaserOutputDirectory.Name) = TextBoxLaserOutputDirectory.Text
-        'Configuration(ComboBoxPartNumberPropertySet.Name) = ComboBoxPartNumberPropertySet.Text
-        'Configuration(TextBoxPartNumberPropertyName.Name) = TextBoxPartNumberPropertyName.Text
-        'Configuration(TextBoxStepAssemblyOutputDirectory.Name) = TextBoxStepAssemblyOutputDirectory.Text
-        'Configuration(TextBoxStepPartOutputDirectory.Name) = TextBoxStepPartOutputDirectory.Text
-        'Configuration(TextBoxStepSheetmetalOutputDirectory.Name) = TextBoxStepSheetmetalOutputDirectory.Text
-        'Configuration(TextBoxPdfDraftOutputDirectory.Name) = TextBoxPdfDraftOutputDirectory.Text
-        'Configuration(TextBoxDxfDraftOutputDirectory.Name) = TextBoxDxfDraftOutputDirectory.Text
-        'Configuration(TextBoxTopLevelAssembly.Name) = TextBoxTopLevelAssembly.Text
-        '' Configuration(TextBoxPropertyFilter.Name) = TextBoxPropertyFilter.Text
-
-        'Configuration(CheckBoxStepAssemblyOutputDirectory.Name) = CheckBoxStepAssemblyOutputDirectory.Checked.ToString
-        'Configuration(CheckBoxStepPartOutputDirectory.Name) = CheckBoxStepPartOutputDirectory.Checked.ToString
-        'Configuration(CheckBoxLaserOutputDirectory.Name) = CheckBoxLaserOutputDirectory.Checked.ToString
-        'Configuration(CheckBoxStepSheetmetalOutputDirectory.Name) = CheckBoxStepSheetmetalOutputDirectory.Checked.ToString
-        'Configuration(CheckBoxPdfDraftOutputDirectory.Name) = CheckBoxPdfDraftOutputDirectory.Checked.ToString
-        'Configuration(CheckBoxDxfDraftOutputDirectory.Name) = CheckBoxDxfDraftOutputDirectory.Checked.ToString
-
-        'Configuration(RadioButtonTLABottomUp.Name) = RadioButtonTLABottomUp.Checked.ToString
-        'Configuration(RadioButtonTLATopDown.Name) = RadioButtonTLATopDown.Checked.ToString
-        'Configuration(CheckBoxTLAReportUnrelatedFiles.Name) = CheckBoxTLAReportUnrelatedFiles.Checked.ToString
-
-
         If RadioButtonTopLevelAssembly.Checked Or CheckBoxEnablePropertyFilter.Checked Then
             'ListBoxFiles.Items.Clear()
             ButtonUpdateListBoxFiles.Enabled = True

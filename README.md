@@ -3,7 +3,7 @@ Robert McAnany 2021
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @Jean-Louis
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @Jean-Louis, @Jan_Bos
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -11,7 +11,7 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases/tag/v0.1.6  From the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases  Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
 On each file type's tab, select which errors to detect.  On the General tab, browse to the desired input folder, then select the desired directory search option.  
@@ -40,7 +40,7 @@ May not support multiple installed Solid Edge versions on the same machine.  Cau
 
 ## DETAILS
 
-TESTS AND ACTIONS
+### TESTS AND ACTIONS
 ### Assembly
     Activate and update all
     Update face and view styles from template
