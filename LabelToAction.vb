@@ -11,10 +11,11 @@ Public Class LabelToAction
         Public Property RequiresLaserOutputDirectory As Boolean
         Public Property RequiresPartNumberFields As Boolean
         Public Property RequiresSave As Boolean
-        Public Property RequiresStepOutputDirectory As Boolean
-        Public Property RequiresPdfOutputDirectory As Boolean
-        Public Property RequiresDxfOutputDirectory As Boolean
+        Public Property RequiresSaveAsOutputDirectory As Boolean
         Public Property IncompatibleWithOtherTasks As Boolean
+        Public Property RequiresExternalProgram As Boolean
+        Public Property RequiresSaveAsFlatDXFOutputDirectory As Boolean
+        Public Property RequiresFindReplaceFields As Boolean
 
 
     End Class
@@ -38,15 +39,16 @@ Public Class LabelToAction
                             LabelText As String,
                             TaskName As String,
                             HelpText As String,
-                            RequiresTemplate As Boolean,
-                            RequiresMaterialTable As Boolean,
-                            RequiresLaserOutputDirectory As Boolean,
-                            RequiresPartNumberFields As Boolean,
-                            RequiresSave As Boolean,
-                            RequiresStepOutputDirectory As Boolean,
-                            RequiresPdfOutputDirectory As Boolean,
-                            RequiresDxfOutputDirectory As Boolean,
-                            IncompatibleWithOtherTasks As Boolean)
+                            Optional RequiresTemplate As Boolean = False,
+                            Optional RequiresMaterialTable As Boolean = False,
+                            Optional RequiresLaserOutputDirectory As Boolean = False,
+                            Optional RequiresPartNumberFields As Boolean = False,
+                            Optional RequiresSave As Boolean = False,
+                            Optional RequiresSaveAsOutputDirectory As Boolean = False,
+                            Optional IncompatibleWithOtherTasks As Boolean = False,
+                            Optional RequiresExternalProgram As Boolean = False,
+                            Optional RequiresSaveAsFlatDXFOutputDirectory As Boolean = False,
+                            Optional RequiresFindReplaceFields As Boolean = False)
 
         Entry.TaskName = TaskName
         Entry.HelpText = HelpText
@@ -55,10 +57,11 @@ Public Class LabelToAction
         Entry.RequiresLaserOutputDirectory = RequiresLaserOutputDirectory
         Entry.RequiresPartNumberFields = RequiresPartNumberFields
         Entry.RequiresSave = RequiresSave
-        Entry.RequiresStepOutputDirectory = RequiresStepOutputDirectory
-        Entry.RequiresPdfOutputDirectory = RequiresPdfOutputDirectory
-        Entry.RequiresDxfOutputDirectory = RequiresDxfOutputDirectory
+        Entry.RequiresSaveAsOutputDirectory = RequiresSaveAsOutputDirectory
         Entry.IncompatibleWithOtherTasks = IncompatibleWithOtherTasks
+        Entry.RequiresExternalProgram = RequiresExternalProgram
+        Entry.RequiresSaveAsFlatDXFOutputDirectory = RequiresSaveAsFlatDXFOutputDirectory
+        Entry.RequiresFindReplaceFields = RequiresFindReplaceFields
 
         Me(LabelText) = Entry
 
@@ -75,7 +78,7 @@ Public Class LabelToAction
                      "Activate and update all",
                      "ActivateAndUpdateAll",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "    Updates the file with face and view styles from a file you specify on the Configuration tab.  " + vbCrLf
@@ -85,7 +88,7 @@ Public Class LabelToAction
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
                      HelpString,
-                     True, False, False, False, True, False, False, False, False)
+                     RequiresTemplate:=True, RequiresSave:=True)
 
         Dim RemoveFaceStyleOverrides As New L2A
         HelpString = "    Face style overrides change a part's appearance in the assembly.  "
@@ -94,7 +97,7 @@ Public Class LabelToAction
                      "Remove face style overrides",
                      "RemoveFaceStyleOverrides",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim FitIsometricView As New L2A
         HelpString = "    Hides reference planes, maximizes the window, sets the view to iso, and does a fit."
@@ -102,15 +105,21 @@ Public Class LabelToAction
                      "Fit isometric view",
                      "FitIsometricView",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
+
+        Dim MissingDrawing As New L2A
+        HelpString = "    Assumes drawing has the same name as the model, and is in the same directory"
+        PopulateList(MissingDrawing,
+                     "Missing drawing",
+                     "MissingDrawing",
+                     HelpString)
 
         Dim OccurrenceMissingFiles As New L2A
         HelpString = "    Checks to see if any assembly occurrence is pointing to a file not found on disk."
         PopulateList(OccurrenceMissingFiles,
                      "Occurrence missing files",
                      "OccurrenceMissingFiles",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim OccurrenceOutsideProjectDirectory As New L2A
         HelpString = "    Checks to see if any assembly occurrence resides outside the input directory specified on the General tab.  " + vbCrLf
@@ -118,24 +127,21 @@ Public Class LabelToAction
         PopulateList(OccurrenceOutsideProjectDirectory,
                      "Occurrence outside project directory",
                      "OccurrenceOutsideProjectDirectory",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim FailedRelationships As New L2A
         HelpString = ""
         PopulateList(FailedRelationships,
                      "Failed relationships",
                      "FailedRelationships",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim UnderconstrainedRelationships As New L2A
         HelpString = ""
         PopulateList(UnderconstrainedRelationships,
                      "Underconstrained relationships",
                      "UnderconstrainedRelationships",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "    Checks if a file property, that you specify on the Configuration tab, matches the file name."
@@ -143,16 +149,46 @@ Public Class LabelToAction
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
                      HelpString,
-                     False, False, False, True, False, False, False, False, False)
+                     RequiresPartNumberFields:=True)
 
-        Dim SaveAsSTEP As New L2A
+        Dim SaveAs As New L2A
         HelpString = ""
-        PopulateList(SaveAsSTEP,
-                     "Save as STEP",
-                     "SaveAsSTEP",
+        PopulateList(SaveAs,
+                     "Save as",
+                     "SaveAs",
                      HelpString,
-                     False, False, False, False, False, True, False, False, False)
+                     RequiresSaveAsOutputDirectory:=True)
 
+        Dim InteractiveEdit As New L2A
+        HelpString = "    Brings up files one at a time for manual processing.  Some rules apply."
+        HelpString += vbCrLf + "    It is important to leave Solid Edge in the state you found it when the file was opened.  "
+        HelpString += "For example, if you open another file, such as a drawing, you need to close it.  "
+        HelpString += "If you add or modify a feature, you need to click Finish.  "
+        HelpString += vbCrLf + "    Also, do not Close the file or do a Save As on it.  "
+        HelpString += "Housekeeper maintains a 'reference' to the file.  "
+        HelpString += "Those two commands cause the reference to be lost, resulting in an exception.  "
+        PopulateList(InteractiveEdit,
+                     "Interactive edit",
+                     "InteractiveEdit",
+                     HelpString)
+
+        Dim RunExternalProgram As New L2A
+        HelpString = "    Runs an *.exe file.  Several rules about the program implementation apply.  "
+        HelpString += "See https://github.com/rmcanany/HousekeeperExternalPrograms for details and examples.  "
+        PopulateList(RunExternalProgram,
+                     "Run external program",
+                     "RunExternalProgram",
+                     HelpString,
+                     RequiresExternalProgram:=True)
+
+        Dim PropertyFindReplace As New L2A
+        HelpString = "    Searches for the string in the defined property and replaces it if found.  "
+        HelpString += "The search is case insensitive, the replace is case sensitive."
+        PopulateList(PropertyFindReplace,
+                     "Property find replace",
+                     "PropertyFindReplace",
+                     HelpString,
+                     RequiresFindReplaceFields:=True, RequiresSave:=True)
 
     End Sub
 
@@ -166,7 +202,7 @@ Public Class LabelToAction
                      "Update insert part copies",
                      "UpdateInsertPartCopies",
                      HelpString,
-                     False, False, False, True, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim UpdateMaterialFromMaterialTable As New L2A
         HelpString = "    Checks to see if the part's material name and properties match any material "
@@ -178,7 +214,7 @@ Public Class LabelToAction
                      "Update material from material table",
                      "UpdateMaterialFromMaterialTable",
                      HelpString,
-                     False, True, False, False, True, False, False, False, False)
+                     RequiresMaterialTable:=True, RequiresSave:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -186,7 +222,7 @@ Public Class LabelToAction
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
                      HelpString,
-                     True, False, False, False, True, False, False, False, False)
+                     RequiresTemplate:=True, RequiresSave:=True)
 
         Dim FitIsometricView As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -194,39 +230,42 @@ Public Class LabelToAction
                      "Fit isometric view",
                      "FitIsometricView",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
+
+        Dim MissingDrawing As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(MissingDrawing,
+                     "Missing drawing",
+                     "MissingDrawing",
+                     HelpString)
 
         Dim FailedOrWarnedFeatures As New L2A
         HelpString = ""
         PopulateList(FailedOrWarnedFeatures,
                      "Failed or warned features",
                      "FailedOrWarnedFeatures",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim SuppressedOrRolledBackFeatures As New L2A
         HelpString = ""
         PopulateList(SuppressedOrRolledBackFeatures,
                      "Suppressed or rolled back features",
                      "SuppressedOrRolledBackFeatures",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim UnderconstrainedProfiles As New L2A
         HelpString = ""
         PopulateList(UnderconstrainedProfiles,
                      "Underconstrained profiles",
                      "UnderconstrainedProfiles",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = ""
         PopulateList(InsertPartCopiesOutOfDate,
                      "Insert part copies out of date",
                      "InsertPartCopiesOutOfDate",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim MaterialNotInMaterialTable As New L2A
         HelpString = ""
@@ -234,7 +273,7 @@ Public Class LabelToAction
                      "Material not in material table",
                      "MaterialNotInMaterialTable",
                      HelpString,
-                     False, True, False, False, False, False, False, False, False)
+                     RequiresMaterialTable:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -242,15 +281,38 @@ Public Class LabelToAction
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
                      HelpString,
-                     False, False, False, True, False, False, False, False, False)
+                     RequiresPartNumberFields:=True)
 
-        Dim SaveAsSTEP As New L2A
+        Dim SaveAs As New L2A
         HelpString = ""
-        PopulateList(SaveAsSTEP,
-                     "Save as STEP",
-                     "SaveAsSTEP",
+        PopulateList(SaveAs,
+                     "Save As",
+                     "SaveAs",
                      HelpString,
-                     False, False, False, False, False, True, False, False, False)
+                     RequiresSaveAsOutputDirectory:=True)
+
+        Dim InteractiveEdit As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(InteractiveEdit,
+                     "Interactive edit",
+                     "InteractiveEdit",
+                     HelpString)
+
+        Dim RunExternalProgram As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(RunExternalProgram,
+                     "Run external program",
+                     "RunExternalProgram",
+                     HelpString,
+                     RequiresExternalProgram:=True)
+
+        Dim PropertyFindReplace As New L2A
+        HelpString = "    Same as the Assembly command of the same name."
+        PopulateList(PropertyFindReplace,
+                     "Property find replace",
+                     "PropertyFindReplace",
+                     HelpString,
+                     RequiresFindReplaceFields:=True, RequiresSave:=True)
 
     End Sub
 
@@ -263,7 +325,7 @@ Public Class LabelToAction
                      "Update insert part copies",
                      "UpdateInsertPartCopies",
                      HelpString,
-                     False, False, False, True, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim UpdateMaterialFromMaterialTable As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -271,7 +333,7 @@ Public Class LabelToAction
                      "Update material from material table",
                      "UpdateMaterialFromMaterialTable",
                      HelpString,
-                     False, True, False, False, True, False, False, False, False)
+                     RequiresMaterialTable:=True, RequiresSave:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -279,7 +341,7 @@ Public Class LabelToAction
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
                      HelpString,
-                     True, False, False, False, True, False, False, False, False)
+                     RequiresTemplate:=True, RequiresSave:=True)
 
         Dim FitIsometricView As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -287,47 +349,49 @@ Public Class LabelToAction
                      "Fit isometric view",
                      "FitIsometricView",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
+
+        Dim MissingDrawing As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(MissingDrawing,
+                     "Missing drawing",
+                     "MissingDrawing",
+                     HelpString)
 
         Dim FailedOrWarnedFeatures As New L2A
         HelpString = "    Same as the part command of the same name."
         PopulateList(FailedOrWarnedFeatures,
                      "Failed or warned features",
                      "FailedOrWarnedFeatures",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim SuppressedOrRolledBackFeatures As New L2A
         HelpString = "    Same as the part command of the same name."
         PopulateList(SuppressedOrRolledBackFeatures,
                      "Suppressed or rolled back features",
                      "SuppressedOrRolledBackFeatures",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim UnderconstrainedProfiles As New L2A
         HelpString = "    Same as the part command of the same name."
         PopulateList(UnderconstrainedProfiles,
                      "Underconstrained profiles",
                      "UnderconstrainedProfiles",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = "    Same as the part command of the same name."
         PopulateList(InsertPartCopiesOutOfDate,
                      "Insert part copies out of date",
                      "InsertPartCopiesOutOfDate",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim FlatPatternMissingOrOutOfDate As New L2A
         HelpString = ""
         PopulateList(FlatPatternMissingOrOutOfDate,
                      "Flat pattern missing or out of date",
                      "FlatPatternMissingOrOutOfDate",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim MaterialNotInMaterialTable As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -335,7 +399,7 @@ Public Class LabelToAction
                      "Material not in material table",
                      "MaterialNotInMaterialTable",
                      HelpString,
-                     False, True, False, False, False, False, False, False, False)
+                     RequiresMaterialTable:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -343,7 +407,7 @@ Public Class LabelToAction
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
                      HelpString,
-                     False, False, False, True, False, False, False, False, False)
+                     RequiresPartNumberFields:=True)
 
         Dim GenerateLaserDXFAndPDF As New L2A
         HelpString = "    Creates a DXF file of the sheet metal flat pattern.  "
@@ -356,15 +420,46 @@ Public Class LabelToAction
                      "Generate Laser DXF and PDF",
                      "GenerateLaserDXFAndPDF",
                      HelpString,
-                     False, False, True, True, False, False, False, False, False)
+                     RequiresLaserOutputDirectory:=True, RequiresSave:=True)
 
-        Dim SaveAsSTEP As New L2A
+        Dim SaveAs As New L2A
         HelpString = ""
-        PopulateList(SaveAsSTEP,
-                     "Save as STEP",
-                     "SaveAsSTEP",
+        PopulateList(SaveAs,
+                     "Save As",
+                     "SaveAs",
                      HelpString,
-                     False, False, False, False, False, True, False, False, False)
+                     RequiresSaveAsOutputDirectory:=True)
+
+        Dim SaveAsFlatDXF As New L2A
+        HelpString = ""
+        PopulateList(SaveAsFlatDXF,
+                     "Save As Flat DXF",
+                     "SaveAsFlatDXF",
+                     HelpString,
+                     RequiresSaveAsFlatDXFOutputDirectory:=True)
+
+        Dim InteractiveEdit As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(InteractiveEdit,
+                     "Interactive edit",
+                     "InteractiveEdit",
+                     HelpString)
+
+        Dim RunExternalProgram As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(RunExternalProgram,
+                     "Run external program",
+                     "RunExternalProgram",
+                     HelpString,
+                     RequiresExternalProgram:=True)
+
+        Dim PropertyFindReplace As New L2A
+        HelpString = "    Same as the Assembly command of the same name."
+        PopulateList(PropertyFindReplace,
+                     "Property find replace",
+                     "PropertyFindReplace",
+                     HelpString,
+                     RequiresFindReplaceFields:=True, RequiresSave:=True)
 
     End Sub
 
@@ -377,19 +472,7 @@ Public Class LabelToAction
                      "Update drawing views",
                      "UpdateDrawingViews",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
-
-        'Dim UpdateDrawingBorderFromTemplate As New L2A
-        'PopulateList(UpdateDrawingBorderFromTemplate,
-        '             "Update drawing border from template",
-        '             "UpdateDrawingBorderFromTemplate",
-        '             True, False, False, False, True, False, False, False, False)
-
-        'Dim UpdateDimensionStylesFromTemplate As New L2A
-        'PopulateList(UpdateDimensionStylesFromTemplate,
-        '             "Update dimension styles from template",
-        '             "UpdateDimensionStylesFromTemplate",
-        '             True, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim MoveDrawingToNewTemplate As New L2A
         HelpString = "    Creates a new file from a template you specify on the Configuration tab.  "
@@ -405,7 +488,7 @@ Public Class LabelToAction
                      "Move drawing to new template",
                      "MoveDrawingToNewTemplate",
                      HelpString,
-                     True, False, False, False, True, False, False, False, True)
+                     RequiresTemplate:=True, RequiresSave:=True, IncompatibleWithOtherTasks:=True)
 
         Dim FitView As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -413,55 +496,66 @@ Public Class LabelToAction
                      "Fit view",
                      "FitView",
                      HelpString,
-                     False, False, False, False, True, False, False, False, False)
+                     RequiresSave:=True)
 
         Dim DrawingViewsMissingFile As New L2A
         HelpString = "    Same as the assembly command of the same name."
         PopulateList(DrawingViewsMissingFile,
                      "Drawing views missing file",
                      "DrawingViewsMissingFile",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim DrawingViewsOutOfDate As New L2A
         HelpString = ""
         PopulateList(DrawingViewsOutOfDate,
                      "Drawing views out of date",
                      "DrawingViewsOutOfDate",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim DetachedDimensionsOrAnnotations As New L2A
         HelpString = ""
         PopulateList(DetachedDimensionsOrAnnotations,
                      "Detached dimensions or annotations",
                      "DetachedDimensionsOrAnnotations",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
         Dim FileNameDoesNotMatchModelFilename As New L2A
         HelpString = "    Same as the assembly command of the same name."
         PopulateList(FileNameDoesNotMatchModelFilename,
                      "File name does not match model file name",
                      "FileNameDoesNotMatchModelFilename",
-                     HelpString,
-                     False, False, False, False, False, False, False, False, False)
+                     HelpString)
 
-        Dim SaveAsPDF As New L2A
+        Dim SaveAs As New L2A
         HelpString = ""
-        PopulateList(SaveAsPDF,
-                     "Save as PDF",
-                     "SaveAsPDF",
+        PopulateList(SaveAs,
+                     "Save As",
+                     "SaveAs",
                      HelpString,
-                     False, False, False, False, False, False, True, False, False)
+                     RequiresSaveAsOutputDirectory:=True)
 
-        Dim SaveAsDXF As New L2A
-        HelpString = ""
-        PopulateList(SaveAsDXF,
-                     "Save as DXF",
-                     "SaveAsDXF",
+        Dim Print As New L2A
+        HelpString = "    Access printer settings on the Configuration tab."
+        PopulateList(Print,
+                     "Print",
+                     "Print",
+                     HelpString)
+
+        Dim InteractiveEdit As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(InteractiveEdit,
+                     "Interactive edit",
+                     "InteractiveEdit",
+                     HelpString)
+
+        Dim RunExternalProgram As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(RunExternalProgram,
+                     "Run external program",
+                     "RunExternalProgram",
                      HelpString,
-                     False, False, False, False, False, False, False, True, False)
+                     RequiresExternalProgram:=True)
+
 
     End Sub
 

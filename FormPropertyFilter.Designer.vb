@@ -258,6 +258,7 @@ Partial Class FormPropertyFilter
         Me.ComboBoxPropertyFilterName.Location = New System.Drawing.Point(25, 30)
         Me.ComboBoxPropertyFilterName.Name = "ComboBoxPropertyFilterName"
         Me.ComboBoxPropertyFilterName.Size = New System.Drawing.Size(450, 24)
+        Me.ComboBoxPropertyFilterName.Sorted = True
         Me.ComboBoxPropertyFilterName.TabIndex = 19
         '
         'TabPage2

@@ -33,6 +33,7 @@ Partial Class Form1
 
         Return Configuration
     End Function
+
     Private Function RecurseFormControls(Ctrl As Control,
                                          ControlDict As Dictionary(Of String, Control),
                                          Exclude As Boolean
@@ -45,7 +46,9 @@ Partial Class Form1
         ExcludeControls.Add(RadioButtonFilesDirectoriesAndSubdirectories.Name)
         ExcludeControls.Add(RadioButtonFilesDirectoryOnly.Name)
         ExcludeControls.Add(RadioButtonTopLevelAssembly.Name)
+        ExcludeControls.Add(RadioButtonTODOList.Name)
         ExcludeControls.Add(CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(CheckBoxCreateTODOList.Name)
         ExcludeControls.Add(TextBoxReadme.Name)
         ExcludeControls.Add(ListBoxFiles.Name)
 
@@ -88,6 +91,7 @@ Partial Class Form1
         tf = tb.Name.ToLower.Contains("template")
         tf = tf Or tb.Name.ToLower.Contains("materiallibrary")
         tf = tf Or tb.Name.ToLower.Contains("toplevelassembly")
+        tf = tf Or tb.Name.ToLower.Contains("externalprogram")
         If tf Then
             If FileIO.FileSystem.FileExists(Value) Then
                 tb.Text = Value
@@ -104,7 +108,7 @@ Partial Class Form1
                 Try
                     tb.Text = CStr(Value)
                 Catch ex As Exception
-                    tb.Text = "50"
+                    tb.Text = "5.5"
                 End Try
             End If
         End If
@@ -123,10 +127,83 @@ Partial Class Form1
         End If
 
         tf = tb.Name.ToLower.Contains("propertyname")
+        tf = tf Or tb.Name.ToLower.Contains("findreplace")
+        tf = tf Or tb.Name.ToLower.Contains("filesearch")
         If tf Then
             tb.Text = Value
         End If
 
+
+    End Sub
+
+    Private Sub PopulateComboBoxes()
+        'Dim FileTypesAssembly As String()
+        'Dim FileTypesPart As String()
+        'Dim FileTypesSheetmetal As String()
+        'Dim FileTypesDraft As String()
+        Dim FileTypesString As String
+        Dim FileType As String
+
+        ' Assembly
+        FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
+        FileTypesString += ":OBJ (*.obj):STL (*.stl)"
+
+        ComboBoxSaveAsAssemblyFileType.Items.Clear()
+        For Each FileType In Split(FileTypesString, Delimiter:=":")
+            ComboBoxSaveAsAssemblyFileType.Items.Add(FileType)
+        Next
+        ComboBoxSaveAsAssemblyFileType.Text = CType(ComboBoxSaveAsAssemblyFileType.Items(0), String)
+
+        ' Part
+        ComboBoxSaveAsPartFileType.Items.Clear()
+        For Each FileType In Split(FileTypesString, Delimiter:=":")
+            ComboBoxSaveAsPartFileType.Items.Add(FileType)
+        Next
+        ComboBoxSaveAsPartFileType.Text = CType(ComboBoxSaveAsPartFileType.Items(0), String)
+
+        ' Sheetmetal
+        ComboBoxSaveAsSheetmetalFileType.Items.Clear()
+        For Each FileType In Split(FileTypesString, Delimiter:=":")
+            ComboBoxSaveAsSheetmetalFileType.Items.Add(FileType)
+        Next
+        ComboBoxSaveAsSheetmetalFileType.Text = CType(ComboBoxSaveAsSheetmetalFileType.Items(0), String)
+
+        ' Draft
+        FileTypesString = "PDF (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
+
+        ComboBoxSaveAsDraftFileType.Items.Clear()
+        For Each FileType In Split(FileTypesString, Delimiter:=":")
+            ComboBoxSaveAsDraftFileType.Items.Add(FileType)
+        Next
+        ComboBoxSaveAsDraftFileType.Text = CType(ComboBoxSaveAsDraftFileType.Items(0), String)
+
+        'ComboBoxPartNumberPropertySet
+        ComboBoxPartNumberPropertySet.Items.Clear()
+        For Each s As String In Split("System Custom")
+            ComboBoxPartNumberPropertySet.Items.Add(s)
+        Next
+        ComboBoxPartNumberPropertySet.Text = CType(ComboBoxPartNumberPropertySet.Items(0), String)
+
+        'ComboBoxFindReplacePropertySetAssembly
+        ComboBoxFindReplacePropertySetAssembly.Items.Clear()
+        For Each s As String In Split("System Custom")
+            ComboBoxFindReplacePropertySetAssembly.Items.Add(s)
+        Next
+        ComboBoxFindReplacePropertySetAssembly.Text = CType(ComboBoxFindReplacePropertySetAssembly.Items(0), String)
+
+        'ComboBoxFindReplacePropertySetPart
+        ComboBoxFindReplacePropertySetPart.Items.Clear()
+        For Each s As String In Split("System Custom")
+            ComboBoxFindReplacePropertySetPart.Items.Add(s)
+        Next
+        ComboBoxFindReplacePropertySetPart.Text = CType(ComboBoxFindReplacePropertySetPart.Items(0), String)
+
+        'ComboBoxFindReplacePropertySetSheetmetal
+        ComboBoxFindReplacePropertySetSheetmetal.Items.Clear()
+        For Each s As String In Split("System Custom")
+            ComboBoxFindReplacePropertySetSheetmetal.Items.Add(s)
+        Next
+        ComboBoxFindReplacePropertySetSheetmetal.Text = CType(ComboBoxFindReplacePropertySetSheetmetal.Items(0), String)
 
     End Sub
 
@@ -144,6 +221,8 @@ Partial Class Form1
         Dim Ctrl As Control
 
         DefaultsFilename = StartupPath + "\" + "defaults.txt"
+
+        PopulateComboBoxes()
 
         ControlDict = RecurseFormControls(Me, ControlDict, True)
 
@@ -205,6 +284,7 @@ Partial Class Form1
         ReconcileFormChanges()
 
     End Sub
+
 
     'Private Function GetPartsListStyles() As List(Of String)
     '    Dim PartsListStyles As New List(Of String)
@@ -400,7 +480,7 @@ Partial Class Form1
         Dim msg As String
         Dim readme_github As New List(Of String)  ' Used to create the Readme file for GitHub
         Dim readme_tab As New List(Of String)  ' Used to create the Readme tab on Form1
-        Dim msg3 As New List(Of String)  ' Reformats msg2 to eliminate Markdown directives
+        Dim readme_tab_formatted As New List(Of String)  ' Reformats msg2 to eliminate Markdown directives
         Dim ReadmeFileName As String
         Dim FilenameList As New List(Of String)
         Dim tf As Boolean
@@ -419,7 +499,7 @@ Partial Class Form1
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
 
-        msg = "# Solid Edge Housekeeper"
+        msg = "# Solid Edge Housekeeper v0.1.7"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2021"
@@ -428,19 +508,23 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog."
+
+        msg = "Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  "
+        msg += "Most of the rest copied verbatim from Jason's repo and Tushar's blog."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
-        msg += "@Jean-Louis, @Jan_Bos"
+        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "## DESCRIPTION"
         readme_github.Add(msg)
         readme_tab.Add(msg)
@@ -453,6 +537,7 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "## INSTALLATION"
         readme_github.Add(msg)
         msg = "There is no installation per se.  The preferred method is to download or clone "
@@ -460,6 +545,7 @@ Partial Class Form1
         readme_github.Add(msg)
         msg = ""
         readme_github.Add(msg)
+
         msg = "The other option is to use the latest released version here "
         msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases  "
         msg += "Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  "
@@ -470,27 +556,28 @@ Partial Class Form1
         readme_github.Add(msg)
         msg = ""
         readme_github.Add(msg)
+
         msg = "## OPERATION"
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "On each file type's tab, select which errors to detect.  "
         msg += "On the General tab, browse to the desired input folder, "
         msg += "then select the desired directory search option.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "You can further refine the search using a property filter.  "
-        msg += "For details, see the Property Filter Readme tab.  "
-        msg += "Note, if 'Top level assembly' is the chosen search option, or a property filter is set, "
-        msg += "click 'Update File List' to populate the list.  "
-        msg += "On large assemblies, this can take some time."
+        msg = "You can refine the search using a file filter, a property filter, or both.  "
+        msg += "See the file selection section for details.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "If any errors are found, a log file will be written to the input folder.  "
         msg += "It will identify each error and the file in which it occurred.  "
         msg += "When processing is complete, a message box will give you the file name."
@@ -499,18 +586,23 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "The first time you use the program, some site-specific information is needed.  This includes the location of your templates, material table, etc.  These are accessed on the Configuration Tab."
+
+        msg = "The first time you use the program, some site-specific information is needed.  "
+        msg += "This includes the location of your templates, material table, etc.  "
+        msg += "These are populated on the Configuration Tab."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "You can interrupt the program before it finishes.  While processing, the Cancel button changes to a Stop button.  Just click that to halt processing.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "## CAVEATS"
         readme_github.Add(msg)
         readme_tab.Add(msg)
@@ -523,6 +615,7 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "However, problems can arise.  "
         msg += "Those cases will be reported in the log file with the message 'Error processing file'.  "
         msg += "A stack trace will be included.  The stack trace looks scary, but may be useful for program debugging.  "
@@ -533,6 +626,7 @@ Partial Class Form1
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)
+
         msg = "Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it."
         readme_github.Add(msg)
         readme_tab.Add(msg)
@@ -571,28 +665,86 @@ Partial Class Form1
         readme_tab.Add(msg)
 
 
-        msg = "## DETAILS"
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
-
         msg = vbCrLf + "FILE SELECTION"
         readme_tab.Add(msg)
-        msg = "Select individual files to process OR Select none to process all."
+
+        msg = "There are four file selection options: "
+        msg += "'Directory', 'Subdirectories', 'Top level assembly', and 'TODO list'.  "
+        msg += "The first two are hopefully self-explanatory.  The other two are described next.  "
         readme_tab.Add(msg)
-        msg = vbCrLf + "If 'Top level assembly' is checked, "
-        msg += "the search can be conducted in one of two ways, bottom up or top down.  "
-        msg += "These options are set on the Configuration tab."
+
+        msg = vbCrLf + "Top Level Assembly"
         readme_tab.Add(msg)
+
+        msg = "This option uses an assembly file as a starting point.  "
+        msg += "The program follows all links to the assembly and its subassemblies.  "
+        msg += "Draft files are found with 'Where Used' on the linked files.  "
+        msg += "The search scope is any file within or below the current input directory."
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "The search can be conducted in one of two ways, bottom up or top down.  "
+        msg += "These options are set on the Configuration tab and are described next."
+        readme_tab.Add(msg)
+
         msg = vbCrLf + "Bottom up is meant for general purpose directories (e.g., \\BIG_SERVER\every file we have\).  "
         readme_tab.Add(msg)
+
         msg = vbCrLf + "Top down is meant for self-contained project directories (e.g., C:\Projects\Project123\).  "
         msg += "A top down search can optionally report files with no links to the top level assembly.  "
         readme_tab.Add(msg)
 
-        msg = vbCrLf + "PROPERTY FILTER"
+        msg = vbCrLf + "Most file selection options occur as soon as they are selected.  "
+        msg += "A top-level assembly search is different.  "
+        msg += "Since it can be somewhat time consuming, the update is only conducted after "
+        msg += "clicking the Update file list button.  "
         readme_tab.Add(msg)
-        msg = "See the Readme tab on the Property Filter form."
+
+        msg = vbCrLf + "TODO List"
         readme_tab.Add(msg)
+
+        msg = "The 'TODO List' option uses output from a previous run as a starting point.  "
+        msg += "To create the list, check the Create TODO list checkbox before processing files.  "
+        msg += "Files with any errors will be added to the list.  "
+        msg += "To then process those files, select 'TODO List' as the files-to-process option."
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "This option is intended mainly to work with Interactive Edit, but can be used with any task.  "
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "The file list is stored in the Housekeeper directory in a text file named todo.txt.  "
+        msg += "If you have a file list from another source, you can save it in the text file and process it as above."
+        readme_tab.Add(msg)
+
+
+
+
+        msg = vbCrLf + "FILTERING"
+        readme_tab.Add(msg)
+
+        msg = "You can refine the file list by file name, property value, or both.  "
+        msg += "For details on the property search, see the Readme tab on the Property Filter dialog.  "
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "File filtering can occur on file extension, file wildcard, or both.  "
+        msg += "Filtering by extension is done by checking/unchecking the appropriate extension.  "
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "Filtering by wildcard is done by entering the wildcard pattern in the provided textbox.  "
+        msg += "Internally, it is implemented with the VB 'Like' operator, "
+        msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
+        readme_tab.Add(msg)
+
+        msg = vbCrLf + "For details and examples on the VB 'Like' syntax, see "
+        msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+
+        msg = "## DETAILS"
+        readme_github.Add(msg)
+        'readme_tab.Add(msg)
 
         msg = vbCrLf + "### TESTS AND ACTIONS"
         readme_github.Add(msg)
@@ -600,7 +752,7 @@ Partial Class Form1
         readme_tab.Add("")
         For i As Integer = 0 To 3
             readme_github.Add(Names(i))
-            readme_tab.Add(Names(i).ToUpper)
+            readme_tab.Add(Names(i))
             readme_tab.Add("")
             'For Each Item In CheckBoxList(i).Items
             '    msg1.Add("    " + CStr(Item))
@@ -648,26 +800,6 @@ Partial Class Form1
 
         Next
 
-        'CheckedListBoxAssembly.Items.Clear()
-        'For Each Key In LabelToActionAssembly.Keys
-        '    CheckedListBoxAssembly.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxPart.Items.Clear()
-        'For Each Key In LabelToActionPart.Keys
-        '    CheckedListBoxPart.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxSheetmetal.Items.Clear()
-        'For Each Key In LabelToActionSheetmetal.Keys
-        '    CheckedListBoxSheetmetal.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxDraft.Items.Clear()
-        'For Each Key In LabelToActionDraft.Keys
-        '    CheckedListBoxDraft.Items.Add(Key)
-        'Next
-
 
         msg = ""
         readme_github.Add(msg)
@@ -678,9 +810,9 @@ Partial Class Form1
         readme_github.Add(msg)
 
         For Each s As String In readme_tab
-            msg3.Add(s.Replace("# ", "").Replace("#", ""))
+            readme_tab_formatted.Add(s.Replace("# ", "").Replace("#", ""))
         Next
-        TextBoxReadme.Lines = msg3.ToArray
+        TextBoxReadme.Lines = readme_tab_formatted.ToArray
 
         ' The readme file is not needed on the user's machine.  
         ' The file name is hard coded, hopefully most users won't have this exact location on their machines.  

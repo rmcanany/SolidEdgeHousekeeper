@@ -346,14 +346,17 @@ Public Class FormPropertyFilter
 		Dim Key As String
 
 		ComboBoxPropertyFilterPropertySet.Items.Clear()
-		ComboBoxPropertyFilterPropertySet.Items.Add("System")
 		ComboBoxPropertyFilterPropertySet.Items.Add("Custom")
-		ComboBoxPropertyFilterPropertySet.SelectedIndex = 0
+		'ComboBoxPropertyFilterPropertySet.Items.Add("Filename")
+		'ComboBoxPropertyFilterPropertySet.Items.Add("Path")
+		ComboBoxPropertyFilterPropertySet.Items.Add("System")
+		ComboBoxPropertyFilterPropertySet.SelectedIndex = 1
 
 		ComboBoxPropertyFilterComparison.Items.Clear()
 		ComboBoxPropertyFilterComparison.Items.Add("contains")
 		ComboBoxPropertyFilterComparison.Items.Add("is_exactly")
 		ComboBoxPropertyFilterComparison.Items.Add("is_not")
+		ComboBoxPropertyFilterComparison.Items.Add("wildcard_contains")
 		ComboBoxPropertyFilterComparison.SelectedIndex = 0
 
 		ComboBoxPropertyFilterName.Items.Clear()
@@ -398,7 +401,8 @@ Public Class FormPropertyFilter
 		Paragraphs.Add(msg)
 
 		msg = "Enter the name of the property to be evaluated in the 'Property name' textbox.  "
-		msg += "The Property's 'Property set' must be selected, either System or Custom.  "
+		msg += "Select the Property's 'Property set', either System or Custom.  "
+		msg += "The Property sets are described below.  "
 		Paragraphs.Add(msg)
 
 		msg = "System properties are in every Solid Edge file.  "
@@ -407,12 +411,13 @@ Public Class FormPropertyFilter
 		Paragraphs.Add(msg)
 
 		msg = "Custom properties are ones that you create, probably in a template.  "
-		msg += "The custom property names can be in any language.  (Hopefully.  Untested at this time...)"
+		msg += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
 		Paragraphs.Add(msg)
 
 		msg = "Select the Comparison from its dropdown box.  "
-		msg += "The choices are 'contains', 'is_exactly', or 'is_not'.  "
+		msg += "The choices are 'contains', 'is_exactly', 'is_not', or 'wildcard_contains'.  "
 		msg += "The options 'is_exactly' and 'is_not' are hopefully self explanatory.  "
+		msg += "The two 'contains' options are described below.  "
 		Paragraphs.Add(msg)
 
 		msg = "With the 'contains' option, "
@@ -423,7 +428,15 @@ Public Class FormPropertyFilter
 		msg += "So 'ALUMINUM', 'Aluminum', and 'aluminum' would all match.  "
 		Paragraphs.Add(msg)
 
-		msg = "Each condition is assigned a variable name, (A, B, ...).  "
+		msg = "The 'wildcard_contains' option is like 'contains', except wildcard characters are used.  "
+		msg += "Internally, it is implemented with the VB 'Like' operator, "
+		msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
+		msg += "For details and examples on the VB 'Like' syntax, see "
+		msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
+		Paragraphs.Add(msg)
+
+		msg = "Once a Condition is composed, use the 'Add' button to place it in the list.  "
+		msg += "Each Condition is assigned a variable name, (A, B, ...).  "
 		msg += "The default filter formula is to match all conditions (e.g., A AND B AND C).  "
 		msg += "For example, say you have the following conditions:"
 		Paragraphs.Add(msg)
@@ -443,9 +456,9 @@ Public Class FormPropertyFilter
 		Paragraphs.Add(msg)
 
 		msg = "As a side note for those interested in the details, "
-		msg += "the formula is computed using the VBScript 'Eval' function.  "
+		msg += "the formula is evaluated with the VBScript 'Eval' function.  "
 		msg += "It has been tested with binary operators 'AND' and 'OR', unary operator 'NOT', "
-		msg += "and paired grouping operators '(' and ')'.  "
+		msg += "and precedence operators '(' and ')'.  "
 		msg += "Others should probably work.  "
 		msg += "However, as stated above, all values are converted to lower case text.  "
 		msg += "So operators such as '>' or '<=' may not behave as intended."
@@ -453,7 +466,7 @@ Public Class FormPropertyFilter
 
 		msg = "If you like details, you might also want to know that "
 		msg += "the filters are saved in 'property_filters.txt' in the same directory as Housekeeper.exe.  "
-		msg += "If desired, you can create a master copy of the file and share it with coworkers.  "
+		msg += "If desired, you can create a master copy of the file and share it with others.  "
 		msg += "You can manually edit the file, "
 		msg += "however, note that the field delimiter is the TAB character.  "
 		msg += "This was done so that the property name and value fields could contain space (' ') characters.  "
@@ -553,6 +566,17 @@ Public Class FormPropertyFilter
 		ReconcileFormChanges()
 	End Sub
 
+	Private Sub ComboBoxPropertyFilterPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyFilterPropertySet.SelectedIndexChanged
+		If ComboBoxPropertyFilterPropertySet.Text = "Filename" Then
+			TextBoxPropertyFilterPropertyName.Text = "Filename"
+		ElseIf ComboBoxPropertyFilterPropertySet.Text = "Path" Then
+			TextBoxPropertyFilterPropertyName.Text = "Path"
+		Else
+			TextBoxPropertyFilterPropertyName.Text = ""
+		End If
+	End Sub
+
+
 
 	Private Sub FormPropertyFilter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 		Startup()
@@ -576,6 +600,5 @@ Public Class FormPropertyFilter
 		TextBoxFormula.Enabled = False
 		UpdateDictFormula(ComboBoxPropertyFilterName.Text)
 	End Sub
-
 
 End Class

@@ -5,14 +5,23 @@ Partial Class Form1
     Private Sub UpdateListBoxFiles()
         ' Update ListBoxFiles on Form1
 
-        Dim FoundFiles As IReadOnlyCollection(Of String)
+        Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
         Dim tf As Boolean
 
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
+
+        ListBoxFilesOutOfDate = False
+
+        ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
+        ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
+
         tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked = False
         tf = tf And RadioButtonFilesDirectoryOnly.Checked = False
         tf = tf And RadioButtonTopLevelAssembly.Checked = False
+        tf = tf And RadioButtonTODOList.Checked = False
         If tf Then
             MsgBox("Select an option for files to process")
             Exit Sub
@@ -21,10 +30,18 @@ Partial Class Form1
         StopProcess = False
         ButtonCancel.Text = "Stop"
 
-        ActiveFileExtensionsList.Add("*.asm")
-        ActiveFileExtensionsList.Add("*.par")
-        ActiveFileExtensionsList.Add("*.psm")
-        ActiveFileExtensionsList.Add("*.dft")
+        If CheckBoxFilterAsm.Checked Then
+            ActiveFileExtensionsList.Add("*.asm")
+        End If
+        If CheckBoxFilterPar.Checked Then
+            ActiveFileExtensionsList.Add("*.par")
+        End If
+        If CheckBoxFilterPsm.Checked Then
+            ActiveFileExtensionsList.Add("*.psm")
+        End If
+        If CheckBoxFilterDft.Checked Then
+            ActiveFileExtensionsList.Add("*.dft")
+        End If
 
         ListBoxFiles.Items.Clear()
 
@@ -58,16 +75,28 @@ Partial Class Form1
 
                     TextBoxStatus.Text = ""
 
+                ElseIf RadioButtonTODOList.Checked Then
+                    If FileIO.FileSystem.FileExists(TODOFile) Then
+                        FoundFiles = IO.File.ReadAllLines(TODOFile)
+
+                    End If
+
                 Else  ' No RadioButton on FilesToProcess checked
                     FoundFiles = Nothing
                 End If
 
                 If Not FoundFiles Is Nothing Then
 
+                    ' Filter by properties
                     If CheckBoxEnablePropertyFilter.Checked Then
                         System.Threading.Thread.Sleep(1000)
                         Dim PropertyFilter As New PropertyFilter(Me)
                         FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
+                    End If
+
+                    ' Filter by file wildcard search
+                    If CheckBoxFileSearch.Checked Then
+                        FoundFiles = FileWildcardSearch(FoundFiles, TextBoxFileSearch.Text)
                     End If
 
                     Dim MaxFilenameLength As Integer
@@ -96,6 +125,24 @@ Partial Class Form1
 
 
     End Sub
+
+    Private Function FileWildcardSearch(
+        ByVal FoundFiles As IReadOnlyCollection(Of String),
+        ByVal WildcardString As String) As IReadOnlyCollection(Of String)
+
+        Dim LocalFoundFiles As New List(Of String)
+        Dim FilePath As String
+        Dim Filename As String
+
+        For Each FilePath In FoundFiles
+            Filename = System.IO.Path.GetFileName(FilePath)
+            If Filename Like WildcardString Then
+                LocalFoundFiles.Add(FilePath)
+            End If
+        Next
+
+        Return LocalFoundFiles
+    End Function
 
     Private Function GetFileNames(ByVal FileWildcard As String) As List(Of String)
         ' Build up list of files to process depending on which option was selected.
@@ -163,13 +210,14 @@ Partial Class Form1
     End Function
 
     Private Function IsCheckedFilesToProcess() As Boolean
-        Dim TF As Boolean
+        Dim tf As Boolean
 
-        TF = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-        TF = TF Or RadioButtonFilesDirectoryOnly.Checked
-        TF = TF Or RadioButtonTopLevelAssembly.Checked
+        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
+        tf = tf Or RadioButtonFilesDirectoryOnly.Checked
+        tf = tf Or RadioButtonTopLevelAssembly.Checked
+        tf = tf Or RadioButtonTODOList.Checked
 
-        Return TF
+        Return tf
     End Function
 
 End Class

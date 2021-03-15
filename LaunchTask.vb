@@ -64,8 +64,18 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.RemoveFaceStyleOverrides(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
                     ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
-                Case "SaveAsSTEP"
-                    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                'Case "SaveAsSTEP"
+                '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                Case "SaveAs"
+                    ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
+                Case "InteractiveEdit"
+                    ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
+                Case "RunExternalProgram"
+                    ErrorMessage = task.Proxy.RunExternalProgram(SEDoc, Configuration, SEApp)
+                Case "MissingDrawing"
+                    ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
+                Case "PropertyFindReplace"
+                    ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -111,8 +121,18 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
                     ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
-                Case "SaveAsSTEP"
-                    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                'Case "SaveAsSTEP"
+                '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                Case "SaveAs"
+                    ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
+                Case "InteractiveEdit"
+                    ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
+                Case "RunExternalProgram"
+                    ErrorMessage = task.Proxy.RunExternalProgram(SEDoc, Configuration, SEApp)
+                Case "MissingDrawing"
+                    ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
+                Case "PropertyFindReplace"
+                    ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -162,8 +182,20 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitIsometricView"
                     ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
-                Case "SaveAsSTEP"
-                    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                'Case "SaveAsSTEP"
+                '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
+                Case "SaveAs"
+                    ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
+                Case "SaveAsFlatDXF"
+                    ErrorMessage = task.Proxy.SaveAsFlatDXF(SEDoc, Configuration, SEApp)
+                Case "InteractiveEdit"
+                    ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
+                Case "RunExternalProgram"
+                    ErrorMessage = task.Proxy.RunExternalProgram(SEDoc, Configuration, SEApp)
+                Case "MissingDrawing"
+                    ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
+                Case "PropertyFindReplace"
+                    ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -207,10 +239,18 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
                 Case "FitView"
                     ErrorMessage = task.Proxy.FitView(SEDoc, Configuration, SEApp)
-                Case "SaveAsPDF"
-                    ErrorMessage = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
+                'Case "SaveAsPDF"
+                '    ErrorMessage = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
                 Case "SaveAsDXF"
                     ErrorMessage = task.Proxy.SaveAsDXF(SEDoc, Configuration, SEApp)
+                Case "SaveAs"
+                    ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
+                Case "Print"
+                    ErrorMessage = task.Proxy.Print(SEDoc, Configuration, SEApp)
+                Case "InteractiveEdit"
+                    ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
+                Case "RunExternalProgram"
+                    ErrorMessage = task.Proxy.RunExternalProgram(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()

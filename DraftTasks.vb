@@ -1504,63 +1504,6 @@ Public Class DraftTasks
     End Function
 
 
-    Public Function SaveAsPDF(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeDraft.DraftDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf SaveAsPDFInternal,
-                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function SaveAsPDFInternal(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim PDFFilename As String = ""
-        Dim DraftBaseFilename As String
-
-        DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
-
-        ' CheckBoxPdfDraftOutputDirectory
-        If Configuration("CheckBoxPdfDraftOutputDirectory") = "False" Then
-            PDFFilename = Configuration("TextBoxPdfDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, ".pdf")
-        Else
-            PDFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".pdf")
-        End If
-
-        'Capturing a fault to update ExitStatus
-        Try
-            SEDoc.SaveAs(PDFFilename)
-            SEApp.DoIdle()
-        Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(PDFFilename, Configuration)))
-        End Try
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
-
 
     Public Function SaveAsDXF(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -1620,6 +1563,270 @@ Public Class DraftTasks
     End Function
 
 
+    Public Function SaveAs(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf SaveAsInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function SaveAsInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim NewFilename As String = ""
+        Dim NewExtension As String = ""
+        Dim DraftBaseFilename As String
+
+        ' ComboBoxSaveAsSheetmetalFileType
+        ' Format: Parasolid (*.xt), IGES (*.igs)
+        NewExtension = Configuration("ComboBoxSaveAsDraftFileType")
+        NewExtension = Split(NewExtension, Delimiter:="*")(1)
+        NewExtension = Split(NewExtension, Delimiter:=")")(0)
+
+        DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+
+        ' CheckBoxSaveAsDraftOutputDirectory
+        If Configuration("CheckBoxSaveAsDraftOutputDirectory") = "False" Then
+            NewFilename = Configuration("TextBoxSaveAsDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, NewExtension)
+        Else
+            NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
+        End If
+
+        'Capturing a fault to update ExitStatus
+        Try
+            SEDoc.SaveAs(NewFilename)
+            SEApp.DoIdle()
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
+        End Try
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
+    Public Function Print(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf PrintInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function PrintInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
+
+
+        'Capturing a fault to update ExitStatus
+        Try
+            DraftPrinter.AddDocument(SEDoc)
+            DraftPrinter.PrintOut()
+            SEApp.DoIdle()
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add("Print drawing did not succeed")
+        End Try
+
+        DraftPrinter.RemoveAllDocuments()
+        SEApp.DoIdle()
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function InteractiveEdit(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf InteractiveEditInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function InteractiveEditInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Result As MsgBoxResult
+        Dim msg As String
+        Dim indent As String = "    "
+
+        SEApp.DisplayAlerts = True
+
+        msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
+        msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
+
+        Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
+
+        If Result = vbYes Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save read-only file.")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        ElseIf Result = vbNo Then
+            ExitStatus = 1
+            ErrorMessageList.Add("File was not saved.")
+        Else  ' Cancel was chosen
+            ExitStatus = 99
+            ErrorMessageList.Add("Operation was cancelled.")
+        End If
+
+        SEApp.DisplayAlerts = False
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
+    Public Function RunExternalProgram(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf RunExternalProgramInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function RunExternalProgramInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim ExternalProgram As String = Configuration("TextBoxExternalProgramDraft")
+        Dim P As New Process
+        Dim ExitCode As Integer
+        Dim ErrorMessageFilename As String
+        Dim ErrorMessages As String()
+        Dim Key As String
+        Dim Value As String
+
+        ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
+
+        P = Process.Start(ExternalProgram)
+        P.WaitForExit()
+        ExitCode = P.ExitCode
+
+        If ExitCode <> 0 Then
+            ExitStatus = 1
+            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+                Dim KeyFound As Boolean = False
+                ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
+                For Each KVPair As String In ErrorMessages
+                    ' Error message file format:
+                    ' 1 Some error occurred
+                    ' 2 Some other error occurred
+
+                    KVPair = Trim(KVPair)
+
+                    Key = Split(KVPair, Delimiter:=" ")(0)
+                    If Key = CStr(ExitCode) Then
+                        Value = KVPair.Substring(Len(Key) + 1)
+                        ErrorMessageList.Add(Value)
+                        Exit For
+                    End If
+                Next
+                If Not KeyFound Then
+                    ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+                End If
+            Else
+                ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+            End If
+        End If
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
     Private Function TruncateFullPath(ByVal Path As String,
         Configuration As Dictionary(Of String, String)
         ) As String
@@ -1634,6 +1841,43 @@ Public Class DraftTasks
             NewPath = Path
         End If
         Return NewPath
+    End Function
+
+    Public Function Dummy(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf DummyInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function DummyInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 End Class

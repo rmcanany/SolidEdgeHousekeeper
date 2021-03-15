@@ -592,6 +592,74 @@ Public Class SheetmetalTasks
     End Function
 
 
+    Public Function SaveAsFlatDXF(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf SaveAsFlatDXFInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function SaveAsFlatDXFInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageTemp As New Dictionary(Of Integer, List(Of String))
+        Dim FlatPatternOutOfDate As Boolean = False
+        Dim DXFFilename As String
+        Dim SheetmetalBaseFilename As String
+
+        Dim SEDraftDoc As SolidEdgeDraft.DraftDocument = Nothing
+        Dim Models As SolidEdgePart.Models = Nothing
+
+        SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+        If Configuration("CheckBoxSaveAsFlatDXFOutputDirectory") = "False" Then
+            DXFFilename = Configuration("TextBoxSaveAsFlatDXFOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".dxf")
+        Else
+            DXFFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dxf")
+        End If
+
+        ErrorMessageTemp = FlatPatternMissingOrOutOfDate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
+        If ExitStatus = 0 Then
+            ExitStatus = ErrorMessageTemp.Keys(0)
+        End If
+        If ErrorMessageTemp.Keys(0) = 1 Then
+            FlatPatternOutOfDate = True
+            ErrorMessageList.Add("Flat pattern missing or out of date")
+        End If
+
+        If Not FlatPatternOutOfDate Then
+            Models = SEDoc.Models
+            Models.SaveAsFlatDXFEx(DXFFilename, Nothing, Nothing, Nothing, True)
+            SEApp.DoIdle()
+        End If
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
     Public Function UpdateInsertPartCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -912,7 +980,8 @@ Public Class SheetmetalTasks
         Return ErrorMessage
     End Function
 
-    Public Function SaveAsSTEP(
+
+    Public Function SaveAs(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -925,7 +994,7 @@ Public Class SheetmetalTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf SaveAsSTEPInternal,
+                                   AddressOf SaveAsInternal,
                                    CType(SEDoc, SolidEdgePart.SheetMetalDocument),
                                    Configuration,
                                    SEApp)
@@ -934,7 +1003,7 @@ Public Class SheetmetalTasks
 
     End Function
 
-    Private Function SaveAsSTEPInternal(
+    Private Function SaveAsInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -944,26 +1013,226 @@ Public Class SheetmetalTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim STEPFilename As String = ""
+        Dim NewFilename As String = ""
+        Dim NewExtension As String = ""
         Dim SheetmetalBaseFilename As String
+
+        ' ComboBoxSaveAsSheetmetalFileType
+        ' Format: Parasolid (*.xt), IGES (*.igs)
+        NewExtension = Configuration("ComboBoxSaveAsSheetmetalFileType")
+        NewExtension = Split(NewExtension, Delimiter:="*")(1)
+        NewExtension = Split(NewExtension, Delimiter:=")")(0)
 
         SheetmetalBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
         ' CheckBoxStepSheetmetalOutputDirectory
-        If Configuration("CheckBoxStepSheetmetalOutputDirectory") = "False" Then
-            STEPFilename = Configuration("TextBoxStepSheetmetalOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, ".stp")
+        If Configuration("CheckBoxSaveAsSheetmetalOutputDirectory") = "False" Then
+            NewFilename = Configuration("TextBoxSaveAsSheetmetalOutputDirectory") + "\" + System.IO.Path.ChangeExtension(SheetmetalBaseFilename, NewExtension)
         Else
-            STEPFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".stp")
+            NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
         End If
 
         'Capturing a fault to update ExitStatus
         Try
-            SEDoc.SaveAs(STEPFilename)
+            SEDoc.SaveAs(NewFilename)
             SEApp.DoIdle()
         Catch ex As Exception
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(STEPFilename, Configuration)))
+            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
         End Try
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function InteractiveEdit(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf InteractiveEditInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function InteractiveEditInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Result As MsgBoxResult
+        Dim msg As String
+        Dim indent As String = "    "
+
+        SEApp.DisplayAlerts = True
+
+        msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
+        msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
+
+        Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
+
+        If Result = vbYes Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save read-only file.")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        ElseIf Result = vbNo Then
+            ExitStatus = 1
+            ErrorMessageList.Add("File was not saved.")
+        Else  ' Cancel was chosen
+            ExitStatus = 99
+            ErrorMessageList.Add("Operation was cancelled.")
+        End If
+
+        SEApp.DisplayAlerts = False
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function RunExternalProgram(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf RunExternalProgramInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function RunExternalProgramInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
+        Dim P As New Process
+        Dim ExitCode As Integer
+        Dim ErrorMessageFilename As String
+        Dim ErrorMessages As String()
+        Dim Key As String
+        Dim Value As String
+
+        ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
+
+        P = Process.Start(ExternalProgram)
+        P.WaitForExit()
+        ExitCode = P.ExitCode
+
+        If ExitCode <> 0 Then
+            ExitStatus = 1
+            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+                Dim KeyFound As Boolean = False
+                ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
+                For Each KVPair As String In ErrorMessages
+                    ' Error message file format:
+                    ' 1 Some error occurred
+                    ' 2 Some other error occurred
+
+                    KVPair = Trim(KVPair)
+
+                    Key = Split(KVPair, Delimiter:=" ")(0)
+                    If Key = CStr(ExitCode) Then
+                        Value = KVPair.Substring(Len(Key) + 1)
+                        ErrorMessageList.Add(Value)
+                        Exit For
+                    End If
+                Next
+                If Not KeyFound Then
+                    ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+                End If
+            Else
+                ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+            End If
+        End If
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function MissingDrawing(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf MissingDrawingInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function MissingDrawingInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim ModelFilename As String
+        Dim DrawingFilename As String
+
+        ModelFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+        DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+
+        If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Drawing {0} not found", TruncateFullPath(DrawingFilename, Configuration)))
+        End If
+
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -984,6 +1253,136 @@ Public Class SheetmetalTasks
             NewPath = Path
         End If
         Return NewPath
+    End Function
+
+    Public Function PropertyFindReplace(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf PropertyFindReplaceInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function PropertyFindReplaceInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+        Dim Properties As SolidEdgeFramework.Properties = Nothing
+        Dim Prop As SolidEdgeFramework.Property = Nothing
+
+        Dim PropertyFound As Boolean = False
+        Dim tf As Boolean
+        Dim FindString As String = Configuration("TextBoxFindReplaceFindSheetmetal")
+        Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplaceSheetmetal")
+
+        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+
+        For Each Properties In PropertySets
+            For Each Prop In Properties
+                tf = (Configuration("ComboBoxFindReplacePropertySetSheetmetal").ToLower = "custom")
+                tf = tf And (Properties.Name.ToLower = "custom")
+                If tf Then
+                    If Prop.Name = Configuration("TextBoxFindReplacePropertyNameSheetmetal") Then
+                        PropertyFound = True
+                        ' Only works on text type properties
+                        Try
+                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                            Properties.Save()
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+                        End Try
+                        Exit For
+                    End If
+                Else
+                    If Prop.Name = Configuration("TextBoxFindReplacePropertyNameSheetmetal") Then
+                        PropertyFound = True
+                        ' Only works on text type properties
+                        Try
+                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                            Properties.Save()
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+                        End Try
+                        Exit For
+                    End If
+                End If
+            Next
+            If PropertyFound Then
+                Exit For
+            End If
+        Next
+
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function Dummy(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgePart.SheetMetalDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf DummyInternal,
+                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function DummyInternal(
+        ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
 End Class

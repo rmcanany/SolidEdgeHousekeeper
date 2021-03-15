@@ -19,6 +19,8 @@ Partial Class Form1
         ByVal Filename As String,
         ByVal ErrorMessagesCombined As Dictionary(Of String, List(Of String))
         )
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
         Try
             Using writer As New IO.StreamWriter(LogfileName, True)
@@ -37,6 +39,12 @@ Partial Class Form1
             MsgBox("Error saving logfile")
         End Try
 
+        If CheckBoxCreateTODOList.Checked Then
+            Using writer As New IO.StreamWriter(TODOFile, True)
+                writer.WriteLine(Filename)
+            End Using
+        End If
+
         ErrorsOccurred = True
     End Sub
 
@@ -47,5 +55,11 @@ Partial Class Form1
         ErrorsOccurred = False
     End Sub
 
+    Private Sub ClearTODOList()
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
+
+        System.IO.File.Create(TODOFile).Dispose()
+    End Sub
 
 End Class

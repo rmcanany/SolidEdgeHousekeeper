@@ -19,6 +19,8 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
+    Private ListBoxFilesOutOfDate As Boolean
+
     Private Configuration As New Dictionary(Of String, String)
 
     Private LabelToActionAssembly As New LabelToAction("Assembly")
@@ -108,6 +110,11 @@ Public Class Form1
 
         LogfileSetName()
 
+        If CheckBoxCreateTODOList.Checked Then
+            ClearTODOList()
+
+        End If
+
         TotalAborts = 0
 
         SEStart()
@@ -190,14 +197,18 @@ Public Class Form1
             msg += "    Select an option on Files To Process" + Chr(13)
         End If
 
-        If ListBoxFiles.Items.Count = 0 Then
-            tf = RadioButtonTopLevelAssembly.Checked
-            tf = tf Or CheckBoxEnablePropertyFilter.Checked
-            If tf Then
-                msg += "    Update the file list" + Chr(13)
-            Else
-                msg += "    Select an input directory with files to process" + Chr(13)
+        For Each Filename As String In ListBoxFiles.Items
+            If Not FileIO.FileSystem.FileExists(String.Format("{0}/{1}", TextBoxInputDirectory.Text, Filename)) Then
+                msg += "    Some files have been renamed or deleted" + Chr(13)
+                ListBoxFilesOutOfDate = True
+                Exit For
             End If
+        Next
+
+        If ListBoxFilesOutOfDate Then
+            msg += "    Update the file list" + Chr(13)
+        ElseIf ListBoxFiles.Items.Count = 0 Then
+            msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
         If Not FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
@@ -214,6 +225,13 @@ Public Class Form1
                 msg += "    Set top level assembly processing option on the Configuration tab" + Chr(13)
             End If
         End If
+
+        If CheckBoxFileSearch.Checked Then
+            If TextBoxFileSearch.Text = "" Then
+                msg += "    Enter a file wildcard search string" + Chr(13)
+            End If
+        End If
+
 
         ' For the selected tasks, see if outside information, such as a template file, is required.
         ' If so, verify that the outside information is valid.
@@ -250,14 +268,46 @@ Public Class Form1
             If LabelToActionAssembly(Label).RequiresSave Then
                 SaveMsg += "    Assembly: " + Label + Chr(13)
             End If
-            If LabelToActionAssembly(Label).RequiresStepOutputDirectory Then
-                If TextBoxStepAssemblyOutputDirectory.Text = "" Then
-                    If Not msg.Contains("Select a valid STEP assembly output directory") Then
-                        msg += "    Select a valid STEP assembly output directory" + Chr(13)
+            If LabelToActionAssembly(Label).RequiresSaveAsOutputDirectory Then
+                If TextBoxSaveAsAssemblyOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid Save As assembly output directory") Then
+                        msg += "    Select a valid Save As assembly output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionAssembly(Label).IncompatibleWithOtherTasks Then
+                tf = CheckedListBoxAssembly.CheckedItems.Count > 1
+                tf = tf Or CheckedListBoxPart.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxSheetmetal.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxDraft.CheckedItems.Count > 0
+
+                If tf Then
+                    If Not msg.Contains(Label + "--Assembly cannot be performed with any other tasks selected") Then
+                        msg += "    " + Label + "--Assembly cannot be performed with any other tasks selected" + Chr(13)
                     End If
                 End If
             End If
 
+            If LabelToActionAssembly(Label).RequiresExternalProgram Then
+                If Not FileIO.FileSystem.FileExists(TextBoxExternalProgramAssembly.Text) Then
+                    If Not msg.Contains("Select a valid assembly external program") Then
+                        msg += "    Select a valid assembly external program" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionAssembly(Label).RequiresFindReplaceFields Then
+                If TextBoxFindReplacePropertyNameAssembly.Text = "" Then
+                    If Not msg.Contains("Enter a valid assembly property name") Then
+                        msg += "    Enter a valid assembly property name" + Chr(13)
+                    End If
+                End If
+                If TextBoxFindReplaceFindAssembly.Text = "" Then
+                    If Not msg.Contains("Enter a valid assembly search string") Then
+                        msg += "    Enter a valid assembly search string" + Chr(13)
+                    End If
+                End If
+            End If
         Next
 
         For Each Label As String In CheckedListBoxPart.CheckedItems
@@ -292,13 +342,47 @@ Public Class Form1
             If LabelToActionPart(Label).RequiresSave Then
                 SaveMsg += "    Part: " + Label + Chr(13)
             End If
-            If LabelToActionPart(Label).RequiresStepOutputDirectory Then
-                If TextBoxStepPartOutputDirectory.Text = "" Then
-                    If Not msg.Contains("Select a valid STEP part output directory") Then
-                        msg += "    Select a valid STEP part output directory" + Chr(13)
+            If LabelToActionPart(Label).RequiresSaveAsOutputDirectory Then
+                If TextBoxSaveAsPartOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid Save As part output directory") Then
+                        msg += "    Select a valid Save As part output directory" + Chr(13)
                     End If
                 End If
             End If
+            If LabelToActionPart(Label).IncompatibleWithOtherTasks Then
+                tf = CheckedListBoxPart.CheckedItems.Count > 1
+                tf = tf Or CheckedListBoxAssembly.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxSheetmetal.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxDraft.CheckedItems.Count > 0
+
+                If tf Then
+                    If Not msg.Contains(Label + "--Part cannot be performed with any other tasks selected") Then
+                        msg += "    " + Label + "--Part cannot be performed with any other tasks selected" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionPart(Label).RequiresExternalProgram Then
+                If Not FileIO.FileSystem.FileExists(TextBoxExternalProgramPart.Text) Then
+                    If Not msg.Contains("Select a valid part external program") Then
+                        msg += "    Select a valid part external program" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionPart(Label).RequiresFindReplaceFields Then
+                If TextBoxFindReplacePropertyNamePart.Text = "" Then
+                    If Not msg.Contains("Enter a valid part property name") Then
+                        msg += "    Enter a valid part property name" + Chr(13)
+                    End If
+                End If
+                If TextBoxFindReplaceFindPart.Text = "" Then
+                    If Not msg.Contains("Enter a valid part search string") Then
+                        msg += "    Enter a valid part search string" + Chr(13)
+                    End If
+                End If
+            End If
+
 
         Next
 
@@ -334,13 +418,54 @@ Public Class Form1
             If LabelToActionSheetmetal(Label).RequiresSave Then
                 SaveMsg += "    Sheetmetal: " + Label + Chr(13)
             End If
-            If LabelToActionSheetmetal(Label).RequiresStepOutputDirectory Then
-                If TextBoxStepSheetmetalOutputDirectory.Text = "" Then
-                    If Not msg.Contains("Select a valid STEP sheetmetal output directory") Then
-                        msg += "    Select a valid STEP sheetmetal output directory" + Chr(13)
+            If LabelToActionSheetmetal(Label).RequiresSaveAsOutputDirectory Then
+                If TextBoxSaveAsSheetmetalOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid Save As sheetmetal output directory") Then
+                        msg += "    Select a valid Save As sheetmetal output directory" + Chr(13)
                     End If
                 End If
             End If
+            If LabelToActionSheetmetal(Label).RequiresSaveAsFlatDXFOutputDirectory Then
+                If TextBoxSaveAsFlatDXFOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid Save As Flat DXF output directory") Then
+                        msg += "    Select a valid Save As Flat DXF output directory" + Chr(13)
+                    End If
+                End If
+            End If
+            If LabelToActionSheetmetal(Label).IncompatibleWithOtherTasks Then
+                tf = CheckedListBoxSheetmetal.CheckedItems.Count > 1
+                tf = tf Or CheckedListBoxAssembly.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxPart.CheckedItems.Count > 0
+                tf = tf Or CheckedListBoxDraft.CheckedItems.Count > 0
+
+                If tf Then
+                    If Not msg.Contains(Label + "--Sheetmetal cannot be performed with any other tasks selected") Then
+                        msg += "    " + Label + "--Sheetmetal cannot be performed with any other tasks selected" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionSheetmetal(Label).RequiresExternalProgram Then
+                If Not FileIO.FileSystem.FileExists(TextBoxExternalProgramSheetmetal.Text) Then
+                    If Not msg.Contains("Select a valid sheetmetal external program") Then
+                        msg += "    Select a valid sheetmetal external program" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionSheetmetal(Label).RequiresFindReplaceFields Then
+                If TextBoxFindReplacePropertyNameSheetmetal.Text = "" Then
+                    If Not msg.Contains("Enter a valid sheetmetal property name") Then
+                        msg += "    Enter a valid sheetmetal property name" + Chr(13)
+                    End If
+                End If
+                If TextBoxFindReplaceFindSheetmetal.Text = "" Then
+                    If Not msg.Contains("Enter a valid sheetmetal search string") Then
+                        msg += "    Enter a valid sheetmetal search string" + Chr(13)
+                    End If
+                End If
+            End If
+
 
         Next
 
@@ -383,20 +508,20 @@ Public Class Form1
             '        End If
             '    End If
             'End If
-            If LabelToActionDraft(Label).RequiresPdfOutputDirectory Then
-                If TextBoxPdfDraftOutputDirectory.Text = "" Then
-                    If Not msg.Contains("Select a valid PDF draft output directory") Then
-                        msg += "    Select a valid PDF draft output directory" + Chr(13)
+            If LabelToActionDraft(Label).RequiresSaveAsOutputDirectory Then
+                If TextBoxSaveAsDraftOutputDirectory.Text = "" Then
+                    If Not msg.Contains("Select a valid Save As draft output directory") Then
+                        msg += "    Select a valid Save As draft output directory" + Chr(13)
                     End If
                 End If
             End If
-            If LabelToActionDraft(Label).RequiresDxfOutputDirectory Then
-                If TextBoxDxfDraftOutputDirectory.Text = "" Then
-                    If Not msg.Contains("Select a valid DXF draft output directory") Then
-                        msg += "    Select a valid DXF draft output directory" + Chr(13)
-                    End If
-                End If
-            End If
+            'If LabelToActionDraft(Label).RequiresDxfOutputDirectory Then
+            '    If TextBoxDxfDraftOutputDirectory.Text = "" Then
+            '        If Not msg.Contains("Select a valid DXF draft output directory") Then
+            '            msg += "    Select a valid DXF draft output directory" + Chr(13)
+            '        End If
+            '    End If
+            'End If
             If LabelToActionDraft(Label).IncompatibleWithOtherTasks Then
                 tf = CheckedListBoxDraft.CheckedItems.Count > 1
                 tf = tf Or CheckedListBoxAssembly.CheckedItems.Count > 0
@@ -404,11 +529,19 @@ Public Class Form1
                 tf = tf Or CheckedListBoxSheetmetal.CheckedItems.Count > 0
 
                 If tf Then
-                    If Not msg.Contains(Label + " cannot be performed with any other tasks selected") Then
-                        msg += "    " + Label + " cannot be performed with any other tasks selected"
+                    If Not msg.Contains(Label + "--Draft cannot be performed with any other tasks selected") Then
+                        msg += "    " + Label + "--Draft cannot be performed with any other tasks selected" + Chr(13)
                     End If
                 End If
             End If
+            If LabelToActionDraft(Label).RequiresExternalProgram Then
+                If Not FileIO.FileSystem.FileExists(TextBoxExternalProgramDraft.Text) Then
+                    If Not msg.Contains("Select a valid draft external program") Then
+                        msg += "    Select a valid draft external program" + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         If Len(msg) <> 0 Then
@@ -574,6 +707,10 @@ Public Class Form1
 
                 If ExitStatus <> 0 Then
                     ErrorMessagesCombined(LabelText) = ErrorMessage(ErrorMessage.Keys(0))
+
+                    If ExitStatus = 99 Then
+                        StopProcess = True
+                    End If
                     'LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
                 End If
             Next
@@ -648,6 +785,8 @@ Public Class Form1
 
         ButtonUpdateListBoxFiles.Enabled = False
 
+        ListBoxFilesOutOfDate = False
+
     End Sub
 
 
@@ -690,15 +829,30 @@ Public Class Form1
     End Function
 
     Private Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
+        Dim tf As Boolean
         ' Update configuration
         Configuration = GetConfiguration()
 
-        If RadioButtonTopLevelAssembly.Checked Or CheckBoxEnablePropertyFilter.Checked Then
-            'ListBoxFiles.Items.Clear()
-            ButtonUpdateListBoxFiles.Enabled = True
-        Else
-            'UpdateListBoxFiles()
-            ButtonUpdateListBoxFiles.Enabled = False
+        If ListBoxFilesOutOfDate Then
+            ListBoxFiles.Items.Clear()
+            tf = RadioButtonTopLevelAssembly.Checked
+            tf = tf Or CheckBoxEnablePropertyFilter.Checked
+            If tf Then
+                ButtonUpdateListBoxFiles.Enabled = True
+                ButtonUpdateListBoxFiles.BackColor = System.Drawing.Color.Orange
+                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = False
+            Else
+                'ButtonUpdateListBoxFiles.Enabled = False
+                ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
+                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
+
+                tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
+                tf = tf Or RadioButtonFilesDirectoryOnly.Checked
+                tf = tf Or RadioButtonTODOList.Checked
+                If tf Then
+                    UpdateListBoxFiles()
+                End If
+            End If
         End If
 
         If CheckBoxEnablePropertyFilter.Checked Then
@@ -707,6 +861,11 @@ Public Class Form1
             ButtonPropertyFilter.Enabled = False
         End If
 
+        If CheckBoxFileSearch.Checked Then
+            TextBoxFileSearch.Enabled = True
+        Else
+            TextBoxFileSearch.Enabled = False
+        End If
 
     End Sub
 
@@ -749,16 +908,60 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ButtonDxfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonDxfDraftOutputDirectory.Click
+    Private Sub ButtonExternalProgramAssembly_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramAssembly.Click
+        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxExternalProgramAssembly.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonExternalProgramPart_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramPart.Click
+        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxExternalProgramPart.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonExternalProgramSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramSheetmetal.Click
+        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxExternalProgramSheetmetal.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonExternalProgramDraft_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramDraft.Click
+        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxExternalProgramDraft.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonSaveAsDraftOutputDirectory_Click(sender As Object, e As EventArgs)
         FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxDxfDraftOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxDxfDraftOutputDirectory.Text
+        If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
         End If
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxDxfDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxDxfDraftOutputDirectory.Text
+            TextBoxSaveAsDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
         End If
-        ToolTip1.SetToolTip(TextBoxDxfDraftOutputDirectory, TextBoxDxfDraftOutputDirectory.Text)
+        ToolTip1.SetToolTip(TextBoxSaveAsDraftOutputDirectory, TextBoxSaveAsDraftOutputDirectory.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -770,6 +973,7 @@ Public Class Form1
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
             TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
             FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
+            ListBoxFilesOutOfDate = True
         End If
 
         ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
@@ -790,17 +994,21 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonPdfDraftOutputDirectory.Click
+    Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxPdfDraftOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxPdfDraftOutputDirectory.Text
+        If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
         End If
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxPdfDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxPdfDraftOutputDirectory.Text
+            TextBoxSaveAsDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
         End If
-        ToolTip1.SetToolTip(TextBoxPdfDraftOutputDirectory, TextBoxPdfDraftOutputDirectory.Text)
+        ToolTip1.SetToolTip(TextBoxSaveAsDraftOutputDirectory, TextBoxSaveAsDraftOutputDirectory.Text)
         ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonPrintOptions_Click(sender As Object, e As EventArgs) Handles ButtonPrintOptions.Click
+        PrintDialog1.ShowDialog()
     End Sub
 
     Private Sub ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles ButtonPropertyFilter.Click
@@ -811,52 +1019,65 @@ Public Class Form1
         tf = FormPropertyFilter.DialogResult = DialogResult.OK
         tf = tf And PropertyFilterFormula <> ""
         If tf Then
-            ListBoxFiles.Items.Clear()
-        Else
-
+            ' ListBoxFiles.Items.Clear()
+            ListBoxFilesOutOfDate = True
         End If
+        ReconcileFormChanges()
     End Sub
 
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
         Process()
     End Sub
 
-    Private Sub ButtonStepAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepAssemblyOutputDirectory.Click
+    Private Sub ButtonSaveAsFlatDXF_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsFlatDXF.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxStepAssemblyOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepAssemblyOutputDirectory.Text
+        If TextBoxSaveAsFlatDXFOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
         End If
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxStepAssemblyOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepAssemblyOutputDirectory.Text
+            TextBoxSaveAsFlatDXFOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
         End If
-        ToolTip1.SetToolTip(TextBoxStepAssemblyOutputDirectory, TextBoxStepAssemblyOutputDirectory.Text)
+
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonStepPartOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepPartOutputDirectory.Click
+    Private Sub ButtonStepAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsAssemblyOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxStepPartOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepPartOutputDirectory.Text
+        If TextBoxSaveAsAssemblyOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsAssemblyOutputDirectory.Text
         End If
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxStepPartOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepPartOutputDirectory.Text
+            TextBoxSaveAsAssemblyOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsAssemblyOutputDirectory.Text
         End If
-        ToolTip1.SetToolTip(TextBoxStepPartOutputDirectory, TextBoxStepPartOutputDirectory.Text)
+        ToolTip1.SetToolTip(TextBoxSaveAsAssemblyOutputDirectory, TextBoxSaveAsAssemblyOutputDirectory.Text)
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonStepSheetmetalOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonStepSheetmetalOutputDirectory.Click
+    Private Sub ButtonStepPartOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsPartOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxStepSheetmetalOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepSheetmetalOutputDirectory.Text
+        If TextBoxSaveAsPartOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsPartOutputDirectory.Text
         End If
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxStepSheetmetalOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxStepSheetmetalOutputDirectory.Text
+            TextBoxSaveAsPartOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsPartOutputDirectory.Text
         End If
-        ToolTip1.SetToolTip(TextBoxStepSheetmetalOutputDirectory, TextBoxStepSheetmetalOutputDirectory.Text)
+        ToolTip1.SetToolTip(TextBoxSaveAsPartOutputDirectory, TextBoxSaveAsPartOutputDirectory.Text)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ButtonStepSheetmetalOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsSheetmetalOutputDirectory.Click
+        FakeFolderBrowserDialog.FileName = "Select Folder"
+        If TextBoxSaveAsSheetmetalOutputDirectory.Text <> "" Then
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsSheetmetalOutputDirectory.Text
+        End If
+        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxSaveAsSheetmetalOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsSheetmetalOutputDirectory.Text
+        End If
+        ToolTip1.SetToolTip(TextBoxSaveAsSheetmetalOutputDirectory, TextBoxSaveAsSheetmetalOutputDirectory.Text)
         ReconcileFormChanges()
     End Sub
 
@@ -960,42 +1181,64 @@ Public Class Form1
     ' CHECKBOXES
 
 
+    Private Sub CheckBoxCreateTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxCreateTODOList.CheckedChanged
+        Dim tf As Boolean
 
-    Private Sub CheckBoxDxfDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDxfDraftOutputDirectory.CheckedChanged
-        If CheckBoxDxfDraftOutputDirectory.Checked Then
-            TextBoxDxfDraftOutputDirectory.Enabled = False
-        Else
-            TextBoxDxfDraftOutputDirectory.Enabled = True
+        If CheckBoxCreateTODOList.Checked Then
+            RadioButtonTODOList.Checked = False
+
+            tf = CheckBoxEnablePropertyFilter.Checked
+            tf = tf Or RadioButtonTopLevelAssembly.Checked
+            If Not tf Then
+                UpdateListBoxFiles()
+            End If
+
         End If
+
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
-        Dim tf As Boolean
+        ListBoxFilesOutOfDate = True
 
-        If Not CheckBoxEnablePropertyFilter.Checked Then
-            tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-            tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-            If tf Then
-                UpdateListBoxFiles()
-            End If
-        Else
+        If CheckBoxEnablePropertyFilter.Checked Then
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.GetPropertyFilter()
-                tf = PropertyFilterFormula <> ""
-                tf = tf And FormPropertyFilter.DialogResult = DialogResult.OK
-                If tf Then
-                    ListBoxFiles.Items.Clear()
-                End If
-            Else
-                ListBoxFiles.Items.Clear()
             End If
-
         End If
 
         ReconcileFormChanges()
+    End Sub
 
+    Private Sub CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFileSearch.CheckedChanged
+        If CheckBoxFileSearch.Checked Then
+            TextBoxFileSearch.Enabled = True
+        Else
+            TextBoxFileSearch.Enabled = False
+        End If
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
 
+    Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxLaserOutputDirectory.CheckedChanged
@@ -1011,11 +1254,11 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxPdfDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPdfDraftOutputDirectory.CheckedChanged
-        If CheckBoxPdfDraftOutputDirectory.Checked Then
-            TextBoxPdfDraftOutputDirectory.Enabled = False
+    Private Sub CheckBoxPdfDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsDraftOutputDirectory.CheckedChanged
+        If CheckBoxSaveAsDraftOutputDirectory.Checked Then
+            TextBoxSaveAsDraftOutputDirectory.Enabled = False
         Else
-            TextBoxPdfDraftOutputDirectory.Enabled = True
+            TextBoxSaveAsDraftOutputDirectory.Enabled = True
         End If
         ReconcileFormChanges()
     End Sub
@@ -1024,29 +1267,46 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxStepAssemblyOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStepAssemblyOutputDirectory.CheckedChanged
-        If CheckBoxStepAssemblyOutputDirectory.Checked Then
-            TextBoxStepAssemblyOutputDirectory.Enabled = False
+    Private Sub CheckBoxSaveAsDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
+        If CheckBoxSaveAsDraftOutputDirectory.Checked Then
+            TextBoxSaveAsDraftOutputDirectory.Enabled = False
         Else
-            TextBoxStepAssemblyOutputDirectory.Enabled = True
+            TextBoxSaveAsDraftOutputDirectory.Enabled = True
         End If
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxStepPartOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStepPartOutputDirectory.CheckedChanged
-        If CheckBoxStepPartOutputDirectory.Checked Then
-            TextBoxStepPartOutputDirectory.Enabled = False
+    Private Sub CheckBoxSaveAsFlatDXFOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFlatDXFOutputDirectory.CheckedChanged
+        If CheckBoxSaveAsFlatDXFOutputDirectory.Checked Then
+            CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = False
         Else
-            TextBoxStepPartOutputDirectory.Enabled = True
+            CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = True
+        End If
+        ReconcileFormChanges()
+    End Sub
+    Private Sub CheckBoxStepAssemblyOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsAssemblyOutputDirectory.CheckedChanged
+        If CheckBoxSaveAsAssemblyOutputDirectory.Checked Then
+            TextBoxSaveAsAssemblyOutputDirectory.Enabled = False
+        Else
+            TextBoxSaveAsAssemblyOutputDirectory.Enabled = True
         End If
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxStepSheetmetalOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStepSheetmetalOutputDirectory.CheckedChanged
-        If CheckBoxStepSheetmetalOutputDirectory.Checked Then
-            TextBoxStepSheetmetalOutputDirectory.Enabled = False
+    Private Sub CheckBoxStepPartOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsPartOutputDirectory.CheckedChanged
+        If CheckBoxSaveAsPartOutputDirectory.Checked Then
+            TextBoxSaveAsPartOutputDirectory.Enabled = False
         Else
-            TextBoxStepSheetmetalOutputDirectory.Enabled = True
+            TextBoxSaveAsPartOutputDirectory.Enabled = True
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxStepSheetmetalOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsSheetmetalOutputDirectory.CheckedChanged
+        If CheckBoxSaveAsSheetmetalOutputDirectory.Checked Then
+            TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
+        Else
+            TextBoxSaveAsSheetmetalOutputDirectory.Enabled = True
         End If
         ReconcileFormChanges()
     End Sub
@@ -1104,31 +1364,37 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
+    Private Sub ComboBoxSaveAsAssemblyFileType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSaveAsAssemblyFileType.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ComboBoxSaveAsPartFiletype_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSaveAsPartFileType.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ComboBoxSaveAsSheetmetalFileType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSaveAsSheetmetalFileType.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ComboBoxSaveAsDraftFileType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSaveAsDraftFileType.SelectedIndexChanged
+        ReconcileFormChanges()
+    End Sub
+
 
 
     ' RADIO BUTTONS
 
     Private Sub RadioButtonFilesDirectoriesAndSubdirectories_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoriesAndSubdirectories.CheckedChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-        tf = tf And Not CheckBoxEnablePropertyFilter.Checked
-
-        If tf Then
-            UpdateListBoxFiles()
+        If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
+            ListBoxFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonFilesDirectoryOnly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoryOnly.CheckedChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonFilesDirectoryOnly.Checked
-        tf = tf And Not CheckBoxEnablePropertyFilter.Checked
-
-        If tf Then
-            UpdateListBoxFiles()
+        If RadioButtonFilesDirectoryOnly.Checked Then
+            ListBoxFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1166,12 +1432,18 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
-        Dim tf As Boolean
+    Private Sub RadioButtonTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTODOList.CheckedChanged
+        If RadioButtonTODOList.Checked Then
+            CheckBoxCreateTODOList.Checked = False
+            ListBoxFilesOutOfDate = True
+        End If
 
-        tf = RadioButtonTopLevelAssembly.Checked
-        If tf Then
-            ListBoxFiles.Items.Clear()
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
+        If RadioButtonTopLevelAssembly.Checked Then
+            ListBoxFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1193,6 +1465,11 @@ Public Class Form1
 
         ' MaxFilenameLength = CDbl(ListBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
         ' ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFileSearch.LostFocus
+        ListBoxFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
