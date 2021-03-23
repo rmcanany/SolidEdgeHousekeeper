@@ -431,7 +431,7 @@ Public Class FormPropertyFilter
 		msg = "The 'wildcard_contains' option is like 'contains', except wildcard characters are used.  "
 		msg += "Internally, it is implemented with the VB 'Like' operator, "
 		msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
-		msg += "For details and examples on the VB 'Like' syntax, see "
+		msg += "For details and examples, see "
 		msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
 		Paragraphs.Add(msg)
 

@@ -177,6 +177,8 @@ Public Class Form1
         Dim SaveMsg As String = ""
         Dim tf As Boolean
 
+        ReconcileFormChanges()
+
         If SEIsRunning() Then
             msg += "    Close Solid Edge" + Chr(13)
         End If
@@ -783,7 +785,7 @@ Public Class Form1
 
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
 
-        ButtonUpdateListBoxFiles.Enabled = False
+        ' ButtonUpdateListBoxFiles.Enabled = False
 
         ListBoxFilesOutOfDate = False
 

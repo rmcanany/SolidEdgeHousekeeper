@@ -137,6 +137,7 @@ Public Class PropertyFilter
             Comparison = PropertyFilterDict(Variable)("Comparison")
             Value = PropertyFilterDict(Variable)("Value")
 
+            ' TODO Remove PropertySet 'path' and 'filename'
             If PropertySet.ToLower = "filename" Then
                 DocValue = System.IO.Path.GetFileName(FoundFile)
             ElseIf PropertySet.ToLower = "path" Then

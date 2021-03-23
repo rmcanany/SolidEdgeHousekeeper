@@ -563,7 +563,7 @@ Partial Class Form1
 
         msg = "On each file type's tab, select which errors to detect.  "
         msg += "On the General tab, browse to the desired input folder, "
-        msg += "then select the desired directory search option.  "
+        msg += "then select the desired file search option.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
 
@@ -676,21 +676,26 @@ Partial Class Form1
         msg = vbCrLf + "Top Level Assembly"
         readme_tab.Add(msg)
 
-        msg = "This option uses an assembly file as a starting point.  "
-        msg += "The program follows all links to the assembly and its subassemblies.  "
-        msg += "Draft files are found with 'Where Used' on the linked files.  "
+        msg = "This option uses an assembly file as a starting point and "
+        msg += "finds all links to it.  "
         msg += "The search scope is any file within or below the current input directory."
-        readme_tab.Add(msg)
-
-        msg = vbCrLf + "The search can be conducted in one of two ways, bottom up or top down.  "
+        msg += "The search can be conducted in one of two ways, bottom up or top down.  "
         msg += "These options are set on the Configuration tab and are described next."
         readme_tab.Add(msg)
 
-        msg = vbCrLf + "Bottom up is meant for general purpose directories (e.g., \\BIG_SERVER\every file we have\).  "
+        msg = vbCrLf + "Bottom up is meant for general purpose directories (e.g., \\BIG_SERVER\all_parts\).  "
+        msg += "The program gets links by recursion, then "
+        msg += "finds draft files with 'Where Used'.  "
         readme_tab.Add(msg)
 
         msg = vbCrLf + "Top down is meant for self-contained project directories (e.g., C:\Projects\Project123\).  "
-        msg += "A top down search can optionally report files with no links to the top level assembly.  "
+        msg += "The program checks every file within and below the input directory.  "
+        msg += "As it does, it creates a graph of the links.  "
+        msg += "The graph is subsequently traversed to find related files.  "
+        msg += "I don't know how it works; my son did that part.  "
+        readme_tab.Add(msg)
+
+        msg = "A top down search can optionally report files with no links to the top level assembly.  "
         readme_tab.Add(msg)
 
         msg = vbCrLf + "Most file selection options occur as soon as they are selected.  "
@@ -705,13 +710,11 @@ Partial Class Form1
         msg = "The 'TODO List' option uses output from a previous run as a starting point.  "
         msg += "To create the list, check the Create TODO list checkbox before processing files.  "
         msg += "Files with any errors will be added to the list.  "
-        msg += "To then process those files, select 'TODO List' as the files-to-process option."
+        msg += "To then process those files, select 'TODO List' as the files-to-process option.  "
+        msg += "This option is intended mainly to work with Interactive Edit, but can be used with any task.  "
         readme_tab.Add(msg)
 
-        msg = vbCrLf + "This option is intended mainly to work with Interactive Edit, but can be used with any task.  "
-        readme_tab.Add(msg)
-
-        msg = vbCrLf + "The file list is stored in the Housekeeper directory in a text file named todo.txt.  "
+        msg = vbCrLf + "The file list is stored in the Housekeeper directory in a text file named 'todo.txt'.  "
         msg += "If you have a file list from another source, you can save it in the text file and process it as above."
         readme_tab.Add(msg)
 
@@ -732,11 +735,10 @@ Partial Class Form1
         msg = vbCrLf + "Filtering by wildcard is done by entering the wildcard pattern in the provided textbox.  "
         msg += "Internally, it is implemented with the VB 'Like' operator, "
         msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
-        readme_tab.Add(msg)
-
-        msg = vbCrLf + "For details and examples on the VB 'Like' syntax, see "
+        msg += "For details and examples, see "
         msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
         readme_tab.Add(msg)
+
         msg = ""
         readme_github.Add(msg)
         readme_tab.Add(msg)

@@ -1074,6 +1074,7 @@ Public Class PartTasks
         Dim tf As Boolean
         Dim FindString As String = Configuration("TextBoxFindReplaceFindPart")
         Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplacePart")
+        Dim ReplaceStringDummy As String = String.Format("{0}_", ReplaceString)
 
         PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
 
@@ -1088,6 +1089,7 @@ Public Class PartTasks
                         Try
                             Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
                             Properties.Save()
+                            SEApp.DoIdle()
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
@@ -1101,6 +1103,7 @@ Public Class PartTasks
                         Try
                             Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
                             Properties.Save()
+                            SEApp.DoIdle()
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")

@@ -14,7 +14,7 @@ There is no installation per se.  The preferred method is to download or clone t
 The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases  Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
-On each file type's tab, select which errors to detect.  On the General tab, browse to the desired input folder, then select the desired directory search option.  
+On each file type's tab, select which errors to detect.  On the General tab, browse to the desired input folder, then select the desired file search option.  
 
 You can refine the search using a file filter, a property filter, or both.  See the file selection section for details.  
 

@@ -130,14 +130,14 @@ Public Class LabelToAction
                      HelpString)
 
         Dim FailedRelationships As New L2A
-        HelpString = ""
+        HelpString = "    Checks if any assembly occurrences have conflicting or otherwise broken relationships."
         PopulateList(FailedRelationships,
                      "Failed relationships",
                      "FailedRelationships",
                      HelpString)
 
         Dim UnderconstrainedRelationships As New L2A
-        HelpString = ""
+        HelpString = "    Checks if any assembly occurrences have missing relationships."
         PopulateList(UnderconstrainedRelationships,
                      "Underconstrained relationships",
                      "UnderconstrainedRelationships",
@@ -152,7 +152,11 @@ Public Class LabelToAction
                      RequiresPartNumberFields:=True)
 
         Dim SaveAs As New L2A
-        HelpString = ""
+        HelpString = "    Exports the file to a non-Solid Edge format.  "
+        HelpString += vbCrLf + "    Select the file type using the Save As combobox.  "
+        HelpString += "Select the directory using the Save As Browse button, "
+        HelpString += "or check the Original Directory checkbox.  "
+        HelpString += "These controls are on the task tab below the task list.  "
         PopulateList(SaveAs,
                      "Save as",
                      "SaveAs",
@@ -173,7 +177,9 @@ Public Class LabelToAction
                      HelpString)
 
         Dim RunExternalProgram As New L2A
-        HelpString = "    Runs an *.exe file.  Several rules about the program implementation apply.  "
+        HelpString = "    Runs an *.exe file.  Select the program with the External Program Browse button.  "
+        HelpString += "It is located on the task tab below the task list.  "
+        HelpString += vbCrLf + "    Several rules about the program implementation apply.  "
         HelpString += "See https://github.com/rmcanany/HousekeeperExternalPrograms for details and examples.  "
         PopulateList(RunExternalProgram,
                      "Run external program",
@@ -182,8 +188,19 @@ Public Class LabelToAction
                      RequiresExternalProgram:=True)
 
         Dim PropertyFindReplace As New L2A
-        HelpString = "    Searches for the string in the defined property and replaces it if found.  "
-        HelpString += "The search is case insensitive, the replace is case sensitive."
+        HelpString = "    Searches for text in a specified property and replaces it if found.  "
+        HelpString += "The property, search text, and replacement text are entered on the task tab, "
+        HelpString += "below the task list.  "
+        HelpString += vbCrLf + "    A 'Property set', either 'System' or 'Custom', is required.  "
+        HelpString += "System properties are in every Solid Edge file.  "
+        HelpString += "They include Material, Manager, Project, etc.  "
+        HelpString += "At this time, they must be in English.  "
+        HelpString += "Custom properties are ones that you create, probably in a template.  "
+        HelpString += vbCrLf + "    The search is case insensitive, the replace is case sensitive.  "
+        HelpString += "For example, say the search is 'aluminum', "
+        HelpString += "the replacement is 'ALUMINUM', "
+        HelpString += "and the property value is 'Aluminum 6061-T6'.  "
+        HelpString += "Then the new value would be 'ALUMINUM 6061-T6'.  "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
@@ -240,35 +257,36 @@ Public Class LabelToAction
                      HelpString)
 
         Dim FailedOrWarnedFeatures As New L2A
-        HelpString = ""
+        HelpString = "    Checks if any features of the model are in the Failed or Warned status."
         PopulateList(FailedOrWarnedFeatures,
                      "Failed or warned features",
                      "FailedOrWarnedFeatures",
                      HelpString)
 
         Dim SuppressedOrRolledBackFeatures As New L2A
-        HelpString = ""
+        HelpString = "    Checks if any features of the model are in the Suppressed or Rolledback status."
         PopulateList(SuppressedOrRolledBackFeatures,
                      "Suppressed or rolled back features",
                      "SuppressedOrRolledBackFeatures",
                      HelpString)
 
         Dim UnderconstrainedProfiles As New L2A
-        HelpString = ""
+        HelpString = "    Checks if any profiles are not fully constrained."
         PopulateList(UnderconstrainedProfiles,
                      "Underconstrained profiles",
                      "UnderconstrainedProfiles",
                      HelpString)
 
         Dim InsertPartCopiesOutOfDate As New L2A
-        HelpString = ""
+        HelpString = "    If the file has any insert part copies, checks if they are up to date."
         PopulateList(InsertPartCopiesOutOfDate,
                      "Insert part copies out of date",
                      "InsertPartCopiesOutOfDate",
                      HelpString)
 
         Dim MaterialNotInMaterialTable As New L2A
-        HelpString = ""
+        HelpString = "    Checks the file's material against the material table.  "
+        HelpString += "The material table is chosen on the Configuration tab.  "
         PopulateList(MaterialNotInMaterialTable,
                      "Material not in material table",
                      "MaterialNotInMaterialTable",
@@ -284,7 +302,7 @@ Public Class LabelToAction
                      RequiresPartNumberFields:=True)
 
         Dim SaveAs As New L2A
-        HelpString = ""
+        HelpString = "    Same as the assembly command of the same name."
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
@@ -387,7 +405,8 @@ Public Class LabelToAction
                      HelpString)
 
         Dim FlatPatternMissingOrOutOfDate As New L2A
-        HelpString = ""
+        HelpString = "    Checks for the existence of a flat pattern.  "
+        HelpString += "If one is found, checks if it is up to date.  "
         PopulateList(FlatPatternMissingOrOutOfDate,
                      "Flat pattern missing or out of date",
                      "FlatPatternMissingOrOutOfDate",
@@ -412,10 +431,12 @@ Public Class LabelToAction
         Dim GenerateLaserDXFAndPDF As New L2A
         HelpString = "    Creates a DXF file of the sheet metal flat pattern.  "
         HelpString += "Creates a PDF of the drawing file.  "
-        HelpString += "If the flat pattern is missing or out of date, or if the drawing is out of date, "
-        HelpString += "it is reported in the log file." + vbCrLf
-        HelpString += "    Note, the drawing file must have the same name "
-        HelpString += "as the sheet metal file.  "
+        HelpString += "Select the directory using the Laser Files Browse button, "
+        HelpString += "or check the Original Directory checkbox.  "
+        HelpString += vbCrLf + "  If the flat pattern is missing or out of date, or if the drawing is out of date, "
+        HelpString += "it is reported in the log file."
+        HelpString += vbCrLf + "    Note, the drawing file must have the same name "
+        HelpString += "and directory as the sheet metal file.  "
         PopulateList(GenerateLaserDXFAndPDF,
                      "Generate Laser DXF and PDF",
                      "GenerateLaserDXFAndPDF",
@@ -423,7 +444,7 @@ Public Class LabelToAction
                      RequiresLaserOutputDirectory:=True, RequiresSave:=True)
 
         Dim SaveAs As New L2A
-        HelpString = ""
+        HelpString = "    Same as the assembly command of the same name."
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
@@ -431,7 +452,10 @@ Public Class LabelToAction
                      RequiresSaveAsOutputDirectory:=True)
 
         Dim SaveAsFlatDXF As New L2A
-        HelpString = ""
+        HelpString = "    Saves a flat pattern as a DXF file.  "
+        HelpString += vbCrLf + "    Select the file type using the Save As Flat combobox.  "
+        HelpString += "Select the directory using the Save As Flat Browse button, "
+        HelpString += "or save it in the orginal directory checking the Original directory checkbox.  "
         PopulateList(SaveAsFlatDXF,
                      "Save As Flat DXF",
                      "SaveAsFlatDXF",
@@ -467,7 +491,7 @@ Public Class LabelToAction
         Dim HelpString As String
 
         Dim UpdateDrawingViews As New L2A
-        HelpString = ""
+        HelpString = "    Checks drawing views one by one, and updates them if needed."
         PopulateList(UpdateDrawingViews,
                      "Update drawing views",
                      "UpdateDrawingViews",
@@ -506,14 +530,14 @@ Public Class LabelToAction
                      HelpString)
 
         Dim DrawingViewsOutOfDate As New L2A
-        HelpString = ""
+        HelpString = "    Checks if drawing views are not up to date."
         PopulateList(DrawingViewsOutOfDate,
                      "Drawing views out of date",
                      "DrawingViewsOutOfDate",
                      HelpString)
 
         Dim DetachedDimensionsOrAnnotations As New L2A
-        HelpString = ""
+        HelpString = "    Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing."
         PopulateList(DetachedDimensionsOrAnnotations,
                      "Detached dimensions or annotations",
                      "DetachedDimensionsOrAnnotations",
@@ -527,7 +551,7 @@ Public Class LabelToAction
                      HelpString)
 
         Dim SaveAs As New L2A
-        HelpString = ""
+        HelpString = "    Same as the assembly command of the same name."
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
