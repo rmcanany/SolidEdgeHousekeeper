@@ -267,6 +267,11 @@ Public Class TopLevelAssemblyUtilities
         Dim CorrectFilename As String = ""
 
         For Each CorrectFilename In LinkDict.Keys
+            If Filename.Contains("!") Then
+                If CorrectFilename.ToLower = Filename.ToLower.Split("!"c)(0) Then
+                    Return CorrectFilename
+                End If
+            End If
             If CorrectFilename.ToLower = Filename.ToLower Then
                 Return CorrectFilename
             End If
@@ -424,6 +429,7 @@ Public Class TopLevelAssemblyUtilities
                 Try
                     DMDoc = CType(DMApp.OpenFileInDesignManager(Filename), DesignManager.Document)
 
+                    ' Get any draft files containing this file.
                     WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName)
                     For Each WhereUsedFile In WhereUsedFiles
                         ' 20210204 Changed from
@@ -438,10 +444,14 @@ Public Class TopLevelAssemblyUtilities
                         ' 20210204 End change
                     Next
 
+                    ' Follow links contained by this file, if any.
                     LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
                     If LinkedDocs.Count > 0 Then
                         For Each LinkedDoc In LinkedDocs
                             LinkedDocName = LinkedDoc.FullName
+                            If LinkedDocName.Contains("!") Then
+                                LinkedDocName = LinkedDocName.Split("!"c)(0)
+                            End If
                             Extension = IO.Path.GetExtension(LinkedDocName)
                             If ValidExtensions.Contains(Extension) Then
                                 AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
@@ -453,6 +463,7 @@ Public Class TopLevelAssemblyUtilities
                     DMDoc.Close()
                     System.Threading.Thread.Sleep(100)
                 Catch ex As Exception
+                    MsgBox(Filename)
                 End Try
             End If
         End If
@@ -461,6 +472,19 @@ Public Class TopLevelAssemblyUtilities
         Return AllLinkedFilenames
 
     End Function
+
+
+    'Private Function Bare(Filename As String) As String
+    '    Dim BareFilename As String
+
+    '    If Filename.Contains("!") Then
+    '        BareFilename = Filename.Split("!"c)(0)
+    '    Else
+    '        BareFilename = Filename
+    '    End If
+
+    '    Return BareFilename
+    'End Function
 
     Private Function GetWhereUsedBottomUp(
                      DMApp As DesignManager.Application,

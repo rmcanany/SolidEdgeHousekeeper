@@ -25,6 +25,8 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.LabelFontSize = New System.Windows.Forms.Label()
+        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.TextBoxFileSearch = New System.Windows.Forms.TextBox()
         Me.CheckBoxFileSearch = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFilterDft = New System.Windows.Forms.CheckBox()
@@ -51,6 +53,14 @@ Partial Class Form1
         Me.TextBoxInputDirectory = New System.Windows.Forms.TextBox()
         Me.ButtonInputDirectory = New System.Windows.Forms.Button()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.TextBoxFindReplaceReplaceAssembly = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplaceFindAssembly = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplacePropertyNameAssembly = New System.Windows.Forms.TextBox()
+        Me.ComboBoxFindReplacePropertySetAssembly = New System.Windows.Forms.ComboBox()
+        Me.LabelFindReplaceReplaceAssembly = New System.Windows.Forms.Label()
+        Me.LabelFindReplaceFindAssembly = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertyNameAssembly = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertySetAssembly = New System.Windows.Forms.Label()
         Me.ButtonExternalProgramAssembly = New System.Windows.Forms.Button()
         Me.TextBoxExternalProgramAssembly = New System.Windows.Forms.TextBox()
         Me.LabelExternalProgramAssembly = New System.Windows.Forms.Label()
@@ -62,6 +72,14 @@ Partial Class Form1
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.TextBoxFindReplaceReplacePart = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplaceFindPart = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplacePropertyNamePart = New System.Windows.Forms.TextBox()
+        Me.ComboBoxFindReplacePropertySetPart = New System.Windows.Forms.ComboBox()
+        Me.LabelFindReplaceReplacePart = New System.Windows.Forms.Label()
+        Me.LabelFindReplaceFindPart = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertyNamePart = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertySetPart = New System.Windows.Forms.Label()
         Me.ButtonExternalProgramPart = New System.Windows.Forms.Button()
         Me.TextBoxExternalProgramPart = New System.Windows.Forms.TextBox()
         Me.LabelExternalProgramPart = New System.Windows.Forms.Label()
@@ -73,6 +91,14 @@ Partial Class Form1
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.TextBoxFindReplaceReplaceSheetmetal = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplaceFindSheetmetal = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplacePropertyNameSheetmetal = New System.Windows.Forms.TextBox()
+        Me.ComboBoxFindReplacePropertySetSheetmetal = New System.Windows.Forms.ComboBox()
+        Me.LabelFindReplaceReplaceSheetmetal = New System.Windows.Forms.Label()
+        Me.LabelFindReplaceFindSheetmetal = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertyNameSheetmetal = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertySetSheetmetal = New System.Windows.Forms.Label()
         Me.CheckBoxSaveAsFlatDXFOutputDirectory = New System.Windows.Forms.CheckBox()
         Me.ButtonSaveAsFlatDXF = New System.Windows.Forms.Button()
         Me.LabelSaveAsFlatDXF = New System.Windows.Forms.Label()
@@ -143,30 +169,6 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
-        Me.LabelFindReplacePropertySetAssembly = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertyNameAssembly = New System.Windows.Forms.Label()
-        Me.LabelFindReplaceFindAssembly = New System.Windows.Forms.Label()
-        Me.LabelFindReplaceReplaceAssembly = New System.Windows.Forms.Label()
-        Me.ComboBoxFindReplacePropertySetAssembly = New System.Windows.Forms.ComboBox()
-        Me.TextBoxFindReplacePropertyNameAssembly = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceFindAssembly = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceReplaceAssembly = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceReplacePart = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceFindPart = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplacePropertyNamePart = New System.Windows.Forms.TextBox()
-        Me.ComboBoxFindReplacePropertySetPart = New System.Windows.Forms.ComboBox()
-        Me.LabelFindReplaceReplacePart = New System.Windows.Forms.Label()
-        Me.LabelFindReplaceFindPart = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertyNamePart = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertySetPart = New System.Windows.Forms.Label()
-        Me.TextBoxFindReplaceReplaceSheetmetal = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceFindSheetmetal = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplacePropertyNameSheetmetal = New System.Windows.Forms.TextBox()
-        Me.ComboBoxFindReplacePropertySetSheetmetal = New System.Windows.Forms.ComboBox()
-        Me.LabelFindReplaceReplaceSheetmetal = New System.Windows.Forms.Label()
-        Me.LabelFindReplaceFindSheetmetal = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertyNameSheetmetal = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertySetSheetmetal = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFilesToProcess.SuspendLayout()
@@ -202,6 +204,8 @@ Partial Class Form1
         '
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
+        Me.TabPageGeneral.Controls.Add(Me.TextBoxFontSize)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxFileSearch)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxFileSearch)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxFilterDft)
@@ -230,6 +234,25 @@ Partial Class Form1
         Me.TabPageGeneral.Size = New System.Drawing.Size(643, 721)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
+        '
+        'LabelFontSize
+        '
+        Me.LabelFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelFontSize.AutoSize = True
+        Me.LabelFontSize.Location = New System.Drawing.Point(96, 520)
+        Me.LabelFontSize.Name = "LabelFontSize"
+        Me.LabelFontSize.Size = New System.Drawing.Size(65, 17)
+        Me.LabelFontSize.TabIndex = 29
+        Me.LabelFontSize.Text = "Font size"
+        '
+        'TextBoxFontSize
+        '
+        Me.TextBoxFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(10, 518)
+        Me.TextBoxFontSize.Name = "TextBoxFontSize"
+        Me.TextBoxFontSize.Size = New System.Drawing.Size(75, 22)
+        Me.TextBoxFontSize.TabIndex = 28
+        Me.TextBoxFontSize.Text = "8"
         '
         'TextBoxFileSearch
         '
@@ -387,7 +410,7 @@ Partial Class Form1
         'TextBoxColumnWidth
         '
         Me.TextBoxColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(10, 518)
+        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(10, 553)
         Me.TextBoxColumnWidth.Name = "TextBoxColumnWidth"
         Me.TextBoxColumnWidth.Size = New System.Drawing.Size(75, 22)
         Me.TextBoxColumnWidth.TabIndex = 11
@@ -397,7 +420,7 @@ Partial Class Form1
         '
         Me.LabelColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelColumnWidth.AutoSize = True
-        Me.LabelColumnWidth.Location = New System.Drawing.Point(96, 521)
+        Me.LabelColumnWidth.Location = New System.Drawing.Point(96, 556)
         Me.LabelColumnWidth.Name = "LabelColumnWidth"
         Me.LabelColumnWidth.Size = New System.Drawing.Size(172, 17)
         Me.LabelColumnWidth.TabIndex = 9
@@ -542,6 +565,71 @@ Partial Class Form1
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
         '
+        'TextBoxFindReplaceReplaceAssembly
+        '
+        Me.TextBoxFindReplaceReplaceAssembly.Location = New System.Drawing.Point(460, 565)
+        Me.TextBoxFindReplaceReplaceAssembly.Name = "TextBoxFindReplaceReplaceAssembly"
+        Me.TextBoxFindReplaceReplaceAssembly.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceReplaceAssembly.TabIndex = 17
+        '
+        'TextBoxFindReplaceFindAssembly
+        '
+        Me.TextBoxFindReplaceFindAssembly.Location = New System.Drawing.Point(310, 565)
+        Me.TextBoxFindReplaceFindAssembly.Name = "TextBoxFindReplaceFindAssembly"
+        Me.TextBoxFindReplaceFindAssembly.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceFindAssembly.TabIndex = 16
+        '
+        'TextBoxFindReplacePropertyNameAssembly
+        '
+        Me.TextBoxFindReplacePropertyNameAssembly.Location = New System.Drawing.Point(160, 565)
+        Me.TextBoxFindReplacePropertyNameAssembly.Name = "TextBoxFindReplacePropertyNameAssembly"
+        Me.TextBoxFindReplacePropertyNameAssembly.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplacePropertyNameAssembly.TabIndex = 15
+        '
+        'ComboBoxFindReplacePropertySetAssembly
+        '
+        Me.ComboBoxFindReplacePropertySetAssembly.FormattingEnabled = True
+        Me.ComboBoxFindReplacePropertySetAssembly.Location = New System.Drawing.Point(10, 565)
+        Me.ComboBoxFindReplacePropertySetAssembly.Name = "ComboBoxFindReplacePropertySetAssembly"
+        Me.ComboBoxFindReplacePropertySetAssembly.Size = New System.Drawing.Size(125, 24)
+        Me.ComboBoxFindReplacePropertySetAssembly.TabIndex = 14
+        '
+        'LabelFindReplaceReplaceAssembly
+        '
+        Me.LabelFindReplaceReplaceAssembly.AutoSize = True
+        Me.LabelFindReplaceReplaceAssembly.Location = New System.Drawing.Point(460, 540)
+        Me.LabelFindReplaceReplaceAssembly.Name = "LabelFindReplaceReplaceAssembly"
+        Me.LabelFindReplaceReplaceAssembly.Size = New System.Drawing.Size(60, 17)
+        Me.LabelFindReplaceReplaceAssembly.TabIndex = 13
+        Me.LabelFindReplaceReplaceAssembly.Text = "Replace"
+        '
+        'LabelFindReplaceFindAssembly
+        '
+        Me.LabelFindReplaceFindAssembly.AutoSize = True
+        Me.LabelFindReplaceFindAssembly.Location = New System.Drawing.Point(310, 540)
+        Me.LabelFindReplaceFindAssembly.Name = "LabelFindReplaceFindAssembly"
+        Me.LabelFindReplaceFindAssembly.Size = New System.Drawing.Size(35, 17)
+        Me.LabelFindReplaceFindAssembly.TabIndex = 12
+        Me.LabelFindReplaceFindAssembly.Text = "Find"
+        '
+        'LabelFindReplacePropertyNameAssembly
+        '
+        Me.LabelFindReplacePropertyNameAssembly.AutoSize = True
+        Me.LabelFindReplacePropertyNameAssembly.Location = New System.Drawing.Point(160, 540)
+        Me.LabelFindReplacePropertyNameAssembly.Name = "LabelFindReplacePropertyNameAssembly"
+        Me.LabelFindReplacePropertyNameAssembly.Size = New System.Drawing.Size(101, 17)
+        Me.LabelFindReplacePropertyNameAssembly.TabIndex = 11
+        Me.LabelFindReplacePropertyNameAssembly.Text = "Property name"
+        '
+        'LabelFindReplacePropertySetAssembly
+        '
+        Me.LabelFindReplacePropertySetAssembly.AutoSize = True
+        Me.LabelFindReplacePropertySetAssembly.Location = New System.Drawing.Point(10, 540)
+        Me.LabelFindReplacePropertySetAssembly.Name = "LabelFindReplacePropertySetAssembly"
+        Me.LabelFindReplacePropertySetAssembly.Size = New System.Drawing.Size(87, 17)
+        Me.LabelFindReplacePropertySetAssembly.TabIndex = 10
+        Me.LabelFindReplacePropertySetAssembly.Text = "Property Set"
+        '
         'ButtonExternalProgramAssembly
         '
         Me.ButtonExternalProgramAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -669,6 +757,71 @@ Partial Class Form1
         Me.TabPagePart.Size = New System.Drawing.Size(643, 721)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
+        '
+        'TextBoxFindReplaceReplacePart
+        '
+        Me.TextBoxFindReplaceReplacePart.Location = New System.Drawing.Point(460, 565)
+        Me.TextBoxFindReplaceReplacePart.Name = "TextBoxFindReplaceReplacePart"
+        Me.TextBoxFindReplaceReplacePart.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceReplacePart.TabIndex = 25
+        '
+        'TextBoxFindReplaceFindPart
+        '
+        Me.TextBoxFindReplaceFindPart.Location = New System.Drawing.Point(310, 565)
+        Me.TextBoxFindReplaceFindPart.Name = "TextBoxFindReplaceFindPart"
+        Me.TextBoxFindReplaceFindPart.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceFindPart.TabIndex = 24
+        '
+        'TextBoxFindReplacePropertyNamePart
+        '
+        Me.TextBoxFindReplacePropertyNamePart.Location = New System.Drawing.Point(160, 565)
+        Me.TextBoxFindReplacePropertyNamePart.Name = "TextBoxFindReplacePropertyNamePart"
+        Me.TextBoxFindReplacePropertyNamePart.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplacePropertyNamePart.TabIndex = 23
+        '
+        'ComboBoxFindReplacePropertySetPart
+        '
+        Me.ComboBoxFindReplacePropertySetPart.FormattingEnabled = True
+        Me.ComboBoxFindReplacePropertySetPart.Location = New System.Drawing.Point(10, 565)
+        Me.ComboBoxFindReplacePropertySetPart.Name = "ComboBoxFindReplacePropertySetPart"
+        Me.ComboBoxFindReplacePropertySetPart.Size = New System.Drawing.Size(125, 24)
+        Me.ComboBoxFindReplacePropertySetPart.TabIndex = 22
+        '
+        'LabelFindReplaceReplacePart
+        '
+        Me.LabelFindReplaceReplacePart.AutoSize = True
+        Me.LabelFindReplaceReplacePart.Location = New System.Drawing.Point(460, 540)
+        Me.LabelFindReplaceReplacePart.Name = "LabelFindReplaceReplacePart"
+        Me.LabelFindReplaceReplacePart.Size = New System.Drawing.Size(60, 17)
+        Me.LabelFindReplaceReplacePart.TabIndex = 21
+        Me.LabelFindReplaceReplacePart.Text = "Replace"
+        '
+        'LabelFindReplaceFindPart
+        '
+        Me.LabelFindReplaceFindPart.AutoSize = True
+        Me.LabelFindReplaceFindPart.Location = New System.Drawing.Point(310, 540)
+        Me.LabelFindReplaceFindPart.Name = "LabelFindReplaceFindPart"
+        Me.LabelFindReplaceFindPart.Size = New System.Drawing.Size(35, 17)
+        Me.LabelFindReplaceFindPart.TabIndex = 20
+        Me.LabelFindReplaceFindPart.Text = "Find"
+        '
+        'LabelFindReplacePropertyNamePart
+        '
+        Me.LabelFindReplacePropertyNamePart.AutoSize = True
+        Me.LabelFindReplacePropertyNamePart.Location = New System.Drawing.Point(160, 540)
+        Me.LabelFindReplacePropertyNamePart.Name = "LabelFindReplacePropertyNamePart"
+        Me.LabelFindReplacePropertyNamePart.Size = New System.Drawing.Size(101, 17)
+        Me.LabelFindReplacePropertyNamePart.TabIndex = 19
+        Me.LabelFindReplacePropertyNamePart.Text = "Property name"
+        '
+        'LabelFindReplacePropertySetPart
+        '
+        Me.LabelFindReplacePropertySetPart.AutoSize = True
+        Me.LabelFindReplacePropertySetPart.Location = New System.Drawing.Point(10, 540)
+        Me.LabelFindReplacePropertySetPart.Name = "LabelFindReplacePropertySetPart"
+        Me.LabelFindReplacePropertySetPart.Size = New System.Drawing.Size(87, 17)
+        Me.LabelFindReplacePropertySetPart.TabIndex = 18
+        Me.LabelFindReplacePropertySetPart.Text = "Property Set"
         '
         'ButtonExternalProgramPart
         '
@@ -805,6 +958,71 @@ Partial Class Form1
         Me.TabPageSheetmetal.Size = New System.Drawing.Size(643, 721)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'TextBoxFindReplaceReplaceSheetmetal
+        '
+        Me.TextBoxFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(460, 685)
+        Me.TextBoxFindReplaceReplaceSheetmetal.Name = "TextBoxFindReplaceReplaceSheetmetal"
+        Me.TextBoxFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceReplaceSheetmetal.TabIndex = 33
+        '
+        'TextBoxFindReplaceFindSheetmetal
+        '
+        Me.TextBoxFindReplaceFindSheetmetal.Location = New System.Drawing.Point(310, 685)
+        Me.TextBoxFindReplaceFindSheetmetal.Name = "TextBoxFindReplaceFindSheetmetal"
+        Me.TextBoxFindReplaceFindSheetmetal.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplaceFindSheetmetal.TabIndex = 32
+        '
+        'TextBoxFindReplacePropertyNameSheetmetal
+        '
+        Me.TextBoxFindReplacePropertyNameSheetmetal.Location = New System.Drawing.Point(160, 685)
+        Me.TextBoxFindReplacePropertyNameSheetmetal.Name = "TextBoxFindReplacePropertyNameSheetmetal"
+        Me.TextBoxFindReplacePropertyNameSheetmetal.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxFindReplacePropertyNameSheetmetal.TabIndex = 31
+        '
+        'ComboBoxFindReplacePropertySetSheetmetal
+        '
+        Me.ComboBoxFindReplacePropertySetSheetmetal.FormattingEnabled = True
+        Me.ComboBoxFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(10, 685)
+        Me.ComboBoxFindReplacePropertySetSheetmetal.Name = "ComboBoxFindReplacePropertySetSheetmetal"
+        Me.ComboBoxFindReplacePropertySetSheetmetal.Size = New System.Drawing.Size(125, 24)
+        Me.ComboBoxFindReplacePropertySetSheetmetal.TabIndex = 30
+        '
+        'LabelFindReplaceReplaceSheetmetal
+        '
+        Me.LabelFindReplaceReplaceSheetmetal.AutoSize = True
+        Me.LabelFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(460, 660)
+        Me.LabelFindReplaceReplaceSheetmetal.Name = "LabelFindReplaceReplaceSheetmetal"
+        Me.LabelFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(60, 17)
+        Me.LabelFindReplaceReplaceSheetmetal.TabIndex = 29
+        Me.LabelFindReplaceReplaceSheetmetal.Text = "Replace"
+        '
+        'LabelFindReplaceFindSheetmetal
+        '
+        Me.LabelFindReplaceFindSheetmetal.AutoSize = True
+        Me.LabelFindReplaceFindSheetmetal.Location = New System.Drawing.Point(310, 660)
+        Me.LabelFindReplaceFindSheetmetal.Name = "LabelFindReplaceFindSheetmetal"
+        Me.LabelFindReplaceFindSheetmetal.Size = New System.Drawing.Size(35, 17)
+        Me.LabelFindReplaceFindSheetmetal.TabIndex = 28
+        Me.LabelFindReplaceFindSheetmetal.Text = "Find"
+        '
+        'LabelFindReplacePropertyNameSheetmetal
+        '
+        Me.LabelFindReplacePropertyNameSheetmetal.AutoSize = True
+        Me.LabelFindReplacePropertyNameSheetmetal.Location = New System.Drawing.Point(160, 660)
+        Me.LabelFindReplacePropertyNameSheetmetal.Name = "LabelFindReplacePropertyNameSheetmetal"
+        Me.LabelFindReplacePropertyNameSheetmetal.Size = New System.Drawing.Size(101, 17)
+        Me.LabelFindReplacePropertyNameSheetmetal.TabIndex = 27
+        Me.LabelFindReplacePropertyNameSheetmetal.Text = "Property name"
+        '
+        'LabelFindReplacePropertySetSheetmetal
+        '
+        Me.LabelFindReplacePropertySetSheetmetal.AutoSize = True
+        Me.LabelFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(10, 660)
+        Me.LabelFindReplacePropertySetSheetmetal.Name = "LabelFindReplacePropertySetSheetmetal"
+        Me.LabelFindReplacePropertySetSheetmetal.Size = New System.Drawing.Size(87, 17)
+        Me.LabelFindReplacePropertySetSheetmetal.TabIndex = 26
+        Me.LabelFindReplacePropertySetSheetmetal.Text = "Property Set"
         '
         'CheckBoxSaveAsFlatDXFOutputDirectory
         '
@@ -1533,201 +1751,6 @@ Partial Class Form1
         '
         Me.PrintDialog1.UseEXDialog = True
         '
-        'LabelFindReplacePropertySetAssembly
-        '
-        Me.LabelFindReplacePropertySetAssembly.AutoSize = True
-        Me.LabelFindReplacePropertySetAssembly.Location = New System.Drawing.Point(10, 540)
-        Me.LabelFindReplacePropertySetAssembly.Name = "LabelFindReplacePropertySetAssembly"
-        Me.LabelFindReplacePropertySetAssembly.Size = New System.Drawing.Size(87, 17)
-        Me.LabelFindReplacePropertySetAssembly.TabIndex = 10
-        Me.LabelFindReplacePropertySetAssembly.Text = "Property Set"
-        '
-        'LabelFindReplacePropertyNameAssembly
-        '
-        Me.LabelFindReplacePropertyNameAssembly.AutoSize = True
-        Me.LabelFindReplacePropertyNameAssembly.Location = New System.Drawing.Point(160, 540)
-        Me.LabelFindReplacePropertyNameAssembly.Name = "LabelFindReplacePropertyNameAssembly"
-        Me.LabelFindReplacePropertyNameAssembly.Size = New System.Drawing.Size(101, 17)
-        Me.LabelFindReplacePropertyNameAssembly.TabIndex = 11
-        Me.LabelFindReplacePropertyNameAssembly.Text = "Property name"
-        '
-        'LabelFindReplaceFindAssembly
-        '
-        Me.LabelFindReplaceFindAssembly.AutoSize = True
-        Me.LabelFindReplaceFindAssembly.Location = New System.Drawing.Point(310, 540)
-        Me.LabelFindReplaceFindAssembly.Name = "LabelFindReplaceFindAssembly"
-        Me.LabelFindReplaceFindAssembly.Size = New System.Drawing.Size(35, 17)
-        Me.LabelFindReplaceFindAssembly.TabIndex = 12
-        Me.LabelFindReplaceFindAssembly.Text = "Find"
-        '
-        'LabelFindReplaceReplaceAssembly
-        '
-        Me.LabelFindReplaceReplaceAssembly.AutoSize = True
-        Me.LabelFindReplaceReplaceAssembly.Location = New System.Drawing.Point(460, 540)
-        Me.LabelFindReplaceReplaceAssembly.Name = "LabelFindReplaceReplaceAssembly"
-        Me.LabelFindReplaceReplaceAssembly.Size = New System.Drawing.Size(60, 17)
-        Me.LabelFindReplaceReplaceAssembly.TabIndex = 13
-        Me.LabelFindReplaceReplaceAssembly.Text = "Replace"
-        '
-        'ComboBoxFindReplacePropertySetAssembly
-        '
-        Me.ComboBoxFindReplacePropertySetAssembly.FormattingEnabled = True
-        Me.ComboBoxFindReplacePropertySetAssembly.Location = New System.Drawing.Point(10, 565)
-        Me.ComboBoxFindReplacePropertySetAssembly.Name = "ComboBoxFindReplacePropertySetAssembly"
-        Me.ComboBoxFindReplacePropertySetAssembly.Size = New System.Drawing.Size(125, 24)
-        Me.ComboBoxFindReplacePropertySetAssembly.TabIndex = 14
-        '
-        'TextBoxFindReplacePropertyNameAssembly
-        '
-        Me.TextBoxFindReplacePropertyNameAssembly.Location = New System.Drawing.Point(160, 565)
-        Me.TextBoxFindReplacePropertyNameAssembly.Name = "TextBoxFindReplacePropertyNameAssembly"
-        Me.TextBoxFindReplacePropertyNameAssembly.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplacePropertyNameAssembly.TabIndex = 15
-        '
-        'TextBoxFindReplaceFindAssembly
-        '
-        Me.TextBoxFindReplaceFindAssembly.Location = New System.Drawing.Point(310, 565)
-        Me.TextBoxFindReplaceFindAssembly.Name = "TextBoxFindReplaceFindAssembly"
-        Me.TextBoxFindReplaceFindAssembly.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceFindAssembly.TabIndex = 16
-        '
-        'TextBoxFindReplaceReplaceAssembly
-        '
-        Me.TextBoxFindReplaceReplaceAssembly.Location = New System.Drawing.Point(460, 565)
-        Me.TextBoxFindReplaceReplaceAssembly.Name = "TextBoxFindReplaceReplaceAssembly"
-        Me.TextBoxFindReplaceReplaceAssembly.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceReplaceAssembly.TabIndex = 17
-        '
-        'TextBoxFindReplaceReplacePart
-        '
-        Me.TextBoxFindReplaceReplacePart.Location = New System.Drawing.Point(460, 565)
-        Me.TextBoxFindReplaceReplacePart.Name = "TextBoxFindReplaceReplacePart"
-        Me.TextBoxFindReplaceReplacePart.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceReplacePart.TabIndex = 25
-        '
-        'TextBoxFindReplaceFindPart
-        '
-        Me.TextBoxFindReplaceFindPart.Location = New System.Drawing.Point(310, 565)
-        Me.TextBoxFindReplaceFindPart.Name = "TextBoxFindReplaceFindPart"
-        Me.TextBoxFindReplaceFindPart.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceFindPart.TabIndex = 24
-        '
-        'TextBoxFindReplacePropertyNamePart
-        '
-        Me.TextBoxFindReplacePropertyNamePart.Location = New System.Drawing.Point(160, 565)
-        Me.TextBoxFindReplacePropertyNamePart.Name = "TextBoxFindReplacePropertyNamePart"
-        Me.TextBoxFindReplacePropertyNamePart.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplacePropertyNamePart.TabIndex = 23
-        '
-        'ComboBoxFindReplacePropertySetPart
-        '
-        Me.ComboBoxFindReplacePropertySetPart.FormattingEnabled = True
-        Me.ComboBoxFindReplacePropertySetPart.Location = New System.Drawing.Point(10, 565)
-        Me.ComboBoxFindReplacePropertySetPart.Name = "ComboBoxFindReplacePropertySetPart"
-        Me.ComboBoxFindReplacePropertySetPart.Size = New System.Drawing.Size(125, 24)
-        Me.ComboBoxFindReplacePropertySetPart.TabIndex = 22
-        '
-        'LabelFindReplaceReplacePart
-        '
-        Me.LabelFindReplaceReplacePart.AutoSize = True
-        Me.LabelFindReplaceReplacePart.Location = New System.Drawing.Point(460, 540)
-        Me.LabelFindReplaceReplacePart.Name = "LabelFindReplaceReplacePart"
-        Me.LabelFindReplaceReplacePart.Size = New System.Drawing.Size(60, 17)
-        Me.LabelFindReplaceReplacePart.TabIndex = 21
-        Me.LabelFindReplaceReplacePart.Text = "Replace"
-        '
-        'LabelFindReplaceFindPart
-        '
-        Me.LabelFindReplaceFindPart.AutoSize = True
-        Me.LabelFindReplaceFindPart.Location = New System.Drawing.Point(310, 540)
-        Me.LabelFindReplaceFindPart.Name = "LabelFindReplaceFindPart"
-        Me.LabelFindReplaceFindPart.Size = New System.Drawing.Size(35, 17)
-        Me.LabelFindReplaceFindPart.TabIndex = 20
-        Me.LabelFindReplaceFindPart.Text = "Find"
-        '
-        'LabelFindReplacePropertyNamePart
-        '
-        Me.LabelFindReplacePropertyNamePart.AutoSize = True
-        Me.LabelFindReplacePropertyNamePart.Location = New System.Drawing.Point(160, 540)
-        Me.LabelFindReplacePropertyNamePart.Name = "LabelFindReplacePropertyNamePart"
-        Me.LabelFindReplacePropertyNamePart.Size = New System.Drawing.Size(101, 17)
-        Me.LabelFindReplacePropertyNamePart.TabIndex = 19
-        Me.LabelFindReplacePropertyNamePart.Text = "Property name"
-        '
-        'LabelFindReplacePropertySetPart
-        '
-        Me.LabelFindReplacePropertySetPart.AutoSize = True
-        Me.LabelFindReplacePropertySetPart.Location = New System.Drawing.Point(10, 540)
-        Me.LabelFindReplacePropertySetPart.Name = "LabelFindReplacePropertySetPart"
-        Me.LabelFindReplacePropertySetPart.Size = New System.Drawing.Size(87, 17)
-        Me.LabelFindReplacePropertySetPart.TabIndex = 18
-        Me.LabelFindReplacePropertySetPart.Text = "Property Set"
-        '
-        'TextBoxFindReplaceReplaceSheetmetal
-        '
-        Me.TextBoxFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(460, 685)
-        Me.TextBoxFindReplaceReplaceSheetmetal.Name = "TextBoxFindReplaceReplaceSheetmetal"
-        Me.TextBoxFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceReplaceSheetmetal.TabIndex = 33
-        '
-        'TextBoxFindReplaceFindSheetmetal
-        '
-        Me.TextBoxFindReplaceFindSheetmetal.Location = New System.Drawing.Point(310, 685)
-        Me.TextBoxFindReplaceFindSheetmetal.Name = "TextBoxFindReplaceFindSheetmetal"
-        Me.TextBoxFindReplaceFindSheetmetal.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplaceFindSheetmetal.TabIndex = 32
-        '
-        'TextBoxFindReplacePropertyNameSheetmetal
-        '
-        Me.TextBoxFindReplacePropertyNameSheetmetal.Location = New System.Drawing.Point(160, 685)
-        Me.TextBoxFindReplacePropertyNameSheetmetal.Name = "TextBoxFindReplacePropertyNameSheetmetal"
-        Me.TextBoxFindReplacePropertyNameSheetmetal.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxFindReplacePropertyNameSheetmetal.TabIndex = 31
-        '
-        'ComboBoxFindReplacePropertySetSheetmetal
-        '
-        Me.ComboBoxFindReplacePropertySetSheetmetal.FormattingEnabled = True
-        Me.ComboBoxFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(10, 685)
-        Me.ComboBoxFindReplacePropertySetSheetmetal.Name = "ComboBoxFindReplacePropertySetSheetmetal"
-        Me.ComboBoxFindReplacePropertySetSheetmetal.Size = New System.Drawing.Size(125, 24)
-        Me.ComboBoxFindReplacePropertySetSheetmetal.TabIndex = 30
-        '
-        'LabelFindReplaceReplaceSheetmetal
-        '
-        Me.LabelFindReplaceReplaceSheetmetal.AutoSize = True
-        Me.LabelFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(460, 660)
-        Me.LabelFindReplaceReplaceSheetmetal.Name = "LabelFindReplaceReplaceSheetmetal"
-        Me.LabelFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(60, 17)
-        Me.LabelFindReplaceReplaceSheetmetal.TabIndex = 29
-        Me.LabelFindReplaceReplaceSheetmetal.Text = "Replace"
-        '
-        'LabelFindReplaceFindSheetmetal
-        '
-        Me.LabelFindReplaceFindSheetmetal.AutoSize = True
-        Me.LabelFindReplaceFindSheetmetal.Location = New System.Drawing.Point(310, 660)
-        Me.LabelFindReplaceFindSheetmetal.Name = "LabelFindReplaceFindSheetmetal"
-        Me.LabelFindReplaceFindSheetmetal.Size = New System.Drawing.Size(35, 17)
-        Me.LabelFindReplaceFindSheetmetal.TabIndex = 28
-        Me.LabelFindReplaceFindSheetmetal.Text = "Find"
-        '
-        'LabelFindReplacePropertyNameSheetmetal
-        '
-        Me.LabelFindReplacePropertyNameSheetmetal.AutoSize = True
-        Me.LabelFindReplacePropertyNameSheetmetal.Location = New System.Drawing.Point(160, 660)
-        Me.LabelFindReplacePropertyNameSheetmetal.Name = "LabelFindReplacePropertyNameSheetmetal"
-        Me.LabelFindReplacePropertyNameSheetmetal.Size = New System.Drawing.Size(101, 17)
-        Me.LabelFindReplacePropertyNameSheetmetal.TabIndex = 27
-        Me.LabelFindReplacePropertyNameSheetmetal.Text = "Property name"
-        '
-        'LabelFindReplacePropertySetSheetmetal
-        '
-        Me.LabelFindReplacePropertySetSheetmetal.AutoSize = True
-        Me.LabelFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(10, 660)
-        Me.LabelFindReplacePropertySetSheetmetal.Name = "LabelFindReplacePropertySetSheetmetal"
-        Me.LabelFindReplacePropertySetSheetmetal.Size = New System.Drawing.Size(87, 17)
-        Me.LabelFindReplacePropertySetSheetmetal.TabIndex = 26
-        Me.LabelFindReplacePropertySetSheetmetal.Text = "Property Set"
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -1909,4 +1932,6 @@ Partial Class Form1
     Friend WithEvents LabelFindReplaceFindSheetmetal As Label
     Friend WithEvents LabelFindReplacePropertyNameSheetmetal As Label
     Friend WithEvents LabelFindReplacePropertySetSheetmetal As Label
+    Friend WithEvents LabelFontSize As Label
+    Friend WithEvents TextBoxFontSize As TextBox
 End Class

@@ -821,6 +821,12 @@ Public Class SheetmetalTasks
         Dim ViewStyleAlreadyPresent As Boolean
         Dim TemplateSkyboxName(5) As String
         Dim msg As String = ""
+        Dim tf As Boolean = False
+
+        Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim PartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
 
         SEDoc.ImportStyles(TemplateFilename, True)
 
@@ -892,6 +898,25 @@ Public Class SheetmetalTasks
                 View = Window.View
                 View.Style = TemplateActiveStyleName
             Next
+
+            SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seConstructionBaseStyle,
+                           ConstructionBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seThreadedCylindersBaseStyle,
+                       ThreadBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.sePartBaseStyle,
+                       PartBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seCurveBaseStyle,
+                       CurveBaseStyle)
+
+            tf = ConstructionBaseStyle Is Nothing
+            tf = tf Or (ThreadBaseStyle Is Nothing)
+            tf = tf Or (PartBaseStyle Is Nothing)
+            tf = tf Or (CurveBaseStyle Is Nothing)
+
+            If tf Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Some Color Manager base styles undefined.")
+            End If
 
             If SEDoc.ReadOnly Then
                 ExitStatus = 1

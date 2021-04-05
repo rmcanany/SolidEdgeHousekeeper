@@ -99,6 +99,10 @@ Partial Class Form1
                         FoundFiles = FileWildcardSearch(FoundFiles, TextBoxFileSearch.Text)
                     End If
 
+                    If Not ListBoxFiles.Font.Size = CSng(TextBoxFontSize.Text) Then
+                        ListBoxFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
+                    End If
+
                     Dim MaxFilenameLength As Integer
                     MaxFilenameLength = 0
                     Dim BaseFilename As String

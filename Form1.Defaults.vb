@@ -100,7 +100,7 @@ Partial Class Form1
             End If
         End If
 
-        tf = tb.Name.ToLower.Contains("colwidth")
+        tf = tb.Name.ToLower.Contains("columnwidth")
         If tf Then
             If Value = "" Then
                 tb.Text = "5.5"
@@ -109,6 +109,19 @@ Partial Class Form1
                     tb.Text = CStr(Value)
                 Catch ex As Exception
                     tb.Text = "5.5"
+                End Try
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("fontsize")
+        If tf Then
+            If Value = "" Then
+                tb.Text = "8"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "8"
                 End Try
             End If
         End If

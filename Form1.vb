@@ -3,6 +3,7 @@
 Imports System.Runtime.InteropServices
 Imports SolidEdgeCommunity
 
+
 Public Class Form1
     Public SEApp As SolidEdgeFramework.Application
 
@@ -253,13 +254,6 @@ Public Class Form1
                     End If
                 End If
             End If
-            If LabelToActionAssembly(Label).RequiresLaserOutputDirectory Then
-                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
-                    If Not msg.Contains("Select a valid laser output directory") Then
-                        msg += "    Select a valid laser output directory" + Chr(13)
-                    End If
-                End If
-            End If
             If LabelToActionAssembly(Label).RequiresPartNumberFields Then
                 If TextBoxPartNumberPropertyName.Text = "" Then
                     If Not msg.Contains("Select a valid part number property name") Then
@@ -271,7 +265,9 @@ Public Class Form1
                 SaveMsg += "    Assembly: " + Label + Chr(13)
             End If
             If LabelToActionAssembly(Label).RequiresSaveAsOutputDirectory Then
-                If TextBoxSaveAsAssemblyOutputDirectory.Text = "" Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsAssemblyOutputDirectory.Text)
+                tf = tf And Not CheckBoxSaveAsAssemblyOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid Save As assembly output directory") Then
                         msg += "    Select a valid Save As assembly output directory" + Chr(13)
                     End If
@@ -327,13 +323,6 @@ Public Class Form1
                     End If
                 End If
             End If
-            If LabelToActionPart(Label).RequiresLaserOutputDirectory Then
-                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
-                    If Not msg.Contains("Select a valid laser output directory") Then
-                        msg += "    Select a valid laser output directory" + Chr(13)
-                    End If
-                End If
-            End If
             If LabelToActionPart(Label).RequiresPartNumberFields Then
                 If TextBoxPartNumberPropertyName.Text = "" Then
                     If Not msg.Contains("Select a valid part number property name") Then
@@ -345,7 +334,9 @@ Public Class Form1
                 SaveMsg += "    Part: " + Label + Chr(13)
             End If
             If LabelToActionPart(Label).RequiresSaveAsOutputDirectory Then
-                If TextBoxSaveAsPartOutputDirectory.Text = "" Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsPartOutputDirectory.Text)
+                tf = tf And Not CheckBoxSaveAsPartOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid Save As part output directory") Then
                         msg += "    Select a valid Save As part output directory" + Chr(13)
                     End If
@@ -404,7 +395,9 @@ Public Class Form1
                 End If
             End If
             If LabelToActionSheetmetal(Label).RequiresLaserOutputDirectory Then
-                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
+                tf = tf And Not CheckBoxLaserOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid laser output directory") Then
                         msg += "    Select a valid laser output directory" + Chr(13)
                     End If
@@ -421,14 +414,18 @@ Public Class Form1
                 SaveMsg += "    Sheetmetal: " + Label + Chr(13)
             End If
             If LabelToActionSheetmetal(Label).RequiresSaveAsOutputDirectory Then
-                If TextBoxSaveAsSheetmetalOutputDirectory.Text = "" Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsSheetmetalOutputDirectory.Text)
+                tf = tf And Not CheckBoxSaveAsSheetmetalOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid Save As sheetmetal output directory") Then
                         msg += "    Select a valid Save As sheetmetal output directory" + Chr(13)
                     End If
                 End If
             End If
             If LabelToActionSheetmetal(Label).RequiresSaveAsFlatDXFOutputDirectory Then
-                If TextBoxSaveAsFlatDXFOutputDirectory.Text = "" Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsFlatDXFOutputDirectory.Text)
+                tf = tf And Not CheckBoxSaveAsFlatDXFOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid Save As Flat DXF output directory") Then
                         msg += "    Select a valid Save As Flat DXF output directory" + Chr(13)
                     End If
@@ -487,7 +484,9 @@ Public Class Form1
                 End If
             End If
             If LabelToActionDraft(Label).RequiresLaserOutputDirectory Then
-                If Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text) Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
+                tf = tf And Not CheckBoxLaserOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid laser output directory") Then
                         msg += "    Select a valid laser output directory" + Chr(13)
                     End If
@@ -503,27 +502,15 @@ Public Class Form1
             If LabelToActionDraft(Label).RequiresSave Then
                 SaveMsg += "    Draft: " + Label + Chr(13)
             End If
-            'If LabelToActionDraft(Label).RequiresStepOutputDirectory Then
-            '    If TextBoxStepDraftOutputDirectory.Text = "" Then
-            '        If Not msg.Contains("Select a valid STEP output directory") Then
-            '            msg += "    Select a valid STEP output directory" + Chr(13)
-            '        End If
-            '    End If
-            'End If
             If LabelToActionDraft(Label).RequiresSaveAsOutputDirectory Then
-                If TextBoxSaveAsDraftOutputDirectory.Text = "" Then
+                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsDraftOutputDirectory.Text)
+                tf = tf And Not CheckBoxSaveAsDraftOutputDirectory.Checked
+                If tf Then
                     If Not msg.Contains("Select a valid Save As draft output directory") Then
                         msg += "    Select a valid Save As draft output directory" + Chr(13)
                     End If
                 End If
             End If
-            'If LabelToActionDraft(Label).RequiresDxfOutputDirectory Then
-            '    If TextBoxDxfDraftOutputDirectory.Text = "" Then
-            '        If Not msg.Contains("Select a valid DXF draft output directory") Then
-            '            msg += "    Select a valid DXF draft output directory" + Chr(13)
-            '        End If
-            '    End If
-            'End If
             If LabelToActionDraft(Label).IncompatibleWithOtherTasks Then
                 tf = CheckedListBoxDraft.CheckedItems.Count > 1
                 tf = tf Or CheckedListBoxAssembly.CheckedItems.Count > 0
@@ -1280,9 +1267,9 @@ Public Class Form1
 
     Private Sub CheckBoxSaveAsFlatDXFOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFlatDXFOutputDirectory.CheckedChanged
         If CheckBoxSaveAsFlatDXFOutputDirectory.Checked Then
-            CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = False
+            TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
         Else
-            CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = True
+            TextBoxSaveAsFlatDXFOutputDirectory.Enabled = True
         End If
         ReconcileFormChanges()
     End Sub
@@ -1467,10 +1454,25 @@ Public Class Form1
 
         ' MaxFilenameLength = CDbl(ListBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
         ' ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
+        ListBoxFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFileSearch.LostFocus
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxFontSize_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFontSize.LostFocus
+        Dim FontSize As Single = 8
+
+        Try
+            FontSize = CSng(TextBoxFontSize.Text)
+        Catch ex As Exception
+            TextBoxFontSize.Text = CStr(FontSize)
+        End Try
+
+        'ListBoxFiles.Font = New Font("Microsoft Sans Serif", FontSize, FontStyle.Regular)
         ListBoxFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
@@ -1511,5 +1513,21 @@ Public Class Form1
         ReconcileFormChanges()
 
     End Sub
+
+
+    ' Commands I can never remember
+    ' tf = FileIO.FileSystem.FileExists(Filename)
+
+    ' Extension = IO.Path.GetExtension(WhereUsedFile)
+    ' C:\project\part.par -> .par
+
+    ' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)
+    ' C:\project\part.par -> C:\project
+
+    ' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+    ' C:\project\part.par -> part
+
+    ' System.Threading.Thread.Sleep(100)
+    ' 
 
 End Class

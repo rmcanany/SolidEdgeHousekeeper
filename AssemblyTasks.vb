@@ -246,10 +246,15 @@ Public Class AssemblyTasks
         Dim PartNumber As String = ""
         Dim PartNumberPropertyFound As Boolean = False
         Dim TF As Boolean
-        Dim Filename As String
+        Dim Filename As String = ""
 
-        'Get the bare file name without directory information
-        Filename = System.IO.Path.GetFileName(SEDoc.FullName)
+        Filename = SEDoc.FullName
+
+        If Filename.Contains("!") Then
+            Filename = Filename.Split("!"c)(0)
+        End If
+
+        Filename = System.IO.Path.GetFileName(Filename)
 
         PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
 
@@ -294,6 +299,7 @@ Public Class AssemblyTasks
                 ErrorMessageList.Add("Check the Configuration tab for valid entries")
             End If
         End If
+
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -393,14 +399,19 @@ Public Class AssemblyTasks
         Dim ViewStyleAlreadyPresent As Boolean
         Dim TemplateSkyboxName(5) As String
         Dim msg As String = ""
+        Dim tf As Boolean = False
 
-        ' Dim PartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim TemplateConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim TemplateThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim TemplateWeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        'Dim TemplateCurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
 
+        Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
 
+        ' Import face styles from template
         SEDoc.ImportStyles(TemplateFilename, True)
 
         ' Find the active ViewStyle in the template file.
@@ -408,11 +419,15 @@ Public Class AssemblyTasks
         SEApp.DoIdle()
 
         '' Get the template base styles
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle, ConstructionBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle, ThreadBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle, WeldbeadBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle, CurveBaseStyle)
-        'msg = ConstructionBaseStyle.StyleName
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+        '                           TemplateConstructionBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+        '                           TemplateThreadBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+        '                           TemplateWeldbeadBaseStyle)
+        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+        '                           TemplateCurveBaseStyle)
+        'MsgBox(TemplateConstructionBaseStyle.StyleName)
 
         Windows = SETemplateDoc.Windows
         For Each Window In Windows
@@ -433,11 +448,18 @@ Public Class AssemblyTasks
         SETemplateDoc.Close(False)
         SEApp.DoIdle()
 
-        '' Set the document base styles
-        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle, ConstructionBaseStyle)
-        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle, ThreadBaseStyle)
-        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle, WeldbeadBaseStyle)
-        'SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle, CurveBaseStyle)
+        '' Get the document base styles
+        '' Does not work.  SetBaseStyle crashes if no base style is assigned.
+        'msg = ""
+
+        '' Copy base styles if not already assigned.
+        'SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+        '                   ConstructionBaseStyle)
+        'If ConstructionBaseStyle Is Nothing Then
+        '    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+        '                   TemplateConstructionBaseStyle)
+        '    msg = String.Format("{0}{1}a{2}", msg, vbCrLf, TemplateConstructionBaseStyle.StyleName)
+        'End If
 
         ' If a style by the same name exists in the target file, delete it.
         ViewStyleAlreadyPresent = False
@@ -484,6 +506,25 @@ Public Class AssemblyTasks
                 View = Window.View
                 View.Style = TemplateActiveStyleName
             Next
+
+            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+                           ConstructionBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+                       ThreadBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+                       WeldbeadBaseStyle)
+            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+                       CurveBaseStyle)
+
+            tf = ConstructionBaseStyle Is Nothing
+            tf = tf Or (ThreadBaseStyle Is Nothing)
+            tf = tf Or (WeldbeadBaseStyle Is Nothing)
+            tf = tf Or (CurveBaseStyle Is Nothing)
+
+            If tf Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Some Color Manager base styles undefined.")
+            End If
 
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
@@ -655,7 +696,13 @@ Public Class AssemblyTasks
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
-        Dim AssemblyBaseFilename As String
+        Dim Filename As String
+        Dim BaseFilename As String
+        Dim Dir As String
+
+        Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers
+        Dim Member As SolidEdgeAssembly.AssemblyFamilyMember
+        Dim msg As String = ""
 
         ' ComboBoxSaveAsAssemblyFiletype
         ' Format: Parasolid (*.xt), IGES (*.igs)
@@ -663,23 +710,59 @@ Public Class AssemblyTasks
         NewExtension = Split(NewExtension, Delimiter:="*")(1)
         NewExtension = Split(NewExtension, Delimiter:=")")(0)
 
-        AssemblyBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+        Filename = SEDoc.FullName
 
-        ' CheckBoxSaveAsAssemblyOutputDirectory
-        If Configuration("CheckBoxSaveAsAssemblyOutputDirectory") = "False" Then
-            NewFilename = Configuration("TextBoxSaveAsAssemblyOutputDirectory") + "\" + System.IO.Path.ChangeExtension(AssemblyBaseFilename, NewExtension)
+        If Not SEDoc.IsFileFamilyByDocument Then
+            If Configuration("CheckBoxSaveAsAssemblyOutputDirectory") = "False" Then
+                Dir = Configuration("TextBoxSaveAsAssemblyOutputDirectory")
+                BaseFilename = System.IO.Path.GetFileNameWithoutExtension(Filename)
+                NewFilename = Dir + "\" + System.IO.Path.ChangeExtension(BaseFilename, NewExtension)
+            Else
+                NewFilename = System.IO.Path.ChangeExtension(Filename, NewExtension)
+            End If
+
+            Try
+                SEDoc.SaveAs(NewFilename)
+                SEApp.DoIdle()
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
+            End Try
+
         Else
-            NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
+            ' D:\projects\foa1.asm!Master -> D:\foa1.asm
+            Filename = Filename.Split("!"c)(0)
+
+            Members = SEDoc.AssemblyFamilyMembers
+            For Each Member In Members
+                Members.ActivateMember(Member.MemberName)
+
+                If Configuration("CheckBoxSaveAsAssemblyOutputDirectory") = "False" Then
+                    Dir = Configuration("TextBoxSaveAsAssemblyOutputDirectory")
+                    ' D:\projects\foa1.asm -> foa1
+                    BaseFilename = System.IO.Path.GetFileNameWithoutExtension(Filename)
+                    ' foa1 -> foa1-Member1
+                    BaseFilename = String.Format("{0}-{1}", BaseFilename, Member.MemberName)
+                    NewFilename = Dir + "\" + System.IO.Path.ChangeExtension(BaseFilename, NewExtension)
+                Else
+                    Dir = System.IO.Path.GetDirectoryName(Filename)
+                    BaseFilename = System.IO.Path.GetFileNameWithoutExtension(Filename)
+                    ' foa1 -> foa1-Member1
+                    BaseFilename = String.Format("{0}-{1}", BaseFilename, Member.MemberName)
+                    NewFilename = Dir + "\" + System.IO.Path.ChangeExtension(BaseFilename, NewExtension)
+                End If
+
+                Try
+                    SEDoc.SaveAs(NewFilename)
+                    SEApp.DoIdle()
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
+                End Try
+
+            Next
         End If
 
-        'Capturing a fault to update ExitStatus
-        Try
-            SEDoc.SaveAs(NewFilename)
-            SEApp.DoIdle()
-        Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
-        End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -868,8 +951,13 @@ Public Class AssemblyTasks
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
-        ModelFilename = System.IO.Path.GetFileName(SEDoc.FullName)
-        DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+        ModelFilename = SEDoc.FullName
+
+        If ModelFilename.Contains("!") Then
+            ModelFilename = ModelFilename.Split("!"c)(0)
+        End If
+
+        DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
             ExitStatus = 1

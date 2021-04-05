@@ -194,6 +194,7 @@ Public Class DraftTasks
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
+        Dim ParentSheet As SolidEdgeDraft.Sheet = Nothing
 
         Sections = SEDoc.Sections
         Section = Sections.WorkingSection
@@ -210,7 +211,8 @@ Public Class DraftTasks
                     If Balloon.Leader Then
                         If Not Balloon.IsTerminatorAttachedToEntity Then
                             ExitStatus = 1
-                            ErrorMessageList.Add(Balloon.BalloonDisplayedText)
+                            msg = String.Format("Sheet {0}: {1}", Sheet.Name, Balloon.BalloonDisplayedText)
+                            ErrorMessageList.Add(msg)
                         End If
                     End If
                 Catch ex As Exception
@@ -239,7 +241,9 @@ Public Class DraftTasks
 
                 If TF Then
                     ExitStatus = 1
-                    ErrorMessageList.Add(Dimension.DisplayName)
+                    ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
+                    msg = String.Format("Sheet {0}: {1}", ParentSheet.Name, Dimension.DisplayName)
+                    ErrorMessageList.Add(msg)
                 End If
             End If
 
