@@ -2,9 +2,19 @@
 
 Public Class TopLevelAssemblyUtilities
     Private _mainInstance As Form1
+    Private IndexedDrives As New List(Of String)
 
     Public Sub New(mainInstance As Form1)
         _mainInstance = mainInstance
+        IndexedDrives = GetIndexedDrives()
+
+        'Dim msg As String = ""
+        'Dim IndexedDrive As String
+        'For Each IndexedDrive In IndexedDrives
+        '    msg = String.Format("{0}{1}{2}", msg, IndexedDrive, vbCrLf)
+        'Next
+        'MsgBox(msg)
+
     End Sub
 
     Public Function GetLinks(SearchType As String,
@@ -498,37 +508,121 @@ Public Class TopLevelAssemblyUtilities
         Dim WhereUsedDocuments As New List(Of DesignManager.Document)
         Dim WhereUsedDocument As DesignManager.Document
 
+        Dim arrDocUsed As Object = Nothing
+        Dim IndexedDrives As New List(Of String)
+        Dim IsIndexed As Boolean = False
+
         If CheckInterruptRequest() Then
             Return AllWhereUsedFileNames
         End If
         UpdateStatus("Where Used", Filename, TopLevelFolder)
 
+        'IndexedDrives = GetIndexedDrives()
+
+        If IndexedDrives.Count > 0 Then
+            For Each IndexedDrive In IndexedDrives
+                If TopLevelFolder.StartsWith(IndexedDrive) Then
+                    IsIndexed = True
+                    Exit For
+                End If
+            Next
+        End If
+
         Extension = IO.Path.GetExtension(Filename)
 
         If Not Extension = ".dft" Then  ' Draft files are not "Used" anywhere.
-            'This "resets" DMApp.FindWhereUsed().  Somehow.
-            DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
+            If Not IsIndexed Then
+                'This "resets" DMApp.FindWhereUsed().  Somehow.
+                DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
 
-            'Finds the first WhereUsed Document, if any.
-            WhereUsedDocument = CType(
+                'Finds the first WhereUsed Document, if any.
+                WhereUsedDocument = CType(
                 DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)),
                 DesignManager.Document)
 
-            While Not WhereUsedDocument Is Nothing
-                If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName) Then
-                    If IO.Path.GetExtension(WhereUsedDocument.FullName) = ".dft" Then
-                        AllWhereUsedFileNames.Add(WhereUsedDocument.FullName)
+                While Not WhereUsedDocument Is Nothing
+                    If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName) Then
+                        ' For bottom_up search, the only applicable where used results are draft files
+                        If IO.Path.GetExtension(WhereUsedDocument.FullName) = ".dft" Then
+                            AllWhereUsedFileNames.Add(WhereUsedDocument.FullName)
+                        End If
                     End If
-                End If
-                'Finds the next WhereUsed document, if any.
-                WhereUsedDocument = CType(DMApp.FindWhereUsed(), DesignManager.Document)
-            End While
+                    'Finds the next WhereUsed document, if any.
+                    WhereUsedDocument = CType(DMApp.FindWhereUsed(), DesignManager.Document)
+                End While
+
+            Else  'It is indexed
+                Try
+                    DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
+
+                    DMApp.FindWhereUsedDocuments(FileIO.FileSystem.GetFileInfo(Filename), arrDocUsed)
+
+                    For Each item As String In DirectCast(arrDocUsed, Array)
+                        If Not AllWhereUsedFileNames.Contains(item) Then
+                            ' For bottom_up search, the only applicable where used results are draft files
+                            If IO.Path.GetExtension(item) = ".dft" Then
+                                AllWhereUsedFileNames.Add(item)
+                            End If
+                        End If
+                    Next
+
+                Catch ex As Exception
+                    'Console.WriteLine(ex.ToString)
+                    MsgBox(ex.ToString)
+                End Try
+
+            End If
 
         End If
 
         Return AllWhereUsedFileNames
 
     End Function
+
+
+    'Private Function GetWhereUsedBottomUp(
+    '                 DMApp As DesignManager.Application,
+    '                 TopLevelFolder As String,
+    '                 Filename As String) As List(Of String)
+
+    '    Dim AllWhereUsedFileNames As New List(Of String)
+    '    Dim msg As String
+    '    Dim Extension As String
+
+    '    Dim WhereUsedDocuments As New List(Of DesignManager.Document)
+    '    Dim WhereUsedDocument As DesignManager.Document
+
+    '    If CheckInterruptRequest() Then
+    '        Return AllWhereUsedFileNames
+    '    End If
+    '    UpdateStatus("Where Used", Filename, TopLevelFolder)
+
+    '    Extension = IO.Path.GetExtension(Filename)
+
+    '    If Not Extension = ".dft" Then  ' Draft files are not "Used" anywhere.
+    '        'This "resets" DMApp.FindWhereUsed().  Somehow.
+    '        DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
+
+    '        'Finds the first WhereUsed Document, if any.
+    '        WhereUsedDocument = CType(
+    '            DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)),
+    '            DesignManager.Document)
+
+    '        While Not WhereUsedDocument Is Nothing
+    '            If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName) Then
+    '                If IO.Path.GetExtension(WhereUsedDocument.FullName) = ".dft" Then
+    '                    AllWhereUsedFileNames.Add(WhereUsedDocument.FullName)
+    '                End If
+    '            End If
+    '            'Finds the next WhereUsed document, if any.
+    '            WhereUsedDocument = CType(DMApp.FindWhereUsed(), DesignManager.Document)
+    '        End While
+
+    '    End If
+
+    '    Return AllWhereUsedFileNames
+
+    'End Function
 
     Private Function GetCorrectedFilenameBottomUp(Filename As String,
                                                   AllFilenames As Dictionary(Of String, String)) As String
@@ -565,5 +659,77 @@ Public Class TopLevelAssemblyUtilities
 
         Return tf
     End Function
+
+    Private Function GetIndexedDrives() As List(Of String)
+
+        Dim SearchScopeFilename As String = _mainInstance.TextBoxFastSearchScopeFilename.Text
+
+        Dim SearchScope As String() = Nothing
+        Dim CommentString As String = "\\ "
+        Dim Line As String
+
+        Try
+            SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
+        Catch ex As Exception
+            MsgBox(String.Format("Error reading {0}", SearchScopeFilename))
+            'Exit Function
+        End Try
+
+        If (SearchScope.Count > 0) And (SearchScope IsNot Nothing) Then
+            For Each item As String In SearchScope
+                Line = item.TrimStart()
+                If (Not Line.StartsWith(CommentString)) And (Line.Count > 0) Then
+                    IndexedDrives.Add(Line)
+                End If
+            Next
+        End If
+
+        Return IndexedDrives
+    End Function
+
+
+    'Private Sub GetIndexedDrives()
+
+    '    ' Dim IndexedDrives As New List(Of String)
+    '    'Dim IndexedDrive As String
+
+    '    Dim SEID As New SEInstallDataLib.SEInstallData
+    '    Dim PreferencesPath As String = SEID.GetPreferencesPath()
+    '    Dim SearchScopeFilename As String = String.Format("{0}\FastSearchScope.txt", PreferencesPath)
+    '    Dim SearchScope As String() = Nothing
+    '    Dim CommentString As String = "\\ "
+    '    Dim Line As String
+
+    '    Try
+    '        SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
+    '    Catch ex As Exception
+    '        'Console.WriteLine(String.Format("Error reading {0}", SearchScopeFilename))
+    '        MsgBox(String.Format("Error reading {0}", SearchScopeFilename))
+    '    End Try
+
+    '    'Console.WriteLine("Indexed Drives")
+    '    'Console.WriteLine(String.Format("    SearchScopeFilename: {0}", SearchScopeFilename))
+
+    '    If (SearchScope.Count > 0) And (SearchScope IsNot Nothing) Then
+    '        For Each item As String In SearchScope
+    '            Line = item.TrimStart()
+    '            If (Not Line.StartsWith(CommentString)) And (Line.Count > 0) Then
+    '                IndexedDrives.Add(Line)
+    '            End If
+    '        Next
+    '    End If
+
+    '    'If IndexedDrives.Count > 0 Then
+    '    '    For Each IndexedDrive In IndexedDrives
+    '    '        Console.WriteLine(String.Format("    Indexed Drive: {0}", IndexedDrive))
+    '    '    Next
+    '    'Else
+    '    '    Console.WriteLine("    No indexed drives detected")
+    '    'End If
+
+    '    'Console.WriteLine("")
+
+    '    ' Return IndexedDrives
+    'End Sub
 
 End Class

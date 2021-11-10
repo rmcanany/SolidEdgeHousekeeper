@@ -92,6 +92,7 @@ Partial Class Form1
         tf = tf Or tb.Name.ToLower.Contains("materiallibrary")
         tf = tf Or tb.Name.ToLower.Contains("toplevelassembly")
         tf = tf Or tb.Name.ToLower.Contains("externalprogram")
+        tf = tf Or tb.Name.ToLower.Contains("fastsearchscope")
         If tf Then
             If FileIO.FileSystem.FileExists(Value) Then
                 tb.Text = Value
@@ -512,7 +513,7 @@ Partial Class Form1
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
 
-        msg = "# Solid Edge Housekeeper v0.1.7"
+        msg = "# Solid Edge Housekeeper v0.1.7.2"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2021"
@@ -653,6 +654,7 @@ Partial Class Form1
 
         msg = "Does not support managed files.  Cause: Unknown.  "
         msg += "Possible workaround: Process the files in an unmanaged workspace.   "
+        msg += "Update 10/10/2021: Some users have reported success with BiDM managed files.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""

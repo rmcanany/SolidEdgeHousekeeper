@@ -7,56 +7,72 @@ Please note, the program has been tested on many of our files, but none of yours
 Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 
+## v0.1.7.2 Enhancements/Fixes
+
+### Indexed Drives
+
+Fixed an issue where the index was not used on indexed drives in Top Level Assembly mode.  (Thank you @Jean-Louis)
+
+The system now checks FastSearchScope.txt.  The location of this file is entered on the Configuration Tab.
+
+### Known Issues
+
+Updated entry on managed files.  Added a note that some users have had success with BiDM managed files.  Previous guidance was "Does not support managed files."
+
 
 ## v0.1.7 Enhancements/Fixes
 
 ### Run External Program
 
-    Added the ability to launch a Console App from within Housekeeper.  The idea is to be able to customize tasks to your site-specific requirements.  
-    The Console App works on a single Solid Edge file.  Housekeeper serves up files one at a time for processing.  It handles the batching, filtering, error reporting, etc.  
-    Several rules on the program implementation apply.  See details and examples at https://github.com/rmcanany/HousekeeperExternalPrograms
-    If you could use this, but are not the programming type, your VAR might be willing to help.  If not, you could try waving around a little bit of money on this forum.  It may well bring someone to the rescue.
+Added the ability to launch a Console App from within Housekeeper.  The idea is to be able to customize tasks to your site-specific requirements.  
+
+The Console App works on a single Solid Edge file.  Housekeeper serves up files one at a time for processing.  It handles the batching, filtering, error reporting, etc.  
+
+Several rules on the program implementation apply.  See details and examples at https://github.com/rmcanany/HousekeeperExternalPrograms
+
+If you could use this, but are not the programming type, your VAR might be willing to help.  If not, you could try waving around a little bit of money on this forum.  It may well bring someone to the rescue.
 
 ### Interactive Edit
 
-    Added the ability to bring up files one at a time for manual editing.  An always-on-top dialog box lets the user signal when they are finished and ready for the next file.  The main idea is to allow the user to fix errors, such as missing flat patterns, that are not easily accomplished automatically.  Some rules apply.  See the README tab for details.
+Added the ability to bring up files one at a time for manual editing.  An always-on-top dialog box lets the user signal when they are finished and ready for the next file.  The main idea is to allow the user to fix errors, such as missing flat patterns, that are not easily accomplished automatically.  Some rules apply.  See the README tab for details.
 
 ### TODO List
 
-    Added the ability to create a list of files in which errors were detected.  This list can be used as a file search option on subsequent runs.  It is intended mainly to work as a preprocessor for Interactive Edit, but can be used with any task.
+Added the ability to create a list of files in which errors were detected.  This list can be used as a file search option on subsequent runs.  It is intended mainly to work as a preprocessor for Interactive Edit, but can be used with any task.
 
 ### Wildcard Property Comparison
 
-    Added the ability to search properties with a wildcard pattern.  It is implemented with the VB `Like` operator, which is similar to the old DOS wildcard search, but with a few more options.  For details and examples, see https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator.
+Added the ability to search properties with a wildcard pattern.  It is implemented with the VB `Like` operator, which is similar to the old DOS wildcard search, but with a few more options.  For details and examples, see https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator.
 
 ### File Filters
 
-    Added the ability to narrow the file listing based on file type.  Also added a wildcard search option.
+Added the ability to narrow the file listing based on file type.  Also added a wildcard search option.
 
 ### Missing Drawing
 
-    Added a task to find missing drawings for model files.  A current limitation is that the drawing name and directory must both be the same as the model file.
+Added a task to find missing drawings for model files.  A current limitation is that the drawing name and directory must both be the same as the model file.
 
 ### Property Find/Replace
 
-    Added a task to edit property values.  It searches for text in the defined property and replaces it if found.  
-    The search is not case sensitive, the replacement is.  For example, say the search is `aluminum`, the replacement is `Aluminum`, and the property value is `ALUMINUM 6061-T6`.  The new value will be `Aluminum 6061-T6`.
+Added a task to edit property values.  It searches for text in the defined property and replaces it if found.  
+
+The search is not case sensitive, the replacement is.  For example, say the search is `aluminum`, the replacement is `Aluminum`, and the property value is `ALUMINUM 6061-T6`.  The new value will be `Aluminum 6061-T6`.
 
 ### Save As
 
-    Made Save As more generic by having the user specify the file type from a ComboBox.  Previously, each file type had its own task.
+Made Save As more generic by having the user specify the file type from a ComboBox.  Previously, each file type had its own task.
 
 ### Save As Flat DXF
 
-    Added the ability to save a sheetmetal flat pattern as a DXF file.  Previously, this function was combined with the task 'Save Laser DXF and PDF'.
+Added the ability to save a sheetmetal flat pattern as a DXF file.  Previously, this function was combined with the task 'Save Laser DXF and PDF'.
 
 ### Print
 
-    Added the ability to print draft files.  
+Added the ability to print draft files.  
 
 ### File List Out Of Date Issue
 
-    Fixed an issue where the file list did not update correctly under certain conditions.  Also added a pre-process check to verify that all files on the list still exist on disk.
+Fixed an issue where the file list did not update correctly under certain conditions.  Also added a pre-process check to verify that all files on the list still exist on disk.
 
 
 
@@ -64,44 +80,51 @@ Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 ### Top Level Assembly
 
-    Added a top-level assembly file search option (Thank you @Jean-Louis).  The search can be conducted in one of two ways, bottom up or top down.  
-    Bottom up is meant for general purpose directories (e.g., `\\BIG_SERVER\huge list of files\`).  
-    Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`).  A top down search can optionally report files with no links to the top level assembly.
-    See the README tab for more information.
+Added a top-level assembly file search option (Thank you @Jean-Louis).  The search can be conducted in one of two ways, bottom up or top down.  
+
+Bottom up is meant for general purpose directories (e.g., `\\BIG_SERVER\huge list of files\`).  
+
+Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`).  A top down search can optionally report files with no links to the top level assembly.
+
+See the README tab for more information.
 
 ### Property Filter
-    Added a property filter search.  You identify a condition consisting of a property, a comparison, and a value (e.g., `Material contains Steel`).  Only those files matching the condition are processed.
-    System or custom properties can be searched.  Multiple conditions can be included.  Filters can optionally be named, saved, modified, or deleted.
-    Each condition is assigned a variable name, (`A`, `B`, ...).  The default filter formula is to match all conditions (e.g., `A AND B AND C`).  You can optionally change the formula (e.g., `A AND (B OR C)`).
-    See the Property Filter README tab for more information.
+
+Added a property filter search.  You identify a condition consisting of a property, a comparison, and a value (e.g., `Material contains Steel`).  Only those files matching the condition are processed.
+
+System or custom properties can be searched.  Multiple conditions can be included.  Filters can optionally be named, saved, modified, or deleted.
+
+Each condition is assigned a variable name, (`A`, `B`, ...).  The default filter formula is to match all conditions (e.g., `A AND B AND C`).  You can optionally change the formula (e.g., `A AND (B OR C)`).
+
+See the Property Filter README tab for more information.
 
 ### Help Text
 
-    Added extra help text on the README tab for tasks where the label did not fully explain the action (Thank you @bshand).
+Added extra help text on the README tab for tasks where the label did not fully explain the action (Thank you @bshand).
 
 ### Known Limitations
 
-    Added a section to the README, listing known issues and possible workarounds.  
+Added a section to the README, listing known issues and possible workarounds.  
 
 ### File Select Set
 
-    Improved the behavior of the file list select set.  Previously, the select set was cleared whenever a task option was changed.  Now the select set is preserved whenever possible.
+Improved the behavior of the file list select set.  Previously, the select set was cleared whenever a task option was changed.  Now the select set is preserved whenever possible.
 
 ### Save Task Selections Now Optional
 
-    Previous behavior was to always save.  All other information, such as input directory and template locations, is still always saved.  
+Previous behavior was to always save.  All other information, such as input directory and template locations, is still always saved.  
 
 ### Allow Partial Success on 'Move drawing to new template' Now Optional
 
-    Previous behavior was to always allow.
+Previous behavior was to always allow.
 
 ### Readme Scroll Issue
 
-    Fixed an issue where the README tab did not scroll correctly.
+Fixed an issue where the README tab did not scroll correctly.
 
 ### Broken Out Section Views Issue
 
-    Fixed an issue where `Move drawing to new template` failed on broken-out section views.
+Fixed an issue where `Move drawing to new template` failed on broken-out section views.
 
 
 
@@ -109,20 +132,20 @@ Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 ### Move Drawing to New Template
 
-    This new task replaces `Update drawing border from template` and `Update dimension styles from template`. It is an improvement because any Styles you modify in your template (even ones I don't know about) will be present in the updated Draft file.
+This new task replaces `Update drawing border from template` and `Update dimension styles from template`. It is an improvement because any Styles you modify in your template (even ones I don't know about) will be present in the updated Draft file.
 
 ### Save As STEP
 
-    Added for Assembly, Part and SheetMetal files.
+Added for Assembly, Part and SheetMetal files.
 
 ### Save As DXF
 
-    Added for Draft files
+Added for Draft files
 
 ### File List
 
-    Changed file listbox to multi-column and improved the sort order.
+Changed file listbox to multi-column and improved the sort order.
 
 ### Widget Positioning
 
-    Fixed an issue where form controls were not postioned correctly when the main form was resized.
+Fixed an issue where form controls were not postioned correctly when the main form was resized.

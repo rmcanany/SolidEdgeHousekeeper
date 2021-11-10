@@ -1,4 +1,4 @@
-# Solid Edge Housekeeper v0.1.7
+# Solid Edge Housekeeper v0.1.7.2
 Robert McAnany 2021
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
@@ -32,7 +32,7 @@ However, problems can arise.  Those cases will be reported in the log file with 
 Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
 
 ## KNOWN ISSUES
-Does not support managed files.  Cause: Unknown.  Possible workaround: Process the files in an unmanaged workspace.   
+Does not support managed files.  Cause: Unknown.  Possible workaround: Process the files in an unmanaged workspace.   Update 10/10/2021: Some users have reported success with BiDM managed files.  
 
 Some tasks may not support versions of Solid Edge prior to SE2020.  Cause: Maybe an API call not available in previous versions.  Possible workaround: Use SE2020 or later.  
 
