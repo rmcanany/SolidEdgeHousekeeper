@@ -200,6 +200,12 @@ Public Class Form1
             msg += "    Select an option on Files To Process" + Chr(13)
         End If
 
+        If RadioButtonTLABottomUp.Checked Then
+            If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
+                msg += "    Fast search scope file (on Configuration Tab) not found" + Chr(13)
+            End If
+        End If
+
         For Each Filename As String In ListBoxFiles.Items
             If Not FileIO.FileSystem.FileExists(String.Format("{0}/{1}", TextBoxInputDirectory.Text, Filename)) Then
                 msg += "    Some files have been renamed or deleted" + Chr(13)
@@ -941,6 +947,17 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
+    Private Sub ButtonFastSearchScopeFilename_Click(sender As Object, e As EventArgs) Handles ButtonFastSearchScopeFilename.Click
+        OpenFileDialog1.Filter = "Search Scope Documents|*.txt"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxFastSearchScopeFilename.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+
+    End Sub
     Private Sub ButtonSaveAsDraftOutputDirectory_Click(sender As Object, e As EventArgs)
         FakeFolderBrowserDialog.FileName = "Select Folder"
         If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
@@ -1395,6 +1412,8 @@ Public Class Form1
         tf = RadioButtonTLABottomUp.Checked
         If tf Then
             CheckBoxTLAReportUnrelatedFiles.Enabled = False
+            TextBoxFastSearchScopeFilename.Enabled = True
+            ButtonFastSearchScopeFilename.Enabled = True
         End If
 
         tf = RadioButtonTopLevelAssembly.Checked
@@ -1411,6 +1430,8 @@ Public Class Form1
         tf = RadioButtonTLATopDown.Checked
         If tf Then
             CheckBoxTLAReportUnrelatedFiles.Enabled = True
+            TextBoxFastSearchScopeFilename.Enabled = False
+            ButtonFastSearchScopeFilename.Enabled = False
         End If
 
         tf = RadioButtonTopLevelAssembly.Checked
@@ -1455,6 +1476,10 @@ Public Class Form1
         ' MaxFilenameLength = CDbl(ListBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
         ' ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
         ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxFastSearchScopeFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFastSearchScopeFilename.TextChanged
         ReconcileFormChanges()
     End Sub
 
@@ -1513,6 +1538,9 @@ Public Class Form1
         ReconcileFormChanges()
 
     End Sub
+
+
+
 
 
     ' Commands I can never remember

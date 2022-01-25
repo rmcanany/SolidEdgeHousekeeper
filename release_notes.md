@@ -7,17 +7,19 @@ Please note, the program has been tested on many of our files, but none of yours
 Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 
-## v0.1.7.2 Enhancements/Fixes
+## v0.1.7.3 Enhancements/Fixes
 
-### Indexed Drives
+Minor release fixing reported bugs and adding feedback on managed files.  (Thank you @Jean-Louis and @mike miller)
 
-Fixed an issue where the index was not used on indexed drives in Top Level Assembly mode.  (Thank you @Jean-Louis)
+### Top Level Assembly search
 
-The system now checks FastSearchScope.txt.  The location of this file is entered on the Configuration Tab.
+Added detection of indexed drives for bottom-up searches.  Requires a valid Fast Search Scope filename.  See Readme for details.
+
+Added a filter to avoid listing Family of Parts master documents.
 
 ### Known Issues
 
-Updated entry on managed files.  Added a note that some users have had success with BiDM managed files.  Previous guidance was "Does not support managed files."
+Updated entry on managed files.  Added user feedback regarding BiDM and Teamcenter.  Previous guidance was "Does not support managed files."
 
 
 ## v0.1.7 Enhancements/Fixes

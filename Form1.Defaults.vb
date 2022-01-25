@@ -513,10 +513,10 @@ Partial Class Form1
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
 
-        msg = "# Solid Edge Housekeeper v0.1.7.2"
+        msg = "# Solid Edge Housekeeper v0.1.7.3"
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "Robert McAnany 2021"
+        msg = "Robert McAnany 2022"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -532,7 +532,7 @@ Partial Class Form1
         readme_tab.Add(msg)
 
         msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
-        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos"
+        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @mike miller"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -562,7 +562,8 @@ Partial Class Form1
 
         msg = "The other option is to use the latest released version here "
         msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases  "
-        msg += "Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  "
+        msg += "Under the latest release, click the SolidEdgeHousekeeper-vx.x.x.zip file "
+        msg += "(sometimes hidden under the Assets dropdown).  "
         msg += "It should prompt you to save it.  "
         msg += "Choose a convenient location on your machine.  "
         msg += "Extract the zip file (probably by right-clicking and selecting Extract All).  "
@@ -654,7 +655,12 @@ Partial Class Form1
 
         msg = "Does not support managed files.  Cause: Unknown.  "
         msg += "Possible workaround: Process the files in an unmanaged workspace.   "
-        msg += "Update 10/10/2021: Some users have reported success with BiDM managed files.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "Update 10/10/2021: Some users have reported success with BiDM managed files.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "Update 1/25/2022: One user has reported success with Teamcenter 'cached' files.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -703,8 +709,14 @@ Partial Class Form1
         msg += "finds draft files with 'Where Used'.  "
         readme_tab.Add(msg)
 
+        msg = "A bottom up search requires a valid Fast Search Scope filename, "
+        msg += "(e.g., C:\Program Files\Siemens\Solid Edge 2021\Preferences\FastSearchScope.txt).  "
+        msg += "It set on the Configuration tab, and tells the program "
+        msg += "if the input directory is on an indexed drive.  "
+        readme_tab.Add(msg)
+
         msg = vbCrLf + "Top down is meant for self-contained project directories (e.g., C:\Projects\Project123\).  "
-        msg += "The program checks every file within and below the input directory.  "
+        msg += "The program opens every file within and below the input directory.  "
         msg += "As it does, it creates a graph of the links.  "
         msg += "The graph is subsequently traversed to find related files.  "
         msg += "I don't know how it works; my son did that part.  "

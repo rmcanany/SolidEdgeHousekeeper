@@ -1,9 +1,9 @@
-# Solid Edge Housekeeper v0.1.7.2
-Robert McAnany 2021
+# Solid Edge Housekeeper v0.1.7.3
+Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @mike miller
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -11,7 +11,7 @@ This tool is designed to help you find annoying little errors in your project.  
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
 
-The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases  Click the latest release, then from the Assets list, click the SolidEdgeHousekeeper zip file.  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
+The other option is to use the latest released version here https://github.com/rmcanany/SolidEdgeHousekeeper/releases  Under the latest release, click the SolidEdgeHousekeeper-vx.x.x.zip file (sometimes hidden under the Assets dropdown).  It should prompt you to save it.  Choose a convenient location on your machine.  Extract the zip file (probably by right-clicking and selecting Extract All).  Double-click the .exe file to run.
 
 ## OPERATION
 On each file type's tab, select which errors to detect.  On the General tab, browse to the desired input folder, then select the desired file search option.  
@@ -32,7 +32,9 @@ However, problems can arise.  Those cases will be reported in the log file with 
 Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
 
 ## KNOWN ISSUES
-Does not support managed files.  Cause: Unknown.  Possible workaround: Process the files in an unmanaged workspace.   Update 10/10/2021: Some users have reported success with BiDM managed files.  
+Does not support managed files.  Cause: Unknown.  Possible workaround: Process the files in an unmanaged workspace.   
+Update 10/10/2021: Some users have reported success with BiDM managed files.  
+Update 1/25/2022: One user has reported success with Teamcenter 'cached' files.  
 
 Some tasks may not support versions of Solid Edge prior to SE2020.  Cause: Maybe an API call not available in previous versions.  Possible workaround: Use SE2020 or later.  
 
