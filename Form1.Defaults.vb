@@ -143,6 +143,7 @@ Partial Class Form1
         tf = tb.Name.ToLower.Contains("propertyname")
         tf = tf Or tb.Name.ToLower.Contains("findreplace")
         tf = tf Or tb.Name.ToLower.Contains("filesearch")
+        tf = tf Or tb.Name.ToLower.Contains("printoptions")
         If tf Then
             tb.Text = Value
         End If
@@ -513,7 +514,7 @@ Partial Class Form1
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
 
-        msg = "# Solid Edge Housekeeper v0.1.7.3"
+        msg = "# Solid Edge Housekeeper v0.1.7.4"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -685,6 +686,16 @@ Partial Class Form1
         readme_github.Add(msg)
         readme_tab.Add(msg)
 
+        msg = "Does not support all printer settings, e.g., duplexing, collating, etc.  "
+        msg += "Cause: Not exposed in the DraftPrintUtility() API.  "
+        msg += "Possible workaround: Create a new Windows printer with the desired settings.  "
+        msg += "Refer to the TESTS AND ACTIONS topic below for more details.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
 
         msg = vbCrLf + "FILE SELECTION"
         readme_tab.Add(msg)
@@ -832,11 +843,45 @@ Partial Class Form1
 
         msg = ""
         readme_github.Add(msg)
-        readme_tab.Add(msg)
+        'readme_tab.Add(msg)
         msg = "## CODE ORGANIZATION"
         readme_github.Add(msg)
         msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
         readme_github.Add(msg)
+
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "## ABOUT ME"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "A coworker saw this program and said, 'Do you have Obsessive Compulsive Disorder?'  "
+        msg += "I said, 'There's nothing disorderly about it.'  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "I had a colonoscopy the other day.  "
+        msg += "Afterwards the nurse said, 'You look like John Lithgow.'  "
+        msg += "I said, 'You mean my face?'  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "The HR Department asked for our preferred pronouns.  "
+        msg += "I put 'we/us'.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
 
         For Each s As String In readme_tab
             readme_tab_formatted.Add(s.Replace("# ", "").Replace("#", ""))

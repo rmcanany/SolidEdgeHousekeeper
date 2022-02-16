@@ -7,19 +7,27 @@ Please note, the program has been tested on many of our files, but none of yours
 Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 
-## v0.1.7.3 Enhancements/Fixes
-
-Minor release fixing reported bugs and adding feedback on managed files.  (Thank you @Jean-Louis and @mike miller)
+## v0.1.7.4 Enhancements/Fixes
 
 ### Top Level Assembly search
 
-Added detection of indexed drives for bottom-up searches.  Requires a valid Fast Search Scope filename.  See Readme for details.
+Added detection of indexed drives for bottom-up searches (Thank you @Jean-Louis).  Requires a valid Fast Search Scope filename.  See Readme for details.
 
-Added a filter to avoid listing Family of Parts master documents.
+Added a filter to avoid listing Family of Parts master and unrelated child documents.
+
+### Print Task
+
+Added the ability to override several Windows printing defaults (Thank you @n0minus38).  
+
+Added controls for several Solid Edge-specific printing options.
+
+Fixed an issue where the print options were not saved between sessions.  
 
 ### Known Issues
 
-Updated entry on managed files.  Added user feedback regarding BiDM and Teamcenter.  Previous guidance was "Does not support managed files."
+Added user feedback on Teamcenter managed files (Thank you @[mike miller]).  
+
+Added an entry on some printing limitations and workarounds.
 
 
 ## v0.1.7 Enhancements/Fixes

@@ -16,6 +16,7 @@ Public Class LabelToAction
         Public Property RequiresExternalProgram As Boolean
         Public Property RequiresSaveAsFlatDXFOutputDirectory As Boolean
         Public Property RequiresFindReplaceFields As Boolean
+        Public Property RequiresPrinter As Boolean
 
 
     End Class
@@ -48,7 +49,8 @@ Public Class LabelToAction
                             Optional IncompatibleWithOtherTasks As Boolean = False,
                             Optional RequiresExternalProgram As Boolean = False,
                             Optional RequiresSaveAsFlatDXFOutputDirectory As Boolean = False,
-                            Optional RequiresFindReplaceFields As Boolean = False)
+                            Optional RequiresFindReplaceFields As Boolean = False,
+                            Optional RequiresPrinter As Boolean = False)
 
         Entry.TaskName = TaskName
         Entry.HelpText = HelpText
@@ -62,6 +64,7 @@ Public Class LabelToAction
         Entry.RequiresExternalProgram = RequiresExternalProgram
         Entry.RequiresSaveAsFlatDXFOutputDirectory = RequiresSaveAsFlatDXFOutputDirectory
         Entry.RequiresFindReplaceFields = RequiresFindReplaceFields
+        Entry.RequiresPrinter = RequiresPrinter
 
         Me(LabelText) = Entry
 
@@ -559,11 +562,21 @@ Public Class LabelToAction
                      RequiresSaveAsOutputDirectory:=True)
 
         Dim Print As New L2A
-        HelpString = "    Access printer settings on the Configuration tab."
+        HelpString = "    Print settings are accessed on the Configuration tab." + vbCrLf
+        HelpString += "    Note, the presence of the Printer Settings dialog is somewhat misleading.  "
+        HelpString += "The only settings taken from it are the printer name, page height and width, "
+        HelpString += "and the number of copies.  "
+        HelpString += "Any other selections "
+        HelpString += "revert back to the Windows defaults when printing.  "
+        HelpString += "A workaround is to create a new Windows printer with the desired defaults.  " + vbCrLf
+        HelpString += "    Another quirk is that, no matter the selection, the page width "
+        HelpString += "is always listed as greater than or equal to the page height.  "
+        HelpString += "In most cases, checking 'Auto orient' should provide the desired result.  "
         PopulateList(Print,
                      "Print",
                      "Print",
-                     HelpString)
+                     HelpString,
+                     RequiresPrinter:=True)
 
         Dim InteractiveEdit As New L2A
         HelpString = "    Same as the assembly command of the same name."

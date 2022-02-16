@@ -207,7 +207,10 @@ Public Class Form1
         End If
 
         For Each Filename As String In ListBoxFiles.Items
-            If Not FileIO.FileSystem.FileExists(String.Format("{0}/{1}", TextBoxInputDirectory.Text, Filename)) Then
+            If Filename.StartsWith("~") Then
+                Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+            End If
+            If Not FileIO.FileSystem.FileExists(Filename) Then
                 msg += "    Some files have been renamed or deleted" + Chr(13)
                 ListBoxFilesOutOfDate = True
                 Exit For
@@ -536,6 +539,21 @@ Public Class Form1
                     End If
                 End If
             End If
+            If LabelToActionDraft(Label).RequiresPrinter Then
+                Dim PrinterInstalled As Boolean = False
+                Dim InstalledPrinter As String
+                For Each InstalledPrinter In System.Drawing.Printing.PrinterSettings.InstalledPrinters
+                    If InstalledPrinter = TextBoxPrintOptionsPrinter.Text Then
+                        PrinterInstalled = True
+                        Exit For
+                    End If
+                Next InstalledPrinter
+                If Not PrinterInstalled Then
+                    If Not msg.Contains("Select a valid printer on the Configuration Tab") Then
+                        msg += "    Select a valid printer on the Configuration Tab" + Chr(13)
+                    End If
+                End If
+            End If
 
         Next
 
@@ -767,6 +785,7 @@ Public Class Form1
 
         PopulateCheckedListBoxes()
         LoadDefaults()
+        LoadPrinterSettings()
         ReconcileFormChanges()
         LoadTextBoxReadme()
 
@@ -1014,7 +1033,32 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonPrintOptions_Click(sender As Object, e As EventArgs) Handles ButtonPrintOptions.Click
-        PrintDialog1.ShowDialog()
+        'PrintDialog1.ShowDialog()
+        Dim h, w As Integer
+        Dim long_dim, short_dim As Double
+
+        If PrintDialog1.ShowDialog() = DialogResult.OK Then
+            SavePrinterSettings()
+
+            TextBoxPrintOptionsPrinter.Text = PrintDialog1.PrinterSettings.PrinterName
+
+            h = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Height
+            w = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Width
+            If w > h Then
+                long_dim = CDbl(w) / 100
+                short_dim = CDbl(h) / 100
+            Else
+                long_dim = CDbl(h) / 100
+                short_dim = CDbl(w) / 100
+            End If
+            TextBoxPrintOptionsWidth.Text = CStr(long_dim)
+            TextBoxPrintOptionsHeight.Text = CStr(short_dim)
+
+            TextBoxPrintOptionsCopies.Text = CStr(PrintDialog1.PrinterSettings.Copies)
+
+            ReconcileFormChanges()
+        End If
+
     End Sub
 
     Private Sub ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles ButtonPropertyFilter.Click

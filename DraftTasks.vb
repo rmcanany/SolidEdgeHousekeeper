@@ -1663,9 +1663,68 @@ Public Class DraftTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim h As Double
+        Dim w As Double
 
         Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
 
+        Dim msg As String = ""
+
+        DraftPrinter.Units = SolidEdgeDraft.DraftPrintUnitsConstants.igDraftPrintInches
+
+        DraftPrinter.Printer = Configuration("TextBoxPrintOptionsPrinter")
+
+        w = CDbl(Configuration("TextBoxPrintOptionsWidth"))
+        h = CDbl(Configuration("TextBoxPrintOptionsHeight"))
+
+        ' Weird workaround
+        DraftPrinter.PaperHeight = 3.0
+        DraftPrinter.PaperHeight = h
+        DraftPrinter.PaperHeight = w
+
+        DraftPrinter.Copies = CShort(Configuration("TextBoxPrintOptionsCopies"))
+
+        If Configuration("CheckBoxPrintOptionsAutoOrient").ToLower = "true" Then
+            DraftPrinter.AutoOrient = True
+        Else
+            DraftPrinter.AutoOrient = False
+        End If
+
+        If Configuration("CheckBoxPrintOptionsBestFit").ToLower = "true" Then
+            DraftPrinter.BestFit = True
+        Else
+            DraftPrinter.BestFit = False
+        End If
+
+        If Configuration("CheckBoxPrintOptionsPrintAsBlack").ToLower = "true" Then
+            DraftPrinter.PrintAsBlack = True
+        Else
+            DraftPrinter.PrintAsBlack = False
+        End If
+
+        If Configuration("CheckBoxPrintOptionsScaleLineTypes").ToLower = "true" Then
+            DraftPrinter.ScaleLineTypes = True
+        Else
+            DraftPrinter.ScaleLineTypes = False
+        End If
+
+        If Configuration("CheckBoxPrintOptionsScaleLineWidths").ToLower = "true" Then
+            DraftPrinter.ScaleLineWidths = True
+        Else
+            DraftPrinter.ScaleLineWidths = False
+        End If
+
+        'msg = String.Format("{0}{1}DraftPrinter.Printer={2}", msg, vbCrLf, DraftPrinter.Printer)
+        'msg = String.Format("{0}{1}DraftPrinter.PaperHeight={2}", msg, vbCrLf, DraftPrinter.PaperHeight)
+        'msg = String.Format("{0}{1}DraftPrinter.PaperWidth={2}", msg, vbCrLf, DraftPrinter.PaperWidth)
+        'msg = String.Format("{0}{1}DraftPrinter.Copies={2}", msg, vbCrLf, DraftPrinter.Copies)
+        'msg = String.Format("{0}{1}DraftPrinter.AutoOrient={2}", msg, vbCrLf, DraftPrinter.AutoOrient)
+        'msg = String.Format("{0}{1}DraftPrinter.BestFit={2}", msg, vbCrLf, DraftPrinter.BestFit)
+        'msg = String.Format("{0}{1}DraftPrinter.PrintAsBlack={2}", msg, vbCrLf, DraftPrinter.PrintAsBlack)
+        'msg = String.Format("{0}{1}DraftPrinter.ScaleLineTypes={2}", msg, vbCrLf, DraftPrinter.ScaleLineTypes)
+        'msg = String.Format("{0}{1}DraftPrinter.ScaleLineWidths={2}", msg, vbCrLf, DraftPrinter.ScaleLineWidths)
+
+        'MsgBox(msg)
 
         'Capturing a fault to update ExitStatus
         Try

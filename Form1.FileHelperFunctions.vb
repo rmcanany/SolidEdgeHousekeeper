@@ -107,7 +107,7 @@ Partial Class Form1
                     MaxFilenameLength = 0
                     Dim BaseFilename As String
                     For Each FoundFile In FoundFiles
-                        BaseFilename = FoundFile.Replace(TextBoxInputDirectory.Text, "")
+                        BaseFilename = FoundFile.Replace(TextBoxInputDirectory.Text, "~")
                         'BaseFilename = System.IO.Path.GetFileName(FoundFile)
                         If Len(BaseFilename) > MaxFilenameLength Then
                             MaxFilenameLength = Len(BaseFilename)
@@ -162,7 +162,10 @@ Partial Class Form1
             For i As Integer = 0 To ListBoxFiles.SelectedItems.Count - 1
                 Filename = CType(ListBoxFiles.SelectedItems(i), String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                    Filename = TextBoxInputDirectory.Text + Filename
+                    If Filename.StartsWith("~") Then
+                        Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                    End If
+                    ' Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)
                 End If
             Next
@@ -171,23 +174,13 @@ Partial Class Form1
                 Filename = CType(ListBoxFiles.Items(i), String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     'Filename = TextBoxInputDirectory.Text + "\" + Filename
-                    Filename = TextBoxInputDirectory.Text + Filename
+                    If Filename.StartsWith("~") Then
+                        Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                    End If
+                    'Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)
                 End If
             Next
-            'If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-            '    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
-            '                        FileIO.SearchOption.SearchAllSubDirectories,
-            '                        FileWildcard)
-            '    FoundFilesList = FoundFiles.ToList
-            'End If
-
-            'If RadioButtonFilesDirectoryOnly.Checked Then
-            '    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
-            '                        FileIO.SearchOption.SearchTopLevelOnly,
-            '                        FileWildcard)
-            '    FoundFilesList = FoundFiles.ToList
-            'End If
 
         End If
 

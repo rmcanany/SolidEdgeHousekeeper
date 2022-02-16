@@ -1,4 +1,4 @@
-# Solid Edge Housekeeper v0.1.7.3
+# Solid Edge Housekeeper v0.1.7.4
 Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
@@ -39,6 +39,8 @@ Update 1/25/2022: One user has reported success with Teamcenter 'cached' files.
 Some tasks may not support versions of Solid Edge prior to SE2020.  Cause: Maybe an API call not available in previous versions.  Possible workaround: Use SE2020 or later.  
 
 May not support multiple installed Solid Edge versions on the same machine.  Cause: Unknown.  Possible workaround: Use the version that was 'silently' installed.  
+
+Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: Not exposed in the DraftPrintUtility() API.  Possible workaround: Create a new Windows printer with the desired settings.  Refer to the TESTS AND ACTIONS topic below for more details.  
 
 
 ## DETAILS
@@ -109,3 +111,11 @@ May not support multiple installed Solid Edge versions on the same machine.  Cau
 
 ## CODE ORGANIZATION
 Processing starts in Form1.vb.  A short description of the code's organization can be found there.
+
+## ABOUT ME
+A coworker saw this program and said, 'Do you have Obsessive Compulsive Disorder?'  I said, 'There's nothing disorderly about it.'  
+
+I had a colonoscopy the other day.  Afterwards the nurse said, 'You look like John Lithgow.'  I said, 'You mean my face?'  
+
+The HR Department asked for our preferred pronouns.  I put 'we/us'.  
+
