@@ -1,25 +1,33 @@
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and can be found at github.com/rmcanany/SolidEdgeHousekeeper.
+Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it here:
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production files without extensive testing on backups first.
+https://github.com/rmcanany/SolidEdgeHousekeeper
+
+(Scroll down on that page for a description of what it can do and how to use it.)
+
+Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without extensive testing on backups first.
 
 Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
 
 
-## v0.1.7.4 Enhancements/Fixes
+## v0.1.8 Enhancements/Fixes
+
+### Open/Save
+
+Added a task to open a file and save it in the current version.
 
 ### Top Level Assembly search
 
 Added detection of indexed drives for bottom-up searches (Thank you @Jean-Louis).  Requires a valid Fast Search Scope filename.  See Readme for details.
 
-Added a filter to avoid listing Family of Parts master and unrelated child documents.
+Added a filter to avoid processing Family of Parts master and unrelated child documents.
 
 ### Print Task
 
 Added the ability to override several Windows printing defaults (Thank you @n0minus38).  
 
-Added controls for several Solid Edge-specific printing options.
+Added controls for Solid Edge-specific printing options.
 
 Fixed an issue where the print options were not saved between sessions.  
 

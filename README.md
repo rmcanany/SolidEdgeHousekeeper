@@ -1,9 +1,9 @@
-# Solid Edge Housekeeper v0.1.7.4
+# Solid Edge Housekeeper v0.1.8.0
 Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @mike miller
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller]
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -47,6 +47,7 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
 
 ### TESTS AND ACTIONS
 ### Assembly
+    Open/Save
     Activate and update all
     Update face and view styles from template
     Remove face style overrides
@@ -62,6 +63,7 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Run external program
     Property find replace
 ### Part
+    Open/Save
     Update insert part copies
     Update material from material table
     Update face and view styles from template
@@ -78,6 +80,7 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Run external program
     Property find replace
 ### Sheetmetal
+    Open/Save
     Update insert part copies
     Update material from material table
     Update face and view styles from template
@@ -97,6 +100,7 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Run external program
     Property find replace
 ### Draft
+    Open/Save
     Update drawing views
     Move drawing to new template
     Fit view

@@ -73,6 +73,15 @@ Public Class LabelToAction
     Private Sub PopulateAssembly()
         Dim HelpString As String
 
+        Dim OpenSave As New L2A
+        HelpString = "    Open and save a document."
+        PopulateList(OpenSave,
+                     "Open/Save",
+                     "OpenSave",
+                     HelpString,
+                     RequiresSave:=True)
+
+
         Dim ActivateAndUpdateAll As New L2A
         HelpString = "    Loads all assembly occurrences' geometry into memory and does an update.  "
         HelpString += "Used mainly to eliminate the gray corners on assembly drawings.  " + vbCrLf
@@ -215,6 +224,14 @@ Public Class LabelToAction
     Private Sub PopulatePart()
         Dim HelpString As String
 
+        Dim OpenSave As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(OpenSave,
+                     "Open/Save",
+                     "OpenSave",
+                     HelpString,
+                     RequiresSave:=True)
+
         Dim UpdateInsertPartCopies As New L2A
         HelpString = "    In conjuction with 'Assembly Activate and update all', "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings."
@@ -339,6 +356,14 @@ Public Class LabelToAction
 
     Public Sub PopulateSheetmetal()
         Dim HelpString As String
+
+        Dim OpenSave As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(OpenSave,
+                     "Open/Save",
+                     "OpenSave",
+                     HelpString,
+                     RequiresSave:=True)
 
         Dim UpdateInsertPartCopies As New L2A
         HelpString = "    Same as the part command of the same name."
@@ -492,6 +517,14 @@ Public Class LabelToAction
 
     Private Sub PopulateDraft()
         Dim HelpString As String
+
+        Dim OpenSave As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(OpenSave,
+                     "Open/Save",
+                     "OpenSave",
+                     HelpString,
+                     RequiresSave:=True)
 
         Dim UpdateDrawingViews As New L2A
         HelpString = "    Checks drawing views one by one, and updates them if needed."

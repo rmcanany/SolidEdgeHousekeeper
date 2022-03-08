@@ -514,7 +514,7 @@ Partial Class Form1
         Names.Add("### Sheetmetal")
         Names.Add("### Draft")
 
-        msg = "# Solid Edge Housekeeper v0.1.7.4"
+        msg = "# Solid Edge Housekeeper v0.1.8.0"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -533,7 +533,7 @@ Partial Class Form1
         readme_tab.Add(msg)
 
         msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
-        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @mike miller"
+        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller]"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -739,7 +739,7 @@ Partial Class Form1
         msg = vbCrLf + "Most file selection options occur as soon as they are selected.  "
         msg += "A top-level assembly search is different.  "
         msg += "Since it can be somewhat time consuming, the update is only conducted after "
-        msg += "clicking the Update file list button.  "
+        msg += "clicking the Update File List button.  "
         readme_tab.Add(msg)
 
         msg = vbCrLf + "TODO List"

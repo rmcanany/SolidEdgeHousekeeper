@@ -46,6 +46,8 @@ Public Class LaunchTask
         Using task = New IsolatedTask(Of AssemblyTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
+                Case "OpenSave"
+                    ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "OccurrenceMissingFiles"
                     ErrorMessage = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
                 Case "OccurrenceOutsideProjectDirectory"
@@ -101,6 +103,8 @@ Public Class LaunchTask
         Using task = New IsolatedTask(Of PartTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
+                Case "OpenSave"
+                    ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "FailedOrWarnedFeatures"
                     ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
@@ -158,6 +162,8 @@ Public Class LaunchTask
         Using task = New IsolatedTask(Of SheetmetalTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
+                Case "OpenSave"
+                    ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "FailedOrWarnedFeatures"
                     ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
@@ -221,6 +227,8 @@ Public Class LaunchTask
         Using task = New IsolatedTask(Of DraftTasks)()
 
             Select Case LabelToActionX(LabelText).TaskName
+                Case "OpenSave"
+                    ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsMissingFile"
                     ErrorMessage = task.Proxy.DrawingViewsMissingFile(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
