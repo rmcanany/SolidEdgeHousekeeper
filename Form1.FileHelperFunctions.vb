@@ -163,7 +163,8 @@ Partial Class Form1
                 Filename = CType(ListBoxFiles.SelectedItems(i), String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     If Filename.StartsWith("~") Then
-                        Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                        ' Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                        Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
                     End If
                     ' Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)
@@ -175,7 +176,8 @@ Partial Class Form1
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     'Filename = TextBoxInputDirectory.Text + "\" + Filename
                     If Filename.StartsWith("~") Then
-                        Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                        ' Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                        Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
                     End If
                     'Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)

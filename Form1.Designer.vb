@@ -118,6 +118,15 @@ Partial Class Form1
         Me.LabelLaserOutputDirectory = New System.Windows.Forms.Label()
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
+        Me.ButtonWatermark = New System.Windows.Forms.Button()
+        Me.TextBoxWatermarkFilename = New System.Windows.Forms.TextBox()
+        Me.TextBoxWatermarkScale = New System.Windows.Forms.TextBox()
+        Me.LabelWatermarkScale = New System.Windows.Forms.Label()
+        Me.TextBoxWatermarkY = New System.Windows.Forms.TextBox()
+        Me.LabelWatermarkY = New System.Windows.Forms.Label()
+        Me.TextBoxWatermarkX = New System.Windows.Forms.TextBox()
+        Me.LabelWatermarkX = New System.Windows.Forms.Label()
+        Me.CheckBoxWatermark = New System.Windows.Forms.CheckBox()
         Me.ButtonExternalProgramDraft = New System.Windows.Forms.Button()
         Me.TextBoxExternalProgramDraft = New System.Windows.Forms.TextBox()
         Me.LabelExternalProgramDraft = New System.Windows.Forms.Label()
@@ -129,6 +138,19 @@ Partial Class Form1
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
+        Me.LabelPrintOptionsCopies = New System.Windows.Forms.Label()
+        Me.LabelPrintOptionsHeight = New System.Windows.Forms.Label()
+        Me.LabelPrintOptionsWidth = New System.Windows.Forms.Label()
+        Me.LabelPrintOptionsPrinter = New System.Windows.Forms.Label()
+        Me.CheckBoxPrintOptionsScaleLineWidths = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPrintOptionsScaleLineTypes = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPrintOptionsPrintAsBlack = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPrintOptionsBestFit = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPrintOptionsAutoOrient = New System.Windows.Forms.CheckBox()
+        Me.TextBoxPrintOptionsCopies = New System.Windows.Forms.TextBox()
+        Me.TextBoxPrintOptionsHeight = New System.Windows.Forms.TextBox()
+        Me.TextBoxPrintOptionsWidth = New System.Windows.Forms.TextBox()
+        Me.TextBoxPrintOptionsPrinter = New System.Windows.Forms.TextBox()
         Me.ButtonPrintOptions = New System.Windows.Forms.Button()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
@@ -172,19 +194,10 @@ Partial Class Form1
         Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
-        Me.TextBoxPrintOptionsPrinter = New System.Windows.Forms.TextBox()
-        Me.TextBoxPrintOptionsWidth = New System.Windows.Forms.TextBox()
-        Me.TextBoxPrintOptionsHeight = New System.Windows.Forms.TextBox()
-        Me.TextBoxPrintOptionsCopies = New System.Windows.Forms.TextBox()
-        Me.CheckBoxPrintOptionsAutoOrient = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxPrintOptionsBestFit = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxPrintOptionsPrintAsBlack = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxPrintOptionsScaleLineTypes = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxPrintOptionsScaleLineWidths = New System.Windows.Forms.CheckBox()
-        Me.LabelPrintOptionsPrinter = New System.Windows.Forms.Label()
-        Me.LabelPrintOptionsWidth = New System.Windows.Forms.Label()
-        Me.LabelPrintOptionsHeight = New System.Windows.Forms.Label()
-        Me.LabelPrintOptionsCopies = New System.Windows.Forms.Label()
+        Me.GroupBoxPictorialViews = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonPictorialViewIsometric = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonPictorialViewDimetric = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonPictorialViewTrimetric = New System.Windows.Forms.RadioButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.GroupBoxFilesToProcess.SuspendLayout()
@@ -195,6 +208,7 @@ Partial Class Form1
         Me.TabPageConfiguration.SuspendLayout()
         Me.GroupBoxTLAOptions.SuspendLayout()
         Me.TabPageReadme.SuspendLayout()
+        Me.GroupBoxPictorialViews.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -1220,6 +1234,15 @@ Partial Class Form1
         '
         Me.TabPageDraft.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageDraft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TabPageDraft.Controls.Add(Me.ButtonWatermark)
+        Me.TabPageDraft.Controls.Add(Me.TextBoxWatermarkFilename)
+        Me.TabPageDraft.Controls.Add(Me.TextBoxWatermarkScale)
+        Me.TabPageDraft.Controls.Add(Me.LabelWatermarkScale)
+        Me.TabPageDraft.Controls.Add(Me.TextBoxWatermarkY)
+        Me.TabPageDraft.Controls.Add(Me.LabelWatermarkY)
+        Me.TabPageDraft.Controls.Add(Me.TextBoxWatermarkX)
+        Me.TabPageDraft.Controls.Add(Me.LabelWatermarkX)
+        Me.TabPageDraft.Controls.Add(Me.CheckBoxWatermark)
         Me.TabPageDraft.Controls.Add(Me.ButtonExternalProgramDraft)
         Me.TabPageDraft.Controls.Add(Me.TextBoxExternalProgramDraft)
         Me.TabPageDraft.Controls.Add(Me.LabelExternalProgramDraft)
@@ -1238,10 +1261,87 @@ Partial Class Form1
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
         '
+        'ButtonWatermark
+        '
+        Me.ButtonWatermark.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonWatermark.Location = New System.Drawing.Point(509, 506)
+        Me.ButtonWatermark.Name = "ButtonWatermark"
+        Me.ButtonWatermark.Size = New System.Drawing.Size(100, 25)
+        Me.ButtonWatermark.TabIndex = 24
+        Me.ButtonWatermark.Text = "Browse"
+        Me.ButtonWatermark.UseVisualStyleBackColor = True
+        '
+        'TextBoxWatermarkFilename
+        '
+        Me.TextBoxWatermarkFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxWatermarkFilename.Location = New System.Drawing.Point(10, 506)
+        Me.TextBoxWatermarkFilename.Name = "TextBoxWatermarkFilename"
+        Me.TextBoxWatermarkFilename.Size = New System.Drawing.Size(491, 22)
+        Me.TextBoxWatermarkFilename.TabIndex = 23
+        '
+        'TextBoxWatermarkScale
+        '
+        Me.TextBoxWatermarkScale.Location = New System.Drawing.Point(396, 478)
+        Me.TextBoxWatermarkScale.Name = "TextBoxWatermarkScale"
+        Me.TextBoxWatermarkScale.Size = New System.Drawing.Size(50, 22)
+        Me.TextBoxWatermarkScale.TabIndex = 22
+        '
+        'LabelWatermarkScale
+        '
+        Me.LabelWatermarkScale.AutoSize = True
+        Me.LabelWatermarkScale.Location = New System.Drawing.Point(340, 478)
+        Me.LabelWatermarkScale.Name = "LabelWatermarkScale"
+        Me.LabelWatermarkScale.Size = New System.Drawing.Size(43, 17)
+        Me.LabelWatermarkScale.TabIndex = 21
+        Me.LabelWatermarkScale.Text = "Scale"
+        '
+        'TextBoxWatermarkY
+        '
+        Me.TextBoxWatermarkY.Location = New System.Drawing.Point(255, 478)
+        Me.TextBoxWatermarkY.Name = "TextBoxWatermarkY"
+        Me.TextBoxWatermarkY.Size = New System.Drawing.Size(50, 22)
+        Me.TextBoxWatermarkY.TabIndex = 20
+        '
+        'LabelWatermarkY
+        '
+        Me.LabelWatermarkY.AutoSize = True
+        Me.LabelWatermarkY.Location = New System.Drawing.Point(230, 478)
+        Me.LabelWatermarkY.Name = "LabelWatermarkY"
+        Me.LabelWatermarkY.Size = New System.Drawing.Size(17, 17)
+        Me.LabelWatermarkY.TabIndex = 19
+        Me.LabelWatermarkY.Text = "Y"
+        '
+        'TextBoxWatermarkX
+        '
+        Me.TextBoxWatermarkX.Location = New System.Drawing.Point(145, 478)
+        Me.TextBoxWatermarkX.Name = "TextBoxWatermarkX"
+        Me.TextBoxWatermarkX.Size = New System.Drawing.Size(50, 22)
+        Me.TextBoxWatermarkX.TabIndex = 18
+        '
+        'LabelWatermarkX
+        '
+        Me.LabelWatermarkX.AutoSize = True
+        Me.LabelWatermarkX.Location = New System.Drawing.Point(120, 478)
+        Me.LabelWatermarkX.Name = "LabelWatermarkX"
+        Me.LabelWatermarkX.Size = New System.Drawing.Size(17, 17)
+        Me.LabelWatermarkX.TabIndex = 17
+        Me.LabelWatermarkX.Text = "X"
+        '
+        'CheckBoxWatermark
+        '
+        Me.CheckBoxWatermark.AutoSize = True
+        Me.CheckBoxWatermark.Location = New System.Drawing.Point(10, 478)
+        Me.CheckBoxWatermark.Name = "CheckBoxWatermark"
+        Me.CheckBoxWatermark.Size = New System.Drawing.Size(99, 21)
+        Me.CheckBoxWatermark.TabIndex = 16
+        Me.CheckBoxWatermark.Text = "Watermark"
+        Me.CheckBoxWatermark.UseVisualStyleBackColor = True
+        '
         'ButtonExternalProgramDraft
         '
         Me.ButtonExternalProgramDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonExternalProgramDraft.Location = New System.Drawing.Point(509, 504)
+        Me.ButtonExternalProgramDraft.Location = New System.Drawing.Point(509, 578)
         Me.ButtonExternalProgramDraft.Name = "ButtonExternalProgramDraft"
         Me.ButtonExternalProgramDraft.Size = New System.Drawing.Size(100, 23)
         Me.ButtonExternalProgramDraft.TabIndex = 15
@@ -1252,7 +1352,7 @@ Partial Class Form1
         '
         Me.TextBoxExternalProgramDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExternalProgramDraft.Location = New System.Drawing.Point(10, 504)
+        Me.TextBoxExternalProgramDraft.Location = New System.Drawing.Point(10, 578)
         Me.TextBoxExternalProgramDraft.Name = "TextBoxExternalProgramDraft"
         Me.TextBoxExternalProgramDraft.Size = New System.Drawing.Size(490, 22)
         Me.TextBoxExternalProgramDraft.TabIndex = 14
@@ -1260,7 +1360,7 @@ Partial Class Form1
         'LabelExternalProgramDraft
         '
         Me.LabelExternalProgramDraft.AutoSize = True
-        Me.LabelExternalProgramDraft.Location = New System.Drawing.Point(10, 479)
+        Me.LabelExternalProgramDraft.Location = New System.Drawing.Point(10, 553)
         Me.LabelExternalProgramDraft.Name = "LabelExternalProgramDraft"
         Me.LabelExternalProgramDraft.Size = New System.Drawing.Size(116, 17)
         Me.LabelExternalProgramDraft.TabIndex = 13
@@ -1340,6 +1440,7 @@ Partial Class Form1
         '
         Me.TabPageConfiguration.AutoScroll = True
         Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageConfiguration.Controls.Add(Me.GroupBoxPictorialViews)
         Me.TabPageConfiguration.Controls.Add(Me.LabelPrintOptionsCopies)
         Me.TabPageConfiguration.Controls.Add(Me.LabelPrintOptionsHeight)
         Me.TabPageConfiguration.Controls.Add(Me.LabelPrintOptionsWidth)
@@ -1387,6 +1488,126 @@ Partial Class Form1
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
+        'LabelPrintOptionsCopies
+        '
+        Me.LabelPrintOptionsCopies.AutoSize = True
+        Me.LabelPrintOptionsCopies.Location = New System.Drawing.Point(15, 865)
+        Me.LabelPrintOptionsCopies.Name = "LabelPrintOptionsCopies"
+        Me.LabelPrintOptionsCopies.Size = New System.Drawing.Size(51, 17)
+        Me.LabelPrintOptionsCopies.TabIndex = 33
+        Me.LabelPrintOptionsCopies.Text = "Copies"
+        '
+        'LabelPrintOptionsHeight
+        '
+        Me.LabelPrintOptionsHeight.AutoSize = True
+        Me.LabelPrintOptionsHeight.Location = New System.Drawing.Point(150, 815)
+        Me.LabelPrintOptionsHeight.Name = "LabelPrintOptionsHeight"
+        Me.LabelPrintOptionsHeight.Size = New System.Drawing.Size(74, 17)
+        Me.LabelPrintOptionsHeight.TabIndex = 32
+        Me.LabelPrintOptionsHeight.Text = "Height (in)"
+        '
+        'LabelPrintOptionsWidth
+        '
+        Me.LabelPrintOptionsWidth.AutoSize = True
+        Me.LabelPrintOptionsWidth.Location = New System.Drawing.Point(15, 815)
+        Me.LabelPrintOptionsWidth.Name = "LabelPrintOptionsWidth"
+        Me.LabelPrintOptionsWidth.Size = New System.Drawing.Size(69, 17)
+        Me.LabelPrintOptionsWidth.TabIndex = 31
+        Me.LabelPrintOptionsWidth.Text = "Width (in)"
+        '
+        'LabelPrintOptionsPrinter
+        '
+        Me.LabelPrintOptionsPrinter.AutoSize = True
+        Me.LabelPrintOptionsPrinter.Location = New System.Drawing.Point(15, 765)
+        Me.LabelPrintOptionsPrinter.Name = "LabelPrintOptionsPrinter"
+        Me.LabelPrintOptionsPrinter.Size = New System.Drawing.Size(50, 17)
+        Me.LabelPrintOptionsPrinter.TabIndex = 30
+        Me.LabelPrintOptionsPrinter.Text = "Printer"
+        '
+        'CheckBoxPrintOptionsScaleLineWidths
+        '
+        Me.CheckBoxPrintOptionsScaleLineWidths.AutoSize = True
+        Me.CheckBoxPrintOptionsScaleLineWidths.Location = New System.Drawing.Point(15, 1020)
+        Me.CheckBoxPrintOptionsScaleLineWidths.Name = "CheckBoxPrintOptionsScaleLineWidths"
+        Me.CheckBoxPrintOptionsScaleLineWidths.Size = New System.Drawing.Size(134, 21)
+        Me.CheckBoxPrintOptionsScaleLineWidths.TabIndex = 29
+        Me.CheckBoxPrintOptionsScaleLineWidths.Text = "Scale line widths"
+        Me.CheckBoxPrintOptionsScaleLineWidths.UseVisualStyleBackColor = True
+        '
+        'CheckBoxPrintOptionsScaleLineTypes
+        '
+        Me.CheckBoxPrintOptionsScaleLineTypes.AutoSize = True
+        Me.CheckBoxPrintOptionsScaleLineTypes.Location = New System.Drawing.Point(15, 995)
+        Me.CheckBoxPrintOptionsScaleLineTypes.Name = "CheckBoxPrintOptionsScaleLineTypes"
+        Me.CheckBoxPrintOptionsScaleLineTypes.Size = New System.Drawing.Size(129, 21)
+        Me.CheckBoxPrintOptionsScaleLineTypes.TabIndex = 28
+        Me.CheckBoxPrintOptionsScaleLineTypes.Text = "Scale line types"
+        Me.CheckBoxPrintOptionsScaleLineTypes.UseVisualStyleBackColor = True
+        '
+        'CheckBoxPrintOptionsPrintAsBlack
+        '
+        Me.CheckBoxPrintOptionsPrintAsBlack.AutoSize = True
+        Me.CheckBoxPrintOptionsPrintAsBlack.Location = New System.Drawing.Point(15, 970)
+        Me.CheckBoxPrintOptionsPrintAsBlack.Name = "CheckBoxPrintOptionsPrintAsBlack"
+        Me.CheckBoxPrintOptionsPrintAsBlack.Size = New System.Drawing.Size(115, 21)
+        Me.CheckBoxPrintOptionsPrintAsBlack.TabIndex = 27
+        Me.CheckBoxPrintOptionsPrintAsBlack.Text = "Print as black"
+        Me.CheckBoxPrintOptionsPrintAsBlack.UseVisualStyleBackColor = True
+        '
+        'CheckBoxPrintOptionsBestFit
+        '
+        Me.CheckBoxPrintOptionsBestFit.AutoSize = True
+        Me.CheckBoxPrintOptionsBestFit.Location = New System.Drawing.Point(15, 945)
+        Me.CheckBoxPrintOptionsBestFit.Name = "CheckBoxPrintOptionsBestFit"
+        Me.CheckBoxPrintOptionsBestFit.Size = New System.Drawing.Size(73, 21)
+        Me.CheckBoxPrintOptionsBestFit.TabIndex = 26
+        Me.CheckBoxPrintOptionsBestFit.Text = "Best fit"
+        Me.CheckBoxPrintOptionsBestFit.UseVisualStyleBackColor = True
+        '
+        'CheckBoxPrintOptionsAutoOrient
+        '
+        Me.CheckBoxPrintOptionsAutoOrient.AutoSize = True
+        Me.CheckBoxPrintOptionsAutoOrient.Location = New System.Drawing.Point(15, 920)
+        Me.CheckBoxPrintOptionsAutoOrient.Name = "CheckBoxPrintOptionsAutoOrient"
+        Me.CheckBoxPrintOptionsAutoOrient.Size = New System.Drawing.Size(99, 21)
+        Me.CheckBoxPrintOptionsAutoOrient.TabIndex = 25
+        Me.CheckBoxPrintOptionsAutoOrient.Text = "Auto orient"
+        Me.CheckBoxPrintOptionsAutoOrient.UseVisualStyleBackColor = True
+        '
+        'TextBoxPrintOptionsCopies
+        '
+        Me.TextBoxPrintOptionsCopies.Enabled = False
+        Me.TextBoxPrintOptionsCopies.Location = New System.Drawing.Point(15, 885)
+        Me.TextBoxPrintOptionsCopies.Name = "TextBoxPrintOptionsCopies"
+        Me.TextBoxPrintOptionsCopies.Size = New System.Drawing.Size(100, 22)
+        Me.TextBoxPrintOptionsCopies.TabIndex = 24
+        '
+        'TextBoxPrintOptionsHeight
+        '
+        Me.TextBoxPrintOptionsHeight.Enabled = False
+        Me.TextBoxPrintOptionsHeight.Location = New System.Drawing.Point(150, 835)
+        Me.TextBoxPrintOptionsHeight.Name = "TextBoxPrintOptionsHeight"
+        Me.TextBoxPrintOptionsHeight.Size = New System.Drawing.Size(100, 22)
+        Me.TextBoxPrintOptionsHeight.TabIndex = 23
+        '
+        'TextBoxPrintOptionsWidth
+        '
+        Me.TextBoxPrintOptionsWidth.Enabled = False
+        Me.TextBoxPrintOptionsWidth.Location = New System.Drawing.Point(15, 835)
+        Me.TextBoxPrintOptionsWidth.Name = "TextBoxPrintOptionsWidth"
+        Me.TextBoxPrintOptionsWidth.Size = New System.Drawing.Size(100, 22)
+        Me.TextBoxPrintOptionsWidth.TabIndex = 22
+        '
+        'TextBoxPrintOptionsPrinter
+        '
+        Me.TextBoxPrintOptionsPrinter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPrintOptionsPrinter.Enabled = False
+        Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(15, 785)
+        Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
+        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(297, 22)
+        Me.TextBoxPrintOptionsPrinter.TabIndex = 21
+        '
         'ButtonPrintOptions
         '
         Me.ButtonPrintOptions.Location = New System.Drawing.Point(10, 735)
@@ -1430,7 +1651,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
         Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(11, 435)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(543, 172)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(562, 172)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
@@ -1438,7 +1659,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(415, 119)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(434, 119)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(100, 25)
         Me.ButtonFastSearchScopeFilename.TabIndex = 5
@@ -1451,7 +1672,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(15, 120)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(381, 22)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(400, 22)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 4
         '
         'LabelFastSearchScopeFilename
@@ -1566,7 +1787,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(426, 270)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(473, 270)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(100, 25)
@@ -1581,7 +1802,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(11, 270)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(396, 22)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(445, 22)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
@@ -1597,7 +1818,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(426, 30)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(473, 30)
         Me.ButtonTemplateAssembly.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(100, 25)
@@ -1612,7 +1833,7 @@ Partial Class Form1
         Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(11, 30)
         Me.TextBoxTemplateAssembly.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(396, 22)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(445, 22)
         Me.TextBoxTemplateAssembly.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
@@ -1629,7 +1850,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(426, 90)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(473, 90)
         Me.ButtonTemplatePart.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(100, 25)
@@ -1644,7 +1865,7 @@ Partial Class Form1
         Me.TextBoxTemplatePart.Location = New System.Drawing.Point(11, 90)
         Me.TextBoxTemplatePart.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(396, 22)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(445, 22)
         Me.TextBoxTemplatePart.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
@@ -1661,7 +1882,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(426, 150)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(473, 150)
         Me.ButtonTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(100, 25)
@@ -1676,7 +1897,7 @@ Partial Class Form1
         Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(11, 150)
         Me.TextBoxTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(396, 22)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(445, 22)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
@@ -1693,7 +1914,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(426, 210)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(473, 210)
         Me.ButtonTemplateDraft.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(100, 25)
@@ -1708,7 +1929,7 @@ Partial Class Form1
         Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(11, 210)
         Me.TextBoxTemplateDraft.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(396, 22)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(445, 22)
         Me.TextBoxTemplateDraft.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
@@ -1813,125 +2034,50 @@ Partial Class Form1
         '
         Me.PrintDialog1.UseEXDialog = True
         '
-        'TextBoxPrintOptionsPrinter
+        'GroupBoxPictorialViews
         '
-        Me.TextBoxPrintOptionsPrinter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPrintOptionsPrinter.Enabled = False
-        Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(15, 785)
-        Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
-        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(381, 22)
-        Me.TextBoxPrintOptionsPrinter.TabIndex = 21
+        Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
+        Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
+        Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(15, 1085)
+        Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
+        Me.GroupBoxPictorialViews.Size = New System.Drawing.Size(150, 100)
+        Me.GroupBoxPictorialViews.TabIndex = 34
+        Me.GroupBoxPictorialViews.TabStop = False
+        Me.GroupBoxPictorialViews.Text = "Pictorial views"
         '
-        'TextBoxPrintOptionsWidth
+        'RadioButtonPictorialViewIsometric
         '
-        Me.TextBoxPrintOptionsWidth.Enabled = False
-        Me.TextBoxPrintOptionsWidth.Location = New System.Drawing.Point(15, 835)
-        Me.TextBoxPrintOptionsWidth.Name = "TextBoxPrintOptionsWidth"
-        Me.TextBoxPrintOptionsWidth.Size = New System.Drawing.Size(100, 22)
-        Me.TextBoxPrintOptionsWidth.TabIndex = 22
+        Me.RadioButtonPictorialViewIsometric.AutoSize = True
+        Me.RadioButtonPictorialViewIsometric.Location = New System.Drawing.Point(0, 25)
+        Me.RadioButtonPictorialViewIsometric.Name = "RadioButtonPictorialViewIsometric"
+        Me.RadioButtonPictorialViewIsometric.Size = New System.Drawing.Size(85, 21)
+        Me.RadioButtonPictorialViewIsometric.TabIndex = 0
+        Me.RadioButtonPictorialViewIsometric.TabStop = True
+        Me.RadioButtonPictorialViewIsometric.Text = "Isometric"
+        Me.RadioButtonPictorialViewIsometric.UseVisualStyleBackColor = True
         '
-        'TextBoxPrintOptionsHeight
+        'RadioButtonPictorialViewDimetric
         '
-        Me.TextBoxPrintOptionsHeight.Enabled = False
-        Me.TextBoxPrintOptionsHeight.Location = New System.Drawing.Point(150, 835)
-        Me.TextBoxPrintOptionsHeight.Name = "TextBoxPrintOptionsHeight"
-        Me.TextBoxPrintOptionsHeight.Size = New System.Drawing.Size(100, 22)
-        Me.TextBoxPrintOptionsHeight.TabIndex = 23
+        Me.RadioButtonPictorialViewDimetric.AutoSize = True
+        Me.RadioButtonPictorialViewDimetric.Location = New System.Drawing.Point(0, 50)
+        Me.RadioButtonPictorialViewDimetric.Name = "RadioButtonPictorialViewDimetric"
+        Me.RadioButtonPictorialViewDimetric.Size = New System.Drawing.Size(80, 21)
+        Me.RadioButtonPictorialViewDimetric.TabIndex = 1
+        Me.RadioButtonPictorialViewDimetric.TabStop = True
+        Me.RadioButtonPictorialViewDimetric.Text = "Dimetric"
+        Me.RadioButtonPictorialViewDimetric.UseVisualStyleBackColor = True
         '
-        'TextBoxPrintOptionsCopies
+        'RadioButtonPictorialViewTrimetric
         '
-        Me.TextBoxPrintOptionsCopies.Enabled = False
-        Me.TextBoxPrintOptionsCopies.Location = New System.Drawing.Point(15, 885)
-        Me.TextBoxPrintOptionsCopies.Name = "TextBoxPrintOptionsCopies"
-        Me.TextBoxPrintOptionsCopies.Size = New System.Drawing.Size(100, 22)
-        Me.TextBoxPrintOptionsCopies.TabIndex = 24
-        '
-        'CheckBoxPrintOptionsAutoOrient
-        '
-        Me.CheckBoxPrintOptionsAutoOrient.AutoSize = True
-        Me.CheckBoxPrintOptionsAutoOrient.Location = New System.Drawing.Point(15, 920)
-        Me.CheckBoxPrintOptionsAutoOrient.Name = "CheckBoxPrintOptionsAutoOrient"
-        Me.CheckBoxPrintOptionsAutoOrient.Size = New System.Drawing.Size(99, 21)
-        Me.CheckBoxPrintOptionsAutoOrient.TabIndex = 25
-        Me.CheckBoxPrintOptionsAutoOrient.Text = "Auto orient"
-        Me.CheckBoxPrintOptionsAutoOrient.UseVisualStyleBackColor = True
-        '
-        'CheckBoxPrintOptionsBestFit
-        '
-        Me.CheckBoxPrintOptionsBestFit.AutoSize = True
-        Me.CheckBoxPrintOptionsBestFit.Location = New System.Drawing.Point(15, 945)
-        Me.CheckBoxPrintOptionsBestFit.Name = "CheckBoxPrintOptionsBestFit"
-        Me.CheckBoxPrintOptionsBestFit.Size = New System.Drawing.Size(73, 21)
-        Me.CheckBoxPrintOptionsBestFit.TabIndex = 26
-        Me.CheckBoxPrintOptionsBestFit.Text = "Best fit"
-        Me.CheckBoxPrintOptionsBestFit.UseVisualStyleBackColor = True
-        '
-        'CheckBoxPrintOptionsPrintAsBlack
-        '
-        Me.CheckBoxPrintOptionsPrintAsBlack.AutoSize = True
-        Me.CheckBoxPrintOptionsPrintAsBlack.Location = New System.Drawing.Point(15, 970)
-        Me.CheckBoxPrintOptionsPrintAsBlack.Name = "CheckBoxPrintOptionsPrintAsBlack"
-        Me.CheckBoxPrintOptionsPrintAsBlack.Size = New System.Drawing.Size(115, 21)
-        Me.CheckBoxPrintOptionsPrintAsBlack.TabIndex = 27
-        Me.CheckBoxPrintOptionsPrintAsBlack.Text = "Print as black"
-        Me.CheckBoxPrintOptionsPrintAsBlack.UseVisualStyleBackColor = True
-        '
-        'CheckBoxPrintOptionsScaleLineTypes
-        '
-        Me.CheckBoxPrintOptionsScaleLineTypes.AutoSize = True
-        Me.CheckBoxPrintOptionsScaleLineTypes.Location = New System.Drawing.Point(15, 995)
-        Me.CheckBoxPrintOptionsScaleLineTypes.Name = "CheckBoxPrintOptionsScaleLineTypes"
-        Me.CheckBoxPrintOptionsScaleLineTypes.Size = New System.Drawing.Size(129, 21)
-        Me.CheckBoxPrintOptionsScaleLineTypes.TabIndex = 28
-        Me.CheckBoxPrintOptionsScaleLineTypes.Text = "Scale line types"
-        Me.CheckBoxPrintOptionsScaleLineTypes.UseVisualStyleBackColor = True
-        '
-        'CheckBoxPrintOptionsScaleLineWidths
-        '
-        Me.CheckBoxPrintOptionsScaleLineWidths.AutoSize = True
-        Me.CheckBoxPrintOptionsScaleLineWidths.Location = New System.Drawing.Point(15, 1020)
-        Me.CheckBoxPrintOptionsScaleLineWidths.Name = "CheckBoxPrintOptionsScaleLineWidths"
-        Me.CheckBoxPrintOptionsScaleLineWidths.Size = New System.Drawing.Size(134, 21)
-        Me.CheckBoxPrintOptionsScaleLineWidths.TabIndex = 29
-        Me.CheckBoxPrintOptionsScaleLineWidths.Text = "Scale line widths"
-        Me.CheckBoxPrintOptionsScaleLineWidths.UseVisualStyleBackColor = True
-        '
-        'LabelPrintOptionsPrinter
-        '
-        Me.LabelPrintOptionsPrinter.AutoSize = True
-        Me.LabelPrintOptionsPrinter.Location = New System.Drawing.Point(15, 765)
-        Me.LabelPrintOptionsPrinter.Name = "LabelPrintOptionsPrinter"
-        Me.LabelPrintOptionsPrinter.Size = New System.Drawing.Size(50, 17)
-        Me.LabelPrintOptionsPrinter.TabIndex = 30
-        Me.LabelPrintOptionsPrinter.Text = "Printer"
-        '
-        'LabelPrintOptionsWidth
-        '
-        Me.LabelPrintOptionsWidth.AutoSize = True
-        Me.LabelPrintOptionsWidth.Location = New System.Drawing.Point(15, 815)
-        Me.LabelPrintOptionsWidth.Name = "LabelPrintOptionsWidth"
-        Me.LabelPrintOptionsWidth.Size = New System.Drawing.Size(69, 17)
-        Me.LabelPrintOptionsWidth.TabIndex = 31
-        Me.LabelPrintOptionsWidth.Text = "Width (in)"
-        '
-        'LabelPrintOptionsHeight
-        '
-        Me.LabelPrintOptionsHeight.AutoSize = True
-        Me.LabelPrintOptionsHeight.Location = New System.Drawing.Point(150, 815)
-        Me.LabelPrintOptionsHeight.Name = "LabelPrintOptionsHeight"
-        Me.LabelPrintOptionsHeight.Size = New System.Drawing.Size(74, 17)
-        Me.LabelPrintOptionsHeight.TabIndex = 32
-        Me.LabelPrintOptionsHeight.Text = "Height (in)"
-        '
-        'LabelPrintOptionsCopies
-        '
-        Me.LabelPrintOptionsCopies.AutoSize = True
-        Me.LabelPrintOptionsCopies.Location = New System.Drawing.Point(15, 865)
-        Me.LabelPrintOptionsCopies.Name = "LabelPrintOptionsCopies"
-        Me.LabelPrintOptionsCopies.Size = New System.Drawing.Size(51, 17)
-        Me.LabelPrintOptionsCopies.TabIndex = 33
-        Me.LabelPrintOptionsCopies.Text = "Copies"
+        Me.RadioButtonPictorialViewTrimetric.AutoSize = True
+        Me.RadioButtonPictorialViewTrimetric.Location = New System.Drawing.Point(0, 75)
+        Me.RadioButtonPictorialViewTrimetric.Name = "RadioButtonPictorialViewTrimetric"
+        Me.RadioButtonPictorialViewTrimetric.Size = New System.Drawing.Size(84, 21)
+        Me.RadioButtonPictorialViewTrimetric.TabIndex = 2
+        Me.RadioButtonPictorialViewTrimetric.TabStop = True
+        Me.RadioButtonPictorialViewTrimetric.Text = "Trimetric"
+        Me.RadioButtonPictorialViewTrimetric.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -1965,6 +2111,8 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
         Me.TabPageReadme.PerformLayout()
+        Me.GroupBoxPictorialViews.ResumeLayout(False)
+        Me.GroupBoxPictorialViews.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2132,4 +2280,17 @@ Partial Class Form1
     Friend WithEvents LabelPrintOptionsHeight As Label
     Friend WithEvents LabelPrintOptionsWidth As Label
     Friend WithEvents LabelPrintOptionsPrinter As Label
+    Friend WithEvents TextBoxWatermarkScale As TextBox
+    Friend WithEvents LabelWatermarkScale As Label
+    Friend WithEvents TextBoxWatermarkY As TextBox
+    Friend WithEvents LabelWatermarkY As Label
+    Friend WithEvents TextBoxWatermarkX As TextBox
+    Friend WithEvents LabelWatermarkX As Label
+    Friend WithEvents CheckBoxWatermark As CheckBox
+    Friend WithEvents ButtonWatermark As Button
+    Friend WithEvents TextBoxWatermarkFilename As TextBox
+    Friend WithEvents GroupBoxPictorialViews As GroupBox
+    Friend WithEvents RadioButtonPictorialViewTrimetric As RadioButton
+    Friend WithEvents RadioButtonPictorialViewDimetric As RadioButton
+    Friend WithEvents RadioButtonPictorialViewIsometric As RadioButton
 End Class

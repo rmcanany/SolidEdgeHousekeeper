@@ -386,158 +386,521 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Dim TempErrorMessageList As New List(Of String)
+
         Dim SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
-        Dim Windows As SolidEdgeFramework.Windows
-        Dim Window As SolidEdgeFramework.Window
-        Dim View As SolidEdgeFramework.View
-        Dim ViewStyles As SolidEdgeFramework.ViewStyles
-        Dim ViewStyle As SolidEdgeFramework.ViewStyle
-
         Dim TemplateFilename As String = Configuration("TextBoxTemplateAssembly")
-        Dim TemplateActiveStyleName As String = ""
-        Dim TempViewStyleName As String = ""
-        Dim ViewStyleAlreadyPresent As Boolean
-        Dim TemplateSkyboxName(5) As String
-        Dim msg As String = ""
-        Dim tf As Boolean = False
-
-        'Dim TemplateConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim TemplateThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim TemplateWeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        'Dim TemplateCurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-
-        Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-        Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
 
         ' Import face styles from template
         SEDoc.ImportStyles(TemplateFilename, True)
+        SEApp.DoIdle()
 
-        ' Find the active ViewStyle in the template file.
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeAssembly.AssemblyDocument)
         SEApp.DoIdle()
 
-        '' Get the template base styles
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
-        '                           TemplateConstructionBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
-        '                           TemplateThreadBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
-        '                           TemplateWeldbeadBaseStyle)
-        'SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
-        '                           TemplateCurveBaseStyle)
-        'MsgBox(TemplateConstructionBaseStyle.StyleName)
+        ' Update Color Manager base styles from template
+        TempErrorMessageList = UpdateBaseStyles(SEDoc, SETemplateDoc)
+        If TempErrorMessageList.Count > 0 Then
+            ExitStatus = 1
+            For Each s As String In TempErrorMessageList
+                ErrorMessageList.Add(s)
+            Next
+        End If
 
-        Windows = SETemplateDoc.Windows
-        For Each Window In Windows
-            View = Window.View
-            TemplateActiveStyleName = View.Style.ToString
-        Next
+        ' Update view styles from template
+        TempErrorMessageList = UpdateViewStyles(SEApp, SEDoc, SETemplateDoc)
+        If TempErrorMessageList.Count > 0 Then
+            ExitStatus = 1
+            For Each s As String In TempErrorMessageList
+                ErrorMessageList.Add(s)
+            Next
+        End If
 
-        ViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-
-        For Each ViewStyle In ViewStyles
-            If ViewStyle.StyleName = TemplateActiveStyleName Then
-                For i As Integer = 0 To 5
-                    TemplateSkyboxName(i) = ViewStyle.GetSkyboxSideFilename(i)
-                Next
-            End If
-        Next
-
-        SETemplateDoc.Close(False)
+        SETemplateDoc.Close()
         SEApp.DoIdle()
 
-        '' Get the document base styles
-        '' Does not work.  SetBaseStyle crashes if no base style is assigned.
-        'msg = ""
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
 
-        '' Copy base styles if not already assigned.
-        'SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
-        '                   ConstructionBaseStyle)
-        'If ConstructionBaseStyle Is Nothing Then
-        '    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
-        '                   TemplateConstructionBaseStyle)
-        '    msg = String.Format("{0}{1}a{2}", msg, vbCrLf, TemplateConstructionBaseStyle.StyleName)
-        'End If
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
-        ' If a style by the same name exists in the target file, delete it.
-        ViewStyleAlreadyPresent = False
-        ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-        For Each ViewStyle In ViewStyles
-            If ViewStyle.StyleName = TemplateActiveStyleName Then
-                ViewStyleAlreadyPresent = True
-            Else
-                TempViewStyleName = ViewStyle.StyleName
-            End If
+    Private Function UpdateViewStyles(
+        ByRef SEApp As SolidEdgeFramework.Application,
+        ByRef SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByRef SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim TempErrorMessageList As New List(Of String)
+
+        Dim TemplateViewStyles As SolidEdgeFramework.ViewStyles
+        'Dim TemplateViewStyle As SolidEdgeFramework.ViewStyle
+        Dim DocViewStyles As SolidEdgeFramework.ViewStyles
+        Dim DocViewStyle As SolidEdgeFramework.ViewStyle
+        Dim TemplateActiveViewStyle As SolidEdgeFramework.ViewStyle = Nothing
+        Dim DocActiveViewStyle As SolidEdgeFramework.ViewStyle
+
+        Dim Windows As SolidEdgeFramework.Windows
+        Dim Window As SolidEdgeFramework.Window
+        Dim View As SolidEdgeFramework.View
+
+        Dim tf As Boolean
+
+        SETemplateDoc.Activate()
+
+        Windows = SETemplateDoc.Windows
+
+        For Each Window In Windows
+            View = Window.View
+            TemplateActiveViewStyle = CType(View.ViewStyle, SolidEdgeFramework.ViewStyle)
+        Next
+
+        TemplateViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+        DocViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+
+        SEDoc.Activate()
+
+        DocActiveViewStyle = DocViewStyles.AddFromFile(SETemplateDoc.FullName, TemplateActiveViewStyle.StyleName)
+
+        SEApp.DoIdle()
+
+        'Update skybox
+        DocActiveViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
+
+        Dim s As String
+        Dim i As Integer
+
+        For i = 0 To 5
+            s = TemplateActiveViewStyle.GetSkyboxSideFilename(i)
+            DocActiveViewStyle.SetSkyboxSideFilename(i, s)
         Next
 
         SEApp.DoIdle()
 
         Windows = SEDoc.Windows
 
-        If ViewStyleAlreadyPresent Then ' Hopefully deactivate the desired ViewStyle so it can be removed
-            For Each Window In Windows
-                View = Window.View
-                View.Style = TempViewStyleName
-            Next
-            ' ViewStyles can sometimes be flagged 'in use' even if they are not
-            Try
-                ViewStyles.Remove(TemplateActiveStyleName)
-            Catch ex As Exception
-                ExitStatus = 1
-                ErrorMessageList.Add("View style not updated")
-            End Try
-        End If
+        For Each Window In Windows
+            View = Window.View
+            View.Style = DocActiveViewStyle.StyleName
+        Next
 
-        If ExitStatus = 0 Then
-            ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
+        DocViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
 
-            For Each ViewStyle In ViewStyles
-                If ViewStyle.StyleName = TemplateActiveStyleName Then
-                    ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
-                    For i As Integer = 0 To 5
-                        ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
-                    Next
+        SEApp.DoIdle()
+
+        For Each DocViewStyle In DocViewStyles
+            tf = Not DocViewStyle.StyleName.ToLower() = "default"
+            tf = tf And Not DocViewStyle.StyleName = DocActiveViewStyle.StyleName
+            If tf Then
+                Try
+                    DocViewStyle.Delete()
+                Catch ex As Exception
+                End Try
+            End If
+        Next
+
+        Return ErrorMessageList
+    End Function
+
+    Private Function UpdateBaseStyles(
+        ByRef SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByRef SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
+        ) As List(Of String)
+
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim FaceStyles As SolidEdgeFramework.FaceStyles
+        Dim FaceStyle As SolidEdgeFramework.FaceStyle
+        Dim tf As Boolean
+
+        Dim TemplateConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim TemplateThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim TemplateWeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim TemplateCurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+
+        Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+        Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+
+        SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+                                   TemplateConstructionBaseStyle)
+        SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+                                   TemplateThreadBaseStyle)
+        SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+                                   TemplateWeldbeadBaseStyle)
+        SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+                                   TemplateCurveBaseStyle)
+        'MsgBox(TemplateConstructionBaseStyle.StyleName)
+
+        ' Update base styles in the document
+        FaceStyles = CType(SEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+
+
+        For Each FaceStyle In FaceStyles
+            If TemplateConstructionBaseStyle IsNot Nothing Then
+                If FaceStyle.StyleName = TemplateConstructionBaseStyle.StyleName Then
+                    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+                                   FaceStyle)
                 End If
-            Next
+            End If
 
-            For Each Window In Windows
-                View = Window.View
-                View.Style = TemplateActiveStyleName
-            Next
+            If TemplateThreadBaseStyle IsNot Nothing Then
+                If FaceStyle.StyleName = TemplateThreadBaseStyle.StyleName Then
+                    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+                                       FaceStyle)
+                End If
+            End If
 
-            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+            If TemplateWeldbeadBaseStyle IsNot Nothing Then
+                If FaceStyle.StyleName = TemplateWeldbeadBaseStyle.StyleName Then
+                    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+                                       FaceStyle)
+                End If
+            End If
+
+            If TemplateCurveBaseStyle IsNot Nothing Then
+                If FaceStyle.StyleName = TemplateCurveBaseStyle.StyleName Then
+                    SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+                                       FaceStyle)
+                End If
+            End If
+        Next
+
+        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
                            ConstructionBaseStyle)
-            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
                        ThreadBaseStyle)
-            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
                        WeldbeadBaseStyle)
-            SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
                        CurveBaseStyle)
 
-            tf = ConstructionBaseStyle Is Nothing
-            tf = tf Or (ThreadBaseStyle Is Nothing)
-            tf = tf Or (WeldbeadBaseStyle Is Nothing)
-            tf = tf Or (CurveBaseStyle Is Nothing)
+        tf = ConstructionBaseStyle Is Nothing
+        tf = tf Or (ThreadBaseStyle Is Nothing)
+        tf = tf Or (WeldbeadBaseStyle Is Nothing)
+        tf = tf Or (CurveBaseStyle Is Nothing)
 
-            If tf Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Some Color Manager base styles undefined.")
-            End If
-
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+        If tf Then
+            ErrorMessageList.Add("Some Color Manager base styles undefined.")
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
+        Return ErrorMessageList
     End Function
+
+    'Private Function SetActiveViewStyle(
+    '    ByRef SEDoc As SolidEdgeAssembly.AssemblyDocument,
+    '    ByRef SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
+    '    ) As List(Of String)
+
+    '    Dim ErrorMessageList As New List(Of String)
+
+    '    Dim Windows As SolidEdgeFramework.Windows
+    '    Dim Window As SolidEdgeFramework.Window
+    '    Dim View As SolidEdgeFramework.View
+    '    'Dim ViewStyles As SolidEdgeFramework.ViewStyles
+    '    'Dim ViewStyle As SolidEdgeFramework.ViewStyle
+    '    Dim ViewStyleName As String
+
+    '    Windows = SETemplateDoc.Windows
+    '    Window = CType(Windows.Item(1), SolidEdgeFramework.Window)
+    '    View = Window.View
+    '    ViewStyleName = View.Style
+
+    '    'ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+    '    'ViewStyle = ViewStyles.Item(ViewStyleName)
+
+    '    Windows = SEDoc.Windows
+    '    Window = CType(Windows.Item(1), SolidEdgeFramework.Window)
+    '    View = Window.View
+    '    View.Style = ViewStyleName
+
+    '    Return ErrorMessageList
+    'End Function
+
+
+    'Private Function UpdateFaceAndViewStylesFromTemplateInternal_OLD(
+    '    ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    'Dim TempErrorMessageList As New List(Of String)
+
+    '    Dim SETemplateDoc As SolidEdgeAssembly.AssemblyDocument
+    '    Dim Windows As SolidEdgeFramework.Windows
+    '    Dim Window As SolidEdgeFramework.Window
+    '    Dim View As SolidEdgeFramework.View
+    '    Dim ViewStyles As SolidEdgeFramework.ViewStyles
+    '    Dim ViewStyle As SolidEdgeFramework.ViewStyle
+    '    Dim FaceStyles As SolidEdgeFramework.FaceStyles
+    '    Dim FaceStyle As SolidEdgeFramework.FaceStyle
+
+    '    Dim TemplateFilename As String = Configuration("TextBoxTemplateAssembly")
+    '    Dim TemplateActiveStyleName As String = ""
+    '    Dim TempViewStyleName As String = ""
+    '    Dim ViewStyleAlreadyPresent As Boolean
+    '    Dim TemplateSkyboxName(5) As String
+    '    Dim msg As String = ""
+    '    Dim tf As Boolean = False
+
+    '    Dim TemplateConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim TemplateThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim TemplateWeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim TemplateCurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+
+    '    Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+    '    Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
+
+    '    ' Import face styles from template
+    '    SEDoc.ImportStyles(TemplateFilename, True)
+
+    '    SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeAssembly.AssemblyDocument)
+    '    SEApp.DoIdle()
+
+
+    '    ' Get the template base styles
+    '    SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+    '                               TemplateConstructionBaseStyle)
+    '    SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+    '                               TemplateThreadBaseStyle)
+    '    SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+    '                               TemplateWeldbeadBaseStyle)
+    '    SETemplateDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+    '                               TemplateCurveBaseStyle)
+    '    'MsgBox(TemplateConstructionBaseStyle.StyleName)
+
+    '    ' Update base styles in the document
+    '    FaceStyles = CType(SEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+
+    '    For Each FaceStyle In FaceStyles
+    '        If TemplateConstructionBaseStyle IsNot Nothing Then
+    '            If FaceStyle.StyleName = TemplateConstructionBaseStyle.StyleName Then
+    '                SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+    '                               FaceStyle)
+    '            End If
+    '        End If
+
+    '        If TemplateThreadBaseStyle IsNot Nothing Then
+    '            If FaceStyle.StyleName = TemplateThreadBaseStyle.StyleName Then
+    '                SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+    '                                   FaceStyle)
+    '            End If
+    '        End If
+
+    '        If TemplateWeldbeadBaseStyle IsNot Nothing Then
+    '            If FaceStyle.StyleName = TemplateWeldbeadBaseStyle.StyleName Then
+    '                SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+    '                                   FaceStyle)
+    '            End If
+    '        End If
+
+    '        If TemplateCurveBaseStyle IsNot Nothing Then
+    '            If FaceStyle.StyleName = TemplateCurveBaseStyle.StyleName Then
+    '                SEDoc.SetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+    '                                   FaceStyle)
+    '            End If
+    '        End If
+    '    Next
+
+    '    Windows = SETemplateDoc.Windows
+    '    For Each Window In Windows
+    '        View = Window.View
+    '        TemplateActiveStyleName = View.Style.ToString
+    '    Next
+
+    '    ViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+
+    '    For Each ViewStyle In ViewStyles
+    '        If ViewStyle.StyleName = TemplateActiveStyleName Then
+    '            For i As Integer = 0 To 5
+    '                TemplateSkyboxName(i) = ViewStyle.GetSkyboxSideFilename(i)
+    '            Next
+    '        End If
+    '    Next
+
+    '    SETemplateDoc.Close(False)
+    '    SEApp.DoIdle()
+
+    '    ' If a style by the same name exists in the target file, delete it.
+    '    ViewStyleAlreadyPresent = False
+    '    ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+    '    For Each ViewStyle In ViewStyles
+    '        If ViewStyle.StyleName = TemplateActiveStyleName Then
+    '            ViewStyleAlreadyPresent = True
+    '        Else
+    '            TempViewStyleName = ViewStyle.StyleName
+    '        End If
+    '    Next
+
+    '    SEApp.DoIdle()
+
+    '    Windows = SEDoc.Windows
+
+    '    If ViewStyleAlreadyPresent Then ' Hopefully deactivate the desired ViewStyle so it can be removed
+    '        For Each Window In Windows
+    '            View = Window.View
+    '            View.Style = TempViewStyleName
+    '        Next
+    '        ' ViewStyles can sometimes be flagged 'in use' even if they are not
+    '        Try
+    '            ViewStyles.Remove(TemplateActiveStyleName)
+    '        Catch ex As Exception
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("View style not updated")
+    '        End Try
+    '    End If
+
+    '    If ExitStatus = 0 Then
+    '        ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
+
+    '        For Each ViewStyle In ViewStyles
+    '            If ViewStyle.StyleName = TemplateActiveStyleName Then
+    '                ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
+    '                For i As Integer = 0 To 5
+    '                    ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
+    '                Next
+    '            End If
+    '        Next
+
+    '        For Each Window In Windows
+    '            View = Window.View
+    '            View.Style = TemplateActiveStyleName
+    '        Next
+
+    '        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyConstructionStyle,
+    '                       ConstructionBaseStyle)
+    '        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyThreadedCylindersStyle,
+    '                   ThreadBaseStyle)
+    '        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyWeldBeadStyle,
+    '                   WeldbeadBaseStyle)
+    '        SEDoc.GetBaseStyle(SolidEdgeAssembly.AssemblyBaseStylesConstants.seAssemblyCurveStyle,
+    '                   CurveBaseStyle)
+
+    '        tf = ConstructionBaseStyle Is Nothing
+    '        tf = tf Or (ThreadBaseStyle Is Nothing)
+    '        tf = tf Or (WeldbeadBaseStyle Is Nothing)
+    '        tf = tf Or (CurveBaseStyle Is Nothing)
+
+    '        If tf Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Some Color Manager base styles undefined.")
+    '        End If
+
+    '        If SEDoc.ReadOnly Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '        Else
+    '            SEDoc.Save()
+    '            SEApp.DoIdle()
+    '        End If
+    '    End If
+
+
+    '    'AllowOverrides
+    '    'AmbientBlue
+    '    ''AmbientColor
+    '    'AmbientGreen
+    '    ''AmbientIntensity
+    '    'AmbientRed
+    '    'AmbientShadows
+    '    'AntialiasLevel
+    '    ''AntialiasSurface
+    '    ''AntialiasWireframe
+    '    'BackgroundImageFile
+    '    'BackgroundMirrorX
+    '    'BackgroundMirrorY
+    '    'BackgroundType
+    '    'Bumpmaps
+    '    'CastShadows
+    '    'DepthFading
+    '    'DimPercentage
+    '    'DropShadow
+    '    'FloorReflection
+    '    'FocalLength
+    '    'HiddenLineMode
+    '    'HiddenLines
+    '    'HighQuality
+    '    ''IsBackgroundImageDisplayed
+    '    ''NumLights
+    '    ''Parent
+    '    'Perspective
+    '    'Reflections
+    '    'RenderMode
+    '    'RenderModeType
+    '    'Silhouettes
+    '    'SilhouettesEnabled
+    '    'SkyboxType
+    '    ''StyleID
+    '    ''StyleName
+    '    'Textures
+
+
+
+
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
+
+    'Private Function UpdateViewStyleProperties(
+    '    ByRef TemplateViewStyle As SolidEdgeFramework.ViewStyle,
+    '    ByRef DocViewStyle As SolidEdgeFramework.ViewStyle
+    '    ) As List(Of String)
+
+    '    Dim ErrorMessageList As New List(Of String)
+
+    '    DocViewStyle.AllowOverrides = TemplateViewStyle.AllowOverrides
+    '    DocViewStyle.AmbientBlue = TemplateViewStyle.AmbientBlue
+    '    DocViewStyle.AmbientGreen = TemplateViewStyle.AmbientGreen
+    '    DocViewStyle.AmbientRed = TemplateViewStyle.AmbientRed
+    '    DocViewStyle.AmbientShadows = TemplateViewStyle.AmbientShadows
+    '    DocViewStyle.AntialiasLevel = TemplateViewStyle.AntialiasLevel
+    '    DocViewStyle.BackgroundImageFile = TemplateViewStyle.BackgroundImageFile
+    '    DocViewStyle.BackgroundMirrorX = TemplateViewStyle.BackgroundMirrorX
+    '    DocViewStyle.BackgroundMirrorY = TemplateViewStyle.BackgroundMirrorY
+    '    DocViewStyle.BackgroundType = TemplateViewStyle.BackgroundType
+    '    DocViewStyle.Bumpmaps = TemplateViewStyle.Bumpmaps
+    '    DocViewStyle.CastShadows = TemplateViewStyle.CastShadows
+    '    DocViewStyle.DepthFading = TemplateViewStyle.DepthFading
+    '    DocViewStyle.DimPercentage = TemplateViewStyle.DimPercentage
+    '    DocViewStyle.DropShadow = TemplateViewStyle.DropShadow
+    '    DocViewStyle.FloorReflection = TemplateViewStyle.FloorReflection
+    '    DocViewStyle.FocalLength = TemplateViewStyle.FocalLength
+    '    DocViewStyle.HiddenLineMode = TemplateViewStyle.HiddenLineMode
+    '    DocViewStyle.HiddenLines = TemplateViewStyle.HiddenLines
+    '    DocViewStyle.HighQuality = TemplateViewStyle.HighQuality
+    '    DocViewStyle.Perspective = TemplateViewStyle.Perspective
+    '    DocViewStyle.Reflections = TemplateViewStyle.Reflections
+    '    DocViewStyle.RenderMode = TemplateViewStyle.RenderMode
+    '    DocViewStyle.RenderModeType = TemplateViewStyle.RenderModeType
+    '    DocViewStyle.Silhouettes = TemplateViewStyle.Silhouettes
+    '    DocViewStyle.SilhouettesEnabled = TemplateViewStyle.SilhouettesEnabled
+    '    'DocViewStyle.SkyboxType = TemplateViewStyle.SkyboxType
+    '    DocViewStyle.Textures = TemplateViewStyle.Textures
+
+    '    DocViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
+    '    For i As Integer = 0 To 5
+    '        DocViewStyle.SetSkyboxSideFilename(i, TemplateViewStyle.GetSkyboxSideFilename(i))
+    '    Next
+
+
+    '    Return ErrorMessageList
+    'End Function
 
 
     Public Function RemoveFaceStyleOverrides(
@@ -644,7 +1007,7 @@ Public Class AssemblyTasks
     End Function
 
 
-    Public Function FitIsometricView(
+    Public Function HideConstructions(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -657,7 +1020,7 @@ Public Class AssemblyTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf FitIsometricViewInternal,
+                                   AddressOf HideConstructionsInternal,
                                    CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
                                    Configuration,
                                    SEApp)
@@ -666,7 +1029,7 @@ Public Class AssemblyTasks
 
     End Function
 
-    Private Function FitIsometricViewInternal(
+    Private Function HideConstructionsInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -690,9 +1053,96 @@ Public Class AssemblyTasks
         Else
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.StartCommand(CType(40080, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Sketches
+            SEApp.StartCommand(CType(40081, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Reference Axes
+            SEApp.StartCommand(CType(40082, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants))
         End If
 
-        SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '' SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        'SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewTrimetricView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        'SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
+
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function FitPictorialView(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf FitPictorialViewInternal,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function FitPictorialViewInternal(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
+        Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
+        Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
+        'Dim Occurrence As SolidEdgeAssembly.Occurrence
+
+        If Occurrences.Count = 0 Then
+            AsmRefPlanes.Visible = True
+            For Each AsmRefPlane In AsmRefPlanes
+                AsmRefPlane.Visible = False
+                AsmRefPlane.Visible = True
+            Next
+            'Else
+            '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
+            '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
+            '    SEApp.StartCommand(CType(40080, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Sketches
+            '    SEApp.StartCommand(CType(40081, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Reference Axes
+            '    SEApp.StartCommand(CType(40082, SolidEdgeFramework.SolidEdgeCommandConstants))
+            '    SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants))
+            '    SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants))
+        End If
+
+        If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
+            SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        End If
+        If Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
+            SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewDimetricView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        End If
+        If Configuration("RadioButtonPictorialViewTrimetric").ToLower = "true" Then
+            SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewTrimetricView, SolidEdgeFramework.SolidEdgeCommandConstants))
+        End If
+
+        'RadioButtonPictorialViewDimetric = True
+        'RadioButtonPictorialViewIsometric = False
+        ' SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
+
         SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         If SEDoc.ReadOnly Then
@@ -749,8 +1199,15 @@ Public Class AssemblyTasks
         Dim Member As SolidEdgeAssembly.AssemblyFamilyMember
         Dim msg As String = ""
 
-        ' ComboBoxSaveAsAssemblyFiletype
-        ' Format: Parasolid (*.xt), IGES (*.igs)
+        Dim ImageExtensions As New List(Of String)
+
+        ImageExtensions.Add(".bmp")
+        ImageExtensions.Add(".jpg")
+        ImageExtensions.Add(".tif")
+
+        'Configuration("ComboBoxSaveAsAssemblyFileType") format examples
+        'IGES (*.igs)
+        'Parasolid text (*.x_b)
         NewExtension = Configuration("ComboBoxSaveAsAssemblyFileType")
         NewExtension = Split(NewExtension, Delimiter:="*")(1)
         NewExtension = Split(NewExtension, Delimiter:=")")(0)
@@ -767,8 +1224,18 @@ Public Class AssemblyTasks
             End If
 
             Try
-                SEDoc.SaveAs(NewFilename)
-                SEApp.DoIdle()
+                If Not ImageExtensions.Contains(NewExtension) Then
+                    SEDoc.SaveAs(NewFilename)
+                    SEApp.DoIdle()
+                Else
+                    Dim Window As SolidEdgeFramework.Window
+                    Dim View As SolidEdgeFramework.View
+
+                    Window = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                    View = Window.View
+
+                    View.SaveAsImage(NewFilename)
+                End If
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
@@ -798,8 +1265,18 @@ Public Class AssemblyTasks
                 End If
 
                 Try
-                    SEDoc.SaveAs(NewFilename)
-                    SEApp.DoIdle()
+                    If Not ImageExtensions.Contains(NewExtension) Then
+                        SEDoc.SaveAs(NewFilename)
+                        SEApp.DoIdle()
+                    Else
+                        Dim Window As SolidEdgeFramework.Window
+                        Dim View As SolidEdgeFramework.View
+
+                        Window = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                        View = Window.View
+
+                        View.SaveAsImage(NewFilename)
+                    End If
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))

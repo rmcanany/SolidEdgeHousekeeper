@@ -64,8 +64,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "RemoveFaceStyleOverrides"
                     ErrorMessage = task.Proxy.RemoveFaceStyleOverrides(SEDoc, Configuration, SEApp)
-                Case "FitIsometricView"
-                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                Case "HideConstructions"
+                    ErrorMessage = task.Proxy.HideConstructions(SEDoc, Configuration, SEApp)
+                Case "FitPictorialView"
+                    ErrorMessage = task.Proxy.FitPictorialView(SEDoc, Configuration, SEApp)
                 'Case "SaveAsSTEP"
                 '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
@@ -123,8 +125,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
-                Case "FitIsometricView"
-                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                Case "HideConstructions"
+                    ErrorMessage = task.Proxy.HideConstructions(SEDoc, Configuration, SEApp)
+                Case "FitPictorialView"
+                    ErrorMessage = task.Proxy.FitPictorialView(SEDoc, Configuration, SEApp)
                 'Case "SaveAsSTEP"
                 '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
@@ -164,6 +168,8 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
+                Case "UpdateDesignForCost"
+                    ErrorMessage = task.Proxy.UpdateDesignForCost(SEDoc, Configuration, SEApp)
                 Case "FailedOrWarnedFeatures"
                     ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
                 Case "SuppressedOrRolledBackFeatures"
@@ -186,8 +192,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
                 Case "UpdateFaceAndViewStylesFromTemplate"
                     ErrorMessage = task.Proxy.UpdateFaceAndViewStylesFromTemplate(SEDoc, Configuration, SEApp)
-                Case "FitIsometricView"
-                    ErrorMessage = task.Proxy.FitIsometricView(SEDoc, Configuration, SEApp)
+                Case "HideConstructions"
+                    ErrorMessage = task.Proxy.HideConstructions(SEDoc, Configuration, SEApp)
+                Case "FitPictorialView"
+                    ErrorMessage = task.Proxy.FitPictorialView(SEDoc, Configuration, SEApp)
                 'Case "SaveAsSTEP"
                 '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
@@ -239,12 +247,12 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingViews"
                     ErrorMessage = task.Proxy.UpdateDrawingViews(SEDoc, Configuration, SEApp)
+                Case "MoveDrawingToNewTemplate"
+                    ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingBorderFromTemplate"
                     ErrorMessage = task.Proxy.UpdateDrawingBorderFromTemplate(SEDoc, Configuration, SEApp)
                 Case "UpdateDimensionStylesFromTemplate"
                     ErrorMessage = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
-                Case "MoveDrawingToNewTemplate"
-                    ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
                 Case "FitView"
                     ErrorMessage = task.Proxy.FitView(SEDoc, Configuration, SEApp)
                 'Case "SaveAsPDF"

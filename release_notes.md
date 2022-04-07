@@ -2,13 +2,62 @@
 
 Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it here:
 
-https://github.com/rmcanany/SolidEdgeHousekeeper
+https://github.com/rmcanany/SolidEdgeHousekeeper  (Scroll past the file list for the README)
 
-(Scroll down on that page for a description of what it can do and how to use it.)
+Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without extensive testing on backups first.
+Feel free to report bugs and/or ideas for improvement.
 
-Feel free to report bugs and/or ideas for improvement, either here or on GitHub.
+
+## v0.1.9 Enhancements/Fixes
+
+### Update drawing border from template
+
+Added the ability to do a simple drawing border replacement.
+
+Unlike the similar task 'Move drawing to new template', this only replaces the background sheet.  It does not attempt to update styles or anything else.
+
+### Update design for cost
+
+Added the ability to update Sheetmetal Design For Cost properties (Thank you @MonkTheOCD_Engie).  
+
+An annoyance of this command is that it needs to open the DesignForCost Edgebar pane, but is not able to close it.  The user must manually close the pane in a subsequent Sheetmetal session.  The state of the pane is system-wide, not per-document, so closing it is a one-time action.  
+
+### Fit pictorial view
+
+Added options for dimetric and trimetric views.  Previously only isometric was supported.  The option is set on the Configuration Tab.
+
+Moved the 'Hide constructions' functionality to its own task.  Previously it was part of the 'Fit iso view' task.
+
+Fixed an issue where some construction elements were not hidden correctly in assemblies (Thank you @Fiorini).
+
+### Save As
+
+For model files, added bitmap image output formats.  
+
+For draft files, added an optional watermark.  It can be positioned and scaled as desired.  The original file is unchanged.
+
+### Update material from material table
+
+The log file now reports which material properties were updated.  Previous behavior was to simply state that an update had occurred.
+
+Disabled checking the seVSPlusStyle property.
+
+### Update face and view styles from template
+
+Fixed an issue where existing view styles were sometimes incorrectly marked 'in use' and could not be changed.
+
+Fixed an issue where the Color Manager base styles were not updated.
+
+### File names
+
+Fixed an issue where a tilde '~' in the file name caused an error.  
+
+Added a check for path names exceeding the maximum length.
+
+### README font size
+
+Changed the font to match that of the file list box.  Previously it was set to the system default.
 
 
 ## v0.1.8 Enhancements/Fixes

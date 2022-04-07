@@ -1663,6 +1663,56 @@ Public Class DraftTasks
             NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
         End If
 
+        If Configuration("CheckBoxWatermark") = "True" Then
+            Dim Sections As SolidEdgeDraft.Sections
+            Dim Section As SolidEdgeDraft.Section
+            Dim SectionSheets As SolidEdgeDraft.SectionSheets
+            Dim OriginalSheet As SolidEdgeDraft.Sheet
+            Dim Sheet As SolidEdgeDraft.Sheet
+            Dim Watermark As SolidEdgeFrameworkSupport.Image2d
+            Dim SheetWindow As SolidEdgeDraft.SheetWindow
+
+            Dim ImageFilename As String = Configuration("TextBoxWatermarkFilename")
+            Dim ImageX As Double
+            Dim ImageY As Double
+            Dim X As Double = CDbl(Configuration("TextBoxWatermarkX"))
+            Dim Y As Double = CDbl(Configuration("TextBoxWatermarkY"))
+            Dim ImageScale As Double = CDbl(Configuration("TextBoxWatermarkScale"))
+            Dim SheetW As Double
+            Dim SheetH As Double
+
+            OriginalSheet = SEDoc.ActiveSheet
+            Sections = SEDoc.Sections
+            Section = Sections.BackgroundSection
+            SectionSheets = Section.Sheets
+
+            For Each Sheet In SectionSheets
+                Sheet.Activate()
+                SheetW = Sheet.SheetSetup.SheetWidth
+                SheetH = Sheet.SheetSetup.SheetHeight
+                Watermark = Sheet.Images2d.AddImage(False, ImageFilename)
+                Watermark.Height = ImageScale * Watermark.Height
+                Watermark.ShowBorder = False
+                ImageX = X * SheetW - Watermark.Width / 2
+                ImageY = Y * SheetH - Watermark.Height / 2
+                ' Watermark.GetOrigin(ImageX, ImageY)
+                Watermark.SetOrigin(ImageX, ImageY)
+                'msg = String.Format("{0}{1}{2}", msg, Sheet.Name, vbCrLf)
+                'msg = String.Format("{0}{1} {2}{3}", msg, SheetW, SheetH, vbCrLf)
+                'msg = String.Format("{0}{1} {2}{3}", msg, ImageX, ImageY, vbCrLf)
+                'MsgBox(msg)
+                SEApp.DoIdle()
+            Next
+
+            OriginalSheet.Activate()
+            SEApp.DoIdle()
+
+            SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+            SheetWindow.DisplayBackgroundSheetTabs = False
+            SEApp.DoIdle()
+
+        End If
+
         'Capturing a fault to update ExitStatus
         Try
             SEDoc.SaveAs(NewFilename)

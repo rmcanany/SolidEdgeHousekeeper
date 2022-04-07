@@ -87,6 +87,8 @@ Public Class MaterialDoctorPart
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Dim s As String
+
         Dim MatTable As SolidEdgeFramework.MatTable
 
         Dim MaterialLibList As Object = Nothing
@@ -137,12 +139,13 @@ Public Class MaterialDoctorPart
                     If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
 
                         ' Names match, check if their properties do.
-                        If Not MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary) Then
-
+                        s = MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)
+                        If s.Count > 0 Then
                             ' Properties do not match.  Update the document's material to match the library version.
                             MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("'{0}' was updated", CurrentMaterialName))
+                            'ErrorMessageList.Add(String.Format("'{0}' updated: {1}", CurrentMaterialName, s))
+                            ErrorMessageList.Add(String.Format("'{0}' updated properties: {1}", MatTableMaterial.ToString, s))
                         End If
 
                         ' Face styles are not always updated, especially on imported files.
@@ -214,7 +217,9 @@ Public Class MaterialDoctorPart
         SEDoc As SolidEdgePart.PartDocument,
         MatTable As SolidEdgeFramework.MatTable,
         MatTableMaterial As Object,
-        ActiveMaterialLibrary As String) As Boolean
+        ActiveMaterialLibrary As String) As String
+
+        Dim ErrorMessage As String = ""
 
         Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
         Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
@@ -222,6 +227,9 @@ Public Class MaterialDoctorPart
         Dim LibPropValue As Object = Nothing
 
         For Each MatTableProp In MatTableProps
+            If MatTableProp = SolidEdgeFramework.MatTablePropIndex.seVSPlusStyle Then
+                Continue For
+            End If
             ' This function populates 'LibPropValue'
             MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
 
@@ -232,18 +240,30 @@ Public Class MaterialDoctorPart
             If (DocPropValue.GetType = GetType(Double)) And (LibPropValue.GetType = GetType(Double)) Then
                 ' Double types may have insignificant differences.
                 If Not CloseEnough(CType(DocPropValue, Double), CType(LibPropValue, Double)) Then
-                    Return False
+                    'Return False
+                    If ErrorMessage.Count = 0 Then
+                        ErrorMessage = String.Format(" {0}", MatTableProp)
+                    Else
+                        ErrorMessage = String.Format("{0}, {1}", ErrorMessage, MatTableProp)
+                    End If
                 End If
             Else
                 If CType(DocPropValue, String) <> CType(LibPropValue, String) Then
-                    Return False
+                    'Return False
+                    If ErrorMessage.Count = 0 Then
+                        ErrorMessage = String.Format(" {0}", MatTableProp)
+                    Else
+                        ErrorMessage = String.Format("{0}, {1}", ErrorMessage, MatTableProp)
+                    End If
                 End If
             End If
             DocPropValue = Nothing
             LibPropValue = Nothing
         Next
 
-        Return True
+        ErrorMessage = ErrorMessage.Replace(" se", " ")
+
+        Return ErrorMessage
     End Function
 
     Private Function CurrentMaterialFaceStyle(

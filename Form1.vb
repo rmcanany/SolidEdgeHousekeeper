@@ -173,6 +173,7 @@ Public Class Form1
 
     End Sub
 
+
     Private Function CheckStartConditions() As String
         Dim msg As String = ""
         Dim SaveMsg As String = ""
@@ -208,17 +209,19 @@ Public Class Form1
 
         For Each Filename As String In ListBoxFiles.Items
             If Filename.StartsWith("~") Then
-                Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                'Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
+                Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
             End If
             If Not FileIO.FileSystem.FileExists(Filename) Then
-                msg += "    Some files have been renamed or deleted" + Chr(13)
+                msg += "    File not found, or Path exceeds maximum length" + Chr(13)
+                msg += "    " + Filename + Chr(13)
                 ListBoxFilesOutOfDate = True
                 Exit For
             End If
         Next
 
         If ListBoxFilesOutOfDate Then
-            msg += "    Update the file list" + Chr(13)
+            msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
         ElseIf ListBoxFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
@@ -247,6 +250,7 @@ Public Class Form1
 
         ' For the selected tasks, see if outside information, such as a template file, is required.
         ' If so, verify that the outside information is valid.
+
         For Each Label As String In CheckedListBoxAssembly.CheckedItems
             If LabelToActionAssembly(Label).RequiresTemplate Then
                 If Not FileIO.FileSystem.FileExists(TextBoxTemplateAssembly.Text) Then
@@ -315,7 +319,21 @@ Public Class Form1
                     End If
                 End If
             End If
+
+            If LabelToActionAssembly(Label).RequiresPictorialView Then
+                tf = RadioButtonPictorialViewDimetric.Checked
+                tf = tf Or RadioButtonPictorialViewIsometric.Checked
+                tf = tf Or RadioButtonPictorialViewTrimetric.Checked
+
+                If Not tf Then
+                    If Not msg.Contains("Select a pictorial view orientation on the Configuration tab") Then
+                        msg += "    Select a pictorial view orientation on the Configuration tab"
+                    End If
+                End If
+            End If
         Next
+
+        ' Part Tasks
 
         For Each Label As String In CheckedListBoxPart.CheckedItems
             If LabelToActionPart(Label).RequiresTemplate Then
@@ -385,8 +403,21 @@ Public Class Form1
                 End If
             End If
 
+            If LabelToActionPart(Label).RequiresPictorialView Then
+                tf = RadioButtonPictorialViewDimetric.Checked
+                tf = tf Or RadioButtonPictorialViewIsometric.Checked
+                tf = tf Or RadioButtonPictorialViewTrimetric.Checked
+
+                If Not tf Then
+                    If Not msg.Contains("Select a pictorial view orientation on the Configuration tab") Then
+                        msg += "    Select a pictorial view orientation on the Configuration tab"
+                    End If
+                End If
+            End If
 
         Next
+
+        ' Sheetmetal Tasks
 
         For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
             If LabelToActionSheetmetal(Label).RequiresTemplate Then
@@ -474,8 +505,21 @@ Public Class Form1
                 End If
             End If
 
+            If LabelToActionSheetmetal(Label).RequiresPictorialView Then
+                tf = RadioButtonPictorialViewDimetric.Checked
+                tf = tf Or RadioButtonPictorialViewIsometric.Checked
+                tf = tf Or RadioButtonPictorialViewTrimetric.Checked
+
+                If Not tf Then
+                    If Not msg.Contains("Select a pictorial view orientation on the Configuration tab") Then
+                        msg += "    Select a pictorial view orientation on the Configuration tab"
+                    End If
+                End If
+            End If
 
         Next
+
+        ' Draft Tasks
 
         For Each Label As String In CheckedListBoxDraft.CheckedItems
             If LabelToActionDraft(Label).RequiresTemplate Then
@@ -881,6 +925,20 @@ Public Class Form1
             TextBoxFileSearch.Enabled = False
         End If
 
+        If CheckBoxWatermark.Checked Then
+            ButtonWatermark.Enabled = True
+            TextBoxWatermarkFilename.Enabled = True
+            TextBoxWatermarkScale.Enabled = True
+            TextBoxWatermarkX.Enabled = True
+            TextBoxWatermarkY.Enabled = True
+        Else
+            ButtonWatermark.Enabled = False
+            TextBoxWatermarkFilename.Enabled = False
+            TextBoxWatermarkScale.Enabled = False
+            TextBoxWatermarkX.Enabled = False
+            TextBoxWatermarkY.Enabled = False
+        End If
+
     End Sub
 
     Private Sub CheckOrUncheckAll(ByVal CheckedListBoxX As CheckedListBox)
@@ -1218,6 +1276,18 @@ Public Class Form1
         UpdateListBoxFiles()
     End Sub
 
+    Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
+        'OpenFileDialog1.Filter = "Image Files(*.bmp;*.jpg;*.png;*.tif)|*.BMP;*.JPG;*.GIF"
+        OpenFileDialog1.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
+        OpenFileDialog1.Multiselect = False
+        OpenFileDialog1.FileName = ""
+        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
+            TextBoxWatermarkFilename.Text = OpenFileDialog1.FileName
+            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        End If
+        ReconcileFormChanges()
+
+    End Sub
 
 
     ' FORM LOAD
@@ -1369,6 +1439,9 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
+    Private Sub CheckBoxWatermark_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWatermark.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
 
 
 
@@ -1582,6 +1655,23 @@ Public Class Form1
         ReconcileFormChanges()
 
     End Sub
+
+    Private Sub TextBoxWatermarkFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxWatermarkScale_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
+        ReconcileFormChanges()
+    End Sub
+    Private Sub TextBoxWatermarkX_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
+        ReconcileFormChanges()
+    End Sub
+    Private Sub TextBoxWatermarkY_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
+        ReconcileFormChanges()
+    End Sub
+
+
+
 
 
 

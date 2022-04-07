@@ -93,11 +93,27 @@ Partial Class Form1
         tf = tf Or tb.Name.ToLower.Contains("toplevelassembly")
         tf = tf Or tb.Name.ToLower.Contains("externalprogram")
         tf = tf Or tb.Name.ToLower.Contains("fastsearchscope")
+        tf = tf Or tb.Name.ToLower.Contains("watermarkfilename")
         If tf Then
             If FileIO.FileSystem.FileExists(Value) Then
                 tb.Text = Value
             Else
                 tb.Text = ""
+            End If
+        End If
+
+        tf = tb.Name.ToLower.Contains("watermarkscale")
+        tf = tf Or tb.Name.ToLower.Contains("watermarkx")
+        tf = tf Or tb.Name.ToLower.Contains("watermarky")
+        If tf Then
+            If Value = "" Then
+                tb.Text = "0.5"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "0.5"
+                End Try
             End If
         End If
 
@@ -162,6 +178,10 @@ Partial Class Form1
         ' Assembly
         FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
         FileTypesString += ":OBJ (*.obj):STL (*.stl)"
+        FileTypesString += ":bmp (*.bmp):jpg (*.jpg):tif (*.tif)"
+        'Image files do not operate on the document
+        'Solid Edge Framework Type Library > View Object : SaveAsImage Method
+        'FileTypesString += ":bmp (*.bmp)"
 
         ComboBoxSaveAsAssemblyFileType.Items.Clear()
         For Each FileType In Split(FileTypesString, Delimiter:=":")
@@ -509,12 +529,12 @@ Partial Class Form1
         CheckBoxList.Add(CheckedListBoxSheetmetal)
         CheckBoxList.Add(CheckedListBoxDraft)
 
-        Names.Add("### Assembly")
-        Names.Add("### Part")
-        Names.Add("### Sheetmetal")
-        Names.Add("### Draft")
+        Names.Add("### ASSEMBLY")
+        Names.Add("### PART")
+        Names.Add("### SHEETMETAL")
+        Names.Add("### DRAFT")
 
-        msg = "# Solid Edge Housekeeper v0.1.8.0"
+        msg = "# Solid Edge Housekeeper v0.1.9.0"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -533,7 +553,8 @@ Partial Class Form1
         readme_tab.Add(msg)
 
         msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
-        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller]"
+        msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], "
+        msg += "@Fiorini"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -720,7 +741,7 @@ Partial Class Form1
         msg += "finds draft files with 'Where Used'.  "
         readme_tab.Add(msg)
 
-        msg = "A bottom up search requires a valid Fast Search Scope filename, "
+        msg = vbCrLf + "A bottom up search requires a valid Fast Search Scope filename, "
         msg += "(e.g., C:\Program Files\Siemens\Solid Edge 2021\Preferences\FastSearchScope.txt).  "
         msg += "It set on the Configuration tab, and tells the program "
         msg += "if the input directory is on an indexed drive.  "
@@ -733,7 +754,7 @@ Partial Class Form1
         msg += "I don't know how it works; my son did that part.  "
         readme_tab.Add(msg)
 
-        msg = "A top down search can optionally report files with no links to the top level assembly.  "
+        msg = vbCrLf + "A top down search can optionally report files with no links to the top level assembly.  "
         readme_tab.Add(msg)
 
         msg = vbCrLf + "Most file selection options occur as soon as they are selected.  "
@@ -849,34 +870,34 @@ Partial Class Form1
         msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
         readme_github.Add(msg)
 
-        msg = ""
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
-        msg = "## ABOUT ME"
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
+        'msg = ""
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
+        'msg = "## ABOUT ME"
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
 
-        msg = "A coworker saw this program and said, 'Do you have Obsessive Compulsive Disorder?'  "
-        msg += "I said, 'There's nothing disorderly about it.'  "
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
+        'msg = "A coworker saw this program and said, 'Do you have Obsessive Compulsive Disorder?'  "
+        'msg += "I said, 'There's nothing disorderly about it.'  "
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
 
-        msg = ""
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
-        msg = "I had a colonoscopy the other day.  "
-        msg += "Afterwards the nurse said, 'You look like John Lithgow.'  "
-        msg += "I said, 'You mean my face?'  "
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
+        'msg = ""
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
+        'msg = "I had a colonoscopy the other day.  "
+        'msg += "Afterwards the nurse said, 'You look like John Lithgow.'  "
+        'msg += "I said, 'You mean my face?'  "
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
 
-        msg = ""
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
-        msg = "The HR Department asked for our preferred pronouns.  "
-        msg += "I put 'we/us'.  "
-        readme_github.Add(msg)
-        readme_tab.Add(msg)
+        'msg = ""
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
+        'msg = "The HR Department asked for our preferred pronouns.  "
+        'msg += "I put 'we/us'.  "
+        'readme_github.Add(msg)
+        'readme_tab.Add(msg)
 
         msg = ""
         readme_github.Add(msg)
@@ -886,6 +907,10 @@ Partial Class Form1
         For Each s As String In readme_tab
             readme_tab_formatted.Add(s.Replace("# ", "").Replace("#", ""))
         Next
+        If Not TextBoxReadme.Font.Size = CSng(TextBoxFontSize.Text) Then
+            TextBoxReadme.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
+        End If
+
         TextBoxReadme.Lines = readme_tab_formatted.ToArray
 
         ' The readme file is not needed on the user's machine.  

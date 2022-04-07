@@ -1,9 +1,9 @@
-# Solid Edge Housekeeper v0.1.8.0
+# Solid Edge Housekeeper v0.1.9.0
 Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller]
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
@@ -46,12 +46,13 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
 ## DETAILS
 
 ### TESTS AND ACTIONS
-### Assembly
+### ASSEMBLY
     Open/Save
     Activate and update all
     Update face and view styles from template
     Remove face style overrides
-    Fit isometric view
+    Hide constructions
+    Fit pictorial view
     Missing drawing
     Occurrence missing files
     Occurrence outside project directory
@@ -62,12 +63,13 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Interactive edit
     Run external program
     Property find replace
-### Part
+### PART
     Open/Save
     Update insert part copies
     Update material from material table
     Update face and view styles from template
-    Fit isometric view
+    Hide constructions
+    Fit pictorial view
     Missing drawing
     Failed or warned features
     Suppressed or rolled back features
@@ -79,12 +81,14 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Interactive edit
     Run external program
     Property find replace
-### Sheetmetal
+### SHEETMETAL
     Open/Save
     Update insert part copies
     Update material from material table
     Update face and view styles from template
-    Fit isometric view
+    Update design for cost
+    Hide constructions
+    Fit pictorial view
     Missing drawing
     Failed or warned features
     Suppressed or rolled back features
@@ -99,10 +103,11 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Interactive edit
     Run external program
     Property find replace
-### Draft
+### DRAFT
     Open/Save
     Update drawing views
     Move drawing to new template
+    Update drawing border from template
     Fit view
     Drawing views missing file
     Drawing views out of date
@@ -115,11 +120,4 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
 
 ## CODE ORGANIZATION
 Processing starts in Form1.vb.  A short description of the code's organization can be found there.
-
-## ABOUT ME
-A coworker saw this program and said, 'Do you have Obsessive Compulsive Disorder?'  I said, 'There's nothing disorderly about it.'  
-
-I had a colonoscopy the other day.  Afterwards the nurse said, 'You look like John Lithgow.'  I said, 'You mean my face?'  
-
-The HR Department asked for our preferred pronouns.  I put 'we/us'.  
 

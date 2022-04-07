@@ -17,6 +17,8 @@ Public Class LabelToAction
         Public Property RequiresSaveAsFlatDXFOutputDirectory As Boolean
         Public Property RequiresFindReplaceFields As Boolean
         Public Property RequiresPrinter As Boolean
+        Public Property RequiresPictorialView As Boolean
+
 
 
     End Class
@@ -50,7 +52,8 @@ Public Class LabelToAction
                             Optional RequiresExternalProgram As Boolean = False,
                             Optional RequiresSaveAsFlatDXFOutputDirectory As Boolean = False,
                             Optional RequiresFindReplaceFields As Boolean = False,
-                            Optional RequiresPrinter As Boolean = False)
+                            Optional RequiresPrinter As Boolean = False,
+                            Optional RequiresPictorialView As Boolean = False)
 
         Entry.TaskName = TaskName
         Entry.HelpText = HelpText
@@ -65,6 +68,7 @@ Public Class LabelToAction
         Entry.RequiresSaveAsFlatDXFOutputDirectory = RequiresSaveAsFlatDXFOutputDirectory
         Entry.RequiresFindReplaceFields = RequiresFindReplaceFields
         Entry.RequiresPrinter = RequiresPrinter
+        Entry.RequiresPictorialView = RequiresPictorialView
 
         Me(LabelText) = Entry
 
@@ -74,7 +78,7 @@ Public Class LabelToAction
         Dim HelpString As String
 
         Dim OpenSave As New L2A
-        HelpString = "    Open and save a document."
+        HelpString = "    Open a document and save in the current version."
         PopulateList(OpenSave,
                      "Open/Save",
                      "OpenSave",
@@ -111,13 +115,22 @@ Public Class LabelToAction
                      HelpString,
                      RequiresSave:=True)
 
-        Dim FitIsometricView As New L2A
-        HelpString = "    Hides reference planes, maximizes the window, sets the view to iso, and does a fit."
-        PopulateList(FitIsometricView,
-                     "Fit isometric view",
-                     "FitIsometricView",
+        Dim HideConstructions As New L2A
+        HelpString = "    Hides all non-model elements such as reference planes, PMI dimensions, etc."
+        PopulateList(HideConstructions,
+                     "Hide constructions",
+                     "HideConstructions",
                      HelpString,
                      RequiresSave:=True)
+
+        Dim FitPictorialView As New L2A
+        HelpString = "    Maximizes the window, sets the view orientation, and does a fit." + vbCrLf
+        HelpString += "    Select the desired orientation on the Configuration Tab."
+        PopulateList(FitPictorialView,
+                     "Fit pictorial view",
+                     "FitPictorialView",
+                     HelpString,
+                     RequiresSave:=True, RequiresPictorialView:=True)
 
         Dim MissingDrawing As New L2A
         HelpString = "    Assumes drawing has the same name as the model, and is in the same directory"
@@ -261,13 +274,21 @@ Public Class LabelToAction
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True)
 
-        Dim FitIsometricView As New L2A
+        Dim HideConstructions As New L2A
         HelpString = "    Same as the assembly command of the same name."
-        PopulateList(FitIsometricView,
-                     "Fit isometric view",
-                     "FitIsometricView",
+        PopulateList(HideConstructions,
+                     "Hide constructions",
+                     "HideConstructions",
                      HelpString,
                      RequiresSave:=True)
+
+        Dim FitPictorialView As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(FitPictorialView,
+                     "Fit pictorial view",
+                     "FitPictorialView",
+                     HelpString,
+                     RequiresSave:=True, RequiresPictorialView:=True)
 
         Dim MissingDrawing As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -389,13 +410,34 @@ Public Class LabelToAction
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True)
 
-        Dim FitIsometricView As New L2A
-        HelpString = "    Same as the part command of the same name."
-        PopulateList(FitIsometricView,
-                     "Fit isometric view",
-                     "FitIsometricView",
+        Dim UpdateDesignForCost As New L2A
+        HelpString = "    Updates DesignForCost and saves the document." + vbCrLf
+        HelpString += "    An annoyance of this command is that it opens the "
+        HelpString += "DesignForCost Edgebar pane, but is not able to close it.  "
+        HelpString += "The user must manually close the pane in an interactive Sheetmetal session.  "
+        HelpString += "The state of the pane is system-wide, not per-document, "
+        HelpString += "so closing it is a one-time action.  "
+        PopulateList(UpdateDesignForCost,
+                     "Update design for cost",
+                     "UpdateDesignForCost",
                      HelpString,
                      RequiresSave:=True)
+
+        Dim HideConstructions As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(HideConstructions,
+                     "Hide constructions",
+                     "HideConstructions",
+                     HelpString,
+                     RequiresSave:=True)
+
+        Dim FitPictorialView As New L2A
+        HelpString = "    Same as the assembly command of the same name."
+        PopulateList(FitPictorialView,
+                     "Fit pictorial view",
+                     "FitPictorialView",
+                     HelpString,
+                     RequiresSave:=True, RequiresPictorialView:=True)
 
         Dim MissingDrawing As New L2A
         HelpString = "    Same as the assembly command of the same name."
@@ -550,6 +592,17 @@ Public Class LabelToAction
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True, IncompatibleWithOtherTasks:=True)
 
+        Dim UpdateDrawingBorderFromTemplate As New L2A
+        HelpString = "    Replaces the background border with that of the Draft template specified on "
+        HelpString += "the Configuration tab." + vbCrLf
+        HelpString += "    In contrast to MoveDrawingToNewTemplate, this command only replaces the border.  "
+        HelpString += "It does not attempt to update styles or anything else."
+        PopulateList(UpdateDrawingBorderFromTemplate,
+                     "Update drawing border from template",
+                     "UpdateDrawingBorderFromTemplate",
+                     HelpString,
+                     RequiresTemplate:=True, RequiresSave:=True)
+
         Dim FitView As New L2A
         HelpString = "    Same as the assembly command of the same name."
         PopulateList(FitView,
@@ -587,7 +640,13 @@ Public Class LabelToAction
                      HelpString)
 
         Dim SaveAs As New L2A
-        HelpString = "    Same as the assembly command of the same name."
+        HelpString = "    Same as the assembly command of the same name." + vbCrLf
+        HelpString += "    Optionally includes a watermark image on the output.  For the watermark, "
+        HelpString += "set X and Y to position the image, and Scale to change its size.  "
+        HelpString += "The X and Y values are fractions of the sheet's "
+        HelpString += "width and height, respectively.  "
+        HelpString += "So, (0,0) means lower left, (0.5,0.5) means centered, etc.  " + vbCrLf
+        HelpString += "    Note some formats may not support bitmap output."
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
