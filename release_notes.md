@@ -6,7 +6,112 @@ https://github.com/rmcanany/SolidEdgeHousekeeper  (Scroll past the file list for
 
 Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Feel free to report bugs and/or ideas for improvement.
+Feel free to report bugs and/or ideas for improvement on the Solid Edge Community Forum.  https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
+
+
+## v0.1.10 Enhancements/Fixes
+
+### Run external program 
+
+Added the ability to run VBScript files (Thank you @Derek G).  These are simple text files that do not require the user to install/learn Visual Studio.
+
+Added an option to automatically save the file after the macro runs (Thank you @Chris42).  This opens up the use of `Run external program` to many macros that were not designed with Housekeeper in mind.
+
+Added new sample code to the HousekeeperExternalPrograms repo.  https://github.com/rmcanany/HousekeeperExternalPrograms
+
+-- BreakExcelLinks and AssemblyReport shows two examples of VBScript code (Thank you @Derek G, @wku).
+
+-- FitIsoView shows how to parse Housekeeper's `defaults.txt` file.
+
+
+### Disable graphics display  
+
+Added an option to not display graphics during processing (Thank you @Jason1607436093479).  Speed up is approximately 2X.  One possible drawback is you don't look nearly as busy when your boss walks up and sees you playing on your phone.
+
+
+### Expose variables & Expose variable missing 
+
+Added the ability to 'expose' entries in the variable table (Thank you @MonkTheOCDEngie).  Also added a check for variable presence.  The variables are entered in a comma-delimited list on each task tab, e.g., `Flat_Pattern_Model_CutSizeX, Flat_Pattern_Model_CutSizeY, Mass`.
+
+
+### Parts list missing
+
+Added a task to check for the presence of a parts list in a Draft file.
+
+
+### Save as
+
+Added an output directory option, `Use subdirectory formula` (Thank you @SeanCresswell).  The formula is a combination of free text and variable names.  The variable name format is similar to Property Text in a Callout, for example `LASER_%{System.Material}_%{Custom.Material Thickness}`.  For more information, in particular for Draft files, see the Readme for `Save As`.
+
+Added `.png` as an output format.  Since Solid Edge does not support it (as of SE2021), the file is first saved as a `.jpg`, then converted.  The converter is the open source image utility `ffmpeg`, which is included with Housekeeper.  You can read more about it here: https://ffmpeg.org/about.html
+
+Added an option, `Save as image -- Crop to model size`.  The output is saved with the aspect ratio of the model, rather than the window.  The option is found on the Configuration tab.
+
+Combined the three versions of `Save As Sheetmetal` into one.  The previous functionality is covered by two new file output options, `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`.
+
+
+
+### Update styles from template 
+
+Renamed from the confusing `Move drawing to new template`.  Note, the name has changed, but the program still moves everything from the old file to a new one created using the template specified on the Configuration tab.
+
+Fixed an issue where dimensions were copied to the working sheet from section and detail views (Thank you @Bob Henry, @MonkTheOCDEngie).
+
+Fixed an issue where compound weld symbols did not transfer correctly (Thank you @Bob Henry).
+
+
+### Property filter
+
+Added `>` and `<` to the comparison choices.  These are mainly intended for dates and numbers (see next), but can be used for any property.
+
+Enhanced the handling of dates and numbers by attempting to convert them into their native formats.  Previously they were treated as text.  Note this is somewhat experimental.  If you find something that doesn't work correctly, please speak up.
+
+Dates are converted to the format `YYYYMMDD`.  That is the format for the `Value` that must be used on the Property Filter dialog.  
+
+Many numbers, notably those exposed from the variable table, include units.  The program needs to strip them off before comparing.  Currently only distance and mass units (`in`, `mm`, `lbm`, `kg`) are handled.  Please ask if you need others.
+
+
+### Error log display 
+
+If errors occur during processing, the log file is automatically opened in Notepad (Thank you @Martin Bernhard).  Previous behavior was to simply notify the user of its location.  The file is still saved to the input directory.
+
+
+### File wildcard search
+
+Changed from a text box to a combo box.  Keeps the user from having to remember the sometimes arcane wildcard syntax.  Added the ability to delete entries that are no longer needed.
+
+
+### Task list input options
+
+Each input option is now disabled unless a selected task requires it.  This makes it easier to see what options need the user's attention.
+
+
+### Readme
+
+The first time Housekeeper is launched, focus is given to the Readme tab.  
+
+Added a link to the Solid Edge Community Forum for user feedback.
+
+Added a better explanation of the TODO list and its use.
+
+
+### Top level assembly search option
+
+Fixed an issue where Top down search crashes if `FastSearchScope.txt` is blank (Thank you @JayJay101).
+
+
+### Underconstrained profiles
+
+Fixed an issue where Sync Used Sketches were reported as underconstrained.
+
+
+### Interactive Edit
+
+Not saving the file, or cancelling processing, is no longer reported as an error in the log file.
+
+
+
+
 
 
 ## v0.1.9 Enhancements/Fixes

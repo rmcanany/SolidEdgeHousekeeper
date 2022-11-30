@@ -16,6 +16,7 @@ Public Class FormPropertyFilter
 		InitializeListview()
 		InitializeComboBoxes()
 		InitializeReadme()
+		'TextBoxReadme.Font = New Font("Microsoft Sans Serif", 10, FontStyle.Regular)
 
 	End Sub
 
@@ -357,6 +358,9 @@ Public Class FormPropertyFilter
 		ComboBoxPropertyFilterComparison.Items.Add("is_exactly")
 		ComboBoxPropertyFilterComparison.Items.Add("is_not")
 		ComboBoxPropertyFilterComparison.Items.Add("wildcard_contains")
+		ComboBoxPropertyFilterComparison.Items.Add(">")
+		ComboBoxPropertyFilterComparison.Items.Add("<")
+		'ComboBoxPropertyFilterComparison.Items.Add("=")
 		ComboBoxPropertyFilterComparison.SelectedIndex = 0
 
 		ComboBoxPropertyFilterName.Items.Clear()
@@ -390,6 +394,8 @@ Public Class FormPropertyFilter
 		msg = "The property filter allows you to select files by their property values.  "
 		Paragraphs.Add(msg)
 
+		Paragraphs.Add("Composing a Filter")
+
 		msg = "Compose a filter by defining one or more Conditions, and adding them one-by-one to the list.  "
 		msg += "A Condition consists of a Property, a Comparison, and a Value.  "
 		msg += "For example, 'Material contains Steel', where 'Material' is the Property, "
@@ -399,6 +405,8 @@ Public Class FormPropertyFilter
 		msg = "Up to six Conditions are allowed for a filter.  "
 		msg += "They can be named, saved, modified, and deleted as desired.  "
 		Paragraphs.Add(msg)
+
+		Paragraphs.Add("Property")
 
 		msg = "Enter the name of the property to be evaluated in the 'Property name' textbox.  "
 		msg += "Select the Property's 'Property set', either System or Custom.  "
@@ -414,9 +422,11 @@ Public Class FormPropertyFilter
 		msg += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
 		Paragraphs.Add(msg)
 
+		Paragraphs.Add("Comparison")
+
 		msg = "Select the Comparison from its dropdown box.  "
-		msg += "The choices are 'contains', 'is_exactly', 'is_not', or 'wildcard_contains'.  "
-		msg += "The options 'is_exactly' and 'is_not' are hopefully self explanatory.  "
+		msg += "The choices are 'contains', 'is_exactly', 'is_not', 'wildcard_contains', '>', or '<'.  "
+		msg += "The options 'is_exactly', 'is_not', '>', and '<' are hopefully self explanatory.  "
 		msg += "The two 'contains' options are described below.  "
 		Paragraphs.Add(msg)
 
@@ -424,7 +434,7 @@ Public Class FormPropertyFilter
 		msg += "the Value you specify can appear anywhere in the property.  "
 		msg += "For example, if you specify 'Aluminum' and a part file has 'Aluminum 6061-T6', "
 		msg += "you will get a match.  "
-		msg += "Note, at this time, all Values are converted to lower case text before comparison.  "
+		msg += "Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison.  "
 		msg += "So 'ALUMINUM', 'Aluminum', and 'aluminum' would all match.  "
 		Paragraphs.Add(msg)
 
@@ -435,11 +445,15 @@ Public Class FormPropertyFilter
 		msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
 		Paragraphs.Add(msg)
 
-		msg = "Once a Condition is composed, use the 'Add' button to place it in the list.  "
-		msg += "Each Condition is assigned a variable name, (A, B, ...).  "
+		Paragraphs.Add("Default Filter Formula")
+
+		msg = "Each Condition is assigned a variable name, (A, B, ...).  "
 		msg += "The default filter formula is to match all conditions (e.g., A AND B AND C).  "
-		msg += "For example, say you have the following conditions:"
 		Paragraphs.Add(msg)
+
+		Paragraphs.Add("Example")
+
+		Paragraphs.Add("Say you have the following conditions:")
 
 		msg = "    A  System  Material  contains    Aluminum" + vbCrLf
 		msg += "    B  System  Project   is_exactly  7477" + vbCrLf
@@ -449,23 +463,37 @@ Public Class FormPropertyFilter
 		msg = "By default you will get all Aluminum parts in project 7477 engineered by Fred.  "
 		Paragraphs.Add(msg)
 
+		Paragraphs.Add("Editing the Formula")
+
 		msg = "You can optionally change the formula.  "
 		msg += "Click the Edit button and type the desired expression.  "
 		msg += "For example, if you wanted all Aluminum parts, either from project 7477, or engineered by Fred, "
 		msg += "you would enter A AND (B OR C)."
 		Paragraphs.Add(msg)
 
-		msg = "As a side note for those interested in the details, "
-		msg += "the formula is evaluated with the VBScript 'Eval' function.  "
-		msg += "It has been tested with binary operators 'AND' and 'OR', unary operator 'NOT', "
-		msg += "and precedence operators '(' and ')'.  "
-		msg += "Others should probably work.  "
-		msg += "However, as stated above, all values are converted to lower case text.  "
-		msg += "So operators such as '>' or '<=' may not behave as intended."
+		Paragraphs.Add("Dates and Numbers")
+
+		msg = "Dates and numbers are converted to their native format when possible.  "
+		msg += "This is done to obtain commonsense results for the comparisons '<' and '>'.  "
 		Paragraphs.Add(msg)
 
-		msg = "If you like details, you might also want to know that "
-		msg += "the filters are saved in 'property_filters.txt' in the same directory as Housekeeper.exe.  "
+		msg = "Dates take the form 'YYYYMMDD' when converted.  "
+		msg += "This is the format that must be used in the 'Value' field for comparisons.  "
+		msg += "The conversion is supposed to be locale-aware, however this has not been tested.  "
+		msg += "Please ask on the Solid Edge Forum if it is not working correctly for you.  "
+		Paragraphs.Add(msg)
+
+		msg = "Numbers are converted to floating point values.  "
+		msg += "In Solid Edge many numbers, in particular those from the variable table, "
+		msg += "include units.  "
+		msg += "These must be stripped off by the program to make comparisons.  "
+		msg += "Currently only distance and mass units are checked ('in', 'mm', 'lbm', 'kg').  "
+		msg += "It's easy to add more, so please ask on the Forum if you need others.  "
+		Paragraphs.Add(msg)
+
+		Paragraphs.Add("Saved Settings")
+
+		msg = "The filters are saved in 'property_filters.txt' in the same directory as Housekeeper.exe.  "
 		msg += "If desired, you can create a master copy of the file and share it with others.  "
 		msg += "You can manually edit the file, "
 		msg += "however, note that the field delimiter is the TAB character.  "
@@ -484,6 +512,12 @@ Public Class FormPropertyFilter
 
 
 
+	End Sub
+
+	Public Sub SetReadmeFontsize(Fontsize As Integer)
+		If Not TextBoxReadme.Font.Size = Fontsize Then
+			TextBoxReadme.Font = New Font("Microsoft Sans Serif", Fontsize, FontStyle.Regular)
+		End If
 	End Sub
 
 	Private Sub PrintDict(Caller As String)

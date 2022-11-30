@@ -8,13 +8,29 @@ Partial Class Form1
         ' Start Solid Edge.
         TextBoxStatus.Text = "Starting Solid Edge..."
 
+        Dim RunInBackground As Boolean = CheckBoxBackgroundProcessing.Checked
+
         Try
             SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            ' Make Solid Edge visible and turn off popups.
-            SEApp.Visible = True
+            ' Turn off popups.
             SEApp.DisplayAlerts = False
+
+            ' Set foreground/background processing options
+            If RunInBackground Then
+                SEApp.DelayCompute = True
+                SEApp.Interactive = False
+                SEApp.ScreenUpdating = False
+                SEApp.Visible = False
+                'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+            Else
+                SEApp.DelayCompute = False
+                SEApp.Interactive = True
+                SEApp.ScreenUpdating = True
+                SEApp.Visible = True
+                SEApp.WindowState = 2  'Maximizes Solid Edge
+                'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+            End If
             'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
-            SEApp.WindowState = 2  'Maximizes Solid Edge
         Catch ex As Exception
             Activate()
             MsgBox("Could not start Solid Edge.  Exiting...")

@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="AssemblyTasks.vb" />
     <Compile Include="DraftTasks.vb" />
+    <Compile Include="FeatureDoctor.vb" />
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +146,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
+    <Compile Include="OccurrenceGetter.vb" />
     <Compile Include="PartTasks.vb" />
     <Compile Include="PropertyFilter.vb" />
     <Compile Include="SheetmetalTasks.vb" />

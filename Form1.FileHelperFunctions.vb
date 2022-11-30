@@ -9,6 +9,7 @@ Partial Class Form1
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
         Dim tf As Boolean
+        Dim msg As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
@@ -63,6 +64,12 @@ Partial Class Form1
                     TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                     If RadioButtonTLABottomUp.Checked Then
+                        If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
+                            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+                            MsgBox(msg, vbOKOnly)
+                            Exit Sub
+                        End If
+
                         FoundFiles = TLAU.GetLinks("BottomUp", TextBoxInputDirectory.Text,
                                                TextBoxTopLevelAssembly.Text,
                                                ActiveFileExtensionsList)
@@ -96,7 +103,7 @@ Partial Class Form1
 
                     ' Filter by file wildcard search
                     If CheckBoxFileSearch.Checked Then
-                        FoundFiles = FileWildcardSearch(FoundFiles, TextBoxFileSearch.Text)
+                        FoundFiles = FileWildcardSearch(FoundFiles, ComboBoxFileSearch.Text)
                     End If
 
                     If Not ListBoxFiles.Font.Size = CSng(TextBoxFontSize.Text) Then

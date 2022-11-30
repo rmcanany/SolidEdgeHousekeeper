@@ -81,7 +81,7 @@ Public Class Form1
     'ReconcileFormChanges routine.  Next would be to modify CheckStartConditions to validate 
     'any user input.  Finally, the LoadDefaults would need to be updated as required.
 
-    Private Sub Process()
+    Private Sub ProcessAll()
         Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
@@ -157,16 +157,17 @@ Public Class Form1
         ButtonCancel.Text = "Cancel"
 
         If ErrorsOccurred Then
-            Dim msg As String = ""
-            Dim indent As String = ""
-            Dim FancyPrint As List(Of String) = LogfileName.Split("\"c).ToList
-            msg += "Some checks did not pass and/or more feedback is available." + Chr(13)
-            msg += "Path to log file:" + Chr(13)
-            For Each s As String In FancyPrint
-                msg += indent + s + Chr(13)
-                indent += "    "
-            Next
-            MsgBox(msg)
+            Process.Start("Notepad.exe", LogfileName)
+            'Dim msg As String = ""
+            'Dim indent As String = ""
+            'Dim FancyPrint As List(Of String) = LogfileName.Split("\"c).ToList
+            'msg += "Some checks did not pass and/or more feedback is available." + Chr(13)
+            'msg += "Path to log file:" + Chr(13)
+            'For Each s As String In FancyPrint
+            '    msg += indent + s + Chr(13)
+            '    indent += "    "
+            'Next
+            'MsgBox(msg)
         Else
             TextBoxStatus.Text = TextBoxStatus.Text + "  All checks passed."
         End If
@@ -176,8 +177,11 @@ Public Class Form1
 
     Private Function CheckStartConditions() As String
         Dim msg As String = ""
+        Dim msg2 As String = ""
+        Dim indent As String = "    "
         Dim SaveMsg As String = ""
         Dim tf As Boolean
+        Dim DestinationDirectory As String
 
         ReconcileFormChanges()
 
@@ -242,7 +246,7 @@ Public Class Form1
         End If
 
         If CheckBoxFileSearch.Checked Then
-            If TextBoxFileSearch.Text = "" Then
+            If ComboBoxFileSearch.Text = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -304,6 +308,10 @@ Public Class Form1
                     If Not msg.Contains("Select a valid assembly external program") Then
                         msg += "    Select a valid assembly external program" + Chr(13)
                     End If
+                Else
+                    DestinationDirectory = System.IO.Path.GetDirectoryName(TextBoxExternalProgramAssembly.Text)
+                    FileSystem.FileCopy(DefaultsFilename, String.Format("{0}\defaults.txt", DestinationDirectory))
+                    ' MsgBox(DefaultsFilename + ", " + DestinationDirectory + ", " + String.Format("{0}\defaults.txt", DestinationDirectory))
                 End If
             End If
 
@@ -331,6 +339,24 @@ Public Class Form1
                     End If
                 End If
             End If
+
+            If LabelToActionAssembly(Label).RequiresForegroundProcessing Then
+                If CheckBoxBackgroundProcessing.Checked Then
+                    If Not msg.Contains(Label + " cannot be run in a background process") Then
+                        msg += "    " + Label + " cannot be run in a background process" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionAssembly(Label).RequiresExposeVariables Then
+                If TextBoxExposeVariablesAssembly.Text = "" Then
+                    msg2 = indent + "Enter as least one Assembly variable to check/expose"
+                    If Not msg.Contains(msg2) Then
+                        msg += msg2 + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         ' Part Tasks
@@ -387,6 +413,10 @@ Public Class Form1
                     If Not msg.Contains("Select a valid part external program") Then
                         msg += "    Select a valid part external program" + Chr(13)
                     End If
+                Else
+                    DestinationDirectory = System.IO.Path.GetDirectoryName(TextBoxExternalProgramPart.Text)
+                    FileSystem.FileCopy(DefaultsFilename, String.Format("{0}\defaults.txt", DestinationDirectory))
+
                 End If
             End If
 
@@ -415,6 +445,23 @@ Public Class Form1
                 End If
             End If
 
+            If LabelToActionPart(Label).RequiresForegroundProcessing Then
+                If CheckBoxBackgroundProcessing.Checked Then
+                    If Not msg.Contains(Label + " cannot be run in a background process") Then
+                        msg += "    " + Label + " cannot be run in a background process" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionPart(Label).RequiresExposeVariables Then
+                If TextBoxExposeVariablesPart.Text = "" Then
+                    msg2 = indent + "Enter as least one Part variable to check/expose"
+                    If Not msg.Contains(msg2) Then
+                        msg += msg2 + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         ' Sheetmetal Tasks
@@ -434,15 +481,15 @@ Public Class Form1
                     End If
                 End If
             End If
-            If LabelToActionSheetmetal(Label).RequiresLaserOutputDirectory Then
-                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
-                tf = tf And Not CheckBoxLaserOutputDirectory.Checked
-                If tf Then
-                    If Not msg.Contains("Select a valid laser output directory") Then
-                        msg += "    Select a valid laser output directory" + Chr(13)
-                    End If
-                End If
-            End If
+            'If LabelToActionSheetmetal(Label).RequiresLaserOutputDirectory Then
+            '    tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
+            '    tf = tf And Not CheckBoxLaserOutputDirectory.Checked
+            '    If tf Then
+            '        If Not msg.Contains("Select a valid laser output directory") Then
+            '            msg += "    Select a valid laser output directory" + Chr(13)
+            '        End If
+            '    End If
+            'End If
             If LabelToActionSheetmetal(Label).RequiresPartNumberFields Then
                 If TextBoxPartNumberPropertyName.Text = "" Then
                     If Not msg.Contains("Select a valid part number property name") Then
@@ -462,15 +509,15 @@ Public Class Form1
                     End If
                 End If
             End If
-            If LabelToActionSheetmetal(Label).RequiresSaveAsFlatDXFOutputDirectory Then
-                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsFlatDXFOutputDirectory.Text)
-                tf = tf And Not CheckBoxSaveAsFlatDXFOutputDirectory.Checked
-                If tf Then
-                    If Not msg.Contains("Select a valid Save As Flat DXF output directory") Then
-                        msg += "    Select a valid Save As Flat DXF output directory" + Chr(13)
-                    End If
-                End If
-            End If
+            'If LabelToActionSheetmetal(Label).RequiresSaveAsFlatDXFOutputDirectory Then
+            '    tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsFlatDXFOutputDirectory.Text)
+            '    tf = tf And Not CheckBoxSaveAsFlatDXFOutputDirectory.Checked
+            '    If tf Then
+            '        If Not msg.Contains("Select a valid Save As Flat DXF output directory") Then
+            '            msg += "    Select a valid Save As Flat DXF output directory" + Chr(13)
+            '        End If
+            '    End If
+            'End If
             If LabelToActionSheetmetal(Label).IncompatibleWithOtherTasks Then
                 tf = CheckedListBoxSheetmetal.CheckedItems.Count > 1
                 tf = tf Or CheckedListBoxAssembly.CheckedItems.Count > 0
@@ -489,6 +536,10 @@ Public Class Form1
                     If Not msg.Contains("Select a valid sheetmetal external program") Then
                         msg += "    Select a valid sheetmetal external program" + Chr(13)
                     End If
+                Else
+                    DestinationDirectory = System.IO.Path.GetDirectoryName(TextBoxExternalProgramSheetmetal.Text)
+                    FileSystem.FileCopy(DefaultsFilename, String.Format("{0}\defaults.txt", DestinationDirectory))
+
                 End If
             End If
 
@@ -517,6 +568,23 @@ Public Class Form1
                 End If
             End If
 
+            If LabelToActionSheetmetal(Label).RequiresForegroundProcessing Then
+                If CheckBoxBackgroundProcessing.Checked Then
+                    If Not msg.Contains(Label + " cannot be run in a background process") Then
+                        msg += "    " + Label + " cannot be run in a background process" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionSheetmetal(Label).RequiresExposeVariables Then
+                If TextBoxExposeVariablesSheetmetal.Text = "" Then
+                    msg2 = indent + "Enter as least one Sheetmetal variable to check/expose"
+                    If Not msg.Contains(msg2) Then
+                        msg += msg2 + Chr(13)
+                    End If
+                End If
+            End If
+
         Next
 
         ' Draft Tasks
@@ -536,15 +604,15 @@ Public Class Form1
                     End If
                 End If
             End If
-            If LabelToActionDraft(Label).RequiresLaserOutputDirectory Then
-                tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
-                tf = tf And Not CheckBoxLaserOutputDirectory.Checked
-                If tf Then
-                    If Not msg.Contains("Select a valid laser output directory") Then
-                        msg += "    Select a valid laser output directory" + Chr(13)
-                    End If
-                End If
-            End If
+            'If LabelToActionDraft(Label).RequiresLaserOutputDirectory Then
+            '    tf = Not FileIO.FileSystem.DirectoryExists(TextBoxLaserOutputDirectory.Text)
+            '    tf = tf And Not CheckBoxLaserOutputDirectory.Checked
+            '    If tf Then
+            '        If Not msg.Contains("Select a valid laser output directory") Then
+            '            msg += "    Select a valid laser output directory" + Chr(13)
+            '        End If
+            '    End If
+            'End If
             If LabelToActionDraft(Label).RequiresPartNumberFields Then
                 If TextBoxPartNumberPropertyName.Text = "" Then
                     If Not msg.Contains("Select a valid part number property name") Then
@@ -581,6 +649,10 @@ Public Class Form1
                     If Not msg.Contains("Select a valid draft external program") Then
                         msg += "    Select a valid draft external program" + Chr(13)
                     End If
+                Else
+                    DestinationDirectory = System.IO.Path.GetDirectoryName(TextBoxExternalProgramDraft.Text)
+                    FileSystem.FileCopy(DefaultsFilename, String.Format("{0}\defaults.txt", DestinationDirectory))
+
                 End If
             End If
             If LabelToActionDraft(Label).RequiresPrinter Then
@@ -595,6 +667,14 @@ Public Class Form1
                 If Not PrinterInstalled Then
                     If Not msg.Contains("Select a valid printer on the Configuration Tab") Then
                         msg += "    Select a valid printer on the Configuration Tab" + Chr(13)
+                    End If
+                End If
+            End If
+
+            If LabelToActionDraft(Label).RequiresForegroundProcessing Then
+                If CheckBoxBackgroundProcessing.Checked Then
+                    If Not msg.Contains(Label + " cannot be run in a background process") Then
+                        msg += "    " + Label + " cannot be run in a background process" + Chr(13)
                     End If
                 End If
             End If
@@ -729,7 +809,11 @@ Public Class Form1
             Else
                 ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
                 ActiveWindow.WindowState = 2
+                'ActiveWindow.WindowState = 0  '0 normal, 1 minimized, 2 maximized
+                'Dim h As Integer = ActiveWindow.Height
+                'Dim w As Integer = ActiveWindow.Width
             End If
+
 
             If Filetype = "Assembly" Then
                 CheckedListBoxX = CheckedListBoxAssembly
@@ -746,9 +830,6 @@ Public Class Form1
             End If
 
             For Each LabelText In CheckedListBoxX.CheckedItems
-                'LogfileAppend("Trying " + LabelText, TruncateFullPath(Path), "")
-                'MsgBox("Trying " + LabelText + " " + Path)
-
                 If Filetype = "Assembly" Then
                     ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
                 ElseIf Filetype = "Part" Then
@@ -772,20 +853,18 @@ Public Class Form1
                 End If
             Next
 
-            If LabelText = "Move drawing to new template" Then
+            If LabelText = "Update styles from template" Then
                 OriginalFilename = SEDoc.FullName
                 ModifiedFilename = String.Format("{0}\{1}-Housekeeper.dft",
                                             System.IO.Path.GetDirectoryName(SEDoc.FullName),
                                             System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
-                RemnantsFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
-                                            System.IO.Path.GetDirectoryName(SEDoc.FullName),
-                                            System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+                RemnantsFilename = ModifiedFilename.Replace("Housekeeper", "HousekeeperOld")
             End If
 
             SEDoc.Close(False)
             SEApp.DoIdle()
 
-            If LabelText = "Move drawing to new template" Then
+            If LabelText = "Update styles from template" Then
                 If ExitStatus = 0 Then
                     System.IO.File.Delete(OriginalFilename)
                     FileSystem.Rename(ModifiedFilename, OriginalFilename)
@@ -920,24 +999,281 @@ Public Class Form1
         End If
 
         If CheckBoxFileSearch.Checked Then
-            TextBoxFileSearch.Enabled = True
+            ComboBoxFileSearch.Enabled = True
         Else
-            TextBoxFileSearch.Enabled = False
+            ComboBoxFileSearch.Enabled = False
         End If
 
-        If CheckBoxWatermark.Checked Then
-            ButtonWatermark.Enabled = True
-            TextBoxWatermarkFilename.Enabled = True
-            TextBoxWatermarkScale.Enabled = True
-            TextBoxWatermarkX.Enabled = True
-            TextBoxWatermarkY.Enabled = True
-        Else
-            ButtonWatermark.Enabled = False
-            TextBoxWatermarkFilename.Enabled = False
-            TextBoxWatermarkScale.Enabled = False
-            TextBoxWatermarkX.Enabled = False
-            TextBoxWatermarkY.Enabled = False
-        End If
+
+        ' Enable/Disable option controls based on task selection
+
+        ' ASSEMBLY
+
+        ComboBoxSaveAsAssemblyFileType.Enabled = False
+        CheckBoxSaveAsAssemblyOutputDirectory.Enabled = False
+        TextBoxSaveAsAssemblyOutputDirectory.Enabled = False
+        ButtonSaveAsAssemblyOutputDirectory.Enabled = False
+
+        CheckBoxSaveAsFormulaAssembly.Enabled = False
+        TextBoxSaveAsFormulaAssembly.Enabled = False
+
+        TextBoxExternalProgramAssembly.Enabled = False
+        ButtonExternalProgramAssembly.Enabled = False
+
+        ComboBoxFindReplacePropertySetAssembly.Enabled = False
+        TextBoxFindReplacePropertyNameAssembly.Enabled = False
+        TextBoxFindReplaceFindAssembly.Enabled = False
+        TextBoxFindReplaceReplaceAssembly.Enabled = False
+
+        TextBoxExposeVariablesAssembly.Enabled = False
+
+        For Each Label As String In CheckedListBoxAssembly.CheckedItems
+
+            If LabelToActionAssembly(Label).RequiresSaveAsOutputDirectory Then
+                ComboBoxSaveAsAssemblyFileType.Enabled = True
+                CheckBoxSaveAsAssemblyOutputDirectory.Enabled = True
+
+                If CheckBoxSaveAsAssemblyOutputDirectory.Checked Then
+                    TextBoxSaveAsAssemblyOutputDirectory.Enabled = False
+                    ButtonSaveAsAssemblyOutputDirectory.Enabled = False
+                Else
+                    TextBoxSaveAsAssemblyOutputDirectory.Enabled = True
+                    ButtonSaveAsAssemblyOutputDirectory.Enabled = True
+                    CheckBoxSaveAsFormulaAssembly.Enabled = True
+                    If CheckBoxSaveAsFormulaAssembly.Checked = True Then
+                        TextBoxSaveAsFormulaAssembly.Enabled = True
+                    End If
+                End If
+
+            End If
+
+            If LabelToActionAssembly(Label).RequiresExternalProgram Then
+                TextBoxExternalProgramAssembly.Enabled = True
+                ButtonExternalProgramAssembly.Enabled = True
+            End If
+
+            If LabelToActionAssembly(Label).RequiresFindReplaceFields Then
+                ComboBoxFindReplacePropertySetAssembly.Enabled = True
+                TextBoxFindReplacePropertyNameAssembly.Enabled = True
+                TextBoxFindReplaceFindAssembly.Enabled = True
+                TextBoxFindReplaceReplaceAssembly.Enabled = True
+            End If
+
+            If LabelToActionAssembly(Label).RequiresExposeVariables Then
+                TextBoxExposeVariablesAssembly.Enabled = True
+            End If
+
+        Next
+
+        ' PART
+
+        ComboBoxSaveAsPartFileType.Enabled = False
+        CheckBoxSaveAsPartOutputDirectory.Enabled = False
+        TextBoxSaveAsPartOutputDirectory.Enabled = False
+        ButtonSaveAsPartOutputDirectory.Enabled = False
+
+        CheckBoxSaveAsFormulaPart.Enabled = False
+        TextBoxSaveAsFormulaPart.Enabled = False
+
+        TextBoxExternalProgramPart.Enabled = False
+        ButtonExternalProgramPart.Enabled = False
+
+        ComboBoxFindReplacePropertySetPart.Enabled = False
+        TextBoxFindReplacePropertyNamePart.Enabled = False
+        TextBoxFindReplaceFindPart.Enabled = False
+        TextBoxFindReplaceReplacePart.Enabled = False
+
+        TextBoxExposeVariablesPart.Enabled = False
+
+        For Each Label As String In CheckedListBoxPart.CheckedItems
+
+            If LabelToActionPart(Label).RequiresSaveAsOutputDirectory Then
+                ComboBoxSaveAsPartFileType.Enabled = True
+                CheckBoxSaveAsPartOutputDirectory.Enabled = True
+
+                If CheckBoxSaveAsPartOutputDirectory.Checked Then
+                    TextBoxSaveAsPartOutputDirectory.Enabled = False
+                    ButtonSaveAsPartOutputDirectory.Enabled = False
+                Else
+                    TextBoxSaveAsPartOutputDirectory.Enabled = True
+                    ButtonSaveAsPartOutputDirectory.Enabled = True
+                    CheckBoxSaveAsFormulaPart.Enabled = True
+                    If CheckBoxSaveAsFormulaPart.Checked = True Then
+                        TextBoxSaveAsFormulaPart.Enabled = True
+                    End If
+                End If
+
+            End If
+
+            If LabelToActionPart(Label).RequiresExternalProgram Then
+                TextBoxExternalProgramPart.Enabled = True
+                ButtonExternalProgramPart.Enabled = True
+            End If
+
+            If LabelToActionPart(Label).RequiresFindReplaceFields Then
+                ComboBoxFindReplacePropertySetPart.Enabled = True
+                TextBoxFindReplacePropertyNamePart.Enabled = True
+                TextBoxFindReplaceFindPart.Enabled = True
+                TextBoxFindReplaceReplacePart.Enabled = True
+            End If
+
+            If LabelToActionPart(Label).RequiresExposeVariables Then
+                TextBoxExposeVariablesPart.Enabled = True
+            End If
+
+        Next
+
+        ' SHEETMETAL
+
+        'CheckBoxLaserOutputDirectory.Enabled = False
+        'TextBoxLaserOutputDirectory.Enabled = False
+        'ButtonLaserOutputDirectory.Enabled = False
+
+        ComboBoxSaveAsSheetmetalFileType.Enabled = False
+        CheckBoxSaveAsSheetmetalOutputDirectory.Enabled = False
+        TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
+        ButtonSaveAsSheetmetalOutputDirectory.Enabled = False
+
+        CheckBoxSaveAsFormulaSheetmetal.Enabled = False
+        TextBoxSaveAsFormulaSheetmetal.Enabled = False
+
+        'CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = False
+        'TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
+        'ButtonSaveAsFlatDXF.Enabled = False
+
+        TextBoxExternalProgramSheetmetal.Enabled = False
+        ButtonExternalProgramSheetmetal.Enabled = False
+
+        ComboBoxFindReplacePropertySetSheetmetal.Enabled = False
+        TextBoxFindReplacePropertyNameSheetmetal.Enabled = False
+        TextBoxFindReplaceFindSheetmetal.Enabled = False
+        TextBoxFindReplaceReplaceSheetmetal.Enabled = False
+
+        TextBoxExposeVariablesSheetmetal.Enabled = False
+
+        For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
+
+            If LabelToActionSheetmetal(Label).RequiresSaveAsOutputDirectory Then
+                ComboBoxSaveAsSheetmetalFileType.Enabled = True
+                CheckBoxSaveAsSheetmetalOutputDirectory.Enabled = True
+                ' TextBoxSaveAsSheetmetalOutputDirectory.Enabled = True
+
+                If CheckBoxSaveAsSheetmetalOutputDirectory.Checked Then
+                    TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
+                    ButtonSaveAsSheetmetalOutputDirectory.Enabled = False
+                Else
+                    TextBoxSaveAsSheetmetalOutputDirectory.Enabled = True
+                    ButtonSaveAsSheetmetalOutputDirectory.Enabled = True
+                    CheckBoxSaveAsFormulaSheetmetal.Enabled = True
+                    If CheckBoxSaveAsFormulaSheetmetal.Checked = True Then
+                        TextBoxSaveAsFormulaSheetmetal.Enabled = True
+                    End If
+                End If
+            End If
+
+
+            If LabelToActionSheetmetal(Label).RequiresExternalProgram Then
+                TextBoxExternalProgramSheetmetal.Enabled = True
+                ButtonExternalProgramSheetmetal.Enabled = True
+            End If
+
+            If LabelToActionSheetmetal(Label).RequiresFindReplaceFields Then
+                ComboBoxFindReplacePropertySetSheetmetal.Enabled = True
+                TextBoxFindReplacePropertyNameSheetmetal.Enabled = True
+                TextBoxFindReplaceFindSheetmetal.Enabled = True
+                TextBoxFindReplaceReplaceSheetmetal.Enabled = True
+            End If
+
+            If LabelToActionSheetmetal(Label).RequiresExposeVariables Then
+                TextBoxExposeVariablesSheetmetal.Enabled = True
+            End If
+
+        Next
+
+        ' DRAFT
+
+        ComboBoxSaveAsDraftFileType.Enabled = False
+        CheckBoxSaveAsDraftOutputDirectory.Enabled = False
+        TextBoxSaveAsDraftOutputDirectory.Enabled = False
+        ButtonSaveAsDraftOutputDirectory.Enabled = False
+
+        CheckBoxSaveAsFormulaDraft.Enabled = False
+        TextBoxSaveAsFormulaDraft.Enabled = False
+
+        CheckBoxWatermark.Enabled = False
+        ButtonWatermark.Enabled = False
+        TextBoxWatermarkFilename.Enabled = False
+        TextBoxWatermarkScale.Enabled = False
+        TextBoxWatermarkX.Enabled = False
+        TextBoxWatermarkY.Enabled = False
+
+        'If CheckBoxWatermark.Checked Then
+        '    ButtonWatermark.Enabled = True
+        '    TextBoxWatermarkFilename.Enabled = True
+        '    TextBoxWatermarkScale.Enabled = True
+        '    TextBoxWatermarkX.Enabled = True
+        '    TextBoxWatermarkY.Enabled = True
+        'Else
+        '    ButtonWatermark.Enabled = False
+        '    TextBoxWatermarkFilename.Enabled = False
+        '    TextBoxWatermarkScale.Enabled = False
+        '    TextBoxWatermarkX.Enabled = False
+        '    TextBoxWatermarkY.Enabled = False
+        'End If
+
+
+        TextBoxExternalProgramDraft.Enabled = False
+        ButtonExternalProgramDraft.Enabled = False
+
+
+        For Each Label As String In CheckedListBoxDraft.CheckedItems
+
+            If LabelToActionDraft(Label).RequiresLaserOutputDirectory Then
+
+            End If
+
+            If LabelToActionDraft(Label).RequiresSaveAsOutputDirectory Then
+                ComboBoxSaveAsDraftFileType.Enabled = True
+                CheckBoxSaveAsDraftOutputDirectory.Enabled = True
+                CheckBoxWatermark.Enabled = True
+                'TextBoxSaveAsDraftOutputDirectory.Enabled = True
+                'ButtonSaveAsDraftOutputDirectory.Enabled = True
+
+                If CheckBoxSaveAsDraftOutputDirectory.Checked Then
+                    TextBoxSaveAsDraftOutputDirectory.Enabled = False
+                    ButtonSaveAsDraftOutputDirectory.Enabled = False
+                Else
+                    TextBoxSaveAsDraftOutputDirectory.Enabled = True
+                    ButtonSaveAsDraftOutputDirectory.Enabled = True
+                    CheckBoxSaveAsFormulaDraft.Enabled = True
+                    If CheckBoxSaveAsFormulaDraft.Checked = True Then
+                        TextBoxSaveAsFormulaDraft.Enabled = True
+                    End If
+                End If
+
+                If CheckBoxWatermark.Checked Then
+                    ButtonWatermark.Enabled = True
+                    TextBoxWatermarkFilename.Enabled = True
+                    TextBoxWatermarkScale.Enabled = True
+                    TextBoxWatermarkX.Enabled = True
+                    TextBoxWatermarkY.Enabled = True
+                Else
+                    ButtonWatermark.Enabled = False
+                    TextBoxWatermarkFilename.Enabled = False
+                    TextBoxWatermarkScale.Enabled = False
+                    TextBoxWatermarkX.Enabled = False
+                    TextBoxWatermarkY.Enabled = False
+                End If
+
+            End If
+
+            If LabelToActionDraft(Label).RequiresExternalProgram Then
+                TextBoxExternalProgramDraft.Enabled = True
+                ButtonExternalProgramDraft.Enabled = True
+            End If
+
+        Next
+
 
     End Sub
 
@@ -981,7 +1317,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonExternalProgramAssembly_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramAssembly.Click
-        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs" 'Office Files|*.doc;*.xls;*.ppt
         OpenFileDialog1.Multiselect = False
         OpenFileDialog1.FileName = ""
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -992,7 +1328,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonExternalProgramPart_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramPart.Click
-        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
         OpenFileDialog1.Multiselect = False
         OpenFileDialog1.FileName = ""
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -1003,7 +1339,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonExternalProgramSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramSheetmetal.Click
-        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
         OpenFileDialog1.Multiselect = False
         OpenFileDialog1.FileName = ""
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -1014,7 +1350,7 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonExternalProgramDraft_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramDraft.Click
-        OpenFileDialog1.Filter = "Programs|*.exe"
+        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
         OpenFileDialog1.Multiselect = False
         OpenFileDialog1.FileName = ""
         If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
@@ -1035,6 +1371,14 @@ Public Class Form1
         ReconcileFormChanges()
 
     End Sub
+
+    Private Sub ButtonFileSearch_Click(sender As Object, e As EventArgs) Handles ButtonFileSearch.Click
+        If Not ComboBoxFileSearch.Text = "" Then
+            ComboBoxFileSearch.Items.Remove(ComboBoxFileSearch.Text)
+            ComboBoxFileSearch.Text = ""
+        End If
+    End Sub
+
     Private Sub ButtonSaveAsDraftOutputDirectory_Click(sender As Object, e As EventArgs)
         FakeFolderBrowserDialog.FileName = "Select Folder"
         If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
@@ -1064,18 +1408,18 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonLaserOutputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxLaserOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-        End If
-        ToolTip1.SetToolTip(TextBoxLaserOutputDirectory, TextBoxLaserOutputDirectory.Text)
-        ReconcileFormChanges()
-    End Sub
+    'Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs)
+    '    FakeFolderBrowserDialog.FileName = "Select Folder"
+    '    If TextBoxLaserOutputDirectory.Text <> "" Then
+    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
+    '    End If
+    '    If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+    '        TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
+    '    End If
+    '    ToolTip1.SetToolTip(TextBoxLaserOutputDirectory, TextBoxLaserOutputDirectory.Text)
+    '    ReconcileFormChanges()
+    'End Sub
 
     Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
@@ -1122,6 +1466,8 @@ Public Class Form1
     Private Sub ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles ButtonPropertyFilter.Click
         Dim tf As Boolean
 
+        FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
+
         FormPropertyFilter.GetPropertyFilter()
 
         tf = FormPropertyFilter.DialogResult = DialogResult.OK
@@ -1134,21 +1480,21 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
-        Process()
+        ProcessAll()
     End Sub
 
-    Private Sub ButtonSaveAsFlatDXF_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsFlatDXF.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsFlatDXFOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsFlatDXFOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
-        End If
+    'Private Sub ButtonSaveAsFlatDXF_Click(sender As Object, e As EventArgs)
+    '    FakeFolderBrowserDialog.FileName = "Select Folder"
+    '    If TextBoxSaveAsFlatDXFOutputDirectory.Text <> "" Then
+    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
+    '    End If
+    '    If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
+    '        TextBoxSaveAsFlatDXFOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
+    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
+    '    End If
 
-        ReconcileFormChanges()
-    End Sub
+    '    ReconcileFormChanges()
+    'End Sub
 
     Private Sub ButtonStepAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsAssemblyOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
@@ -1324,6 +1670,8 @@ Public Class Form1
 
         If CheckBoxEnablePropertyFilter.Checked Then
             If PropertyFilterFormula = "" Then
+                FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
+
                 FormPropertyFilter.GetPropertyFilter()
             End If
         End If
@@ -1333,9 +1681,9 @@ Public Class Form1
 
     Private Sub CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFileSearch.CheckedChanged
         If CheckBoxFileSearch.Checked Then
-            TextBoxFileSearch.Enabled = True
+            ComboBoxFileSearch.Enabled = True
         Else
-            TextBoxFileSearch.Enabled = False
+            ComboBoxFileSearch.Enabled = False
         End If
         ListBoxFilesOutOfDate = True
         ReconcileFormChanges()
@@ -1361,12 +1709,12 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxLaserOutputDirectory.CheckedChanged
-        If CheckBoxLaserOutputDirectory.Checked Then
-            TextBoxLaserOutputDirectory.Enabled = False
-        Else
-            TextBoxLaserOutputDirectory.Enabled = True
-        End If
+    Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
+        'If CheckBoxLaserOutputDirectory.Checked Then
+        '    TextBoxLaserOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxLaserOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
 
@@ -1375,11 +1723,11 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxPdfDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsDraftOutputDirectory.CheckedChanged
-        If CheckBoxSaveAsDraftOutputDirectory.Checked Then
-            TextBoxSaveAsDraftOutputDirectory.Enabled = False
-        Else
-            TextBoxSaveAsDraftOutputDirectory.Enabled = True
-        End If
+        'If CheckBoxSaveAsDraftOutputDirectory.Checked Then
+        '    TextBoxSaveAsDraftOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxSaveAsDraftOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
 
@@ -1396,38 +1744,56 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxSaveAsFlatDXFOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFlatDXFOutputDirectory.CheckedChanged
-        If CheckBoxSaveAsFlatDXFOutputDirectory.Checked Then
-            TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
-        Else
-            TextBoxSaveAsFlatDXFOutputDirectory.Enabled = True
-        End If
+    Private Sub CheckBoxSaveAsFlatDXFOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
+        'If CheckBoxSaveAsFlatDXFOutputDirectory.Checked Then
+        '    TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxSaveAsFlatDXFOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
+
+    Private Sub CheckBoxSaveAsFormulaAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaAssembly.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxSaveAsFormulaDraft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaDraft.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxSaveAsFormulaPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaPart.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxSaveAsFormulaSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaSheetmetal.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
+
+
     Private Sub CheckBoxStepAssemblyOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsAssemblyOutputDirectory.CheckedChanged
-        If CheckBoxSaveAsAssemblyOutputDirectory.Checked Then
-            TextBoxSaveAsAssemblyOutputDirectory.Enabled = False
-        Else
-            TextBoxSaveAsAssemblyOutputDirectory.Enabled = True
-        End If
+        'If CheckBoxSaveAsAssemblyOutputDirectory.Checked Then
+        '    TextBoxSaveAsAssemblyOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxSaveAsAssemblyOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxStepPartOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsPartOutputDirectory.CheckedChanged
-        If CheckBoxSaveAsPartOutputDirectory.Checked Then
-            TextBoxSaveAsPartOutputDirectory.Enabled = False
-        Else
-            TextBoxSaveAsPartOutputDirectory.Enabled = True
-        End If
+        'If CheckBoxSaveAsPartOutputDirectory.Checked Then
+        '    TextBoxSaveAsPartOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxSaveAsPartOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxStepSheetmetalOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsSheetmetalOutputDirectory.CheckedChanged
-        If CheckBoxSaveAsSheetmetalOutputDirectory.Checked Then
-            TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
-        Else
-            TextBoxSaveAsSheetmetalOutputDirectory.Enabled = True
-        End If
+        'If CheckBoxSaveAsSheetmetalOutputDirectory.Checked Then
+        '    TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
+        'Else
+        '    TextBoxSaveAsSheetmetalOutputDirectory.Enabled = True
+        'End If
         ReconcileFormChanges()
     End Sub
 
@@ -1482,6 +1848,21 @@ Public Class Form1
 
 
     ' COMBOBOXES
+
+    Private Sub ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.SelectedIndexChanged
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.LostFocus
+        Dim Key As String = ComboBoxFileSearch.Text
+
+        If Not ComboBoxFileSearch.Items.Contains(Key) Then
+            ComboBoxFileSearch.Items.Add(ComboBoxFileSearch.Text)
+        End If
+        ListBoxFilesOutOfDate = True
+        ReconcileFormChanges()
+    End Sub
 
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
         ReconcileFormChanges()
@@ -1600,7 +1981,7 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFileSearch.LostFocus
+    Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs)
         ListBoxFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
@@ -1636,6 +2017,22 @@ Public Class Form1
     End Sub
 
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxSaveAsFormulaAssembly_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSaveAsFormulaAssembly.LostFocus
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxSaveAsFormulaDraft_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSaveAsFormulaDraft.LostFocus
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxSaveAsFormulaPart_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSaveAsFormulaPart.LostFocus
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub TextBoxSaveAsFormulaSheetmetal_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSaveAsFormulaSheetmetal.LostFocus
         ReconcileFormChanges()
     End Sub
 
@@ -1677,8 +2074,18 @@ Public Class Form1
 
 
 
+
+
+
+
     ' Commands I can never remember
     ' tf = FileIO.FileSystem.FileExists(Filename)
+
+    ' tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsAssemblyOutputDirectory.Text)
+
+    ' If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
+    '     FileIO.FileSystem.CreateDirectory(BaseDir)
+    ' End If
 
     ' Extension = IO.Path.GetExtension(WhereUsedFile)
     ' C:\project\part.par -> .par
@@ -1689,7 +2096,11 @@ Public Class Form1
     ' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
     ' C:\project\part.par -> part
 
+    ' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+    ' C:\project\part.par -> part.par
+
     ' System.Threading.Thread.Sleep(100)
-    ' 
+
+    ' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
 
 End Class

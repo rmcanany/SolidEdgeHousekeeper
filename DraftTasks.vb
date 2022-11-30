@@ -6,7 +6,7 @@ Public Class DraftTasks
     Inherits IsolatedTaskProxy
 
 
-    Public Function DrawingViewsMissingFile(
+    Public Function BrokenLinks(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -19,7 +19,7 @@ Public Class DraftTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf DrawingViewsMissingFileInternal,
+                                   AddressOf BrokenLinksInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
@@ -28,7 +28,7 @@ Public Class DraftTasks
 
     End Function
 
-    Private Function DrawingViewsMissingFileInternal(
+    Private Function BrokenLinksInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -53,6 +53,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function DrawingViewsOutOfDate(
@@ -144,6 +145,7 @@ Public Class DraftTasks
     End Function
 
 
+
     Public Function DetachedDimensionsOrAnnotations(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -232,6 +234,9 @@ Public Class DraftTasks
         For Each VariableListItem In VariableList.OfType(Of Object)()
             Dim VariableListItemType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
                 Of SolidEdgeFramework.ObjectType)(VariableListItem, "Type", CType(0, SolidEdgeFramework.ObjectType))
+            Dim VariableListItemType2 As String = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+
 
             If VariableListItemType = SolidEdgeFramework.ObjectType.igDimension Then
                 Dimension = DirectCast(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
@@ -252,6 +257,63 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+
+
+    Public Function PartsListMissingOrOutOfDate(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf PartsListMissingOrOutOfDateInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function PartsListMissingOrOutOfDateInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim PartsLists As SolidEdgeDraft.PartsLists = SEDoc.PartsLists
+        Dim PartsList As SolidEdgeDraft.PartsList
+
+        If PartsLists.Count = 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Parts list missing")
+        Else
+            For Each PartsList In PartsLists
+                If Not PartsList.IsUpToDate Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Parts list out of date")
+                    Exit For
+                End If
+            Next
+
+        End If
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
 
 
     Public Function FileNameDoesNotMatchModelFilename(
@@ -325,6 +387,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function UpdateDrawingViews(
@@ -425,6 +488,7 @@ Public Class DraftTasks
     End Function
 
 
+
     Public Function UpdateDrawingBorderFromTemplate(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -505,6 +569,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function UpdateDimensionStylesFromTemplate(
@@ -640,6 +705,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function MoveDrawingToNewTemplate(
@@ -879,7 +945,7 @@ Public Class DraftTasks
                                       If Not Sheet.Name = SourceDocDummySheetName Then
                                           For Each DrawingView In Sheet.DrawingViews
                                               DVSheetNames.Add(Sheet.Name)
-                                              Dim Name As String = DrawingView.Name
+                                              'Dim Name As String = DrawingView.Name
                                               ' Issue with broken out section view
                                               Try
                                                   DrawingView.Sheet = TargetSheet
@@ -1347,8 +1413,8 @@ Public Class DraftTasks
         Dim msg As String = ""
         Dim tf As Boolean
 
-        Dim SEDocUserSheetGroupSheetNames As New List(Of String)
-        Dim SEDocAutoSheetGroupSheetNames As New List(Of String)
+        'Dim SEDocUserSheetGroupSheetNames As New List(Of String)
+        'Dim SEDocAutoSheetGroupSheetNames As New List(Of String)
 
         Dim DummySheetName As String = "Housekeeper"
 
@@ -1359,6 +1425,11 @@ Public Class DraftTasks
                                            SolidEdgeDraft.DraftDocument)
 
         ' Make sure the file is not an auto-generated file from previous runs of this task
+        ' Note an AutoGenerateFile is not the same thing as as AutoGeneratedSheet.
+        ' The former is created by Housekeeper and may be left over if not everything transfered.
+        ' The latter is a set of sheets SE creates, for example for a BOM that is configured to be placed
+        ' on its own sheet(s)
+
         If Not CheckAutoGeneratedFile(SEDoc) Then
             ' Create dummy sheet source document
             AddSheet(SEDoc, DummySheetName)
@@ -1426,7 +1497,12 @@ Public Class DraftTasks
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
-                msg = String.Format("After correcting issues, please delete {0}", System.IO.Path.GetFileName(GetRemnantsDocFilename(SEDoc)))
+                Dim RemnantsDocFilename As String
+                RemnantsDocFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
+                                                                 System.IO.Path.GetDirectoryName(SEDoc.FullName),
+                                                                 System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+
+                msg = String.Format("After correcting issues, please delete {0}", RemnantsDocFilename)
                 ErrorMessageList.Add(msg)
             End If
         ElseIf (Not tf) Or (ExitStatus = 2) Then
@@ -1442,6 +1518,690 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+
+
+    Public Function UpdateStylesFromTemplate(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf UpdateStylesFromTemplateInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function UpdateStylesFromTemplateInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalErrorMessageList As New List(Of String)
+
+        Dim NewDoc As SolidEdgeDraft.DraftDocument
+
+        Dim NewDocFilename As String = String.Format("{0}\{1}-Housekeeper.dft",
+                                       System.IO.Path.GetDirectoryName(SEDoc.FullName),
+                                       System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+        Dim RemnantsDocFilename As String = NewDocFilename.Replace("Housekeeper", "HousekeeperOld")
+
+        Dim SEDocDVSheetNames As New List(Of String)  ' List of sheet names in order of drawing views
+
+        Dim SheetName As String
+        Dim BOSVCountBefore As New Dictionary(Of String, Integer)
+        Dim BOSVCountAfter As New Dictionary(Of String, Integer)
+        Dim Delta As Integer
+
+        Dim msg As String = ""
+        Dim tf As Boolean
+
+        Dim DummySheetName As String = "Housekeeper"
+
+        Dim DVOriginalSheetDict As New Dictionary(Of SolidEdgeDraft.DrawingView, SolidEdgeDraft.Sheet)
+        Dim DVIdxOriginalSheetDict As New Dictionary(Of String, Dictionary(Of Integer, String))
+
+        ' Open target document
+        NewDoc = CType(SEApp.Documents.Add("SolidEdge.DraftDocument",
+                                           Configuration("TextBoxTemplateDraft")),
+                                           SolidEdgeDraft.DraftDocument)
+
+        If SEDoc.FullName.Contains("-HousekeeperOld") Then
+            ExitStatus = 2
+            msg = TruncateFullPath(SEDoc.FullName, Configuration)
+            ErrorMessageList.Add(String.Format("Auto-generated file '{0}' not processed", msg))
+
+        Else
+
+            ' Check for Drawing Views on background sheets
+            Dim BackgroundSheet As SolidEdgeDraft.Sheet
+            For Each BackgroundSheet In GetSheets(SEDoc, "Background")
+                If BackgroundSheet.DrawingViews.Count > 0 Then
+                    ExitStatus = 2
+                    msg = String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name)
+                    msg = String.Format("{0}  No changes made.  Please transfer to a working sheet and try again.", msg)
+                    ErrorMessageList.Add(msg)
+
+                End If
+            Next
+
+            If ExitStatus < 2 Then
+                ' Create new sheets in target.  Delete any sheets in target not in source.  Set background each sheet.
+                SupplementalErrorMessageList = AddSheetsToTarget(SEDoc, NewDoc, DummySheetName)
+                If SupplementalErrorMessageList.Count > 0 Then
+                    ExitStatus = 1
+                    For Each s As String In SupplementalErrorMessageList
+                        ErrorMessageList.Add(s)
+                    Next
+                End If
+
+                ' Records sheet locations for each drawing view
+                DVOriginalSheetDict = GetDVOriginalSheet(SEDoc)
+
+                ' Get any broken out section views from the source document
+                BOSVCountBefore = GetBOSVCount(SEDoc)
+
+                ' Move drawing views, such as sections and details, to the sheet holding the parent view.
+                ' This eliminates duplicate source drawing views when they are cut/pasted from the old doc to the new.
+                MoveDVToSourceViewSheet(SEDoc, DVOriginalSheetDict)
+
+                ' Cut/paste changes the drawing view object IDs, but not their item order on the sheet.
+                DVIdxOriginalSheetDict = GetDVIdx(SEDoc, DVOriginalSheetDict)
+
+                ExitStatus = TransferSheetContentsToTarget(SEApp, SEDoc, NewDoc)
+
+                If ExitStatus = 2 Then
+                    ' Botched cut/paste.  Don't save anything.
+                    ErrorMessageList.Add("Problem with cut/paste.  No changes made.  Please update manually.")
+
+                Else
+                    ExitStatus = Move2DModelsToTarget(SEApp, SEDoc, NewDoc)
+
+                    If ExitStatus = 2 Then
+                        ' Problem transferring 2D model
+                        ErrorMessageList.Add("Problem with 2D model.  No changes made.  Please update manually.")
+
+                    Else
+
+                        MoveDVsToTargetSheet(NewDoc, DVIdxOriginalSheetDict)
+
+                        ' Get any broken out section views from the source document
+                        BOSVCountAfter = GetBOSVCount(NewDoc)
+
+                        ' Check if any broken out section views did not update correctly
+                        For Each SheetName In BOSVCountBefore.Keys
+                            If BOSVCountAfter.Keys.Contains(SheetName) Then
+                                Delta = BOSVCountBefore(SheetName) - BOSVCountAfter(SheetName)
+                                If Delta > 0 Then
+                                    ExitStatus = 1
+                                    msg = String.Format("Sheet '{0}': Broken Out Section View(s) did not update correctly", SheetName)
+                                    ErrorMessageList.Add(msg)
+                                End If
+                            End If
+                        Next
+
+                        ' Check for Parts Lists that were created with the option 'Create new sheets for table'
+                        If GetSheets(SEDoc, "AutoGenerated").Count > 0 Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Auto generated sheets (probably a Parts List) not processed.  Please regenerate.")
+                            msg = ""
+                            For Each Sheet In GetSheets(SEDoc, "AutoGenerated")
+                                msg += String.Format("{0}, ", Sheet.Name)
+                            Next
+                            ErrorMessageList.Add(msg)
+                        End If
+
+                        TidyUpUpdateStylesFromTemplate(SEApp, SEDoc, NewDoc)
+
+                    End If
+
+                End If
+
+            End If
+
+        End If
+
+
+        If ExitStatus = 2 Then
+            ' Don't save anything
+        ElseIf ExitStatus = 1 Then
+            If Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True" Then
+                NewDoc.SaveAs(NewDocFilename)
+                SEApp.DoIdle()
+
+                If SEDoc.ReadOnly Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+                Else
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+
+                    msg = TruncateFullPath(RemnantsDocFilename, Configuration)
+                    msg = String.Format("After correcting issues, please delete {0}", msg)
+                    ErrorMessageList.Add(msg)
+                End If
+            End If
+        ElseIf ExitStatus = 0 Then
+            NewDoc.SaveAs(NewDocFilename)
+            SEApp.DoIdle()
+        End If
+
+        NewDoc.Close()
+        SEApp.DoIdle()
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function GetBOSVCount(Doc As SolidEdgeDraft.DraftDocument) As Dictionary(Of String, Integer)
+        Dim BOSVCount As New Dictionary(Of String, Integer)
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim count As Integer
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+
+
+        For Each Sheet In GetSheets(Doc, "Working")
+            count = 0
+            DrawingViews = Sheet.DrawingViews
+            For Each DrawingView In DrawingViews
+                If DrawingView.IsBrokenOutSectionTarget Then
+                    count += 1
+                End If
+            Next
+            BOSVCount(Sheet.Name) = count
+        Next
+
+        Return BOSVCount
+    End Function
+
+    Private Sub TidyUpUpdateStylesFromTemplate(SEApp As SolidEdgeFramework.Application,
+                                               SourceDoc As SolidEdgeDraft.DraftDocument,
+                                               TargetDoc As SolidEdgeDraft.DraftDocument)
+
+        Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
+        Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
+        Dim SheetWindow As SolidEdgeDraft.SheetWindow
+
+        SourceDoc.Activate()
+        SourceSheets(0).Activate()
+        SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+        SheetWindow.Display2DModelSheetTab = False
+        'SheetWindow.DisplayBackgroundSheetTabs = False
+
+        'For Each SourceSheet In SourceSheets
+        '    If SourceSheet.Name = DummyName Then
+        '        SourceSheet.Delete()
+        '        Exit For
+        '    End If
+        'Next
+
+        TargetDoc.Activate()
+        For Each TargetSheet In TargetSheets
+            TargetSheet.Activate()
+            SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+            SheetWindow.Display2DModelSheetTab = False
+            SheetWindow.DisplayBackgroundSheetTabs = False
+            SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitSheet)
+        Next
+        TargetSheets(0).Activate()
+
+    End Sub
+
+    'Dim TidyUp As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
+    '    TidyUp = Sub(SourceDoc, TargetDoc, DummyName)
+
+    '             End Sub
+
+    Private Function Move2DModelsToTarget(SEApp As SolidEdgeFramework.Application,
+                                          SourceDoc As SolidEdgeDraft.DraftDocument,
+                                          TargetDoc As SolidEdgeDraft.DraftDocument
+                                          ) As Integer
+
+        Dim ExitStatus As Integer = 0
+
+        Dim SheetWindow As SolidEdgeDraft.SheetWindow
+        'Dim Sections As SolidEdgeDraft.Sections
+
+        Dim Source2DSheet As SolidEdgeDraft.Sheet = GetSheets(SourceDoc, "2DModel")(0)
+        Dim Target2DSheet As SolidEdgeDraft.Sheet = GetSheets(TargetDoc, "2DModel")(0)
+
+        Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
+        'Dim SelectSet As SolidEdgeFramework.SelectSet
+
+        DrawingObjects = Source2DSheet.DrawingObjects
+
+        If DrawingObjects.Count > 0 Then
+            Try
+                SourceDoc.Activate()
+                Source2DSheet.Activate()
+                SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                'SelectSet = SheetWindow.SelectSet
+
+                'For Each DrawingObject In DrawingObjects
+                '    SelectSet.Add(DrawingObject)
+                'Next
+
+                Source2DSheet.FenceLocate(-1000, 1000, 1000, -1000)
+
+
+                SEApp.DoIdle()
+                SheetWindow.Cut()
+                SEApp.DoIdle()
+                SheetWindow.Display2DModelSheetTab = False
+                SheetWindow.DisplayBackgroundSheetTabs = False
+
+                TargetDoc.Activate()
+                Target2DSheet.Activate()
+                SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+                SheetWindow.Paste()
+                SEApp.DoIdle()
+                SheetWindow.Display2DModelSheetTab = False
+                SheetWindow.DisplayBackgroundSheetTabs = False
+
+            Catch ex As Exception
+                ExitStatus = 2
+            End Try
+        End If
+
+        Return ExitStatus
+    End Function
+    'End Sub
+
+    Private Sub MoveDVsToTargetSheet(Doc As SolidEdgeDraft.DraftDocument,
+                              DVIdxOriginalSheetDict As Dictionary(Of String, Dictionary(Of Integer, String))
+                              )
+
+
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+        Dim idx As Integer
+        Dim TargetSheetName As String
+
+        For Each Sheet In GetSheets(Doc, "Working")
+            DrawingViews = Sheet.DrawingViews
+            If DrawingViews.Count > 0 Then
+                idx = 1
+                For Each DrawingView In DrawingViews
+                    If DVIdxOriginalSheetDict(Sheet.Name).Keys.Contains(idx) Then
+                        TargetSheetName = DVIdxOriginalSheetDict(Sheet.Name)(idx)
+                        If Sheet.Name <> TargetSheetName Then
+                            DrawingView.Sheet = SheetNameToObject(Doc, "Working", TargetSheetName)
+                        End If
+                    End If
+                    idx += 1
+                Next
+            End If
+        Next
+
+    End Sub
+
+    Private Function GetDVIdx(Doc As SolidEdgeDraft.DraftDocument,
+                              DVOriginalSheetDict As Dictionary(Of SolidEdgeDraft.DrawingView, SolidEdgeDraft.Sheet)
+                              ) As Dictionary(Of String, Dictionary(Of Integer, String))
+
+        Dim DVIdxOriginalSheetDict As New Dictionary(Of String, Dictionary(Of Integer, String))
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+        Dim idx As Integer
+
+        For Each Sheet In GetSheets(Doc, "Working")
+            DVIdxOriginalSheetDict(Sheet.Name) = New Dictionary(Of Integer, String)
+            DrawingViews = Sheet.DrawingViews
+            If DrawingViews.Count > 0 Then
+                idx = 1
+                For Each DrawingView In DrawingViews
+                    DVIdxOriginalSheetDict(Sheet.Name)(idx) = DVOriginalSheetDict(DrawingView).Name
+                    idx += 1
+                Next
+            End If
+        Next
+
+        Return DVIdxOriginalSheetDict
+    End Function
+
+    Private Function AddSheetsToTarget(SourceDoc As SolidEdgeDraft.DraftDocument,
+                                  TargetDoc As SolidEdgeDraft.DraftDocument,
+                                  DummyName As String
+                                  ) As List(Of String)
+        ' Add sheets to target to match source.
+        ' Remove sheets from target that don't match.
+        ' Set backgrounds to match.  Report to log if target does not have the background sheet.
+
+        Dim ErrorMessageList As New List(Of String)
+
+        'Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
+        'Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
+
+        Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
+        Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
+
+        Dim SourceSheet As SolidEdgeDraft.Sheet
+        Dim TargetSheet As SolidEdgeDraft.Sheet
+
+        Dim SourceSheetNames As New List(Of String)
+        Dim TargetSheetNames As New List(Of String)
+
+        For Each SourceSheet In SourceSheets
+            SourceSheetNames.Add(SourceSheet.Name)
+        Next
+
+        For Each TargetSheet In TargetSheets
+            TargetSheetNames.Add(TargetSheet.Name)
+        Next
+
+        For Each SourceSheet In SourceSheets
+            If Not TargetSheetNames.Contains(SourceSheet.Name) Then
+                AddSheet(TargetDoc, SourceSheet.Name)
+            End If
+        Next
+
+        For Each TargetSheetName In TargetSheetNames
+            If Not SourceSheetNames.Contains(TargetSheetName) Then
+                SheetNameToObject(TargetDoc, "Working", TargetSheetName).Delete()
+            End If
+        Next
+
+        ' SetTargetBackgrounds(SourceDoc, TargetDoc, DummyName)
+        Dim SourceBackgroundSheet As SolidEdgeDraft.Sheet
+        Dim TargetBackgroundSheet As SolidEdgeDraft.Sheet
+
+        Dim msg2 As String = ""
+
+        TargetSheets = GetSheets(TargetDoc, "UserGenerated")
+
+        For Each TargetSheet In TargetSheets
+            If Not TargetSheet.Name = DummyName Then
+                SourceSheet = SheetNameToObject(SourceDoc, "Working", TargetSheet.Name)
+                ' SourceSheetNames.Add(SourceSheet.Name)
+                ' Not all sheets have a background defined
+                Try
+                    SourceBackgroundSheet = SourceSheet.Background
+                    TargetBackgroundSheet = SheetNameToObject(TargetDoc, "Background", SourceBackgroundSheet.Name)
+                    If Not TargetBackgroundSheet Is Nothing Then
+                        TargetSheet.Background = TargetBackgroundSheet
+                        TargetSheet.BackgroundVisible = SourceSheet.BackgroundVisible
+                        TargetSheet.SheetSetup.SheetSizeOption = SourceSheet.SheetSetup.SheetSizeOption
+                    Else
+                        ' ExitStatus = 1
+                        msg2 = String.Format("Template does not have a background named '{0}'", SourceBackgroundSheet.Name)
+                        If Not ErrorMessageList.Contains(msg2) Then
+                            ErrorMessageList.Add(msg2)
+                        End If
+                    End If
+                Catch ex As Exception
+                End Try
+            End If
+        Next
+
+        Return ErrorMessageList
+
+    End Function
+
+    Private Function TransferSheetContentsToTarget(SEApp As SolidEdgeFramework.Application,
+                                                   SourceDoc As SolidEdgeDraft.DraftDocument,
+                                                   TargetDoc As SolidEdgeDraft.DraftDocument
+                                                   ) As Integer
+
+        Dim ExitStatus As Integer = 0
+
+        Dim SheetWindow As SolidEdgeDraft.SheetWindow
+        Dim SourceSheet As SolidEdgeDraft.Sheet
+        Dim TargetSheet As SolidEdgeDraft.Sheet
+        'Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
+
+        Dim SelectSet As SolidEdgeFramework.SelectSet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+
+        Dim msg2 As String = ""
+        Dim HasBrokenView As Boolean
+
+        Dim SelectSetCount As Integer
+
+        For Each SourceSheet In GetSheets(SourceDoc, "UserGenerated")
+            If SourceSheet.DrawingObjects.Count > 0 Then
+                SourceDoc.Activate()
+                SourceSheet.Activate()
+
+                SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitAll)
+
+                ' Deal with Broken Views
+                DrawingViews = SourceSheet.DrawingViews
+                If DrawingViews.Count > 0 Then
+                    HasBrokenView = False
+
+                    For Each DrawingView In DrawingViews
+                        If DrawingView.IsBroken Then
+                            HasBrokenView = True
+                            Exit For
+                        End If
+                    Next
+
+                    If HasBrokenView Then
+                        SelectSet = SheetWindow.SelectSet
+                        For Each DrawingView In DrawingViews
+                            DrawingView.Select()
+                            DrawingView.AddConnectedAnnotationsToSelectSet()
+                            DrawingView.AddConnectedDimensionsToSelectSet()
+                        Next
+                        SEApp.DoIdle()
+                        SheetWindow.Cut()
+                        SEApp.DoIdle()
+
+                        TargetDoc.Activate()
+                        TargetSheet = SheetNameToObject(TargetDoc, "UserGenerated", SourceSheet.Name)
+                        TargetSheet.Activate()
+                        SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                        SheetWindow.Paste()
+                        SEApp.DoIdle()
+
+                        SelectSetCount = SelectSet.Count
+                        SelectSet.RemoveAll()
+                        SelectSetCount = SelectSet.Count
+                        SEApp.DoIdle()
+
+                    End If
+
+                End If
+
+                SourceDoc.Activate()
+                SourceSheet.Activate()
+
+                SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+                SourceSheet.FenceLocate(-1000, 1000, 1000, -1000)
+
+                SelectSet = SheetWindow.SelectSet
+
+                SelectSetCount = SelectSet.Count
+                If SelectSet.Count > 0 Then
+                    ' Catch copy/paste problem
+                    Try
+
+                        SEApp.DoIdle()
+                        SheetWindow.Cut()
+                        SEApp.DoIdle()
+
+                        TargetDoc.Activate()
+                        TargetSheet = SheetNameToObject(TargetDoc, "UserGenerated", SourceSheet.Name)
+                        TargetSheet.Activate()
+                        SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+                        SheetWindow.Paste()
+                        SEApp.DoIdle()
+
+                    Catch ex As Exception
+                        ExitStatus = 2
+
+                    End Try
+
+                End If
+            End If
+        Next
+
+        Return ExitStatus
+
+    End Function
+
+    Private Function GetDVOriginalSheet(Doc As SolidEdgeDraft.DraftDocument
+                                        ) As Dictionary(Of SolidEdgeDraft.DrawingView, SolidEdgeDraft.Sheet)
+
+        Dim DVOriginalSheet As New Dictionary(Of SolidEdgeDraft.DrawingView, SolidEdgeDraft.Sheet)
+        Dim SectionTypes As New List(Of String)
+        Dim SectionType As String
+
+        Dim Sheets As New List(Of SolidEdgeDraft.Sheet)
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DrawingView As SolidEdgeDraft.DrawingView
+
+        SectionTypes.Add("Working")
+        SectionTypes.Add("Background")
+
+        For Each SectionType In SectionTypes
+            Sheets = GetSheets(Doc, SectionType)
+            For Each Sheet In Sheets
+                If Sheet.DrawingViews.Count > 0 Then
+                    DrawingViews = Sheet.DrawingViews
+                    For Each DrawingView In DrawingViews
+                        DVOriginalSheet(DrawingView) = Sheet
+                    Next
+                End If
+            Next
+        Next
+
+        Return DVOriginalSheet
+
+    End Function
+
+    Private Sub MoveDVToSourceViewSheet(Doc As SolidEdgeDraft.DraftDocument,
+                                        DVOriginalSheetsDict As Dictionary(Of SolidEdgeDraft.DrawingView, SolidEdgeDraft.Sheet))
+
+        For Each DV In DVOriginalSheetsDict.Keys
+            If Not DV.SourceDrawingView Is DV Then
+                DV.Sheet = DVOriginalSheetsDict(DV.SourceDrawingView)  ' Key is the drawing view, value is the sheet
+            End If
+        Next
+
+
+    End Sub
+
+    Private Function GetSheets(Doc As SolidEdgeDraft.DraftDocument,
+        SectionType As String
+        ) As List(Of SolidEdgeDraft.Sheet)
+
+        Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim Section As SolidEdgeDraft.Section = Nothing
+        Dim SectionSheets As SolidEdgeDraft.SectionSheets
+        Dim SheetGroups As SolidEdgeDraft.SheetGroups
+        Dim SheetGroup As SolidEdgeDraft.SheetGroup
+
+        Dim count As Integer
+
+        If SectionType = "Working" Then
+            Section = Doc.Sections.WorkingSection
+        ElseIf SectionType = "Background" Then
+            Section = Doc.Sections.BackgroundSection
+        ElseIf SectionType = "2DModel" Then
+            Section = Doc.Sections.WorkingSection  ' Ignored below
+        ElseIf SectionType = "UserGenerated" Then
+            Section = Doc.Sections.WorkingSection
+            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+        ElseIf SectionType = "AutoGenerated" Then
+            Section = Doc.Sections.WorkingSection
+            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+        Else
+            MsgBox(String.Format("SectionType '{0}' not recognized.  Quitting...", SectionType))
+        End If
+
+        SectionSheets = Section.Sheets
+
+        If (SectionType = "Working") Or (SectionType = "Background") Then
+            For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
+                SheetList.Add(Sheet)
+            Next
+
+        ElseIf (SectionType = "2DModel") Then
+            SheetList.Add(Doc.Sections.Get2DModelSheet)
+
+        Else  ' So, 'UserGenerated' or 'AutoGenerated'
+            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+
+            ' 'count' is an index on SheetGroups.  The first SheetGroup is user generated.
+            ' The others appear to be automatically generated for PartsLists
+            count = 0
+
+            For Each SheetGroup In SheetGroups
+                For Each Sheet In SheetGroup.Sheets.OfType(Of SolidEdgeDraft.Sheet)()
+                    If (SectionType = "UserGenerated") And (count = 0) Then
+                        SheetList.Add(Sheet)
+                    End If
+                    If (SectionType = "AutoGenerated") And (count > 0) Then
+                        SheetList.Add(Sheet)
+                    End If
+                Next
+                count += 1
+            Next
+        End If
+
+        Return SheetList
+
+    End Function
+
+    Private Function SheetNameToObject(Doc As SolidEdgeDraft.DraftDocument,
+                                       SectionType As String,
+                                       SheetName As String) As SolidEdgeDraft.Sheet
+        'Dim SheetNameToObject As Func(Of SolidEdgeDraft.DraftDocument, String, String, SolidEdgeDraft.Sheet)
+        'SheetNameToObject = Function(Doc, SectionType, SheetName)
+        '                        Dim Sheet As SolidEdgeDraft.Sheet
+
+        For Each Sheet In GetSheets(Doc, SectionType)
+            If Sheet.Name = SheetName Then
+                Return Sheet
+            End If
+        Next
+        Return Nothing
+    End Function
+
+    Private Sub AddSheet(Doc As SolidEdgeDraft.DraftDocument, SheetName As String)
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim SheetAlreadyExists As Boolean = False
+
+        For Each Sheet In GetSheets(Doc, "Working")
+            If SheetName = Sheet.Name Then
+                SheetAlreadyExists = True
+                Exit For
+            End If
+        Next
+
+        If Not SheetAlreadyExists Then
+            Doc.Sheets.AddSheet(SheetName, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+        End If
+    End Sub
+
 
 
     Public Function OpenSave(
@@ -1487,6 +2247,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function FitView(
@@ -1612,6 +2373,7 @@ Public Class DraftTasks
     End Function
 
 
+
     Public Function SaveAs(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1644,21 +2406,66 @@ Public Class DraftTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalExitStatus As Integer
+
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
         Dim DraftBaseFilename As String
 
+        Dim BaseDir As String
+        Dim SubDir As String
+        Dim Formula As String
+        Dim Proceed As Boolean = True
+        Dim msg As String
+
+
         ' ComboBoxSaveAsSheetmetalFileType
         ' Format: Parasolid (*.xt), IGES (*.igs)
         NewExtension = Configuration("ComboBoxSaveAsDraftFileType")
-        NewExtension = Split(NewExtension, Delimiter:="*")(1)
-        NewExtension = Split(NewExtension, Delimiter:=")")(0)
+        NewExtension = Split(NewExtension, Delimiter:="*")(1)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = Split(NewExtension, Delimiter:=")")(0)  ' ".xt)" -> ".xt"
 
         DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
         ' CheckBoxSaveAsDraftOutputDirectory
         If Configuration("CheckBoxSaveAsDraftOutputDirectory") = "False" Then
-            NewFilename = Configuration("TextBoxSaveAsDraftOutputDirectory") + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, NewExtension)
+            BaseDir = Configuration("TextBoxSaveAsDraftOutputDirectory")
+
+            If Configuration("CheckBoxSaveAsFormulaDraft").ToLower = "true" Then
+                Formula = Configuration("TextBoxSaveAsFormulaDraft")
+
+                SupplementalErrorMessage = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
+                ' SubDir = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
+                SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                If SupplementalExitStatus = 0 Then
+                    SubDir = SupplementalErrorMessage(0)(0)
+
+                    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
+                    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
+                        Try
+                            FileIO.FileSystem.CreateDirectory(BaseDir)
+                        Catch ex As Exception
+                            Proceed = False
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
+                        End Try
+                    End If
+                Else
+                    ExitStatus = 1
+                    Proceed = False
+                    For Each msg In SupplementalErrorMessage(SupplementalExitStatus)
+                        ErrorMessageList.Add(msg)
+                    Next
+                    ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
+                End If
+
+            End If
+
+            If Proceed Then
+                NewFilename = BaseDir + "\" + System.IO.Path.ChangeExtension(DraftBaseFilename, NewExtension)
+            End If
+
         Else
             NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
         End If
@@ -1681,6 +2488,7 @@ Public Class DraftTasks
             Dim SheetW As Double
             Dim SheetH As Double
 
+
             OriginalSheet = SEDoc.ActiveSheet
             Sections = SEDoc.Sections
             Section = Sections.BackgroundSection
@@ -1697,10 +2505,7 @@ Public Class DraftTasks
                 ImageY = Y * SheetH - Watermark.Height / 2
                 ' Watermark.GetOrigin(ImageX, ImageY)
                 Watermark.SetOrigin(ImageX, ImageY)
-                'msg = String.Format("{0}{1}{2}", msg, Sheet.Name, vbCrLf)
-                'msg = String.Format("{0}{1} {2}{3}", msg, SheetW, SheetH, vbCrLf)
-                'msg = String.Format("{0}{1} {2}{3}", msg, ImageX, ImageY, vbCrLf)
-                'MsgBox(msg)
+
                 SEApp.DoIdle()
             Next
 
@@ -1719,12 +2524,251 @@ Public Class DraftTasks
             SEApp.DoIdle()
         Catch ex As Exception
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
+            ErrorMessageList.Add(String.Format("Error saving file {0}", TruncateFullPath(NewFilename, Configuration)))
         End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+    Private Function ParseSubdirectoryFormula(SEDoc As SolidEdgeDraft.DraftDocument,
+                                              Configuration As Dictionary(Of String, String),
+                                              SubdirectoryFormula As String
+                                              ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalExitStatus As Integer
+
+        Dim OutString As String = ""
+
+        ' Formatting for subdirectory name formula
+        ' Example property callout: %{hmk_Part_Number/CP|G}  
+        ' Need to know PropertySet, so maybe: %{Custom.hmk_Part_Number}
+        ' For Drafts, maybe: %{Custom.hmk_Part_Number|R1}
+
+        ' Example 1 Formula: "Material_%{System.Material}_Thickness_%{Custom.Material Thickness}"
+        ' Example 2 Formula: "%{System.Material} %{Custom.Material Thickness}"
+
+        Dim PropertySet As String
+        Dim PropertyName As String
+
+        Dim DocValues As New List(Of String)
+        Dim DocValue As String
+
+        Dim StartPositions As New List(Of Integer)
+        Dim StartPosition As Integer
+        Dim EndPositions As New List(Of Integer)
+        Dim EndPosition As Integer
+        Dim Length As Integer
+        Dim i As Integer
+        Dim msg As String
+
+        Dim Proceed As Boolean = True
+
+        Dim LastPipeCharPosition As Integer
+        Dim ModelLinkIdx As Integer
+        Dim ModelLinkSpecifier As String
+
+        Dim Formulas As New List(Of String)
+        Dim Formula As String
+
+
+        If Not SubdirectoryFormula.Contains("%") Then
+            OutString = SubdirectoryFormula
+            Proceed = False
+        End If
+
+        If Proceed Then
+
+            For StartPosition = 0 To SubdirectoryFormula.Length - 1
+                If SubdirectoryFormula.Substring(StartPosition, 1) = "%" Then
+                    StartPositions.Add(StartPosition)
+                End If
+            Next
+
+            For EndPosition = 0 To SubdirectoryFormula.Length - 1
+                If SubdirectoryFormula.Substring(EndPosition, 1) = "}" Then
+                    EndPositions.Add(EndPosition)
+                End If
+            Next
+
+            For i = 0 To StartPositions.Count - 1
+                Length = EndPositions(i) - StartPositions(i) + 1
+                Formulas.Add(SubdirectoryFormula.Substring(StartPositions(i), Length))
+            Next
+
+            For Each Formula In Formulas
+                Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
+                Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
+                i = Formula.IndexOf(".")  ' First occurrence
+                PropertySet = Formula.Substring(0, i)    ' "Custom"
+                PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                LastPipeCharPosition = 0
+                For i = 0 To PropertyName.Length - 1
+                    If PropertyName.Substring(i, 1) = "|" Then
+                        LastPipeCharPosition = i
+                    End If
+                Next
+
+                If LastPipeCharPosition = 0 Then
+                    ModelLinkIdx = 0
+                Else
+                    ModelLinkSpecifier = PropertyName.Substring(LastPipeCharPosition)
+                    PropertyName = PropertyName.Substring(0, LastPipeCharPosition)
+
+                    Try
+                        ModelLinkIdx = CInt(ModelLinkSpecifier.Replace("|R", ""))
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Could not resolve '{0}'", ModelLinkSpecifier))
+                        Exit For
+                    End Try
+                End If
+
+                SupplementalErrorMessage = GetPropertyValue(SEDoc, Configuration, PropertySet, PropertyName, ModelLinkIdx)
+                SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                If SupplementalExitStatus = 0 Then
+                    DocValue = SupplementalErrorMessage(SupplementalExitStatus)(0)
+                Else
+                    DocValue = ""
+                    ExitStatus = 1
+                    For Each msg In SupplementalErrorMessage(SupplementalExitStatus)
+                        If Not ErrorMessageList.Contains(msg) Then
+                            ErrorMessageList.Add(msg)
+                        End If
+                    Next
+                End If
+                DocValues.Add(DocValue)
+            Next
+
+            If Proceed Then
+                OutString = SubdirectoryFormula
+
+                For i = 0 To DocValues.Count - 1
+                    OutString = OutString.Replace(Formulas(i), DocValues(i))
+                Next
+            End If
+        End If
+
+        If ExitStatus = 0 Then
+            ErrorMessageList.Add(OutString)
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function GetPropertyValue(SEDoc As SolidEdgeDraft.DraftDocument,
+                                      Configuration As Dictionary(Of String, String),
+                                      PropertySet As String,
+                                      PropertyName As String,
+                                      ModelLinkIdx As Integer
+                                      ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+        Dim Properties As SolidEdgeFramework.Properties = Nothing
+        Dim Prop As SolidEdgeFramework.Property = Nothing
+
+        Dim DocValue As String = ""
+        Dim PropertyFound As Boolean = False
+        Dim tf As Boolean
+        Dim msg As String
+        Dim Proceed As Boolean = True
+
+        Dim ModelDocName As String = ""
+
+        If ModelLinkIdx = 0 Then
+            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Else
+            Dim ModelLink As SolidEdgeDraft.ModelLink
+            Dim Typename As String
+
+            Try
+                ModelLink = SEDoc.ModelLinks.Item(ModelLinkIdx)
+                Typename = Microsoft.VisualBasic.Information.TypeName(ModelLink.ModelDocument)  ' "PartDocument", "SheetmetalDocument", "AssemblyDocument"
+
+                If Typename.ToLower = "partdocument" Then
+                    Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "sheetmetaldocument" Then
+                    Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "assemblydocument" Then
+                    Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                msg = String.Format("Problem accessing index reference {0}", ModelLinkIdx)
+                If Not ErrorMessageList.Contains(msg) Then
+                    ErrorMessageList.Add(msg)
+                End If
+            End Try
+
+        End If
+
+        If Proceed Then
+            For Each Properties In PropertySets
+                For Each Prop In Properties
+                    tf = (PropertySet.ToLower = "custom")
+                    tf = tf And (Properties.Name.ToLower = "custom")
+                    If tf Then
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            PropertyFound = True
+                            DocValue = Prop.Value.ToString
+                            Exit For
+                        End If
+                    Else
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            PropertyFound = True
+                            DocValue = Prop.Value.ToString
+                            Exit For
+                        End If
+                    End If
+                Next
+                If PropertyFound Then
+                    Exit For
+                End If
+            Next
+
+            If Not PropertyFound Then
+                ExitStatus = 1
+                If ModelLinkIdx = 0 Then
+                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(SEDoc.FullName, Configuration))
+                    ErrorMessageList.Add(msg)
+                Else
+                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(ModelDocName, Configuration))
+                    ErrorMessageList.Add(msg)
+                End If
+            End If
+        End If
+
+        If ExitStatus = 0 Then
+            ErrorMessageList.Add(DocValue)
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
 
 
     Public Function Print(
@@ -1838,6 +2882,8 @@ Public Class DraftTasks
         Return ErrorMessage
     End Function
 
+
+
     Public Function InteractiveEdit(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1892,8 +2938,8 @@ Public Class DraftTasks
                 SEApp.DoIdle()
             End If
         ElseIf Result = vbNo Then
-            ExitStatus = 1
-            ErrorMessageList.Add("File was not saved.")
+            'ExitStatus = 1
+            'ErrorMessageList.Add("File was not saved.")
         Else  ' Cancel was chosen
             ExitStatus = 99
             ErrorMessageList.Add("Operation was cancelled.")
@@ -1904,6 +2950,7 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Public Function RunExternalProgram(
@@ -1980,9 +3027,20 @@ Public Class DraftTasks
         End If
 
 
+        If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        End If
+
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 
     Private Function TruncateFullPath(ByVal Path As String,
@@ -2000,6 +3058,8 @@ Public Class DraftTasks
         End If
         Return NewPath
     End Function
+
+
 
     Public Function Dummy(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -2037,5 +3097,6 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
 End Class

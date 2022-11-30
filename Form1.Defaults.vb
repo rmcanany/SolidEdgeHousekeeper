@@ -88,6 +88,11 @@ Partial Class Form1
             End If
         End If
 
+        tf = tb.Name.ToLower.Contains("formula")
+        If tf Then
+            tb.Text = Value
+        End If
+
         tf = tb.Name.ToLower.Contains("template")
         tf = tf Or tb.Name.ToLower.Contains("materiallibrary")
         tf = tf Or tb.Name.ToLower.Contains("toplevelassembly")
@@ -164,6 +169,10 @@ Partial Class Form1
             tb.Text = Value
         End If
 
+        tf = tb.Name.ToLower.Contains("exposevariables")
+        If tf Then
+            tb.Text = Value
+        End If
 
     End Sub
 
@@ -178,10 +187,8 @@ Partial Class Form1
         ' Assembly
         FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
         FileTypesString += ":OBJ (*.obj):STL (*.stl)"
-        FileTypesString += ":bmp (*.bmp):jpg (*.jpg):tif (*.tif)"
-        'Image files do not operate on the document
-        'Solid Edge Framework Type Library > View Object : SaveAsImage Method
-        'FileTypesString += ":bmp (*.bmp)"
+        ' FileTypesString += ":bmp (*.bmp):jpg (*.jpg):tif (*.tif)"
+        FileTypesString += ":bmp (*.bmp):jpg (*.jpg):png (*.png):tif (*.tif)"
 
         ComboBoxSaveAsAssemblyFileType.Items.Clear()
         For Each FileType In Split(FileTypesString, Delimiter:=":")
@@ -201,6 +208,8 @@ Partial Class Form1
         For Each FileType In Split(FileTypesString, Delimiter:=":")
             ComboBoxSaveAsSheetmetalFileType.Items.Add(FileType)
         Next
+        ComboBoxSaveAsSheetmetalFileType.Items.Add("PDF Drawing (*.pdf)")
+        ComboBoxSaveAsSheetmetalFileType.Items.Add("DXF Flat (*.dxf)")
         ComboBoxSaveAsSheetmetalFileType.Text = CType(ComboBoxSaveAsSheetmetalFileType.Items(0), String)
 
         ' Draft
@@ -297,7 +306,16 @@ Partial Class Form1
 
                     ElseIf TypeOf Ctrl Is ComboBox Then
                         Dim c As ComboBox = CType(Ctrl, ComboBox)
-                        c.Text = Value
+
+                        If Key = "ComboBoxFileSearch" Then
+                            If Value.Contains("ComboBoxFileSearchItem.") Then
+                                c.Items.Add(Value.Replace("ComboBoxFileSearchItem.", ""))
+                            Else
+                                c.Text = Value
+                            End If
+                        Else
+                            c.Text = Value
+                        End If
                     End If
                 Else
                     tf = Key.Contains("Assembly.")
@@ -314,6 +332,12 @@ Partial Class Form1
         Catch ex As Exception
             ' MsgBox(ex.ToString)
             TextBoxInputDirectory.Text = Application.StartupPath
+            ' If the file 'defaults.txt' does not exist, this is the first run of the program.
+            ' In that case, display the Readme Tab.
+            ' TODO: Figure out how to un-highlight the text
+            TabControl1.SelectedTab = TabControl1.TabPages("TabPageReadme")
+            'TextBoxReadme.SelectAll()
+            'TextBoxReadme.DeselectAll()
         End Try
 
         ReconcileFormChanges()
@@ -394,46 +418,21 @@ Partial Class Form1
 
             ElseIf TypeOf Ctrl Is ComboBox Then
                 Dim c As ComboBox = CType(Ctrl, ComboBox)
+
+                If c.Name = "ComboBoxFileSearch" Then
+                    If c.Items.Count > 0 Then
+                        For i As Integer = 0 To c.Items.Count - 1
+                            Dim Value As String = c.Items(i).ToString
+                            Defaults.Add(String.Format("{0}=ComboBoxFileSearchItem.{1}", c.Name, Value))
+
+                        Next
+                    End If
+                End If
+
                 Defaults.Add(String.Format("{0}={1}", c.Name, c.Text))
             End If
         Next
 
-        'Defaults.Add(TextBoxInputDirectory.Name + "=" + TextBoxInputDirectory.Text)
-        ''MsgBox(TextBoxInputDirectory.Text)
-        'Defaults.Add(TextBoxTemplateAssembly.Name + "=" + TextBoxTemplateAssembly.Text)
-        'Defaults.Add(TextBoxTemplatePart.Name + "=" + TextBoxTemplatePart.Text)
-        'Defaults.Add(TextBoxTemplateSheetmetal.Name + "=" + TextBoxTemplateSheetmetal.Text)
-        'Defaults.Add(TextBoxTemplateDraft.Name + "=" + TextBoxTemplateDraft.Text)
-        'Defaults.Add(TextBoxActiveMaterialLibrary.Name + "=" + TextBoxActiveMaterialLibrary.Text)
-        'Defaults.Add(ComboBoxPartNumberPropertySet.Name + "=" + ComboBoxPartNumberPropertySet.Text)
-        'Defaults.Add(TextBoxPartNumberPropertyName.Name + "=" + TextBoxPartNumberPropertyName.Text)
-        'Defaults.Add(TextBoxRestartAfter.Name + "=" + TextBoxRestartAfter.Text)
-        'Defaults.Add(TextBoxLaserOutputDirectory.Name + "=" + TextBoxLaserOutputDirectory.Text)
-        'Defaults.Add(CheckBoxWarnSave.Name + "=" + CheckBoxWarnSave.Checked.ToString)
-        'Defaults.Add(TextBoxStepAssemblyOutputDirectory.Name + "=" + TextBoxStepAssemblyOutputDirectory.Text)
-        'Defaults.Add(TextBoxStepPartOutputDirectory.Name + "=" + TextBoxStepPartOutputDirectory.Text)
-        'Defaults.Add(TextBoxStepSheetmetalOutputDirectory.Name + "=" + TextBoxStepSheetmetalOutputDirectory.Text)
-        'Defaults.Add(TextBoxPdfDraftOutputDirectory.Name + "=" + TextBoxPdfDraftOutputDirectory.Text)
-        'Defaults.Add(TextBoxDxfDraftOutputDirectory.Name + "=" + TextBoxDxfDraftOutputDirectory.Text)
-        'Defaults.Add(TextBoxColumnWidth.Name + "=" + TextBoxColumnWidth.Text)
-        'Defaults.Add(TextBoxTopLevelAssembly.Name + "=" + TextBoxTopLevelAssembly.Text)
-        '' Defaults.Add(TextBoxPropertyFilter.Name + "=" + TextBoxPropertyFilter.Text)
-
-        'Defaults.Add(CheckBoxStepAssemblyOutputDirectory.Name + "=" + CheckBoxStepAssemblyOutputDirectory.Checked.ToString)
-        'Defaults.Add(CheckBoxStepPartOutputDirectory.Name + "=" + CheckBoxStepPartOutputDirectory.Checked.ToString)
-        'Defaults.Add(CheckBoxLaserOutputDirectory.Name + "=" + CheckBoxLaserOutputDirectory.Checked.ToString)
-        'Defaults.Add(CheckBoxStepSheetmetalOutputDirectory.Name + "=" + CheckBoxStepSheetmetalOutputDirectory.Checked.ToString)
-        'Defaults.Add(CheckBoxPdfDraftOutputDirectory.Name + "=" + CheckBoxPdfDraftOutputDirectory.Checked.ToString)
-        'Defaults.Add(CheckBoxDxfDraftOutputDirectory.Name + "=" + CheckBoxDxfDraftOutputDirectory.Checked.ToString)
-
-        'Defaults.Add(RadioButtonTLABottomUp.Name + "=" + RadioButtonTLABottomUp.Checked.ToString)
-        'Defaults.Add(RadioButtonTLATopDown.Name + "=" + RadioButtonTLATopDown.Checked.ToString)
-        'Defaults.Add(CheckBoxTLAReportUnrelatedFiles.Name + "=" + CheckBoxTLAReportUnrelatedFiles.Checked.ToString)
-
-        ''MsgBox(ComboBoxPartsListStyle.SelectedText)
-        ''Defaults.Add(ComboBoxPartsListStyle.Name + "=" + ComboBoxPartsListStyle.SelectedItem.ToString)
-        ''Defaults.Add(ComboBoxPartsListAutoballoon.Name + "=" + ComboBoxPartsListAutoballoon.SelectedItem.ToString)
-        ''Defaults.Add(ComboBoxPartsListCreateList.Name + "=" + ComboBoxPartsListCreateList.SelectedItem.ToString)
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="
@@ -534,7 +533,7 @@ Partial Class Form1
         Names.Add("### SHEETMETAL")
         Names.Add("### DRAFT")
 
-        msg = "# Solid Edge Housekeeper v0.1.9.0"
+        msg = "# Solid Edge Housekeeper v0.1.10.0"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -554,7 +553,8 @@ Partial Class Form1
 
         msg = "Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, "
         msg += "@SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], "
-        msg += "@Fiorini"
+        msg += "@Fiorini, @[Martin Bernhard], @Derek G, @Chris42, @Jason1607436093479, @Bob Henry, "
+        msg += "@JayJay101"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -568,6 +568,19 @@ Partial Class Form1
         msg += "It can identify failed features in 3D models, detached dimensions in drawings, "
         msg += "missing parts in assemblies, and more.  It can also update certain individual "
         msg += "file settings to match those in a template you specify."
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "## GETTING HELP"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "Ask questions, report issues, or suggest ideas for improvement on the Solid Edge Forum: "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -617,7 +630,7 @@ Partial Class Form1
 
         msg = "If any errors are found, a log file will be written to the input folder.  "
         msg += "It will identify each error and the file in which it occurred.  "
-        msg += "When processing is complete, a message box will give you the file name."
+        msg += "When processing is complete, the log file is opened in Notepad for review."
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -711,6 +724,15 @@ Partial Class Form1
         msg += "Cause: Not exposed in the DraftPrintUtility() API.  "
         msg += "Possible workaround: Create a new Windows printer with the desired settings.  "
         msg += "Refer to the TESTS AND ACTIONS topic below for more details.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "Pathfinder is sometimes blank when running the 'Interactive Edit' task.  "
+        msg += "Cause: Unknown.  "
+        msg += "Possible workaround: Refresh the screen by minimizing and maximizing the Solid Edge window.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""

@@ -195,10 +195,80 @@ Public Class PropertyFilter
             tf = DocValue.ToLower <> Value.ToLower
         ElseIf Comparison = "wildcard_contains" Then
             tf = DocValue.ToLower Like Value.ToLower
+        ElseIf Comparison = ">" Then
+            Try
+                tf = TextToDouble(DocValue) > TextToDouble(Value)
+            Catch ex As Exception
+                tf = DocValue.ToLower > Value.ToLower
+            End Try
+        ElseIf Comparison = "<" Then
+            Try
+                tf = TextToDouble(DocValue) < TextToDouble(Value)
+            Catch ex As Exception
+                tf = DocValue.ToLower < Value.ToLower
+            End Try
         End If
 
         Return tf
     End Function
+
+    Private Function TextToDouble(Text As String) As Double
+        Dim DoubleNumber As Double
+
+        Dim Units As New List(Of String)
+        Units.Add("in")
+        Units.Add("mm")
+        Units.Add("lbm")
+        Units.Add("kg")
+
+        Dim DateTime As DateTime
+
+        ' First try to convert the text directly.
+        ' If that fails, try to strip a unit from the end of the text, then convert.
+        ' If that fails, either because a unit match was not found, or the conversion still didn't work, 
+        ' try to treat it as a date and convert
+        ' If that fails, raise a FormatException for the function caller.
+
+        Try
+            DoubleNumber = CDbl(Text)
+            Return DoubleNumber
+        Catch ex As Exception
+            Try
+                For Each Unit In Units
+                    ' Example "0.325 in",  Length=8, UnitLength=2, idx_start = 6 = Length - UnitLength.
+                    If Text.Substring(Text.Length - Unit.Length) = Unit Then
+                        DoubleNumber = CDbl(Text.Substring(0, Text.Length - Unit.Length))
+                        Return DoubleNumber
+                    End If
+                Next
+            Catch ex2 As Exception
+            End Try
+        End Try
+
+        DateTime = Convert.ToDateTime(Text, Globalization.CultureInfo.CurrentCulture)  ' Returns a FormatException if it doesn't work.
+        Text = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+        DoubleNumber = CDbl(Text)
+
+        Return DoubleNumber
+
+    End Function
+
+    'Private Function IsNumber(Value As String) As Boolean
+    '    Dim tf As Boolean = True
+    '    Dim result As Double
+
+    '    Dim Units As New List(Of String)
+    '    Units.Add("in")
+    '    Units.Add("mm")
+
+    '    Try
+    '        result = CDbl(Value)
+    '    Catch ex As Exception
+    '        tf = False
+    '    End Try
+
+    '    Return tf
+    'End Function
 
     Private Function SearchProperties(PropertySets As DesignManager.PropertySets,
                                       PropertySet As String,
@@ -209,18 +279,27 @@ Public Class PropertyFilter
         Dim SystemPropertySets As New List(Of String)
         Dim SystemPropertySet As String
 
+        Dim DateTime As DateTime
+
         SystemPropertySets.Add("ProjectInformation")
         SystemPropertySets.Add("MechanicalModeling")
         SystemPropertySets.Add("SummaryInformation")
         SystemPropertySets.Add("ExtendedSummaryInformation")
         SystemPropertySets.Add("DocumentSummaryInformation")
 
+        Dim TypeName As String
+
         If PropertySet.ToLower = "custom" Then
             ' The property may not be in every file
             Try
                 Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
                 Prop = Properties.Item(PropertyName)
+                TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
                 DocValue = Prop.Value.ToString
+                If TypeName.ToLower = "date" Then
+                    DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+                    DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+                End If
             Catch ex As Exception
             End Try
         Else
@@ -228,7 +307,12 @@ Public Class PropertyFilter
                 Try
                     Properties = CType(PropertySets.Item(SystemPropertySet), DesignManager.Properties)
                     Prop = Properties.Item(PropertyName)
+                    TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
                     DocValue = Prop.Value.ToString
+                    If TypeName.ToLower = "date" Then
+                        DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+                        DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+                    End If
                     Exit For
                 Catch ex As Exception
                 End Try

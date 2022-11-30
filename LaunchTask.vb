@@ -48,10 +48,10 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
-                Case "OccurrenceMissingFiles"
-                    ErrorMessage = task.Proxy.OccurrenceMissingFiles(SEDoc, Configuration, SEApp)
-                Case "OccurrenceOutsideProjectDirectory"
-                    ErrorMessage = task.Proxy.OccurrenceOutsideProjectDirectory(SEDoc, Configuration, SEApp)
+                Case "BrokenLinks"
+                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                Case "LinksOutsideInputDirectory"
+                    ErrorMessage = task.Proxy.LinksOutsideInputDirectory(SEDoc, Configuration, SEApp)
                 Case "FailedRelationships"
                     ErrorMessage = task.Proxy.FailedRelationships(SEDoc, Configuration, SEApp)
                 Case "UnderconstrainedRelationships"
@@ -80,6 +80,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
                 Case "PropertyFindReplace"
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
+                Case "ExposeVariables"
+                    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
+                Case "ExposeVariablesMissing"
+                    ErrorMessage = task.Proxy.ExposeVariablesMissing(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -115,6 +119,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
                     ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                Case "BrokenLinks"
+                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
@@ -141,6 +147,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
                 Case "PropertyFindReplace"
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
+                Case "ExposeVariables"
+                    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
+                Case "ExposeVariablesMissing"
+                    ErrorMessage = task.Proxy.ExposeVariablesMissing(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -180,12 +190,14 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
                     ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
+                Case "BrokenLinks"
+                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
-                Case "GenerateLaserDXFAndPDF"
-                    ErrorMessage = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
+                'Case "GenerateLaserDXFAndPDF"
+                '    ErrorMessage = task.Proxy.GenerateLaserDXFAndPDF(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
                     ErrorMessage = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateMaterialFromMaterialTable"
@@ -200,8 +212,8 @@ Public Class LaunchTask
                 '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
                     ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
-                Case "SaveAsFlatDXF"
-                    ErrorMessage = task.Proxy.SaveAsFlatDXF(SEDoc, Configuration, SEApp)
+                'Case "SaveAsFlatDXF"
+                '    ErrorMessage = task.Proxy.SaveAsFlatDXF(SEDoc, Configuration, SEApp)
                 Case "InteractiveEdit"
                     ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
                 Case "RunExternalProgram"
@@ -210,6 +222,10 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.MissingDrawing(SEDoc, Configuration, SEApp)
                 Case "PropertyFindReplace"
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
+                Case "ExposeVariables"
+                    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
+                Case "ExposeVariablesMissing"
+                    ErrorMessage = task.Proxy.ExposeVariablesMissing(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -237,28 +253,32 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
-                Case "DrawingViewsMissingFile"
-                    ErrorMessage = task.Proxy.DrawingViewsMissingFile(SEDoc, Configuration, SEApp)
+                Case "BrokenLinks"
+                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
                     ErrorMessage = task.Proxy.DrawingViewsOutOfDate(SEDoc, Configuration, SEApp)
                 Case "DetachedDimensionsOrAnnotations"
                     ErrorMessage = task.Proxy.DetachedDimensionsOrAnnotations(SEDoc, Configuration, SEApp)
+                Case "PartsListMissingOrOutOfDate"
+                    ErrorMessage = task.Proxy.PartsListMissingOrOutOfDate(SEDoc, Configuration, SEApp)
                 Case "FileNameDoesNotMatchModelFilename"
                     ErrorMessage = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingViews"
                     ErrorMessage = task.Proxy.UpdateDrawingViews(SEDoc, Configuration, SEApp)
-                Case "MoveDrawingToNewTemplate"
-                    ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
+                'Case "MoveDrawingToNewTemplate"
+                '    ErrorMessage = task.Proxy.MoveDrawingToNewTemplate(SEDoc, Configuration, SEApp)
+                Case "UpdateStylesFromTemplate"
+                    ErrorMessage = task.Proxy.UpdateStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingBorderFromTemplate"
                     ErrorMessage = task.Proxy.UpdateDrawingBorderFromTemplate(SEDoc, Configuration, SEApp)
-                Case "UpdateDimensionStylesFromTemplate"
-                    ErrorMessage = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
+                'Case "UpdateDimensionStylesFromTemplate"
+                '    ErrorMessage = task.Proxy.UpdateDimensionStylesFromTemplate(SEDoc, Configuration, SEApp)
                 Case "FitView"
                     ErrorMessage = task.Proxy.FitView(SEDoc, Configuration, SEApp)
                 'Case "SaveAsPDF"
                 '    ErrorMessage = task.Proxy.SaveAsPDF(SEDoc, Configuration, SEApp)
-                Case "SaveAsDXF"
-                    ErrorMessage = task.Proxy.SaveAsDXF(SEDoc, Configuration, SEApp)
+                'Case "SaveAsDXF"
+                '    ErrorMessage = task.Proxy.SaveAsDXF(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
                     ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
                 Case "Print"

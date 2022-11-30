@@ -92,10 +92,12 @@ Public Class TopLevelAssemblyUtilities
                         Next
                     End Using
 
-                    LogfileName = LogfileName.Replace(TopLevelFolder, "")
-                    msg = String.Format("Files unrelated to top level assembly found.  See log file{0}", vbCrLf)
-                    msg += LogfileName
-                    MsgBox(msg)
+                    Process.Start("Notepad.exe", LogfileName)
+
+                    'LogfileName = LogfileName.Replace(TopLevelFolder, "")
+                    'msg = String.Format("Files unrelated to top level assembly found.  See log file{0}", vbCrLf)
+                    'msg += LogfileName
+                    'MsgBox(msg)
                 Catch ex As Exception
                 End Try
 
@@ -595,11 +597,13 @@ Public Class TopLevelAssemblyUtilities
         Dim CommentString As String = "\\ "
         Dim Line As String
         Dim IndexedDrives As New List(Of String)
+        Dim msg As String
 
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
-            MsgBox(String.Format("Error reading {0}", SearchScopeFilename))
+            msg = String.Format("Fast search scope file '{0}' (on Configuration Tab) not found.", SearchScopeFilename)
+            MsgBox(msg)
             'Exit Function
         End Try
 

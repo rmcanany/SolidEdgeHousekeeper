@@ -1,12 +1,16 @@
-# Solid Edge Housekeeper v0.1.9.0
+# Solid Edge Housekeeper v0.1.10.0
 Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
 
-Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini
+Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, @[Martin Bernhard], @Derek G, @Chris42, @Jason1607436093479, @Bob Henry, @JayJay101
 
 ## DESCRIPTION
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
+
+## GETTING HELP
+Ask questions, report issues, or suggest ideas for improvement on the Solid Edge Forum: 
+https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
 
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
@@ -18,7 +22,7 @@ On each file type's tab, select which errors to detect.  On the General tab, bro
 
 You can refine the search using a file filter, a property filter, or both.  See the file selection section for details.  
 
-If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, a message box will give you the file name.
+If any errors are found, a log file will be written to the input folder.  It will identify each error and the file in which it occurred.  When processing is complete, the log file is opened in Notepad for review.
 
 The first time you use the program, some site-specific information is needed.  This includes the location of your templates, material table, etc.  These are populated on the Configuration Tab.
 
@@ -42,6 +46,8 @@ May not support multiple installed Solid Edge versions on the same machine.  Cau
 
 Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: Not exposed in the DraftPrintUtility() API.  Possible workaround: Create a new Windows printer with the desired settings.  Refer to the TESTS AND ACTIONS topic below for more details.  
 
+Pathfinder is sometimes blank when running the 'Interactive Edit' task.  Cause: Unknown.  Possible workaround: Refresh the screen by minimizing and maximizing the Solid Edge window.  
+
 
 ## DETAILS
 
@@ -49,46 +55,56 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
 ### ASSEMBLY
     Open/Save
     Activate and update all
-    Update face and view styles from template
+    Property find replace
+    Expose variables missing
+    Expose variables
     Remove face style overrides
+    Update face and view styles from template
     Hide constructions
     Fit pictorial view
+    Part number does not match file name
     Missing drawing
-    Occurrence missing files
-    Occurrence outside project directory
+    Broken links
+    Links outside input directory
     Failed relationships
     Underconstrained relationships
-    Part number does not match file name
-    Save as
-    Interactive edit
     Run external program
-    Property find replace
+    Interactive edit
+    Save as
 ### PART
     Open/Save
-    Update insert part copies
-    Update material from material table
+    Property find replace
+    Expose variables missing
+    Expose variables
     Update face and view styles from template
+    Update material from material table
     Hide constructions
     Fit pictorial view
+    Update insert part copies
+    Broken links
+    Part number does not match file name
     Missing drawing
     Failed or warned features
     Suppressed or rolled back features
     Underconstrained profiles
     Insert part copies out of date
     Material not in material table
-    Part number does not match file name
-    Save As
-    Interactive edit
     Run external program
-    Property find replace
+    Interactive edit
+    Save As
 ### SHEETMETAL
     Open/Save
-    Update insert part copies
-    Update material from material table
+    Property find replace
+    Expose variables missing
+    Expose variables
     Update face and view styles from template
-    Update design for cost
+    Update material from material table
     Hide constructions
     Fit pictorial view
+    Update insert part copies
+    Update design for cost
+    Broken links
+    Part number does not match file name
     Missing drawing
     Failed or warned features
     Suppressed or rolled back features
@@ -96,27 +112,24 @@ Does not support all printer settings, e.g., duplexing, collating, etc.  Cause: 
     Insert part copies out of date
     Flat pattern missing or out of date
     Material not in material table
-    Part number does not match file name
-    Generate Laser DXF and PDF
-    Save As
-    Save As Flat DXF
-    Interactive edit
     Run external program
-    Property find replace
+    Interactive edit
+    Save As
 ### DRAFT
     Open/Save
     Update drawing views
-    Move drawing to new template
+    Update styles from template
     Update drawing border from template
     Fit view
-    Drawing views missing file
+    File name does not match model file name
+    Broken links
     Drawing views out of date
     Detached dimensions or annotations
-    File name does not match model file name
-    Save As
-    Print
-    Interactive edit
+    Parts list missing or out of date
     Run external program
+    Interactive edit
+    Print
+    Save As
 
 ## CODE ORGANIZATION
 Processing starts in Form1.vb.  A short description of the code's organization can be found there.
