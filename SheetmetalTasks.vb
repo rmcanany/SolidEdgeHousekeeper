@@ -2174,81 +2174,75 @@ Public Class SheetmetalTasks
         Dim msg As String
         Dim Proceed As Boolean = True
 
+        Dim SkippedProperties As String = ""
+
         Dim ModelDocName As String = ""
 
         If ModelLinkIdx = 0 Then
-            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem accessing PropertySets.")
+            End Try
         Else
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add("Formula error.  Model documents do not have index references.")
-
-            'Dim ModelLink As SolidEdgeDraft.ModelLink
-            'Dim Typename As String
-
-            'Try
-            '    ModelLink = SEDoc.ModelLinks.Item(ModelLinkIdx)
-            '    Typename = Microsoft.VisualBasic.Information.TypeName(ModelLink.ModelDocument)  ' "PartDocument", "SheetmetalDocument", "AssemblyDocument"
-
-            '    If Typename.ToLower = "partdocument" Then
-            '        Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-
-            '    If Typename.ToLower = "sheetmetaldocument" Then
-            '        Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-
-            '    If Typename.ToLower = "assemblydocument" Then
-            '        Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-            'Catch ex As Exception
-            '    Proceed = False
-            '    ExitStatus = 1
-            '    msg = String.Format("Problem accessing index reference {0}", ModelLinkIdx)
-            '    If Not ErrorMessageList.Contains(msg) Then
-            '        ErrorMessageList.Add(msg)
-            '    End If
-            'End Try
-
         End If
 
         If Proceed Then
-            For Each Properties In PropertySets
-                For Each Prop In Properties
-                    tf = (PropertySet.ToLower = "custom")
-                    tf = tf And (Properties.Name.ToLower = "custom")
-                    If tf Then
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
+            Try
+                For Each Properties In PropertySets
+                    Try
+                        msg = String.Format("{0}", Properties.Name)
+                        For Each Prop In Properties
+                            tf = (PropertySet.ToLower = "custom")
+                            tf = tf And (Properties.Name.ToLower = "custom")
+                            If tf Then
+                                If Prop.Name.ToLower = PropertyName.ToLower Then
+                                    PropertyFound = True
+                                    DocValue = Prop.Value.ToString
+                                    Exit For
+                                End If
+                            Else
+                                If Prop.Name.ToLower = PropertyName.ToLower Then
+                                    PropertyFound = True
+                                    DocValue = Prop.Value.ToString
+                                    Exit For
+                                End If
+                            End If
+                        Next
+                        If PropertyFound Then
                             Exit For
                         End If
-                    Else
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
-                            Exit For
+                    Catch ex2 As Exception
+                        If SkippedProperties.Length = 0 Then
+                            SkippedProperties = Properties.Name
+                        Else
+                            SkippedProperties = String.Format("{0}, {1}", SkippedProperties, Properties.Name)
                         End If
-                    End If
+                    End Try
                 Next
-                If PropertyFound Then
-                    Exit For
-                End If
-            Next
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem accessing Properties In PropertySets.")
+            End Try
 
             If Not PropertyFound Then
                 ExitStatus = 1
                 If ModelLinkIdx = 0 Then
-                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(SEDoc.FullName, Configuration))
+                    msg = String.Format("Property '{0}' not found", PropertyName)
+                    If SkippedProperties.Length > 0 Then
+                        msg = String.Format("{0}.  One or more property sets could not be processed: {1}", msg, SkippedProperties)
+                    End If
                     ErrorMessageList.Add(msg)
                 Else
                     msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(ModelDocName, Configuration))
+                    If SkippedProperties.Length > 0 Then
+                        msg = String.Format("{0}.  One or more property sets could not be processed: {1}", msg, SkippedProperties)
+                    End If
                     ErrorMessageList.Add(msg)
                 End If
             End If
