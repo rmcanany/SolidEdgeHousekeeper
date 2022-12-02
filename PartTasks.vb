@@ -1806,45 +1806,17 @@ Public Class PartTasks
         Dim ModelDocName As String = ""
 
         If ModelLinkIdx = 0 Then
-            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem accessing PropertySets.")
+            End Try
         Else
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add("Formula error.  Model documents do not have index references.")
-
-            'Dim ModelLink As SolidEdgeDraft.ModelLink
-            'Dim Typename As String
-
-            'Try
-            '    ModelLink = SEDoc.ModelLinks.Item(ModelLinkIdx)
-            '    Typename = Microsoft.VisualBasic.Information.TypeName(ModelLink.ModelDocument)  ' "PartDocument", "SheetmetalDocument", "AssemblyDocument"
-
-            '    If Typename.ToLower = "partdocument" Then
-            '        Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-
-            '    If Typename.ToLower = "sheetmetaldocument" Then
-            '        Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-
-            '    If Typename.ToLower = "assemblydocument" Then
-            '        Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
-            '        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-            '        ModelDocName = ModelDoc.FullName
-            '    End If
-            'Catch ex As Exception
-            '    Proceed = False
-            '    ExitStatus = 1
-            '    msg = String.Format("Problem accessing index reference {0}", ModelLinkIdx)
-            '    If Not ErrorMessageList.Contains(msg) Then
-            '        ErrorMessageList.Add(msg)
-            '    End If
-            'End Try
-
         End If
 
         If Proceed Then
@@ -1853,17 +1825,25 @@ Public Class PartTasks
                     tf = (PropertySet.ToLower = "custom")
                     tf = tf And (Properties.Name.ToLower = "custom")
                     If tf Then
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
-                            Exit For
-                        End If
+                        ' Some properties do not have names
+                        Try
+                            If Prop.Name.ToLower = PropertyName.ToLower Then
+                                PropertyFound = True
+                                DocValue = Prop.Value.ToString
+                                Exit For
+                            End If
+                        Catch ex As Exception
+                        End Try
                     Else
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
-                            Exit For
-                        End If
+                        ' Some properties do not have names
+                        Try
+                            If Prop.Name.ToLower = PropertyName.ToLower Then
+                                PropertyFound = True
+                                DocValue = Prop.Value.ToString
+                                Exit For
+                            End If
+                        Catch ex As Exception
+                        End Try
                     End If
                 Next
                 If PropertyFound Then
@@ -2261,54 +2241,74 @@ Public Class PartTasks
         Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplacePart")
         Dim ReplaceStringDummy As String = String.Format("{0}_", ReplaceString)
 
-        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Dim Proceed As Boolean = True
 
-        For Each Properties In PropertySets
-            For Each Prop In Properties
-                tf = (Configuration("ComboBoxFindReplacePropertySetPart").ToLower = "custom")
-                tf = tf And (Properties.Name.ToLower = "custom")
-                If tf Then
-                    If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
-                        PropertyFound = True
-                        ' Only works on text type properties
+        Try
+            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Catch ex As Exception
+            Proceed = False
+            ExitStatus = 1
+            ErrorMessageList.Add("Problem accessing PropertySets.")
+        End Try
+
+        If Proceed Then
+            For Each Properties In PropertySets
+                For Each Prop In Properties
+                    tf = (Configuration("ComboBoxFindReplacePropertySetPart").ToLower = "custom")
+                    tf = tf And (Properties.Name.ToLower = "custom")
+                    If tf Then
+                        ' Some properties do not have names.
                         Try
-                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                            Properties.Save()
-                            SEApp.DoIdle()
+                            If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
+                                PropertyFound = True
+                                ' Only works on text type properties
+                                Try
+                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                                    Properties.Save()
+                                    SEApp.DoIdle()
+                                Catch ex As Exception
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+                                End Try
+                                Exit For
+                            End If
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
                         End Try
-                        Exit For
-                    End If
-                Else
-                    If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
-                        PropertyFound = True
-                        ' Only works on text type properties
+                    Else
+                        ' Some properties do not have names.
                         Try
-                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                            Properties.Save()
-                            SEApp.DoIdle()
+                            If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
+                                PropertyFound = True
+                                ' Only works on text type properties
+                                Try
+                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                                    Properties.Save()
+                                    SEApp.DoIdle()
+                                Catch ex As Exception
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+                                End Try
+                                Exit For
+                            End If
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
                         End Try
-                        Exit For
                     End If
+                Next
+                If PropertyFound Then
+                    Exit For
                 End If
             Next
-            If PropertyFound Then
-                Exit For
-            End If
-        Next
 
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+
         End If
+
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

@@ -2688,7 +2688,13 @@ Public Class DraftTasks
         Dim ModelDocName As String = ""
 
         If ModelLinkIdx = 0 Then
-            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem accessing PropertySets.")
+            End Try
         Else
             Dim ModelLink As SolidEdgeDraft.ModelLink
             Dim Typename As String
@@ -2699,19 +2705,37 @@ Public Class DraftTasks
 
                 If Typename.ToLower = "partdocument" Then
                     Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Try
+                        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Problem accessing PropertySets.")
+                    End Try
                     ModelDocName = ModelDoc.FullName
                 End If
 
                 If Typename.ToLower = "sheetmetaldocument" Then
                     Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Try
+                        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Problem accessing PropertySets.")
+                    End Try
                     ModelDocName = ModelDoc.FullName
                 End If
 
                 If Typename.ToLower = "assemblydocument" Then
                     Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Try
+                        PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Problem accessing PropertySets.")
+                    End Try
                     ModelDocName = ModelDoc.FullName
                 End If
             Catch ex As Exception
@@ -2731,17 +2755,25 @@ Public Class DraftTasks
                     tf = (PropertySet.ToLower = "custom")
                     tf = tf And (Properties.Name.ToLower = "custom")
                     If tf Then
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
-                            Exit For
-                        End If
+                        ' Some properties do not have names
+                        Try
+                            If Prop.Name.ToLower = PropertyName.ToLower Then
+                                PropertyFound = True
+                                DocValue = Prop.Value.ToString
+                                Exit For
+                            End If
+                        Catch ex As Exception
+                        End Try
                     Else
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            PropertyFound = True
-                            DocValue = Prop.Value.ToString
-                            Exit For
-                        End If
+                        ' Some properties do not have names
+                        Try
+                            If Prop.Name.ToLower = PropertyName.ToLower Then
+                                PropertyFound = True
+                                DocValue = Prop.Value.ToString
+                                Exit For
+                            End If
+                        Catch ex As Exception
+                        End Try
                     End If
                 Next
                 If PropertyFound Then

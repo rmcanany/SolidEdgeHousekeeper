@@ -533,7 +533,7 @@ Partial Class Form1
         Names.Add("### SHEETMETAL")
         Names.Add("### DRAFT")
 
-        msg = "# Solid Edge Housekeeper v0.1.10.0"
+        msg = "# Solid Edge Housekeeper v0.1.10.2"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -577,10 +577,15 @@ Partial Class Form1
         msg = "## GETTING HELP"
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "Ask questions, report issues, or suggest ideas for improvement on the Solid Edge Forum: "
+        msg = "Ask questions or suggest improvements on the Solid Edge Forum: "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge"
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "To subscribe to update notices, message me, RobertMcAnany, on the forum.  "
+        msg += "(Click your profile picture then 'My Messages').  "
+        msg += "To combat bots and spam, I will probably ignore requests from 'User16612341234...'.  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""

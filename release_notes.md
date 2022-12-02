@@ -9,6 +9,20 @@ Please note, the program has been tested on many of our files, but none of yours
 Feel free to report bugs and/or ideas for improvement on the Solid Edge Community Forum.  https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
 
 
+
+## v0.1.10.2 Enhancements/Fixes
+
+### Save as
+
+Fixed an issue with `Use subdirectory formula` when the file contains properties with no assigned name (Thank you @n0minus38).  Applied the same fix to `Property find/replace`.
+
+
+### Readme
+
+Under the section GETTING HELP, added instructions on how to subscribe to update notifications.
+
+
+
 ## v0.1.10 Enhancements/Fixes
 
 ### Run external program 

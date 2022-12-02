@@ -1,4 +1,4 @@
-# Solid Edge Housekeeper v0.1.10.0
+# Solid Edge Housekeeper v0.1.10.2
 Robert McAnany 2022
 
 Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
@@ -9,8 +9,9 @@ Helpful feedback and bug reports: @Satyen, @n0minus38, @wku, @aredderson, @bshan
 This tool is designed to help you find annoying little errors in your project.  It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
 ## GETTING HELP
-Ask questions, report issues, or suggest ideas for improvement on the Solid Edge Forum: 
+Ask questions or suggest improvements on the Solid Edge Forum: 
 https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
+To subscribe to update notices, message me, RobertMcAnany, on the forum.  (Click your profile picture then 'My Messages').  To combat bots and spam, I will probably ignore requests from 'User16612341234...'.  
 
 ## INSTALLATION
 There is no installation per se.  The preferred method is to download or clone the project and compile it yourself.
