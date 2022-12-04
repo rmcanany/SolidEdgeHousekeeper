@@ -251,6 +251,100 @@ Partial Class Form1
 
     End Sub
 
+    Private Sub CreateFilenameCharmap()
+
+        Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
+
+        'Dim s As String
+        's = FCD.SubstituteIllegalCharacters("<>:""/\|?*! ")
+        's = FCD.SubstituteIllegalCharacters("L 3 X 6 X 1/4")
+
+        'Dim msg As String = ""
+
+        'Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        'Dim Charmap As String() = Nothing
+        'Dim CharmapList As New List(Of String)
+
+        'Dim CharmapFilename As String = String.Format("{0}\filename_charmap.txt", StartupPath)
+
+        'Try
+        '    Charmap = IO.File.ReadAllLines(CharmapFilename)
+        'Catch ex As Exception
+        '    ' File does not exist.  Create it.
+        '    ' https://www.mtu.edu/umc/services/websites/writing/characters-avoid/
+
+        '    CharmapList.Add("c This file contains a list of common illegal characters")
+        '    CharmapList.Add("c for files and directories.")
+        '    CharmapList.Add("c https://www.mtu.edu/umc/services/websites/writing/characters-avoid/")
+        '    CharmapList.Add("c It covers operating systems such as Windows, Mac and Linux")
+        '    CharmapList.Add("c and devices such as desktops, tablets and smartphones.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c The format is <illegal character><space><replacement value>")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c So, '# my_replacement' means ")
+        '    CharmapList.Add("c If '#' is found, replace it with 'my_replacement'.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c (Note, in the default mapping below, the '.' is just text.")
+        '    CharmapList.Add("c It doesn't have any special meaning or function.)")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c If you're just using Windows, you probably only have to define")
+        '    CharmapList.Add("c replacements for the characters    < > : "" / \ | ? * !")
+        '    CharmapList.Add("c and comment out or delete the rest.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c (Actually Windows doesn't care about !, but Solid Edge does.")
+        '    CharmapList.Add("c It used to identify Assembly Family members.)")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c If you mess up, you can delete this file and Housekeeper will")
+        '    CharmapList.Add("c regenerate it next time you start the program.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c To comment out a line (so Housekeeper ignores it) start the line")
+        '    CharmapList.Add("c with 'c' as done in this header text.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c There is no error checking when the program reads in this file.")
+        '    CharmapList.Add("c So don't do stuff like '* ?' or '   c This is too complicated'.")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c ")
+        '    CharmapList.Add("c Character mapping below")
+        '    CharmapList.Add("")
+
+        '    CharmapList.Add("# .pound.")
+        '    CharmapList.Add("% .percent.")
+        '    CharmapList.Add("& .ampersand.")
+        '    CharmapList.Add("{ .leftcurlybracket.")
+        '    CharmapList.Add("} .rightcurlybracket.")
+        '    CharmapList.Add("\ .backslash.")
+        '    CharmapList.Add("< .leftanglebracket.")
+        '    CharmapList.Add("> .rightanglebracket.")
+        '    CharmapList.Add("* .asterisk.")
+        '    CharmapList.Add("? .questionmark.")
+        '    CharmapList.Add("/ .forwardslash.")
+        '    CharmapList.Add("  .blankspace.")
+        '    CharmapList.Add("$ .dollarsign.")
+        '    CharmapList.Add("! .exclamationpoint.")
+        '    CharmapList.Add("' .singlequote.")
+
+        '    'CharmapList.Add("".doublequote.")
+        '    CharmapList.Add(String.Format("{0} {1}", Chr(34), ".doublequote."))
+
+        '    CharmapList.Add(": .colon.")
+        '    CharmapList.Add("@ .atsign.")
+        '    CharmapList.Add("+ .plussign.")
+        '    CharmapList.Add("` .backtick.")
+        '    CharmapList.Add("| .pipe.")
+        '    CharmapList.Add("= .equalsign.")
+
+        '    IO.File.WriteAllLines(CharmapFilename, CharmapList)
+
+        '    'Dim msg As String = ""
+        '    'For Each s As String In CharmapList
+        '    '    msg = String.Format("{0}{1}{2}", msg, s, vbCrLf)
+        '    'Next
+        '    'MsgBox(msg)
+
+        'End Try
+
+    End Sub
+
     Private Sub LoadDefaults()
         'See format example in SaveDefaults()
 
@@ -265,6 +359,8 @@ Partial Class Form1
         Dim Ctrl As Control
 
         DefaultsFilename = StartupPath + "\" + "defaults.txt"
+
+        CreateFilenameCharmap()
 
         PopulateComboBoxes()
 
@@ -533,7 +629,7 @@ Partial Class Form1
         Names.Add("### SHEETMETAL")
         Names.Add("### DRAFT")
 
-        msg = "# Solid Edge Housekeeper v0.1.10.2"
+        msg = "# Solid Edge Housekeeper v0.1.10.3"
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = "Robert McAnany 2022"
@@ -583,9 +679,14 @@ Partial Class Form1
         msg = "https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge"
         readme_github.Add(msg)
         readme_tab.Add(msg)
-        msg = "To subscribe to update notices, message me, RobertMcAnany, on the forum.  "
-        msg += "(Click your profile picture then 'My Messages').  "
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = "To subscribe to update notices or volunteer to be a beta tester, message me, RobertMcAnany, on the forum.  "
+        msg += "(Click your profile picture, then 'My Messages', then 'Create').  "
+        msg += "Unsubscribe the same way.  "
         msg += "To combat bots and spam, I will probably ignore requests from 'User16612341234...'.  "
+        msg += "(Change your nickname by clicking your profile picture, then 'My Profile', then 'Edit').  "
         readme_github.Add(msg)
         readme_tab.Add(msg)
         msg = ""
@@ -594,11 +695,14 @@ Partial Class Form1
 
         msg = "## INSTALLATION"
         readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = "There is no installation per se.  The preferred method is to download or clone "
         msg += "the project and compile it yourself."
         readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
+        readme_tab.Add(msg)
 
         msg = "The other option is to use the latest released version here "
         msg += "https://github.com/rmcanany/SolidEdgeHousekeeper/releases  "
@@ -609,8 +713,21 @@ Partial Class Form1
         msg += "Extract the zip file (probably by right-clicking and selecting Extract All).  "
         msg += "Double-click the .exe file to run."
         readme_github.Add(msg)
+        readme_tab.Add(msg)
         msg = ""
         readme_github.Add(msg)
+        readme_tab.Add(msg)
+
+        msg = "If you are upgrading from a previous release, you should be able to copy "
+        msg += "the settings files from the old version to the new.   "
+        msg += "The files are 'defaults.txt', 'property_filters.txt', and 'filename_charmap.txt'.  "
+        msg += "If you haven't used Property Filter, 'property_filters.txt' won't be there.  "
+        msg += "Versions prior to 0.1.10 won't have 'filename_charmap.txt' either.  "
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
+        msg = ""
+        readme_github.Add(msg)
+        readme_tab.Add(msg)
 
         msg = "## OPERATION"
         readme_github.Add(msg)
@@ -770,7 +887,7 @@ Partial Class Form1
 
         msg = vbCrLf + "A bottom up search requires a valid Fast Search Scope filename, "
         msg += "(e.g., C:\Program Files\Siemens\Solid Edge 2021\Preferences\FastSearchScope.txt).  "
-        msg += "It set on the Configuration tab, and tells the program "
+        msg += "It is set on the Configuration tab, and tells the program "
         msg += "if the input directory is on an indexed drive.  "
         readme_tab.Add(msg)
 
@@ -818,8 +935,10 @@ Partial Class Form1
         msg += "Filtering by extension is done by checking/unchecking the appropriate extension.  "
         readme_tab.Add(msg)
 
-        msg = vbCrLf + "Filtering by wildcard is done by entering the wildcard pattern in the provided textbox.  "
-        msg += "Internally, it is implemented with the VB 'Like' operator, "
+        msg = vbCrLf + "Filtering by wildcard is done by entering the wildcard pattern in the provided combobox.  "
+        msg += "Wildcard patterns are automatically saved for future use.  "
+        msg += "Delete a pattern that is no longer needed by selecting it and clicking Delete.  "
+        msg += vbCrLf + "Internally, the search is implemented with the VB 'Like' operator, "
         msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
         msg += "For details and examples, see "
         msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."

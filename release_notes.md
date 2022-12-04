@@ -10,17 +10,19 @@ Feel free to report bugs and/or ideas for improvement on the Solid Edge Communit
 
 
 
-## v0.1.10.2 Enhancements/Fixes
+## v0.1.10.3 Enhancements/Fixes
 
 ### Save as
 
 Fixed an issue with `Use subdirectory formula` when the file contains properties with no assigned name (Thank you @n0minus38).  Applied the same fix to `Property find/replace`.
 
+Fixed another issue with `Use subdirectory formula` when the formula contains illegal characters for the file system.  (Thank you again @n0minus38).  See details on the Readme Tab, `Assembly Save As` section.
 
-### Readme
+### README
 
-Under the section GETTING HELP, added instructions on how to subscribe to update notifications.
+In the GETTING HELP section, added instructions on how to subscribe to update notifications and/or become a beta tester.
 
+In the INSTALLATION section, added instructions on how to copy settings files from an earlier release to a new one.
 
 
 ## v0.1.10 Enhancements/Fixes

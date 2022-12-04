@@ -1570,7 +1570,6 @@ Public Class DraftTasks
         Dim Delta As Integer
 
         Dim msg As String = ""
-        Dim tf As Boolean
 
         Dim DummySheetName As String = "Housekeeper"
 
@@ -2545,6 +2544,8 @@ Public Class DraftTasks
 
         Dim OutString As String = ""
 
+        Dim FCD As New FilenameCharmapDoctor()
+
         ' Formatting for subdirectory name formula
         ' Example property callout: %{hmk_Part_Number/CP|G}  
         ' Need to know PropertySet, so maybe: %{Custom.hmk_Part_Number}
@@ -2657,6 +2658,7 @@ Public Class DraftTasks
         End If
 
         If ExitStatus = 0 Then
+            OutString = FCD.SubstituteIllegalCharacters(OutString)
             ErrorMessageList.Add(OutString)
         End If
 

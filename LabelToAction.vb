@@ -273,6 +273,10 @@ Public Class LabelToAction
         HelpString += "Note, at this time, the System property names must be specified in English.  "
         HelpString += "Custom properties are ones that you create, probably in a template.  "
         HelpString += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
+        HelpString += vbCrLf + "    It is possible that a property contains a character that cannot be used in a file name.  "
+        HelpString += "If that happens, a replacement is read from filename_charmap.txt in the same directory as Housekeeper.exe.  "
+        HelpString += "You can/should edit it to change the replacement characters to your preference.  "
+        HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file.  "
 
         PopulateList(SaveAs,
                      "Save as",
@@ -623,39 +627,19 @@ Public Class LabelToAction
                      HelpString,
                      RequiresForegroundProcessing:=True)
 
-        'Dim GenerateLaserDXFAndPDF As New L2A
-        'HelpString = "    Creates a DXF file of the sheet metal flat pattern.  "
-        'HelpString += "Creates a PDF of the drawing file.  "
-        'HelpString += "Select the directory using the Laser Files Browse button, "
-        'HelpString += "or check the Original Directory checkbox.  "
-        'HelpString += vbCrLf + "  If the flat pattern is missing or out of date, or if the drawing is out of date, "
-        'HelpString += "it is reported in the log file."
-        'HelpString += vbCrLf + "    Note, the drawing file must have the same name "
-        'HelpString += "and directory as the sheet metal file.  "
-        'PopulateList(GenerateLaserDXFAndPDF,
-        '             "Generate Laser DXF and PDF",
-        '             "GenerateLaserDXFAndPDF",
-        '             HelpString,
-        '             RequiresLaserOutputDirectory:=True, RequiresSave:=True)
-
         Dim SaveAs As New L2A
-        HelpString = "    Same as the Assembly command of the same name."
+        HelpString = "    Same as the Assembly command of the same name, "
+        HelpString += "except two additional options -- DXF Flat (*.dxf) and PDF Drawing (*.pdf).  "
+        HelpString += vbCrLf + "    The DXF Flat option saves the flat pattern of the sheet metal file.  "
+        HelpString += vbCrLf + "    The PDF Drawing option saves the drawing of the sheet metal file.  "
+        HelpString += "The drawing must have the same name as the model, and be in the same directory.  "
+        HelpString += "A more flexible option may be to use the Draft Save As, "
+        HelpString += "using a Property Filter if needed.  "
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
                      HelpString,
                      RequiresSaveAsOutputDirectory:=True)
-
-        'Dim SaveAsFlatDXF As New L2A
-        'HelpString = "    Saves a flat pattern as a DXF file.  "
-        'HelpString += vbCrLf + "    Select the file type using the Save As Flat combobox.  "
-        'HelpString += "Select the directory using the Save As Flat Browse button, "
-        'HelpString += "or save it in the orginal directory checking the Original directory checkbox.  "
-        'PopulateList(SaveAsFlatDXF,
-        '             "Save As Flat DXF",
-        '             "SaveAsFlatDXF",
-        '             HelpString,
-        '             RequiresSaveAsFlatDXFOutputDirectory:=True)
 
     End Sub
 

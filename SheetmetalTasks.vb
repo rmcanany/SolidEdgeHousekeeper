@@ -2034,6 +2034,8 @@ Public Class SheetmetalTasks
 
         Dim OutString As String = ""
 
+        Dim FCD As New FilenameCharmapDoctor()
+
         ' Formatting for subdirectory name formula
         ' Example property callout: %{hmk_Part_Number/CP|G}  
         ' Need to know PropertySet, so maybe: %{Custom.hmk_Part_Number}
@@ -2146,6 +2148,7 @@ Public Class SheetmetalTasks
         End If
 
         If ExitStatus = 0 Then
+            OutString = FCD.SubstituteIllegalCharacters(OutString)
             ErrorMessageList.Add(OutString)
         End If
 

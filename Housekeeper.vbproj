@@ -98,6 +98,7 @@
     <Compile Include="AssemblyTasks.vb" />
     <Compile Include="DraftTasks.vb" />
     <Compile Include="FeatureDoctor.vb" />
+    <Compile Include="FilenameCharmapDoctor.vb" />
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
