@@ -681,7 +681,7 @@ Partial Class Form1
         'TextBoxFindReplaceReplaceAssembly
         '
         Me.TextBoxFindReplaceReplaceAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceReplaceAssembly.Location = New System.Drawing.Point(355, 495)
+        Me.TextBoxFindReplaceReplaceAssembly.Location = New System.Drawing.Point(350, 495)
         Me.TextBoxFindReplaceReplaceAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplaceReplaceAssembly.Name = "TextBoxFindReplaceReplaceAssembly"
         Me.TextBoxFindReplaceReplaceAssembly.Size = New System.Drawing.Size(100, 20)
@@ -719,7 +719,7 @@ Partial Class Form1
         '
         Me.LabelFindReplaceReplaceAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplaceReplaceAssembly.AutoSize = True
-        Me.LabelFindReplaceReplaceAssembly.Location = New System.Drawing.Point(355, 475)
+        Me.LabelFindReplaceReplaceAssembly.Location = New System.Drawing.Point(350, 475)
         Me.LabelFindReplaceReplaceAssembly.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplaceReplaceAssembly.Name = "LabelFindReplaceReplaceAssembly"
         Me.LabelFindReplaceReplaceAssembly.Size = New System.Drawing.Size(47, 13)
@@ -948,19 +948,19 @@ Partial Class Form1
         'TextBoxFindReplaceReplacePart
         '
         Me.TextBoxFindReplaceReplacePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceReplacePart.Location = New System.Drawing.Point(345, 495)
+        Me.TextBoxFindReplaceReplacePart.Location = New System.Drawing.Point(350, 495)
         Me.TextBoxFindReplaceReplacePart.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplaceReplacePart.Name = "TextBoxFindReplaceReplacePart"
-        Me.TextBoxFindReplaceReplacePart.Size = New System.Drawing.Size(95, 20)
+        Me.TextBoxFindReplaceReplacePart.Size = New System.Drawing.Size(100, 20)
         Me.TextBoxFindReplaceReplacePart.TabIndex = 25
         '
         'TextBoxFindReplaceFindPart
         '
         Me.TextBoxFindReplaceFindPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceFindPart.Location = New System.Drawing.Point(232, 495)
+        Me.TextBoxFindReplaceFindPart.Location = New System.Drawing.Point(235, 495)
         Me.TextBoxFindReplaceFindPart.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplaceFindPart.Name = "TextBoxFindReplaceFindPart"
-        Me.TextBoxFindReplaceFindPart.Size = New System.Drawing.Size(95, 20)
+        Me.TextBoxFindReplaceFindPart.Size = New System.Drawing.Size(100, 20)
         Me.TextBoxFindReplaceFindPart.TabIndex = 24
         '
         'TextBoxFindReplacePropertyNamePart
@@ -969,7 +969,7 @@ Partial Class Form1
         Me.TextBoxFindReplacePropertyNamePart.Location = New System.Drawing.Point(120, 495)
         Me.TextBoxFindReplacePropertyNamePart.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplacePropertyNamePart.Name = "TextBoxFindReplacePropertyNamePart"
-        Me.TextBoxFindReplacePropertyNamePart.Size = New System.Drawing.Size(95, 20)
+        Me.TextBoxFindReplacePropertyNamePart.Size = New System.Drawing.Size(100, 20)
         Me.TextBoxFindReplacePropertyNamePart.TabIndex = 23
         '
         'ComboBoxFindReplacePropertySetPart
@@ -986,7 +986,7 @@ Partial Class Form1
         '
         Me.LabelFindReplaceReplacePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplaceReplacePart.AutoSize = True
-        Me.LabelFindReplaceReplacePart.Location = New System.Drawing.Point(345, 475)
+        Me.LabelFindReplaceReplacePart.Location = New System.Drawing.Point(350, 475)
         Me.LabelFindReplaceReplacePart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplaceReplacePart.Name = "LabelFindReplaceReplacePart"
         Me.LabelFindReplaceReplacePart.Size = New System.Drawing.Size(47, 13)
@@ -997,7 +997,7 @@ Partial Class Form1
         '
         Me.LabelFindReplaceFindPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplaceFindPart.AutoSize = True
-        Me.LabelFindReplaceFindPart.Location = New System.Drawing.Point(232, 475)
+        Me.LabelFindReplaceFindPart.Location = New System.Drawing.Point(235, 475)
         Me.LabelFindReplaceFindPart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplaceFindPart.Name = "LabelFindReplaceFindPart"
         Me.LabelFindReplaceFindPart.Size = New System.Drawing.Size(27, 13)
@@ -1215,7 +1215,7 @@ Partial Class Form1
         'TextBoxFindReplaceReplaceSheetmetal
         '
         Me.TextBoxFindReplaceReplaceSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(351, 495)
+        Me.TextBoxFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(350, 495)
         Me.TextBoxFindReplaceReplaceSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplaceReplaceSheetmetal.Name = "TextBoxFindReplaceReplaceSheetmetal"
         Me.TextBoxFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(100, 20)
@@ -1253,7 +1253,7 @@ Partial Class Form1
         '
         Me.LabelFindReplaceReplaceSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplaceReplaceSheetmetal.AutoSize = True
-        Me.LabelFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(351, 475)
+        Me.LabelFindReplaceReplaceSheetmetal.Location = New System.Drawing.Point(350, 475)
         Me.LabelFindReplaceReplaceSheetmetal.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplaceReplaceSheetmetal.Name = "LabelFindReplaceReplaceSheetmetal"
         Me.LabelFindReplaceReplaceSheetmetal.Size = New System.Drawing.Size(47, 13)
@@ -1929,7 +1929,7 @@ Partial Class Form1
         Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(11, 720)
         Me.TextBoxPrintOptionsPrinter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
-        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(440, 20)
+        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(423, 20)
         Me.TextBoxPrintOptionsPrinter.TabIndex = 21
         '
         'ButtonPrintOptions
@@ -1980,7 +1980,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(443, 140)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(426, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
@@ -1988,7 +1988,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(347, 97)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(330, 97)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2003,7 +2003,7 @@ Partial Class Form1
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 98)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(323, 20)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(306, 20)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 4
         '
         'LabelFastSearchScopeFilename
@@ -2089,7 +2089,7 @@ Partial Class Form1
         Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 268)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
-        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(279, 20)
+        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(262, 20)
         Me.TextBoxPartNumberPropertyName.TabIndex = 13
         '
         'LabelPartNumberPropertyName
@@ -2126,7 +2126,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(377, 219)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(360, 219)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
@@ -2141,7 +2141,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(8, 219)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(350, 20)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(333, 20)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
@@ -2158,7 +2158,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(377, 24)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(360, 24)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateAssembly.TabIndex = 3
@@ -2171,7 +2171,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(8, 24)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(350, 20)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(333, 20)
         Me.TextBoxTemplateAssembly.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
@@ -2187,7 +2187,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(377, 73)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(360, 73)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplatePart.TabIndex = 6
@@ -2200,7 +2200,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplatePart.Location = New System.Drawing.Point(8, 73)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(350, 20)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(333, 20)
         Me.TextBoxTemplatePart.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
@@ -2216,7 +2216,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(377, 122)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(360, 122)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateSheetmetal.TabIndex = 6
@@ -2229,7 +2229,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(8, 122)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(350, 20)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(333, 20)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
@@ -2245,7 +2245,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(377, 171)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(360, 171)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateDraft.TabIndex = 6
@@ -2258,7 +2258,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(8, 171)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(350, 20)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(333, 20)
         Me.TextBoxTemplateDraft.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
