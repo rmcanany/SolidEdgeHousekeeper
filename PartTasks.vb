@@ -1475,44 +1475,45 @@ Public Class PartTasks
                                NewFilename As String
                                ) As String
 
-        Dim ExitCode As Integer = 0
+        'Dim ExitCode As Integer = 0
         Dim ExitMessage As String = ""
-        Dim FfmpegCmd As String
-        Dim FfmpegArgs As String
+        'Dim FfmpegCmd As String
+        'Dim FfmpegArgs As String
         Dim P As New Process
         Dim TempFilename As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
 
-        TempFilename = NewFilename.Replace(".png", "-Housekeeper.jpg")
+        TempFilename = NewFilename.Replace(".png", "-Housekeeper.tif")
 
         View.SaveAsImage(TempFilename)
 
-        FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
+        'FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
 
-        FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
-        FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
+        'FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
+        'FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
 
         Try
 
-            P = Process.Start(FfmpegCmd, FfmpegArgs)
-            P.WaitForExit()
-            ExitCode = P.ExitCode
+            Image.FromFile(TempFilename).Save(NewFilename, Imaging.ImageFormat.Png)
 
-            If ExitCode = 0 Then
-                System.IO.File.Delete(TempFilename)
-            Else
-                ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
-            End If
+            'P = Process.Start(FfmpegCmd, FfmpegArgs)
+            'P.WaitForExit()
+            'ExitCode = P.ExitCode
+
+            'If ExitCode = 0 Then
+            '    System.IO.File.Delete(TempFilename)
+            'Else
+            '    ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
+            'End If
 
         Catch ex As Exception
             ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
-            ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
+            ExitMessage = String.Format("{0}  Verify the following file is present on the system.", ExitMessage)
         End Try
 
-
-
         Return ExitMessage
+
     End Function
 
     Private Function CropImage(Configuration As Dictionary(Of String, String),
