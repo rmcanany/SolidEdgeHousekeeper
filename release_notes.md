@@ -25,6 +25,7 @@ In the GETTING HELP section, added instructions on how to subscribe to update no
 In the INSTALLATION section, added instructions on how to copy settings files from an earlier release to a new one.
 
 
+
 ## v0.1.10 Enhancements/Fixes
 
 ### Run external program 
