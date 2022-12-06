@@ -81,7 +81,7 @@ Public Class TopLevelAssemblyUtilities
             If UnrelatedFiles.Count > 0 Then
                 Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
                 Dim LogfileName As String
-                Dim msg As String
+                'Dim msg As String
                 LogfileName = TopLevelFolder + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
 
                 Try
