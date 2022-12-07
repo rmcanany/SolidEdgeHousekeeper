@@ -1445,7 +1445,7 @@ Public Class PartTasks
                     If Not NewExtension = ".png" Then
                         View.SaveAsImage(NewFilename)
                     Else
-                        ExitMessage = SaveAsPNG(View, NewFilename)
+                        ExitMessage = CommonTasks.SaveAsPNG(View, NewFilename)
                         If Not ExitMessage = "" Then
                             ExitStatus = 1
                             ErrorMessageList.Add(ExitMessage)
@@ -1471,50 +1471,49 @@ Public Class PartTasks
         Return ErrorMessage
     End Function
 
-    Private Function SaveAsPNG(View As SolidEdgeFramework.View,
-                               NewFilename As String
-                               ) As String
+    'Private Function SaveAsPNG(View As SolidEdgeFramework.View,
+    '                           NewFilename As String
+    '                           ) As String
 
-        'Dim ExitCode As Integer = 0
-        Dim ExitMessage As String = ""
-        'Dim FfmpegCmd As String
-        'Dim FfmpegArgs As String
-        Dim P As New Process
-        Dim TempFilename As String
+    '    Dim ExitCode As Integer = 0
+    '    Dim ExitMessage As String = ""
+    '    Dim FfmpegCmd As String
+    '    Dim FfmpegArgs As String
+    '    Dim P As New Process
+    '    Dim TempFilename As String
 
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+    '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
 
-        TempFilename = NewFilename.Replace(".png", "-Housekeeper.tif")
+    '    TempFilename = NewFilename.Replace(".png", "-Housekeeper.jpg")
 
-        View.SaveAsImage(TempFilename)
+    '    View.SaveAsImage(TempFilename)
 
-        'FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
+    '    FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
 
-        'FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
-        'FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
+    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
+    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
 
-        Try
+    '    Try
 
-            Image.FromFile(TempFilename).Save(NewFilename, Imaging.ImageFormat.Png)
+    '        P = Process.Start(FfmpegCmd, FfmpegArgs)
+    '        P.WaitForExit()
+    '        ExitCode = P.ExitCode
 
-            'P = Process.Start(FfmpegCmd, FfmpegArgs)
-            'P.WaitForExit()
-            'ExitCode = P.ExitCode
+    '        If ExitCode = 0 Then
+    '            System.IO.File.Delete(TempFilename)
+    '        Else
+    '            ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
+    '        End If
 
-            'If ExitCode = 0 Then
-            '    System.IO.File.Delete(TempFilename)
-            'Else
-            '    ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
-            'End If
+    '    Catch ex As Exception
+    '        ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
+    '        ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
+    '    End Try
 
-        Catch ex As Exception
-            ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
-            ExitMessage = String.Format("{0}  Verify the following file is present on the system.", ExitMessage)
-        End Try
 
-        Return ExitMessage
 
-    End Function
+    '    Return ExitMessage
+    'End Function
 
     Private Function CropImage(Configuration As Dictionary(Of String, String),
                           SEDoc As SolidEdgePart.PartDocument,

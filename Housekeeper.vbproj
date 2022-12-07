@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyTasks.vb" />
+    <Compile Include="CommonTasks.vb" />
     <Compile Include="DraftTasks.vb" />
     <Compile Include="FeatureDoctor.vb" />
     <Compile Include="FilenameCharmapDoctor.vb" />
