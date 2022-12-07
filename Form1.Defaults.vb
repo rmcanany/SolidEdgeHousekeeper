@@ -50,7 +50,7 @@ Partial Class Form1
         ExcludeControls.Add(CheckBoxEnablePropertyFilter.Name)
         ExcludeControls.Add(CheckBoxCreateTODOList.Name)
         ExcludeControls.Add(TextBoxReadme.Name)
-        ExcludeControls.Add(ListBoxFiles.Name)
+        ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
         tf = tf Or TypeOf Ctrl Is TabControl

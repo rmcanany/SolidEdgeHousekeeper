@@ -20,7 +20,7 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
-    Private ListBoxFilesOutOfDate As Boolean
+    Private ListViewFilesOutOfDate As Boolean
 
     Private Configuration As New Dictionary(Of String, String)
 
@@ -211,22 +211,22 @@ Public Class Form1
             End If
         End If
 
-        For Each Filename As String In ListBoxFiles.Items
-            If Filename.StartsWith("~") Then
+        For Each Filename As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
+            If Filename.Text.StartsWith("~") Then
                 'Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
-                Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
+                Filename.Text = TextBoxInputDirectory.Text + Filename.Text.Substring(1)
             End If
-            If Not FileIO.FileSystem.FileExists(Filename) Then
+            If Not FileIO.FileSystem.FileExists(Filename.Text) Then
                 msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                msg += "    " + Filename + Chr(13)
-                ListBoxFilesOutOfDate = True
+                msg += "    " + Filename.Text + Chr(13)
+                ListViewFilesOutOfDate = True
                 Exit For
             End If
         Next
 
-        If ListBoxFilesOutOfDate Then
+        If ListViewFilesOutOfDate Then
             msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
-        ElseIf ListBoxFiles.Items.Count = 0 Then
+        ElseIf ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
@@ -920,9 +920,9 @@ Public Class Form1
 
         IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
 
-        ' ButtonUpdateListBoxFiles.Enabled = False
+        ' ButtonUpdateL-istBoxFiles.Enabled = False
 
-        ListBoxFilesOutOfDate = False
+        ListViewFilesOutOfDate = False
 
     End Sub
 
@@ -970,8 +970,8 @@ Public Class Form1
         ' Update configuration
         Configuration = GetConfiguration()
 
-        If ListBoxFilesOutOfDate Then
-            ListBoxFiles.Items.Clear()
+        If ListViewFilesOutOfDate Then
+            ListViewFiles.Items.Clear()
             tf = RadioButtonTopLevelAssembly.Checked
             tf = tf Or CheckBoxEnablePropertyFilter.Checked
             If tf Then
@@ -979,7 +979,7 @@ Public Class Form1
                 ButtonUpdateListBoxFiles.BackColor = System.Drawing.Color.Orange
                 ButtonUpdateListBoxFiles.UseVisualStyleBackColor = False
             Else
-                'ButtonUpdateListBoxFiles.Enabled = False
+                'ButtonUpdateL-istBoxFiles.Enabled = False
                 ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
                 ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
 
@@ -987,7 +987,7 @@ Public Class Form1
                 tf = tf Or RadioButtonFilesDirectoryOnly.Checked
                 tf = tf Or RadioButtonTODOList.Checked
                 If tf Then
-                    UpdateListBoxFiles()
+                    UpdateListViewFiles()
                 End If
             End If
         End If
@@ -1400,7 +1400,7 @@ Public Class Form1
         If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
             TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
             FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-            ListBoxFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
         End If
 
         ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
@@ -1473,8 +1473,8 @@ Public Class Form1
         tf = FormPropertyFilter.DialogResult = DialogResult.OK
         tf = tf And PropertyFilterFormula <> ""
         If tf Then
-            ' ListBoxFiles.Items.Clear()
-            ListBoxFilesOutOfDate = True
+            ' L-istBoxFiles.Items.Clear()
+            ListViewFilesOutOfDate = True
         End If
         ReconcileFormChanges()
     End Sub
@@ -1619,7 +1619,7 @@ Public Class Form1
             End If
         End If
 
-        UpdateListBoxFiles()
+        UpdateListViewFiles()
     End Sub
 
     Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
@@ -1656,7 +1656,7 @@ Public Class Form1
             tf = CheckBoxEnablePropertyFilter.Checked
             tf = tf Or RadioButtonTopLevelAssembly.Checked
             If Not tf Then
-                UpdateListBoxFiles()
+                UpdateListViewFiles()
             End If
 
         End If
@@ -1666,7 +1666,7 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
 
         If CheckBoxEnablePropertyFilter.Checked Then
             If PropertyFilterFormula = "" Then
@@ -1685,27 +1685,27 @@ Public Class Form1
         Else
             ComboBoxFileSearch.Enabled = False
         End If
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -1850,7 +1850,7 @@ Public Class Form1
     ' COMBOBOXES
 
     Private Sub ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.SelectedIndexChanged
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -1860,7 +1860,7 @@ Public Class Form1
         If Not ComboBoxFileSearch.Items.Contains(Key) Then
             ComboBoxFileSearch.Items.Add(ComboBoxFileSearch.Text)
         End If
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -1890,7 +1890,7 @@ Public Class Form1
 
     Private Sub RadioButtonFilesDirectoriesAndSubdirectories_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoriesAndSubdirectories.CheckedChanged
         If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-            ListBoxFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1898,7 +1898,7 @@ Public Class Form1
 
     Private Sub RadioButtonFilesDirectoryOnly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoryOnly.CheckedChanged
         If RadioButtonFilesDirectoryOnly.Checked Then
-            ListBoxFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1916,7 +1916,7 @@ Public Class Form1
 
         tf = RadioButtonTopLevelAssembly.Checked
         If tf Then
-            ListBoxFiles.Items.Clear()
+            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -1934,7 +1934,7 @@ Public Class Form1
 
         tf = RadioButtonTopLevelAssembly.Checked
         If tf Then
-            ListBoxFiles.Items.Clear()
+            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -1943,7 +1943,7 @@ Public Class Form1
     Private Sub RadioButtonTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTODOList.CheckedChanged
         If RadioButtonTODOList.Checked Then
             CheckBoxCreateTODOList.Checked = False
-            ListBoxFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1951,7 +1951,7 @@ Public Class Form1
 
     Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
         If RadioButtonTopLevelAssembly.Checked Then
-            ListBoxFilesOutOfDate = True
+            ListViewFilesOutOfDate = True
         End If
 
         ReconcileFormChanges()
@@ -1971,9 +1971,9 @@ Public Class Form1
             TextBoxColumnWidth.Text = CStr(ColCharPixels)
         End Try
 
-        ' MaxFilenameLength = CDbl(ListBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
-        ' ListBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
-        ListBoxFilesOutOfDate = True
+        ' MaxFilenameLength = CDbl(L-istBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
+        ' L-istBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -1982,7 +1982,7 @@ Public Class Form1
     End Sub
 
     Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs)
-        ListBoxFilesOutOfDate = True
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -1995,8 +1995,8 @@ Public Class Form1
             TextBoxFontSize.Text = CStr(FontSize)
         End Try
 
-        'ListBoxFiles.Font = New Font("Microsoft Sans Serif", FontSize, FontStyle.Regular)
-        ListBoxFilesOutOfDate = True
+        'L-istBoxFiles.Font = New Font("Microsoft Sans Serif", FontSize, FontStyle.Regular)
+        ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
@@ -2008,9 +2008,9 @@ Public Class Form1
         tf = tf And Not CheckBoxEnablePropertyFilter.Checked
 
         If tf Then
-            UpdateListBoxFiles()
+            UpdateListViewFiles()
         Else
-            ListBoxFiles.Items.Clear()
+            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -2046,7 +2046,7 @@ Public Class Form1
         tf = RadioButtonTopLevelAssembly.Checked
 
         If tf Then
-            ListBoxFiles.Items.Clear()
+            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -2066,6 +2066,8 @@ Public Class Form1
     Private Sub TextBoxWatermarkY_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
         ReconcileFormChanges()
     End Sub
+
+
 
 
 
