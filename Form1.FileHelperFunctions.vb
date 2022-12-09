@@ -44,7 +44,9 @@ Partial Class Form1
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
+        ListViewFiles.BeginUpdate()
         ListViewFiles.Items.Clear()
+        ListViewFiles.EndUpdate()
 
         If ActiveFileExtensionsList.Count > 0 Then
             If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
@@ -110,6 +112,8 @@ Partial Class Form1
                         ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
                     End If
 
+                    ListViewFiles.BeginUpdate()
+
                     For Each FoundFile In FoundFiles
                         Dim tmpLVItem As New ListViewItem
                         tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
@@ -123,6 +127,8 @@ Partial Class Form1
 
                     ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
                     ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
+
+                    ListViewFiles.EndUpdate()
 
                     TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
 

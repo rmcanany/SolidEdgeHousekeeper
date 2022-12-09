@@ -970,7 +970,7 @@ Public Class Form1
         Configuration = GetConfiguration()
 
         If ListViewFilesOutOfDate Then
-            ListViewFiles.Items.Clear()
+            'ListViewFiles.Items.Clear()
             tf = RadioButtonTopLevelAssembly.Checked
             tf = tf Or CheckBoxEnablePropertyFilter.Checked
             If tf Then
@@ -1890,17 +1890,17 @@ Public Class Form1
     Private Sub RadioButtonFilesDirectoriesAndSubdirectories_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoriesAndSubdirectories.CheckedChanged
         If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
             ListViewFilesOutOfDate = True
+            ReconcileFormChanges()
         End If
 
-        ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonFilesDirectoryOnly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoryOnly.CheckedChanged
         If RadioButtonFilesDirectoryOnly.Checked Then
             ListViewFilesOutOfDate = True
+            ReconcileFormChanges()
         End If
 
-        ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonTLABottomUp_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLABottomUp.CheckedChanged
@@ -1943,17 +1943,17 @@ Public Class Form1
         If RadioButtonTODOList.Checked Then
             CheckBoxCreateTODOList.Checked = False
             ListViewFilesOutOfDate = True
+            ReconcileFormChanges()
         End If
 
-        ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
         If RadioButtonTopLevelAssembly.Checked Then
             ListViewFilesOutOfDate = True
+            ReconcileFormChanges()
         End If
 
-        ReconcileFormChanges()
     End Sub
 
 
