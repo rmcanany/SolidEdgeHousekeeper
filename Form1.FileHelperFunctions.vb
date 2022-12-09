@@ -110,22 +110,16 @@ Partial Class Form1
                         ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
                     End If
 
-                    Dim MaxFilenameLength As Integer
-                    MaxFilenameLength = 0
-                    Dim BaseFilename As String
                     For Each FoundFile In FoundFiles
-                        BaseFilename = FoundFile.Replace(TextBoxInputDirectory.Text, "~")
-                        'BaseFilename = System.IO.Path.GetFileName(FoundFile)
-                        If Len(BaseFilename) > MaxFilenameLength Then
-                            MaxFilenameLength = Len(BaseFilename)
-                        End If
                         Dim tmpLVItem As New ListViewItem
                         tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
-                        tmpLVItem.SubItems.Add(IO.Path.GetFullPath(FoundFile))
+                        tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+                        tmpLVItem.ImageKey = "Unchecked"
+                        tmpLVItem.Tag = FoundFile
+                        tmpLVItem.Name = FoundFile
+                        tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
                         ListViewFiles.Items.Add(tmpLVItem)
                     Next
-                    'L-istBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
-                    ' MsgBox(MaxFilenameLength)
 
                     ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
                     ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
@@ -173,26 +167,15 @@ Partial Class Form1
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
-                Filename = CType(ListViewFiles.SelectedItems.Item(i).Text, String)
+                Filename = CType(ListViewFiles.SelectedItems.Item(i).Tag, String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                    If Filename.StartsWith("~") Then
-                        ' Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
-                        Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
-                    End If
-                    ' Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)
                 End If
             Next
         Else
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
-                Filename = CType(ListViewFiles.Items(i).Text, String)
+                Filename = CType(ListViewFiles.Items(i).Tag, String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                    'Filename = TextBoxInputDirectory.Text + "\" + Filename
-                    If Filename.StartsWith("~") Then
-                        ' Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
-                        Filename = TextBoxInputDirectory.Text + Filename.Substring(1)
-                    End If
-                    'Filename = TextBoxInputDirectory.Text + Filename
                     FoundFilesList.Add(Filename)
                 End If
             Next

@@ -212,13 +212,9 @@ Public Class Form1
         End If
 
         For Each Filename As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
-            If Filename.Text.StartsWith("~") Then
-                'Filename = Filename.Replace("~", TextBoxInputDirectory.Text)
-                Filename.Text = TextBoxInputDirectory.Text + Filename.Text.Substring(1)
-            End If
-            If Not FileIO.FileSystem.FileExists(Filename.Text) Then
+            If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
                 msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                msg += "    " + Filename.Text + Chr(13)
+                msg += "    " + CType(Filename.Tag, String) + Chr(13)
                 ListViewFilesOutOfDate = True
                 Exit For
             End If
@@ -770,6 +766,9 @@ Public Class Form1
 
             If ErrorMessagesCombined.Count > 0 Then
                 LogfileAppend(FileToProcess, ErrorMessagesCombined)
+                ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
+            Else
+                ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
             End If
 
         Next
@@ -2065,6 +2064,12 @@ Public Class Form1
     End Sub
     Private Sub TextBoxWatermarkY_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
         ReconcileFormChanges()
+    End Sub
+
+    Private Sub ListViewFiles_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ListViewFiles.KeyPress
+
+        If e.KeyChar = ChrW(27) Then ListViewFiles.SelectedItems.Clear()
+
     End Sub
 
 
