@@ -63,7 +63,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Housekeeper.ico</ApplicationIcon>
+    <ApplicationIcon>Housekeeper_New.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Interop.SolidEdge, Version=220.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <Content Include="Housekeeper_New.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
