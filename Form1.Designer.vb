@@ -23,14 +23,18 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewGroup5 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup6 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup7 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup8 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewItem5 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("fdsaasfdasfdsa", "Unchecked")
-        Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadasdsa", "Unchecked")
-        Dim ListViewItem7 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("ddadsadas", "Unchecked")
-        Dim ListViewItem8 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadsadas", "Unchecked")
+        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 1", "C:\Documents\Projects\FakeProject"}, "Unchecked")
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 2", "C:\Documents\Projects\FakeProject"}, "Unchecked")
+        Dim ListViewItem3 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 3", "C:\Documents\Projects\FakeProject"}, "Unchecked")
+        Dim ListViewItem4 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 4", "C:\Documents\Projects\FakeProject"}, "Unchecked")
+        Dim ListViewItem5 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 5", "C:\Documents\Projects\FakeProject"}, "Checked")
+        Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 6", "C:\Documents\Projects\FakeProject"}, "Error")
+        Dim ListViewItem7 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 7", "C:\Documents\Projects\FakeProject\Drawings"}, "Checked")
+        Dim ListViewItem8 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 8", "C:\Documents\Projects\FakeProject\Drawings"}, "Checked")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
@@ -300,18 +304,26 @@ Partial Class Form1
         Me.ListViewFiles.Cursor = System.Windows.Forms.Cursors.Default
         Me.ListViewFiles.FullRowSelect = True
         Me.ListViewFiles.GridLines = True
-        ListViewGroup5.Header = "Assemblies"
-        ListViewGroup5.Name = ".asm"
-        ListViewGroup6.Header = "Parts"
-        ListViewGroup6.Name = ".par"
-        ListViewGroup7.Header = "Sheetmetals"
-        ListViewGroup7.Name = ".psm"
-        ListViewGroup8.Header = "Drafts"
-        ListViewGroup8.Name = ".dft"
-        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup5, ListViewGroup6, ListViewGroup7, ListViewGroup8})
+        ListViewGroup1.Header = "Assemblies"
+        ListViewGroup1.Name = ".asm"
+        ListViewGroup2.Header = "Parts"
+        ListViewGroup2.Name = ".par"
+        ListViewGroup3.Header = "Sheetmetals"
+        ListViewGroup3.Name = ".psm"
+        ListViewGroup4.Header = "Drafts"
+        ListViewGroup4.Name = ".dft"
+        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4})
         Me.ListViewFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.ListViewFiles.HideSelection = False
-        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8})
+        ListViewItem1.Group = ListViewGroup1
+        ListViewItem2.Group = ListViewGroup2
+        ListViewItem3.Group = ListViewGroup2
+        ListViewItem4.Group = ListViewGroup2
+        ListViewItem5.Group = ListViewGroup3
+        ListViewItem6.Group = ListViewGroup3
+        ListViewItem7.Group = ListViewGroup4
+        ListViewItem8.Group = ListViewGroup4
+        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8})
         Me.ListViewFiles.Location = New System.Drawing.Point(11, 82)
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.Size = New System.Drawing.Size(491, 331)
