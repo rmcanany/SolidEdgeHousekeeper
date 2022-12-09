@@ -23,14 +23,14 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("fdsaasfdasfdsa", "Unchecked")
-        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadasdsa", "Unchecked")
-        Dim ListViewItem3 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("ddadsadas", "Unchecked")
-        Dim ListViewItem4 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadsadas", "Unchecked")
+        Dim ListViewGroup5 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup6 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup7 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup8 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewItem5 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("fdsaasfdasfdsa", "Unchecked")
+        Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadasdsa", "Unchecked")
+        Dim ListViewItem7 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("ddadsadas", "Unchecked")
+        Dim ListViewItem8 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("dsadsadas", "Unchecked")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
@@ -300,18 +300,18 @@ Partial Class Form1
         Me.ListViewFiles.Cursor = System.Windows.Forms.Cursors.Default
         Me.ListViewFiles.FullRowSelect = True
         Me.ListViewFiles.GridLines = True
-        ListViewGroup1.Header = "Assemblies"
-        ListViewGroup1.Name = ".asm"
-        ListViewGroup2.Header = "Parts"
-        ListViewGroup2.Name = ".par"
-        ListViewGroup3.Header = "Sheetmetals"
-        ListViewGroup3.Name = ".psm"
-        ListViewGroup4.Header = "Drafts"
-        ListViewGroup4.Name = ".dft"
-        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4})
+        ListViewGroup5.Header = "Assemblies"
+        ListViewGroup5.Name = ".asm"
+        ListViewGroup6.Header = "Parts"
+        ListViewGroup6.Name = ".par"
+        ListViewGroup7.Header = "Sheetmetals"
+        ListViewGroup7.Name = ".psm"
+        ListViewGroup8.Header = "Drafts"
+        ListViewGroup8.Name = ".dft"
+        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup5, ListViewGroup6, ListViewGroup7, ListViewGroup8})
         Me.ListViewFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.ListViewFiles.HideSelection = False
-        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4})
+        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8})
         Me.ListViewFiles.Location = New System.Drawing.Point(11, 82)
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.Size = New System.Drawing.Size(491, 331)
@@ -2041,7 +2041,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(302, 140)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(344, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
@@ -2049,7 +2049,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(206, 97)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(248, 97)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2064,7 +2064,7 @@ Partial Class Form1
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 98)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(182, 20)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(224, 20)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 4
         '
         'LabelFastSearchScopeFilename
