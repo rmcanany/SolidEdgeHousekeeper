@@ -1755,7 +1755,7 @@ Public Class SheetmetalTasks
                                 SEApp.DoIdle()
                             Catch ex As Exception
                                 ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Error saving '{0}'", TruncateFullPath(NewFilename, Configuration)))
+                                ErrorMessageList.Add(String.Format("Error saving '{0}'", CommonTasks.TruncateFullPath(NewFilename, Configuration)))
                             End Try
                         End If
 
@@ -1763,7 +1763,7 @@ Public Class SheetmetalTasks
                         DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
                         If Not FileIO.FileSystem.FileExists(DraftFilename) Then
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Draft document not found '{0}'", TruncateFullPath(DraftFilename, Configuration)))
+                            ErrorMessageList.Add(String.Format("Draft document not found '{0}'", CommonTasks.TruncateFullPath(DraftFilename, Configuration)))
                         Else
                             SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
                             SEApp.DoIdle()
@@ -1780,7 +1780,7 @@ Public Class SheetmetalTasks
                                     SEApp.DoIdle()
                                 Catch ex As Exception
                                     ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Error saving '{0}'", TruncateFullPath(NewFilename, Configuration)))
+                                    ErrorMessageList.Add(String.Format("Error saving '{0}'", CommonTasks.TruncateFullPath(NewFilename, Configuration)))
                                 End Try
 
                             End If
@@ -1792,7 +1792,7 @@ Public Class SheetmetalTasks
                             SEApp.DoIdle()
                         Catch ex As Exception
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Error saving '{0}'", TruncateFullPath(NewFilename, Configuration)))
+                            ErrorMessageList.Add(String.Format("Error saving '{0}'", CommonTasks.TruncateFullPath(NewFilename, Configuration)))
                         End Try
                     End If
 
@@ -1823,7 +1823,7 @@ Public Class SheetmetalTasks
                 End If
             Catch ex As Exception
                 ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(NewFilename, Configuration)))
+                ErrorMessageList.Add(String.Format("Error saving {0}", CommonTasks.TruncateFullPath(NewFilename, Configuration)))
             End Try
 
 
@@ -2237,7 +2237,7 @@ Public Class SheetmetalTasks
                     End If
                     ErrorMessageList.Add(msg)
                 Else
-                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(ModelDocName, Configuration))
+                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, CommonTasks.TruncateFullPath(ModelDocName, Configuration))
                     If SkippedProperties.Length > 0 Then
                         msg = String.Format("{0}.  One or more property sets could not be processed: {1}", msg, SkippedProperties)
                     End If
@@ -2572,7 +2572,7 @@ Public Class SheetmetalTasks
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Drawing {0} not found", TruncateFullPath(DrawingFilename, Configuration)))
+            ErrorMessageList.Add(String.Format("Drawing {0} not found", CommonTasks.TruncateFullPath(DrawingFilename, Configuration)))
         End If
 
 
@@ -2881,21 +2881,7 @@ Public Class SheetmetalTasks
 
 
 
-    Private Function TruncateFullPath(ByVal Path As String,
-        Configuration As Dictionary(Of String, String)
-        ) As String
 
-        Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
-        Dim NewPath As String
-
-        If Path.Contains(Configuration("TextBoxInputDirectory")) Then
-            NewPath = Path.Remove(0, Length)
-            NewPath = "~" + NewPath
-        Else
-            NewPath = Path
-        End If
-        Return NewPath
-    End Function
 
     Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
         ' Takes a double-delimited string and returns a dictionary

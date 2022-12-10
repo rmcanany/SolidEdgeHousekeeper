@@ -212,12 +212,19 @@ Public Class Form1
         End If
 
         For Each Filename As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
+
+            ListViewFiles.BeginUpdate()
+            Filename.ImageKey = "Unchecked"
+
             If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
                 msg += "    File not found, or Path exceeds maximum length" + Chr(13)
                 msg += "    " + CType(Filename.Tag, String) + Chr(13)
                 ListViewFilesOutOfDate = True
                 Exit For
             End If
+
+            ListViewFiles.EndUpdate()
+
         Next
 
         If ListViewFilesOutOfDate Then
