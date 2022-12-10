@@ -993,7 +993,7 @@ Public Class Form1
                 tf = tf Or RadioButtonFilesDirectoryOnly.Checked
                 tf = tf Or RadioButtonTODOList.Checked
                 If tf Then
-                    UpdateListViewFiles()
+                    New_UpdateFileList()
                 End If
             End If
         End If
@@ -1625,7 +1625,8 @@ Public Class Form1
             End If
         End If
 
-        UpdateListViewFiles()
+        New_UpdateFileList()
+
     End Sub
 
     Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
@@ -1662,7 +1663,7 @@ Public Class Form1
             tf = CheckBoxEnablePropertyFilter.Checked
             tf = tf Or RadioButtonTopLevelAssembly.Checked
             If Not tf Then
-                UpdateListViewFiles()
+                New_UpdateFileList()
             End If
 
         End If
@@ -2014,7 +2015,7 @@ Public Class Form1
         tf = tf And Not CheckBoxEnablePropertyFilter.Checked
 
         If tf Then
-            UpdateListViewFiles()
+            New_UpdateFileList()
         Else
             ListViewFiles.Items.Clear()
         End If
@@ -2079,7 +2080,138 @@ Public Class Form1
 
     End Sub
 
+    Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
+        Dim tmpFolderDialog As New FolderBrowserDialog
+        tmpFolderDialog.Description = "Select folder"
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFolderDialog.SelectedPath
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "Folder"
+            tmpItem.Tag = "Folder"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
+
+        Dim tmpFolderDialog As New FolderBrowserDialog
+        tmpFolderDialog.Description = "Select folder"
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFolderDialog.SelectedPath
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "Folders"
+            tmpItem.Tag = "Folders"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub BT_AddFromTXTlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromTXTlist.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a txt file"
+        tmpFileDialog.Filter = "Text files|*.txt"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "txt"
+            tmpItem.Tag = "txt"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub BT_AddFromCSVlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromCSVlist.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a csv file"
+        tmpFileDialog.Filter = "CSV files|*.csv"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "csv"
+            tmpItem.Tag = "csv"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub AddFromEXCELlist_Click(sender As Object, e As EventArgs) Handles AddFromEXCELlist.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an Excel file"
+        tmpFileDialog.Filter = "xlsx files|*.xlsx"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "excel"
+            tmpItem.Tag = "excel"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub BT_DeleteAll_Click(sender As Object, e As EventArgs) Handles BT_DeleteAll.Click
+
+        ListViewFiles.BeginUpdate()
+        ListViewFiles.Items.Clear()
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Reload.Click
+
+        New_UpdateFileList()
+
+    End Sub
+
+    Private Sub New_UpdateFileList()
+
+        ListViewFiles.BeginUpdate()
+
+        For i = ListViewFiles.Items.Count - 1 To 0
+
+            If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then ListViewFiles.Items.Item(i).Remove()
+
+        Next
+
+        For Each item As ListViewItem In ListViewFiles.Items
+
+            Select Case item.Tag.ToString
+                Case = "Folder"
+                    UpdateListViewFiles(item.Text, False)
+                Case = "Folders"
+                    UpdateListViewFiles(item.Text, True)
+            End Select
+
+        Next
+
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub BT_TopLevelAsm_Click(sender As Object, e As EventArgs) Handles BT_TopLevelAsm.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an assembly file"
+        tmpFileDialog.Filter = "asm files|*.asm"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "asm"
+            tmpItem.Tag = "asm"
+            ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
 
 
 

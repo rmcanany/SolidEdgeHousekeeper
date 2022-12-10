@@ -2,14 +2,14 @@ Option Strict On
 
 Partial Class Form1
 
-    Private Sub UpdateListViewFiles()
+    Private Sub UpdateListViewFiles(Folder As String, SubFolders As Boolean)
         ' Update L-istBoxFiles on Form1
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
-        Dim tf As Boolean
-        Dim msg As String
+        'Dim tf As Boolean
+        'Dim msg As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
@@ -19,14 +19,14 @@ Partial Class Form1
         ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
         ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
 
-        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked = False
-        tf = tf And RadioButtonFilesDirectoryOnly.Checked = False
-        tf = tf And RadioButtonTopLevelAssembly.Checked = False
-        tf = tf And RadioButtonTODOList.Checked = False
-        If tf Then
-            MsgBox("Select an option for files to process")
-            Exit Sub
-        End If
+        'tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked = False
+        'tf = tf And RadioButtonFilesDirectoryOnly.Checked = False
+        'tf = tf And RadioButtonTopLevelAssembly.Checked = False
+        'tf = tf And RadioButtonTODOList.Checked = False
+        'If tf Then
+        '    MsgBox("Select an option for files to process")
+        '    Exit Sub
+        'End If
 
         StopProcess = False
         ButtonCancel.Text = "Stop"
@@ -44,51 +44,51 @@ Partial Class Form1
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
-        ListViewFiles.BeginUpdate()
-        ListViewFiles.Items.Clear()
-        ListViewFiles.EndUpdate()
+        'ListViewFiles.BeginUpdate()
+        'ListViewFiles.Items.Clear()
+        'ListViewFiles.EndUpdate()
 
         If ActiveFileExtensionsList.Count > 0 Then
-            If FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
-                If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-                    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+            If FileIO.FileSystem.DirectoryExists(Folder) Then
+                If SubFolders Then
+                    FoundFiles = FileIO.FileSystem.GetFiles(Folder,
                                     FileIO.SearchOption.SearchAllSubDirectories,
                                     ActiveFileExtensionsList.ToArray)
 
-                ElseIf RadioButtonFilesDirectoryOnly.Checked Then
-                    FoundFiles = FileIO.FileSystem.GetFiles(TextBoxInputDirectory.Text,
+                ElseIf Not SubFolders Then
+                    FoundFiles = FileIO.FileSystem.GetFiles(Folder,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
-                ElseIf RadioButtonTopLevelAssembly.Checked Then
-                    Dim TLAU As New TopLevelAssemblyUtilities(Me)
+                    'ElseIf RadioButtonTopLevelAssembly.Checked Then    '################# TO DO manage Toplevel ASM
+                    '    Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
-                    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                    '    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
-                    If RadioButtonTLABottomUp.Checked Then
-                        If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
-                            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-                            MsgBox(msg, vbOKOnly)
-                            Exit Sub
-                        End If
+                    '    If RadioButtonTLABottomUp.Checked Then
+                    '        If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
+                    '            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+                    '            MsgBox(msg, vbOKOnly)
+                    '            Exit Sub
+                    '        End If
 
-                        FoundFiles = TLAU.GetLinks("BottomUp", TextBoxInputDirectory.Text,
-                                               TextBoxTopLevelAssembly.Text,
-                                               ActiveFileExtensionsList)
-                    Else
-                        FoundFiles = TLAU.GetLinks("TopDown", TextBoxInputDirectory.Text,
-                                               TextBoxTopLevelAssembly.Text,
-                                               ActiveFileExtensionsList,
-                                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
-                    End If
+                    '        FoundFiles = TLAU.GetLinks("BottomUp", Folder,
+                    '                               TextBoxTopLevelAssembly.Text,
+                    '                               ActiveFileExtensionsList)
+                    '    Else
+                    '        FoundFiles = TLAU.GetLinks("TopDown", Folder,
+                    '                               TextBoxTopLevelAssembly.Text,
+                    '                               ActiveFileExtensionsList,
+                    '                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                    '    End If
 
-                    TextBoxStatus.Text = ""
+                    '    TextBoxStatus.Text = ""
 
-                ElseIf RadioButtonTODOList.Checked Then
-                    If FileIO.FileSystem.FileExists(TODOFile) Then
-                        FoundFiles = IO.File.ReadAllLines(TODOFile)
+                    'ElseIf RadioButtonTODOList.Checked Then     '############# TO DO Manage txt, csv, excel lists
+                    '    If FileIO.FileSystem.FileExists(TODOFile) Then
+                    '        FoundFiles = IO.File.ReadAllLines(TODOFile)
 
-                    End If
+                    '    End If
 
                 Else  ' No RadioButton on FilesToProcess checked
                     FoundFiles = Nothing
