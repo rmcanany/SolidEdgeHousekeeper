@@ -31,4 +31,20 @@
 
     End Function
 
+    Shared Function TruncateFullPath(ByVal Path As String,
+    Configuration As Dictionary(Of String, String)
+    ) As String
+
+        'Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
+        'Dim NewPath As String
+
+        'If Path.Contains(Configuration("TextBoxInputDirectory")) Then
+        '    NewPath = Path.Remove(0, Length)
+        '    NewPath = "~" + NewPath
+        'Else
+        '    NewPath = Path
+        'End If
+        Return Path
+    End Function
+
 End Class

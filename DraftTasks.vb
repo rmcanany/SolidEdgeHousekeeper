@@ -46,7 +46,7 @@ Public Class DraftTasks
         For Each ModelLink In ModelLinks
             If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
                 ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} not found", TruncateFullPath(ModelLink.FileName, Configuration)))
+                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(ModelLink.FileName, Configuration)))
             End If
         Next
 
@@ -458,7 +458,7 @@ Public Class DraftTasks
         For Each ModelLink In ModelLinks
             If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
                 ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} not found", TruncateFullPath(ModelLink.FileName, Configuration)))
+                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(ModelLink.FileName, Configuration)))
             End If
         Next
 
@@ -1583,7 +1583,7 @@ Public Class DraftTasks
 
         If SEDoc.FullName.Contains("-HousekeeperOld") Then
             ExitStatus = 2
-            msg = TruncateFullPath(SEDoc.FullName, Configuration)
+            msg = CommonTasks.TruncateFullPath(SEDoc.FullName, Configuration)
             ErrorMessageList.Add(String.Format("Auto-generated file '{0}' not processed", msg))
 
         Else
@@ -1691,7 +1691,7 @@ Public Class DraftTasks
                     SEDoc.Save()
                     SEApp.DoIdle()
 
-                    msg = TruncateFullPath(RemnantsDocFilename, Configuration)
+                    msg = CommonTasks.TruncateFullPath(RemnantsDocFilename, Configuration)
                     msg = String.Format("After correcting issues, please delete {0}", msg)
                     ErrorMessageList.Add(msg)
                 End If
@@ -2364,7 +2364,7 @@ Public Class DraftTasks
             SEApp.DoIdle()
         Catch ex As Exception
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving {0}", TruncateFullPath(DXFFilename, Configuration)))
+            ErrorMessageList.Add(String.Format("Error saving {0}", CommonTasks.TruncateFullPath(DXFFilename, Configuration)))
         End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -2523,7 +2523,7 @@ Public Class DraftTasks
             SEApp.DoIdle()
         Catch ex As Exception
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving file {0}", TruncateFullPath(NewFilename, Configuration)))
+            ErrorMessageList.Add(String.Format("Error saving file {0}", CommonTasks.TruncateFullPath(NewFilename, Configuration)))
         End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -2786,10 +2786,10 @@ Public Class DraftTasks
             If Not PropertyFound Then
                 ExitStatus = 1
                 If ModelLinkIdx = 0 Then
-                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(SEDoc.FullName, Configuration))
+                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, CommonTasks.TruncateFullPath(SEDoc.FullName, Configuration))
                     ErrorMessageList.Add(msg)
                 Else
-                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, TruncateFullPath(ModelDocName, Configuration))
+                    msg = String.Format("Property '{0}' not found in {1}", PropertyName, CommonTasks.TruncateFullPath(ModelDocName, Configuration))
                     ErrorMessageList.Add(msg)
                 End If
             End If
@@ -3074,25 +3074,6 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
-
-
-
-    Private Function TruncateFullPath(ByVal Path As String,
-        Configuration As Dictionary(Of String, String)
-        ) As String
-
-        Dim Length As Integer = Len(Configuration("TextBoxInputDirectory"))
-        Dim NewPath As String
-
-        If Path.Contains(Configuration("TextBoxInputDirectory")) Then
-            NewPath = Path.Remove(0, Length)
-            NewPath = "~" + NewPath
-        Else
-            NewPath = Path
-        End If
-        Return NewPath
-    End Function
-
 
 
     Public Function Dummy(
