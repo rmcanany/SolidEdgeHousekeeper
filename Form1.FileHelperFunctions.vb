@@ -53,25 +53,42 @@ Partial Class Form1
 
                 Case = "asm"
                     If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then
-                        Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
-                        TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                        Dim tmpList As New Collection
 
-                        If RadioButtonTLABottomUp.Checked Then
-                            If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
-                                msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-                                MsgBox(msg, vbOKOnly)
-                                Exit Sub
+                        For Each item As ListViewItem In ListViewFiles.Items
+                            If item.Tag.ToString = "Folder" Or item.Tag.ToString = "Folders" Then
+                                tmpList.Add(item.SubItems.Item(1).Text)
                             End If
+                        Next
 
-                            FoundFiles = TLAU.GetLinks("BottomUp", IO.Path.GetDirectoryName(Source.SubItems.Item(1).Text),
-                                                   Source.SubItems.Item(1).Text,
-                                                   ActiveFileExtensionsList)
-                        Else
-                            FoundFiles = TLAU.GetLinks("TopDown", IO.Path.GetDirectoryName(Source.SubItems.Item(1).Text),
-                                                   Source.SubItems.Item(1).Text,
-                                                   ActiveFileExtensionsList,
-                                                   Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                        If tmpList.Count > 0 Then
+
+                            For Each tmpFolder As String In tmpList
+
+                                Dim TLAU As New TopLevelAssemblyUtilities(Me)
+
+                                TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                                If RadioButtonTLABottomUp.Checked Then
+                                    If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
+                                        msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+                                        MsgBox(msg, vbOKOnly)
+                                        Exit Sub
+                                    End If
+
+                                    FoundFiles = TLAU.GetLinks("BottomUp", tmpFolder,
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList)
+                                Else
+                                    FoundFiles = TLAU.GetLinks("TopDown", tmpFolder,
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList,
+                                                           Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                                End If
+
+                            Next
+
                         End If
 
                         TextBoxStatus.Text = ""
