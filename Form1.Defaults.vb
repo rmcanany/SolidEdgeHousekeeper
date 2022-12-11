@@ -43,12 +43,7 @@ Partial Class Form1
         Dim tf As Boolean
         Dim ExcludeControls As New List(Of String)
 
-        ExcludeControls.Add(RadioButtonFilesDirectoriesAndSubdirectories.Name)
-        ExcludeControls.Add(RadioButtonFilesDirectoryOnly.Name)
-        ExcludeControls.Add(RadioButtonTopLevelAssembly.Name)
-        ExcludeControls.Add(RadioButtonTODOList.Name)
         ExcludeControls.Add(CheckBoxEnablePropertyFilter.Name)
-        ExcludeControls.Add(CheckBoxCreateTODOList.Name)
         ExcludeControls.Add(TextBoxReadme.Name)
         ExcludeControls.Add(ListViewFiles.Name)
 
@@ -427,7 +422,7 @@ Partial Class Form1
 
         Catch ex As Exception
             ' MsgBox(ex.ToString)
-            TextBoxInputDirectory.Text = Application.StartupPath
+            'TextBoxInputDirectory.Text = Application.StartupPath
             ' If the file 'defaults.txt' does not exist, this is the first run of the program.
             ' In that case, display the Readme Tab.
             ' TODO: Figure out how to un-highlight the text

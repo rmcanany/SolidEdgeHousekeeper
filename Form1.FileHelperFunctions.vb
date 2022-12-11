@@ -16,9 +16,6 @@ Partial Class Form1
 
         ListViewFilesOutOfDate = False
 
-        ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
-        ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
-
         StopProcess = False
         ButtonCancel.Text = "Stop"
 
@@ -68,11 +65,11 @@ Partial Class Form1
                             End If
 
                             FoundFiles = TLAU.GetLinks("BottomUp", IO.Path.GetDirectoryName(Source.Text),
-                                                   TextBoxTopLevelAssembly.Text,
+                                                   Source.Text,
                                                    ActiveFileExtensionsList)
                         Else
                             FoundFiles = TLAU.GetLinks("TopDown", IO.Path.GetDirectoryName(Source.Text),
-                                                   TextBoxTopLevelAssembly.Text,
+                                                   Source.Text,
                                                    ActiveFileExtensionsList,
                                                    Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
                         End If
@@ -211,18 +208,5 @@ Partial Class Form1
 
         Return Count
     End Function
-
-    Private Function IsCheckedFilesToProcess() As Boolean
-        Dim tf As Boolean
-
-        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-        tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-        tf = tf Or RadioButtonTopLevelAssembly.Checked
-        tf = tf Or RadioButtonTODOList.Checked
-
-        Return tf
-    End Function
-
-
 
 End Class

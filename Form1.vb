@@ -111,11 +111,6 @@ Public Class Form1
 
         LogfileSetName()
 
-        If CheckBoxCreateTODOList.Checked Then
-            ClearTODOList()
-
-        End If
-
         TotalAborts = 0
 
         SEStart()
@@ -201,10 +196,6 @@ Public Class Form1
             msg += "    Select a task to perform on at least one Task tab" + Chr(13)
         End If
 
-        If Not IsCheckedFilesToProcess() Then
-            msg += "    Select an option on Files To Process" + Chr(13)
-        End If
-
         If RadioButtonTLABottomUp.Checked Then
             If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
                 msg += "    Fast search scope file (on Configuration Tab) not found" + Chr(13)
@@ -231,21 +222,6 @@ Public Class Form1
             msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
         ElseIf ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
-        End If
-
-        If Not FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
-            msg += "    Select a valid input directory" + Chr(13)
-        End If
-
-        If RadioButtonTopLevelAssembly.Checked Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTopLevelAssembly.Text) Then
-                msg += "    Select a valid top level assembly" + Chr(13)
-            End If
-            tf = RadioButtonTLABottomUp.Checked
-            tf = tf Or RadioButtonTLATopDown.Checked
-            If Not tf Then
-                msg += "    Set top level assembly processing option on the Configuration tab" + Chr(13)
-            End If
         End If
 
         If CheckBoxFileSearch.Checked Then
@@ -766,7 +742,7 @@ Public Class Form1
             End If
 
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            msg += TruncateFullPath(FileToProcess)
+            msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
             TextBoxStatus.Text = msg
 
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
@@ -919,12 +895,6 @@ Public Class Form1
         LoadTextBoxReadme()
 
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
-        If Not TextBoxInputDirectory.Text = "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-            OpenFileDialog1.InitialDirectory = TextBoxInputDirectory.Text
-        End If
-
-        IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
 
         ' ButtonUpdateL-istBoxFiles.Enabled = False
 
@@ -978,20 +948,9 @@ Public Class Form1
 
         If ListViewFilesOutOfDate Then
             'ListViewFiles.Items.Clear()
-            tf = RadioButtonTopLevelAssembly.Checked
-            tf = tf Or CheckBoxEnablePropertyFilter.Checked
+            tf = CheckBoxEnablePropertyFilter.Checked
             If tf Then
-                ButtonUpdateListBoxFiles.Enabled = True
-                ButtonUpdateListBoxFiles.BackColor = System.Drawing.Color.Orange
-                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = False
             Else
-                'ButtonUpdateL-istBoxFiles.Enabled = False
-                ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
-                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
-
-                tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-                tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-                tf = tf Or RadioButtonTODOList.Checked
                 If tf Then
                     New_UpdateFileList()
                 End If
@@ -1398,35 +1357,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonInputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonInputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxInputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-            ListViewFilesOutOfDate = True
-        End If
-
-        ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
-
-        ReconcileFormChanges()
-    End Sub
-
-    'Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs)
-    '    FakeFolderBrowserDialog.FileName = "Select Folder"
-    '    If TextBoxLaserOutputDirectory.Text <> "" Then
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-    '    End If
-    '    If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-    '        TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-    '    End If
-    '    ToolTip1.SetToolTip(TextBoxLaserOutputDirectory, TextBoxLaserOutputDirectory.Text)
-    '    ReconcileFormChanges()
-    'End Sub
-
     Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
         If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
@@ -1589,46 +1519,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonTopLevelAssembly_Click(sender As Object, e As EventArgs) Handles ButtonTopLevelAssembly.Click
-        OpenFileDialog1.Filter = "Assembly Documents|*.asm"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTopLevelAssembly.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
-        End If
-        ToolTip1.SetToolTip(TextBoxTopLevelAssembly, TextBoxTopLevelAssembly.Text)
-        ReconcileFormChanges()
-    End Sub
-
-    Private Sub ButtonUpdateListBoxFiles_Click(sender As Object, e As EventArgs) Handles ButtonUpdateListBoxFiles.Click
-        Dim tf As Boolean
-        Dim msg1 As String = ""
-        Dim msg2 As String = ""
-
-        If RadioButtonTopLevelAssembly.Checked Then
-            tf = RadioButtonTLABottomUp.Checked
-            tf = tf Or RadioButtonTLATopDown.Checked
-            If Not tf Then
-                msg1 = "Select the top level assembly processing option on the Configuration tab."
-            End If
-
-            tf = FileIO.FileSystem.FileExists(TextBoxTopLevelAssembly.Text)
-            If Not tf Then
-                msg2 = "  Select a valid top level assembly on the General tab"
-            End If
-
-            tf = (msg1 <> "") Or (msg2 <> "")
-            If tf Then
-                MsgBox(msg1 + msg2)
-                Exit Sub
-            End If
-        End If
-
-        New_UpdateFileList()
-
-    End Sub
-
     Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
         'OpenFileDialog1.Filter = "Image Files(*.bmp;*.jpg;*.png;*.tif)|*.BMP;*.JPG;*.GIF"
         OpenFileDialog1.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
@@ -1652,25 +1542,6 @@ Public Class Form1
 
 
     ' CHECKBOXES
-
-
-    Private Sub CheckBoxCreateTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxCreateTODOList.CheckedChanged
-        Dim tf As Boolean
-
-        If CheckBoxCreateTODOList.Checked Then
-            RadioButtonTODOList.Checked = False
-
-            tf = CheckBoxEnablePropertyFilter.Checked
-            tf = tf Or RadioButtonTopLevelAssembly.Checked
-            If Not tf Then
-                New_UpdateFileList()
-            End If
-
-        End If
-
-        ReconcileFormChanges()
-
-    End Sub
 
     Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
         ListViewFilesOutOfDate = True
@@ -1894,23 +1765,6 @@ Public Class Form1
 
 
     ' RADIO BUTTONS
-
-    Private Sub RadioButtonFilesDirectoriesAndSubdirectories_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoriesAndSubdirectories.CheckedChanged
-        If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
-    Private Sub RadioButtonFilesDirectoryOnly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoryOnly.CheckedChanged
-        If RadioButtonFilesDirectoryOnly.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
     Private Sub RadioButtonTLABottomUp_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLABottomUp.CheckedChanged
         Dim tf As Boolean
 
@@ -1919,11 +1773,6 @@ Public Class Form1
             CheckBoxTLAReportUnrelatedFiles.Enabled = False
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
-        End If
-
-        tf = RadioButtonTopLevelAssembly.Checked
-        If tf Then
-            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -1939,31 +1788,8 @@ Public Class Form1
             ButtonFastSearchScopeFilename.Enabled = False
         End If
 
-        tf = RadioButtonTopLevelAssembly.Checked
-        If tf Then
-            ListViewFiles.Items.Clear()
-        End If
-
         ReconcileFormChanges()
     End Sub
-
-    Private Sub RadioButtonTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTODOList.CheckedChanged
-        If RadioButtonTODOList.Checked Then
-            CheckBoxCreateTODOList.Checked = False
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
-    Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
-        If RadioButtonTopLevelAssembly.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
 
 
     ' TEXT BOXES
@@ -2007,22 +1833,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxInputDirectory_TextChanged(sender As Object, e As EventArgs) Handles TextBoxInputDirectory.TextChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-        tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-        tf = tf And Not CheckBoxEnablePropertyFilter.Checked
-
-        If tf Then
-            New_UpdateFileList()
-        Else
-            ListViewFiles.Items.Clear()
-        End If
-
-        ReconcileFormChanges()
-    End Sub
-
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
     End Sub
@@ -2045,19 +1855,6 @@ Public Class Form1
 
     Private Sub TextBoxStatus_TextChanged(sender As Object, e As EventArgs) Handles TextBoxStatus.TextChanged
         ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
-    End Sub
-
-    Private Sub TextBoxTopLevelAssembly_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTopLevelAssembly.TextChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonTopLevelAssembly.Checked
-
-        If tf Then
-            ListViewFiles.Items.Clear()
-        End If
-
-        ReconcileFormChanges()
-
     End Sub
 
     Private Sub TextBoxWatermarkFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged

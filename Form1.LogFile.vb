@@ -2,19 +2,6 @@ Option Strict On
 
 Partial Class Form1
 
-    Public Function TruncateFullPath(ByVal Path As String) As String
-        Dim Length As Integer = Len(TextBoxInputDirectory.Text)
-        Dim NewPath As String
-
-        If Path.Contains(TextBoxInputDirectory.Text) Then
-            NewPath = Path.Remove(0, Length)
-            NewPath = "~" + NewPath
-        Else
-            NewPath = Path
-        End If
-        Return NewPath
-    End Function
-
     Private Sub LogfileAppend(
         ByVal Filename As String,
         ByVal ErrorMessagesCombined As Dictionary(Of String, List(Of String))
@@ -24,7 +11,7 @@ Partial Class Form1
 
         Try
             Using writer As New IO.StreamWriter(LogfileName, True)
-                writer.WriteLine(TruncateFullPath(Filename))
+                writer.WriteLine(CommonTasks.TruncateFullPath(Filename, Nothing))
                 For Each Key In ErrorMessagesCombined.Keys
                     writer.WriteLine(String.Format("    {0}", Key))
                     If ErrorMessagesCombined(Key).Count > 0 Then
@@ -39,18 +26,18 @@ Partial Class Form1
             MsgBox("Error saving logfile")
         End Try
 
-        If CheckBoxCreateTODOList.Checked Then
-            Using writer As New IO.StreamWriter(TODOFile, True)
-                writer.WriteLine(Filename)
-            End Using
-        End If
+        'If CheckBoxCreateTODOList.Checked Then
+        '    Using writer As New IO.StreamWriter(TODOFile, True)
+        '        writer.WriteLine(Filename)
+        '    End Using
+        'End If
 
         ErrorsOccurred = True
     End Sub
 
     Private Sub LogfileSetName()
         Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-        LogfileName = TextBoxInputDirectory.Text + "\Housekeeper_" + Timestamp + ".log"
+        LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + ".log"
 
         ErrorsOccurred = False
     End Sub
