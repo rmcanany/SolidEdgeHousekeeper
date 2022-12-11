@@ -36,23 +36,23 @@ Partial Class Form1
 
             Select Case Source.Tag.ToString
                 Case = "Folder"
-                    If FileIO.FileSystem.DirectoryExists(Source.Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Text,
+                    If FileIO.FileSystem.DirectoryExists(Source.SubItems.Item(1).Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.SubItems.Item(1).Text,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
                 Case = "Folders"
-                    If FileIO.FileSystem.DirectoryExists(Source.Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Text,
+                    If FileIO.FileSystem.DirectoryExists(Source.SubItems.Item(1).Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.SubItems.Item(1).Text,
                                     FileIO.SearchOption.SearchAllSubDirectories,
                                     ActiveFileExtensionsList.ToArray)
 
                 Case = "csv", "txt"
-                    If FileIO.FileSystem.FileExists(Source.Text) Then FoundFiles = IO.File.ReadAllLines(Source.Text)
+                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then FoundFiles = IO.File.ReadAllLines(Source.SubItems.Item(1).Text)
 
                 Case = "excel"
-                    If FileIO.FileSystem.FileExists(Source.Text) Then FoundFiles = CommonTasks.ReadExcel(Source.Text)
+                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then FoundFiles = CommonTasks.ReadExcel(Source.SubItems.Item(1).Text)
 
                 Case = "asm"
-                    If FileIO.FileSystem.FileExists(Source.Text) Then
+                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then
                         Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
                         TextBoxStatus.Text = "Finding all linked files.  This may take some time."
@@ -64,12 +64,12 @@ Partial Class Form1
                                 Exit Sub
                             End If
 
-                            FoundFiles = TLAU.GetLinks("BottomUp", IO.Path.GetDirectoryName(Source.Text),
-                                                   Source.Text,
+                            FoundFiles = TLAU.GetLinks("BottomUp", IO.Path.GetDirectoryName(Source.SubItems.Item(1).Text),
+                                                   Source.SubItems.Item(1).Text,
                                                    ActiveFileExtensionsList)
                         Else
-                            FoundFiles = TLAU.GetLinks("TopDown", IO.Path.GetDirectoryName(Source.Text),
-                                                   Source.Text,
+                            FoundFiles = TLAU.GetLinks("TopDown", IO.Path.GetDirectoryName(Source.SubItems.Item(1).Text),
+                                                   Source.SubItems.Item(1).Text,
                                                    ActiveFileExtensionsList,
                                                    Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
                         End If

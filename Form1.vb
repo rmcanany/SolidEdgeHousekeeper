@@ -896,7 +896,7 @@ Public Class Form1
 
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
 
-        ' ButtonUpdateL-istBoxFiles.Enabled = False
+        ListViewFiles.Items.Clear()
 
         ListViewFilesOutOfDate = False
 
@@ -1883,7 +1883,8 @@ Public Class Form1
         tmpFolderDialog.Description = "Select folder"
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFolderDialog.SelectedPath
+            tmpItem.Text = "Folder"
+            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
@@ -1898,7 +1899,8 @@ Public Class Form1
         tmpFolderDialog.Description = "Select folder"
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFolderDialog.SelectedPath
+            tmpItem.Text = "Folder with subfolders"
+            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
@@ -1914,7 +1916,8 @@ Public Class Form1
         tmpFileDialog.Filter = "Text files|*.txt"
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Text = "TXT list"
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "txt"
             tmpItem.Tag = "txt"
@@ -1930,7 +1933,8 @@ Public Class Form1
         tmpFileDialog.Filter = "CSV files|*.csv"
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Text = "CSV list"
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "csv"
             tmpItem.Tag = "csv"
@@ -1946,7 +1950,8 @@ Public Class Form1
         tmpFileDialog.Filter = "xlsx files|*.xlsx"
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Text = "Excel list"
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "excel"
             tmpItem.Tag = "excel"
@@ -1996,7 +2001,8 @@ Public Class Form1
         tmpFileDialog.Filter = "asm files|*.asm"
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = tmpFileDialog.FileName
+            tmpItem.Text = "Top level assembly"
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "asm"
             tmpItem.Tag = "asm"
