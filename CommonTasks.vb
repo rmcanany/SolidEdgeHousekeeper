@@ -1,4 +1,7 @@
-﻿Public Class CommonTasks
+﻿Imports System.IO
+Imports Microsoft.Office.Interop
+
+Public Class CommonTasks
 
     Shared Function SaveAsPNG(View As SolidEdgeFramework.View,
                                NewFilename As String
@@ -45,6 +48,40 @@
         '    NewPath = Path
         'End If
         Return Path
+    End Function
+
+    Shared Function ReadExcel(FileName As String) As String()
+
+        Dim tmpList As String() = Nothing
+
+        Dim xlApp As Excel.Application = New Excel.Application
+        Dim xlWb As Excel.Workbook = xlApp.Workbooks.Open(FileName)
+        Dim xlWs As Excel.Worksheet = CType(xlWb.Worksheets.Item(1), Excel.Worksheet)
+
+        For i As Object = 1 To xlWs.Rows.Count
+
+            If xlWs.Cells(i, 1).value <> "" Then
+                ReDim Preserve tmpList(i)
+                tmpList(i) = xlWs.Cells(i, 1).value
+            Else
+
+                Exit For
+            End If
+        Next
+
+        Return tmpList
+
+    End Function
+
+    Public Shared Function FilenameIsOK(ByVal fileName As String) As Boolean
+
+        Try
+            Dim fi As New IO.FileInfo(fileName)
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+
     End Function
 
 End Class

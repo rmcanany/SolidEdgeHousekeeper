@@ -2176,7 +2176,7 @@ Public Class Form1
 
         ListViewFiles.BeginUpdate()
 
-        For i = ListViewFiles.Items.Count - 1 To 0
+        For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
             If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then ListViewFiles.Items.Item(i).Remove()
 
@@ -2184,12 +2184,7 @@ Public Class Form1
 
         For Each item As ListViewItem In ListViewFiles.Items
 
-            Select Case item.Tag.ToString
-                Case = "Folder"
-                    UpdateListViewFiles(item.Text, False)
-                Case = "Folders"
-                    UpdateListViewFiles(item.Text, True)
-            End Select
+            UpdateListViewFiles(item)
 
         Next
 

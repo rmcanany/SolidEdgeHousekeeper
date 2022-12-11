@@ -1,15 +1,15 @@
 Option Strict On
 
+Imports Excel = Microsoft.Office.Interop.Excel
+
 Partial Class Form1
 
-    Private Sub UpdateListViewFiles(Folder As String, SubFolders As Boolean)
-        ' Update L-istBoxFiles on Form1
+    Private Sub UpdateListViewFiles(Source As ListViewItem)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
-        'Dim tf As Boolean
-        'Dim msg As String
+        Dim msg As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
@@ -18,15 +18,6 @@ Partial Class Form1
 
         ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
         ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
-
-        'tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked = False
-        'tf = tf And RadioButtonFilesDirectoryOnly.Checked = False
-        'tf = tf And RadioButtonTopLevelAssembly.Checked = False
-        'tf = tf And RadioButtonTODOList.Checked = False
-        'If tf Then
-        '    MsgBox("Select an option for files to process")
-        '    Exit Sub
-        'End If
 
         StopProcess = False
         ButtonCancel.Text = "Stop"
@@ -44,77 +35,86 @@ Partial Class Form1
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
-        'ListViewFiles.BeginUpdate()
-        'ListViewFiles.Items.Clear()
-        'ListViewFiles.EndUpdate()
-
         If ActiveFileExtensionsList.Count > 0 Then
-            If FileIO.FileSystem.DirectoryExists(Folder) Then
-                If SubFolders Then
-                    FoundFiles = FileIO.FileSystem.GetFiles(Folder,
-                                    FileIO.SearchOption.SearchAllSubDirectories,
-                                    ActiveFileExtensionsList.ToArray)
 
-                ElseIf Not SubFolders Then
-                    FoundFiles = FileIO.FileSystem.GetFiles(Folder,
+            Select Case Source.Tag.ToString
+                Case = "Folder"
+                    If FileIO.FileSystem.DirectoryExists(Source.Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Text,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
-                    'ElseIf RadioButtonTopLevelAssembly.Checked Then    '################# TO DO manage Toplevel ASM
-                    '    Dim TLAU As New TopLevelAssemblyUtilities(Me)
+                Case = "Folders"
+                    If FileIO.FileSystem.DirectoryExists(Source.Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Text,
+                                    FileIO.SearchOption.SearchAllSubDirectories,
+                                    ActiveFileExtensionsList.ToArray)
 
-                    '    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                Case = "csv", "txt"
+                    If FileIO.FileSystem.FileExists(Source.Text) Then FoundFiles = IO.File.ReadAllLines(Source.Text)
 
-                    '    If RadioButtonTLABottomUp.Checked Then
-                    '        If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
-                    '            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-                    '            MsgBox(msg, vbOKOnly)
-                    '            Exit Sub
-                    '        End If
+                Case = "excel"
+                    If FileIO.FileSystem.FileExists(Source.Text) Then FoundFiles = CommonTasks.ReadExcel(Source.Text)
 
-                    '        FoundFiles = TLAU.GetLinks("BottomUp", Folder,
-                    '                               TextBoxTopLevelAssembly.Text,
-                    '                               ActiveFileExtensionsList)
-                    '    Else
-                    '        FoundFiles = TLAU.GetLinks("TopDown", Folder,
-                    '                               TextBoxTopLevelAssembly.Text,
-                    '                               ActiveFileExtensionsList,
-                    '                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
-                    '    End If
+                Case = "asm"
+                    If FileIO.FileSystem.FileExists(Source.Text) Then
+                        Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
-                    '    TextBoxStatus.Text = ""
+                        TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
-                    'ElseIf RadioButtonTODOList.Checked Then     '############# TO DO Manage txt, csv, excel lists
-                    '    If FileIO.FileSystem.FileExists(TODOFile) Then
-                    '        FoundFiles = IO.File.ReadAllLines(TODOFile)
+                        If RadioButtonTLABottomUp.Checked Then
+                            If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
+                                msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+                                MsgBox(msg, vbOKOnly)
+                                Exit Sub
+                            End If
 
-                    '    End If
+                            FoundFiles = TLAU.GetLinks("BottomUp", IO.Path.GetDirectoryName(Source.Text),
+                                                   TextBoxTopLevelAssembly.Text,
+                                                   ActiveFileExtensionsList)
+                        Else
+                            FoundFiles = TLAU.GetLinks("TopDown", IO.Path.GetDirectoryName(Source.Text),
+                                                   TextBoxTopLevelAssembly.Text,
+                                                   ActiveFileExtensionsList,
+                                                   Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                        End If
 
-                Else  ' No RadioButton on FilesToProcess checked
+                        TextBoxStatus.Text = ""
+
+                    End If
+
+                Case Else
                     FoundFiles = Nothing
-                End If
 
-                If Not FoundFiles Is Nothing Then
+            End Select
 
-                    ' Filter by properties
-                    If CheckBoxEnablePropertyFilter.Checked Then
-                        System.Threading.Thread.Sleep(1000)
-                        Dim PropertyFilter As New PropertyFilter(Me)
-                        FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
-                    End If
 
-                    ' Filter by file wildcard search
-                    If CheckBoxFileSearch.Checked Then
-                        FoundFiles = FileWildcardSearch(FoundFiles, ComboBoxFileSearch.Text)
-                    End If
+        End If
 
-                    If Not ListViewFiles.Font.Size = CSng(TextBoxFontSize.Text) Then
-                        ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
-                    End If
+        If Not FoundFiles Is Nothing Then
 
-                    ListViewFiles.BeginUpdate()
+            ' Filter by properties
+            If CheckBoxEnablePropertyFilter.Checked Then
+                System.Threading.Thread.Sleep(1000)
+                Dim PropertyFilter As New PropertyFilter(Me)
+                FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
+            End If
 
-                    For Each FoundFile In FoundFiles
+            ' Filter by file wildcard search
+            If CheckBoxFileSearch.Checked Then
+                FoundFiles = FileWildcardSearch(FoundFiles, ComboBoxFileSearch.Text)
+            End If
+
+            If Not ListViewFiles.Font.Size = CSng(TextBoxFontSize.Text) Then
+                ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
+            End If
+
+            ListViewFiles.BeginUpdate()
+
+            For Each FoundFile In FoundFiles
+
+                If CommonTasks.FilenameIsOK(FoundFile) Then
+
+                    If Not ListViewFiles.Items.ContainsKey(FoundFile) Then
+
                         Dim tmpLVItem As New ListViewItem
                         tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                         tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
@@ -123,23 +123,25 @@ Partial Class Form1
                         tmpLVItem.Name = FoundFile
                         tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
                         ListViewFiles.Items.Add(tmpLVItem)
-                    Next
 
-                    ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
-                    ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
-
-                    ListViewFiles.EndUpdate()
-
-                    TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
+                    End If
 
                 End If
-            End If
+
+            Next
+
+            'ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
+            ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
+
+            ListViewFiles.EndUpdate()
+
+            TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
+
         End If
+
 
         StopProcess = False
         ButtonCancel.Text = "Cancel"
-
-
 
     End Sub
 
@@ -220,5 +222,7 @@ Partial Class Form1
 
         Return tf
     End Function
+
+
 
 End Class
