@@ -196,7 +196,7 @@ Partial Class Form1
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
                 Filename = CType(ListViewFiles.Items(i).Tag, String)
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                    FoundFilesList.Add(Filename)
+                    If ListViewFiles.Items(i).Group.Name <> "Excluded" Then FoundFilesList.Add(Filename)
                 End If
             Next
 

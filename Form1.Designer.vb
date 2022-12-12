@@ -25,10 +25,11 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Files sources", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup5 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Excluded files", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup5 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup6 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
         Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 1", "C:\Documents\Projects\FakeProject"}, "Unchecked")
         Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 2", "C:\Documents\Projects\FakeProject"}, "Unchecked")
         Dim ListViewItem3 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 3", "C:\Documents\Projects\FakeProject"}, "Unchecked")
@@ -54,8 +55,8 @@ Partial Class Form1
         Me.BT_Update = New System.Windows.Forms.ToolStripButton()
         Me.BT_DeleteAll = New System.Windows.Forms.ToolStripButton()
         Me.new_CheckBoxFilterDft = New System.Windows.Forms.ToolStripButton()
-        Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
         Me.new_CheckBoxFilterPsm = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
         Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ListViewFiles = New System.Windows.Forms.ListView()
@@ -409,6 +410,19 @@ Partial Class Form1
         Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
         Me.new_CheckBoxFilterDft.Text = "ToolStripButton2"
         '
+        'new_CheckBoxFilterPsm
+        '
+        Me.new_CheckBoxFilterPsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterPsm.Checked = True
+        Me.new_CheckBoxFilterPsm.CheckOnClick = True
+        Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
+        Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterPsm.Text = "ToolStripButton3"
+        '
         'new_CheckBoxFilterPar
         '
         Me.new_CheckBoxFilterPar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -422,19 +436,6 @@ Partial Class Form1
         Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.new_CheckBoxFilterPar.Size = New System.Drawing.Size(23, 22)
         Me.new_CheckBoxFilterPar.Text = "ToolStripButton1"
-        '
-        'new_CheckBoxFilterPsm
-        '
-        Me.new_CheckBoxFilterPsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
-        Me.new_CheckBoxFilterPsm.Checked = True
-        Me.new_CheckBoxFilterPsm.CheckOnClick = True
-        Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
-        Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
-        Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterPsm.Text = "ToolStripButton3"
         '
         'new_CheckBoxFilterAsm
         '
@@ -468,25 +469,27 @@ Partial Class Form1
         Me.ListViewFiles.GridLines = True
         ListViewGroup1.Header = "Files sources"
         ListViewGroup1.Name = "Sources"
-        ListViewGroup2.Header = "Assemblies"
-        ListViewGroup2.Name = ".asm"
-        ListViewGroup3.Header = "Parts"
-        ListViewGroup3.Name = ".par"
-        ListViewGroup4.Header = "Sheetmetals"
-        ListViewGroup4.Name = ".psm"
-        ListViewGroup5.Header = "Drafts"
-        ListViewGroup5.Name = ".dft"
-        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4, ListViewGroup5})
+        ListViewGroup2.Header = "Excluded files"
+        ListViewGroup2.Name = "Excluded"
+        ListViewGroup3.Header = "Assemblies"
+        ListViewGroup3.Name = ".asm"
+        ListViewGroup4.Header = "Parts"
+        ListViewGroup4.Name = ".par"
+        ListViewGroup5.Header = "Sheetmetals"
+        ListViewGroup5.Name = ".psm"
+        ListViewGroup6.Header = "Drafts"
+        ListViewGroup6.Name = ".dft"
+        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4, ListViewGroup5, ListViewGroup6})
         Me.ListViewFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.ListViewFiles.HideSelection = False
-        ListViewItem1.Group = ListViewGroup2
-        ListViewItem2.Group = ListViewGroup3
-        ListViewItem3.Group = ListViewGroup3
-        ListViewItem4.Group = ListViewGroup3
-        ListViewItem5.Group = ListViewGroup4
-        ListViewItem6.Group = ListViewGroup4
-        ListViewItem7.Group = ListViewGroup5
-        ListViewItem8.Group = ListViewGroup5
+        ListViewItem1.Group = ListViewGroup3
+        ListViewItem2.Group = ListViewGroup4
+        ListViewItem3.Group = ListViewGroup4
+        ListViewItem4.Group = ListViewGroup4
+        ListViewItem5.Group = ListViewGroup5
+        ListViewItem6.Group = ListViewGroup5
+        ListViewItem7.Group = ListViewGroup6
+        ListViewItem8.Group = ListViewGroup6
         ListViewItem9.Group = ListViewGroup1
         ListViewItem10.Group = ListViewGroup1
         Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8, ListViewItem9, ListViewItem10})
@@ -2025,7 +2028,7 @@ Partial Class Form1
         Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(11, 720)
         Me.TextBoxPrintOptionsPrinter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
-        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(214, 20)
+        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(180, 20)
         Me.TextBoxPrintOptionsPrinter.TabIndex = 21
         '
         'ButtonPrintOptions
@@ -2076,7 +2079,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(354, 140)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(320, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
@@ -2084,7 +2087,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(258, 97)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(224, 97)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2099,7 +2102,7 @@ Partial Class Form1
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 98)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(234, 20)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(200, 20)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 4
         '
         'LabelFastSearchScopeFilename
@@ -2185,7 +2188,7 @@ Partial Class Form1
         Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 268)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
-        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(53, 20)
+        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(19, 20)
         Me.TextBoxPartNumberPropertyName.TabIndex = 13
         '
         'LabelPartNumberPropertyName
@@ -2222,7 +2225,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(151, 219)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(117, 219)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
@@ -2237,7 +2240,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(8, 219)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(124, 20)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(90, 20)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
@@ -2254,7 +2257,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(151, 24)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(117, 24)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateAssembly.TabIndex = 3
@@ -2267,7 +2270,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(8, 24)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(124, 20)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(90, 20)
         Me.TextBoxTemplateAssembly.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
@@ -2283,7 +2286,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(151, 73)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(117, 73)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplatePart.TabIndex = 6
@@ -2296,7 +2299,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplatePart.Location = New System.Drawing.Point(8, 73)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(124, 20)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(90, 20)
         Me.TextBoxTemplatePart.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
@@ -2312,7 +2315,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(151, 122)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(117, 122)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateSheetmetal.TabIndex = 6
@@ -2325,7 +2328,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(8, 122)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(124, 20)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(90, 20)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
@@ -2341,7 +2344,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(151, 171)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(117, 171)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateDraft.TabIndex = 6
@@ -2354,7 +2357,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(8, 171)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(124, 20)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(90, 20)
         Me.TextBoxTemplateDraft.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '

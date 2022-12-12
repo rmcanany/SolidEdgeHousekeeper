@@ -205,13 +205,18 @@ Public Class Form1
         For Each Filename As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
 
             ListViewFiles.BeginUpdate()
-            Filename.ImageKey = "Unchecked"
 
-            If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
-                msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                msg += "    " + CType(Filename.Tag, String) + Chr(13)
-                ListViewFilesOutOfDate = True
-                Exit For
+            If Filename.Group.Name <> "Sources" Then
+
+                Filename.ImageKey = "Unchecked"
+
+                If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
+                    msg += "    File not found, or Path exceeds maximum length" + Chr(13)
+                    msg += "    " + CType(Filename.Tag, String) + Chr(13)
+                    ListViewFilesOutOfDate = True
+                    Exit For
+                End If
+
             End If
 
             ListViewFiles.EndUpdate()
@@ -219,7 +224,7 @@ Public Class Form1
         Next
 
         If ListViewFilesOutOfDate Then
-            msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
+            'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
         ElseIf ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
@@ -1885,12 +1890,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ListViewFiles_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ListViewFiles.KeyPress
-
-        If e.KeyChar = ChrW(27) Then ListViewFiles.SelectedItems.Clear()
-
-    End Sub
-
     Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
         Dim tmpFolderDialog As New FolderBrowserDialog
@@ -2039,6 +2038,28 @@ Public Class Form1
 
     Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
         CheckBoxFilterDft.Checked = new_CheckBoxFilterDft.Checked
+    End Sub
+
+    Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
+
+        If e.KeyCode = Keys.Escape Then ListViewFiles.SelectedItems.Clear()
+        If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
+
+            For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+                Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+                If tmpItem.Group.Name = "Sources" Then
+                    tmpItem.Remove()
+                ElseIf tmpItem.Group.Name <> "Excluded" Then
+                    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+                Else
+                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+                End If
+
+            Next
+
+        End If
+
     End Sub
 
 
