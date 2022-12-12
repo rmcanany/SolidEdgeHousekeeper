@@ -894,6 +894,12 @@ Public Class Form1
         ReconcileFormChanges()
         LoadTextBoxReadme()
 
+        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
+        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
+        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
+        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
+
+
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
 
         ListViewFiles.Items.Clear()
@@ -1568,24 +1574,32 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
+        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
+        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
+        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
+        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
+
+
+
+
 
     Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
         'If CheckBoxLaserOutputDirectory.Checked Then
@@ -1968,7 +1982,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Reload.Click
+    Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
 
         New_UpdateFileList()
 
@@ -2011,8 +2025,21 @@ Public Class Form1
 
     End Sub
 
+    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
+        CheckBoxFilterAsm.Checked = new_CheckBoxFilterAsm.Checked
+    End Sub
 
+    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
+        CheckBoxFilterPar.Checked = new_CheckBoxFilterPar.Checked
+    End Sub
 
+    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
+        CheckBoxFilterPsm.Checked = new_CheckBoxFilterPsm.Checked
+    End Sub
+
+    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
+        CheckBoxFilterDft.Checked = new_CheckBoxFilterDft.Checked
+    End Sub
 
 
 
