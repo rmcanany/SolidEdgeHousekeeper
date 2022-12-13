@@ -2428,8 +2428,10 @@ Public Class SheetmetalTasks
         ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
+        Dim SupplementalErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
