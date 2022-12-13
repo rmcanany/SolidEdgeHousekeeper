@@ -1815,21 +1815,7 @@ Public Class Form1
 
     ' TEXT BOXES
 
-    Private Sub TextBoxColumnWidth_TextChanged(sender As Object, e As EventArgs) Handles TextBoxColumnWidth.TextChanged
-        Dim ColCharPixels As Double = 5.5
-        'Dim MaxFilenameLength As Double
 
-        Try
-            ColCharPixels = CDbl(TextBoxColumnWidth.Text)
-        Catch ex As Exception
-            TextBoxColumnWidth.Text = CStr(ColCharPixels)
-        End Try
-
-        ' MaxFilenameLength = CDbl(L-istBoxFiles.ColumnWidth) / CDbl(TextBoxColumnWidth.Text)
-        ' L-istBoxFiles.ColumnWidth = CInt(CDbl(TextBoxColumnWidth.Text) * MaxFilenameLength)
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
-    End Sub
 
     Private Sub TextBoxFastSearchScopeFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFastSearchScopeFilename.TextChanged
         ReconcileFormChanges()
