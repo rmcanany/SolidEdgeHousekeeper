@@ -2435,6 +2435,20 @@ Public Class SheetmetalTasks
 
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
+        SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
+
+        ExitStatus = SupplementalErrorMessage.Keys(0)
+
+        SupplementalErrorMessageList = SupplementalErrorMessage(ExitStatus)
+
+        If SupplementalErrorMessageList.Count > 0 Then
+            For Each s As String In SupplementalErrorMessageList
+                ErrorMessageList.Add(s)
+            Next
+        End If
+
+
+
         If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
