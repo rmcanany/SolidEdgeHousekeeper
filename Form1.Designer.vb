@@ -509,7 +509,7 @@ Partial Class Form1
         Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8, ListViewItem9, ListViewItem10})
         Me.ListViewFiles.Location = New System.Drawing.Point(2, 30)
         Me.ListViewFiles.Name = "ListViewFiles"
-        Me.ListViewFiles.Size = New System.Drawing.Size(505, 467)
+        Me.ListViewFiles.Size = New System.Drawing.Size(505, 483)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
@@ -551,7 +551,7 @@ Partial Class Form1
         'ButtonFileSearch
         '
         Me.ButtonFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFileSearch.Location = New System.Drawing.Point(217, 534)
+        Me.ButtonFileSearch.Location = New System.Drawing.Point(219, 569)
         Me.ButtonFileSearch.Name = "ButtonFileSearch"
         Me.ButtonFileSearch.Size = New System.Drawing.Size(75, 20)
         Me.ButtonFileSearch.TabIndex = 31
@@ -562,7 +562,7 @@ Partial Class Form1
         '
         Me.ComboBoxFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxFileSearch.FormattingEnabled = True
-        Me.ComboBoxFileSearch.Location = New System.Drawing.Point(84, 534)
+        Me.ComboBoxFileSearch.Location = New System.Drawing.Point(88, 569)
         Me.ComboBoxFileSearch.Name = "ComboBoxFileSearch"
         Me.ComboBoxFileSearch.Size = New System.Drawing.Size(125, 21)
         Me.ComboBoxFileSearch.Sorted = True
@@ -572,7 +572,7 @@ Partial Class Form1
         '
         Me.LabelFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(63, 505)
+        Me.LabelFontSize.Location = New System.Drawing.Point(66, 521)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(49, 13)
@@ -582,7 +582,7 @@ Partial Class Form1
         'TextBoxFontSize
         '
         Me.TextBoxFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(2, 502)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(5, 518)
         Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(57, 20)
@@ -593,7 +593,7 @@ Partial Class Form1
         '
         Me.CheckBoxFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxFileSearch.AutoSize = True
-        Me.CheckBoxFileSearch.Location = New System.Drawing.Point(2, 534)
+        Me.CheckBoxFileSearch.Location = New System.Drawing.Point(6, 571)
         Me.CheckBoxFileSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileSearch.Name = "CheckBoxFileSearch"
         Me.CheckBoxFileSearch.Size = New System.Drawing.Size(77, 17)
@@ -661,7 +661,7 @@ Partial Class Form1
         '
         Me.CheckBoxEnablePropertyFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxEnablePropertyFilter.AutoSize = True
-        Me.CheckBoxEnablePropertyFilter.Location = New System.Drawing.Point(2, 567)
+        Me.CheckBoxEnablePropertyFilter.Location = New System.Drawing.Point(6, 543)
         Me.CheckBoxEnablePropertyFilter.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxEnablePropertyFilter.Name = "CheckBoxEnablePropertyFilter"
         Me.CheckBoxEnablePropertyFilter.Size = New System.Drawing.Size(122, 17)
@@ -673,7 +673,7 @@ Partial Class Form1
         '
         Me.ButtonPropertyFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ButtonPropertyFilter.Enabled = False
-        Me.ButtonPropertyFilter.Location = New System.Drawing.Point(125, 560)
+        Me.ButtonPropertyFilter.Location = New System.Drawing.Point(132, 536)
         Me.ButtonPropertyFilter.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilter.Name = "ButtonPropertyFilter"
         Me.ButtonPropertyFilter.Size = New System.Drawing.Size(75, 28)
@@ -684,7 +684,7 @@ Partial Class Form1
         'LabelListboxFiles
         '
         Me.LabelListboxFiles.AutoSize = True
-        Me.LabelListboxFiles.Location = New System.Drawing.Point(126, 505)
+        Me.LabelListboxFiles.Location = New System.Drawing.Point(129, 521)
         Me.LabelListboxFiles.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelListboxFiles.Name = "LabelListboxFiles"
         Me.LabelListboxFiles.Size = New System.Drawing.Size(381, 13)
