@@ -2147,6 +2147,43 @@ Public Class Form1
 
     End Sub
 
+    Private Sub ListViewFiles_MouseClick(sender As Object, e As MouseEventArgs) Handles ListViewFiles.MouseClick
+
+        If ListViewFiles.SelectedItems.Count > 0 And e.Button = MouseButtons.Right Then
+
+            Menu_ListViewFile.Show(ListViewFiles, New Point(e.X, e.Y))
+
+        End If
+
+    End Sub
+
+    Private Sub BT_Open_Click(sender As Object, e As EventArgs) Handles BT_Open.Click
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+            Process.Start(item.Name)
+        Next
+    End Sub
+
+    Private Sub BT_OpenFolder_Click(sender As Object, e As EventArgs) Handles BT_OpenFolder.Click
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+            Process.Start(IO.Path.GetDirectoryName(item.Name))
+        Next
+    End Sub
+
+    Private Sub BT_Remove_Click(sender As Object, e As EventArgs) Handles BT_Remove.Click
+        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+            If tmpItem.Group.Name = "Sources" Then
+                tmpItem.Remove()
+            ElseIf tmpItem.Group.Name <> "Excluded" Then
+                tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+            Else
+                tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+            End If
+
+        Next
+    End Sub
+
 
 
 
