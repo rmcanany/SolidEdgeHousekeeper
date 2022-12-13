@@ -53,11 +53,11 @@ Partial Class Form1
                     If FileIO.FileSystem.FileExists(Source.Name) Then
 
                         Dim tmpList As New Collection
-                        tmpList.Add(IO.Path.GetDirectoryName(Source.Name))
+                        tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
 
                         For Each item As ListViewItem In ListViewFiles.Items
                             If item.Tag.ToString = "ASM_Folder" Then
-                                If Not tmpList.Contains(item.Name) Then tmpList.Add(item.Name, Name)
+                                If Not tmpList.Contains(item.Name) Then tmpList.Add(item.Name, item.Name)
                             End If
                         Next
 
