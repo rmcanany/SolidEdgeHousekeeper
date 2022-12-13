@@ -1,4 +1,4 @@
-﻿Imports System.IO
+Imports System.IO
 Imports Microsoft.Office.Interop
 
 Public Class CommonTasks
@@ -49,7 +49,6 @@ Public Class CommonTasks
         'End If
         Return Path
     End Function
-
 
     Shared Function RunExternalProgram(
         ExternalProgram As String
