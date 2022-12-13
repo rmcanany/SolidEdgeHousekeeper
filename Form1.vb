@@ -111,11 +111,6 @@ Public Class Form1
 
         LogfileSetName()
 
-        If CheckBoxCreateTODOList.Checked Then
-            ClearTODOList()
-
-        End If
-
         TotalAborts = 0
 
         SEStart()
@@ -201,10 +196,6 @@ Public Class Form1
             msg += "    Select a task to perform on at least one Task tab" + Chr(13)
         End If
 
-        If Not IsCheckedFilesToProcess() Then
-            msg += "    Select an option on Files To Process" + Chr(13)
-        End If
-
         If RadioButtonTLABottomUp.Checked Then
             If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
                 msg += "    Fast search scope file (on Configuration Tab) not found" + Chr(13)
@@ -214,13 +205,18 @@ Public Class Form1
         For Each Filename As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
 
             ListViewFiles.BeginUpdate()
-            Filename.ImageKey = "Unchecked"
 
-            If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
-                msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                msg += "    " + CType(Filename.Tag, String) + Chr(13)
-                ListViewFilesOutOfDate = True
-                Exit For
+            If Filename.Group.Name <> "Sources" Then
+
+                Filename.ImageKey = "Unchecked"
+
+                If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
+                    msg += "    File not found, or Path exceeds maximum length" + Chr(13)
+                    msg += "    " + CType(Filename.Tag, String) + Chr(13)
+                    ListViewFilesOutOfDate = True
+                    Exit For
+                End If
+
             End If
 
             ListViewFiles.EndUpdate()
@@ -228,24 +224,9 @@ Public Class Form1
         Next
 
         If ListViewFilesOutOfDate Then
-            msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
+            'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
         ElseIf ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
-        End If
-
-        If Not FileIO.FileSystem.DirectoryExists(TextBoxInputDirectory.Text) Then
-            msg += "    Select a valid input directory" + Chr(13)
-        End If
-
-        If RadioButtonTopLevelAssembly.Checked Then
-            If Not FileIO.FileSystem.FileExists(TextBoxTopLevelAssembly.Text) Then
-                msg += "    Select a valid top level assembly" + Chr(13)
-            End If
-            tf = RadioButtonTLABottomUp.Checked
-            tf = tf Or RadioButtonTLATopDown.Checked
-            If Not tf Then
-                msg += "    Set top level assembly processing option on the Configuration tab" + Chr(13)
-            End If
         End If
 
         If CheckBoxFileSearch.Checked Then
@@ -766,7 +747,7 @@ Public Class Form1
             End If
 
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            msg += TruncateFullPath(FileToProcess)
+            msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
             TextBoxStatus.Text = msg
 
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
@@ -918,15 +899,17 @@ Public Class Form1
         ReconcileFormChanges()
         LoadTextBoxReadme()
 
+        CarIcona()
+
+        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
+        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
+        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
+        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
+
+
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
-        If Not TextBoxInputDirectory.Text = "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-            OpenFileDialog1.InitialDirectory = TextBoxInputDirectory.Text
-        End If
 
-        IO.Directory.SetCurrentDirectory(TextBoxInputDirectory.Text)
-
-        ' ButtonUpdateL-istBoxFiles.Enabled = False
+        ListViewFiles.Items.Clear()
 
         ListViewFilesOutOfDate = False
 
@@ -978,22 +961,11 @@ Public Class Form1
 
         If ListViewFilesOutOfDate Then
             'ListViewFiles.Items.Clear()
-            tf = RadioButtonTopLevelAssembly.Checked
-            tf = tf Or CheckBoxEnablePropertyFilter.Checked
+            tf = CheckBoxEnablePropertyFilter.Checked
             If tf Then
-                ButtonUpdateListBoxFiles.Enabled = True
-                ButtonUpdateListBoxFiles.BackColor = System.Drawing.Color.Orange
-                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = False
             Else
-                'ButtonUpdateL-istBoxFiles.Enabled = False
-                ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
-                ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
-
-                tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-                tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-                tf = tf Or RadioButtonTODOList.Checked
                 If tf Then
-                    UpdateListViewFiles()
+                    New_UpdateFileList()
                 End If
             End If
         End If
@@ -1398,35 +1370,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonInputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonInputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxInputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxInputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxInputDirectory.Text
-            ListViewFilesOutOfDate = True
-        End If
-
-        ToolTip1.SetToolTip(TextBoxInputDirectory, TextBoxInputDirectory.Text)
-
-        ReconcileFormChanges()
-    End Sub
-
-    'Private Sub ButtonLaserOutputDirectory_Click(sender As Object, e As EventArgs)
-    '    FakeFolderBrowserDialog.FileName = "Select Folder"
-    '    If TextBoxLaserOutputDirectory.Text <> "" Then
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-    '    End If
-    '    If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-    '        TextBoxLaserOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxLaserOutputDirectory.Text
-    '    End If
-    '    ToolTip1.SetToolTip(TextBoxLaserOutputDirectory, TextBoxLaserOutputDirectory.Text)
-    '    ReconcileFormChanges()
-    'End Sub
-
     Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
         FakeFolderBrowserDialog.FileName = "Select Folder"
         If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
@@ -1589,45 +1532,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ButtonTopLevelAssembly_Click(sender As Object, e As EventArgs) Handles ButtonTopLevelAssembly.Click
-        OpenFileDialog1.Filter = "Assembly Documents|*.asm"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTopLevelAssembly.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
-        End If
-        ToolTip1.SetToolTip(TextBoxTopLevelAssembly, TextBoxTopLevelAssembly.Text)
-        ReconcileFormChanges()
-    End Sub
-
-    Private Sub ButtonUpdateListBoxFiles_Click(sender As Object, e As EventArgs) Handles ButtonUpdateListBoxFiles.Click
-        Dim tf As Boolean
-        Dim msg1 As String = ""
-        Dim msg2 As String = ""
-
-        If RadioButtonTopLevelAssembly.Checked Then
-            tf = RadioButtonTLABottomUp.Checked
-            tf = tf Or RadioButtonTLATopDown.Checked
-            If Not tf Then
-                msg1 = "Select the top level assembly processing option on the Configuration tab."
-            End If
-
-            tf = FileIO.FileSystem.FileExists(TextBoxTopLevelAssembly.Text)
-            If Not tf Then
-                msg2 = "  Select a valid top level assembly on the General tab"
-            End If
-
-            tf = (msg1 <> "") Or (msg2 <> "")
-            If tf Then
-                MsgBox(msg1 + msg2)
-                Exit Sub
-            End If
-        End If
-
-        UpdateListViewFiles()
-    End Sub
-
     Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
         'OpenFileDialog1.Filter = "Image Files(*.bmp;*.jpg;*.png;*.tif)|*.BMP;*.JPG;*.GIF"
         OpenFileDialog1.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
@@ -1651,25 +1555,6 @@ Public Class Form1
 
 
     ' CHECKBOXES
-
-
-    Private Sub CheckBoxCreateTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxCreateTODOList.CheckedChanged
-        Dim tf As Boolean
-
-        If CheckBoxCreateTODOList.Checked Then
-            RadioButtonTODOList.Checked = False
-
-            tf = CheckBoxEnablePropertyFilter.Checked
-            tf = tf Or RadioButtonTopLevelAssembly.Checked
-            If Not tf Then
-                UpdateListViewFiles()
-            End If
-
-        End If
-
-        ReconcileFormChanges()
-
-    End Sub
 
     Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
         ListViewFilesOutOfDate = True
@@ -1696,24 +1581,32 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
+        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
+        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
+        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
+        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
+
+
+
+
 
     Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
         'If CheckBoxLaserOutputDirectory.Checked Then
@@ -1893,23 +1786,6 @@ Public Class Form1
 
 
     ' RADIO BUTTONS
-
-    Private Sub RadioButtonFilesDirectoriesAndSubdirectories_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoriesAndSubdirectories.CheckedChanged
-        If RadioButtonFilesDirectoriesAndSubdirectories.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
-    Private Sub RadioButtonFilesDirectoryOnly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonFilesDirectoryOnly.CheckedChanged
-        If RadioButtonFilesDirectoryOnly.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
     Private Sub RadioButtonTLABottomUp_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLABottomUp.CheckedChanged
         Dim tf As Boolean
 
@@ -1918,11 +1794,6 @@ Public Class Form1
             CheckBoxTLAReportUnrelatedFiles.Enabled = False
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
-        End If
-
-        tf = RadioButtonTopLevelAssembly.Checked
-        If tf Then
-            ListViewFiles.Items.Clear()
         End If
 
         ReconcileFormChanges()
@@ -1938,31 +1809,8 @@ Public Class Form1
             ButtonFastSearchScopeFilename.Enabled = False
         End If
 
-        tf = RadioButtonTopLevelAssembly.Checked
-        If tf Then
-            ListViewFiles.Items.Clear()
-        End If
-
         ReconcileFormChanges()
     End Sub
-
-    Private Sub RadioButtonTODOList_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTODOList.CheckedChanged
-        If RadioButtonTODOList.Checked Then
-            CheckBoxCreateTODOList.Checked = False
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
-    Private Sub RadioButtonTopLevelAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTopLevelAssembly.CheckedChanged
-        If RadioButtonTopLevelAssembly.Checked Then
-            ListViewFilesOutOfDate = True
-            ReconcileFormChanges()
-        End If
-
-    End Sub
-
 
 
     ' TEXT BOXES
@@ -2006,22 +1854,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxInputDirectory_TextChanged(sender As Object, e As EventArgs) Handles TextBoxInputDirectory.TextChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonFilesDirectoriesAndSubdirectories.Checked
-        tf = tf Or RadioButtonFilesDirectoryOnly.Checked
-        tf = tf And Not CheckBoxEnablePropertyFilter.Checked
-
-        If tf Then
-            UpdateListViewFiles()
-        Else
-            ListViewFiles.Items.Clear()
-        End If
-
-        ReconcileFormChanges()
-    End Sub
-
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
     End Sub
@@ -2046,19 +1878,6 @@ Public Class Form1
         ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
     End Sub
 
-    Private Sub TextBoxTopLevelAssembly_TextChanged(sender As Object, e As EventArgs) Handles TextBoxTopLevelAssembly.TextChanged
-        Dim tf As Boolean
-
-        tf = RadioButtonTopLevelAssembly.Checked
-
-        If tf Then
-            ListViewFiles.Items.Clear()
-        End If
-
-        ReconcileFormChanges()
-
-    End Sub
-
     Private Sub TextBoxWatermarkFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxWatermarkScale.TextChanged
         ReconcileFormChanges()
     End Sub
@@ -2073,19 +1892,297 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ListViewFiles_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ListViewFiles.KeyPress
+    Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
-        If e.KeyChar = ChrW(27) Then ListViewFiles.SelectedItems.Clear()
+        Dim tmpFolderDialog As New FolderBrowserDialog
+        tmpFolderDialog.Description = "Select folder"
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Folder"
+            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "Folder"
+            tmpItem.Tag = "Folder"
+            tmpItem.Name = tmpFolderDialog.SelectedPath
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+        End If
 
     End Sub
 
+    Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
+
+        Dim tmpFolderDialog As New FolderBrowserDialog
+        tmpFolderDialog.Description = "Select folder"
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Folder with subfolders"
+            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "Folders"
+            tmpItem.Tag = "Folders"
+            tmpItem.Name = tmpFolderDialog.SelectedPath
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a list of files"
+        tmpFileDialog.Filter = "Text files|*.txt|CSV files|*.csv|Excel files|*.xls;*.xlsx;*.xlsm"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+
+            Dim tmpItem As New ListViewItem
+
+            Select Case IO.Path.GetExtension(tmpFileDialog.FileName).ToLower
+
+                Case Is = ".txt"
+                    tmpItem.Text = "TXT list"
+                    tmpItem.ImageKey = "txt"
+                    tmpItem.Tag = "txt"
+                Case Is = ".csv"
+                    tmpItem.Text = "CSV list"
+                    tmpItem.ImageKey = "csv"
+                    tmpItem.Tag = "csv"
+                Case Is = ".xls", ".xlsx", ".xlsm"
+                    tmpItem.Text = "Excel list"
+                    tmpItem.ImageKey = "excel"
+                    tmpItem.Tag = "excel"
+
+            End Select
+
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+
+            tmpItem.Name = tmpFileDialog.FileName
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+        End If
+
+    End Sub
+
+    Private Sub BT_TopLevelAsm_Click(sender As Object, e As EventArgs) Handles BT_TopLevelAsm.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an assembly file"
+        tmpFileDialog.Filter = "asm files|*.asm"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Top level assembly"
+            tmpItem.SubItems.Add(tmpFileDialog.FileName)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "asm"
+            tmpItem.Tag = "asm"
+            tmpItem.Name = tmpFileDialog.FileName
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+        End If
+
+    End Sub
+
+    Private Sub BT_DeleteAll_Click(sender As Object, e As EventArgs) Handles BT_DeleteAll.Click
+
+        ListViewFiles.BeginUpdate()
+        ListViewFiles.Items.Clear()
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
+
+        New_UpdateFileList()
+
+    End Sub
+
+    Private Sub New_UpdateFileList()
+
+        ListViewFiles.BeginUpdate()
+
+        For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+
+            If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then ListViewFiles.Items.Item(i).Remove()
+
+        Next
+
+        For Each item As ListViewItem In ListViewFiles.Items
+
+            UpdateListViewFiles(item)
+
+        Next
+
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
+        CheckBoxFilterAsm.Checked = new_CheckBoxFilterAsm.Checked
+    End Sub
+
+    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
+        CheckBoxFilterPar.Checked = new_CheckBoxFilterPar.Checked
+    End Sub
+
+    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
+        CheckBoxFilterPsm.Checked = new_CheckBoxFilterPsm.Checked
+    End Sub
+
+    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
+        CheckBoxFilterDft.Checked = new_CheckBoxFilterDft.Checked
+    End Sub
+
+    Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
+
+        If e.KeyCode = Keys.Escape Then ListViewFiles.SelectedItems.Clear()
+        If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
+
+            For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+                Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+                If tmpItem.Group.Name = "Sources" Then
+                    tmpItem.Remove()
+                ElseIf tmpItem.Group.Name <> "Excluded" Then
+                    tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+                Else
+                    tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+                End If
+
+            Next
+
+        End If
+
+    End Sub
+
+    Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
+
+        Dim tmpFolderDialog As New FolderBrowserDialog
+        tmpFolderDialog.Description = "Select folder"
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Top level asm folder"
+            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "ASM_Folder"
+            tmpItem.Tag = "ASM_Folder"
+            tmpItem.Name = tmpFolderDialog.SelectedPath
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+        End If
+
+    End Sub
+
+    Private Sub CarIcona()
+
+        TabPage_ImageList.Images.Clear()
+
+        CaricaImmagine16x16(TabPage_ImageList, "se", My.Resources.se)
+        CaricaImmagine16x16(TabPage_ImageList, "asm", My.Resources.asm)
+        CaricaImmagine16x16(TabPage_ImageList, "cfg", My.Resources.cfg)
+        CaricaImmagine16x16(TabPage_ImageList, "dft", My.Resources.dft)
+        CaricaImmagine16x16(TabPage_ImageList, "par", My.Resources.par)
+        CaricaImmagine16x16(TabPage_ImageList, "psm", My.Resources.psm)
+        CaricaImmagine16x16(TabPage_ImageList, "Checked", My.Resources.Checked)
+        CaricaImmagine16x16(TabPage_ImageList, "Unchecked", My.Resources.Unchecked)
+        CaricaImmagine16x16(TabPage_ImageList, "config", My.Resources.config)
+        CaricaImmagine16x16(TabPage_ImageList, "Help", My.Resources.Help)
+        CaricaImmagine16x16(TabPage_ImageList, "Info", My.Resources.Info)
+        CaricaImmagine16x16(TabPage_ImageList, "Error", My.Resources.Errore)
+        CaricaImmagine16x16(TabPage_ImageList, "txt", My.Resources.txt)
+        CaricaImmagine16x16(TabPage_ImageList, "csv", My.Resources.csv)
+        CaricaImmagine16x16(TabPage_ImageList, "excel", My.Resources.excel)
+        CaricaImmagine16x16(TabPage_ImageList, "folder", My.Resources.folder)
+        CaricaImmagine16x16(TabPage_ImageList, "folders", My.Resources.folders)
+        CaricaImmagine16x16(TabPage_ImageList, "ASM_folder", My.Resources.ASM_Folder)
+
+    End Sub
+
+    Private Sub CaricaImmagine16x16(IL As ImageList, Key As String, Immagine As Image)
+
+        Dim b = New Bitmap(16, 16)
+        Dim g = Graphics.FromImage(b)
+        g.FillRectangle(New SolidBrush(Color.Transparent), 0, 0, 16, 16)
+        g.DrawImage(Immagine, 0, 0, 16, 16)
+
+        Try
+            IL.Images.Add(Key, b)
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Private Sub BT_ExportList_Click(sender As Object, e As EventArgs) Handles BT_ExportList.Click
+
+        Dim tmpFileDialog As New SaveFileDialog
+        tmpFileDialog.Title = "Save a list of files"
+        tmpFileDialog.Filter = "Text files|*.txt"
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+
+            Dim content As String = ""
+            For Each tmpItem As ListViewItem In ListViewFiles.Items
+
+                If tmpItem.Group.Name <> "Sources" And tmpItem.Group.Name <> "Excluded" Then
+                    content += tmpItem.Name & vbCrLf
+                End If
+
+            Next
+
+            IO.File.WriteAllText(tmpFileDialog.FileName, content)
 
 
 
+        End If
 
+    End Sub
 
+    Private Sub BT_ErrorList_Click(sender As Object, e As EventArgs) Handles BT_ErrorList.Click
 
+        ListViewFiles.BeginUpdate()
 
+        For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+
+            If ListViewFiles.Items.Item(i).ImageKey <> "Error" Then ListViewFiles.Items.Item(i).Remove()
+
+        Next
+
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub ListViewFiles_MouseClick(sender As Object, e As MouseEventArgs) Handles ListViewFiles.MouseClick
+
+        If ListViewFiles.SelectedItems.Count > 0 And e.Button = MouseButtons.Right Then
+
+            Menu_ListViewFile.Show(ListViewFiles, New Point(e.X, e.Y))
+
+        End If
+
+    End Sub
+
+    Private Sub BT_Open_Click(sender As Object, e As EventArgs) Handles BT_Open.Click
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+            Process.Start(item.Name)
+        Next
+    End Sub
+
+    Private Sub BT_OpenFolder_Click(sender As Object, e As EventArgs) Handles BT_OpenFolder.Click
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+            Process.Start(IO.Path.GetDirectoryName(item.Name))
+        Next
+    End Sub
+
+    Private Sub BT_Remove_Click(sender As Object, e As EventArgs) Handles BT_Remove.Click
+        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+            If tmpItem.Group.Name = "Sources" Then
+                tmpItem.Remove()
+            ElseIf tmpItem.Group.Name <> "Excluded" Then
+                tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+            Else
+                tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+            End If
+
+        Next
+    End Sub
 
 
 

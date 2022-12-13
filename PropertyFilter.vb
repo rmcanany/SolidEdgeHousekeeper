@@ -51,7 +51,7 @@ Public Class PropertyFilter
             If Form1.StopProcess Then
                 Exit For
             End If
-            msg = Form1.TruncateFullPath(FoundFile)
+            msg = CommonTasks.TruncateFullPath(FoundFile, Nothing)
             Form1.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
             tf = ProcessFile(DMApp, FoundFile, PropertyFilterDict, PropertyFilterFormula)
             If tf Then

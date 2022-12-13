@@ -1,4 +1,7 @@
-﻿Public Class CommonTasks
+Imports System.IO
+Imports ExcelDataReader
+
+Public Class CommonTasks
 
     Shared Function SaveAsPNG(View As SolidEdgeFramework.View,
                                NewFilename As String
@@ -91,5 +94,48 @@
         Return ErrorMessage
     End Function
 
+
+    Shared Function ReadExcel(FileName As String) As String()
+
+        Dim tmpList As String() = Nothing
+        Dim i As Integer = 0
+
+        Using stream = File.Open(FileName, FileMode.Open, FileAccess.Read)
+            ' Auto-detect format, supports:
+            '  - Binary Excel files (2.0-2003 format; *.xls)
+            '  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
+            Using reader = ExcelReaderFactory.CreateReader(stream)
+                ' Choose one of either 1 or 2:
+
+                ' 1. Use the reader methods
+                Do
+                    While reader.Read()
+                        i += 1
+                        ReDim Preserve tmpList(i)
+                        tmpList(i) = reader.GetValue(0)
+                    End While
+                Loop While reader.NextResult()
+
+                '' 2. Use the AsDataSet extension method
+                'Dim result = reader.AsDataSet()
+
+                '' The result of each spreadsheet is in result.Tables
+            End Using
+        End Using
+
+        Return tmpList
+
+    End Function
+
+    Public Shared Function FilenameIsOK(ByVal fileName As String) As Boolean
+
+        Try
+            Dim fi As New IO.FileInfo(fileName)
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+
+    End Function
 
 End Class

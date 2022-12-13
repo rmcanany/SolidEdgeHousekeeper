@@ -23,10 +23,13 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
-        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Files sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Excluded files", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup3 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Assemblies", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup4 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Parts", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup5 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Sheetmetals", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup6 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("Drafts", System.Windows.Forms.HorizontalAlignment.Left)
         Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 1", "C:\Documents\Projects\FakeProject"}, "Unchecked")
         Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 2", "C:\Documents\Projects\FakeProject"}, "Unchecked")
         Dim ListViewItem3 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 3", "C:\Documents\Projects\FakeProject"}, "Unchecked")
@@ -35,9 +38,29 @@ Partial Class Form1
         Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 6", "C:\Documents\Projects\FakeProject"}, "Error")
         Dim ListViewItem7 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 7", "C:\Documents\Projects\FakeProject\Drawings"}, "Checked")
         Dim ListViewItem8 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"FakeFile number 8", "C:\Documents\Projects\FakeProject\Drawings"}, "Checked")
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Dim ListViewItem9 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("C:\Documents\Projects", "folder")
+        Dim ListViewItem10 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("C:\Documents\Projects", "folders")
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ASM_Folder = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_AddFromlist = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ExportList = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_ErrorList = New System.Windows.Forms.ToolStripButton()
+        Me.BT_DeleteAll = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_Update = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterDft = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterPsm = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
+        Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.ListViewFiles = New System.Windows.Forms.ListView()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -51,24 +74,11 @@ Partial Class Form1
         Me.CheckBoxFilterPsm = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFilterPar = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFilterAsm = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCreateTODOList = New System.Windows.Forms.CheckBox()
         Me.CheckBoxEnablePropertyFilter = New System.Windows.Forms.CheckBox()
-        Me.ButtonUpdateListBoxFiles = New System.Windows.Forms.Button()
         Me.ButtonPropertyFilter = New System.Windows.Forms.Button()
-        Me.ButtonTopLevelAssembly = New System.Windows.Forms.Button()
-        Me.LabelTopLevelAssembly = New System.Windows.Forms.Label()
-        Me.TextBoxTopLevelAssembly = New System.Windows.Forms.TextBox()
         Me.LabelListboxFiles = New System.Windows.Forms.Label()
         Me.TextBoxColumnWidth = New System.Windows.Forms.TextBox()
         Me.LabelColumnWidth = New System.Windows.Forms.Label()
-        Me.GroupBoxFilesToProcess = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonTODOList = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonTopLevelAssembly = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonFilesDirectoryOnly = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonFilesDirectoriesAndSubdirectories = New System.Windows.Forms.RadioButton()
-        Me.LabelInputDirectory = New System.Windows.Forms.Label()
-        Me.TextBoxInputDirectory = New System.Windows.Forms.TextBox()
-        Me.ButtonInputDirectory = New System.Windows.Forms.Button()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
         Me.TextBoxSaveAsFormulaAssembly = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaAssembly = New System.Windows.Forms.CheckBox()
@@ -225,9 +235,15 @@ Partial Class Form1
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
-        Me.GroupBoxFilesToProcess.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
         Me.TabPageAssembly.SuspendLayout()
         Me.TabPagePart.SuspendLayout()
         Me.TabPageSheetmetal.SuspendLayout()
@@ -237,6 +253,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.SuspendLayout()
         Me.TabPageReadme.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.Menu_ListViewFile.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -261,6 +278,7 @@ Partial Class Form1
         '
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageGeneral.Controls.Add(Me.ToolStrip1)
         Me.TabPageGeneral.Controls.Add(Me.ListViewFiles)
         Me.TabPageGeneral.Controls.Add(Me.ButtonFileSearch)
         Me.TabPageGeneral.Controls.Add(Me.ComboBoxFileSearch)
@@ -271,20 +289,11 @@ Partial Class Form1
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxFilterPsm)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxFilterPar)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxFilterAsm)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxCreateTODOList)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxEnablePropertyFilter)
-        Me.TabPageGeneral.Controls.Add(Me.ButtonUpdateListBoxFiles)
         Me.TabPageGeneral.Controls.Add(Me.ButtonPropertyFilter)
-        Me.TabPageGeneral.Controls.Add(Me.ButtonTopLevelAssembly)
-        Me.TabPageGeneral.Controls.Add(Me.LabelTopLevelAssembly)
-        Me.TabPageGeneral.Controls.Add(Me.TextBoxTopLevelAssembly)
         Me.TabPageGeneral.Controls.Add(Me.LabelListboxFiles)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxColumnWidth)
         Me.TabPageGeneral.Controls.Add(Me.LabelColumnWidth)
-        Me.TabPageGeneral.Controls.Add(Me.GroupBoxFilesToProcess)
-        Me.TabPageGeneral.Controls.Add(Me.LabelInputDirectory)
-        Me.TabPageGeneral.Controls.Add(Me.TextBoxInputDirectory)
-        Me.TabPageGeneral.Controls.Add(Me.ButtonInputDirectory)
         Me.TabPageGeneral.ImageKey = "se"
         Me.TabPageGeneral.Location = New System.Drawing.Point(4, 23)
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(2)
@@ -293,6 +302,178 @@ Partial Class Form1
         Me.TabPageGeneral.Size = New System.Drawing.Size(511, 594)
         Me.TabPageGeneral.TabIndex = 0
         Me.TabPageGeneral.Text = "General"
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.White
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(2, 2)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
+        Me.ToolStrip1.Size = New System.Drawing.Size(505, 25)
+        Me.ToolStrip1.TabIndex = 33
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'BT_AddFolder
+        '
+        Me.BT_AddFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFolder.Image = CType(resources.GetObject("BT_AddFolder.Image"), System.Drawing.Image)
+        Me.BT_AddFolder.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFolder.Name = "BT_AddFolder"
+        Me.BT_AddFolder.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFolder.Text = "Add single folder"
+        '
+        'BT_AddFolderSubfolders
+        '
+        Me.BT_AddFolderSubfolders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFolderSubfolders.Image = CType(resources.GetObject("BT_AddFolderSubfolders.Image"), System.Drawing.Image)
+        Me.BT_AddFolderSubfolders.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
+        Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFolderSubfolders.Text = "Add folder and subfolders"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_TopLevelAsm
+        '
+        Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_TopLevelAsm.Image = CType(resources.GetObject("BT_TopLevelAsm.Image"), System.Drawing.Image)
+        Me.BT_TopLevelAsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_TopLevelAsm.Name = "BT_TopLevelAsm"
+        Me.BT_TopLevelAsm.Size = New System.Drawing.Size(23, 22)
+        Me.BT_TopLevelAsm.Text = "Top level asm"
+        '
+        'BT_ASM_Folder
+        '
+        Me.BT_ASM_Folder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ASM_Folder.Image = CType(resources.GetObject("BT_ASM_Folder.Image"), System.Drawing.Image)
+        Me.BT_ASM_Folder.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ASM_Folder.Name = "BT_ASM_Folder"
+        Me.BT_ASM_Folder.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ASM_Folder.Text = "Top level assembly folder"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_AddFromlist
+        '
+        Me.BT_AddFromlist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddFromlist.Image = CType(resources.GetObject("BT_AddFromlist.Image"), System.Drawing.Image)
+        Me.BT_AddFromlist.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddFromlist.Name = "BT_AddFromlist"
+        Me.BT_AddFromlist.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddFromlist.Text = "Add files from a list"
+        Me.BT_AddFromlist.ToolTipText = "Add files from a list"
+        '
+        'BT_ExportList
+        '
+        Me.BT_ExportList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ExportList.Image = CType(resources.GetObject("BT_ExportList.Image"), System.Drawing.Image)
+        Me.BT_ExportList.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ExportList.Name = "BT_ExportList"
+        Me.BT_ExportList.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ExportList.Text = "Export list"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_ErrorList
+        '
+        Me.BT_ErrorList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ErrorList.Image = CType(resources.GetObject("BT_ErrorList.Image"), System.Drawing.Image)
+        Me.BT_ErrorList.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ErrorList.Name = "BT_ErrorList"
+        Me.BT_ErrorList.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ErrorList.Text = "Show only file with errors"
+        '
+        'BT_DeleteAll
+        '
+        Me.BT_DeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_DeleteAll.Image = CType(resources.GetObject("BT_DeleteAll.Image"), System.Drawing.Image)
+        Me.BT_DeleteAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_DeleteAll.Name = "BT_DeleteAll"
+        Me.BT_DeleteAll.Size = New System.Drawing.Size(23, 22)
+        Me.BT_DeleteAll.Text = "Delete all"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_Update
+        '
+        Me.BT_Update.Image = CType(resources.GetObject("BT_Update.Image"), System.Drawing.Image)
+        Me.BT_Update.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Update.Name = "BT_Update"
+        Me.BT_Update.Size = New System.Drawing.Size(65, 22)
+        Me.BT_Update.Text = "Update"
+        '
+        'new_CheckBoxFilterDft
+        '
+        Me.new_CheckBoxFilterDft.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterDft.Checked = True
+        Me.new_CheckBoxFilterDft.CheckOnClick = True
+        Me.new_CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterDft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterDft.Image = CType(resources.GetObject("new_CheckBoxFilterDft.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
+        Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterDft.Text = "ToolStripButton2"
+        '
+        'new_CheckBoxFilterPsm
+        '
+        Me.new_CheckBoxFilterPsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterPsm.Checked = True
+        Me.new_CheckBoxFilterPsm.CheckOnClick = True
+        Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
+        Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterPsm.Text = "ToolStripButton3"
+        '
+        'new_CheckBoxFilterPar
+        '
+        Me.new_CheckBoxFilterPar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterPar.Checked = True
+        Me.new_CheckBoxFilterPar.CheckOnClick = True
+        Me.new_CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterPar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterPar.Image = CType(resources.GetObject("new_CheckBoxFilterPar.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterPar.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
+        Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.new_CheckBoxFilterPar.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterPar.Text = "ToolStripButton1"
+        '
+        'new_CheckBoxFilterAsm
+        '
+        Me.new_CheckBoxFilterAsm.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.new_CheckBoxFilterAsm.Checked = True
+        Me.new_CheckBoxFilterAsm.CheckOnClick = True
+        Me.new_CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.new_CheckBoxFilterAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.new_CheckBoxFilterAsm.Image = CType(resources.GetObject("new_CheckBoxFilterAsm.Image"), System.Drawing.Image)
+        Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
+        Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)
+        Me.new_CheckBoxFilterAsm.Text = "ToolStripButton4"
+        '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(41, 22)
+        Me.ToolStripLabel1.Text = "Filters:"
         '
         'ListViewFiles
         '
@@ -304,29 +485,35 @@ Partial Class Form1
         Me.ListViewFiles.Cursor = System.Windows.Forms.Cursors.Default
         Me.ListViewFiles.FullRowSelect = True
         Me.ListViewFiles.GridLines = True
-        ListViewGroup1.Header = "Assemblies"
-        ListViewGroup1.Name = ".asm"
-        ListViewGroup2.Header = "Parts"
-        ListViewGroup2.Name = ".par"
-        ListViewGroup3.Header = "Sheetmetals"
-        ListViewGroup3.Name = ".psm"
-        ListViewGroup4.Header = "Drafts"
-        ListViewGroup4.Name = ".dft"
-        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4})
+        ListViewGroup1.Header = "Files sources"
+        ListViewGroup1.Name = "Sources"
+        ListViewGroup2.Header = "Excluded files"
+        ListViewGroup2.Name = "Excluded"
+        ListViewGroup3.Header = "Assemblies"
+        ListViewGroup3.Name = ".asm"
+        ListViewGroup4.Header = "Parts"
+        ListViewGroup4.Name = ".par"
+        ListViewGroup5.Header = "Sheetmetals"
+        ListViewGroup5.Name = ".psm"
+        ListViewGroup6.Header = "Drafts"
+        ListViewGroup6.Name = ".dft"
+        Me.ListViewFiles.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1, ListViewGroup2, ListViewGroup3, ListViewGroup4, ListViewGroup5, ListViewGroup6})
         Me.ListViewFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.ListViewFiles.HideSelection = False
-        ListViewItem1.Group = ListViewGroup1
-        ListViewItem2.Group = ListViewGroup2
-        ListViewItem3.Group = ListViewGroup2
-        ListViewItem4.Group = ListViewGroup2
-        ListViewItem5.Group = ListViewGroup3
-        ListViewItem6.Group = ListViewGroup3
-        ListViewItem7.Group = ListViewGroup4
-        ListViewItem8.Group = ListViewGroup4
-        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8})
-        Me.ListViewFiles.Location = New System.Drawing.Point(11, 82)
+        ListViewItem1.Group = ListViewGroup3
+        ListViewItem2.Group = ListViewGroup4
+        ListViewItem3.Group = ListViewGroup4
+        ListViewItem4.Group = ListViewGroup4
+        ListViewItem5.Group = ListViewGroup5
+        ListViewItem6.Group = ListViewGroup5
+        ListViewItem7.Group = ListViewGroup6
+        ListViewItem8.Group = ListViewGroup6
+        ListViewItem9.Group = ListViewGroup1
+        ListViewItem10.Group = ListViewGroup1
+        Me.ListViewFiles.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5, ListViewItem6, ListViewItem7, ListViewItem8, ListViewItem9, ListViewItem10})
+        Me.ListViewFiles.Location = New System.Drawing.Point(2, 30)
         Me.ListViewFiles.Name = "ListViewFiles"
-        Me.ListViewFiles.Size = New System.Drawing.Size(491, 331)
+        Me.ListViewFiles.Size = New System.Drawing.Size(505, 467)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
@@ -358,11 +545,17 @@ Partial Class Form1
         Me.TabPage_ImageList.Images.SetKeyName(9, "Help")
         Me.TabPage_ImageList.Images.SetKeyName(10, "Info")
         Me.TabPage_ImageList.Images.SetKeyName(11, "Error")
+        Me.TabPage_ImageList.Images.SetKeyName(12, "txt")
+        Me.TabPage_ImageList.Images.SetKeyName(13, "csv")
+        Me.TabPage_ImageList.Images.SetKeyName(14, "excel")
+        Me.TabPage_ImageList.Images.SetKeyName(15, "folder")
+        Me.TabPage_ImageList.Images.SetKeyName(16, "folders")
+        Me.TabPage_ImageList.Images.SetKeyName(17, "ASM_Folder")
         '
         'ButtonFileSearch
         '
         Me.ButtonFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFileSearch.Location = New System.Drawing.Point(394, 465)
+        Me.ButtonFileSearch.Location = New System.Drawing.Point(394, 546)
         Me.ButtonFileSearch.Name = "ButtonFileSearch"
         Me.ButtonFileSearch.Size = New System.Drawing.Size(75, 20)
         Me.ButtonFileSearch.TabIndex = 31
@@ -373,7 +566,7 @@ Partial Class Form1
         '
         Me.ComboBoxFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxFileSearch.FormattingEnabled = True
-        Me.ComboBoxFileSearch.Location = New System.Drawing.Point(261, 465)
+        Me.ComboBoxFileSearch.Location = New System.Drawing.Point(261, 546)
         Me.ComboBoxFileSearch.Name = "ComboBoxFileSearch"
         Me.ComboBoxFileSearch.Size = New System.Drawing.Size(125, 21)
         Me.ComboBoxFileSearch.Sorted = True
@@ -383,7 +576,7 @@ Partial Class Form1
         '
         Me.LabelFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(72, 435)
+        Me.LabelFontSize.Location = New System.Drawing.Point(72, 516)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(49, 13)
@@ -393,7 +586,7 @@ Partial Class Form1
         'TextBoxFontSize
         '
         Me.TextBoxFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 434)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 515)
         Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(57, 20)
@@ -404,7 +597,7 @@ Partial Class Form1
         '
         Me.CheckBoxFileSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxFileSearch.AutoSize = True
-        Me.CheckBoxFileSearch.Location = New System.Drawing.Point(179, 465)
+        Me.CheckBoxFileSearch.Location = New System.Drawing.Point(179, 546)
         Me.CheckBoxFileSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFileSearch.Name = "CheckBoxFileSearch"
         Me.CheckBoxFileSearch.Size = New System.Drawing.Size(77, 17)
@@ -418,7 +611,7 @@ Partial Class Form1
         Me.CheckBoxFilterDft.AutoSize = True
         Me.CheckBoxFilterDft.Checked = True
         Me.CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxFilterDft.Location = New System.Drawing.Point(464, 434)
+        Me.CheckBoxFilterDft.Location = New System.Drawing.Point(296, 382)
         Me.CheckBoxFilterDft.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFilterDft.Name = "CheckBoxFilterDft"
         Me.CheckBoxFilterDft.Size = New System.Drawing.Size(45, 17)
@@ -432,7 +625,7 @@ Partial Class Form1
         Me.CheckBoxFilterPsm.AutoSize = True
         Me.CheckBoxFilterPsm.Checked = True
         Me.CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxFilterPsm.Location = New System.Drawing.Point(408, 434)
+        Me.CheckBoxFilterPsm.Location = New System.Drawing.Point(240, 382)
         Me.CheckBoxFilterPsm.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFilterPsm.Name = "CheckBoxFilterPsm"
         Me.CheckBoxFilterPsm.Size = New System.Drawing.Size(52, 17)
@@ -446,7 +639,7 @@ Partial Class Form1
         Me.CheckBoxFilterPar.AutoSize = True
         Me.CheckBoxFilterPar.Checked = True
         Me.CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxFilterPar.Location = New System.Drawing.Point(352, 434)
+        Me.CheckBoxFilterPar.Location = New System.Drawing.Point(184, 382)
         Me.CheckBoxFilterPar.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFilterPar.Name = "CheckBoxFilterPar"
         Me.CheckBoxFilterPar.Size = New System.Drawing.Size(48, 17)
@@ -460,25 +653,13 @@ Partial Class Form1
         Me.CheckBoxFilterAsm.AutoSize = True
         Me.CheckBoxFilterAsm.Checked = True
         Me.CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxFilterAsm.Location = New System.Drawing.Point(295, 434)
+        Me.CheckBoxFilterAsm.Location = New System.Drawing.Point(127, 382)
         Me.CheckBoxFilterAsm.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxFilterAsm.Name = "CheckBoxFilterAsm"
         Me.CheckBoxFilterAsm.Size = New System.Drawing.Size(52, 17)
         Me.CheckBoxFilterAsm.TabIndex = 22
         Me.CheckBoxFilterAsm.Text = "*.asm"
         Me.CheckBoxFilterAsm.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCreateTODOList
-        '
-        Me.CheckBoxCreateTODOList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCreateTODOList.AutoSize = True
-        Me.CheckBoxCreateTODOList.Location = New System.Drawing.Point(319, 574)
-        Me.CheckBoxCreateTODOList.Margin = New System.Windows.Forms.Padding(2)
-        Me.CheckBoxCreateTODOList.Name = "CheckBoxCreateTODOList"
-        Me.CheckBoxCreateTODOList.Size = New System.Drawing.Size(106, 17)
-        Me.CheckBoxCreateTODOList.TabIndex = 21
-        Me.CheckBoxCreateTODOList.Text = "Create TODO list"
-        Me.CheckBoxCreateTODOList.UseVisualStyleBackColor = True
         '
         'CheckBoxEnablePropertyFilter
         '
@@ -492,17 +673,6 @@ Partial Class Form1
         Me.CheckBoxEnablePropertyFilter.Text = "Enable property filter"
         Me.CheckBoxEnablePropertyFilter.UseVisualStyleBackColor = True
         '
-        'ButtonUpdateListBoxFiles
-        '
-        Me.ButtonUpdateListBoxFiles.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonUpdateListBoxFiles.Location = New System.Drawing.Point(11, 57)
-        Me.ButtonUpdateListBoxFiles.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonUpdateListBoxFiles.Name = "ButtonUpdateListBoxFiles"
-        Me.ButtonUpdateListBoxFiles.Size = New System.Drawing.Size(94, 20)
-        Me.ButtonUpdateListBoxFiles.TabIndex = 19
-        Me.ButtonUpdateListBoxFiles.Text = "Update File List"
-        Me.ButtonUpdateListBoxFiles.UseVisualStyleBackColor = True
-        '
         'ButtonPropertyFilter
         '
         Me.ButtonPropertyFilter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -515,42 +685,10 @@ Partial Class Form1
         Me.ButtonPropertyFilter.Text = "Configure"
         Me.ButtonPropertyFilter.UseVisualStyleBackColor = True
         '
-        'ButtonTopLevelAssembly
-        '
-        Me.ButtonTopLevelAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTopLevelAssembly.Location = New System.Drawing.Point(427, 549)
-        Me.ButtonTopLevelAssembly.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonTopLevelAssembly.Name = "ButtonTopLevelAssembly"
-        Me.ButtonTopLevelAssembly.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonTopLevelAssembly.TabIndex = 15
-        Me.ButtonTopLevelAssembly.Text = "Browse"
-        Me.ButtonTopLevelAssembly.UseVisualStyleBackColor = True
-        '
-        'LabelTopLevelAssembly
-        '
-        Me.LabelTopLevelAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelTopLevelAssembly.AutoSize = True
-        Me.LabelTopLevelAssembly.Location = New System.Drawing.Point(11, 529)
-        Me.LabelTopLevelAssembly.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelTopLevelAssembly.Name = "LabelTopLevelAssembly"
-        Me.LabelTopLevelAssembly.Size = New System.Drawing.Size(97, 13)
-        Me.LabelTopLevelAssembly.TabIndex = 14
-        Me.LabelTopLevelAssembly.Text = "Top level assembly"
-        '
-        'TextBoxTopLevelAssembly
-        '
-        Me.TextBoxTopLevelAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTopLevelAssembly.Location = New System.Drawing.Point(11, 549)
-        Me.TextBoxTopLevelAssembly.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxTopLevelAssembly.Name = "TextBoxTopLevelAssembly"
-        Me.TextBoxTopLevelAssembly.Size = New System.Drawing.Size(409, 20)
-        Me.TextBoxTopLevelAssembly.TabIndex = 13
-        '
         'LabelListboxFiles
         '
         Me.LabelListboxFiles.AutoSize = True
-        Me.LabelListboxFiles.Location = New System.Drawing.Point(126, 61)
+        Me.LabelListboxFiles.Location = New System.Drawing.Point(126, 500)
         Me.LabelListboxFiles.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelListboxFiles.Name = "LabelListboxFiles"
         Me.LabelListboxFiles.Size = New System.Drawing.Size(381, 13)
@@ -561,7 +699,7 @@ Partial Class Form1
         'TextBoxColumnWidth
         '
         Me.TextBoxColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(8, 462)
+        Me.TextBoxColumnWidth.Location = New System.Drawing.Point(8, 543)
         Me.TextBoxColumnWidth.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxColumnWidth.Name = "TextBoxColumnWidth"
         Me.TextBoxColumnWidth.Size = New System.Drawing.Size(57, 20)
@@ -572,106 +710,12 @@ Partial Class Form1
         '
         Me.LabelColumnWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelColumnWidth.AutoSize = True
-        Me.LabelColumnWidth.Location = New System.Drawing.Point(72, 465)
+        Me.LabelColumnWidth.Location = New System.Drawing.Point(72, 546)
         Me.LabelColumnWidth.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelColumnWidth.Name = "LabelColumnWidth"
         Me.LabelColumnWidth.Size = New System.Drawing.Size(98, 13)
         Me.LabelColumnWidth.TabIndex = 9
         Me.LabelColumnWidth.Text = "Col width (pix/char)"
-        '
-        'GroupBoxFilesToProcess
-        '
-        Me.GroupBoxFilesToProcess.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonTODOList)
-        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonTopLevelAssembly)
-        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoryOnly)
-        Me.GroupBoxFilesToProcess.Controls.Add(Me.RadioButtonFilesDirectoriesAndSubdirectories)
-        Me.GroupBoxFilesToProcess.Location = New System.Drawing.Point(11, 484)
-        Me.GroupBoxFilesToProcess.Margin = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxFilesToProcess.Name = "GroupBoxFilesToProcess"
-        Me.GroupBoxFilesToProcess.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxFilesToProcess.Size = New System.Drawing.Size(454, 41)
-        Me.GroupBoxFilesToProcess.TabIndex = 6
-        Me.GroupBoxFilesToProcess.TabStop = False
-        Me.GroupBoxFilesToProcess.Text = "Files to process"
-        '
-        'RadioButtonTODOList
-        '
-        Me.RadioButtonTODOList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.RadioButtonTODOList.AutoSize = True
-        Me.RadioButtonTODOList.Location = New System.Drawing.Point(356, 21)
-        Me.RadioButtonTODOList.Margin = New System.Windows.Forms.Padding(2)
-        Me.RadioButtonTODOList.Name = "RadioButtonTODOList"
-        Me.RadioButtonTODOList.Size = New System.Drawing.Size(71, 17)
-        Me.RadioButtonTODOList.TabIndex = 3
-        Me.RadioButtonTODOList.TabStop = True
-        Me.RadioButtonTODOList.Text = "TODO list"
-        Me.RadioButtonTODOList.UseVisualStyleBackColor = True
-        '
-        'RadioButtonTopLevelAssembly
-        '
-        Me.RadioButtonTopLevelAssembly.AutoSize = True
-        Me.RadioButtonTopLevelAssembly.Location = New System.Drawing.Point(225, 20)
-        Me.RadioButtonTopLevelAssembly.Margin = New System.Windows.Forms.Padding(2)
-        Me.RadioButtonTopLevelAssembly.Name = "RadioButtonTopLevelAssembly"
-        Me.RadioButtonTopLevelAssembly.Size = New System.Drawing.Size(115, 17)
-        Me.RadioButtonTopLevelAssembly.TabIndex = 2
-        Me.RadioButtonTopLevelAssembly.Text = "Top level assembly"
-        Me.RadioButtonTopLevelAssembly.UseVisualStyleBackColor = True
-        '
-        'RadioButtonFilesDirectoryOnly
-        '
-        Me.RadioButtonFilesDirectoryOnly.AutoSize = True
-        Me.RadioButtonFilesDirectoryOnly.Location = New System.Drawing.Point(11, 20)
-        Me.RadioButtonFilesDirectoryOnly.Margin = New System.Windows.Forms.Padding(2)
-        Me.RadioButtonFilesDirectoryOnly.Name = "RadioButtonFilesDirectoryOnly"
-        Me.RadioButtonFilesDirectoryOnly.Size = New System.Drawing.Size(89, 17)
-        Me.RadioButtonFilesDirectoryOnly.TabIndex = 1
-        Me.RadioButtonFilesDirectoryOnly.Text = "Directory only"
-        Me.RadioButtonFilesDirectoryOnly.UseVisualStyleBackColor = True
-        '
-        'RadioButtonFilesDirectoriesAndSubdirectories
-        '
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.AutoSize = True
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Location = New System.Drawing.Point(112, 20)
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Margin = New System.Windows.Forms.Padding(2)
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Name = "RadioButtonFilesDirectoriesAndSubdirectories"
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Size = New System.Drawing.Size(92, 17)
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.TabIndex = 0
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.Text = "Subdirectories"
-        Me.RadioButtonFilesDirectoriesAndSubdirectories.UseVisualStyleBackColor = True
-        '
-        'LabelInputDirectory
-        '
-        Me.LabelInputDirectory.AutoSize = True
-        Me.LabelInputDirectory.Location = New System.Drawing.Point(11, 8)
-        Me.LabelInputDirectory.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelInputDirectory.Name = "LabelInputDirectory"
-        Me.LabelInputDirectory.Size = New System.Drawing.Size(76, 13)
-        Me.LabelInputDirectory.TabIndex = 4
-        Me.LabelInputDirectory.Text = "Input Directory"
-        '
-        'TextBoxInputDirectory
-        '
-        Me.TextBoxInputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxInputDirectory.Location = New System.Drawing.Point(11, 28)
-        Me.TextBoxInputDirectory.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxInputDirectory.Name = "TextBoxInputDirectory"
-        Me.TextBoxInputDirectory.Size = New System.Drawing.Size(409, 20)
-        Me.TextBoxInputDirectory.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.TextBoxInputDirectory, "Input Directory")
-        '
-        'ButtonInputDirectory
-        '
-        Me.ButtonInputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonInputDirectory.Location = New System.Drawing.Point(427, 28)
-        Me.ButtonInputDirectory.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonInputDirectory.Name = "ButtonInputDirectory"
-        Me.ButtonInputDirectory.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonInputDirectory.TabIndex = 2
-        Me.ButtonInputDirectory.Text = "Browse"
-        Me.ButtonInputDirectory.UseVisualStyleBackColor = True
         '
         'TabPageAssembly
         '
@@ -2003,7 +2047,7 @@ Partial Class Form1
         Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(11, 720)
         Me.TextBoxPrintOptionsPrinter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
-        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(282, 20)
+        Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(95, 20)
         Me.TextBoxPrintOptionsPrinter.TabIndex = 21
         '
         'ButtonPrintOptions
@@ -2054,7 +2098,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(327, 140)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(461, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
@@ -2062,7 +2106,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(231, 97)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(365, 97)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2077,7 +2121,7 @@ Partial Class Form1
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 98)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(207, 20)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(341, 20)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 4
         '
         'LabelFastSearchScopeFilename
@@ -2104,6 +2148,7 @@ Partial Class Form1
         'RadioButtonTLATopDown
         '
         Me.RadioButtonTLATopDown.AutoSize = True
+        Me.RadioButtonTLATopDown.Checked = True
         Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 41)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
@@ -2163,7 +2208,7 @@ Partial Class Form1
         Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 268)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
-        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(121, 20)
+        Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(0, 20)
         Me.TextBoxPartNumberPropertyName.TabIndex = 13
         '
         'LabelPartNumberPropertyName
@@ -2200,7 +2245,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(219, 219)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(394, 219)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
@@ -2215,7 +2260,7 @@ Partial Class Form1
         Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(8, 219)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(192, 20)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(380, 20)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 8
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
@@ -2232,7 +2277,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(219, 24)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(394, 24)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateAssembly.TabIndex = 3
@@ -2245,7 +2290,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(8, 24)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(192, 20)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(380, 20)
         Me.TextBoxTemplateAssembly.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
@@ -2261,7 +2306,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(219, 73)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(394, 73)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplatePart.TabIndex = 6
@@ -2274,7 +2319,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplatePart.Location = New System.Drawing.Point(8, 73)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(192, 20)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(380, 20)
         Me.TextBoxTemplatePart.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
@@ -2290,7 +2335,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(219, 122)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(394, 122)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateSheetmetal.TabIndex = 6
@@ -2303,7 +2348,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(8, 122)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(192, 20)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(380, 20)
         Me.TextBoxTemplateSheetmetal.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
@@ -2319,7 +2364,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(219, 171)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(394, 171)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(75, 20)
         Me.ButtonTemplateDraft.TabIndex = 6
@@ -2332,7 +2377,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(8, 171)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(192, 20)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(380, 20)
         Me.TextBoxTemplateDraft.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
@@ -2461,6 +2506,43 @@ Partial Class Form1
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(519, 55)
         Me.TableLayoutPanel1.TabIndex = 5
         '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 23)
+        '
+        'Menu_ListViewFile
+        '
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator5, Me.BT_Remove})
+        Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(181, 98)
+        '
+        'BT_Open
+        '
+        Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
+        Me.BT_Open.Name = "BT_Open"
+        Me.BT_Open.Size = New System.Drawing.Size(180, 22)
+        Me.BT_Open.Text = "Open"
+        '
+        'BT_OpenFolder
+        '
+        Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
+        Me.BT_OpenFolder.Name = "BT_OpenFolder"
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(180, 22)
+        Me.BT_OpenFolder.Text = "Open folder"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(171, 6)
+        '
+        'BT_Remove
+        '
+        Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
+        Me.BT_Remove.Name = "BT_Remove"
+        Me.BT_Remove.Size = New System.Drawing.Size(180, 22)
+        Me.BT_Remove.Text = "Remove from list"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2477,8 +2559,8 @@ Partial Class Form1
         Me.TabControl1.ResumeLayout(False)
         Me.TabPageGeneral.ResumeLayout(False)
         Me.TabPageGeneral.PerformLayout()
-        Me.GroupBoxFilesToProcess.ResumeLayout(False)
-        Me.GroupBoxFilesToProcess.PerformLayout()
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
         Me.TabPageAssembly.ResumeLayout(False)
         Me.TabPageAssembly.PerformLayout()
         Me.TabPagePart.ResumeLayout(False)
@@ -2497,6 +2579,7 @@ Partial Class Form1
         Me.TabPageReadme.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
+        Me.Menu_ListViewFile.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2508,13 +2591,6 @@ Partial Class Form1
     Friend WithEvents TabPagePart As TabPage
     Friend WithEvents TabPageSheetmetal As TabPage
     Friend WithEvents TabPageDraft As TabPage
-    Friend WithEvents GroupBoxFilesToProcess As GroupBox
-    Friend WithEvents RadioButtonTopLevelAssembly As RadioButton
-    Friend WithEvents RadioButtonFilesDirectoryOnly As RadioButton
-    Friend WithEvents RadioButtonFilesDirectoriesAndSubdirectories As RadioButton
-    Friend WithEvents LabelInputDirectory As Label
-    Friend WithEvents TextBoxInputDirectory As TextBox
-    Friend WithEvents ButtonInputDirectory As Button
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents TextBoxStatus As TextBox
     Friend WithEvents ButtonCancel As Button
@@ -2571,10 +2647,6 @@ Partial Class Form1
     Friend WithEvents LabelTimeRemaining As Label
     Friend WithEvents LabelListboxFiles As Label
     Friend WithEvents ButtonPropertyFilter As Button
-    Friend WithEvents ButtonTopLevelAssembly As Button
-    Friend WithEvents LabelTopLevelAssembly As Label
-    Friend WithEvents TextBoxTopLevelAssembly As TextBox
-    Friend WithEvents ButtonUpdateListBoxFiles As Button
     Friend WithEvents CheckBoxSaveAsAssemblyOutputDirectory As CheckBox
     Friend WithEvents CheckBoxSaveAsPartOutputDirectory As CheckBox
     Friend WithEvents CheckBoxSaveAsSheetmetalOutputDirectory As CheckBox
@@ -2605,8 +2677,6 @@ Partial Class Form1
     Friend WithEvents TextBoxExternalProgramDraft As TextBox
     Friend WithEvents LabelExternalProgramDraft As Label
     Friend WithEvents ButtonPrintOptions As Button
-    Friend WithEvents CheckBoxCreateTODOList As CheckBox
-    Friend WithEvents RadioButtonTODOList As RadioButton
     Friend WithEvents CheckBoxFilterDft As CheckBox
     Friend WithEvents CheckBoxFilterPsm As CheckBox
     Friend WithEvents CheckBoxFilterPar As CheckBox
@@ -2691,4 +2761,29 @@ Partial Class Form1
     Friend WithEvents ListViewFiles As ListView
     Friend WithEvents FileName As ColumnHeader
     Friend WithEvents FilePath As ColumnHeader
+    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents BT_AddFolder As ToolStripButton
+    Friend WithEvents BT_AddFolderSubfolders As ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents BT_AddFromlist As ToolStripButton
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents BT_Update As ToolStripButton
+    Friend WithEvents BT_DeleteAll As ToolStripButton
+    Friend WithEvents BT_TopLevelAsm As ToolStripButton
+    Friend WithEvents BT_ExportList As ToolStripButton
+    Friend WithEvents new_CheckBoxFilterPar As ToolStripButton
+    Friend WithEvents new_CheckBoxFilterDft As ToolStripButton
+    Friend WithEvents new_CheckBoxFilterPsm As ToolStripButton
+    Friend WithEvents new_CheckBoxFilterAsm As ToolStripButton
+    Friend WithEvents ToolStripLabel1 As ToolStripLabel
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents BT_ASM_Folder As ToolStripButton
+    Friend WithEvents BT_ErrorList As ToolStripButton
+    Friend WithEvents ToolStripButton1 As ToolStripButton
+    Friend WithEvents Menu_ListViewFile As ContextMenuStrip
+    Friend WithEvents BT_Open As ToolStripMenuItem
+    Friend WithEvents BT_OpenFolder As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents BT_Remove As ToolStripMenuItem
 End Class

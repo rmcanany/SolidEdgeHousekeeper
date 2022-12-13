@@ -66,9 +66,16 @@
     <ApplicationIcon>Housekeeper_New.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExcelDataReader, Version=3.7.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.3.7.0-develop00310\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.7.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.DataSet.3.7.0-develop00310\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.SolidEdge, Version=220.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Interop.SolidEdge.220.2.0\lib\net45\Interop.SolidEdge.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="SolidEdge.Community, Version=219.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\SolidEdge.Community.219.0.0\lib\net45\SolidEdge.Community.dll</HintPath>
     </Reference>
@@ -76,6 +83,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -209,6 +217,24 @@
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
     <Content Include="Housekeeper_New.ico" />
+    <None Include="Resources\icons8_csv_16.png" />
+    <None Include="Resources\icons8_txt_16.png" />
+    <None Include="Resources\Support_16.png" />
+    <None Include="Resources\Info-16.png" />
+    <None Include="Resources\icons8_Microsoft_Excel_2019_16.png" />
+    <None Include="Resources\icons8_help_16.png" />
+    <None Include="Resources\icons8_Folders_16.png" />
+    <None Include="Resources\icons8_folder_tree_16.png" />
+    <None Include="Resources\icons8_Folder_16.png" />
+    <None Include="Resources\icons8_Error_16.png" />
+    <None Include="Resources\icons8_unchecked_checkbox_16.png" />
+    <None Include="Resources\icons8_Checked_Checkbox_16.png" />
+    <None Include="Resources\ST9 - psm.png" />
+    <None Include="Resources\ST9 - par.png" />
+    <None Include="Resources\ST9 - dft.png" />
+    <None Include="Resources\ST9 - cfg.png" />
+    <None Include="Resources\ST9 - asm.png" />
+    <None Include="Resources\SolidEdge_16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

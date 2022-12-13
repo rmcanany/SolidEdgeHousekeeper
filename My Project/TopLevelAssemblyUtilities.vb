@@ -309,7 +309,7 @@ Public Class TopLevelAssemblyUtilities
             If Not AllLinkedFilenames.Contains(LinkedDocument.FullName) Then
                 AllLinkedFilenames.Add(LinkedDocument.FullName)
 
-                msg = LinkedDocument.FullName.Replace(Form1.TextBoxInputDirectory.Text, "")
+                msg = LinkedDocument.FullName '.Replace(Form1.TextBoxInputDirectory.Text, "")
                 msg = "Follow Links " + msg
                 Form1.TextBoxStatus.Text = msg
 
