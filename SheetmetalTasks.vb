@@ -2435,7 +2435,7 @@ Public Class SheetmetalTasks
 
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
-        'ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
+        ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
 
         SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
 
