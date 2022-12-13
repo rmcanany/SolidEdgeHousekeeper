@@ -1,5 +1,5 @@
 Imports System.IO
-Imports Microsoft.Office.Interop
+Imports ExcelDataReader
 
 Public Class CommonTasks
 
@@ -98,21 +98,30 @@ Public Class CommonTasks
     Shared Function ReadExcel(FileName As String) As String()
 
         Dim tmpList As String() = Nothing
+        Dim i As Integer = 0
 
-        Dim xlApp As Excel.Application = New Excel.Application
-        Dim xlWb As Excel.Workbook = xlApp.Workbooks.Open(FileName)
-        Dim xlWs As Excel.Worksheet = CType(xlWb.Worksheets.Item(1), Excel.Worksheet)
+        Using stream = File.Open(FileName, FileMode.Open, FileAccess.Read)
+            ' Auto-detect format, supports:
+            '  - Binary Excel files (2.0-2003 format; *.xls)
+            '  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
+            Using reader = ExcelReaderFactory.CreateReader(stream)
+                ' Choose one of either 1 or 2:
 
-        For i As Object = 1 To xlWs.Rows.Count
+                ' 1. Use the reader methods
+                Do
+                    While reader.Read()
+                        i += 1
+                        ReDim Preserve tmpList(i)
+                        tmpList(i) = reader.GetValue(0)
+                    End While
+                Loop While reader.NextResult()
 
-            If xlWs.Cells(i, 1).value <> "" Then
-                ReDim Preserve tmpList(i)
-                tmpList(i) = xlWs.Cells(i, 1).value
-            Else
+                '' 2. Use the AsDataSet extension method
+                'Dim result = reader.AsDataSet()
 
-                Exit For
-            End If
-        Next
+                '' The result of each spreadsheet is in result.Tables
+            End Using
+        End Using
 
         Return tmpList
 

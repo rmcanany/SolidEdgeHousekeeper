@@ -1,7 +1,5 @@
 Option Strict On
 
-Imports Excel = Microsoft.Office.Interop.Excel
-
 Partial Class Form1
 
     Private Sub UpdateListViewFiles(Source As ListViewItem)
@@ -36,33 +34,32 @@ Partial Class Form1
 
             Select Case Source.Tag.ToString
                 Case = "Folder"
-                    If FileIO.FileSystem.DirectoryExists(Source.SubItems.Item(1).Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.SubItems.Item(1).Text,
+                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
                                     FileIO.SearchOption.SearchTopLevelOnly,
                                     ActiveFileExtensionsList.ToArray)
 
                 Case = "Folders"
-                    If FileIO.FileSystem.DirectoryExists(Source.SubItems.Item(1).Text) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.SubItems.Item(1).Text,
+                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
                                     FileIO.SearchOption.SearchAllSubDirectories,
                                     ActiveFileExtensionsList.ToArray)
 
                 Case = "csv", "txt"
-                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then FoundFiles = IO.File.ReadAllLines(Source.SubItems.Item(1).Text)
+                    If FileIO.FileSystem.FileExists(Source.Name) Then FoundFiles = IO.File.ReadAllLines(Source.Name)
 
                 Case = "excel"
-                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then FoundFiles = CommonTasks.ReadExcel(Source.SubItems.Item(1).Text)
+                    If FileIO.FileSystem.FileExists(Source.Name) Then FoundFiles = CommonTasks.ReadExcel(Source.Name)
 
                 Case = "asm"
-                    If FileIO.FileSystem.FileExists(Source.SubItems.Item(1).Text) Then
+                    If FileIO.FileSystem.FileExists(Source.Name) Then
 
                         Dim tmpList As New Collection
+                        tmpList.Add(IO.Path.GetDirectoryName(Source.Name))
 
                         For Each item As ListViewItem In ListViewFiles.Items
-                            If item.Tag.ToString = "Folder" Or item.Tag.ToString = "Folders" Then
-                                tmpList.Add(item.SubItems.Item(1).Text)
+                            If item.Tag.ToString = "ASM_Folder" Then
+                                If Not tmpList.Contains(item.Name) Then tmpList.Add(item.Name, Name)
                             End If
                         Next
-
-                        If tmpList.Count = 0 Then tmpList.Add(IO.Path.GetDirectoryName(Source.SubItems.Item(1).Text))
 
                         For Each tmpFolder As String In tmpList
 
@@ -101,6 +98,17 @@ Partial Class Form1
 
         End If
 
+        Dim tmpFoundFiles As New List(Of String)
+        For Each item In FoundFiles
+            If CommonTasks.FilenameIsOK(item) Then
+                If IO.File.Exists(item) Then
+                    tmpFoundFiles.Add(item)
+                End If
+            End If
+        Next
+        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+
+
         If Not FoundFiles Is Nothing Then
 
             ' Filter by properties
@@ -125,16 +133,20 @@ Partial Class Form1
 
                 If CommonTasks.FilenameIsOK(FoundFile) Then
 
-                    If Not ListViewFiles.Items.ContainsKey(FoundFile) Then
+                    If IO.File.Exists(FoundFile) Then
 
-                        Dim tmpLVItem As New ListViewItem
-                        tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
-                        tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
-                        tmpLVItem.ImageKey = "Unchecked"
-                        tmpLVItem.Tag = FoundFile
-                        tmpLVItem.Name = FoundFile
-                        tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
-                        ListViewFiles.Items.Add(tmpLVItem)
+                        If Not ListViewFiles.Items.ContainsKey(FoundFile) Then
+
+                            Dim tmpLVItem As New ListViewItem
+                            tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+                            tmpLVItem.ImageKey = "Unchecked"
+                            tmpLVItem.Tag = FoundFile
+                            tmpLVItem.Name = FoundFile
+                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+                            ListViewFiles.Items.Add(tmpLVItem)
+
+                        End If
 
                     End If
 
