@@ -50,6 +50,52 @@ Public Class CommonTasks
         Return Path
     End Function
 
+
+    Shared Function RunExternalProgram(
+        ExternalProgram As String
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(ExternalProgram)
+        Dim P As New Process
+        Dim ExitCode As Integer
+        Dim ErrorMessageFilename As String
+        Dim ErrorMessages As String()
+
+        P = Process.Start(ExternalProgram)
+        P.WaitForExit()
+        ExitCode = P.ExitCode  ' If the program doesn't supply one, what value can it take?  Null?
+
+        ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
+
+        If ExitCode <> 0 Then
+            ExitStatus = 1
+            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+                ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
+                If ErrorMessages.Length > 0 Then
+                    For Each ErrorMessageFromProgram As String In ErrorMessages
+                        ErrorMessageList.Add(ErrorMessageFromProgram)
+                    Next
+                Else
+                    ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+                End If
+
+                IO.File.Delete(ErrorMessageFilename)
+            Else
+                ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+            End If
+        Else
+
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
     Shared Function ReadExcel(FileName As String) As String()
 
         Dim tmpList As String() = Nothing
