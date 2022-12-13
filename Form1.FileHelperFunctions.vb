@@ -98,15 +98,18 @@ Partial Class Form1
 
         End If
 
-        Dim tmpFoundFiles As New List(Of String)
-        For Each item In FoundFiles
-            If CommonTasks.FilenameIsOK(item) Then
-                If IO.File.Exists(item) Then
-                    tmpFoundFiles.Add(item)
+        If Not FoundFiles Is Nothing Then
+            Dim tmpFoundFiles As New List(Of String)
+            For Each item In FoundFiles
+                If CommonTasks.FilenameIsOK(item) Then
+                    If IO.File.Exists(item) Then
+                        tmpFoundFiles.Add(item)
+                    End If
                 End If
-            End If
-        Next
-        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+            Next
+            FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+        End If
+
 
 
         If Not FoundFiles Is Nothing Then
