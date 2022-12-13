@@ -1842,6 +1842,49 @@ Public Class SheetmetalTasks
 
     End Function
 
+    'Private Function SaveAsPNG(View As SolidEdgeFramework.View,
+    '                           NewFilename As String
+    '                           ) As String
+
+    '    Dim ExitCode As Integer = 0
+    '    Dim ExitMessage As String = ""
+    '    Dim FfmpegCmd As String
+    '    Dim FfmpegArgs As String
+    '    Dim P As New Process
+    '    Dim TempFilename As String
+
+    '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+
+    '    TempFilename = NewFilename.Replace(".png", "-Housekeeper.jpg")
+
+    '    View.SaveAsImage(TempFilename)
+
+    '    FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
+
+    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
+    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
+
+    '    Try
+
+    '        P = Process.Start(FfmpegCmd, FfmpegArgs)
+    '        P.WaitForExit()
+    '        ExitCode = P.ExitCode
+
+    '        If ExitCode = 0 Then
+    '            System.IO.File.Delete(TempFilename)
+    '        Else
+    '            ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
+    '        End If
+
+    '    Catch ex As Exception
+    '        ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
+    '        ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
+    '    End Try
+
+
+
+    '    Return ExitMessage
+    'End Function
 
     Private Function CropImage(Configuration As Dictionary(Of String, String),
                           SEDoc As SolidEdgePart.SheetMetalDocument,
@@ -2433,9 +2476,9 @@ Public Class SheetmetalTasks
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
-        ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
+
+        Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
         SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
 
@@ -2451,6 +2494,43 @@ Public Class SheetmetalTasks
 
 
 
+        'Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(ExternalProgram)
+        'Dim P As New Process
+        'Dim ExitCode As Integer
+        'Dim ErrorMessageFilename As String
+        'Dim ErrorMessages As String()
+        'Dim Key As String
+        'Dim Value As String
+
+
+
+        'P = Process.Start(ExternalProgram)
+        'P.WaitForExit()
+        'ExitCode = P.ExitCode  ' If the program doesn't supply one, what value can it take?  Null?
+
+        'ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
+
+        'If ExitCode <> 0 Then
+        '    ExitStatus = 1
+        '    If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
+        '        ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
+        '        If Len(ErrorMessages) > 0 Then
+        '            For Each ErrorMessageFromProgram As String In ErrorMessages
+        '                ErrorMessageList.Add(ErrorMessageFromProgram)
+        '            Next
+        '        Else
+        '            ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+        '        End If
+
+        '        IO.File.Delete(ErrorMessageFilename)
+        '    Else
+        '        ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+        '    End If
+        'Else
+
+        'End If
+
+
         If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
@@ -2460,9 +2540,9 @@ Public Class SheetmetalTasks
                 SEApp.DoIdle()
             End If
         End If
+
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
-
     End Function
 
 
