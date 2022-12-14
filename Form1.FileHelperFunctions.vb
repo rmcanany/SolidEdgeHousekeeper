@@ -119,11 +119,11 @@ Partial Class Form1
         If Not FoundFiles Is Nothing Then
 
             ' Filter by properties
-            If new_CheckBoxEnablePropertyFilter.Checked Then
-                System.Threading.Thread.Sleep(1000)
-                Dim PropertyFilter As New PropertyFilter(Me)
-                FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
-            End If
+            'If new_CheckBoxEnablePropertyFilter.Checked Then
+            '    System.Threading.Thread.Sleep(1000)
+            '    Dim PropertyFilter As New PropertyFilter(Me)
+            '    FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
+            'End If
 
             '' Filter by file wildcard search
             'If new_CheckBoxFileSearch.Checked Then

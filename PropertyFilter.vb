@@ -64,7 +64,7 @@ Public Class PropertyFilter
         Return FilteredFiles
     End Function
 
-    Private Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
+    Shared Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
                 PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
                 PropertyFilterFormula As String) As Boolean
         Dim tf As Boolean
@@ -110,7 +110,7 @@ Public Class PropertyFilter
 
     End Function
 
-    Private Function ProcessProperties(FoundFile As String,
+    Shared Function ProcessProperties(FoundFile As String,
         DMApp As DesignManager.Application,
         PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
         PropertyFilterFormula As String,
@@ -167,7 +167,7 @@ Public Class PropertyFilter
 
     End Function
 
-    Private Function DoSubstitution(Formula As String, VariableTruthValues As Dictionary(Of String, String)) As String
+    Shared Function DoSubstitution(Formula As String, VariableTruthValues As Dictionary(Of String, String)) As String
         Dim Result As String
         Dim Variable As String
         Dim var As String
@@ -184,7 +184,7 @@ Public Class PropertyFilter
         Return Result
     End Function
 
-    Private Function DoComparison(Comparison As String, Value As String, DocValue As String) As Boolean
+    Shared Function DoComparison(Comparison As String, Value As String, DocValue As String) As Boolean
         Dim tf As Boolean = False
 
         If Comparison = "contains" Then
@@ -212,7 +212,7 @@ Public Class PropertyFilter
         Return tf
     End Function
 
-    Private Function TextToDouble(Text As String) As Double
+    Shared Function TextToDouble(Text As String) As Double
         Dim DoubleNumber As Double
 
         Dim Units As New List(Of String)
@@ -270,7 +270,7 @@ Public Class PropertyFilter
     '    Return tf
     'End Function
 
-    Private Function SearchProperties(PropertySets As DesignManager.PropertySets,
+    Shared Function SearchProperties(PropertySets As DesignManager.PropertySets,
                                       PropertySet As String,
                                       PropertyName As String) As String
         Dim DocValue As String = ""
@@ -323,7 +323,7 @@ Public Class PropertyFilter
         Return DocValue
     End Function
 
-    Private Function ParsePropertyString(PropertyString As String, Element As String) As String
+    Shared Function ParsePropertyString(PropertyString As String, Element As String) As String
         Dim Result As String
         Dim PropertyStringList As List(Of String)
 
@@ -344,7 +344,7 @@ Public Class PropertyFilter
         Return Result
     End Function
 
-    Private Function EvaluateBoolean(formula As String) As Boolean
+    Shared Function EvaluateBoolean(formula As String) As Boolean
         ' https://stackoverflow.com/questions/49005926/conversion-from-string-to-boolean-vb-net
         Dim sc As New MSScriptControl.ScriptControl
         'SET LANGUAGE TO VBSCRIPT
