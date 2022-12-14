@@ -1409,19 +1409,20 @@ Public Class Form1
     End Sub
 
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
-        Dim tf As Boolean
 
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
-
         FormPropertyFilter.GetPropertyFilter()
 
-        tf = FormPropertyFilter.DialogResult = DialogResult.OK
-        tf = tf And PropertyFilterFormula <> ""
-        If tf Then
-            ' L-istBoxFiles.Items.Clear()
-            ListViewFilesOutOfDate = True
-        End If
-        ReconcileFormChanges()
+        Dim tf As Boolean = FormPropertyFilter.DialogResult = DialogResult.OK
+        'tf = tf And PropertyFilterFormula <> ""
+        'If tf Then
+        '    ' L-istBoxFiles.Items.Clear()
+        '    'ListViewFilesOutOfDate = True
+        'End If
+        ''ReconcileFormChanges()
+
+        PropFilter()
+
     End Sub
 
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
@@ -1554,23 +1555,20 @@ Public Class Form1
 
     Private Sub new_CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.CheckedChanged
 
-        ListViewFilesOutOfDate = True
-
         If new_CheckBoxEnablePropertyFilter.Checked Then
 
             new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
 
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
-
                 FormPropertyFilter.GetPropertyFilter()
             End If
 
         Else
-            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
+                new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
         End If
 
-        ReconcileFormChanges()
+        PropFilter()
 
     End Sub
 
@@ -1793,6 +1791,61 @@ Public Class Form1
             End If
 
         Next
+
+        ListViewFiles.EndUpdate()
+
+    End Sub
+
+    Private Sub PropFilter()
+
+        ListViewFiles.BeginUpdate()
+        ListViewFiles.Items.Clear()
+
+        Dim DMApp As DesignManager.Application = Nothing
+
+        If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
+            DMApp = New DesignManager.Application
+            DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+        End If
+
+        For Each item As ListViewItem In ListItemsBackup
+
+            Select Case item.Tag.ToString
+                Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
+                    item.Group = ListViewFiles.Groups.Item("Sources")
+                Case Else
+                    item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
+            End Select
+
+            If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
+
+                If item.Group.Name = "Sources" Then
+
+                    ListViewFiles.Items.Add(item)
+
+                Else
+
+                    'System.Threading.Thread.Sleep(1000)
+                    Dim PropertyFilter As New PropertyFilter(Me)
+
+                    If StopProcess Then Exit For
+
+                    Dim msg As String = CommonTasks.TruncateFullPath(item.Name, Nothing)
+
+                    Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+                    If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then ListViewFiles.Items.Add(item)
+
+                End If
+
+            Else
+
+                ListViewFiles.Items.Add(item)
+
+            End If
+
+        Next
+
+        If Not IsNothing(DMAPP) Then DMApp.Quit()
 
         ListViewFiles.EndUpdate()
 
