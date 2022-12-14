@@ -17,16 +17,16 @@ Partial Class Form1
         StopProcess = False
         ButtonCancel.Text = "Stop"
 
-        If CheckBoxFilterAsm.Checked Then
+        If new_CheckBoxFilterAsm.Checked Then
             ActiveFileExtensionsList.Add("*.asm")
         End If
-        If CheckBoxFilterPar.Checked Then
+        If new_CheckBoxFilterPar.Checked Then
             ActiveFileExtensionsList.Add("*.par")
         End If
-        If CheckBoxFilterPsm.Checked Then
+        If new_CheckBoxFilterPsm.Checked Then
             ActiveFileExtensionsList.Add("*.psm")
         End If
-        If CheckBoxFilterDft.Checked Then
+        If new_CheckBoxFilterDft.Checked Then
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
@@ -61,6 +61,8 @@ Partial Class Form1
                             End If
                         Next
 
+                        Dim tmpFoundFiles As New List(Of String)
+
                         For Each tmpFolder As String In tmpList
 
                             Dim TLAU As New TopLevelAssemblyUtilities(Me)
@@ -74,17 +76,19 @@ Partial Class Form1
                                     Exit Sub
                                 End If
 
-                                FoundFiles = TLAU.GetLinks("BottomUp", tmpFolder,
+                                tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList)
+                                                       ActiveFileExtensionsList))
                             Else
-                                FoundFiles = TLAU.GetLinks("TopDown", tmpFolder,
+                                tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
-                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
                             End If
 
                         Next
+
+                        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
                         TextBoxStatus.Text = ""
 

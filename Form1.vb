@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Runtime.InteropServices
+Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
 
 
@@ -901,12 +902,6 @@ Public Class Form1
 
         CarIcona()
 
-        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
-        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
-        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
-        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
-
-
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
 
         ListViewFiles.Items.Clear()
@@ -1580,26 +1575,22 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
-        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
+    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
-        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
+    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
-        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
+    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
-        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
+    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
@@ -1880,16 +1871,17 @@ Public Class Form1
 
     Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
@@ -1897,16 +1889,17 @@ Public Class Form1
 
     Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder with subfolders"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
@@ -2001,22 +1994,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
-        CheckBoxFilterAsm.Checked = new_CheckBoxFilterAsm.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
-        CheckBoxFilterPar.Checked = new_CheckBoxFilterPar.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
-        CheckBoxFilterPsm.Checked = new_CheckBoxFilterPsm.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
-        CheckBoxFilterDft.Checked = new_CheckBoxFilterDft.Checked
-    End Sub
-
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
 
         If e.KeyCode = Keys.Escape Then ListViewFiles.SelectedItems.Clear()
@@ -2041,16 +2018,17 @@ Public Class Form1
 
     Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level asm folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "ASM_Folder"
             tmpItem.Tag = "ASM_Folder"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
