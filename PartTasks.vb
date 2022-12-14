@@ -2047,50 +2047,25 @@ Public Class PartTasks
         ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
+        Dim SupplementalErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
 
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramPart")
-        Dim P As New Process
-        Dim ExitCode As Integer
-        Dim ErrorMessageFilename As String
-        Dim ErrorMessages As String()
-        Dim Key As String
-        Dim Value As String
 
-        ErrorMessageFilename = String.Format("{0}\error_messages.txt", System.IO.Path.GetDirectoryName(ExternalProgram))
+        SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
 
-        P = Process.Start(ExternalProgram)
-        P.WaitForExit()
-        ExitCode = P.ExitCode
+        ExitStatus = SupplementalErrorMessage.Keys(0)
 
-        If ExitCode <> 0 Then
-            ExitStatus = 1
-            If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
-                Dim KeyFound As Boolean = False
-                ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
-                For Each KVPair As String In ErrorMessages
-                    ' Error message file format:
-                    ' 1 Some error occurred
-                    ' 2 Some other error occurred
+        SupplementalErrorMessageList = SupplementalErrorMessage(ExitStatus)
 
-                    KVPair = Trim(KVPair)
-
-                    Key = Split(KVPair, Delimiter:=" ")(0)
-                    If Key = CStr(ExitCode) Then
-                        Value = KVPair.Substring(Len(Key) + 1)
-                        ErrorMessageList.Add(Value)
-                        Exit For
-                    End If
-                Next
-                If Not KeyFound Then
-                    ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-                End If
-            Else
-                ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-            End If
+        If SupplementalErrorMessageList.Count > 0 Then
+            For Each s As String In SupplementalErrorMessageList
+                ErrorMessageList.Add(s)
+            Next
         End If
-
 
         If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
             If SEDoc.ReadOnly Then

@@ -2477,7 +2477,6 @@ Public Class SheetmetalTasks
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
 
-
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramSheetmetal")
 
         SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
@@ -2491,45 +2490,6 @@ Public Class SheetmetalTasks
                 ErrorMessageList.Add(s)
             Next
         End If
-
-
-
-        'Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(ExternalProgram)
-        'Dim P As New Process
-        'Dim ExitCode As Integer
-        'Dim ErrorMessageFilename As String
-        'Dim ErrorMessages As String()
-        'Dim Key As String
-        'Dim Value As String
-
-
-
-        'P = Process.Start(ExternalProgram)
-        'P.WaitForExit()
-        'ExitCode = P.ExitCode  ' If the program doesn't supply one, what value can it take?  Null?
-
-        'ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
-
-        'If ExitCode <> 0 Then
-        '    ExitStatus = 1
-        '    If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
-        '        ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
-        '        If Len(ErrorMessages) > 0 Then
-        '            For Each ErrorMessageFromProgram As String In ErrorMessages
-        '                ErrorMessageList.Add(ErrorMessageFromProgram)
-        '            Next
-        '        Else
-        '            ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-        '        End If
-
-        '        IO.File.Delete(ErrorMessageFilename)
-        '    Else
-        '        ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-        '    End If
-        'Else
-
-        'End If
-
 
         If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
             If SEDoc.ReadOnly Then
