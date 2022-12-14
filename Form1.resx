@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="ToolStrip_List.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1013, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -582,6 +582,15 @@
   <metadata name="FolderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="ButtonCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAALNJREFUOE+1
+        kkESgjAMRXskF4atWLyFG1few6W38gZ6FzLqDvttYgKUGR3wzWRomzzaBsJfaXfr+rGljUy/g2tacUNX
+        bqquH2kt5aSsDEc6jMVBpBop75N3LgilKJ2EY3XTgvtx3z3Pp4+AMdZ0juuIZlgyCwBPP/Y1omXQbZ9E
+        qAiGMgKO6Au8APikynj6sa8RzfiliW2ki2jG7M8IZv1Iyvsk7jomprWpnadAp0fdXpYQXravWWCC21Sv
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="ButtonProcess.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAATNJREFUOE+1
@@ -593,17 +602,11 @@
         h4mzhAhq788AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="ButtonCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAALNJREFUOE+1
-        kkESgjAMRXskF4atWLyFG1few6W38gZ6FzLqDvttYgKUGR3wzWRomzzaBsJfaXfr+rGljUy/g2tacUNX
-        bqquH2kt5aSsDEc6jMVBpBop75N3LgilKJ2EY3XTgvtx3z3Pp4+AMdZ0juuIZlgyCwBPP/Y1omXQbZ9E
-        qAiGMgKO6Au8APikynj6sa8RzfiliW2ki2jG7M8IZv1Iyvsk7jomprWpnadAp0fdXpYQXravWWCC21Sv
-        AAAAAElFTkSuQmCC
-</value>
-  </data>
   <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>223, 17</value>
+  </metadata>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>393, 17</value>
   </metadata>
   <metadata name="FakeFolderBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>509, 17</value>

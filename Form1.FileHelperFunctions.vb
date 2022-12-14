@@ -130,10 +130,6 @@ Partial Class Form1
                 FoundFiles = FileWildcardSearch(FoundFiles, ComboBoxFileSearch.Text)
             End If
 
-            If Not ListViewFiles.Font.Size = CSng(TextBoxFontSize.Text) Then
-                ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
-            End If
-
             ListViewFiles.BeginUpdate()
 
             For Each FoundFile In FoundFiles

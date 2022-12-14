@@ -1817,20 +1817,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxFontSize_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFontSize.LostFocus
-        Dim FontSize As Single = 8
-
-        Try
-            FontSize = CSng(TextBoxFontSize.Text)
-        Catch ex As Exception
-            TextBoxFontSize.Text = CStr(FontSize)
-        End Try
-
-        'L-istBoxFiles.Font = New Font("Microsoft Sans Serif", FontSize, FontStyle.Regular)
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
-    End Sub
-
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
     End Sub
@@ -2146,6 +2132,22 @@ Public Class Form1
             End If
 
         Next
+    End Sub
+
+
+
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
+
+        If e.KeyCode = Keys.Enter Then Me.ActiveControl = Nothing
+
+    End Sub
+
+    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFontSize.Leave
+
+        If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
+        If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"
+        ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFontSize.Text), FontStyle.Regular)
+
     End Sub
 
 
