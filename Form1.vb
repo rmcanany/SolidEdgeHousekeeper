@@ -1783,7 +1783,10 @@ Public Class Form1
             End Select
 
             If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
-                If item.Text.Contains(new_ComboBoxFileSearch.Text) Or item.Group.Name = "Sources" Then
+                'If item.Text.Contains(new_ComboBoxFileSearch.Text) Or item.Group.Name = "Sources" Then
+                '    ListViewFiles.Items.Add(item)
+                'End If
+                If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then
                     ListViewFiles.Items.Add(item)
                 End If
             Else
