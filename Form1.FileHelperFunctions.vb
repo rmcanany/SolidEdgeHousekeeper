@@ -17,16 +17,16 @@ Partial Class Form1
         StopProcess = False
         ButtonCancel.Text = "Stop"
 
-        If CheckBoxFilterAsm.Checked Then
+        If new_CheckBoxFilterAsm.Checked Then
             ActiveFileExtensionsList.Add("*.asm")
         End If
-        If CheckBoxFilterPar.Checked Then
+        If new_CheckBoxFilterPar.Checked Then
             ActiveFileExtensionsList.Add("*.par")
         End If
-        If CheckBoxFilterPsm.Checked Then
+        If new_CheckBoxFilterPsm.Checked Then
             ActiveFileExtensionsList.Add("*.psm")
         End If
-        If CheckBoxFilterDft.Checked Then
+        If new_CheckBoxFilterDft.Checked Then
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
@@ -61,6 +61,8 @@ Partial Class Form1
                             End If
                         Next
 
+                        Dim tmpFoundFiles As New List(Of String)
+
                         For Each tmpFolder As String In tmpList
 
                             Dim TLAU As New TopLevelAssemblyUtilities(Me)
@@ -74,17 +76,19 @@ Partial Class Form1
                                     Exit Sub
                                 End If
 
-                                FoundFiles = TLAU.GetLinks("BottomUp", tmpFolder,
+                                tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList)
+                                                       ActiveFileExtensionsList))
                             Else
-                                FoundFiles = TLAU.GetLinks("TopDown", tmpFolder,
+                                tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
-                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked)
+                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
                             End If
 
                         Next
+
+                        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
                         TextBoxStatus.Text = ""
 
@@ -115,20 +119,16 @@ Partial Class Form1
         If Not FoundFiles Is Nothing Then
 
             ' Filter by properties
-            If CheckBoxEnablePropertyFilter.Checked Then
+            If new_CheckBoxEnablePropertyFilter.Checked Then
                 System.Threading.Thread.Sleep(1000)
                 Dim PropertyFilter As New PropertyFilter(Me)
                 FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
             End If
 
-            ' Filter by file wildcard search
-            If CheckBoxFileSearch.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, ComboBoxFileSearch.Text)
-            End If
-
-            If Not ListViewFiles.Font.Size = CSng(TextBoxFontSize.Text) Then
-                ListViewFiles.Font = New Font("Microsoft Sans Serif", CSng(TextBoxFontSize.Text), FontStyle.Regular)
-            End If
+            '' Filter by file wildcard search
+            'If new_CheckBoxFileSearch.Checked Then
+            '    FoundFiles = FileWildcardSearch(FoundFiles, new_ComboBoxFileSearch.Text)
+            'End If
 
             ListViewFiles.BeginUpdate()
 
@@ -144,7 +144,7 @@ Partial Class Form1
                             tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                             tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
                             tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = FoundFile
+                            tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                             tmpLVItem.Name = FoundFile
                             tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
                             ListViewFiles.Items.Add(tmpLVItem)
@@ -202,14 +202,14 @@ Partial Class Form1
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
-                Filename = CType(ListViewFiles.SelectedItems.Item(i).Tag, String)
+                Filename = ListViewFiles.SelectedItems.Item(i).Name
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     FoundFilesList.Add(Filename)
                 End If
             Next
         Else
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
-                Filename = CType(ListViewFiles.Items(i).Tag, String)
+                Filename = ListViewFiles.Items(i).Name
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     If ListViewFiles.Items(i).Group.Name <> "Excluded" Then FoundFilesList.Add(Filename)
                 End If

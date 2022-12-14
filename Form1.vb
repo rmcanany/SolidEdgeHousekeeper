@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Runtime.InteropServices
+Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
 
 
@@ -20,6 +21,7 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
+    Private ListItemsBackup As New List(Of ListViewItem)
     Private ListViewFilesOutOfDate As Boolean
 
     Private Configuration As New Dictionary(Of String, String)
@@ -210,9 +212,9 @@ Public Class Form1
 
                 Filename.ImageKey = "Unchecked"
 
-                If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
+                If Not FileIO.FileSystem.FileExists(Filename.Name) Then
                     msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                    msg += "    " + CType(Filename.Tag, String) + Chr(13)
+                    msg += "    " + CType(Filename.Name, String) + Chr(13)
                     ListViewFilesOutOfDate = True
                     Exit For
                 End If
@@ -229,8 +231,8 @@ Public Class Form1
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
-        If CheckBoxFileSearch.Checked Then
-            If ComboBoxFileSearch.Text = "" Then
+        If new_CheckBoxFileSearch.Checked Then
+            If new_ComboBoxFileSearch.Text = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -901,12 +903,6 @@ Public Class Form1
 
         CarIcona()
 
-        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
-        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
-        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
-        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
-
-
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
 
         ListViewFiles.Items.Clear()
@@ -961,7 +957,7 @@ Public Class Form1
 
         If ListViewFilesOutOfDate Then
             'ListViewFiles.Items.Clear()
-            tf = CheckBoxEnablePropertyFilter.Checked
+            tf = new_CheckBoxEnablePropertyFilter.Checked
             If tf Then
             Else
                 If tf Then
@@ -970,16 +966,16 @@ Public Class Form1
             End If
         End If
 
-        If CheckBoxEnablePropertyFilter.Checked Then
-            ButtonPropertyFilter.Enabled = True
+        If new_CheckBoxEnablePropertyFilter.Checked Then
+            new_ButtonPropertyFilter.Enabled = True
         Else
-            ButtonPropertyFilter.Enabled = False
+            new_ButtonPropertyFilter.Enabled = False
         End If
 
-        If CheckBoxFileSearch.Checked Then
-            ComboBoxFileSearch.Enabled = True
+        If new_CheckBoxFileSearch.Checked Then
+            new_ComboBoxFileSearch.Enabled = True
         Else
-            ComboBoxFileSearch.Enabled = False
+            new_ComboBoxFileSearch.Enabled = False
         End If
 
 
@@ -1350,10 +1346,10 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ButtonFileSearch_Click(sender As Object, e As EventArgs) Handles ButtonFileSearch.Click
-        If Not ComboBoxFileSearch.Text = "" Then
-            ComboBoxFileSearch.Items.Remove(ComboBoxFileSearch.Text)
-            ComboBoxFileSearch.Text = ""
+    Private Sub new_ButtonFileSearchDelete_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearchDelete.Click
+        If Not new_ComboBoxFileSearch.Text = "" Then
+            new_ComboBoxFileSearch.Items.Remove(new_ComboBoxFileSearch.Text)
+            new_ComboBoxFileSearch.Text = ""
         End If
     End Sub
 
@@ -1412,7 +1408,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles ButtonPropertyFilter.Click
+    Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
         Dim tf As Boolean
 
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
@@ -1556,50 +1552,58 @@ Public Class Form1
 
     ' CHECKBOXES
 
-    Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
+    Private Sub new_CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.CheckedChanged
+
         ListViewFilesOutOfDate = True
 
-        If CheckBoxEnablePropertyFilter.Checked Then
+        If new_CheckBoxEnablePropertyFilter.Checked Then
+
+            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
+
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
 
                 FormPropertyFilter.GetPropertyFilter()
             End If
-        End If
 
-        ReconcileFormChanges()
-    End Sub
-
-    Private Sub CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFileSearch.CheckedChanged
-        If CheckBoxFileSearch.Checked Then
-            ComboBoxFileSearch.Enabled = True
         Else
-            ComboBoxFileSearch.Enabled = False
+            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
         End If
+
+        ReconcileFormChanges()
+
+    End Sub
+
+    Private Sub new_CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.CheckedChanged
+
+        If new_CheckBoxFileSearch.Checked Then
+            new_CheckBoxFileSearch.Image = My.Resources.Checked
+            new_ComboBoxFileSearch.Enabled = True
+        Else
+            new_CheckBoxFileSearch.Image = My.Resources.Unchecked
+            new_ComboBoxFileSearch.Enabled = False
+        End If
+
+        TextFilter()
+
+    End Sub
+
+    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterAsm.CheckedChanged
-        new_CheckBoxFilterAsm.Checked = CheckBoxFilterAsm.Checked
+    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPar.CheckedChanged
-        new_CheckBoxFilterPar.Checked = CheckBoxFilterPar.Checked
+    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterPsm.CheckedChanged
-        new_CheckBoxFilterPsm.Checked = CheckBoxFilterPsm.Checked
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
-    End Sub
-
-    Private Sub CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFilterDft.CheckedChanged
-        new_CheckBoxFilterDft.Checked = CheckBoxFilterDft.Checked
+    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
@@ -1748,19 +1752,50 @@ Public Class Form1
 
     ' COMBOBOXES
 
-    Private Sub ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.SelectedIndexChanged
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+    Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
+
+        TextFilter()
+
     End Sub
 
-    Private Sub ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.LostFocus
-        Dim Key As String = ComboBoxFileSearch.Text
+    Private Sub new_ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.LostFocus
 
-        If Not ComboBoxFileSearch.Items.Contains(Key) Then
-            ComboBoxFileSearch.Items.Add(ComboBoxFileSearch.Text)
+        Dim Key As String = new_ComboBoxFileSearch.Text
+
+        If Not new_ComboBoxFileSearch.Items.Contains(Key) Then
+            new_ComboBoxFileSearch.Items.Add(new_ComboBoxFileSearch.Text)
         End If
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+
+        TextFilter()
+
+    End Sub
+
+    Private Sub TextFilter()
+
+        ListViewFiles.BeginUpdate()
+
+        ListViewFiles.Items.Clear()
+        For Each item As ListViewItem In ListItemsBackup
+
+            Select Case item.Tag.ToString
+                Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
+                    item.Group = ListViewFiles.Groups.Item("Sources")
+                Case Else
+                    item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
+            End Select
+
+            If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
+                If item.Text.Contains(new_ComboBoxFileSearch.Text) Or item.Group.Name = "Sources" Then
+                    ListViewFiles.Items.Add(item)
+                End If
+            Else
+                ListViewFiles.Items.Add(item)
+            End If
+
+        Next
+
+        ListViewFiles.EndUpdate()
+
     End Sub
 
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
@@ -1826,20 +1861,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxFontSize_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFontSize.LostFocus
-        Dim FontSize As Single = 8
-
-        Try
-            FontSize = CSng(TextBoxFontSize.Text)
-        Catch ex As Exception
-            TextBoxFontSize.Text = CStr(FontSize)
-        End Try
-
-        'L-istBoxFiles.Font = New Font("Microsoft Sans Serif", FontSize, FontStyle.Regular)
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
-    End Sub
-
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
     End Sub
@@ -1880,16 +1901,17 @@ Public Class Form1
 
     Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
@@ -1897,16 +1919,17 @@ Public Class Form1
 
     Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder with subfolders"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
@@ -1973,6 +1996,8 @@ Public Class Form1
         ListViewFiles.Items.Clear()
         ListViewFiles.EndUpdate()
 
+        ListItemsBackup.Clear()
+
     End Sub
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
@@ -1984,6 +2009,7 @@ Public Class Form1
     Private Sub New_UpdateFileList()
 
         ListViewFiles.BeginUpdate()
+        ListItemsBackup.Clear()
 
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
@@ -1997,24 +2023,16 @@ Public Class Form1
 
         Next
 
+        For Each item As ListViewItem In ListViewFiles.Items
+
+            ListItemsBackup.Add(item)
+
+        Next
+
+        TextFilter()
+
         ListViewFiles.EndUpdate()
 
-    End Sub
-
-    Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
-        CheckBoxFilterAsm.Checked = new_CheckBoxFilterAsm.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
-        CheckBoxFilterPar.Checked = new_CheckBoxFilterPar.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
-        CheckBoxFilterPsm.Checked = new_CheckBoxFilterPsm.Checked
-    End Sub
-
-    Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
-        CheckBoxFilterDft.Checked = new_CheckBoxFilterDft.Checked
     End Sub
 
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
@@ -2041,16 +2059,17 @@ Public Class Form1
 
     Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
 
-        Dim tmpFolderDialog As New FolderBrowserDialog
-        tmpFolderDialog.Description = "Select folder"
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level asm folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.SelectedPath)
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
             tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.ImageKey = "ASM_Folder"
             tmpItem.Tag = "ASM_Folder"
-            tmpItem.Name = tmpFolderDialog.SelectedPath
+            tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
@@ -2078,6 +2097,8 @@ Public Class Form1
         CaricaImmagine16x16(TabPage_ImageList, "folder", My.Resources.folder)
         CaricaImmagine16x16(TabPage_ImageList, "folders", My.Resources.folders)
         CaricaImmagine16x16(TabPage_ImageList, "ASM_folder", My.Resources.ASM_Folder)
+        CaricaImmagine16x16(TabPage_ImageList, "list", My.Resources.list)
+        CaricaImmagine16x16(TabPage_ImageList, "Tools", My.Resources.Tools)
 
     End Sub
 
@@ -2168,6 +2189,34 @@ Public Class Form1
             End If
 
         Next
+    End Sub
+
+
+
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
+
+        If e.KeyCode = Keys.Enter Then
+            Me.ActiveControl = Nothing
+            e.Handled = True
+            e.SuppressKeyPress = True
+        End If
+
+    End Sub
+
+    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFontSize.Leave
+
+        If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
+        If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"
+        ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFontSize.Text), FontStyle.Regular)
+
+    End Sub
+
+    Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            TextFilter()
+            e.Handled = True
+            e.SuppressKeyPress = True
+        End If
     End Sub
 
 
