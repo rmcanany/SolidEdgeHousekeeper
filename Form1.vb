@@ -21,6 +21,7 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
+    Private ListItemsBackup As New List(Of ListViewItem)
     Private ListViewFilesOutOfDate As Boolean
 
     Private Configuration As New Dictionary(Of String, String)
@@ -211,9 +212,9 @@ Public Class Form1
 
                 Filename.ImageKey = "Unchecked"
 
-                If Not FileIO.FileSystem.FileExists(CType(Filename.Tag, String)) Then
+                If Not FileIO.FileSystem.FileExists(Filename.Name) Then
                     msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                    msg += "    " + CType(Filename.Tag, String) + Chr(13)
+                    msg += "    " + CType(Filename.Name, String) + Chr(13)
                     ListViewFilesOutOfDate = True
                     Exit For
                 End If
@@ -1345,7 +1346,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub new_ButtonFileSearch_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearch.Click
+    Private Sub new_ButtonFileSearchDelete_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearchDelete.Click
         If Not new_ComboBoxFileSearch.Text = "" Then
             new_ComboBoxFileSearch.Items.Remove(new_ComboBoxFileSearch.Text)
             new_ComboBoxFileSearch.Text = ""
@@ -1574,6 +1575,7 @@ Public Class Form1
     End Sub
 
     Private Sub new_CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.CheckedChanged
+
         If new_CheckBoxFileSearch.Checked Then
             new_CheckBoxFileSearch.Image = My.Resources.Checked
             new_ComboBoxFileSearch.Enabled = True
@@ -1581,8 +1583,9 @@ Public Class Form1
             new_CheckBoxFileSearch.Image = My.Resources.Unchecked
             new_ComboBoxFileSearch.Enabled = False
         End If
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+
+        TextFilter()
+
     End Sub
 
     Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
@@ -1750,18 +1753,49 @@ Public Class Form1
     ' COMBOBOXES
 
     Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+
+        TextFilter()
+
     End Sub
 
     Private Sub new_ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.LostFocus
+
         Dim Key As String = new_ComboBoxFileSearch.Text
 
         If Not new_ComboBoxFileSearch.Items.Contains(Key) Then
             new_ComboBoxFileSearch.Items.Add(new_ComboBoxFileSearch.Text)
         End If
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+
+        TextFilter()
+
+    End Sub
+
+    Private Sub TextFilter()
+
+        ListViewFiles.BeginUpdate()
+
+        ListViewFiles.Items.Clear()
+        For Each item As ListViewItem In ListItemsBackup
+
+            Select Case item.Tag.ToString
+                Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
+                    item.Group = ListViewFiles.Groups.Item("Sources")
+                Case Else
+                    item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
+            End Select
+
+            If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
+                If item.Text.Contains(new_ComboBoxFileSearch.Text) Or item.Group.Name = "Sources" Then
+                    ListViewFiles.Items.Add(item)
+                End If
+            Else
+                ListViewFiles.Items.Add(item)
+            End If
+
+        Next
+
+        ListViewFiles.EndUpdate()
+
     End Sub
 
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
@@ -1962,6 +1996,8 @@ Public Class Form1
         ListViewFiles.Items.Clear()
         ListViewFiles.EndUpdate()
 
+        ListItemsBackup.Clear()
+
     End Sub
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
@@ -1973,6 +2009,7 @@ Public Class Form1
     Private Sub New_UpdateFileList()
 
         ListViewFiles.BeginUpdate()
+        ListItemsBackup.Clear()
 
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
@@ -1985,6 +2022,14 @@ Public Class Form1
             UpdateListViewFiles(item)
 
         Next
+
+        For Each item As ListViewItem In ListViewFiles.Items
+
+            ListItemsBackup.Add(item)
+
+        Next
+
+        TextFilter()
 
         ListViewFiles.EndUpdate()
 
@@ -2168,10 +2213,12 @@ Public Class Form1
 
     Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
         If e.KeyCode = Keys.Enter Then
+            TextFilter()
             e.Handled = True
             e.SuppressKeyPress = True
         End If
     End Sub
+
 
 
 

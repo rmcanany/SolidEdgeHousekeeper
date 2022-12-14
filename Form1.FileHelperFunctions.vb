@@ -125,10 +125,10 @@ Partial Class Form1
                 FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
             End If
 
-            ' Filter by file wildcard search
-            If new_CheckBoxFileSearch.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, new_ComboBoxFileSearch.Text)
-            End If
+            '' Filter by file wildcard search
+            'If new_CheckBoxFileSearch.Checked Then
+            '    FoundFiles = FileWildcardSearch(FoundFiles, new_ComboBoxFileSearch.Text)
+            'End If
 
             ListViewFiles.BeginUpdate()
 
@@ -144,7 +144,7 @@ Partial Class Form1
                             tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                             tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
                             tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = FoundFile
+                            tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                             tmpLVItem.Name = FoundFile
                             tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
                             ListViewFiles.Items.Add(tmpLVItem)
@@ -202,14 +202,14 @@ Partial Class Form1
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
-                Filename = CType(ListViewFiles.SelectedItems.Item(i).Tag, String)
+                Filename = ListViewFiles.SelectedItems.Item(i).Name
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     FoundFilesList.Add(Filename)
                 End If
             Next
         Else
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
-                Filename = CType(ListViewFiles.Items(i).Tag, String)
+                Filename = ListViewFiles.Items(i).Name
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
                     If ListViewFiles.Items(i).Group.Name <> "Excluded" Then FoundFilesList.Add(Filename)
                 End If
