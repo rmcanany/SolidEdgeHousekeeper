@@ -43,7 +43,7 @@ Partial Class Form1
         Dim tf As Boolean
         Dim ExcludeControls As New List(Of String)
 
-        ExcludeControls.Add(CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(new_CheckBoxEnablePropertyFilter.Name)
         ExcludeControls.Add(TextBoxReadme.Name)
         ExcludeControls.Add(ListViewFiles.Name)
 
@@ -398,9 +398,9 @@ Partial Class Form1
                     ElseIf TypeOf Ctrl Is ComboBox Then
                         Dim c As ComboBox = CType(Ctrl, ComboBox)
 
-                        If Key = "ComboBoxFileSearch" Then
-                            If Value.Contains("ComboBoxFileSearchItem.") Then
-                                c.Items.Add(Value.Replace("ComboBoxFileSearchItem.", ""))
+                        If Key = "new_ComboBoxFileSearch" Then
+                            If Value.Contains("new_ComboBoxFileSearchItem.") Then
+                                c.Items.Add(Value.Replace("new_ComboBoxFileSearchItem.", ""))
                             Else
                                 c.Text = Value
                             End If
@@ -510,11 +510,11 @@ Partial Class Form1
             ElseIf TypeOf Ctrl Is ComboBox Then
                 Dim c As ComboBox = CType(Ctrl, ComboBox)
 
-                If c.Name = "ComboBoxFileSearch" Then
+                If c.Name = "new_ComboBoxFileSearch" Then
                     If c.Items.Count > 0 Then
                         For i As Integer = 0 To c.Items.Count - 1
                             Dim Value As String = c.Items(i).ToString
-                            Defaults.Add(String.Format("{0}=ComboBoxFileSearchItem.{1}", c.Name, Value))
+                            Defaults.Add(String.Format("{0}=new_ComboBoxFileSearchItem.{1}", c.Name, Value))
 
                         Next
                     End If
