@@ -230,8 +230,8 @@ Public Class Form1
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
-        If CheckBoxFileSearch.Checked Then
-            If ComboBoxFileSearch.Text = "" Then
+        If new_CheckBoxFileSearch.Checked Then
+            If new_ComboBoxFileSearch.Text = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -956,7 +956,7 @@ Public Class Form1
 
         If ListViewFilesOutOfDate Then
             'ListViewFiles.Items.Clear()
-            tf = CheckBoxEnablePropertyFilter.Checked
+            tf = new_CheckBoxEnablePropertyFilter.Checked
             If tf Then
             Else
                 If tf Then
@@ -965,16 +965,16 @@ Public Class Form1
             End If
         End If
 
-        If CheckBoxEnablePropertyFilter.Checked Then
-            ButtonPropertyFilter.Enabled = True
+        If new_CheckBoxEnablePropertyFilter.Checked Then
+            new_ButtonPropertyFilter.Enabled = True
         Else
-            ButtonPropertyFilter.Enabled = False
+            new_ButtonPropertyFilter.Enabled = False
         End If
 
-        If CheckBoxFileSearch.Checked Then
-            ComboBoxFileSearch.Enabled = True
+        If new_CheckBoxFileSearch.Checked Then
+            new_ComboBoxFileSearch.Enabled = True
         Else
-            ComboBoxFileSearch.Enabled = False
+            new_ComboBoxFileSearch.Enabled = False
         End If
 
 
@@ -1345,10 +1345,10 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ButtonFileSearch_Click(sender As Object, e As EventArgs) Handles ButtonFileSearch.Click
-        If Not ComboBoxFileSearch.Text = "" Then
-            ComboBoxFileSearch.Items.Remove(ComboBoxFileSearch.Text)
-            ComboBoxFileSearch.Text = ""
+    Private Sub new_ButtonFileSearch_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearch.Click
+        If Not new_ComboBoxFileSearch.Text = "" Then
+            new_ComboBoxFileSearch.Items.Remove(new_ComboBoxFileSearch.Text)
+            new_ComboBoxFileSearch.Text = ""
         End If
     End Sub
 
@@ -1407,7 +1407,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles ButtonPropertyFilter.Click
+    Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
         Dim tf As Boolean
 
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
@@ -1551,25 +1551,35 @@ Public Class Form1
 
     ' CHECKBOXES
 
-    Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
+    Private Sub new_CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.CheckedChanged
+
         ListViewFilesOutOfDate = True
 
-        If CheckBoxEnablePropertyFilter.Checked Then
+        If new_CheckBoxEnablePropertyFilter.Checked Then
+
+            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
+
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
 
                 FormPropertyFilter.GetPropertyFilter()
             End If
+
+        Else
+            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
         End If
 
         ReconcileFormChanges()
+
     End Sub
 
-    Private Sub CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFileSearch.CheckedChanged
-        If CheckBoxFileSearch.Checked Then
-            ComboBoxFileSearch.Enabled = True
+    Private Sub new_CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.CheckedChanged
+        If new_CheckBoxFileSearch.Checked Then
+            new_CheckBoxFileSearch.Image = My.Resources.Checked
+            new_ComboBoxFileSearch.Enabled = True
         Else
-            ComboBoxFileSearch.Enabled = False
+            new_CheckBoxFileSearch.Image = My.Resources.Unchecked
+            new_ComboBoxFileSearch.Enabled = False
         End If
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
@@ -1739,16 +1749,16 @@ Public Class Form1
 
     ' COMBOBOXES
 
-    Private Sub ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.SelectedIndexChanged
+    Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
     End Sub
 
-    Private Sub ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileSearch.LostFocus
-        Dim Key As String = ComboBoxFileSearch.Text
+    Private Sub new_ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.LostFocus
+        Dim Key As String = new_ComboBoxFileSearch.Text
 
-        If Not ComboBoxFileSearch.Items.Contains(Key) Then
-            ComboBoxFileSearch.Items.Add(ComboBoxFileSearch.Text)
+        If Not new_ComboBoxFileSearch.Items.Contains(Key) Then
+            new_ComboBoxFileSearch.Items.Add(new_ComboBoxFileSearch.Text)
         End If
         ListViewFilesOutOfDate = True
         ReconcileFormChanges()
@@ -2147,6 +2157,14 @@ Public Class Form1
         If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
         If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"
         ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFontSize.Text), FontStyle.Regular)
+
+    End Sub
+
+    Private Sub new_CheckBoxEnablePropertyFilter_Click(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.Click
+
+    End Sub
+
+    Private Sub new_CheckBoxFileSearch_Click(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.Click
 
     End Sub
 
