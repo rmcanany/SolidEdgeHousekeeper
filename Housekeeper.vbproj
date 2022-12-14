@@ -227,6 +227,8 @@
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
     <Content Include="Housekeeper_New.ico" />
+    <None Include="Resources\icons8_list_view_16.png" />
+    <None Include="Resources\icons8_Tools_16.png" />
     <None Include="Resources\icons8_csv_16.png" />
     <None Include="Resources\icons8_txt_16.png" />
     <None Include="Resources\Support_16.png" />

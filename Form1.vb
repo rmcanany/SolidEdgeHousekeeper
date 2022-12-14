@@ -2052,6 +2052,8 @@ Public Class Form1
         CaricaImmagine16x16(TabPage_ImageList, "folder", My.Resources.folder)
         CaricaImmagine16x16(TabPage_ImageList, "folders", My.Resources.folders)
         CaricaImmagine16x16(TabPage_ImageList, "ASM_folder", My.Resources.ASM_Folder)
+        CaricaImmagine16x16(TabPage_ImageList, "list", My.Resources.list)
+        CaricaImmagine16x16(TabPage_ImageList, "Tools", My.Resources.Tools)
 
     End Sub
 
@@ -2148,7 +2150,11 @@ Public Class Form1
 
     Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
 
-        If e.KeyCode = Keys.Enter Then Me.ActiveControl = Nothing
+        If e.KeyCode = Keys.Enter Then
+            Me.ActiveControl = Nothing
+            e.Handled = True
+            e.SuppressKeyPress = True
+        End If
 
     End Sub
 
@@ -2160,14 +2166,12 @@ Public Class Form1
 
     End Sub
 
-    Private Sub new_CheckBoxEnablePropertyFilter_Click(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.Click
-
+    Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.Handled = True
+            e.SuppressKeyPress = True
+        End If
     End Sub
-
-    Private Sub new_CheckBoxFileSearch_Click(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.Click
-
-    End Sub
-
 
 
 
