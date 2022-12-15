@@ -21,7 +21,10 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
-    Private ListItemsBackup As New List(Of ListViewItem)
+    Private ListItems_Backup As New List(Of ListViewItem)
+    Private ListItems_TextFiltered As New List(Of ListViewItem)
+    Private ListItems_PropFiltered As New List(Of ListViewItem)
+
     Private ListViewFilesOutOfDate As Boolean
 
     Private Configuration As New Dictionary(Of String, String)
@@ -1413,15 +1416,7 @@ Public Class Form1
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
         FormPropertyFilter.GetPropertyFilter()
 
-        Dim tf As Boolean = FormPropertyFilter.DialogResult = DialogResult.OK
-        'tf = tf And PropertyFilterFormula <> ""
-        'If tf Then
-        '    ' L-istBoxFiles.Items.Clear()
-        '    'ListViewFilesOutOfDate = True
-        'End If
-        ''ReconcileFormChanges()
-
-        PropFilter()
+        If FormPropertyFilter.DialogResult = DialogResult.OK Then ApplyFilters()
 
     End Sub
 
@@ -1558,6 +1553,7 @@ Public Class Form1
         If new_CheckBoxEnablePropertyFilter.Checked Then
 
             new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
+            new_ButtonPropertyFilter.Enabled = True
 
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
@@ -1565,10 +1561,11 @@ Public Class Form1
             End If
 
         Else
-                new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
+            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
+            new_ButtonPropertyFilter.Enabled = False
         End If
 
-        PropFilter()
+        ApplyFilters()
 
     End Sub
 
@@ -1582,7 +1579,7 @@ Public Class Form1
             new_ComboBoxFileSearch.Enabled = False
         End If
 
-        TextFilter()
+        ApplyFilters()
 
     End Sub
 
@@ -1752,7 +1749,7 @@ Public Class Form1
 
     Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
 
-        TextFilter()
+        ApplyFilters()
 
     End Sub
 
@@ -1764,16 +1761,20 @@ Public Class Form1
             new_ComboBoxFileSearch.Items.Add(new_ComboBoxFileSearch.Text)
         End If
 
-        TextFilter()
-
     End Sub
 
-    Private Sub TextFilter()
-
+    Private Sub ApplyFilters()
         ListViewFiles.BeginUpdate()
-
         ListViewFiles.Items.Clear()
-        For Each item As ListViewItem In ListItemsBackup
+        ListViewFiles.Items.AddRange(PropFilter(TextFilter(ListItems_Backup)).ToArray)
+        ListViewFiles.EndUpdate()
+    End Sub
+
+    Private Function TextFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
+
+        TextFilter = New List(Of ListViewItem)
+
+        For Each item As ListViewItem In FilesList
 
             Select Case item.Tag.ToString
                 Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
@@ -1783,35 +1784,27 @@ Public Class Form1
             End Select
 
             If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
-                'If item.Text.Contains(new_ComboBoxFileSearch.Text) Or item.Group.Name = "Sources" Then
-                '    ListViewFiles.Items.Add(item)
-                'End If
-                If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then
-                    ListViewFiles.Items.Add(item)
-                End If
+                If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then TextFilter.Add(item)
             Else
-                ListViewFiles.Items.Add(item)
+                TextFilter.Add(item)
             End If
 
         Next
 
-        ListViewFiles.EndUpdate()
+    End Function
 
-    End Sub
+    Private Function PropFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
 
-    Private Sub PropFilter()
-
-        ListViewFiles.BeginUpdate()
-        ListViewFiles.Items.Clear()
+        PropFilter = New List(Of ListViewItem)
 
         Dim DMApp As DesignManager.Application = Nothing
 
         If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
             DMApp = New DesignManager.Application
-            DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+            DMApp.Visible = 1
         End If
 
-        For Each item As ListViewItem In ListItemsBackup
+        For Each item As ListViewItem In FilesList
 
             Select Case item.Tag.ToString
                 Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
@@ -1824,7 +1817,7 @@ Public Class Form1
 
                 If item.Group.Name = "Sources" Then
 
-                    ListViewFiles.Items.Add(item)
+                    PropFilter.Add(item)
 
                 Else
 
@@ -1836,23 +1829,21 @@ Public Class Form1
                     Dim msg As String = CommonTasks.TruncateFullPath(item.Name, Nothing)
 
                     Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
-                    If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then ListViewFiles.Items.Add(item)
+                    If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then PropFilter.Add(item)
 
                 End If
 
             Else
 
-                ListViewFiles.Items.Add(item)
+                PropFilter.Add(item)
 
             End If
 
         Next
 
-        If Not IsNothing(DMAPP) Then DMApp.Quit()
+        If Not IsNothing(DMApp) Then DMApp.Quit()
 
-        ListViewFiles.EndUpdate()
-
-    End Sub
+    End Function
 
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
         ReconcileFormChanges()
@@ -2052,7 +2043,7 @@ Public Class Form1
         ListViewFiles.Items.Clear()
         ListViewFiles.EndUpdate()
 
-        ListItemsBackup.Clear()
+        ListItems_Backup.Clear()
 
     End Sub
 
@@ -2065,13 +2056,16 @@ Public Class Form1
     Private Sub New_UpdateFileList()
 
         ListViewFiles.BeginUpdate()
-        ListItemsBackup.Clear()
+        ListItems_Backup.Clear()
 
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
             If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then ListViewFiles.Items.Item(i).Remove()
 
         Next
+
+        new_CheckBoxFileSearch.Checked = False
+        new_ButtonPropertyFilter.Checked = False
 
         For Each item As ListViewItem In ListViewFiles.Items
 
@@ -2081,11 +2075,9 @@ Public Class Form1
 
         For Each item As ListViewItem In ListViewFiles.Items
 
-            ListItemsBackup.Add(item)
+            ListItems_Backup.Add(item)
 
         Next
-
-        TextFilter()
 
         ListViewFiles.EndUpdate()
 
@@ -2269,7 +2261,7 @@ Public Class Form1
 
     Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
         If e.KeyCode = Keys.Enter Then
-            TextFilter()
+            ApplyFilters()
             e.Handled = True
             e.SuppressKeyPress = True
         End If
