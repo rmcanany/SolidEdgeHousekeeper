@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="Housekeeper.exe" version="1.0.0.0" publicKeyToken="309fb99a97ebce24" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="Housekeeper_New.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Housekeeper" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Housekeeper.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          Opzioni manifesto Controllo dell'account utente
+          Se si vuole modificare il livello di Controllo dell'account utente di Windows, sostituire il
+          nodo requestedExecutionLevel con uno dei seguenti.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         Se si vuole usare Virtualizzazione file system e registro di sistema per la 
+         compatibilità con le versioni precedenti, eliminare il nodo requestedExecutionLevel.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ExcelDataReader.dll" size="178176">
+      <assemblyIdentity name="ExcelDataReader" version="3.7.0.0" publicKeyToken="93517DBE6A4012FA" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>1exwAWClDZPk95qs+/UWe+PJWFhDqRfjlr0PEfoeyP8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ExcelDataReader.DataSet.dll" size="9728">
+      <assemblyIdentity name="ExcelDataReader.DataSet" version="3.7.0.0" publicKeyToken="93517DBE6A4012FA" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>sNYV6nEcu+KDrPijjj1TqZnmMETOAG1eIezj/iAke4g=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Housekeeper.exe" size="505840">
+      <assemblyIdentity name="Housekeeper" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>pVwhrHgZivfAkh7e4DF2Okyz6heu0je6qPw8Wcgx2v0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Interop.SolidEdge.dll" size="4004352">
+      <assemblyIdentity name="Interop.SolidEdge" version="220.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>j5t1gCGz9DyVfDGuZmbX64I3BcadD5nrh43Klb+G3Zs=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.WindowsAPICodePack.dll" size="114176">
+      <assemblyIdentity name="Microsoft.WindowsAPICodePack" version="1.1.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>IeFA3K+j4lE3OnEkI7sRFXBzfpXk3PtvVoaNcIavdoY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.WindowsAPICodePack.Shell.dll" size="587776">
+      <assemblyIdentity name="Microsoft.WindowsAPICodePack.Shell" version="1.1.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>bqJb5JpOlsQ8ILwp6xztB49OC87EZzznIiccd7wvoSE=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.WindowsAPICodePack.ShellExtensions.dll" size="38400">
+      <assemblyIdentity name="Microsoft.WindowsAPICodePack.ShellExtensions" version="1.1.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>whvEhHrDx122S196/rD8sOIrpDa324BpJSO0gQsEbSI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SolidEdge.Community.dll" size="44544">
+      <assemblyIdentity name="SolidEdge.Community" version="219.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>SdJYh31HQ+3csfALbOp1RcAnSKT2mdMXqu65YbkUyeg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="Housekeeper.exe.config" size="188">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>VDy5/VrQni+RSOb/6uEMWMc6bGQEaa2e2UdeWG+KK1I=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Housekeeper.ico" size="32038">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>aWYkCQMZP+G1kZAECDljeqi7s4JXf9FhCYCcE8ww9to=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Housekeeper_New.ico" size="32038">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>n32OSVNpSbCpObGVQ1StdRY5L4PGQgVP2Xo8O3bmS5Q=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=FIORINIGROUP\Stazione41" issuerKeyHash="357bc6b5215960807fb085879a1e4a820a70b275" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>qA+ok5jxiY0JdR3eGjacoDUdJY3zeNfGkeg4Fg9rYls=</DigestValue></Reference></SignedInfo><SignatureValue>imBxgFYYoMd+DUBtYyUbZNSwrrI6SZM0k4PG3cfQtCwG0RpVhKKVGxvZRt2XZC1SVfs4VorGjylbv0IbEjckA00MPwAZfobhy6pyDL7XgCh1ctEAnFMuzI01UZM71/XPpE1QFW06HeyVb1+lipnp/dhfJfcECBhoENx9L5UDHjI=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>qJsdK8++nE4jcBU6ZeI65MORTnzBc8N8kuA1oIaNYhxlo8EPRrNZOH2/BwR1QIP3dqLxhj2VlxSE5LXY6SsCESimd2eGDEr9Iik8+w/QQwiy623/LUaszdfwIJWBXJIl+0zAzFFDvxWIjazn4/lzlwXw34bDNo2/FhWQtiK4Juk=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="5b626b0f1638e891c6d778f38d251d35a09c361ade1d75098d89f19893a80fa8" Description="" Url=""><as:assemblyIdentity name="Housekeeper.exe" version="1.0.0.0" publicKeyToken="309fb99a97ebce24" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=FIORINIGROUP\Stazione41</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>wCD1TH4SWnKJ+HQRlz3if9HHVvWRYU/KTPAYFm6IhRM=</DigestValue></Reference></SignedInfo><SignatureValue>Vfu7ogXSlROrxDkB5YGW59AWruYaC7xAKCCHKN4747S4A8yEvwnqNiDOwEHdbjzvIixrzoqBsPmIcBoHxiDGmk0kyDIO/+syWCsP5eLLuPeykm57VUgjbvthNsESS0vKHpABYFtmWLUwjH11cdlJWNfm0nIl1K/WoPi/nOD5Y4k=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>qJsdK8++nE4jcBU6ZeI65MORTnzBc8N8kuA1oIaNYhxlo8EPRrNZOH2/BwR1QIP3dqLxhj2VlxSE5LXY6SsCESimd2eGDEr9Iik8+w/QQwiy623/LUaszdfwIJWBXJIl+0zAzFFDvxWIjazn4/lzlwXw34bDNo2/FhWQtiK4Juk=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB9TCCAV6gAwIBAgIQF22TpaXZFrFLmlBoq7VvjzANBgkqhkiG9w0BAQsFADA5MTcwNQYDVQQDHi4ARgBJAE8AUgBJAE4ASQBHAFIATwBVAFAAXABTAHQAYQB6AGkAbwBuAGUANAAxMB4XDTIyMTIxNTExMDQyMFoXDTIzMTIxNTE3MDQyMFowOTE3MDUGA1UEAx4uAEYASQBPAFIASQBOAEkARwBSAE8AVQBQAFwAUwB0AGEAegBpAG8AbgBlADQAMTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAqJsdK8++nE4jcBU6ZeI65MORTnzBc8N8kuA1oIaNYhxlo8EPRrNZOH2/BwR1QIP3dqLxhj2VlxSE5LXY6SsCESimd2eGDEr9Iik8+w/QQwiy623/LUaszdfwIJWBXJIl+0zAzFFDvxWIjazn4/lzlwXw34bDNo2/FhWQtiK4JukCAwEAATANBgkqhkiG9w0BAQsFAAOBgQCHB8uY/ZUBSmm9pIBE8Z1C1CpHiee8u/SiCFAscI4q90XUYkjbfq4aWJE1Yj1kT8IwBpJp5IOVX4M7w4VVOQmEWk8RspgdlOw9mvtXDpJoRX5CGxWxsUhbK2kY8AeIDUShOM7fbCHUcR1EuWuN6Q4TFL56Ns4XBZZdJvuxHtNL/g==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
