@@ -138,4 +138,151 @@ Public Class CommonTasks
 
     End Function
 
+    Shared Function CropImage(Configuration As Dictionary(Of String, String),
+                          SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+                          NewFilename As String,
+                          NewExtension As String,
+                          WindowH As Integer,
+                          WindowW As Integer
+                          ) As String
+
+        Dim ModelX As Double
+        Dim ModelY As Double
+        Dim ModelZ As Double
+        Dim XMin As Double
+        Dim YMin As Double
+        Dim ZMin As Double
+        Dim XMax As Double
+        Dim YMax As Double
+        Dim ZMax As Double
+
+        Dim ImageW As Double
+        Dim ImageH As Double
+        Dim ImageAspectRatio As Double
+
+        Dim CropW As Integer
+        Dim CropH As Integer
+
+        Dim TempFilename As String
+
+        Dim ExitMessage As String = ""
+
+        Dim WindowAspectRatio As Double = WindowH / WindowW
+
+        Select Case SEDoc.Type
+            Case Is = 3, 7, 10 'asm
+                Dim tmpAsm As SolidEdgeAssembly.AssemblyDocument = SEDoc
+                tmpAsm.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
+                ModelX = XMax - XMin
+                ModelY = YMax - YMin
+                ModelZ = ZMax - ZMin
+
+            Case Is = 1, 8 'par
+                Dim tmpPar As SolidEdgePart.PartDocument = SEDoc
+                tmpPar.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
+                ModelX = XMax - XMin
+                ModelY = YMax - YMin
+                ModelZ = ZMax - ZMin
+
+            Case Is = 4, 9 'psm
+                Dim tmpPsm As SolidEdgePart.SheetMetalDocument = SEDoc
+                Dim Models As SolidEdgePart.Models
+                Dim Model As SolidEdgePart.Model
+                Dim Body As SolidEdgeGeometry.Body
+
+                Dim FeatureDoctor As New FeatureDoctor
+                Dim PointsList As New List(Of Double)
+                Dim PointsListTemp As New List(Of Double)
+                Dim Point As Double
+
+                Models = tmpPsm.Models
+
+                If (Models.Count = 0) Then
+                    ExitMessage = "No models to process.  Cropped image not created."
+                    Return ExitMessage
+                End If
+                If (Models.Count = 0) Or (Models.Count > 25) Then
+                    ExitMessage = "Too many models to process.  Cropped image not created."
+                    Return ExitMessage
+                End If
+
+                For Each Model In Models
+                    Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                    PointsListTemp = FeatureDoctor.GetBodyRange(Body)
+                    If PointsList.Count = 0 Then
+                        For Each Point In PointsListTemp
+                            PointsList.Add(Point)
+                        Next
+                    Else
+                        For i As Integer = 0 To 2
+                            If PointsListTemp(i) < PointsList(i) Then
+                                PointsList(i) = PointsListTemp(i)
+                            End If
+                        Next
+                        For i As Integer = 3 To 5
+                            If PointsListTemp(i) > PointsList(i) Then
+                                PointsList(i) = PointsListTemp(i)
+                            End If
+                        Next
+                    End If
+                Next
+
+                ModelX = PointsList(3) - PointsList(0) 'XMax - XMin
+                ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
+                ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
+
+        End Select
+
+        If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
+            ImageW = 0.707 * ModelX + 0.707 * ModelY
+            ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
+        ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
+            ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
+            ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
+        Else
+            ImageW = 0.557 * ModelX + 0.830667 * ModelY
+            ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
+        End If
+
+        ImageAspectRatio = ImageH / ImageW
+
+        If WindowAspectRatio > ImageAspectRatio Then
+            CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
+            CropW = WindowW
+        Else
+            CropH = WindowH
+            CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
+        End If
+
+        TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
+
+        Dim LocX = (WindowW - CropW) / 2
+        Dim LocY = (WindowH - CropH) / 2
+        Dim CropRect As New Rectangle(LocX, LocY, CropW, CropH)
+        Dim OriginalImage = Image.FromFile(NewFilename)
+        Dim xCropImage = New Bitmap(CropRect.Width, CropRect.Height)
+
+        Try
+
+            Using grp = Graphics.FromImage(xCropImage)
+                grp.DrawImage(OriginalImage, New Rectangle(0, 0, CropRect.Width, CropRect.Height), CropRect, GraphicsUnit.Pixel)
+                OriginalImage.Dispose()
+                xCropImage.Save(TempFilename)
+            End Using
+
+            Try
+                System.IO.File.Delete(NewFilename)
+                FileSystem.Rename(TempFilename, NewFilename)
+            Catch ex As Exception
+                ExitMessage = String.Format("Unable to save cropped image '{0}'", NewFilename)
+            End Try
+
+        Catch ex As Exception
+            ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
+        End Try
+
+        Return ExitMessage
+
+    End Function
+
 End Class
