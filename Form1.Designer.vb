@@ -291,6 +291,7 @@ Partial Class Form1
         '
         'ListViewFiles
         '
+        Me.ListViewFiles.AllowDrop = True
         Me.ListViewFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.FileName, Me.FilePath})
         Me.ListViewFiles.Cursor = System.Windows.Forms.Cursors.Default

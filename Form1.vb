@@ -2268,6 +2268,60 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
+
+        e.Effect = DragDropEffects.Copy
+
+    End Sub
+
+    Private Sub ListViewFiles_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragDrop
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+            ListViewFiles.BeginUpdate()
+
+            Dim extFilter As New List(Of String)
+            If new_CheckBoxFilterAsm.Checked Then extFilter.Add(".asm")
+            If new_CheckBoxFilterPar.Checked Then extFilter.Add(".par")
+            If new_CheckBoxFilterPsm.Checked Then extFilter.Add(".psm")
+            If new_CheckBoxFilterDft.Checked Then extFilter.Add(".dft")
+
+            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each item In files
+
+                If CommonTasks.FilenameIsOK(item) Then
+
+                    If Not extFilter.Contains(IO.Path.GetExtension(item).ToLower) Then Continue For
+
+                    If IO.File.Exists(item) Then
+
+                        If Not ListViewFiles.Items.ContainsKey(item) Then
+
+                            Dim tmpLVItem As New ListViewItem
+                            tmpLVItem.Text = IO.Path.GetFileName(item)
+                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(item))
+                            tmpLVItem.ImageKey = "Unchecked"
+                            tmpLVItem.Tag = IO.Path.GetExtension(item).ToLower 'Backup gruppo
+                            tmpLVItem.Name = item
+                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(item).ToLower)
+                            ListViewFiles.Items.Add(tmpLVItem)
+
+                            ListItems_Backup.Add(tmpLVItem)
+
+                        End If
+
+                    End If
+
+                End If
+
+            Next
+
+            ListViewFiles.EndUpdate()
+
+        End If
+
+    End Sub
+
 
 
 
