@@ -1420,7 +1420,7 @@ Public Class AssemblyTasks
                         End If
 
                         If Configuration("CheckBoxSaveAsImageCrop").ToLower = "true" Then
-                            ExitMessage = CropImage(Configuration, SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
+                            ExitMessage = CommonTasks.CropImage(Configuration, CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), NewFilename, NewExtension, Window.Height, Window.Width)
                             If Not ExitMessage = "" Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add(ExitMessage)
@@ -1541,7 +1541,7 @@ Public Class AssemblyTasks
                             End If
 
                             If Configuration("CheckBoxSaveAsImageCrop").ToLower = "true" Then
-                                ExitMessage = CropImage(Configuration, SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
+                                ExitMessage = CommonTasks.CropImage(Configuration, CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), NewFilename, NewExtension, Window.Height, Window.Width)
                                 If Not ExitMessage = "" Then
                                     ExitStatus = 1
                                     ErrorMessageList.Add(ExitMessage)
@@ -1563,143 +1563,99 @@ Public Class AssemblyTasks
         Return ErrorMessage
     End Function
 
-    'Private Function SaveAsPNG(View As SolidEdgeFramework.View,
-    '                           NewFilename As String
-    '                           ) As String
 
-    '    Dim ExitCode As Integer = 0
-    '    Dim ExitMessage As String = ""
+    'Private Function CropImage(Configuration As Dictionary(Of String, String),
+    '                      SEDoc As SolidEdgeAssembly.AssemblyDocument,
+    '                      NewFilename As String,
+    '                      NewExtension As String,
+    '                      WindowH As Integer,
+    '                      WindowW As Integer
+    '                      ) As String
+
+    '    Dim ModelX As Double
+    '    Dim ModelY As Double
+    '    Dim ModelZ As Double
+    '    Dim XMin As Double
+    '    Dim YMin As Double
+    '    Dim ZMin As Double
+    '    Dim XMax As Double
+    '    Dim YMax As Double
+    '    Dim ZMax As Double
+
+    '    Dim ImageW As Double
+    '    Dim ImageH As Double
+    '    Dim ImageAspectRatio As Double
+
+    '    Dim CropW As Integer
+    '    Dim CropH As Integer
+
     '    Dim FfmpegCmd As String
     '    Dim FfmpegArgs As String
     '    Dim P As New Process
     '    Dim TempFilename As String
 
+    '    Dim ExitCode As Integer = 0
+    '    Dim ExitMessage As String = ""
 
     '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
 
-    '    TempFilename = NewFilename.Replace(".png", "-Housekeeper.jpg")
+    '    Dim WindowAspectRatio As Double = WindowH / WindowW
 
-    '    View.SaveAsImage(TempFilename)
+    '    SEDoc.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
+
+    '    ModelX = XMax - XMin
+    '    ModelY = YMax - YMin
+    '    ModelZ = ZMax - ZMin
+
+    '    If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
+    '        ImageW = 0.707 * ModelX + 0.707 * ModelY
+    '        ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
+    '    ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
+    '        ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
+    '        ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
+    '    Else
+    '        ImageW = 0.557 * ModelX + 0.830667 * ModelY
+    '        ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
+    '    End If
+
+    '    ImageAspectRatio = ImageH / ImageW
+
+    '    If WindowAspectRatio > ImageAspectRatio Then
+    '        CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
+    '        CropW = WindowW
+    '    Else
+    '        CropH = WindowH
+    '        CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
+    '    End If
+
+    '    TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
 
     '    FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
 
-    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), TempFilename, Chr(34))
-    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), NewFilename, Chr(34))
+    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), NewFilename, Chr(34))
+    '    FfmpegArgs = String.Format("{0} -vf crop={1}:{2} ", FfmpegArgs, CropW, CropH)
+    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), TempFilename, Chr(34))
 
     '    Try
-
     '        P = Process.Start(FfmpegCmd, FfmpegArgs)
     '        P.WaitForExit()
     '        ExitCode = P.ExitCode
 
     '        If ExitCode = 0 Then
-    '            System.IO.File.Delete(TempFilename)
+    '            System.IO.File.Delete(NewFilename)
+    '            FileSystem.Rename(TempFilename, NewFilename)
     '        Else
-    '            ExitMessage = String.Format("Unable to save '{0}'", NewFilename)
+    '            ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
     '        End If
 
     '    Catch ex As Exception
-    '        ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
+    '        ExitMessage = String.Format("Unable to save cropped image '{0}'.  ", TempFilename)
     '        ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
     '    End Try
 
-
-
     '    Return ExitMessage
+
     'End Function
-
-    Private Function CropImage(Configuration As Dictionary(Of String, String),
-                          SEDoc As SolidEdgeAssembly.AssemblyDocument,
-                          NewFilename As String,
-                          NewExtension As String,
-                          WindowH As Integer,
-                          WindowW As Integer
-                          ) As String
-
-        Dim ModelX As Double
-        Dim ModelY As Double
-        Dim ModelZ As Double
-        Dim XMin As Double
-        Dim YMin As Double
-        Dim ZMin As Double
-        Dim XMax As Double
-        Dim YMax As Double
-        Dim ZMax As Double
-
-        Dim ImageW As Double
-        Dim ImageH As Double
-        Dim ImageAspectRatio As Double
-
-        Dim CropW As Integer
-        Dim CropH As Integer
-
-        Dim FfmpegCmd As String
-        Dim FfmpegArgs As String
-        Dim P As New Process
-        Dim TempFilename As String
-
-        Dim ExitCode As Integer = 0
-        Dim ExitMessage As String = ""
-
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-
-        Dim WindowAspectRatio As Double = WindowH / WindowW
-
-        SEDoc.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
-
-        ModelX = XMax - XMin
-        ModelY = YMax - YMin
-        ModelZ = ZMax - ZMin
-
-        If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
-            ImageW = 0.707 * ModelX + 0.707 * ModelY
-            ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
-        ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
-            ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
-            ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
-        Else
-            ImageW = 0.557 * ModelX + 0.830667 * ModelY
-            ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
-        End If
-
-        ImageAspectRatio = ImageH / ImageW
-
-        If WindowAspectRatio > ImageAspectRatio Then
-            CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
-            CropW = WindowW
-        Else
-            CropH = WindowH
-            CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
-        End If
-
-        TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
-
-        FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
-
-        FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), NewFilename, Chr(34))
-        FfmpegArgs = String.Format("{0} -vf crop={1}:{2} ", FfmpegArgs, CropW, CropH)
-        FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), TempFilename, Chr(34))
-
-        Try
-            P = Process.Start(FfmpegCmd, FfmpegArgs)
-            P.WaitForExit()
-            ExitCode = P.ExitCode
-
-            If ExitCode = 0 Then
-                System.IO.File.Delete(NewFilename)
-                FileSystem.Rename(TempFilename, NewFilename)
-            Else
-                ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
-            End If
-
-        Catch ex As Exception
-            ExitMessage = String.Format("Unable to save cropped image '{0}'.  ", TempFilename)
-            ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
-        End Try
-
-        Return ExitMessage
-
-    End Function
 
     Private Function ParseSubdirectoryFormula(SEDoc As SolidEdgeAssembly.AssemblyDocument,
                                               Configuration As Dictionary(Of String, String),
