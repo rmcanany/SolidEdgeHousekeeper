@@ -969,17 +969,18 @@ Public Class Form1
             End If
         End If
 
-        If new_CheckBoxEnablePropertyFilter.Checked Then
-            new_ButtonPropertyFilter.Enabled = True
-        Else
-            new_ButtonPropertyFilter.Enabled = False
-        End If
 
-        If new_CheckBoxFileSearch.Checked Then
-            new_ComboBoxFileSearch.Enabled = True
-        Else
-            new_ComboBoxFileSearch.Enabled = False
-        End If
+        'If new_CheckBoxEnablePropertyFilter.Checked Then
+        '    new_ButtonPropertyFilter.Enabled = True
+        'Else
+        '    new_ButtonPropertyFilter.Enabled = False
+        'End If
+
+        'If new_CheckBoxFileSearch.Checked Then
+        '    new_ComboBoxFileSearch.Enabled = True
+        'Else
+        '    new_ComboBoxFileSearch.Enabled = False
+        'End If
 
 
         ' Enable/Disable option controls based on task selection
@@ -1553,7 +1554,7 @@ Public Class Form1
         If new_CheckBoxEnablePropertyFilter.Checked Then
 
             new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
-            new_ButtonPropertyFilter.Enabled = True
+            'new_ButtonPropertyFilter.Enabled = True
 
             If PropertyFilterFormula = "" Then
                 FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
@@ -1562,7 +1563,7 @@ Public Class Form1
 
         Else
             new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
-            new_ButtonPropertyFilter.Enabled = False
+            'new_ButtonPropertyFilter.Enabled = False
         End If
 
         ApplyFilters()
@@ -1573,10 +1574,10 @@ Public Class Form1
 
         If new_CheckBoxFileSearch.Checked Then
             new_CheckBoxFileSearch.Image = My.Resources.Checked
-            new_ComboBoxFileSearch.Enabled = True
+            'new_ComboBoxFileSearch.Enabled = True
         Else
             new_CheckBoxFileSearch.Image = My.Resources.Unchecked
-            new_ComboBoxFileSearch.Enabled = False
+            'new_ComboBoxFileSearch.Enabled = False
         End If
 
         ApplyFilters()
