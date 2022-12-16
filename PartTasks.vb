@@ -1453,7 +1453,7 @@ Public Class PartTasks
                     End If
 
                     If Configuration("CheckBoxSaveAsImageCrop").ToLower = "true" Then
-                        ExitMessage = CropImage(Configuration, SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
+                        ExitMessage = CommonTasks.CropImage(Configuration, CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), NewFilename, NewExtension, Window.Height, Window.Width)
                         If Not ExitMessage = "" Then
                             ExitStatus = 1
                             ErrorMessageList.Add(ExitMessage)
@@ -1472,139 +1472,139 @@ Public Class PartTasks
     End Function
 
 
-    Private Function CropImage(Configuration As Dictionary(Of String, String),
-                          SEDoc As SolidEdgePart.PartDocument,
-                          NewFilename As String,
-                          NewExtension As String,
-                          WindowH As Integer,
-                          WindowW As Integer
-                          ) As String
+    'Private Function CropImage(Configuration As Dictionary(Of String, String),
+    '                      SEDoc As SolidEdgePart.PartDocument,
+    '                      NewFilename As String,
+    '                      NewExtension As String,
+    '                      WindowH As Integer,
+    '                      WindowW As Integer
+    '                      ) As String
 
-        Dim ModelX As Double
-        Dim ModelY As Double
-        Dim ModelZ As Double
-        'Dim XMin As Double = 1000000
-        'Dim YMin As Double = 1000000
-        'Dim ZMin As Double = 1000000
-        'Dim XMax As Double = -1000000
-        'Dim YMax As Double = -1000000
-        'Dim ZMax As Double = -1000000
+    '    Dim ModelX As Double
+    '    Dim ModelY As Double
+    '    Dim ModelZ As Double
+    '    'Dim XMin As Double = 1000000
+    '    'Dim YMin As Double = 1000000
+    '    'Dim ZMin As Double = 1000000
+    '    'Dim XMax As Double = -1000000
+    '    'Dim YMax As Double = -1000000
+    '    'Dim ZMax As Double = -1000000
 
-        Dim ImageW As Double
-        Dim ImageH As Double
-        Dim ImageAspectRatio As Double
+    '    Dim ImageW As Double
+    '    Dim ImageH As Double
+    '    Dim ImageAspectRatio As Double
 
-        Dim CropW As Integer
-        Dim CropH As Integer
+    '    Dim CropW As Integer
+    '    Dim CropH As Integer
 
-        Dim FfmpegCmd As String
-        Dim FfmpegArgs As String
-        Dim P As New Process
-        Dim TempFilename As String
+    '    Dim FfmpegCmd As String
+    '    Dim FfmpegArgs As String
+    '    Dim P As New Process
+    '    Dim TempFilename As String
 
-        Dim ExitCode As Integer = 0
-        Dim ExitMessage As String = ""
+    '    Dim ExitCode As Integer = 0
+    '    Dim ExitMessage As String = ""
 
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+    '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
 
-        Dim WindowAspectRatio As Double = WindowH / WindowW
+    '    Dim WindowAspectRatio As Double = WindowH / WindowW
 
-        Dim Models As SolidEdgePart.Models
-        Dim Model As SolidEdgePart.Model
-        Dim Body As SolidEdgeGeometry.Body
+    '    Dim Models As SolidEdgePart.Models
+    '    Dim Model As SolidEdgePart.Model
+    '    Dim Body As SolidEdgeGeometry.Body
 
-        Dim FeatureDoctor As New FeatureDoctor
-        Dim PointsList As New List(Of Double)
-        Dim PointsListTemp As New List(Of Double)
-        Dim Point As Double
+    '    Dim FeatureDoctor As New FeatureDoctor
+    '    Dim PointsList As New List(Of Double)
+    '    Dim PointsListTemp As New List(Of Double)
+    '    Dim Point As Double
 
-        Models = SEDoc.Models
+    '    Models = SEDoc.Models
 
-        If (Models.Count = 0) Then
-            ExitMessage = "No models to process.  Cropped image not created."
-            Return ExitMessage
-        End If
-        If (Models.Count = 0) Or (Models.Count > 25) Then
-            ExitMessage = "Too many models to process.  Cropped image not created."
-            Return ExitMessage
-        End If
+    '    If (Models.Count = 0) Then
+    '        ExitMessage = "No models to process.  Cropped image not created."
+    '        Return ExitMessage
+    '    End If
+    '    If (Models.Count = 0) Or (Models.Count > 25) Then
+    '        ExitMessage = "Too many models to process.  Cropped image not created."
+    '        Return ExitMessage
+    '    End If
 
-        For Each Model In Models
-            Body = CType(Model.Body, SolidEdgeGeometry.Body)
-            PointsListTemp = FeatureDoctor.GetBodyRange(Body)
-            If PointsList.Count = 0 Then
-                For Each Point In PointsListTemp
-                    PointsList.Add(Point)
-                Next
-            Else
-                For i As Integer = 0 To 2
-                    If PointsListTemp(i) < PointsList(i) Then
-                        PointsList(i) = PointsListTemp(i)
-                    End If
-                Next
-                For i As Integer = 3 To 5
-                    If PointsListTemp(i) > PointsList(i) Then
-                        PointsList(i) = PointsListTemp(i)
-                    End If
-                Next
-            End If
-        Next
+    '    For Each Model In Models
+    '        Body = CType(Model.Body, SolidEdgeGeometry.Body)
+    '        PointsListTemp = FeatureDoctor.GetBodyRange(Body)
+    '        If PointsList.Count = 0 Then
+    '            For Each Point In PointsListTemp
+    '                PointsList.Add(Point)
+    '            Next
+    '        Else
+    '            For i As Integer = 0 To 2
+    '                If PointsListTemp(i) < PointsList(i) Then
+    '                    PointsList(i) = PointsListTemp(i)
+    '                End If
+    '            Next
+    '            For i As Integer = 3 To 5
+    '                If PointsListTemp(i) > PointsList(i) Then
+    '                    PointsList(i) = PointsListTemp(i)
+    '                End If
+    '            Next
+    '        End If
+    '    Next
 
-        ModelX = PointsList(3) - PointsList(0) 'XMax - XMin
-        ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
-        ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
+    '    ModelX = PointsList(3) - PointsList(0) 'XMax - XMin
+    '    ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
+    '    ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
 
-        If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
-            ImageW = 0.707 * ModelX + 0.707 * ModelY
-            ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
-        ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
-            ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
-            ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
-        Else
-            ImageW = 0.557 * ModelX + 0.830667 * ModelY
-            ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
-        End If
+    '    If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
+    '        ImageW = 0.707 * ModelX + 0.707 * ModelY
+    '        ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
+    '    ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
+    '        ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
+    '        ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
+    '    Else
+    '        ImageW = 0.557 * ModelX + 0.830667 * ModelY
+    '        ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
+    '    End If
 
-        ImageAspectRatio = ImageH / ImageW
+    '    ImageAspectRatio = ImageH / ImageW
 
-        If WindowAspectRatio > ImageAspectRatio Then
-            CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
-            CropW = WindowW
-        Else
-            CropH = WindowH
-            CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
-        End If
+    '    If WindowAspectRatio > ImageAspectRatio Then
+    '        CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
+    '        CropW = WindowW
+    '    Else
+    '        CropH = WindowH
+    '        CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
+    '    End If
 
-        TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
+    '    TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
 
-        FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
+    '    FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
 
-        FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), NewFilename, Chr(34))
-        FfmpegArgs = String.Format("{0} -vf crop={1}:{2} ", FfmpegArgs, CropW, CropH)
-        FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), TempFilename, Chr(34))
+    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), NewFilename, Chr(34))
+    '    FfmpegArgs = String.Format("{0} -vf crop={1}:{2} ", FfmpegArgs, CropW, CropH)
+    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), TempFilename, Chr(34))
 
-        Try
-            P = Process.Start(FfmpegCmd, FfmpegArgs)
-            P.WaitForExit()
-            ExitCode = P.ExitCode
+    '    Try
+    '        P = Process.Start(FfmpegCmd, FfmpegArgs)
+    '        P.WaitForExit()
+    '        ExitCode = P.ExitCode
 
-            If ExitCode = 0 Then
-                System.IO.File.Delete(NewFilename)
-                FileSystem.Rename(TempFilename, NewFilename)
-            Else
-                ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
-            End If
+    '        If ExitCode = 0 Then
+    '            System.IO.File.Delete(NewFilename)
+    '            FileSystem.Rename(TempFilename, NewFilename)
+    '        Else
+    '            ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
+    '        End If
 
-        Catch ex As Exception
-            ExitMessage = String.Format("Unable to save cropped image '{0}'.  ", TempFilename)
-            ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
-        End Try
+    '    Catch ex As Exception
+    '        ExitMessage = String.Format("Unable to save cropped image '{0}'.  ", TempFilename)
+    '        ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
+    '    End Try
 
 
 
-        Return ExitMessage
+    '    Return ExitMessage
 
-    End Function
+    'End Function
 
     Private Function ParseSubdirectoryFormula(SEDoc As SolidEdgePart.PartDocument,
                                               Configuration As Dictionary(Of String, String),
