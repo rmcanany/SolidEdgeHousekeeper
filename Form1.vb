@@ -2322,6 +2322,12 @@ Public Class Form1
 
     End Sub
 
+    Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
+
+        If Not ListViewFiles.SelectedItems.Count = 0 Then ProcessAll()
+
+    End Sub
+
 
 
 

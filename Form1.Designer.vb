@@ -237,6 +237,8 @@ Partial Class Form1
         Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2420,35 +2422,47 @@ Partial Class Form1
         '
         'Menu_ListViewFile
         '
-        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator5, Me.BT_Remove})
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove})
         Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(165, 76)
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(181, 126)
         '
         'BT_Open
         '
         Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
         Me.BT_Open.Name = "BT_Open"
-        Me.BT_Open.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Open.Size = New System.Drawing.Size(180, 22)
         Me.BT_Open.Text = "Open"
         '
         'BT_OpenFolder
         '
         Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
         Me.BT_OpenFolder.Name = "BT_OpenFolder"
-        Me.BT_OpenFolder.Size = New System.Drawing.Size(164, 22)
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(180, 22)
         Me.BT_OpenFolder.Text = "Open folder"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(161, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(177, 6)
         '
         'BT_Remove
         '
         Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
         Me.BT_Remove.Name = "BT_Remove"
-        Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Remove.Size = New System.Drawing.Size(180, 22)
         Me.BT_Remove.Text = "Remove from list"
+        '
+        'BT_ProcessSelected
+        '
+        Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
+        Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
+        Me.BT_ProcessSelected.Size = New System.Drawing.Size(180, 22)
+        Me.BT_ProcessSelected.Text = "Process selected"
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(177, 6)
         '
         'Form1
         '
@@ -2691,4 +2705,6 @@ Partial Class Form1
     Friend WithEvents new_ComboBoxFileSearch As ToolStripComboBox
     Friend WithEvents new_ButtonFileSearchDelete As ToolStripButton
     Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
+    Friend WithEvents BT_ProcessSelected As ToolStripMenuItem
 End Class

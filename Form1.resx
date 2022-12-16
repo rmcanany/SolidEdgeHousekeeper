@@ -690,6 +690,17 @@
         RK5CYII=
 </value>
   </data>
+  <data name="BT_ProcessSelected.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAEzSURBVDhPtZLPLgUxGMXnAQiPMC1Bcv1ZWVh5F5aWLAgbXsDi3mndCBM3dyH+7Sy8BJeNeAUS
+        krY3V+aa+XydaaUzOmw4ydn0O7/Tpm3wLyIHaoFEcg/d1aZM7hKm5s24XuH+23jI5CVhEjzOCJfntP06
+        ZuJlaRhD9xXI5563BAcXleBPPjVYIdpUc7iY2cDK9QAOewksxqoKWmeTLdkweL77jhtYuxmAVpICXD0N
+        Ybnbd+HclIktg+MJuIrdoS2w8hWFTB0b/PeCIRacPSb1BfjW276C9w+A+CGBpc73u6BcbBocn7AtZnAx
+        tcNVvMQ60DilLTFl8EKEiY4n6HXp+FbTRy+jOLyrhj2+bUTPIwYrqygRJxj6+hOOM33ZtbCrCS5nSaQ2
+        NJC/EFfrpY/zdwqCT4eJs4QIau/PAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="BT_Remove.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAGdJREFUOE9j
