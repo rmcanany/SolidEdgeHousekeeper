@@ -90,12 +90,40 @@ Public Class AssemblyTasks
         Dim OccurrenceFilename As String
         Dim OccurrenceOutsideProjectError As Boolean = False
 
+
+        '(0)	{[ListViewFiles.Folder with subfolders.0, D\CAD\scripts\test_files\...\7481-50000_GRIPPER]}
+        '(1)	{[ListViewFiles.Folder with subfolders.1, D:\CAD\scripts\test_files\...\7481-01000_purchased]}
+        Dim InputDirectories As New List(Of String)
+        Dim InputDirectory As String
+        Dim Key As String
+        Dim tf As Boolean
+
+        Dim CheckedOcurrences As New List(Of String)
+
+        For Each Key In Configuration.Keys
+            tf = Key.ToLower.Contains("listviewfiles")
+            tf = tf And Key.ToLower.Contains("folder")
+            If tf Then
+                InputDirectories.Add(Configuration(Key))
+            End If
+        Next
+
         For Each Occurrence In Occurrences
             OccurrenceFilename = Occurrence.OccurrenceFileName
-            If Not OccurrenceFilename.Contains(Configuration("TextBoxInputDirectory")) Then
-                ExitStatus = 1
-                If Not ErrorMessageList.Contains(OccurrenceFilename) Then
-                    ErrorMessageList.Add(OccurrenceFilename)
+            If Not CheckedOcurrences.Contains(OccurrenceFilename) Then
+                CheckedOcurrences.Add(OccurrenceFilename)
+                tf = False
+                For Each InputDirectory In InputDirectories
+                    If OccurrenceFilename.Contains(InputDirectory) Then
+                        tf = True
+                    End If
+                Next
+                'If Not OccurrenceFilename.Contains(Configuration("TextBoxInputDirectory")) Then
+                If Not tf Then
+                    ExitStatus = 1
+                    If Not ErrorMessageList.Contains(OccurrenceFilename) Then
+                        ErrorMessageList.Add(OccurrenceFilename)
+                    End If
                 End If
             End If
         Next

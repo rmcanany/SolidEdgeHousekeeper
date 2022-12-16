@@ -27,6 +27,41 @@ Partial Class Form1
             ElseIf TypeOf Ctrl Is ComboBox Then
                 Dim c As ComboBox = CType(Ctrl, ComboBox)
                 Configuration.Add(c.Name, c.Text)
+
+            ElseIf TypeOf Ctrl Is ListView Then
+                Dim c As ListView = CType(Ctrl, ListView)
+                Dim s1 As String
+                Dim s2 As String
+
+                '.Groups.Items
+                '(0) {Files sources}
+                '  .Name "Sources"
+                '  .Items
+                '    (0) {Text = "Top level assembly"}
+                '      .Name "D:\CAD\scripts\test_files\20181212_auto_cube_fill\7481 AUTO CUBE FILL 2021\7481-00000_AUTO_CUBE_FILL_2021.asm"
+                '    (1) {Text = "Top level asm folder"}
+                '    (2) {Text = "Folder"}
+                '    (3) {Text = "Folder with subfolders"}
+                '    (4) {Text = "Top level asm folder"}
+                '    (5) {Text = "Folder"}
+                '    (6) {Text = "Folder with subfolders"}
+                '(1)	{Excluded files}
+                '(2)	{Assemblies}
+                '(3)	{Parts}
+                '(4)	{Sheetmetals}
+                '(5)	{Drafts}
+
+                For i As Integer = 0 To c.Groups.Count - 1
+                    If c.Groups(i).Name = "Sources" Then
+                        For j As Integer = 0 To c.Groups(i).Items.Count - 1
+                            s1 = String.Format("{0}.{1}.{2}", c.Name, c.Groups(i).Items(j).Text, j)
+                            s2 = c.Groups(i).Items(j).Name
+                            Configuration.Add(s1, s2)
+                        Next
+                        s1 = ""
+                    End If
+
+                Next
             End If
         Next
 
@@ -45,7 +80,7 @@ Partial Class Form1
 
         ExcludeControls.Add(new_CheckBoxEnablePropertyFilter.Name)
         ExcludeControls.Add(TextBoxReadme.Name)
-        ExcludeControls.Add(ListViewFiles.Name)
+        ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
         tf = tf Or TypeOf Ctrl Is TabControl

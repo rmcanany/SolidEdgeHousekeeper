@@ -66,7 +66,7 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Housekeeper_New.ico</ApplicationIcon>
+    <ApplicationIcon>Housekeeper_MN.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>E03F5154A324DDEF8BD4676EB384B7E94D074B63</ManifestCertificateThumbprint>
@@ -241,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <Content Include="Housekeeper_MN.ico" />
     <Content Include="Housekeeper_New.ico" />
     <None Include="Resources\icons8_list_view_16.png" />
     <None Include="Resources\icons8_Tools_16.png" />

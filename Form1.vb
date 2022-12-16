@@ -1816,6 +1816,7 @@ Public Class Form1
             If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
 
                 If item.Group.Name = "Sources" Then
+                    'If item.Group.text = "Sources" Then
 
                     PropFilter.Add(item)
 
