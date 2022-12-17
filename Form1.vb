@@ -2359,4 +2359,13 @@ Public Class Form1
 
     ' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
 
+    ' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+
+    ' Dim Defaults As String() = Nothing
+    ' Defaults = IO.File.ReadAllLines(DefaultsFilename)
+
+    ' Dim Defaults As New List(Of String)
+    ' IO.File.WriteAllLines(DefaultsFilename, Defaults)
+
+
 End Class
