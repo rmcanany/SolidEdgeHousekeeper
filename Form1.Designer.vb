@@ -165,6 +165,7 @@ Partial Class Form1
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
+        Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBackgroundProcessing = New System.Windows.Forms.CheckBox()
@@ -238,7 +239,6 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1723,6 +1723,15 @@ Partial Class Form1
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
+        'LabelFontSize
+        '
+        Me.LabelFontSize.AutoSize = True
+        Me.LabelFontSize.Location = New System.Drawing.Point(8, 297)
+        Me.LabelFontSize.Name = "LabelFontSize"
+        Me.LabelFontSize.Size = New System.Drawing.Size(95, 13)
+        Me.LabelFontSize.TabIndex = 39
+        Me.LabelFontSize.Text = "Font size for file list"
+        '
         'TextBoxFontSize
         '
         Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 313)
@@ -2429,15 +2438,6 @@ Partial Class Form1
         Me.BT_Remove.Name = "BT_Remove"
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
-        '
-        'LabelFontSize
-        '
-        Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(133, 295)
-        Me.LabelFontSize.Name = "LabelFontSize"
-        Me.LabelFontSize.Size = New System.Drawing.Size(95, 13)
-        Me.LabelFontSize.TabIndex = 39
-        Me.LabelFontSize.Text = "Font size for file list"
         '
         'Form1
         '
