@@ -238,6 +238,7 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1669,6 +1670,7 @@ Partial Class Form1
         Me.TabPageConfiguration.AutoScroll = True
         Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageConfiguration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageConfiguration.Controls.Add(Me.LabelFontSize)
         Me.TabPageConfiguration.Controls.Add(Me.TextBoxFontSize)
         Me.TabPageConfiguration.Controls.Add(Me.CheckBoxSaveAsImageCrop)
         Me.TabPageConfiguration.Controls.Add(Me.CheckBoxBackgroundProcessing)
@@ -2428,6 +2430,15 @@ Partial Class Form1
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
         '
+        'LabelFontSize
+        '
+        Me.LabelFontSize.AutoSize = True
+        Me.LabelFontSize.Location = New System.Drawing.Point(133, 295)
+        Me.LabelFontSize.Name = "LabelFontSize"
+        Me.LabelFontSize.Size = New System.Drawing.Size(95, 13)
+        Me.LabelFontSize.TabIndex = 39
+        Me.LabelFontSize.Text = "Font size for file list"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2671,4 +2682,5 @@ Partial Class Form1
     Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
     Friend WithEvents BT_ProcessSelected As ToolStripMenuItem
     Friend WithEvents TextBoxFontSize As TextBox
+    Friend WithEvents LabelFontSize As Label
 End Class
