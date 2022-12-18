@@ -1732,7 +1732,7 @@ Partial Class Form1
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
-        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 631)
+        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 680)
         Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
         Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(194, 17)
         Me.CheckBoxSaveAsImageCrop.TabIndex = 37
@@ -1742,7 +1742,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 557)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 606)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(227, 17)
         Me.CheckBoxBackgroundProcessing.TabIndex = 36
@@ -1752,7 +1752,7 @@ Partial Class Form1
         'CheckBoxRunExternalProgramSaveFile
         '
         Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
-        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 607)
+        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 656)
         Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
         Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(222, 17)
         Me.CheckBoxRunExternalProgramSaveFile.TabIndex = 35
@@ -1955,7 +1955,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 532)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 581)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(235, 17)
@@ -1966,7 +1966,7 @@ Partial Class Form1
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 582)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 631)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(266, 17)
@@ -1982,7 +1982,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
-        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 353)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 402)
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
@@ -2063,7 +2063,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 508)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 557)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(170, 17)
         Me.CheckBoxWarnSave.TabIndex = 16
