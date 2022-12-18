@@ -1726,7 +1726,7 @@ Partial Class Form1
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(8, 297)
+        Me.LabelFontSize.Location = New System.Drawing.Point(8, 305)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(95, 13)
         Me.LabelFontSize.TabIndex = 39
@@ -1734,7 +1734,7 @@ Partial Class Form1
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 313)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 321)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(100, 20)
         Me.TextBoxFontSize.TabIndex = 38
@@ -2083,7 +2083,7 @@ Partial Class Form1
         '
         'TextBoxRestartAfter
         '
-        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 363)
+        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 371)
         Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(76, 20)
@@ -2093,7 +2093,7 @@ Partial Class Form1
         'LabelRestartAfter
         '
         Me.LabelRestartAfter.AutoSize = True
-        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 347)
+        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 355)
         Me.LabelRestartAfter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelRestartAfter.Name = "LabelRestartAfter"
         Me.LabelRestartAfter.Size = New System.Drawing.Size(195, 13)
