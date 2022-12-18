@@ -2243,7 +2243,7 @@ Public Class Form1
 
 
 
-    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) 
 
         If e.KeyCode = Keys.Enter Then
             Me.ActiveControl = Nothing
@@ -2253,7 +2253,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFontSize.Leave
+    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) 
 
         If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
         If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"

@@ -46,8 +46,6 @@ Partial Class Form1
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage_ImageList = New System.Windows.Forms.ImageList(Me.components)
-        Me.LabelFontSize = New System.Windows.Forms.Label()
-        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.ToolStrip_Filter = New System.Windows.Forms.ToolStrip()
         Me.new_CheckBoxEnablePropertyFilter = New System.Windows.Forms.ToolStripButton()
         Me.new_ButtonPropertyFilter = New System.Windows.Forms.ToolStripButton()
@@ -278,8 +276,6 @@ Partial Class Form1
         Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TabPageGeneral.Controls.Add(Me.ListViewFiles)
-        Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
-        Me.TabPageGeneral.Controls.Add(Me.TextBoxFontSize)
         Me.TabPageGeneral.Controls.Add(Me.ToolStrip_Filter)
         Me.TabPageGeneral.Controls.Add(Me.ToolStrip_List)
         Me.TabPageGeneral.ImageKey = "list"
@@ -368,27 +364,6 @@ Partial Class Form1
         Me.TabPage_ImageList.Images.SetKeyName(17, "ASM_Folder")
         Me.TabPage_ImageList.Images.SetKeyName(18, "list")
         Me.TabPage_ImageList.Images.SetKeyName(19, "Tools")
-        '
-        'LabelFontSize
-        '
-        Me.LabelFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(393, 573)
-        Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFontSize.Name = "LabelFontSize"
-        Me.LabelFontSize.Size = New System.Drawing.Size(49, 13)
-        Me.LabelFontSize.TabIndex = 29
-        Me.LabelFontSize.Text = "Font size"
-        '
-        'TextBoxFontSize
-        '
-        Me.TextBoxFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(446, 570)
-        Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxFontSize.Name = "TextBoxFontSize"
-        Me.TextBoxFontSize.Size = New System.Drawing.Size(57, 20)
-        Me.TextBoxFontSize.TabIndex = 28
-        Me.TextBoxFontSize.Text = "8"
         '
         'ToolStrip_Filter
         '
@@ -2599,8 +2574,6 @@ Partial Class Form1
     Friend WithEvents LabelFindReplaceFindSheetmetal As Label
     Friend WithEvents LabelFindReplacePropertyNameSheetmetal As Label
     Friend WithEvents LabelFindReplacePropertySetSheetmetal As Label
-    Friend WithEvents LabelFontSize As Label
-    Friend WithEvents TextBoxFontSize As TextBox
     Friend WithEvents TextBoxFastSearchScopeFilename As TextBox
     Friend WithEvents LabelFastSearchScopeFilename As Label
     Friend WithEvents ButtonFastSearchScopeFilename As Button
