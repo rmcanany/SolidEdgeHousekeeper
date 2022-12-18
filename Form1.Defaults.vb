@@ -690,7 +690,7 @@ Partial Class Form1
 
                 If i = 0 Then
                     For Each Key In LabelToActionAssembly.Keys
-                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        ReadmeOut.Add(String.Format("#### {0}", Key))
                         If LabelToActionAssembly(Key).HelpText <> "" Then
                             ReadmeOut.Add(LabelToActionAssembly(Key).HelpText)
                         End If
@@ -698,7 +698,7 @@ Partial Class Form1
                     Next
                 ElseIf i = 1 Then
                     For Each Key In LabelToActionPart.Keys
-                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        ReadmeOut.Add(String.Format("#### {0}", Key))
                         If LabelToActionPart(Key).HelpText <> "" Then
                             ReadmeOut.Add(LabelToActionPart(Key).HelpText)
                         End If
@@ -706,7 +706,7 @@ Partial Class Form1
                     Next
                 ElseIf i = 2 Then
                     For Each Key In LabelToActionSheetmetal.Keys
-                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        ReadmeOut.Add(String.Format("#### {0}", Key))
                         If LabelToActionSheetmetal(Key).HelpText <> "" Then
                             ReadmeOut.Add(LabelToActionSheetmetal(Key).HelpText)
                         End If
@@ -714,7 +714,7 @@ Partial Class Form1
                     Next
                 Else  ' i = 3
                     For Each Key In LabelToActionDraft.Keys
-                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        ReadmeOut.Add(String.Format("#### {0}", Key))
                         If LabelToActionDraft(Key).HelpText <> "" Then
                             ReadmeOut.Add(LabelToActionDraft(Key).HelpText)
                         End If

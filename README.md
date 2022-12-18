@@ -223,25 +223,25 @@ Filtering by file type is done by checking/unchecking the appropriate
 
 ### Assembly
 
-##### Open/Save
+#### Open/Save
 Open a document and save in the current version.
 
-##### Activate and update all
+#### Activate and update all
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
 
 Can run out of memory for very large assemblies.
 
-##### Property find replace
+#### Property find replace
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the task tab, below the task list. 
 
 A 'Property set', either 'System' or 'Custom', is required. System properties are in every Solid Edge file. They include Material, Manager, Project, etc. At this time, they must be in English. Custom properties are ones that you create, probably in a template. 
 
 The search is case insensitive, the replace is case sensitive. For example, say the search is 'aluminum', the replacement is 'ALUMINUM', and the property value is 'Aluminum 6061-T6'. Then the new value would be 'ALUMINUM 6061-T6'. 
 
-##### Expose variables missing
+#### Expose variables missing
 Checks to see if all the variables listed in 'Variables to expose' are present in the document.
 
-##### Expose variables
+#### Expose variables
 Enter the names as a comma-delimited list in the 'Variables to expose' textbox. Optionally include a different Expose Name, set off by the colon ':' character. 
 
 For example
@@ -258,55 +258,55 @@ var1: Variable Name One, var2, var3
 
 Note: You cannot use either a comma or a colon in the Expose Name. Actually you can, but it will not do what you expect. 
 
-##### Remove face style overrides
+#### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
-##### Update face and view styles from template
+#### Update face and view styles from template
 Updates the file with face and view styles from a file you specify on the Configuration tab. 
 
 Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, use 'Save As' on the View Overrides dialog.
 
-##### Hide constructions
+#### Hide constructions
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
-##### Fit pictorial view
+#### Fit pictorial view
 Maximizes the window, sets the view orientation, and does a fit.
 
 Select the desired orientation on the Configuration Tab.
 
-##### Part number does not match file name
+#### Part number does not match file name
 Checks if a file property, that you specify on the Configuration tab, matches the file name.
 
-##### Missing drawing
+#### Missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
 
-##### Broken links
+#### Broken links
 Checks to see if any assembly occurrence is pointing to a file not found on disk.
 
-##### Links outside input directory
+#### Links outside input directory
 Checks to see if any assembly occurrence resides outside the input directory specified on the General tab. 
 
 Only useful when a project is housed in one top-level directory.
 
-##### Failed relationships
+#### Failed relationships
 Checks if any assembly occurrences have conflicting or otherwise broken relationships.
 
-##### Underconstrained relationships
+#### Underconstrained relationships
 Checks if any assembly occurrences have missing relationships.
 
-##### Run external program
+#### Run external program
 Runs an *.exe or *.vbs file.  Select the program with the External Program Browse button. It is located on the task tab below the task list. 
 
 Several rules about the program implementation apply. See https://github.com/rmcanany/HousekeeperExternalPrograms for details and examples. 
 
-##### Interactive edit
+#### Interactive edit
 Brings up files one at a time for manual processing.  Some rules apply.
 
 It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. 
 
 Also, do not Close the file or do a Save As on it. Housekeeper maintains a 'reference' to the file. Those two commands cause the reference to be lost, resulting in an exception. 
 
-##### Save as
+#### Save as
 Exports the file to a non-Solid Edge format. 
 
 Select the file type using the Save As combobox. Select the directory using the Save As Browse button, or check the Original Directory checkbox. These controls are on the task tab below the task list. 
@@ -321,136 +321,136 @@ It is possible that a property contains a character that cannot be used in a fil
 
 ### Part
 
-##### Open/Save
+#### Open/Save
 Same as the Assembly command of the same name.
 
-##### Property find replace
+#### Property find replace
 Same as the Assembly command of the same name.
 
-##### Expose variables missing
+#### Expose variables missing
 Same as the Assembly command of the same name.
 
-##### Expose variables
+#### Expose variables
 Same as the Assembly command of the same name.
 
-##### Update face and view styles from template
+#### Update face and view styles from template
 Same as the Assembly command of the same name.
 
-##### Update material from material table
+#### Update material from material table
 Checks to see if the part's material name and properties match any material in a file you specify on the Configuration tab. 
 
 If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
 
-##### Hide constructions
+#### Hide constructions
 Same as the Assembly command of the same name.
 
-##### Fit pictorial view
+#### Fit pictorial view
 Same as the Assembly command of the same name.
 
-##### Update insert part copies
+#### Update insert part copies
 In conjuction with 'Assembly Activate and update all', used mainly to eliminate the gray corners on assembly drawings.
 
-##### Broken links
+#### Broken links
 Same as the Assembly command of the same name.
 
-##### Part number does not match file name
+#### Part number does not match file name
 Same as the Assembly command of the same name.
 
-##### Missing drawing
+#### Missing drawing
 Same as the Assembly command of the same name.
 
-##### Failed or warned features
+#### Failed or warned features
 Checks if any features of the model are in the Failed or Warned status.
 
-##### Suppressed or rolled back features
+#### Suppressed or rolled back features
 Checks if any features of the model are in the Suppressed or Rolledback status.
 
-##### Underconstrained profiles
+#### Underconstrained profiles
 Checks if any profiles are not fully constrained.
 
-##### Insert part copies out of date
+#### Insert part copies out of date
 If the file has any insert part copies, checks if they are up to date.
 
-##### Material not in material table
+#### Material not in material table
 Checks the file's material against the material table. The material table is chosen on the Configuration tab. 
 
-##### Run external program
+#### Run external program
 Same as the Assembly command of the same name.
 
-##### Interactive edit
+#### Interactive edit
 Same as the Assembly command of the same name.
 
-##### Save As
+#### Save As
 Same as the Assembly command of the same name.
 
 ### Sheetmetal
 
-##### Open/Save
+#### Open/Save
 Same as the Assembly command of the same name.
 
-##### Property find replace
+#### Property find replace
 Same as the Assembly command of the same name.
 
-##### Expose variables missing
+#### Expose variables missing
 Same as the Assembly command of the same name.
 
-##### Expose variables
+#### Expose variables
 Same as the Assembly command of the same name.
 
-##### Update face and view styles from template
+#### Update face and view styles from template
 Same as the Part command of the same name.
 
-##### Update material from material table
+#### Update material from material table
 Same as the Part command of the same name.
 
-##### Hide constructions
+#### Hide constructions
 Same as the Assembly command of the same name.
 
-##### Fit pictorial view
+#### Fit pictorial view
 Same as the Assembly command of the same name.
 
-##### Update insert part copies
+#### Update insert part copies
 Same as the Part command of the same name.
 
-##### Update design for cost
+#### Update design for cost
 Updates DesignForCost and saves the document.
 
 An annoyance of this command is that it opens the DesignForCost Edgebar pane, but is not able to close it. The user must manually close the pane in an interactive Sheetmetal session. The state of the pane is system-wide, not per-document, so closing it is a one-time action. 
 
-##### Broken links
+#### Broken links
 Same as the Assembly command of the same name.
 
-##### Part number does not match file name
+#### Part number does not match file name
 Same as the Part command of the same name.
 
-##### Missing drawing
+#### Missing drawing
 Same as the Assembly command of the same name.
 
-##### Failed or warned features
+#### Failed or warned features
 Same as the Part command of the same name.
 
-##### Suppressed or rolled back features
+#### Suppressed or rolled back features
 Same as the Part command of the same name.
 
-##### Underconstrained profiles
+#### Underconstrained profiles
 Same as the Part command of the same name.
 
-##### Insert part copies out of date
+#### Insert part copies out of date
 Same as the Part command of the same name.
 
-##### Flat pattern missing or out of date
+#### Flat pattern missing or out of date
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
-##### Material not in material table
+#### Material not in material table
 Same as the Part command of the same name.
 
-##### Run external program
+#### Run external program
 Same as the Assembly command of the same name.
 
-##### Interactive edit
+#### Interactive edit
 Same as the Assembly command of the same name.
 
-##### Save As
+#### Save As
 Same as the Assembly command of the same name, except two additional options -- DXF Flat (*.dxf) and PDF Drawing (*.pdf). 
 
 The DXF Flat option saves the flat pattern of the sheet metal file. 
@@ -459,56 +459,56 @@ The PDF Drawing option saves the drawing of the sheet metal file. The drawing mu
 
 ### Draft
 
-##### Open/Save
+#### Open/Save
 Same as the Assembly command of the same name.
 
-##### Update drawing views
+#### Update drawing views
 Checks drawing views one by one, and updates them if needed.
 
-##### Update styles from template
+#### Update styles from template
 Creates a new file from a template you specify on the Configuration tab. Copies drawing views, dimensions, etc. from the old file into the new one. If the template has updated styles, a different background sheet, or other changes, the new drawing will inherit them automatically. 
 
 This task has the option to 'Allow partial success'.  It is set on the Configuration tab. If the option is set, and some drawing elements were not transferred, it is reported in the log file. Also reported in the log file are instructions for completing the transfer. 
 
 Note, because this task needs to do a 'Save As', it must be run with no other tasks selected.
 
-##### Update drawing border from template
+#### Update drawing border from template
 Replaces the background border with that of the Draft template specified on the Configuration tab.
 
 In contrast to UpdateStylesFromTemplate, this command only replaces the border. It does not attempt to update styles or anything else.
 
-##### Fit view
+#### Fit view
 Same as the Assembly command of the same name.
 
-##### File name does not match model file name
+#### File name does not match model file name
 Same as the Assembly command of the same name.
 
-##### Broken links
+#### Broken links
 Same as the Assembly command of the same name.
 
-##### Drawing views out of date
+#### Drawing views out of date
 Checks if drawing views are not up to date.
 
-##### Detached dimensions or annotations
+#### Detached dimensions or annotations
 Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing.
 
-##### Parts list missing or out of date
+#### Parts list missing or out of date
 Checks is there are any parts list in the drawing and if they are all up to date.
 
-##### Run external program
+#### Run external program
 Same as the Assembly command of the same name.
 
-##### Interactive edit
+#### Interactive edit
 Same as the Assembly command of the same name.
 
-##### Print
+#### Print
 Print settings are accessed on the Configuration tab.
 
 Note, the presence of the Printer Settings dialog is somewhat misleading. The only settings taken from it are the printer name, page height and width, and the number of copies. Any other selections revert back to the Windows defaults when printing. A workaround is to create a new Windows printer with the desired defaults. 
 
 Another quirk is that, no matter the selection, the page width is always listed as greater than or equal to the page height. In most cases, checking 'Auto orient' should provide the desired result. 
 
-##### Save As
+#### Save As
 Same as the Assembly command of the same name, except as follows.
 
 Optionally includes a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (0,0) means lower left, (0.5,0.5) means centered, etc. Note some file formats may not support bitmap output.
