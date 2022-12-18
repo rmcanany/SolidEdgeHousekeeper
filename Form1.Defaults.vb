@@ -637,6 +637,115 @@ Partial Class Form1
     End Sub
 
     Private Sub LoadTextBoxReadme()
+        Dim ReadmeFileName As String = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim StartupPath As String = "D:\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+        Dim TaskListHeader As String = "## TASK DESCRIPTIONS"
+        Dim Proceed As Boolean = True
+        Dim i As Integer
+        Dim msg As String
+
+        Dim ReadmeIn As String() = Nothing
+        Dim ReadmeOut As New List(Of String)
+
+        Dim CheckBoxList As New List(Of CheckedListBox)
+        Dim Names As New List(Of String)
+
+        CheckBoxList.Add(CheckedListBoxAssembly)
+        CheckBoxList.Add(CheckedListBoxPart)
+        CheckBoxList.Add(CheckedListBoxSheetmetal)
+        CheckBoxList.Add(CheckedListBoxDraft)
+
+        Names.Add("### Assembly")
+        Names.Add("### Part")
+        Names.Add("### Sheetmetal")
+        Names.Add("### Draft")
+
+
+        ' The readme file is not needed on the user's machine.  
+        ' The startup path is hard coded, hopefully most users won't have this exact location on their machines.  
+        If FileIO.FileSystem.DirectoryExists(StartupPath) Then
+            Try
+                ReadmeIn = IO.File.ReadAllLines(ReadmeFileName)
+            Catch ex As Exception
+                MsgBox(String.Format("Error opening {0}", ReadmeFileName))
+                Proceed = False
+            End Try
+        End If
+
+        If Proceed Then
+            For i = 0 To ReadmeIn.Count - 1
+                If Not ReadmeIn(i).Contains(TaskListHeader) Then
+                    ReadmeOut.Add(ReadmeIn(i))
+                Else
+                    Exit For
+                End If
+            Next
+
+            ReadmeOut.Add(TaskListHeader)
+            ReadmeOut.Add("")
+
+            For i = 0 To 3
+                ReadmeOut.Add(Names(i))
+                ReadmeOut.Add("")
+
+                If i = 0 Then
+                    For Each Key In LabelToActionAssembly.Keys
+                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        If LabelToActionAssembly(Key).HelpText <> "" Then
+                            ReadmeOut.Add(LabelToActionAssembly(Key).HelpText)
+                        End If
+                        ReadmeOut.Add("")
+                    Next
+                ElseIf i = 1 Then
+                    For Each Key In LabelToActionPart.Keys
+                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        If LabelToActionPart(Key).HelpText <> "" Then
+                            ReadmeOut.Add(LabelToActionPart(Key).HelpText)
+                        End If
+                        ReadmeOut.Add("")
+                    Next
+                ElseIf i = 2 Then
+                    For Each Key In LabelToActionSheetmetal.Keys
+                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        If LabelToActionSheetmetal(Key).HelpText <> "" Then
+                            ReadmeOut.Add(LabelToActionSheetmetal(Key).HelpText)
+                        End If
+                        ReadmeOut.Add("")
+                    Next
+                Else  ' i = 3
+                    For Each Key In LabelToActionDraft.Keys
+                        ReadmeOut.Add(String.Format("##### {0}", Key))
+                        If LabelToActionDraft(Key).HelpText <> "" Then
+                            ReadmeOut.Add(LabelToActionDraft(Key).HelpText)
+                        End If
+                        ReadmeOut.Add("")
+                    Next
+
+
+                End If
+
+            Next
+
+
+            msg = ""
+            ReadmeOut.Add("")
+            msg = "## CODE ORGANIZATION"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+            msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+
+            IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
+
+
+        End If
+
+
+    End Sub
+
+    Private Sub LoadTextBoxReadme_OLD()
         Dim msg As String
         Dim readme_github As New List(Of String)  ' Used to create the Readme file for GitHub
         Dim readme_tab As New List(Of String)  ' Used to create the Readme tab on Form1
