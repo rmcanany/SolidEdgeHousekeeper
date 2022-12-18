@@ -2072,7 +2072,7 @@ Partial Class Form1
         '
         'TextBoxRestartAfter
         '
-        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 317)
+        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 363)
         Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(76, 20)
@@ -2082,7 +2082,7 @@ Partial Class Form1
         'LabelRestartAfter
         '
         Me.LabelRestartAfter.AutoSize = True
-        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 301)
+        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 347)
         Me.LabelRestartAfter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelRestartAfter.Name = "LabelRestartAfter"
         Me.LabelRestartAfter.Size = New System.Drawing.Size(195, 13)
