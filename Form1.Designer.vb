@@ -165,6 +165,7 @@ Partial Class Form1
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
+        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBackgroundProcessing = New System.Windows.Forms.CheckBox()
         Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
@@ -237,7 +238,6 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1721,6 +1721,14 @@ Partial Class Form1
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
+        'TextBoxFontSize
+        '
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(383, 301)
+        Me.TextBoxFontSize.Name = "TextBoxFontSize"
+        Me.TextBoxFontSize.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxFontSize.TabIndex = 38
+        Me.TextBoxFontSize.Text = "8"
+        '
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
@@ -1756,7 +1764,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 956)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1000)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -2419,14 +2427,6 @@ Partial Class Form1
         Me.BT_Remove.Name = "BT_Remove"
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
-        '
-        'TextBoxFontSize
-        '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(383, 301)
-        Me.TextBoxFontSize.Name = "TextBoxFontSize"
-        Me.TextBoxFontSize.Size = New System.Drawing.Size(100, 20)
-        Me.TextBoxFontSize.TabIndex = 38
-        Me.TextBoxFontSize.Text = "8"
         '
         'Form1
         '
