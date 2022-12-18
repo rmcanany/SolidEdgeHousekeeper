@@ -2000,7 +2000,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
-        Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme tab for details"
+        Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme for details"
         '
         'ButtonFastSearchScopeFilename
         '
