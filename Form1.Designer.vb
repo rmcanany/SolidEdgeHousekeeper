@@ -1723,7 +1723,7 @@ Partial Class Form1
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(383, 301)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 313)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(100, 20)
         Me.TextBoxFontSize.TabIndex = 38
