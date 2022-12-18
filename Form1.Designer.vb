@@ -1812,7 +1812,7 @@ Partial Class Form1
         'LabelPrintOptionsCopies
         '
         Me.LabelPrintOptionsCopies.AutoSize = True
-        Me.LabelPrintOptionsCopies.Location = New System.Drawing.Point(11, 785)
+        Me.LabelPrintOptionsCopies.Location = New System.Drawing.Point(11, 844)
         Me.LabelPrintOptionsCopies.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPrintOptionsCopies.Name = "LabelPrintOptionsCopies"
         Me.LabelPrintOptionsCopies.Size = New System.Drawing.Size(39, 13)
@@ -1822,7 +1822,7 @@ Partial Class Form1
         'LabelPrintOptionsHeight
         '
         Me.LabelPrintOptionsHeight.AutoSize = True
-        Me.LabelPrintOptionsHeight.Location = New System.Drawing.Point(112, 744)
+        Me.LabelPrintOptionsHeight.Location = New System.Drawing.Point(112, 803)
         Me.LabelPrintOptionsHeight.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPrintOptionsHeight.Name = "LabelPrintOptionsHeight"
         Me.LabelPrintOptionsHeight.Size = New System.Drawing.Size(55, 13)
@@ -1832,7 +1832,7 @@ Partial Class Form1
         'LabelPrintOptionsWidth
         '
         Me.LabelPrintOptionsWidth.AutoSize = True
-        Me.LabelPrintOptionsWidth.Location = New System.Drawing.Point(11, 744)
+        Me.LabelPrintOptionsWidth.Location = New System.Drawing.Point(11, 803)
         Me.LabelPrintOptionsWidth.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPrintOptionsWidth.Name = "LabelPrintOptionsWidth"
         Me.LabelPrintOptionsWidth.Size = New System.Drawing.Size(52, 13)
@@ -1842,7 +1842,7 @@ Partial Class Form1
         'LabelPrintOptionsPrinter
         '
         Me.LabelPrintOptionsPrinter.AutoSize = True
-        Me.LabelPrintOptionsPrinter.Location = New System.Drawing.Point(11, 704)
+        Me.LabelPrintOptionsPrinter.Location = New System.Drawing.Point(11, 763)
         Me.LabelPrintOptionsPrinter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPrintOptionsPrinter.Name = "LabelPrintOptionsPrinter"
         Me.LabelPrintOptionsPrinter.Size = New System.Drawing.Size(37, 13)
@@ -1852,7 +1852,7 @@ Partial Class Form1
         'CheckBoxPrintOptionsScaleLineWidths
         '
         Me.CheckBoxPrintOptionsScaleLineWidths.AutoSize = True
-        Me.CheckBoxPrintOptionsScaleLineWidths.Location = New System.Drawing.Point(11, 912)
+        Me.CheckBoxPrintOptionsScaleLineWidths.Location = New System.Drawing.Point(11, 971)
         Me.CheckBoxPrintOptionsScaleLineWidths.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrintOptionsScaleLineWidths.Name = "CheckBoxPrintOptionsScaleLineWidths"
         Me.CheckBoxPrintOptionsScaleLineWidths.Size = New System.Drawing.Size(105, 17)
@@ -1863,7 +1863,7 @@ Partial Class Form1
         'CheckBoxPrintOptionsScaleLineTypes
         '
         Me.CheckBoxPrintOptionsScaleLineTypes.AutoSize = True
-        Me.CheckBoxPrintOptionsScaleLineTypes.Location = New System.Drawing.Point(11, 891)
+        Me.CheckBoxPrintOptionsScaleLineTypes.Location = New System.Drawing.Point(11, 950)
         Me.CheckBoxPrintOptionsScaleLineTypes.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrintOptionsScaleLineTypes.Name = "CheckBoxPrintOptionsScaleLineTypes"
         Me.CheckBoxPrintOptionsScaleLineTypes.Size = New System.Drawing.Size(100, 17)
@@ -1874,7 +1874,7 @@ Partial Class Form1
         'CheckBoxPrintOptionsPrintAsBlack
         '
         Me.CheckBoxPrintOptionsPrintAsBlack.AutoSize = True
-        Me.CheckBoxPrintOptionsPrintAsBlack.Location = New System.Drawing.Point(11, 871)
+        Me.CheckBoxPrintOptionsPrintAsBlack.Location = New System.Drawing.Point(11, 930)
         Me.CheckBoxPrintOptionsPrintAsBlack.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrintOptionsPrintAsBlack.Name = "CheckBoxPrintOptionsPrintAsBlack"
         Me.CheckBoxPrintOptionsPrintAsBlack.Size = New System.Drawing.Size(90, 17)
@@ -1885,7 +1885,7 @@ Partial Class Form1
         'CheckBoxPrintOptionsBestFit
         '
         Me.CheckBoxPrintOptionsBestFit.AutoSize = True
-        Me.CheckBoxPrintOptionsBestFit.Location = New System.Drawing.Point(11, 851)
+        Me.CheckBoxPrintOptionsBestFit.Location = New System.Drawing.Point(11, 910)
         Me.CheckBoxPrintOptionsBestFit.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrintOptionsBestFit.Name = "CheckBoxPrintOptionsBestFit"
         Me.CheckBoxPrintOptionsBestFit.Size = New System.Drawing.Size(58, 17)
@@ -1896,7 +1896,7 @@ Partial Class Form1
         'CheckBoxPrintOptionsAutoOrient
         '
         Me.CheckBoxPrintOptionsAutoOrient.AutoSize = True
-        Me.CheckBoxPrintOptionsAutoOrient.Location = New System.Drawing.Point(11, 831)
+        Me.CheckBoxPrintOptionsAutoOrient.Location = New System.Drawing.Point(11, 890)
         Me.CheckBoxPrintOptionsAutoOrient.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrintOptionsAutoOrient.Name = "CheckBoxPrintOptionsAutoOrient"
         Me.CheckBoxPrintOptionsAutoOrient.Size = New System.Drawing.Size(77, 17)
@@ -1907,7 +1907,7 @@ Partial Class Form1
         'TextBoxPrintOptionsCopies
         '
         Me.TextBoxPrintOptionsCopies.Enabled = False
-        Me.TextBoxPrintOptionsCopies.Location = New System.Drawing.Point(11, 801)
+        Me.TextBoxPrintOptionsCopies.Location = New System.Drawing.Point(11, 860)
         Me.TextBoxPrintOptionsCopies.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsCopies.Name = "TextBoxPrintOptionsCopies"
         Me.TextBoxPrintOptionsCopies.Size = New System.Drawing.Size(76, 20)
@@ -1916,7 +1916,7 @@ Partial Class Form1
         'TextBoxPrintOptionsHeight
         '
         Me.TextBoxPrintOptionsHeight.Enabled = False
-        Me.TextBoxPrintOptionsHeight.Location = New System.Drawing.Point(112, 760)
+        Me.TextBoxPrintOptionsHeight.Location = New System.Drawing.Point(112, 819)
         Me.TextBoxPrintOptionsHeight.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsHeight.Name = "TextBoxPrintOptionsHeight"
         Me.TextBoxPrintOptionsHeight.Size = New System.Drawing.Size(76, 20)
@@ -1925,7 +1925,7 @@ Partial Class Form1
         'TextBoxPrintOptionsWidth
         '
         Me.TextBoxPrintOptionsWidth.Enabled = False
-        Me.TextBoxPrintOptionsWidth.Location = New System.Drawing.Point(11, 760)
+        Me.TextBoxPrintOptionsWidth.Location = New System.Drawing.Point(11, 819)
         Me.TextBoxPrintOptionsWidth.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsWidth.Name = "TextBoxPrintOptionsWidth"
         Me.TextBoxPrintOptionsWidth.Size = New System.Drawing.Size(76, 20)
@@ -1934,7 +1934,7 @@ Partial Class Form1
         'TextBoxPrintOptionsPrinter
         '
         Me.TextBoxPrintOptionsPrinter.Enabled = False
-        Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(11, 720)
+        Me.TextBoxPrintOptionsPrinter.Location = New System.Drawing.Point(11, 779)
         Me.TextBoxPrintOptionsPrinter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPrintOptionsPrinter.Name = "TextBoxPrintOptionsPrinter"
         Me.TextBoxPrintOptionsPrinter.Size = New System.Drawing.Size(200, 20)
@@ -1942,7 +1942,7 @@ Partial Class Form1
         '
         'ButtonPrintOptions
         '
-        Me.ButtonPrintOptions.Location = New System.Drawing.Point(8, 679)
+        Me.ButtonPrintOptions.Location = New System.Drawing.Point(8, 738)
         Me.ButtonPrintOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPrintOptions.Name = "ButtonPrintOptions"
         Me.ButtonPrintOptions.Size = New System.Drawing.Size(112, 19)
