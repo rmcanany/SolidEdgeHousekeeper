@@ -670,6 +670,8 @@ Partial Class Form1
                 MsgBox(String.Format("Error opening {0}", ReadmeFileName))
                 Proceed = False
             End Try
+        Else
+            Proceed = False
         End If
 
         If Proceed Then
