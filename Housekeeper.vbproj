@@ -247,6 +247,14 @@
     <Content Include="Housekeeper.ico" />
     <Content Include="Housekeeper_MN.ico" />
     <Content Include="Housekeeper_New.ico" />
+    <None Include="Resources\icons8_Close_Window_16.png" />
+    <None Include="Resources\icons8_Circled_Play_16.png" />
+    <None Include="Resources\Delete_16.png" />
+    <None Include="Resources\icons8_trash_16.png" />
+    <None Include="Resources\TrashCan_16.png" />
+    <None Include="Resources\Synch_16.png" />
+    <None Include="Resources\icons8_Import_16.png" />
+    <None Include="Resources\icons8_Export_16.png" />
     <None Include="Resources\icons8_list_view_16.png" />
     <None Include="Resources\icons8_Tools_16.png" />
     <None Include="Resources\icons8_csv_16.png" />
