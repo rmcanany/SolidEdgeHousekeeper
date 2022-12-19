@@ -106,16 +106,16 @@ Public Class LabelToAction
         HelpString = "Searches for text in a specified property and replaces it if found. "
         HelpString += "The property, search text, and replacement text are entered on the task tab, "
         HelpString += "below the task list. "
-        HelpString += vbCrLf + vbCrLf + "A 'Property set', either 'System' or 'Custom', is required. "
+        HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "System properties are in every Solid Edge file. "
         HelpString += "They include Material, Manager, Project, etc. "
         HelpString += "At this time, they must be in English. "
         HelpString += "Custom properties are ones that you create, probably in a template. "
         HelpString += vbCrLf + vbCrLf + "The search is case insensitive, the replace is case sensitive. "
-        HelpString += "For example, say the search is 'aluminum', "
-        HelpString += "the replacement is 'ALUMINUM', "
-        HelpString += "and the property value is 'Aluminum 6061-T6'. "
-        HelpString += "Then the new value would be 'ALUMINUM 6061-T6'. "
+        HelpString += "For example, say the search is `aluminum`, "
+        HelpString += "the replacement is `ALUMINUM`, "
+        HelpString += "and the property value is `Aluminum 6061-T6`. "
+        HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
@@ -123,7 +123,7 @@ Public Class LabelToAction
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
         Dim ExposeVariablesMissing As New L2A
-        HelpString = "Checks to see if all the variables listed in 'Variables to expose' are present in the document."
+        HelpString = "Checks to see if all the variables listed in `Variables to expose` are present in the document."
         PopulateList(ExposeVariablesMissing,
                      "Expose variables missing",
                      "ExposeVariablesMissing",
@@ -131,15 +131,15 @@ Public Class LabelToAction
                      RequiresExposeVariables:=True)
 
         Dim ExposeVariables As New L2A
-        HelpString = "Enter the names as a comma-delimited list in the 'Variables to expose' textbox. "
-        HelpString += "Optionally include a different Expose Name, set off by the colon ':' character. "
+        HelpString = "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
+        HelpString += "Optionally include a different Expose Name, set off by the colon `:` character. "
         HelpString += vbCrLf + vbCrLf + "For example"
-        HelpString += vbCrLf + vbCrLf + "var1, var2, var3"
+        HelpString += vbCrLf + vbCrLf + "`var1, var2, var3`"
         HelpString += vbCrLf + vbCrLf + "Or"
-        HelpString += vbCrLf + vbCrLf + "var1: Variable Name One, var2: Variable Name 2, var3: Variable Name 3"
+        HelpString += vbCrLf + vbCrLf + "`var1: Variable Name One, var2: Variable Name 2, var3: Variable Name 3`"
         HelpString += vbCrLf + vbCrLf + "Or a combination"
-        HelpString += vbCrLf + vbCrLf + "var1: Variable Name One, var2, var3"
-        HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma or a colon in the Expose Name. "
+        HelpString += vbCrLf + vbCrLf + "`var1: Variable Name One, var2, var3`"
+        HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. "
         HelpString += "Actually you can, but it will not do what you expect. "
         PopulateList(ExposeVariables,
                      "Expose variables",
@@ -160,7 +160,7 @@ Public Class LabelToAction
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Updates the file with face and view styles from a file you specify on the Configuration tab. "
         HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
-        HelpString += "To create a named style from an override, use 'Save As' on the View Overrides dialog."
+        HelpString += "To create a named style from an override, use `Save As` on the `View Overrides` dialog."
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
@@ -209,8 +209,7 @@ Public Class LabelToAction
                      HelpString)
 
         Dim LinksOutsideInputDirectory As New L2A
-        HelpString = "Checks to see if any assembly occurrence resides outside the input directory specified on the General tab. "
-        HelpString += vbCrLf + vbCrLf + "Only useful when a project is housed in one top-level directory."
+        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the General tab. "
         PopulateList(LinksOutsideInputDirectory,
                      "Links outside input directory",
                      "LinksOutsideInputDirectory",
@@ -231,10 +230,10 @@ Public Class LabelToAction
                      HelpString)
 
         Dim RunExternalProgram As New L2A
-        HelpString = "Runs an *.exe or *.vbs file.  Select the program with the External Program Browse button. "
+        HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the task tab below the task list. "
         HelpString += vbCrLf + vbCrLf + "Several rules about the program implementation apply. "
-        HelpString += "See https://github.com/rmcanany/HousekeeperExternalPrograms for details and examples. "
+        HelpString += "See **[HousekeeperExternalPrograms](https://github.com/rmcanany/HousekeeperExternalPrograms)** for details and examples. "
         PopulateList(RunExternalProgram,
                      "Run external program",
                      "RunExternalProgram",
@@ -247,7 +246,7 @@ Public Class LabelToAction
         HelpString += "For example, if you open another file, such as a drawing, you need to close it. "
         HelpString += "If you add or modify a feature, you need to click Finish. "
         HelpString += vbCrLf + vbCrLf + "Also, do not Close the file or do a Save As on it. "
-        HelpString += "Housekeeper maintains a 'reference' to the file. "
+        HelpString += "Housekeeper maintains a `reference` to the file. "
         HelpString += "Those two commands cause the reference to be lost, resulting in an exception. "
         PopulateList(InteractiveEdit,
                      "Interactive edit",
@@ -257,16 +256,16 @@ Public Class LabelToAction
 
         Dim SaveAs As New L2A
         HelpString = "Exports the file to a non-Solid Edge format. "
-        HelpString += vbCrLf + vbCrLf + "Select the file type using the Save As combobox. "
-        HelpString += "Select the directory using the Save As Browse button, "
-        HelpString += "or check the Original Directory checkbox. "
+        HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
+        HelpString += "Select the directory using the `Browse` button, "
+        HelpString += "or check the `Original Directory` checkbox. "
         HelpString += "These controls are on the task tab below the task list. "
         HelpString += vbCrLf + vbCrLf + "Images can be saved with the aspect ratio of the model, rather than the window. "
-        HelpString += "The option is called 'Save as image -- crop to model size'. "
+        HelpString += "The option is called `Save as image -- crop to model size`. "
         HelpString += "It is located on the Configuration tab. "
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
-        HelpString += "For example 'Material %{System.Material} Thickness %{Custom.Material Thickness}'. "
-        HelpString += "The PropertySet designation, 'System.' or 'Custom.' is required. "
+        HelpString += "For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. "
+        HelpString += "The PropertySet designation, `System.` or `Custom.` is required. "
         HelpString += "These refer to where the property is stored in a Solid Edge file. "
         HelpString += vbCrLf + vbCrLf + "System properties are in every Solid Edge file. "
         HelpString += "They include Material, Project, etc. "
@@ -361,7 +360,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim UpdateInsertPartCopies As New L2A
-        HelpString = "In conjuction with 'Assembly Activate and update all', "
+        HelpString = "In conjuction with `Assembly Activate and update all`, "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings."
         PopulateList(UpdateInsertPartCopies,
                      "Update insert part copies",
@@ -629,12 +628,12 @@ Public Class LabelToAction
 
         Dim SaveAs As New L2A
         HelpString = "Same as the Assembly command of the same name, "
-        HelpString += "except two additional options -- DXF Flat (*.dxf) and PDF Drawing (*.pdf). "
-        HelpString += vbCrLf + vbCrLf + "The DXF Flat option saves the flat pattern of the sheet metal file. "
-        HelpString += vbCrLf + vbCrLf + "The PDF Drawing option saves the drawing of the sheet metal file. "
+        HelpString += "except two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. "
+        HelpString += vbCrLf + vbCrLf + "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
+        HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
         HelpString += "The drawing must have the same name as the model, and be in the same directory. "
-        HelpString += "A more flexible option may be to use the Draft Save As, "
-        HelpString += "using a Property Filter if needed. "
+        HelpString += "A more flexible option may be to use the Draft `Save As`, "
+        HelpString += "using a `Property Filter` if needed. "
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
@@ -668,11 +667,11 @@ Public Class LabelToAction
         HelpString += "Copies drawing views, dimensions, etc. from the old file into the new one. "
         HelpString += "If the template has updated styles, a different background sheet, or other changes, "
         HelpString += "the new drawing will inherit them automatically. "
-        HelpString += vbCrLf + vbCrLf + "This task has the option to 'Allow partial success'.  It is set on the Configuration tab. "
+        HelpString += vbCrLf + vbCrLf + "This task has the option to `Allow partial success`.  It is set on the Configuration tab. "
         HelpString += "If the option is set, and some drawing elements were not transferred, "
         HelpString += "it is reported in the log file. "
         HelpString += "Also reported in the log file are instructions for completing the transfer. "
-        HelpString += vbCrLf + vbCrLf + "Note, because this task needs to do a 'Save As', it must be run with no other tasks selected."
+        HelpString += vbCrLf + vbCrLf + "Note, because this task needs to do a `Save As`, it must be run with no other tasks selected."
         PopulateList(UpdateStylesFromTemplate,
                      "Update styles from template",
                      "UpdateStylesFromTemplate",
@@ -682,7 +681,7 @@ Public Class LabelToAction
         Dim UpdateDrawingBorderFromTemplate As New L2A
         HelpString = "Replaces the background border with that of the Draft template specified on "
         HelpString += "the Configuration tab."
-        HelpString += vbCrLf + vbCrLf + "In contrast to UpdateStylesFromTemplate, this command only replaces the border. "
+        HelpString += vbCrLf + vbCrLf + "In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. "
         HelpString += "It does not attempt to update styles or anything else."
         PopulateList(UpdateDrawingBorderFromTemplate,
                      "Update drawing border from template",
@@ -761,7 +760,7 @@ Public Class LabelToAction
         HelpString += "A workaround is to create a new Windows printer with the desired defaults. "
         HelpString += vbCrLf + vbCrLf + "Another quirk is that, no matter the selection, the page width "
         HelpString += "is always listed as greater than or equal to the page height. "
-        HelpString += "In most cases, checking 'Auto orient' should provide the desired result. "
+        HelpString += "In most cases, checking `Auto orient` should provide the desired result. "
         PopulateList(Print,
                      "Print",
                      "Print",
@@ -774,14 +773,14 @@ Public Class LabelToAction
         HelpString += "set X/W and Y/H to position the image, and Scale to change its size. "
         HelpString += "The X/W and Y/H values are fractions of the sheet's "
         HelpString += "width and height, respectively. "
-        HelpString += "So, (0,0) means lower left, (0.5,0.5) means centered, etc. "
+        HelpString += "So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. "
         HelpString += "Note some file formats may not support bitmap output."
-        HelpString += vbCrLf + vbCrLf + "The option 'Use subdirectory formula' can use an Index Reference designator "
+        HelpString += vbCrLf + vbCrLf + "The option `Use subdirectory formula` can use an Index Reference designator "
         HelpString += "to select a model file contained in the draft file. "
         HelpString += "This is similar to Property Text in a Callout, "
-        HelpString += "for example, '%{System.Material|R1}'. "
+        HelpString += "for example, `%{System.Material|R1}`. "
         HelpString += "To refer to properties of the draft file itself, do not specify a designator, "
-        HelpString += "for example, '%{Custom.Last Revision Date}'. "
+        HelpString += "for example, `%{Custom.Last Revision Date}`. "
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
