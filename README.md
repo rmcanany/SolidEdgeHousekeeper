@@ -140,7 +140,9 @@ Solid Edge window.
 
 
 
-## FILE SELECTION
+## FILE SELECTION AND FILTERING
+
+### Selection
 
 The General Tab is where you select what files to process. 
 With the Selection Toolbar, you can select by folder, by top-level assembly, 
@@ -153,14 +155,14 @@ The toolbar functions are explained below.
 
 ![Toolbar](My%20Project/media/folder_toolbar.png)
 
-### 1. Select by Folder
+#### 1. Select by Folder
 
 Choose this option if you want to select files within a single folder, 
 or a folder and its subfolders.  You can select any number of each.
 Referring to the diagram, click the the icon marked **a** to select a 
 single folder, click the icon marked **b** to include sub folders.
 
-### 2. Select by Top-Level Assembly
+#### 2. Select by Top-Level Assembly
 
 Choose this option if you want to select files linked to an assembly.
 Again referring to the diagram, click **a** to choose the assembly, 
@@ -175,7 +177,7 @@ If you _do_ specify one or more folders, there are two options on how
 the _where used_ is performed, **Top Down** or **Bottom Up**.  Make 
 this selection on the **Configuration Tab**.
 
-#### Bottom Up
+**Bottom Up**
 
 Bottom up is meant for general purpose directories 
 (e.g., `\\BIG_SERVER\all_parts\`), where the number of files 
@@ -188,7 +190,7 @@ A bottom up search requires a valid Fast Search Scope filename,
 which tells the program if the specified folder is on an indexed drive. 
 Set the Fast Search Scope filename on the **Configuration Tab**.
 
-#### Top Down
+**Top Down**
 
 Top down is meant for self-contained project directories 
 (e.g., `C:\Projects\Project123\`), where most of the files 
@@ -212,18 +214,18 @@ file names must contain the full path.  E.g.,
 
 ### 4. List operations
 
-#### Select files with errors from the previous run
+**Select files with errors from the previous run**
 
 Click **a** to select only files that encountered an error. 
 All other files will be removed from the list.  To reproduce the 
 previous TODO list functionality, you can export the list if
 needed.
 
-#### Remove all
+**Remove all**
 
 Click **b** to remove all folders and files from the list.
 
-#### RMB shortcut menu
+**RMB shortcut menu**
 
 ![RMB Shortcut Menu](My%20Project/media/RMB_shortcut_menu.png)
 
@@ -247,7 +249,7 @@ the file name.  When a file is processed successfully, a checkmark
 If some task encountered an issue, an error indicator 
 ![Error](Resources/icons8_Error_16.png) is shown instead.
 
-## FILTER TOOLBAR
+### Filtering
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
@@ -255,13 +257,13 @@ Filters are a way to refine the list of files to process.  You can filter
 on file properties, filenames (with a wildcard search), or file type. 
 They can be used alone or in any combination.
 
-### Property Filter
+#### Property Filter
 
 To configure a property filter, click the tool icon to the right of
 the Property filter checkbox.  For details on the property search, 
 see the Readme tab on the Property Filter dialog. 
 
-### Wildcard Filter
+#### Wildcard Filter
 
 Filtering by wildcard is done by entering the wildcard pattern in the 
 provided combobox.  Wildcard patterns are automatically saved for 
@@ -273,13 +275,12 @@ which is similar to the old DOS wildcard search, but with a few more options.
 For details and examples, see 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator).
 
-### File Type Filter
+#### File Type Filter
 
 Filtering by file type is done by checking/unchecking the appropriate 
  Type filter icon. 
 
-...
-
+<!-- Everything below this line is auto-generated.  Do not edit. -->
 
 ## TASK DESCRIPTIONS
 
