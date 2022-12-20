@@ -3,6 +3,7 @@ Imports ExcelDataReader
 
 Public Class CommonTasks
 
+    Public Shared tmpList As Collection
     Shared Function SaveAsPNG(View As SolidEdgeFramework.View,
                                NewFilename As String
                                ) As String
@@ -284,5 +285,35 @@ Public Class CommonTasks
         Return ExitMessage
 
     End Function
+
+    Shared Sub FindLinked(objDoc As Object)
+
+        Dim i As Short
+        Dim objLinkedDocs As Object
+
+        ' Loop through the items in the assembly
+        objLinkedDocs = objDoc.LinkedDocuments
+
+        If Not IsNothing(objLinkedDocs) Then
+
+            For i = 1 To objLinkedDocs.Count
+                If Not tmpList.Contains(objLinkedDocs(i).FullName.ToString) Then
+                    tmpList.Add(objLinkedDocs(i).FullName, objLinkedDocs(i).FullName.ToString)
+                    If IO.Path.GetExtension(objLinkedDocs(i).fullname).ToLower = ".asm" Then
+                        ' there is a problem in traversing back up through the tree that throws an exception, so using a try-catch.
+                        Try
+                            FindLinked(objLinkedDocs(i))
+                        Catch ex As Exception
+                            'MsgBox("Problem with traversing back up the tree " & objLinkedDocs(i).fullname)
+                        End Try
+                    End If
+                End If
+            Next
+
+        End If
+
+        objLinkedDocs = Nothing
+
+    End Sub
 
 End Class

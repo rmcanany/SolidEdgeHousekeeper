@@ -908,7 +908,24 @@ Public Class Form1
 
         FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
 
-        ListViewFiles.Items.Clear()
+        Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
+        ListViewGroup1.Name = "Sources"
+        Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
+        ListViewGroup2.Name = "Excluded"
+        Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
+        ListViewGroup3.Name = ".asm"
+        Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
+        ListViewGroup4.Name = ".par"
+        Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
+        ListViewGroup5.Name = ".psm"
+        Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
+        ListViewGroup6.Name = ".dft"
+        ListViewFiles.Groups.Add(ListViewGroup1)
+        ListViewFiles.Groups.Add(ListViewGroup2)
+        ListViewFiles.Groups.Add(ListViewGroup3)
+        ListViewFiles.Groups.Add(ListViewGroup4)
+        ListViewFiles.Groups.Add(ListViewGroup5)
+        ListViewFiles.Groups.Add(ListViewGroup6)
 
         ListViewFilesOutOfDate = False
 
@@ -2326,6 +2343,49 @@ Public Class Form1
     Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
 
         If Not ListViewFiles.SelectedItems.Count = 0 Then ProcessAll()
+
+    End Sub
+
+    Private Sub BT_FindLinks_Click(sender As Object, e As EventArgs) Handles BT_FindLinks.Click
+
+        Dim DMApp As New DesignManager.Application
+        Dim DMDoc As DesignManager.Document
+
+        For Each item As ListViewItem In ListViewFiles.SelectedItems
+
+            DMDoc = CType(DMApp.Open(item.Name), DesignManager.Document)
+
+            CommonTasks.tmpList = New Collection
+            CommonTasks.FindLinked(DMDoc)
+
+            For Each FoundFile In CommonTasks.tmpList
+                If CommonTasks.FilenameIsOK(FoundFile.ToString) Then
+
+                    If IO.File.Exists(FoundFile.ToString) Then
+
+                        If Not ListViewFiles.Items.ContainsKey(FoundFile.ToString) Then
+
+                            Dim tmpLVItem As New ListViewItem
+                            tmpLVItem.Text = IO.Path.GetFileName(FoundFile.ToString)
+                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile.ToString))
+                            tmpLVItem.ImageKey = "Unchecked"
+                            tmpLVItem.Tag = IO.Path.GetExtension(FoundFile.ToString).ToLower 'Backup gruppo
+                            tmpLVItem.Name = FoundFile.ToString
+                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile.ToString).ToLower)
+                            ListViewFiles.Items.Add(tmpLVItem)
+
+                        End If
+
+                    End If
+
+                End If
+            Next
+
+        Next
+
+        CommonTasks.tmpList = Nothing
+
+        DMApp.Quit()
 
     End Sub
 
