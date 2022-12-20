@@ -148,9 +148,13 @@ Possible workaround: Refresh the screen by minimizing and maximizing the Solid E
 ## SELECTION TOOLBAR
 
 The Selection Toolbar is where you select what files to process. 
-You can select by folder, by top-level assembly, by list, or by 
-files with errors from a previous run. 
-These options are explained below.
+With the toolbar, you can select by folder, by top-level assembly, 
+by list, or by files with errors from a previous run. 
+
+Another option is to drag and drop from Windows File Explorer. 
+You can use drag and drop and the toolbar in combination.
+
+The toolbar functions are explained below.
 
 ![Toolbar](My%20Project/media/folder_toolbar.png)
 
@@ -235,7 +239,18 @@ Solid Edge, **Open folder** to view them in File Explorer,
 and finally **Remove from list** to move them to the *Excluded files* 
 section of the list.
 
+### 5. Update
 
+The update button processes the selections made above.  If a change is
+made to the selections or a file filter (see next), an update
+is required.
+
+In the above image, you will notice a checkbox
+![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
+the file name.  When a file is processed successfully, a checkmark 
+![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
+If some task encountered an issue, an error indicator 
+![Error](Resources/icons8_Error_16.png) is shown instead.
 
 ## FILTER TOOLBAR
 
