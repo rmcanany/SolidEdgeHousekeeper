@@ -204,6 +204,8 @@ Partial Class Form1
         Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
         Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPageReadme = New System.Windows.Forms.TabPage()
+        Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
+        Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -223,8 +225,9 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
-        Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
+        Me.LabelReadmeNavigation = New System.Windows.Forms.Label()
+        Me.LabelVersion = New System.Windows.Forms.Label()
+        Me.TextBoxVersion = New System.Windows.Forms.TextBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -237,9 +240,9 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.SuspendLayout()
         Me.GroupBoxTLAOptions.SuspendLayout()
         Me.TabPageReadme.SuspendLayout()
+        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
-        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -2242,6 +2245,9 @@ Partial Class Form1
         Me.TabPageReadme.AutoScroll = True
         Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageReadme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageReadme.Controls.Add(Me.TextBoxVersion)
+        Me.TabPageReadme.Controls.Add(Me.LabelVersion)
+        Me.TabPageReadme.Controls.Add(Me.LabelReadmeNavigation)
         Me.TabPageReadme.Controls.Add(Me.LinkLabelGitHubReadme)
         Me.TabPageReadme.Controls.Add(Me.PictureBoxReadmeNavigation)
         Me.TabPageReadme.ImageKey = "Info"
@@ -2252,6 +2258,25 @@ Partial Class Form1
         Me.TabPageReadme.Size = New System.Drawing.Size(511, 594)
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
+        '
+        'LinkLabelGitHubReadme
+        '
+        Me.LinkLabelGitHubReadme.AutoSize = True
+        Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(15, 50)
+        Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(125, 13)
+        Me.LinkLabelGitHubReadme.TabIndex = 1
+        Me.LinkLabelGitHubReadme.TabStop = True
+        Me.LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
+        '
+        'PictureBoxReadmeNavigation
+        '
+        Me.PictureBoxReadmeNavigation.Image = CType(resources.GetObject("PictureBoxReadmeNavigation.Image"), System.Drawing.Image)
+        Me.PictureBoxReadmeNavigation.Location = New System.Drawing.Point(15, 105)
+        Me.PictureBoxReadmeNavigation.Name = "PictureBoxReadmeNavigation"
+        Me.PictureBoxReadmeNavigation.Size = New System.Drawing.Size(381, 211)
+        Me.PictureBoxReadmeNavigation.TabIndex = 0
+        Me.PictureBoxReadmeNavigation.TabStop = False
         '
         'TextBoxStatus
         '
@@ -2398,24 +2423,32 @@ Partial Class Form1
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
         '
-        'PictureBoxReadmeNavigation
+        'LabelReadmeNavigation
         '
-        Me.PictureBoxReadmeNavigation.Image = CType(resources.GetObject("PictureBoxReadmeNavigation.Image"), System.Drawing.Image)
-        Me.PictureBoxReadmeNavigation.Location = New System.Drawing.Point(53, 107)
-        Me.PictureBoxReadmeNavigation.Name = "PictureBoxReadmeNavigation"
-        Me.PictureBoxReadmeNavigation.Size = New System.Drawing.Size(381, 211)
-        Me.PictureBoxReadmeNavigation.TabIndex = 0
-        Me.PictureBoxReadmeNavigation.TabStop = False
+        Me.LabelReadmeNavigation.AutoSize = True
+        Me.LabelReadmeNavigation.Location = New System.Drawing.Point(15, 80)
+        Me.LabelReadmeNavigation.Name = "LabelReadmeNavigation"
+        Me.LabelReadmeNavigation.Size = New System.Drawing.Size(334, 13)
+        Me.LabelReadmeNavigation.TabIndex = 2
+        Me.LabelReadmeNavigation.Text = "Navigate the Readme with the indicated Table of Contents dropdown"
         '
-        'LinkLabelGitHubReadme
+        'LabelVersion
         '
-        Me.LinkLabelGitHubReadme.AutoSize = True
-        Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(53, 49)
-        Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
-        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(125, 13)
-        Me.LinkLabelGitHubReadme.TabIndex = 1
-        Me.LinkLabelGitHubReadme.TabStop = True
-        Me.LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
+        Me.LabelVersion.AutoSize = True
+        Me.LabelVersion.Location = New System.Drawing.Point(15, 20)
+        Me.LabelVersion.Name = "LabelVersion"
+        Me.LabelVersion.Size = New System.Drawing.Size(163, 13)
+        Me.LabelVersion.TabIndex = 3
+        Me.LabelVersion.Text = "Solid Edge Housekeeper Version"
+        '
+        'TextBoxVersion
+        '
+        Me.TextBoxVersion.Enabled = False
+        Me.TextBoxVersion.Location = New System.Drawing.Point(183, 17)
+        Me.TextBoxVersion.Name = "TextBoxVersion"
+        Me.TextBoxVersion.Size = New System.Drawing.Size(50, 20)
+        Me.TextBoxVersion.TabIndex = 4
+        Me.TextBoxVersion.Text = "2023-1"
         '
         'Form1
         '
@@ -2453,10 +2486,10 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
         Me.TabPageReadme.PerformLayout()
+        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
-        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2663,4 +2696,7 @@ Partial Class Form1
     Friend WithEvents BT_FindLinks As ToolStripMenuItem
     Friend WithEvents PictureBoxReadmeNavigation As PictureBox
     Friend WithEvents LinkLabelGitHubReadme As LinkLabel
+    Friend WithEvents TextBoxVersion As TextBox
+    Friend WithEvents LabelVersion As Label
+    Friend WithEvents LabelReadmeNavigation As Label
 End Class
