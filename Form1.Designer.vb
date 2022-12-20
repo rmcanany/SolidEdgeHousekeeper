@@ -204,6 +204,9 @@ Partial Class Form1
         Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
         Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPageHelp = New System.Windows.Forms.TabPage()
+        Me.TextBoxVersion = New System.Windows.Forms.TextBox()
+        Me.LabelVersion = New System.Windows.Forms.Label()
+        Me.LabelReadmeNavigation = New System.Windows.Forms.Label()
         Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
         Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -225,9 +228,6 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LabelReadmeNavigation = New System.Windows.Forms.Label()
-        Me.LabelVersion = New System.Windows.Forms.Label()
-        Me.TextBoxVersion = New System.Windows.Forms.TextBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -374,8 +374,8 @@ Partial Class Form1
         Me.new_CheckBoxFileSearch.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.new_CheckBoxFileSearch.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFileSearch.Name = "new_CheckBoxFileSearch"
-        Me.new_CheckBoxFileSearch.Size = New System.Drawing.Size(82, 22)
-        Me.new_CheckBoxFileSearch.Text = "File search"
+        Me.new_CheckBoxFileSearch.Size = New System.Drawing.Size(74, 22)
+        Me.new_CheckBoxFileSearch.Text = "Wildcard"
         '
         'new_ComboBoxFileSearch
         '
@@ -2259,6 +2259,33 @@ Partial Class Form1
         Me.TabPageHelp.TabIndex = 6
         Me.TabPageHelp.Text = "Help"
         '
+        'TextBoxVersion
+        '
+        Me.TextBoxVersion.Enabled = False
+        Me.TextBoxVersion.Location = New System.Drawing.Point(183, 17)
+        Me.TextBoxVersion.Name = "TextBoxVersion"
+        Me.TextBoxVersion.Size = New System.Drawing.Size(50, 20)
+        Me.TextBoxVersion.TabIndex = 4
+        Me.TextBoxVersion.Text = "2023-1"
+        '
+        'LabelVersion
+        '
+        Me.LabelVersion.AutoSize = True
+        Me.LabelVersion.Location = New System.Drawing.Point(15, 20)
+        Me.LabelVersion.Name = "LabelVersion"
+        Me.LabelVersion.Size = New System.Drawing.Size(163, 13)
+        Me.LabelVersion.TabIndex = 3
+        Me.LabelVersion.Text = "Solid Edge Housekeeper Version"
+        '
+        'LabelReadmeNavigation
+        '
+        Me.LabelReadmeNavigation.AutoSize = True
+        Me.LabelReadmeNavigation.Location = New System.Drawing.Point(15, 75)
+        Me.LabelReadmeNavigation.Name = "LabelReadmeNavigation"
+        Me.LabelReadmeNavigation.Size = New System.Drawing.Size(379, 13)
+        Me.LabelReadmeNavigation.TabIndex = 2
+        Me.LabelReadmeNavigation.Text = "Navigate the GitHub Help page with the indicated Table of Contents dropdown"
+        '
         'LinkLabelGitHubReadme
         '
         Me.LinkLabelGitHubReadme.AutoSize = True
@@ -2423,33 +2450,6 @@ Partial Class Form1
         Me.BT_Remove.Name = "BT_Remove"
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
-        '
-        'LabelReadmeNavigation
-        '
-        Me.LabelReadmeNavigation.AutoSize = True
-        Me.LabelReadmeNavigation.Location = New System.Drawing.Point(15, 75)
-        Me.LabelReadmeNavigation.Name = "LabelReadmeNavigation"
-        Me.LabelReadmeNavigation.Size = New System.Drawing.Size(379, 13)
-        Me.LabelReadmeNavigation.TabIndex = 2
-        Me.LabelReadmeNavigation.Text = "Navigate the GitHub Help page with the indicated Table of Contents dropdown"
-        '
-        'LabelVersion
-        '
-        Me.LabelVersion.AutoSize = True
-        Me.LabelVersion.Location = New System.Drawing.Point(15, 20)
-        Me.LabelVersion.Name = "LabelVersion"
-        Me.LabelVersion.Size = New System.Drawing.Size(163, 13)
-        Me.LabelVersion.TabIndex = 3
-        Me.LabelVersion.Text = "Solid Edge Housekeeper Version"
-        '
-        'TextBoxVersion
-        '
-        Me.TextBoxVersion.Enabled = False
-        Me.TextBoxVersion.Location = New System.Drawing.Point(183, 17)
-        Me.TextBoxVersion.Name = "TextBoxVersion"
-        Me.TextBoxVersion.Size = New System.Drawing.Size(50, 20)
-        Me.TextBoxVersion.TabIndex = 4
-        Me.TextBoxVersion.Text = "2023-1"
         '
         'Form1
         '
