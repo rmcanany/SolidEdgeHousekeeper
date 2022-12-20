@@ -79,20 +79,20 @@ Partial Class Form1
         Dim ExcludeControls As New List(Of String)
 
         ExcludeControls.Add(new_CheckBoxEnablePropertyFilter.Name)
-        'ExcludeControls.Add(TextBoxReadme.Name)
         ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
         tf = tf Or TypeOf Ctrl Is TabControl
         tf = tf Or TypeOf Ctrl Is TabPage
         tf = tf Or TypeOf Ctrl Is GroupBox
+        'tf = Ctrl.HasChildren
 
         If tf Then
             For Each ChildControl In Ctrl.Controls
                 ControlDict = RecurseFormControls(ChildControl, ControlDict, Exclude)
             Next
         Else
-            tf = TypeOf Ctrl Is Button
+            tf = TypeOf Ctrl Is Button  ' Don't need to save buttons or labels.
             tf = tf Or TypeOf Ctrl Is Label
             If Exclude Then
                 tf = tf Or ExcludeControls.Contains(Ctrl.Name)
@@ -430,7 +430,7 @@ Partial Class Form1
                             c.Checked = False
                         End If
 
-                    ElseIf TypeOf Ctrl Is ComboBox Then
+                    ElseIf (TypeOf Ctrl Is ComboBox) Then
                         Dim c As ComboBox = CType(Ctrl, ComboBox)
 
                         If Key = "new_ComboBoxFileSearch" Then

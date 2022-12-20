@@ -93,6 +93,7 @@ Public Class Form1
 
         StartTime = Now
 
+        ReconcileFormChanges()
         SaveDefaults()
 
         ErrorMessage = CheckStartConditions()
@@ -1312,6 +1313,7 @@ Public Class Form1
         If ButtonCancel.Text = "Stop" Then
             StopProcess = True
         Else
+            ReconcileFormChanges()
             SaveDefaults()
             End
         End If
