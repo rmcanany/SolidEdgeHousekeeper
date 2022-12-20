@@ -22,17 +22,23 @@ file settings to match those in a template you specify.
 
 ## GETTING HELP
 
-Ask questions or suggest improvements on the [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Ask questions or suggest improvements on the 
+[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
 To subscribe to update notices or volunteer to be a beta tester, 
 message me, RobertMcAnany, on the forum. 
-(Click your profile picture, then 'My Messages', then 'Create'). 
-Unsubscribe the same way. 
-
-To combat bots and spam, I will probably ignore requests from 
-'User16612341234...'. 
+(Click your profile picture, then `My Messages`, then `Create`). 
+Unsubscribe the same way.  To combat bots and spam, I will probably 
+ignore requests from `User16612341234...`. 
 (Change your nickname by clicking your profile picture, then 
-'My Profile', then 'Edit'). 
+`My Profile`, then `Edit`). 
+
+
+If you want to help out on Housekeeper, the easiest way may be to 
+become a beta tester.  If you know .NET, or want to learn, there's more
+to do!  To get started on GitHub collaboration, head over to
+[**ToyProject**](https://github.com/rmcanany/ToyProject). 
+There are instructions and links to get you up to speed.
 
 
 ## INSTALLATION
