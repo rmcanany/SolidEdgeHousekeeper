@@ -79,7 +79,7 @@ Partial Class Form1
         Dim ExcludeControls As New List(Of String)
 
         ExcludeControls.Add(new_CheckBoxEnablePropertyFilter.Name)
-        ExcludeControls.Add(TextBoxReadme.Name)
+        'ExcludeControls.Add(TextBoxReadme.Name)
         ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl

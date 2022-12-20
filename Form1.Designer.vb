@@ -204,7 +204,6 @@ Partial Class Form1
         Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
         Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPageReadme = New System.Windows.Forms.TabPage()
-        Me.TextBoxReadme = New System.Windows.Forms.TextBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -224,6 +223,7 @@ Partial Class Form1
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -238,6 +238,7 @@ Partial Class Form1
         Me.TabPageReadme.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
+        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -2240,7 +2241,7 @@ Partial Class Form1
         Me.TabPageReadme.AutoScroll = True
         Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageReadme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TabPageReadme.Controls.Add(Me.TextBoxReadme)
+        Me.TabPageReadme.Controls.Add(Me.PictureBoxReadmeNavigation)
         Me.TabPageReadme.ImageKey = "Info"
         Me.TabPageReadme.Location = New System.Drawing.Point(4, 23)
         Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(2)
@@ -2249,20 +2250,6 @@ Partial Class Form1
         Me.TabPageReadme.Size = New System.Drawing.Size(511, 594)
         Me.TabPageReadme.TabIndex = 6
         Me.TabPageReadme.Text = "Readme"
-        '
-        'TextBoxReadme
-        '
-        Me.TextBoxReadme.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBoxReadme.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBoxReadme.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxReadme.Location = New System.Drawing.Point(2, 2)
-        Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(0)
-        Me.TextBoxReadme.Multiline = True
-        Me.TextBoxReadme.Name = "TextBoxReadme"
-        Me.TextBoxReadme.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBoxReadme.Size = New System.Drawing.Size(505, 588)
-        Me.TextBoxReadme.TabIndex = 0
-        Me.TextBoxReadme.Text = "Populated at build time."
         '
         'TextBoxStatus
         '
@@ -2362,7 +2349,7 @@ Partial Class Form1
         '
         Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove})
         Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(181, 148)
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(165, 126)
         '
         'BT_Open
         '
@@ -2387,7 +2374,7 @@ Partial Class Form1
         '
         Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
         Me.BT_FindLinks.Name = "BT_FindLinks"
-        Me.BT_FindLinks.Size = New System.Drawing.Size(180, 22)
+        Me.BT_FindLinks.Size = New System.Drawing.Size(164, 22)
         Me.BT_FindLinks.Text = "Find linked files"
         '
         'BT_ProcessSelected
@@ -2408,6 +2395,15 @@ Partial Class Form1
         Me.BT_Remove.Name = "BT_Remove"
         Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
         Me.BT_Remove.Text = "Remove from list"
+        '
+        'PictureBoxReadmeNavigation
+        '
+        Me.PictureBoxReadmeNavigation.Image = CType(resources.GetObject("PictureBoxReadmeNavigation.Image"), System.Drawing.Image)
+        Me.PictureBoxReadmeNavigation.Location = New System.Drawing.Point(53, 107)
+        Me.PictureBoxReadmeNavigation.Name = "PictureBoxReadmeNavigation"
+        Me.PictureBoxReadmeNavigation.Size = New System.Drawing.Size(381, 211)
+        Me.PictureBoxReadmeNavigation.TabIndex = 0
+        Me.PictureBoxReadmeNavigation.TabStop = False
         '
         'Form1
         '
@@ -2444,10 +2440,10 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.ResumeLayout(False)
         Me.GroupBoxTLAOptions.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
-        Me.TabPageReadme.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
+        CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2482,7 +2478,6 @@ Partial Class Form1
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents TabPageConfiguration As TabPage
-    Friend WithEvents TextBoxReadme As TextBox
     Friend WithEvents TabPageReadme As TabPage
     Friend WithEvents LabelActiveMaterialLibrary As Label
     Friend WithEvents ButtonActiveMaterialLibrary As Button
@@ -2653,4 +2648,5 @@ Partial Class Form1
     Friend WithEvents TextBoxFontSize As TextBox
     Friend WithEvents LabelFontSize As Label
     Friend WithEvents BT_FindLinks As ToolStripMenuItem
+    Friend WithEvents PictureBoxReadmeNavigation As PictureBox
 End Class
