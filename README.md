@@ -72,8 +72,7 @@ Versions prior to 0.1.10 won't have 'filename_charmap.txt' either.
 ![Tabs](My%20Project/media/tabs.png)
 
 On each file type's tab, select which errors to detect. 
-On the General tab, browse to the desired input folder, 
-then select the desired file search option. 
+On the General tab, select the files to process. 
 You can refine the search using a file filter, a property filter, or both. 
 See the **File Selection** section below. 
 
@@ -101,54 +100,50 @@ This is by design and does not necessarily indicate a problem.
 
 However, problems can arise. 
 Those cases will be reported in the log file with the message 'Error processing file'. 
-A stack trace will be included.  The stack trace looks scary, but may be useful for program debugging. 
+A stack trace will be included.  The stack trace looks scary, but may be 
+useful for program debugging. 
 If four of these errors are detected in a run, the programs halts with the 
 Status Bar message 'Processing aborted'.
 
-Please note this is not a perfect program.  It is not guaranteed not to mess up your files.  Back up any files before using it.
+Please note this is not a perfect program.  It is not guaranteed not to mess 
+up your files.  Back up any files before using it.
 
 ## KNOWN ISSUES
 
-#### Does not support managed files
-
-Cause: Unknown.  Possible workaround: Process the files in an unmanaged 
-workspace.  
-
-*Update 10/10/2021* Some users have reported success with BiDM managed files. 
-
+**Does not support managed files**  
+*Cause*: Unknown.  
+*Possible workaround*: Process the files in an unmanaged workspace.  
+*Update 10/10/2021* Some users have reported success with BiDM managed files.  
 *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files. 
 
-#### Older Solid Edge versions
+**Older Solid Edge versions**  
+Some tasks may not support versions of Solid Edge prior to SE2020.  
+*Cause*: Maybe an API call not available in previous versions.  
+*Possible workaround*: Use SE2020 or later. 
 
-Some tasks may not support versions of Solid Edge prior to SE2020. 
-Cause: Maybe an API call not available in previous versions. 
-Possible workaround: Use SE2020 or later. 
+**Multiple installed Solid Edge versions**  
+May not support multiple installed versions on the same machine.  
+*Cause*: Unknown.  
+*Possible workaround*: Use the version that was 'silently' installed. 
 
-#### Multiple installed Solid Edge versions
-
-May not support multiple installed versions on the same machine. 
-Cause: Unknown. 
-Possible workaround: Use the version that was 'silently' installed. 
-
-#### Printer settings
-
-Does not support all printer settings, e.g., duplexing, collating, etc. 
-Cause: Not exposed in the DraftPrintUtility() API. 
-Possible workaround: Create a new Windows printer with the desired settings. 
+**Printer settings**  
+Does not support all printer settings, e.g., duplexing, collating, etc.  
+*Cause*: Not exposed in the DraftPrintUtility() API.  
+*Possible workaround*: Create a new Windows printer with the desired settings. 
 Refer to the TESTS AND ACTIONS topic below for more details. 
 
-#### Pathfinder during Interactive Edit
+**Pathfinder during Interactive Edit**  
+Pathfinder is sometimes blank when running the 'Interactive Edit' task.  
+*Cause*: Unknown.  
+*Possible workaround*: Refresh the screen by minimizing and maximizing the 
+Solid Edge window. 
 
-Pathfinder is sometimes blank when running the 'Interactive Edit' task. 
-Cause: Unknown. 
-Possible workaround: Refresh the screen by minimizing and maximizing the Solid Edge window. 
 
 
+## FILE SELECTION
 
-## SELECTION TOOLBAR
-
-The Selection Toolbar is where you select what files to process. 
-With the toolbar, you can select by folder, by top-level assembly, 
+The General Tab is where you select what files to process. 
+With the Selection Toolbar, you can select by folder, by top-level assembly, 
 by list, or by files with errors from a previous run. 
 
 Another option is to drag and drop from Windows File Explorer. 
