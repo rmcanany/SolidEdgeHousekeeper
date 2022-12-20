@@ -456,14 +456,10 @@ Partial Class Form1
             Next
 
         Catch ex As Exception
-            ' MsgBox(ex.ToString)
-            'TextBoxInputDirectory.Text = Application.StartupPath
             ' If the file 'defaults.txt' does not exist, this is the first run of the program.
-            ' In that case, display the Readme Tab.
+            ' In that case, display the Help Tab.
             ' TODO: Figure out how to un-highlight the text
-            TabControl1.SelectedTab = TabControl1.TabPages("TabPageReadme")
-            'TextBoxReadme.SelectAll()
-            'TextBoxReadme.DeselectAll()
+            TabControl1.SelectedTab = TabControl1.TabPages("TabPageHelp")
         End Try
 
         ReconcileFormChanges()
@@ -636,7 +632,7 @@ Partial Class Form1
         End If
     End Sub
 
-    Private Sub LoadTextBoxReadme()
+    Private Sub BuildReadmeFile()
         Dim ReadmeFileName As String = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
         Dim StartupPath As String = "D:\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
         Dim TaskListHeader As String = "## TASK DESCRIPTIONS"

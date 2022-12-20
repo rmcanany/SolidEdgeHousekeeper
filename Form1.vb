@@ -902,7 +902,7 @@ Public Class Form1
         LoadDefaults()
         LoadPrinterSettings()
         ReconcileFormChanges()
-        LoadTextBoxReadme()
+        BuildReadmeFile()
 
         CarIcona()
 

@@ -203,7 +203,7 @@ Partial Class Form1
         Me.ButtonTemplateDraft = New System.Windows.Forms.Button()
         Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
         Me.LabelTemplateDraft = New System.Windows.Forms.Label()
-        Me.TabPageReadme = New System.Windows.Forms.TabPage()
+        Me.TabPageHelp = New System.Windows.Forms.TabPage()
         Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
         Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
@@ -239,7 +239,7 @@ Partial Class Form1
         Me.TabPageConfiguration.SuspendLayout()
         Me.GroupBoxPictorialViews.SuspendLayout()
         Me.GroupBoxTLAOptions.SuspendLayout()
-        Me.TabPageReadme.SuspendLayout()
+        Me.TabPageHelp.SuspendLayout()
         CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
@@ -253,7 +253,7 @@ Partial Class Form1
         Me.TabControl1.Controls.Add(Me.TabPageSheetmetal)
         Me.TabControl1.Controls.Add(Me.TabPageDraft)
         Me.TabControl1.Controls.Add(Me.TabPageConfiguration)
-        Me.TabControl1.Controls.Add(Me.TabPageReadme)
+        Me.TabControl1.Controls.Add(Me.TabPageHelp)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.ImageList = Me.TabPage_ImageList
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
@@ -1968,7 +1968,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 140)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
-        Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Readme for details"
+        Me.GroupBoxTLAOptions.Text = "Top level assembly processing options -- See Help for details"
         '
         'ButtonFastSearchScopeFilename
         '
@@ -2056,7 +2056,7 @@ Partial Class Form1
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(76, 20)
         Me.TextBoxRestartAfter.TabIndex = 15
-        Me.TextBoxRestartAfter.Text = "50"
+        Me.TextBoxRestartAfter.Text = "500"
         '
         'LabelRestartAfter
         '
@@ -2240,24 +2240,24 @@ Partial Class Form1
         Me.LabelTemplateDraft.TabIndex = 4
         Me.LabelTemplateDraft.Text = "Draft Template File"
         '
-        'TabPageReadme
+        'TabPageHelp
         '
-        Me.TabPageReadme.AutoScroll = True
-        Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPageReadme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TabPageReadme.Controls.Add(Me.TextBoxVersion)
-        Me.TabPageReadme.Controls.Add(Me.LabelVersion)
-        Me.TabPageReadme.Controls.Add(Me.LabelReadmeNavigation)
-        Me.TabPageReadme.Controls.Add(Me.LinkLabelGitHubReadme)
-        Me.TabPageReadme.Controls.Add(Me.PictureBoxReadmeNavigation)
-        Me.TabPageReadme.ImageKey = "Info"
-        Me.TabPageReadme.Location = New System.Drawing.Point(4, 23)
-        Me.TabPageReadme.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPageReadme.Name = "TabPageReadme"
-        Me.TabPageReadme.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageReadme.Size = New System.Drawing.Size(511, 594)
-        Me.TabPageReadme.TabIndex = 6
-        Me.TabPageReadme.Text = "Readme"
+        Me.TabPageHelp.AutoScroll = True
+        Me.TabPageHelp.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageHelp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageHelp.Controls.Add(Me.TextBoxVersion)
+        Me.TabPageHelp.Controls.Add(Me.LabelVersion)
+        Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation)
+        Me.TabPageHelp.Controls.Add(Me.LinkLabelGitHubReadme)
+        Me.TabPageHelp.Controls.Add(Me.PictureBoxReadmeNavigation)
+        Me.TabPageHelp.ImageKey = "Info"
+        Me.TabPageHelp.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
+        Me.TabPageHelp.Name = "TabPageHelp"
+        Me.TabPageHelp.Padding = New System.Windows.Forms.Padding(2)
+        Me.TabPageHelp.Size = New System.Drawing.Size(511, 594)
+        Me.TabPageHelp.TabIndex = 6
+        Me.TabPageHelp.Text = "Help"
         '
         'LinkLabelGitHubReadme
         '
@@ -2485,8 +2485,8 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.PerformLayout()
         Me.GroupBoxTLAOptions.ResumeLayout(False)
         Me.GroupBoxTLAOptions.PerformLayout()
-        Me.TabPageReadme.ResumeLayout(False)
-        Me.TabPageReadme.PerformLayout()
+        Me.TabPageHelp.ResumeLayout(False)
+        Me.TabPageHelp.PerformLayout()
         CType(Me.PictureBoxReadmeNavigation, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
@@ -2525,7 +2525,7 @@ Partial Class Form1
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents TabPageConfiguration As TabPage
-    Friend WithEvents TabPageReadme As TabPage
+    Friend WithEvents TabPageHelp As TabPage
     Friend WithEvents LabelActiveMaterialLibrary As Label
     Friend WithEvents ButtonActiveMaterialLibrary As Button
     Friend WithEvents TextBoxActiveMaterialLibrary As TextBox
