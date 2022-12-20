@@ -2262,9 +2262,10 @@ Partial Class Form1
         'LinkLabelGitHubReadme
         '
         Me.LinkLabelGitHubReadme.AutoSize = True
+        Me.LinkLabelGitHubReadme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(15, 50)
         Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
-        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(125, 13)
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(149, 13)
         Me.LinkLabelGitHubReadme.TabIndex = 1
         Me.LinkLabelGitHubReadme.TabStop = True
         Me.LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
@@ -2272,7 +2273,7 @@ Partial Class Form1
         'PictureBoxReadmeNavigation
         '
         Me.PictureBoxReadmeNavigation.Image = CType(resources.GetObject("PictureBoxReadmeNavigation.Image"), System.Drawing.Image)
-        Me.PictureBoxReadmeNavigation.Location = New System.Drawing.Point(15, 105)
+        Me.PictureBoxReadmeNavigation.Location = New System.Drawing.Point(15, 100)
         Me.PictureBoxReadmeNavigation.Name = "PictureBoxReadmeNavigation"
         Me.PictureBoxReadmeNavigation.Size = New System.Drawing.Size(381, 211)
         Me.PictureBoxReadmeNavigation.TabIndex = 0
@@ -2426,11 +2427,11 @@ Partial Class Form1
         'LabelReadmeNavigation
         '
         Me.LabelReadmeNavigation.AutoSize = True
-        Me.LabelReadmeNavigation.Location = New System.Drawing.Point(15, 80)
+        Me.LabelReadmeNavigation.Location = New System.Drawing.Point(15, 75)
         Me.LabelReadmeNavigation.Name = "LabelReadmeNavigation"
-        Me.LabelReadmeNavigation.Size = New System.Drawing.Size(334, 13)
+        Me.LabelReadmeNavigation.Size = New System.Drawing.Size(379, 13)
         Me.LabelReadmeNavigation.TabIndex = 2
-        Me.LabelReadmeNavigation.Text = "Navigate the Readme with the indicated Table of Contents dropdown"
+        Me.LabelReadmeNavigation.Text = "Navigate the GitHub Help page with the indicated Table of Contents dropdown"
         '
         'LabelVersion
         '
