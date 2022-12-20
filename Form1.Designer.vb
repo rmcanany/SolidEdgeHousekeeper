@@ -224,6 +224,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
+        Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
         Me.TabControl1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2241,6 +2242,7 @@ Partial Class Form1
         Me.TabPageReadme.AutoScroll = True
         Me.TabPageReadme.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageReadme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageReadme.Controls.Add(Me.LinkLabelGitHubReadme)
         Me.TabPageReadme.Controls.Add(Me.PictureBoxReadmeNavigation)
         Me.TabPageReadme.ImageKey = "Info"
         Me.TabPageReadme.Location = New System.Drawing.Point(4, 23)
@@ -2405,6 +2407,16 @@ Partial Class Form1
         Me.PictureBoxReadmeNavigation.TabIndex = 0
         Me.PictureBoxReadmeNavigation.TabStop = False
         '
+        'LinkLabelGitHubReadme
+        '
+        Me.LinkLabelGitHubReadme.AutoSize = True
+        Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(53, 49)
+        Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(125, 13)
+        Me.LinkLabelGitHubReadme.TabIndex = 1
+        Me.LinkLabelGitHubReadme.TabStop = True
+        Me.LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2440,6 +2452,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.ResumeLayout(False)
         Me.GroupBoxTLAOptions.PerformLayout()
         Me.TabPageReadme.ResumeLayout(False)
+        Me.TabPageReadme.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
@@ -2649,4 +2662,5 @@ Partial Class Form1
     Friend WithEvents LabelFontSize As Label
     Friend WithEvents BT_FindLinks As ToolStripMenuItem
     Friend WithEvents PictureBoxReadmeNavigation As PictureBox
+    Friend WithEvents LinkLabelGitHubReadme As LinkLabel
 End Class

@@ -929,6 +929,12 @@ Public Class Form1
 
         ListViewFilesOutOfDate = False
 
+        LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
+        Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
+        Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
+        LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
+
+
     End Sub
 
 
@@ -1621,10 +1627,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-
-
-
-
     Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
         'If CheckBoxLaserOutputDirectory.Checked Then
         '    TextBoxLaserOutputDirectory.Enabled = False
@@ -1684,7 +1686,6 @@ Public Class Form1
     Private Sub CheckBoxSaveAsFormulaSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaSheetmetal.CheckedChanged
         ReconcileFormChanges()
     End Sub
-
 
     Private Sub CheckBoxStepAssemblyOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsAssemblyOutputDirectory.CheckedChanged
         'If CheckBoxSaveAsAssemblyOutputDirectory.Checked Then
@@ -1884,6 +1885,12 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
+
+    ' LINK LABELS
+
+    Private Sub LinkLabelGitHubReadme_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabelGitHubReadme.LinkClicked
+        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
+    End Sub
 
 
     ' RADIO BUTTONS
