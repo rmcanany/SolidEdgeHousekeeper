@@ -753,7 +753,8 @@ Public Class Form1
             End If
 
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
+            'msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
+            msg += System.IO.Path.GetFileName(FileToProcess)
             TextBoxStatus.Text = msg
 
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
@@ -935,6 +936,7 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
+        Me.Text = "Solid Edge Housekeeper 2023-1"
 
     End Sub
 
@@ -1848,9 +1850,16 @@ Public Class Form1
 
                     If StopProcess Then Exit For
 
-                    Dim msg As String = CommonTasks.TruncateFullPath(item.Name, Nothing)
+                    Dim msg As String  ' = CommonTasks.TruncateFullPath(item.Name, Nothing)
+
+                    Try
+                        msg = System.IO.Path.GetFileName(item.Name)
+                    Catch ex As Exception
+                        msg = ""
+                    End Try
 
                     Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+
                     If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then PropFilter.Add(item)
 
                 End If
@@ -2083,12 +2092,18 @@ Public Class Form1
 
     Private Sub New_UpdateFileList()
 
+        TextBoxStatus.Text = "Updating list..."
+        System.Windows.Forms.Application.DoEvents()
+
         ListViewFiles.BeginUpdate()
         ListItems_Backup.Clear()
 
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
 
-            If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then ListViewFiles.Items.Item(i).Remove()
+            If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
+                ListViewFiles.Items.Item(i).Remove()
+            End If
+
 
         Next
 
@@ -2096,15 +2111,11 @@ Public Class Form1
         new_ButtonPropertyFilter.Checked = False
 
         For Each item As ListViewItem In ListViewFiles.Items
-
             UpdateListViewFiles(item)
-
         Next
 
         For Each item As ListViewItem In ListViewFiles.Items
-
             ListItems_Backup.Add(item)
-
         Next
 
         ListViewFiles.EndUpdate()
@@ -2404,6 +2415,9 @@ Public Class Form1
 
 
     ' Commands I can never remember
+
+    ' System.Windows.Forms.Application.DoEvents()
+
     ' tf = FileIO.FileSystem.FileExists(Filename)
 
     ' tf = Not FileIO.FileSystem.DirectoryExists(TextBoxSaveAsAssemblyOutputDirectory.Text)

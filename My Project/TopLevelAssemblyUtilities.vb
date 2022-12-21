@@ -145,7 +145,8 @@ Public Class TopLevelAssemblyUtilities
         Dim Filename As String
 
         For Each Filename In LinkDict.Keys
-            Form1.TextBoxStatus.Text = Filename
+            'Form1.TextBoxStatus.Text = Filename
+            Form1.TextBoxStatus.Text = System.IO.Path.GetFileName(Filename)
 
             If CheckInterruptRequest() Then
                 Return LinkDict
@@ -309,7 +310,8 @@ Public Class TopLevelAssemblyUtilities
             If Not AllLinkedFilenames.Contains(LinkedDocument.FullName) Then
                 AllLinkedFilenames.Add(LinkedDocument.FullName)
 
-                msg = LinkedDocument.FullName '.Replace(Form1.TextBoxInputDirectory.Text, "")
+                'msg = LinkedDocument.FullName '.Replace(Form1.TextBoxInputDirectory.Text, "")
+                msg = System.IO.Path.GetFileName(LinkedDocument.FullName)
                 msg = "Follow Links " + msg
                 Form1.TextBoxStatus.Text = msg
 
@@ -571,7 +573,8 @@ Public Class TopLevelAssemblyUtilities
     Private Sub UpdateStatus(Description As String, Filename As String, TopLevelFolder As String)
         Dim msg As String
 
-        msg = Filename.Replace(TopLevelFolder, "")
+        'msg = Filename.Replace(TopLevelFolder, "")
+        msg = System.IO.Path.GetFileName(Filename)
         msg = String.Format("{0} {1}", Description, msg)
 
         Form1.TextBoxStatus.Text = msg

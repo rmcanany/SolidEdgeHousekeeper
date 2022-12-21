@@ -134,6 +134,9 @@ Partial Class Form1
 
             For Each FoundFile In FoundFiles
 
+                TextBoxStatus.Text = System.IO.Path.GetFileName(FoundFile)
+                System.Windows.Forms.Application.DoEvents()
+
                 If CommonTasks.FilenameIsOK(FoundFile) Then
 
                     If IO.File.Exists(FoundFile) Then

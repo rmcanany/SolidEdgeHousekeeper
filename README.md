@@ -20,15 +20,15 @@ It can identify failed features in 3D models, detached dimensions in drawings,
 missing parts in assemblies, and more.  It can also update certain individual 
 file settings to match those in a template you specify.
 
-Feedback from users:
+*Feedback from users*
 
-> *This is the Michael Jordan of macros!  I've tried lots of them.  This is on a whole new level.  Thank you!*
+> *This is the Michael Jordan of macros!  I've tried lots of them.  This is on a whole other level.  Thank you!*
 
 > *This is going to save me SO MUCH TIME!  Thank you for sharing!*
 
 > *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
 
-> *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they just figure out how to automate me running housekeeper, I will be out of a job. Thank god only I know how to press that "process" button.*
+> *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they just figure out how to automate me running Housekeeper, I will be out of a job. Thank God only I know how to press that "process" button.*
 
 
 ## GETTING HELP
@@ -44,9 +44,14 @@ ignore requests from `User16612341234...`.
 (Change your nickname by clicking your profile picture, then 
 `My Profile`, then `Edit`). 
 
+## HELPING
 
-If you want to help out on Housekeeper, the easiest way may be to 
-become a beta tester.  If you know .NET, or want to learn, there's more
+If you want to help out on Housekeeper, sign up as a beta tester! 
+It's nothing more than doing your own workflow on your own files and letting me
+know if you run into problems.  It isn't a lot of work and it makes
+the program better for you and everyone else.
+
+If you know .NET, or want to learn, there's more
 to do!  To get started on GitHub collaboration, head over to
 [**ToyProject**](https://github.com/rmcanany/ToyProject). 
 There are instructions and links to get you up to speed.
@@ -65,18 +70,18 @@ It will be the top entry on the page.
 ![Release Page](My%20Project/media/release_page.png)
 
 Click the 
-file SolidEdgeHousekeeper-vx.x.x.zip 
+file `SolidEdgeHousekeeper-vyyyy-x.zip` 
 (sometimes hidden under the Assets dropdown). 
 It should prompt you to save it. 
 Choose a convenient location on your machine. 
 Extract the zip file (probably by right-clicking and selecting Extract All). 
-Double-click the .exe file to run.
+Double-click the `.exe` file to run.
 
 If you are upgrading from a previous release, you should be able to copy 
 the settings files from the old version to the new. 
-The files are 'defaults.txt', 'property_filters.txt', and 'filename_charmap.txt'. 
-If you haven't used Property Filter, 'property_filters.txt' won't be there. 
-Versions prior to 0.1.10 won't have 'filename_charmap.txt' either.
+The files are `defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. 
+If you haven't used Property Filter, `property_filters.txt` won't be there. 
+Versions prior to 0.1.10 won't have `filename_charmap.txt` either.
 
 ## OPERATION
 
@@ -85,7 +90,7 @@ Versions prior to 0.1.10 won't have 'filename_charmap.txt' either.
 On each file type's tab, select which errors to detect. 
 On the General tab, select the files to process. 
 You can refine the search using a file filter, a property filter, or both. 
-See the **File Selection** section below. 
+See the **FILE SELECTION AND FILTERING** section below. 
 
 If any errors are found, a log file will be written to the input folder. 
 It will identify each error and the file in which it occurred. 
@@ -102,10 +107,11 @@ Tasks are executed on selected files, if none are selected the tasks will be exe
 
 A checkbox
 ![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
-the file name rapresent unprocessed files. When a file is processed successfully, a checkmark 
+the file name indicates it has yet to be processed. After processing, if no errors were
+detected, a checkmark 
 ![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
-If some task encountered an issue, an error indicator 
-![Error](Resources/icons8_Error_16.png) is shown instead.
+Otherwise, an error indicator 
+![Error](Resources/icons8_Error_16.png) is displayed.
  
 You can interrupt the program before it finishes.  While processing, 
 the Cancel button changes to a Stop button.  Just click that to halt 
@@ -224,7 +230,7 @@ I don't know how it works; my son did that part.
 A top down search can optionally report files with no links to the 
 top level assembly.  It is set on the **Configuration Tab**.
 
-### 3. Select by list
+#### 3. Select by list
 
 Referring to the diagram, click **a** to import a list, 
 click **b** export one.  
@@ -233,7 +239,7 @@ If you are importing a list from another source, be aware that the
 file names must contain the full path.  E.g.,
 `D:\Projects\Project123\Partxyz`, not just `Project123\Partxyz`.
 
-### 4. List operations
+#### 4. List operations
 
 **Select files with errors from the previous run**
 
@@ -257,7 +263,7 @@ Solid Edge, **Open folder** to view them in File Explorer,
 and finally **Remove from list** to move them to the *Excluded files* 
 section of the list.
 
-### 5. Update
+#### 5. Update
 
 The update button processes the file sources in the list.  If a change is
 made to the sources and/or a file filter (see next), an update

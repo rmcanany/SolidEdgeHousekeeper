@@ -2317,7 +2317,7 @@ Partial Class Form1
         Me.TextBoxStatus.Name = "TextBoxStatus"
         Me.TextBoxStatus.Size = New System.Drawing.Size(515, 20)
         Me.TextBoxStatus.TabIndex = 1
-        Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clean selections)" &
+        Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
     ""
         Me.ToolTip1.SetToolTip(Me.TextBoxStatus, "Status")
         '
