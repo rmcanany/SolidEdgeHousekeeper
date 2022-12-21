@@ -86,6 +86,16 @@ These are populated on the Configuration Tab.
 
 ![Tabs](My%20Project/media/stop_button.png)
 
+Press the Process button to start executing active tasks on the list.
+Tasks are executed on selected files, if none are selected the tasks will be executed on the whole list.
+
+A checkbox
+![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
+the file name rapresent unprocessed files. When a file is processed successfully, a checkmark 
+![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
+If some task encountered an issue, an error indicator 
+![Error](Resources/icons8_Error_16.png) is shown instead.
+ 
 You can interrupt the program before it finishes.  While processing, 
 the Cancel button changes to a Stop button.  Just click that to halt 
 processing.  It may take several seconds to register the request.  It 
@@ -238,16 +248,10 @@ section of the list.
 
 ### 5. Update
 
-The update button processes the selections made above.  If a change is
-made to the selections or a file filter (see next), an update
+The update button processes the file sources in the list.  If a change is
+made to the sources and/or a file filter (see next), an update
 is required.
 
-In the above image, you will notice a checkbox
-![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
-the file name.  When a file is processed successfully, a checkmark 
-![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
-If some task encountered an issue, an error indicator 
-![Error](Resources/icons8_Error_16.png) is shown instead.
 
 ### Filtering
 
