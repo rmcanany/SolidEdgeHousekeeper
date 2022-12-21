@@ -20,6 +20,17 @@ It can identify failed features in 3D models, detached dimensions in drawings,
 missing parts in assemblies, and more.  It can also update certain individual 
 file settings to match those in a template you specify.
 
+Feedback from users:
+
+> *This is the Michael Jordan of macros!  I've tried lots of them.  This is on a whole new level.  Thank you!*
+
+> *This is going to save me SO MUCH TIME!  Thank you for sharing!*
+
+> *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
+
+> *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they just figure out how to automate me running housekeeper, I will be out of a job. Thank god only I know how to press that "process" button.*
+
+
 ## GETTING HELP
 
 Ask questions or suggest improvements on the 
