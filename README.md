@@ -39,17 +39,19 @@ Ask questions or suggest improvements on the
 To subscribe to update notices or volunteer to be a beta tester, 
 message me, RobertMcAnany, on the forum. 
 (Click your profile picture, then `My Messages`, then `Create`). 
-Unsubscribe the same way.  To combat bots and spam, I will probably 
+Unsubscribe the same way.  
+
+To combat bots and spam, I will probably 
 ignore requests from `User16612341234...`. 
 (Change your nickname by clicking your profile picture, then 
 `My Profile`, then `Edit`). 
 
-## HELPING
+## HELPING OUT
 
 If you want to help out on Housekeeper, sign up as a beta tester! 
-It's nothing more than doing your own workflow on your own files and letting me
-know if you run into problems.  It isn't a lot of work and it makes
-the program better for you and everyone else.
+Beta testing is nothing more than doing your own workflow on your own files and 
+letting me know if you run into problems. It isn't meant to be a lot of work. 
+The big idea is to make the program better for you and everyone else!
 
 If you know .NET, or want to learn, there's more
 to do!  To get started on GitHub collaboration, head over to
