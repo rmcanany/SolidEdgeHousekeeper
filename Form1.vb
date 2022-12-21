@@ -908,8 +908,6 @@ Public Class Form1
 
         CarIcona()
 
-        FakeFolderBrowserDialog.Filter = "No files (*.___)|(*.___)"
-
         Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
         ListViewGroup1.Name = "Sources"
         Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
@@ -936,7 +934,7 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023-1"
+        Me.Text = "Solid Edge Housekeeper 2023.1"
 
     End Sub
 
@@ -1301,14 +1299,16 @@ Public Class Form1
     ' BUTTONS
 
     Private Sub ButtonActiveMaterialLibrary_Click(sender As Object, e As EventArgs) Handles ButtonActiveMaterialLibrary.Click
-        OpenFileDialog1.Filter = "Material Documents|*.mtl"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxActiveMaterialLibrary.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a material table file"
+        tmpFileDialog.Filter = "Material Documents|*.mtl"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxActiveMaterialLibrary.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxActiveMaterialLibrary, TextBoxActiveMaterialLibrary.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
@@ -1322,57 +1322,66 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonExternalProgramAssembly_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramAssembly.Click
-        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs" 'Office Files|*.doc;*.xls;*.ppt
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxExternalProgramAssembly.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a program file"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxExternalProgramAssembly.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxExternalProgramAssembly, TextBoxExternalProgramAssembly.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonExternalProgramPart_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramPart.Click
-        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxExternalProgramPart.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a program file"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxExternalProgramPart.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxExternalProgramPart, TextBoxExternalProgramPart.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonExternalProgramSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramSheetmetal.Click
-        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxExternalProgramSheetmetal.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a program file"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxExternalProgramSheetmetal.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxExternalProgramSheetmetal, TextBoxExternalProgramSheetmetal.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonExternalProgramDraft_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramDraft.Click
-        OpenFileDialog1.Filter = "Programs|*.exe;*.vbs"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxExternalProgramDraft.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a program file"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxExternalProgramDraft.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxExternalProgramDraft, TextBoxExternalProgramDraft.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonFastSearchScopeFilename_Click(sender As Object, e As EventArgs) Handles ButtonFastSearchScopeFilename.Click
-        OpenFileDialog1.Filter = "Search Scope Documents|*.txt"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxFastSearchScopeFilename.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a fast search scope file"
+        tmpFileDialog.Filter = "Search Scope Documents|*.txt"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxFastSearchScopeFilename.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
         ReconcileFormChanges()
 
     End Sub
@@ -1384,31 +1393,18 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub ButtonSaveAsDraftOutputDirectory_Click(sender As Object, e As EventArgs)
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
+    Private Sub ButtonSaveAsDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxSaveAsDraftOutputDirectory.Text = tmpFolderDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxSaveAsDraftOutputDirectory, TextBoxSaveAsDraftOutputDirectory.Text)
         ReconcileFormChanges()
+
     End Sub
 
-    Private Sub ButtonPdfDraftOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsDraftOutputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsDraftOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsDraftOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsDraftOutputDirectory.Text
-        End If
-        ToolTip1.SetToolTip(TextBoxSaveAsDraftOutputDirectory, TextBoxSaveAsDraftOutputDirectory.Text)
-        ReconcileFormChanges()
-    End Sub
 
     Private Sub ButtonPrintOptions_Click(sender As Object, e As EventArgs) Handles ButtonPrintOptions.Click
         'PrintDialog1.ShowDialog()
@@ -1452,115 +1448,105 @@ Public Class Form1
         ProcessAll()
     End Sub
 
-    'Private Sub ButtonSaveAsFlatDXF_Click(sender As Object, e As EventArgs)
-    '    FakeFolderBrowserDialog.FileName = "Select Folder"
-    '    If TextBoxSaveAsFlatDXFOutputDirectory.Text <> "" Then
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
-    '    End If
-    '    If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-    '        TextBoxSaveAsFlatDXFOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-    '        FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsFlatDXFOutputDirectory.Text
-    '    End If
 
-    '    ReconcileFormChanges()
-    'End Sub
+    Private Sub ButtonSaveAsAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsAssemblyOutputDirectory.Click
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
 
-    Private Sub ButtonStepAssemblyOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsAssemblyOutputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsAssemblyOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsAssemblyOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsAssemblyOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsAssemblyOutputDirectory.Text
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxSaveAsAssemblyOutputDirectory.Text = tmpFolderDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxSaveAsAssemblyOutputDirectory, TextBoxSaveAsAssemblyOutputDirectory.Text)
         ReconcileFormChanges()
+
+
     End Sub
 
-    Private Sub ButtonStepPartOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsPartOutputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsPartOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsPartOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsPartOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsPartOutputDirectory.Text
+    Private Sub ButtonSaveAsPartOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsPartOutputDirectory.Click
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxSaveAsPartOutputDirectory.Text = tmpFolderDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxSaveAsPartOutputDirectory, TextBoxSaveAsPartOutputDirectory.Text)
         ReconcileFormChanges()
+
     End Sub
 
-    Private Sub ButtonStepSheetmetalOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsSheetmetalOutputDirectory.Click
-        FakeFolderBrowserDialog.FileName = "Select Folder"
-        If TextBoxSaveAsSheetmetalOutputDirectory.Text <> "" Then
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsSheetmetalOutputDirectory.Text
-        End If
-        If FakeFolderBrowserDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxSaveAsSheetmetalOutputDirectory.Text = System.IO.Path.GetDirectoryName(FakeFolderBrowserDialog.FileName)
-            FakeFolderBrowserDialog.InitialDirectory = TextBoxSaveAsSheetmetalOutputDirectory.Text
+    Private Sub ButtonSaveAsSheetmetalOutputDirectory_Click(sender As Object, e As EventArgs) Handles ButtonSaveAsSheetmetalOutputDirectory.Click
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxSaveAsSheetmetalOutputDirectory.Text = tmpFolderDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxSaveAsSheetmetalOutputDirectory, TextBoxSaveAsSheetmetalOutputDirectory.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonTemplateAssembly_Click(sender As Object, e As EventArgs) Handles ButtonTemplateAssembly.Click
-        OpenFileDialog1.Filter = "Assembly Documents|*.asm"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTemplateAssembly.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an assembly template file"
+        tmpFileDialog.Filter = "asm files|*.asm"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxTemplateAssembly.Text = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxTemplateAssembly, TextBoxTemplateAssembly.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonTemplateDraft_Click(sender As Object, e As EventArgs) Handles ButtonTemplateDraft.Click
-        OpenFileDialog1.Filter = "Draft Documents|*.dft"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTemplateDraft.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a draft template file"
+        tmpFileDialog.Filter = "Draft Documents|*.dft"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxTemplateDraft.Text = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxTemplateDraft, TextBoxTemplateDraft.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonTemplatePart_Click(sender As Object, e As EventArgs) Handles ButtonTemplatePart.Click
-        OpenFileDialog1.Filter = "Part Documents|*.par"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTemplatePart.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a part template file"
+        tmpFileDialog.Filter = "Part Documents|*.par"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxTemplatePart.Text = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxTemplatePart, TextBoxTemplatePart.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonTemplateSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonTemplateSheetmetal.Click
-        OpenFileDialog1.Filter = "Sheetmetal Documents|*.psm"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxTemplateSheetmetal.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a sheetmetal template file"
+        tmpFileDialog.Filter = "Sheetmetal Documents|*.psm"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxTemplateSheetmetal.Text = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxTemplateSheetmetal, TextBoxTemplateSheetmetal.Text)
         ReconcileFormChanges()
+
     End Sub
 
     Private Sub ButtonWatermark_Click(sender As Object, e As EventArgs) Handles ButtonWatermark.Click
-        'OpenFileDialog1.Filter = "Image Files(*.bmp;*.jpg;*.png;*.tif)|*.BMP;*.JPG;*.GIF"
-        OpenFileDialog1.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
-        OpenFileDialog1.Multiselect = False
-        OpenFileDialog1.FileName = ""
-        If OpenFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            TextBoxWatermarkFilename.Text = OpenFileDialog1.FileName
-            OpenFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(OpenFileDialog1.FileName)
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an image file"
+        tmpFileDialog.Filter = "Image Files|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            TextBoxWatermarkFilename.Text = tmpFileDialog.FileName
         End If
+        ToolTip1.SetToolTip(TextBoxWatermarkFilename, TextBoxWatermarkFilename.Text)
         ReconcileFormChanges()
 
     End Sub

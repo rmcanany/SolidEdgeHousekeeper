@@ -50,7 +50,7 @@ ignore requests from `User16612341234...`.
 
 If you want to help out on Housekeeper, sign up as a beta tester! 
 Beta testing is nothing more than doing your own workflow on your own files and 
-letting me know if you run into problems. It isn't meant to be a lot of work. 
+letting me know if you run into problems.ï¿½It isn't meant to be a lot of work. 
 The big idea is to make the program better for you and everyone else!
 
 If you know .NET, or want to learn, there's more

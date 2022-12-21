@@ -209,11 +209,9 @@ Partial Class Form1
         Me.LabelReadmeNavigation = New System.Windows.Forms.Label()
         Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
         Me.PictureBoxReadmeNavigation = New System.Windows.Forms.PictureBox()
-        Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.FakeFolderBrowserDialog = New System.Windows.Forms.OpenFileDialog()
         Me.LabelTimeRemaining = New System.Windows.Forms.Label()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -2329,13 +2327,6 @@ Partial Class Form1
         '
         Me.ToolTip1.ShowAlways = True
         '
-        'FakeFolderBrowserDialog
-        '
-        Me.FakeFolderBrowserDialog.CheckFileExists = False
-        Me.FakeFolderBrowserDialog.FileName = "Select Folder"
-        Me.FakeFolderBrowserDialog.Title = "Select Folder"
-        Me.FakeFolderBrowserDialog.ValidateNames = False
-        '
         'LabelTimeRemaining
         '
         Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -2502,7 +2493,6 @@ Partial Class Form1
     Friend WithEvents TabPagePart As TabPage
     Friend WithEvents TabPageSheetmetal As TabPage
     Friend WithEvents TabPageDraft As TabPage
-    Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents TextBoxStatus As TextBox
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ButtonProcess As Button
@@ -2535,7 +2525,6 @@ Partial Class Form1
     Friend WithEvents TextBoxPartNumberPropertyName As TextBox
     Friend WithEvents TextBoxRestartAfter As TextBox
     Friend WithEvents LabelRestartAfter As Label
-    Friend WithEvents FakeFolderBrowserDialog As OpenFileDialog
     Friend WithEvents LabelAssemblyTabNote As Label
     Friend WithEvents LabelPartTabNote As Label
     Friend WithEvents LabelSheetmetalTabNote As Label
