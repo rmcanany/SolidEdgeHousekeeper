@@ -982,16 +982,16 @@ Public Class Form1
         ' Update configuration
         Configuration = GetConfiguration()
 
-        If ListViewFilesOutOfDate Then
-            'ListViewFiles.Items.Clear()
-            tf = new_CheckBoxEnablePropertyFilter.Checked
-            If tf Then
-            Else
-                If tf Then
-                    New_UpdateFileList()
-                End If
-            End If
-        End If
+        'If ListViewFilesOutOfDate Then
+        '    'ListViewFiles.Items.Clear()
+        '    tf = new_CheckBoxEnablePropertyFilter.Checked
+        '    If tf Then
+        '    Else
+        '        If tf Then
+        '            New_UpdateFileList()
+        '        End If
+        '    End If
+        'End If
 
 
         'If new_CheckBoxEnablePropertyFilter.Checked Then
@@ -1127,10 +1127,6 @@ Public Class Form1
 
         ' SHEETMETAL
 
-        'CheckBoxLaserOutputDirectory.Enabled = False
-        'TextBoxLaserOutputDirectory.Enabled = False
-        'ButtonLaserOutputDirectory.Enabled = False
-
         ComboBoxSaveAsSheetmetalFileType.Enabled = False
         CheckBoxSaveAsSheetmetalOutputDirectory.Enabled = False
         TextBoxSaveAsSheetmetalOutputDirectory.Enabled = False
@@ -1138,10 +1134,6 @@ Public Class Form1
 
         CheckBoxSaveAsFormulaSheetmetal.Enabled = False
         TextBoxSaveAsFormulaSheetmetal.Enabled = False
-
-        'CheckBoxSaveAsFlatDXFOutputDirectory.Enabled = False
-        'TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
-        'ButtonSaveAsFlatDXF.Enabled = False
 
         TextBoxExternalProgramSheetmetal.Enabled = False
         ButtonExternalProgramSheetmetal.Enabled = False
@@ -1238,8 +1230,6 @@ Public Class Form1
                 ComboBoxSaveAsDraftFileType.Enabled = True
                 CheckBoxSaveAsDraftOutputDirectory.Enabled = True
                 CheckBoxWatermark.Enabled = True
-                'TextBoxSaveAsDraftOutputDirectory.Enabled = True
-                'ButtonSaveAsDraftOutputDirectory.Enabled = True
 
                 If CheckBoxSaveAsDraftOutputDirectory.Checked Then
                     TextBoxSaveAsDraftOutputDirectory.Enabled = False
@@ -1579,7 +1569,7 @@ Public Class Form1
             'new_ButtonPropertyFilter.Enabled = False
         End If
 
-        ApplyFilters()
+        'ApplyFilters()
 
     End Sub
 
@@ -1593,7 +1583,7 @@ Public Class Form1
             'new_ComboBoxFileSearch.Enabled = False
         End If
 
-        ApplyFilters()
+        'ApplyFilters()
 
     End Sub
 
@@ -2093,8 +2083,8 @@ Public Class Form1
 
         Next
 
-        new_CheckBoxFileSearch.Checked = False
-        new_ButtonPropertyFilter.Checked = False
+        'new_CheckBoxFileSearch.Checked = False
+        'new_ButtonPropertyFilter.Checked = False
 
         For Each item As ListViewItem In ListViewFiles.Items
             UpdateListViewFiles(item)
