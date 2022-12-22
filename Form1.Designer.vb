@@ -2248,7 +2248,7 @@ Partial Class Form1
         Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation)
         Me.TabPageHelp.Controls.Add(Me.LinkLabelGitHubReadme)
         Me.TabPageHelp.Controls.Add(Me.PictureBoxReadmeNavigation)
-        Me.TabPageHelp.ImageKey = "Info"
+        Me.TabPageHelp.ImageKey = "Help"
         Me.TabPageHelp.Location = New System.Drawing.Point(4, 23)
         Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageHelp.Name = "TabPageHelp"
