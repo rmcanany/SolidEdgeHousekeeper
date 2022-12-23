@@ -978,7 +978,7 @@ Public Class Form1
     End Function
 
     Private Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
-        Dim tf As Boolean
+        'Dim tf As Boolean
         ' Update configuration
         Configuration = GetConfiguration()
 

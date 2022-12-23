@@ -7,7 +7,7 @@ Partial Class Form1
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
-        Dim msg As String
+        'Dim msg As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")

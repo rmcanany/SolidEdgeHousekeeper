@@ -38,7 +38,8 @@ Public Class TopLevelAssemblyUtilities
 
         ' DMApp = New DesignManager.Application()
 
-        DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+        ' DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+        DMApp.Visible = 0
 
         Form1.Activate()
 
@@ -370,6 +371,8 @@ Public Class TopLevelAssemblyUtilities
         Dim IndexedDrives As New List(Of String)
         Dim IsDriveIndexed As Boolean = False
 
+        Dim TLADoc As DesignManager.Document
+
         IndexedDrives = GetIndexedDrives()
 
         If IndexedDrives.Count > 0 Then
@@ -381,13 +384,17 @@ Public Class TopLevelAssemblyUtilities
             Next
         End If
 
-        ' DMApp.Visible = 1
+        'DMApp.Visible = 1
         DMApp.Visible = 0
         DMApp.DisplayAlerts = 0
 
         Form1.Activate()
 
-        AllLinkedFilenames = FollowLinksBottomUp(DMApp, TopLevelAssembly, AllLinkedFilenames,
+        Form1.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
+
+        TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
+
+        AllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
                                                  TopLevelFolder, AllFilenames, IsDriveIndexed)
 
         DMApp.Quit()
@@ -406,13 +413,13 @@ Public Class TopLevelAssemblyUtilities
     End Function
 
     Private Function FollowLinksBottomUp(DMApp As DesignManager.Application,
-                                         Filename As String,
+                                         DMDoc As DesignManager.Document,
                                          AllLinkedFilenames As List(Of String),
                                          TopLevelFolder As String,
                                          AllFilenames As Dictionary(Of String, String),
                                          IsDriveIndexed As Boolean) As List(Of String)
 
-        Dim DMDoc As DesignManager.Document
+        'Dim DMDoc As DesignManager.Document
         Dim LinkedDocs As DesignManager.LinkedDocuments
         Dim LinkedDoc As DesignManager.Document
         Dim LinkedDocName As String
@@ -421,6 +428,8 @@ Public Class TopLevelAssemblyUtilities
         Dim WhereUsedFiles As New List(Of String)
         Dim WhereUsedFile As String
         Dim tf As Boolean
+
+        Dim Filename As String
 
         If CheckInterruptRequest() Then
             Return AllLinkedFilenames
@@ -431,6 +440,8 @@ Public Class TopLevelAssemblyUtilities
         ValidExtensions.Add(".psm")
         ValidExtensions.Add(".dft")
 
+        Filename = DMDoc.FullName
+
         If FileIO.FileSystem.FileExists(Filename) Then
             tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)
             If tf Then
@@ -440,7 +451,7 @@ Public Class TopLevelAssemblyUtilities
 
                 ' In case of corrupted file or other problem
                 Try
-                    DMDoc = CType(DMApp.OpenFileInDesignManager(Filename), DesignManager.Document)
+                    'DMDoc = CType(DMApp.OpenFileInDesignManager(Filename), DesignManager.Document)
 
                     ' Get any draft files containing this file.
                     WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed)
@@ -454,31 +465,36 @@ Public Class TopLevelAssemblyUtilities
                     Next
 
                     ' Follow links contained by this file, if any.
-                    LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
-                    If LinkedDocs.Count > 0 Then
-                        For Each LinkedDoc In LinkedDocs
+                    If System.IO.Path.GetExtension(DMDoc.FullName) = ".asm" Then
+                        LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+                        If LinkedDocs.Count > 0 Then
+                            For Each LinkedDoc In LinkedDocs
 
-                            ' Get FOP status
-                            Dim FOPStatus As Integer
-                            LinkedDoc.IsDocumentFOP(FOPStatus)
+                                ' Get FOP status
+                                Dim FOPStatus As Integer
+                                LinkedDoc.IsDocumentFOP(FOPStatus)
 
-                            If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
-                                LinkedDocName = LinkedDoc.FullName
-                                If LinkedDocName.Contains("!") Then
-                                    LinkedDocName = LinkedDocName.Split("!"c)(0)
-                                End If
-                                Extension = IO.Path.GetExtension(LinkedDocName)
-                                If ValidExtensions.Contains(Extension) Then
-                                    AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
+                                If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
+                                    LinkedDocName = LinkedDoc.FullName
+                                    If LinkedDocName.Contains("!") Then
+                                        LinkedDocName = LinkedDocName.Split("!"c)(0)
+                                    End If
+                                    Extension = IO.Path.GetExtension(LinkedDocName)
+                                    If ValidExtensions.Contains(Extension) Then
+                                        'AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
+                                        '                                         TopLevelFolder, AllFilenames, IsDriveIndexed)
+                                        AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
                                                                              TopLevelFolder, AllFilenames, IsDriveIndexed)
+                                    End If
                                 End If
-                            End If
-                        Next
+                            Next
+
+                        End If
 
                     End If
 
-                    DMDoc.Close()
-                    System.Threading.Thread.Sleep(100)
+                    'DMDoc.Close()
+                    'System.Threading.Thread.Sleep(100)
                 Catch ex As Exception
                     ' MsgBox(Filename)
                 End Try
@@ -486,7 +502,7 @@ Public Class TopLevelAssemblyUtilities
         End If
 
 
-            Return AllLinkedFilenames
+        Return AllLinkedFilenames
 
     End Function
 
