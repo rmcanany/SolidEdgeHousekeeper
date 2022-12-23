@@ -2068,26 +2068,50 @@ Public Class Form1
 
     Private Sub New_UpdateFileList()
 
+        Dim GroupTags As New List(Of String)
+        Dim BareTopLevelAssembly As Boolean = False
+        Dim msg As String
+
         TextBoxStatus.Text = "Updating list..."
         System.Windows.Forms.Application.DoEvents()
 
         ListViewFiles.BeginUpdate()
         ListItems_Backup.Clear()
 
+        ' Remove everything except the "Sources" group.
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-
             If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
                 ListViewFiles.Items.Item(i).Remove()
+            Else
+                GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
             End If
-
-
         Next
+
+        If (GroupTags.Contains("ASM_Folder")) And Not (GroupTags.Contains("asm")) Then
+            msg = "A top level assembly folder was found with no top level assembly.  "
+            msg += "Please add an assembly, or delete the folder(s)."
+            MsgBox(msg, vbOKOnly)
+            Exit Sub
+        End If
+
+        If (RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text)) Then
+            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+            MsgBox(msg, vbOKOnly)
+            Exit Sub
+        End If
+
+
+        If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
+            BareTopLevelAssembly = True
+        End If
+
 
         'new_CheckBoxFileSearch.Checked = False
         'new_ButtonPropertyFilter.Checked = False
 
+        ' Only remaining items should be in the "Sources" group.
         For Each item As ListViewItem In ListViewFiles.Items
-            UpdateListViewFiles(item)
+            UpdateListViewFiles(item, BareTopLevelAssembly)
         Next
 
         For Each item As ListViewItem In ListViewFiles.Items

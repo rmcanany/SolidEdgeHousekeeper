@@ -2,7 +2,7 @@ Option Strict On
 
 Partial Class Form1
 
-    Private Sub UpdateListViewFiles(Source As ListViewItem)
+    Private Sub UpdateListViewFiles(Source As ListViewItem, BareTopLevelAssembly As Boolean)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
@@ -49,9 +49,12 @@ Partial Class Form1
                 Case = "excel"
                     If FileIO.FileSystem.FileExists(Source.Name) Then FoundFiles = CommonTasks.ReadExcel(Source.Name)
 
-                Case = "asm"
-                    If FileIO.FileSystem.FileExists(Source.Name) Then
+                Case = "ASM_Folder"
+                    ' Nothing to do here.  Dealt with in 'Case = "asm"'
 
+                Case = "asm"
+
+                    If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
                         Dim tmpList As New Collection
                         tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
 
@@ -70,12 +73,6 @@ Partial Class Form1
                             TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                             If RadioButtonTLABottomUp.Checked Then
-                                If Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text) Then
-                                    msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-                                    MsgBox(msg, vbOKOnly)
-                                    Exit Sub
-                                End If
-
                                 tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList))
@@ -87,6 +84,23 @@ Partial Class Form1
                             End If
 
                         Next
+
+                        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+
+                        TextBoxStatus.Text = ""
+
+                    ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
+                        ' Bare top level assemblies must be processed bottom up.
+                        Dim TLAU As New TopLevelAssemblyUtilities(Me)
+
+                        TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                        Dim tmpFoundFiles As New List(Of String)
+
+                        ' If TopLevelFolder is an empty string ("") that means this is a bare top level assembly.  No 'where used' is performed.
+                        tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", "",
+                                                       Source.SubItems.Item(1).Text,
+                                                       ActiveFileExtensionsList))
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 

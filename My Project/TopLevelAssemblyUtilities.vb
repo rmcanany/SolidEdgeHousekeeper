@@ -6,15 +6,6 @@ Public Class TopLevelAssemblyUtilities
 
     Public Sub New(mainInstance As Form1)
         _mainInstance = mainInstance
-        ' IndexedDrives = GetIndexedDrives()
-
-        'Dim msg As String = ""
-        'Dim IndexedDrive As String
-        'For Each IndexedDrive In IndexedDrives
-        '    msg = String.Format("{0}{1}{2}", msg, IndexedDrive, vbCrLf)
-        'Next
-        'MsgBox(msg)
-
     End Sub
 
     Public Function GetLinks(SearchType As String,
@@ -390,7 +381,8 @@ Public Class TopLevelAssemblyUtilities
             Next
         End If
 
-        DMApp.Visible = 1
+        ' DMApp.Visible = 1
+        DMApp.Visible = 0
         DMApp.DisplayAlerts = 0
 
         Form1.Activate()
@@ -514,6 +506,10 @@ Public Class TopLevelAssemblyUtilities
         Dim WhereUsedDocument As DesignManager.Document
 
         Dim arrDocUsed As Object = Nothing
+
+        If TopLevelFolder = "" Then
+            Return AllWhereUsedFileNames
+        End If
 
         If CheckInterruptRequest() Then
             Return AllWhereUsedFileNames
