@@ -133,11 +133,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyTasks.vb" />
-    <Compile Include="CommonTasks.vb" />
-    <Compile Include="DraftTasks.vb" />
-    <Compile Include="FeatureDoctor.vb" />
-    <Compile Include="FilenameCharmapDoctor.vb" />
     <Compile Include="Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -166,15 +161,23 @@
     <Compile Include="FormPropertyFilter.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LabelToAction.vb" />
-    <Compile Include="LaunchTask.vb" />
-    <Compile Include="MaterialDoctorPart.vb" />
-    <Compile Include="MaterialDoctorSheetmetal.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
+    <Compile Include="My Project\AssemblyTasks.vb" />
+    <Compile Include="My Project\CommonTasks.vb" />
+    <Compile Include="My Project\DraftTasks.vb" />
+    <Compile Include="My Project\FeatureDoctor.vb" />
+    <Compile Include="My Project\FilenameCharmapDoctor.vb" />
+    <Compile Include="My Project\LabelToAction.vb" />
+    <Compile Include="My Project\LaunchTask.vb" />
+    <Compile Include="My Project\MaterialDoctorPart.vb" />
+    <Compile Include="My Project\MaterialDoctorSheetmetal.vb" />
+    <Compile Include="My Project\OccurrenceGetter.vb" />
+    <Compile Include="My Project\PartTasks.vb" />
+    <Compile Include="My Project\PropertyFilter.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,11 +188,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="My Project\SheetmetalTasks.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
-    <Compile Include="OccurrenceGetter.vb" />
-    <Compile Include="PartTasks.vb" />
-    <Compile Include="PropertyFilter.vb" />
-    <Compile Include="SheetmetalTasks.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
