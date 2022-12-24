@@ -101,7 +101,7 @@ There can be any number of each, in any combination.
 You can refine the search using a property filter, a wildcard filter, or both. 
 See **FILE SELECTION AND FILTERING** below for details. 
 
-If any of those annoying little errors are found, a log file will be written 
+If any errors are found, a log file will be written 
 to your temp folder. 
 It will identify each error and the file in which it occurred. 
 When processing is complete, the log file is opened in Notepad for review.
@@ -110,57 +110,11 @@ The first time you use the program, some site-specific information is needed.
 This includes the location of your templates, material table, etc. 
 These are populated on the Configuration Tab.
 
-To start things rolling, click the Process button.  The program has a status
-bar so you can monitor what it's doing.  
+To start execution, click the Process button.  The status
+bar provides feedback to help you monitor the process. 
+You can also stop execution if desired.
 See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
-
-## CAVEATS
-
-Since the program can process a large number of files in a short amount of time, 
-it can be very taxing on Solid Edge. 
-To maintain a clean environment, the program restarts Solid Edge periodically. 
-This is by design and does not necessarily indicate a problem.
-
-However, problems can arise. 
-Those cases will be reported in the log file with the message 'Error processing file'. 
-A stack trace will be included.  The stack trace looks scary, but may be 
-useful for program debugging. 
-If four of these errors are detected in a run, the programs halts with the 
-Status Bar message 'Processing aborted'.
-
-Please note this is not a perfect program.  It is not guaranteed not to mess 
-up your files.  Back up any files before using it.
-
-## KNOWN ISSUES
-
-**Does not support managed files**  
-*Cause*: Unknown.  
-*Possible workaround*: Process the files in an unmanaged workspace.  
-*Update 10/10/2021* Some users have reported success with BiDM managed files.  
-*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files. 
-
-**Older Solid Edge versions**  
-Some tasks may not support versions of Solid Edge prior to SE2020.  
-*Cause*: Maybe an API call not available in previous versions.  
-*Possible workaround*: Use SE2020 or later. 
-
-**Multiple installed Solid Edge versions**  
-May not support multiple installed versions on the same machine.  
-*Cause*: Unknown.  
-*Possible workaround*: Use the version that was 'silently' installed. 
-
-**Printer settings**  
-Does not support all printer settings, e.g., duplexing, collating, etc.  
-*Cause*: Not exposed in the DraftPrintUtility() API.  
-*Possible workaround*: Create a new Windows printer with the desired settings. 
-Refer to the TESTS AND ACTIONS topic below for more details. 
-
-**Pathfinder during Interactive Edit**  
-Pathfinder is sometimes blank when running the 'Interactive Edit' task.  
-*Cause*: Unknown.  
-*Possible workaround*: Refresh the screen by minimizing and maximizing the 
-Solid Edge window. 
 
 
 
@@ -323,6 +277,55 @@ You can also interrupt the program before it finishes.  While processing,
 the Cancel button changes to a Stop button.  Just click that to halt 
 execution.  It may take several seconds to register the request.  It 
 doesn't hurt to click it a couple of times.
+
+
+## CAVEATS
+
+Since the program can process a large number of files in a short amount of time, 
+it can be very taxing on Solid Edge. 
+To maintain a clean environment, the program restarts Solid Edge periodically. 
+This is by design and does not necessarily indicate a problem.
+
+However, problems can arise. 
+Those cases will be reported in the log file with the message 'Error processing file'. 
+A stack trace will be included.  The stack trace looks scary, but may be 
+useful for program debugging. 
+If four of these errors are detected in a run, the programs halts with the 
+Status Bar message 'Processing aborted'.
+
+Please note this is not a perfect program.  It is not guaranteed not to mess 
+up your files.  Back up any files before using it.
+
+## KNOWN ISSUES
+
+**Does not support managed files**  
+*Cause*: Unknown.  
+*Possible workaround*: Process the files in an unmanaged workspace.  
+*Update 10/10/2021* Some users have reported success with BiDM managed files.  
+*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files. 
+
+**Older Solid Edge versions**  
+Some tasks may not support versions of Solid Edge prior to SE2020.  
+*Cause*: Maybe an API call not available in previous versions.  
+*Possible workaround*: Use SE2020 or later. 
+
+**Multiple installed Solid Edge versions**  
+May not support multiple installed versions on the same machine.  
+*Cause*: Unknown.  
+*Possible workaround*: Use the version that was 'silently' installed. 
+
+**Printer settings**  
+Does not support all printer settings, e.g., duplexing, collating, etc.  
+*Cause*: Not exposed in the DraftPrintUtility() API.  
+*Possible workaround*: Create a new Windows printer with the desired settings. 
+Refer to the TESTS AND ACTIONS topic below for more details. 
+
+**Pathfinder during Interactive Edit**  
+Pathfinder is sometimes blank when running the 'Interactive Edit' task.  
+*Cause*: Unknown.  
+*Possible workaround*: Refresh the screen by minimizing and maximizing the 
+Solid Edge window. 
+
 
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
