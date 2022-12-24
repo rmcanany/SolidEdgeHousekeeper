@@ -7,6 +7,7 @@ Partial Class Form1
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
+        Dim tf As Boolean
         'Dim msg As String
 
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
@@ -90,14 +91,17 @@ Partial Class Form1
                         TextBoxStatus.Text = ""
 
                     ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
-                        ' Bare top level assemblies must be processed bottom up.
+
                         Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
                         TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                         Dim tmpFoundFiles As New List(Of String)
 
-                        ' If TopLevelFolder is an empty string ("") that means this is a bare top level assembly.  No 'where used' is performed.
+                        ' Set TopLevelFolder to the empty string (""), which means this is a
+                        ' bare top level assembly.  No 'where used' is performed.
+                        ' Bare top level assemblies are always processed bottom up.
+
                         tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", "",
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList))
@@ -119,10 +123,11 @@ Partial Class Form1
         If Not FoundFiles Is Nothing Then
             Dim tmpFoundFiles As New List(Of String)
             For Each item In FoundFiles
-                If CommonTasks.FilenameIsOK(item) Then
-                    If IO.File.Exists(item) Then
-                        tmpFoundFiles.Add(item)
-                    End If
+                tf = CommonTasks.FilenameIsOK(item)
+                tf = tf And IO.File.Exists(item)
+                tf = tf And Not tmpFoundFiles.Contains(item)
+                If tf Then
+                    tmpFoundFiles.Add(item)
                 End If
             Next
             FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
@@ -143,6 +148,7 @@ Partial Class Form1
                 Dim PropertyFilter As New PropertyFilter(Me)
                 FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
             End If
+
 
             ListViewFiles.BeginUpdate()
 

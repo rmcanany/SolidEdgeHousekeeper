@@ -2073,6 +2073,7 @@ Public Class Form1
         Dim msg As String
 
         TextBoxStatus.Text = "Updating list..."
+        LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
 
         ListViewFiles.BeginUpdate()
@@ -2099,7 +2100,6 @@ Public Class Form1
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
-
 
         If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
             BareTopLevelAssembly = True

@@ -293,6 +293,7 @@ Partial Class Form1
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.Size = New System.Drawing.Size(505, 540)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
+        Me.ListViewFiles.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
         Me.ListViewFiles.View = System.Windows.Forms.View.Details
