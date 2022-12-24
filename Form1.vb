@@ -1430,7 +1430,7 @@ Public Class Form1
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
         FormPropertyFilter.GetPropertyFilter()
 
-        If FormPropertyFilter.DialogResult = DialogResult.OK Then ApplyFilters()
+        'If FormPropertyFilter.DialogResult = DialogResult.OK Then ApplyFilters()
 
     End Sub
 
@@ -2367,6 +2367,11 @@ Public Class Form1
     End Sub
 
     Private Sub BT_FindLinks_Click(sender As Object, e As EventArgs) Handles BT_FindLinks.Click
+
+
+        MsgBox("This command is temporarily disabled.  Please use 'Update' instead.")
+        Exit Sub
+
 
         Dim DMApp As New DesignManager.Application
         Dim DMDoc As DesignManager.Document

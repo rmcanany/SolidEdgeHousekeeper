@@ -441,6 +441,7 @@ Public Class TopLevelAssemblyUtilities
         ValidExtensions.Add(".dft")
 
         Filename = DMDoc.FullName
+        tf = FileIO.FileSystem.FileExists(Filename)
 
         If FileIO.FileSystem.FileExists(Filename) Then
             tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)
@@ -465,7 +466,8 @@ Public Class TopLevelAssemblyUtilities
                     Next
 
                     ' Follow links contained by this file, if any.
-                    If System.IO.Path.GetExtension(DMDoc.FullName) = ".asm" Then
+                    'If System.IO.Path.GetExtension(DMDoc.FullName) = ".asm" Then  ' In testing, this is no faster than just excluding Draft files
+                    If System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft" Then  ' This way, part copy source documents are also found.
                         LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
                         If LinkedDocs.Count > 0 Then
                             For Each LinkedDoc In LinkedDocs
@@ -474,6 +476,8 @@ Public Class TopLevelAssemblyUtilities
                                 Dim FOPStatus As Integer
                                 LinkedDoc.IsDocumentFOP(FOPStatus)
 
+                                ' FOP Masters can have links to many unrelated files.  For example, a fastener.  
+                                ' Do not include them, or follow their links.
                                 If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
                                     LinkedDocName = LinkedDoc.FullName
                                     If LinkedDocName.Contains("!") Then

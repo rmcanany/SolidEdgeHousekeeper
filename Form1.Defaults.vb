@@ -407,6 +407,16 @@ Partial Class Form1
                 Key = KVPair.Split("="c)(0)
                 Value = KVPair.Split("="c)(1)
 
+                If Key = "new_ComboBoxFileSearch" Then
+                    'Example format
+                    'new_ComboBoxFileSearch = new_ComboBoxFileSearchItem.????-?????[!-]
+                    'new_ComboBoxFileSearch = new_ComboBoxFileSearchItem.????-???00*.*
+
+                    Value = Value.Replace("new_ComboBoxFileSearchItem.", "")
+                    new_ComboBoxFileSearch.Items.Add(Value)
+                    Continue For
+                End If
+
                 If ControlDict.Keys.Contains(Key) Then
                     Ctrl = ControlDict(Key)
 
@@ -555,6 +565,14 @@ Partial Class Form1
             End If
         Next
 
+        ' The combobox new_ComboBoxFileSearch is not a Control, it is a ToolStripCombobox
+        ' It has to be handled separately.
+        If new_ComboBoxFileSearch.Items.Count > 0 Then
+            For i As Integer = 0 To new_ComboBoxFileSearch.Items.Count - 1
+                Dim Value As String = new_ComboBoxFileSearch.Items(i).ToString
+                Defaults.Add(String.Format("new_ComboBoxFileSearch=new_ComboBoxFileSearchItem.{0}", Value))
+            Next
+        End If
 
         For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
             msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="
