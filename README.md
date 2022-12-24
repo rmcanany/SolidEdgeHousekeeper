@@ -90,7 +90,7 @@ Versions prior to 0.1.10 won't have `filename_charmap.txt` either.
 ![Tabs](My%20Project/media/tabs.png)
 
 On each file type's tab, select which errors to detect. 
-On the General tab, select the files to process. 
+On the Home tab, select the files to process. 
 You can refine the search using a file filter, a property filter, or both. 
 See the **FILE SELECTION AND FILTERING** section below. 
 
@@ -173,7 +173,7 @@ Solid Edge window.
 
 ### Selection
 
-The General Tab is where you select what files to process. 
+The Home Tab is where you select what files to process. 
 With the Selection Toolbar, you can select by folder, by top-level assembly, 
 by list, or by files with errors from a previous run. 
 
@@ -370,7 +370,7 @@ Assumes drawing has the same name as the model, and is in the same directory
 Checks to see if any assembly occurrence is pointing to a file not found on disk.
 
 #### Links outside input directory
-Checks to see if any assembly occurrence resides outside the top level directories specified on the General tab. 
+Checks to see if any assembly occurrence resides outside the top level directories specified on the Home tab. 
 
 #### Failed relationships
 Checks if any assembly occurrences have conflicting or otherwise broken relationships.

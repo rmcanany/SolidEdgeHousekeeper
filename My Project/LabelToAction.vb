@@ -209,7 +209,7 @@ Public Class LabelToAction
                      HelpString)
 
         Dim LinksOutsideInputDirectory As New L2A
-        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the General tab. "
+        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the Home tab. "
         PopulateList(LinksOutsideInputDirectory,
                      "Links outside input directory",
                      "LinksOutsideInputDirectory",

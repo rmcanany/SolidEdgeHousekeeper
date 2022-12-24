@@ -25,7 +25,7 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ListViewFiles = New System.Windows.Forms.ListView()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -228,7 +228,7 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.TabControl1.SuspendLayout()
-        Me.TabPageGeneral.SuspendLayout()
+        Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
         Me.ToolStrip_List.SuspendLayout()
         Me.TabPageAssembly.SuspendLayout()
@@ -246,7 +246,7 @@ Partial Class Form1
         '
         'TabControl1
         '
-        Me.TabControl1.Controls.Add(Me.TabPageGeneral)
+        Me.TabControl1.Controls.Add(Me.TabPageHome)
         Me.TabControl1.Controls.Add(Me.TabPageAssembly)
         Me.TabControl1.Controls.Add(Me.TabPagePart)
         Me.TabControl1.Controls.Add(Me.TabPageSheetmetal)
@@ -262,21 +262,21 @@ Partial Class Form1
         Me.TabControl1.Size = New System.Drawing.Size(519, 621)
         Me.TabControl1.TabIndex = 0
         '
-        'TabPageGeneral
+        'TabPageHome
         '
-        Me.TabPageGeneral.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TabPageGeneral.Controls.Add(Me.ListViewFiles)
-        Me.TabPageGeneral.Controls.Add(Me.ToolStrip_Filter)
-        Me.TabPageGeneral.Controls.Add(Me.ToolStrip_List)
-        Me.TabPageGeneral.ImageKey = "list"
-        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 23)
-        Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPageGeneral.Name = "TabPageGeneral"
-        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(2, 2, 2, 0)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(511, 594)
-        Me.TabPageGeneral.TabIndex = 0
-        Me.TabPageGeneral.Text = "General"
+        Me.TabPageHome.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageHome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageHome.Controls.Add(Me.ListViewFiles)
+        Me.TabPageHome.Controls.Add(Me.ToolStrip_Filter)
+        Me.TabPageHome.Controls.Add(Me.ToolStrip_List)
+        Me.TabPageHome.ImageKey = "list"
+        Me.TabPageHome.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageHome.Margin = New System.Windows.Forms.Padding(2)
+        Me.TabPageHome.Name = "TabPageHome"
+        Me.TabPageHome.Padding = New System.Windows.Forms.Padding(2, 2, 2, 0)
+        Me.TabPageHome.Size = New System.Drawing.Size(511, 594)
+        Me.TabPageHome.TabIndex = 0
+        Me.TabPageHome.Text = "Home"
         '
         'ListViewFiles
         '
@@ -2463,8 +2463,8 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.Text = "Solid Edge Housekeeper"
         Me.TabControl1.ResumeLayout(False)
-        Me.TabPageGeneral.ResumeLayout(False)
-        Me.TabPageGeneral.PerformLayout()
+        Me.TabPageHome.ResumeLayout(False)
+        Me.TabPageHome.PerformLayout()
         Me.ToolStrip_Filter.ResumeLayout(False)
         Me.ToolStrip_Filter.PerformLayout()
         Me.ToolStrip_List.ResumeLayout(False)
@@ -2495,7 +2495,7 @@ Partial Class Form1
     End Sub
 
     Friend WithEvents TabControl1 As TabControl
-    Friend WithEvents TabPageGeneral As TabPage
+    Friend WithEvents TabPageHome As TabPage
     Friend WithEvents TabPageAssembly As TabPage
     Friend WithEvents TabPagePart As TabPage
     Friend WithEvents TabPageSheetmetal As TabPage
