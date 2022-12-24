@@ -22,13 +22,18 @@ file settings to match those in a template you specify.
 
 *Feedback from users*
 
-> *This is the Michael Jordan of macros!  I've tried lots of them.  This is on a whole other level.  Thank you!*
+> *This is the Michael Jordan of macros!  I've tried lots of them.  This is*
+> *on a whole other level.  Thank you!*
 
 > *This is going to save me SO MUCH TIME!  Thank you for sharing!*
 
-> *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
+> *Thank you for all your time and effort (...) Also thanks a lot for making it*
+> *open source. I constantly reference your code for my own macros, which motivates*
+> *me to make my projects open source as well.*
 
-> *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they just figure out how to automate me running Housekeeper, I will be out of a job. Thank God only I know how to press that "process" button.*
+> *Awesome. It looks like you are still overachieving with this app, and I thank*
+> *you for it. If they ever figure out how to automate me running Housekeeper, I*
+> *will be out of a job. Thank God only I know how to press that "process" button.*
 
 
 ## GETTING HELP
@@ -51,7 +56,7 @@ ignore requests from `User16612341234...`.
 If you want to help out on Housekeeper, sign up as a beta tester! 
 Beta testing is nothing more than doing your own workflow on your own files and 
 letting me know if you run into problems.  It isn't meant to be a lot of work. 
-The big idea is to make the program better for you and everyone else!
+The big idea is to make the program better for you and me and everyone else!
 
 If you know .NET, or want to learn, there's more
 to do!  To get started on GitHub collaboration, head over to
@@ -89,12 +94,15 @@ Versions prior to 0.1.10 won't have `filename_charmap.txt` either.
 
 ![Tabs](My%20Project/media/tabs.png)
 
-On each file type's tab, select which errors to detect. 
-On the Home tab, select the files to process. 
-You can refine the search using a file filter, a property filter, or both. 
-See the **FILE SELECTION AND FILTERING** section below. 
+On each file type's tab, select which tasks to perform. 
+On the Home tab, select which files to process. 
+You can select files by folder, subfolder, top-level assembly or list.
+There can be any number of each, in any combination.
+You can refine the search using a property filter, a wildcard filter, or both. 
+See **FILE SELECTION AND FILTERING** below for details. 
 
-If any errors are found, a log file will be written to the input folder. 
+If any of those annoying little errors are found, a log file will be written 
+to your temp folder. 
 It will identify each error and the file in which it occurred. 
 When processing is complete, the log file is opened in Notepad for review.
 
@@ -102,23 +110,10 @@ The first time you use the program, some site-specific information is needed.
 This includes the location of your templates, material table, etc. 
 These are populated on the Configuration Tab.
 
-![Tabs](My%20Project/media/stop_button.png)
+To start things rolling, click the Process button.  The program has a status
+bar so you can monitor what it's doing.  
+See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
-Press the Process button to start executing active tasks on the list.
-Tasks are executed on selected files, if none are selected the tasks will be executed on the whole list.
-
-A checkbox
-![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
-the file name indicates it has yet to be processed. After processing, if no errors were
-detected, a checkmark 
-![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
-Otherwise, an error indicator 
-![Error](Resources/icons8_Error_16.png) is displayed.
- 
-You can interrupt the program before it finishes.  While processing, 
-the Cancel button changes to a Stop button.  Just click that to halt 
-processing.  It may take several seconds to register the request.  It 
-doesn't hurt to click it a couple of times.
 
 ## CAVEATS
 
@@ -173,7 +168,7 @@ Solid Edge window.
 
 ### Selection
 
-The Home Tab is where you select what files to process. 
+The Home Tab is where you select which files to process. 
 With the Selection Toolbar, you can select by folder, by top-level assembly, 
 by list, or by files with errors from a previous run. 
 
@@ -186,29 +181,32 @@ The toolbar functions are explained below.
 
 #### 1. Select by Folder
 
-Choose this option if you want to select files within a single folder, 
+Choose this option to select files within a single folder, 
 or a folder and its subfolders.  You can select any number of each.
 Referring to the diagram, click the the icon marked **a** to select a 
 single folder, click the icon marked **b** to include sub folders.
 
 #### 2. Select by Top-Level Assembly
 
-Choose this option if you want to select files linked to an assembly.
+Choose this option to select files linked to an assembly.
 Again referring to the diagram, click **a** to choose the assembly, 
-click **b** to choose where to look for _where used_ files for 
-the assembly.  You can select any number of _where used_ folders.
+click **b** to choose where to search for _where used_ files. 
+You can select any number of top-level assemblies and 
+_where used_ folders.
 
-If you don't specify any folders, Housekeeper simply finds
-files contained in the specified assembly and subassemblies without 
-performing a _where used_ on them.
+If you don't specify any *where used* folders, Housekeeper simply finds
+files contained in the specified assembly and subassemblies.  No 
+is _where used_ is performed.
 
 If you _do_ specify one or more folders, there are two options on how 
-the _where used_ is performed, **Top Down** or **Bottom Up**.  Make 
-this selection on the **Configuration Tab**.
+the _where used_ is performed, **Top Down** or **Bottom Up** (see next).  Make 
+this selection on the **Configuration Tab**.  Guidelines are given below,
+however it's not a bad idea to try both methods to see which works best
+for you.
 
 **Bottom Up**
 
-Bottom up is meant for general purpose directories 
+Bottom up is meant for general purpose (hopefully indexed) directories 
 (e.g., `\\BIG_SERVER\all_parts\`), where the number of files 
 in the folder(s) far exceed the number of files in the assembly. 
 The program gets links by recursion, then 
@@ -225,7 +223,7 @@ Top down is meant for self-contained project directories
 (e.g., `C:\Projects\Project123\`), where most of the files 
 in the folder(s) are related to the assembly. 
 The program opens every file within and below the input directory. 
-As it does, it creates a graph representation of the links. 
+As it does, it creates a graph of the links. 
 The graph is subsequently traversed to find related files. 
 I don't know how it works; my son did that part. 
 
@@ -234,21 +232,21 @@ top level assembly.  It is set on the **Configuration Tab**.
 
 #### 3. Select by list
 
-Referring to the diagram, click **a** to import a list, 
+Referring to the diagram, click the icon labeled **a** to import a list, 
 click **b** export one.  
 
 If you are importing a list from another source, be aware that the 
 file names must contain the full path.  E.g.,
-`D:\Projects\Project123\Partxyz`, not just `Project123\Partxyz`.
+`D:\Projects\Project123\Partxyz.par`, not just `Project123\Partxyz.par`.
 
-#### 4. List operations
+#### 4. Tools
 
 **Select files with errors from the previous run**
 
 Click **a** to select only files that encountered an error. 
 All other files will be removed from the list.  To reproduce the 
-previous TODO list functionality, you can export the list if
-needed.
+TODO list functionality from previous versions, you can export the 
+resultant list if needed.
 
 **Remove all**
 
@@ -267,10 +265,14 @@ section of the list.
 
 #### 5. Update
 
-The update button processes the file sources in the list.  If a change is
-made to the sources and/or a file filter (see next), an update
-is required.
+The update button populates the file list from the File Sources and Filters.
+If any Sources are added or removed, or a change is made to a Filter (see next), 
+an update is required.
 
+#### 6. File Type
+
+You can limit the search to return only selected types of Solid Edge files.
+To do so, check/uncheck the appropriate File Type icon. 
 
 ### Filtering
 
@@ -298,10 +300,30 @@ which is similar to the old DOS wildcard search, but with a few more options.
 For details and examples, see 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator).
 
-#### File Type Filter
+## STARTING, STOPPING, AND MONITORING EXECUTION
 
-Filtering by file type is done by checking/unchecking the appropriate 
- Type filter icon. 
+![Tabs](My%20Project/media/stop_button.png)
+
+Press the Process button to start executing the chosen tasks.
+If one or more files on the list were selected, only those are processed.
+Otherwise, all files are processed.
+
+A checkbox
+![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
+the file name indicates it has yet to be processed. Afterwards, if no errors were
+detected, a checkmark 
+![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
+Otherwise, an error indicator 
+![Error](Resources/icons8_Error_16.png) is displayed.
+
+You can monitor progress with the status bar.  It shows the number of files
+processed, the current file, and an estimate of time remaining.
+ 
+You can also interrupt the program before it finishes.  While processing, 
+the Cancel button changes to a Stop button.  Just click that to halt 
+execution.  It may take several seconds to register the request.  It 
+doesn't hurt to click it a couple of times.
+
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 

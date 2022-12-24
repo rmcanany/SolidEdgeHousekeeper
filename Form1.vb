@@ -142,7 +142,7 @@ Public Class Form1
         OleMessageFilter.Unregister()
 
         If StopProcess Then
-            TextBoxStatus.Text = "Processing aborted"
+            TextBoxStatus.Text = "Processing aborted."
         Else
             ElapsedTime = Now.Subtract(StartTime).TotalMinutes
             If ElapsedTime < 60 Then
@@ -154,21 +154,13 @@ Public Class Form1
             TextBoxStatus.Text = "Finished processing " + FilesToProcessTotal.ToString + " files " + ElapsedTimeText
         End If
 
+        LabelTimeRemaining.Text = ""
+
         StopProcess = False
         ButtonCancel.Text = "Cancel"
 
         If ErrorsOccurred Then
             Process.Start("Notepad.exe", LogfileName)
-            'Dim msg As String = ""
-            'Dim indent As String = ""
-            'Dim FancyPrint As List(Of String) = LogfileName.Split("\"c).ToList
-            'msg += "Some checks did not pass and/or more feedback is available." + Chr(13)
-            'msg += "Path to log file:" + Chr(13)
-            'For Each s As String In FancyPrint
-            '    msg += indent + s + Chr(13)
-            '    indent += "    "
-            'Next
-            'MsgBox(msg)
         Else
             TextBoxStatus.Text = TextBoxStatus.Text + "  All checks passed."
         End If

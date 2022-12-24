@@ -566,8 +566,8 @@ Partial Class Form1
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(41, 22)
-        Me.ToolStripLabel1.Text = "Filters:"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(55, 22)
+        Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageAssembly
         '
@@ -2333,7 +2333,7 @@ Partial Class Form1
         '
         Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelTimeRemaining.AutoSize = True
-        Me.LabelTimeRemaining.Location = New System.Drawing.Point(4, 641)
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(10, 655)
         Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
         Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 13)
