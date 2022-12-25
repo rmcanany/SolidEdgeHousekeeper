@@ -111,7 +111,7 @@ This includes the location of your templates, material table, etc.
 These are populated on the Configuration Tab.
 
 To start execution, click the Process button.  The status
-bar provides feedback to help you monitor the process. 
+bar provides feedback to help you monitor progress. 
 You can also stop execution if desired.
 See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
@@ -122,14 +122,16 @@ See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
 ### Selection
 
-The Home Tab is where you select which files to process. 
-With the Selection Toolbar, you can select by folder, by top-level assembly, 
-by list, or by files with errors from a previous run. 
+The Home Tab is where you select which files to process.  As mentioned above,
+using the Selection Toolbar, you can select by folder, subfolder, top-level assembly or list.
+There can be any number of each, in any combination.  
 
-Another option is to drag and drop from Windows File Explorer. 
+Another option is to drag and drop files from Windows File Explorer. 
 You can use drag and drop and the toolbar in combination.
 
-The toolbar functions are explained below.
+An alternative method is to select files with errors from a previous run. 
+
+All of these options are explained below.
 
 ![Toolbar](My%20Project/media/folder_toolbar.png)
 
@@ -149,8 +151,8 @@ You can select any number of top-level assemblies and
 _where used_ folders.
 
 If you don't specify any *where used* folders, Housekeeper simply finds
-files contained in the specified assembly and subassemblies.  No 
-is _where used_ is performed.
+files contained in the specified assembly and subassemblies, without performing  
+_where used_ on them.
 
 If you _do_ specify one or more folders, there are two options on how 
 the _where used_ is performed, **Top Down** or **Bottom Up** (see next).  Make 
@@ -220,7 +222,7 @@ section of the list.
 #### 5. Update
 
 The update button populates the file list from the File Sources and Filters.
-If any Sources are added or removed, or a change is made to a Filter (see next), 
+If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), 
 an update is required.
 
 #### 6. File Type
@@ -233,14 +235,120 @@ To do so, check/uncheck the appropriate File Type icon.
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
 Filters are a way to refine the list of files to process.  You can filter 
-on file properties, filenames (with a wildcard search), or file type. 
-They can be used alone or in any combination.
+on file properties, or filenames (with a wildcard search). 
+They can be used alone or in combination.
 
 #### Property Filter
 
+The property filter allows you to select files by their property values.
 To configure a property filter, click the tool icon to the right of
-the Property filter checkbox.  For details on the property search, 
-see the Readme tab on the Property Filter dialog. 
+the Property filter checkbox.  For details see below.
+
+**Composing a Filter**
+
+Compose a filter by defining one or more Conditions, and adding them one-by-one to the list.
+A Condition consists of a Property, a Comparison, and a Value.
+For example, `Material contains Steel`, where `Material` is the Property, 
+`contains` is the Comparison, and `Steel` is the Value.
+
+
+Up to six Conditions are allowed for a filter.
+They can be named, saved, modified, and deleted as desired.
+
+
+**Property**
+
+Enter the name of the property to be evaluated in the `Property name` textbox.
+Select the Property`s `Property set`, either System or Custom.
+The Property sets are described below.
+
+
+System properties are in every Solid Edge file.
+They include Material, Manager, Project, etc.
+Note, at this time, the System property names must be specified in English.
+
+
+Custom properties are ones that you create, probably in a template.
+The custom property names can be in any language.  (In theory, at least -- not tested at this time.)
+
+
+**Comparison**
+
+Select the Comparison from its dropdown box.
+The choices are `contains`, `is_exactly`, `is_not`, `wildcard_contains`, `>`, or `<`.
+The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self explanatory.
+The two `contains` options are described below.
+
+
+With the `contains` option, 
+the Value you specify can appear anywhere in the property.
+For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, 
+you will get a match.
+Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison.
+So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
+
+
+The `wildcard_contains` option is like `contains`, except wildcard characters are used.
+Internally, it is implemented with the VB `Like` operator, 
+which is similar to the old DOS wildcard search, but with a few more options.
+For details and examples, see 
+[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator).
+
+
+**Default Filter Formula**
+
+Each Condition is assigned a variable name, (`A`, `B`, `...`).
+The default filter formula is to match all conditions (e.g., `A AND B AND C`).
+
+
+**Example**
+
+Say you have the following conditions:
+
+    A  System  Material  contains    Aluminum 
+    B  System  Project   is_exactly  7477 
+    C  Custom  Engineer  contains    Fred
+
+
+By default you will get all Aluminum parts in project 7477 engineered by Fred.
+
+
+**Editing the Formula**
+
+You can optionally change the formula.
+Click the Edit button and type the desired expression.
+For example, if you wanted all Aluminum parts, either from project 7477, or engineered by Fred, 
+you would enter `A AND (B OR C)`.
+
+
+**Dates and Numbers**
+
+Dates and numbers are converted to their native format when possible.
+This is done to obtain commonsense results for the comparisons `<` and `>`.
+
+
+Dates take the form `YYYYMMDD` when converted.
+This is the format that must be used in the `Value` field for comparisons.
+The conversion is supposed to be locale-aware, however this has not been tested.
+Please ask on the Solid Edge Forum if it is not working correctly for you.
+
+
+Numbers are converted to floating point values.
+In Solid Edge many numbers, in particular those from the variable table, 
+include units.
+These must be stripped off by the program to make comparisons.
+Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`).
+It`s easy to add more, so please ask on the Forum if you need others.
+
+
+**Saved Settings**
+
+The filters are saved in `property_filters.txt` in the same directory as Housekeeper.exe.
+If desired, you can create a master copy of the file and share it with others.
+You can manually edit the file, 
+however, note that the field delimiter is the TAB character.
+This was done so that the property name and value fields could contain space (` `) characters.
+
 
 #### Wildcard Filter
 
