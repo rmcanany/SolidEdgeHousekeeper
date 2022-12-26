@@ -41,6 +41,11 @@ file settings to match those in a template you specify.
 
 ## GETTING HELP
 
+Start with the Readme. 
+To view the Table of Contents, click the *list icon* next to `README.md`.
+
+![Table of Contents](My%20Project/media/readme_navigation_02.png)
+
 Ask questions or suggest improvements on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
@@ -185,7 +190,8 @@ Set the Fast Search Scope filename on the **Configuration Tab**.
 Top down is meant for self-contained project directories 
 (e.g., `C:\Projects\Project123\`), where most of the files 
 in the folder(s) are related to the assembly. 
-The program opens every file within and below the input directory. 
+The program opens every file within and below the 
+top-level assembly folder(s). 
 As it does, it creates a graph of the links. 
 The graph is subsequently traversed to find related files. 
 I don't know how it works; my son did that part. 
@@ -292,10 +298,10 @@ Note, at this time, they must be in English.
 `Custom` properties are ones that you create, probably in a template.
 Solid Edge also creates some Custom properties for you.
 These include `Exposed Variables` and output from 
-`Inspect > Physical Properties` command.
+the `Inspect > Physical Properties` command.
 The custom property names can be in any language. 
 (In theory, at least -- not tested at this time.
-Not sure about the Solid Edge variables either.)
+Not sure about the Solid Edge entries either.)
 
 **Comparison**
 
@@ -342,6 +348,8 @@ or engineered by Fred, you would enter `A AND (B OR C)`.
 
 Dates and numbers are converted to their native format when possible.
 This is done to obtain commonsense results for `<` and `>`.
+Note the conversion is attempted even if the property type is
+`TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
 
 Dates take the form `YYYYMMDD` when converted.
 This is the format that must be used in the `Value` field.
@@ -431,12 +439,12 @@ up your work.  Back up any files before using it.
 *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files. 
 
 **Older Solid Edge versions**  
-Some tasks may not support versions of Solid Edge prior to SE2020.  
-*Cause*: Maybe an API call not available in previous versions.  
-*Possible workaround*: Use SE2020 or later. 
+Some tasks cannot be run on older versions.  
+*Cause*: Probably an API call not available in previous versions.  
+*Possible workaround*: Use the latest version, or avoid use of the
+task causing problems. 
 
-**Multiple installed Solid Edge versions**  
-May not support multiple installed versions on the same machine.  
+**May not support multiple installed Solid Edge versions**  
 *Cause*: Unknown.  
 *Possible workaround*: Use the version that was 'silently' installed. 
 
@@ -446,8 +454,7 @@ Does not support all printer settings, e.g., duplexing, collating, etc.
 *Possible workaround*: Create a new Windows printer with the desired settings. 
 Refer to the **Draft Tasks -- Print Topic** below for more details. 
 
-**Pathfinder during Interactive Edit**  
-Pathfinder is sometimes blank when running the 'Interactive Edit' task.  
+**Pathfinder sometimes blank during Interactive Edit**  
 *Cause*: Unknown.  
 *Possible workaround*: Refresh the screen by minimizing and maximizing the 
 Solid Edge window. 

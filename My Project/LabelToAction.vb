@@ -107,11 +107,8 @@ Public Class LabelToAction
         HelpString += "The property, search text, and replacement text are entered on the **Task Tab**, "
         HelpString += "below the task list. "
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "System properties are in every Solid Edge file. "
-        HelpString += "They include Material, Manager, Project, etc. "
-        HelpString += "At this time, they must be in English. "
-        HelpString += "Custom properties are ones that you create, probably in a template. "
-        HelpString += vbCrLf + vbCrLf + "The search is case insensitive, the replace is case sensitive. "
+        HelpString += "For more information, see the **Property Filter** section. "
+        HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
         HelpString += "the replacement is `ALUMINUM`, "
         HelpString += "and the property value is `Aluminum 6061-T6`. "
@@ -131,16 +128,14 @@ Public Class LabelToAction
                      RequiresExposeVariables:=True)
 
         Dim ExposeVariables As New L2A
-        HelpString = "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
+        HelpString = "Exposes entries from the variable table, making them available as a Custom property. "
+        HelpString += "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
         HelpString += "Optionally include a different Expose Name, set off by the colon `:` character. "
-        HelpString += vbCrLf + vbCrLf + "For example"
-        HelpString += vbCrLf + vbCrLf + "`var1, var2, var3`"
-        HelpString += vbCrLf + vbCrLf + "Or"
-        HelpString += vbCrLf + vbCrLf + "`var1: Variable Name One, var2: Variable Name 2, var3: Variable Name 3`"
-        HelpString += vbCrLf + vbCrLf + "Or a combination"
-        HelpString += vbCrLf + vbCrLf + "`var1: Variable Name One, var2, var3`"
+        HelpString += vbCrLf + vbCrLf + "For example `var1, var2, var3`"
+        HelpString += vbCrLf + vbCrLf + "Or `var1: Length, var2: Width, var3: Height`"
+        HelpString += vbCrLf + vbCrLf + "Or a combination `var1: Length, var2, var3`"
         HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. "
-        HelpString += "Actually you can, but it will not do what you expect. "
+        HelpString += "Actually there's nothing stopping you, but it will not do what you want. "
         PopulateList(ExposeVariables,
                      "Expose variables",
                      "ExposeVariables",
