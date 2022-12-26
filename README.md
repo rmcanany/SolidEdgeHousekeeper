@@ -254,11 +254,11 @@ Filters are a way to refine the list of files to process.  You can filter
 on file properties, or filenames (with a wildcard search). 
 They can be used alone or in combination.
 
-#### Property Filter
+#### 1. Property Filter
 
 The property filter allows you to select files by their property values.
 To configure a property filter, 
-click the tool icon ![Draft](Resources/icons8_tools_16.png)
+click the tool icon ![Configure](Resources/icons8_Tools_16.png)
 to the right of
 the Property filter checkbox. 
 
@@ -365,7 +365,7 @@ however, note that the field delimiter is the TAB character.
 This was done so that the property name and value fields could contain 
 spaces.
 
-#### Wildcard Filter
+#### 2. Wildcard Filter
 
 Filtering by wildcard is done by entering the wildcard pattern in the 
 provided combobox.  Wildcard patterns are automatically saved for 
@@ -413,7 +413,7 @@ This is by design and does not necessarily indicate a problem.
 However, problems can arise. 
 Those cases will be reported in the log file with the message 
 `Error processing file`. 
-A stack trace will be included, which may be useful for debugging. 
+A stack trace will be included, which may help debugging. 
 If four of these errors are detected in a run, the programs halts with the 
 Status Bar message `Processing aborted`.
 
