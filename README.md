@@ -194,9 +194,9 @@ top level assembly.  It is set on the **Configuration Tab**.
 #### 3. Select by list
 
 Referring to the diagram, 
-click ![Import List](Resources/icons8_import_16.png)
+click ![Import List](Resources/icons8_Import_16.png)
 to import a list, 
-click ![Export List](Resources/icons8_export_16.png)
+click ![Export List](Resources/icons8_Export_16.png)
 to export one.  
 
 If you are importing a list from another source, be aware that the 
