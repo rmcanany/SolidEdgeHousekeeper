@@ -11,6 +11,9 @@
 @[Martin Bernhard], @Derek G, @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101
 
+Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,
+and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
+
 ## DESCRIPTION
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. 
@@ -154,8 +157,7 @@ click ![Assembly Folders](Resources/icons8_Folders_16.png)
 to choose where to search for _where used_ files. 
 
 If you don't specify any *where used* folders, Housekeeper simply finds
-files linked to the specified assembly and subassemblies, without performing  
-_where used_ on them.
+files directly linked to the specified assembly and subassemblies.
 
 If you _do_ specify one or more folders, there are two options on how 
 the _where used_ is performed, **Top Down** or **Bottom Up** (see next).  Make 
@@ -192,9 +194,9 @@ top level assembly.  It is set on the **Configuration Tab**.
 #### 3. Select by list
 
 Referring to the diagram, 
-click ![Import](Resources/icons8_import_16.png)
+click ![Import List](Resources/icons8_import_16.png)
 to import a list, 
-click ![Export](Resources/icons8_export_16.png)
+click ![Export List](Resources/icons8_export_16.png)
 to export one.  
 
 If you are importing a list from another source, be aware that the 
