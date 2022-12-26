@@ -479,29 +479,23 @@ Can run out of memory for very large assemblies.
 #### Property find replace
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the **Task Tab**, below the task list. 
 
-A `Property set`, either `System` or `Custom`, is required. System properties are in every Solid Edge file. They include Material, Manager, Project, etc. At this time, they must be in English. Custom properties are ones that you create, probably in a template. 
+A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section. 
 
-The search is case insensitive, the replace is case sensitive. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.
 
 #### Expose variables
-Enter the names as a comma-delimited list in the `Variables to expose` textbox. Optionally include a different Expose Name, set off by the colon `:` character. 
+Exposes entries from the variable table, making them available as a Custom property. Enter the names as a comma-delimited list in the `Variables to expose` textbox. Optionally include a different Expose Name, set off by the colon `:` character. 
 
-For example
+For example `var1, var2, var3`
 
-`var1, var2, var3`
+Or `var1: Length, var2: Width, var3: Height`
 
-Or
+Or a combination `var1: Length, var2, var3`
 
-`var1: Variable Name One, var2: Variable Name 2, var3: Variable Name 3`
-
-Or a combination
-
-`var1: Variable Name One, var2, var3`
-
-Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. Actually you can, but it will not do what you expect. 
+Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. Actually there's nothing stopping you, but it will not do what you want. 
 
 #### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
