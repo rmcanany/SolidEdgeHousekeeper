@@ -332,17 +332,21 @@ is used to make the comparison.  Visit the link for details and examples.
 Each Condition is assigned a variable name, (`A`, `B`, `...`).
 The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
+![Property Filter Detail](My%20Project/media/property_filter_detail.png)
+
 Referring to the Property Filter dialog shown above, 
 the default formula means you will get all parts in project 7477 
-made out of Aluminum and engineered by Fred.
+made out of Aluminum and engineered by Fred,
+i.e., `A AND B AND C`.
 
 **Editing the Formula**
 
 You can optionally change the formula.
 Click the Edit button and type the desired expression.
 For example, if you wanted all parts from Project 7477, 
-either made out of Aluminum, 
-or engineered by Fred, you would enter `A AND (B OR C)`.
+**either** made out of Aluminum, 
+**or** engineered by Fred, you would enter the formula shown, 
+i.e., `A AND (B OR C)`.
 
 **Dates and Numbers**
 
