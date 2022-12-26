@@ -46,19 +46,21 @@ Ask questions or suggest improvements on the
 
 To subscribe to update notices or volunteer to be a beta tester, 
 message me, RobertMcAnany, on the forum. 
-(Click your profile picture, then `My Messages`, then `Create`). 
+(The `Messages` button is hidden under your profile picture,
+at the very top right of the page). 
 Unsubscribe the same way.  
 
 To combat bots and spam, I will probably 
 ignore requests from `User16612341234...`. 
-(Change your nickname by clicking your profile picture, then 
-`My Profile`, then `Edit`). 
+(Change you nickname via `My Profile`,
+also hidden under your profile picture). 
 
 ## HELPING OUT
 
 If you want to help out on Housekeeper, sign up as a beta tester! 
-Beta testing is nothing more than doing your own workflow on your own files and 
-letting me know if you run into problems.  It isn't meant to be a lot of work. 
+Beta testing is nothing more than conducting your own workflow on your own 
+files and telling me if you run into problems. 
+It isn't meant to be a lot of work. 
 The big idea is to make the program better for you and me and everyone else!
 
 If you know .NET, or want to learn, there's more
@@ -69,7 +71,7 @@ There are instructions and links to get you up to speed.
 
 ## INSTALLATION
 
-There is no installation per se.  The preferred method is to download or clone 
+There is no installation *per se*.  The preferred method is to download or clone 
 the project and compile it yourself.
 
 The other option is to use the latest 
@@ -111,7 +113,7 @@ When processing is complete, the log file is opened in Notepad for review.
 
 The first time you use the program, some site-specific information is needed. 
 This includes the location of your templates, material table, etc. 
-These are populated on the Configuration Tab.
+These are populated on the **Configuration Tab**.
 
 To start execution, click the Process button.  The status
 bar provides feedback to help you monitor progress. 
@@ -125,7 +127,7 @@ See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
 ### Selection
 
-The Home Tab is where you select which files to process.  As mentioned above,
+The **Home Tab** is where you select which files to process.  As mentioned above,
 using the Selection Toolbar, you can select by folder, subfolder, top-level 
 assembly, top-level folder, or list.
 There can be any number of each, in any combination.  
@@ -407,7 +409,7 @@ doesn't hurt to click it a couple of times.
 Since the program can process a large number of files in a short amount of time, 
 it can be very taxing on Solid Edge. 
 To maintain a clean environment, the program restarts Solid Edge periodically. 
-(Set the frequency on the **Configuration** tab.)
+(Set the frequency on the **Configuration Tab**.)
 This is by design and does not necessarily indicate a problem.
 
 However, problems can arise. 
@@ -468,7 +470,7 @@ Loads all assembly occurrences' geometry into memory and does an update. Used ma
 Can run out of memory for very large assemblies.
 
 #### Property find replace
-Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the task tab, below the task list. 
+Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the **Task Tab**, below the task list. 
 
 A `Property set`, either `System` or `Custom`, is required. System properties are in every Solid Edge file. They include Material, Manager, Project, etc. At this time, they must be in English. Custom properties are ones that you create, probably in a template. 
 
@@ -498,7 +500,7 @@ Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. Actua
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
 #### Update face and view styles from template
-Updates the file with face and view styles from a file you specify on the Configuration tab. 
+Updates the file with face and view styles from a file you specify on the **Configuration Tab**. 
 
 Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, use `Save As` on the `View Overrides` dialog.
 
@@ -508,10 +510,10 @@ Hides all non-model elements such as reference planes, PMI dimensions, etc.
 #### Fit pictorial view
 Maximizes the window, sets the view orientation, and does a fit.
 
-Select the desired orientation on the Configuration Tab.
+Select the desired orientation on the **Configuration Tab**.
 
 #### Part number does not match file name
-Checks if a file property, that you specify on the Configuration tab, matches the file name.
+Checks if a file property, that you specify on the **Configuration Tab**, matches the file name.
 
 #### Missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
@@ -520,7 +522,7 @@ Assumes drawing has the same name as the model, and is in the same directory
 Checks to see if any assembly occurrence is pointing to a file not found on disk.
 
 #### Links outside input directory
-Checks to see if any assembly occurrence resides outside the top level directories specified on the Home tab. 
+Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. 
 
 #### Failed relationships
 Checks if any assembly occurrences have conflicting or otherwise broken relationships.
@@ -529,9 +531,9 @@ Checks if any assembly occurrences have conflicting or otherwise broken relation
 Checks if any assembly occurrences have missing relationships.
 
 #### Run external program
-Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. It is located on the task tab below the task list. 
+Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
-Several rules about the program implementation apply. See **[HousekeeperExternalPrograms](https://github.com/rmcanany/HousekeeperExternalPrograms)** for details and examples. 
+Several rules about the program implementation apply. See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
 #### Interactive edit
 Brings up files one at a time for manual processing.  Some rules apply.
@@ -543,9 +545,9 @@ Also, do not Close the file or do a Save As on it. Housekeeper maintains a `refe
 #### Save as
 Exports the file to a non-Solid Edge format. 
 
-Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the task tab below the task list. 
+Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
 
-Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the Configuration tab. 
+Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab**. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. The PropertySet designation, `System.` or `Custom.` is required. These refer to where the property is stored in a Solid Edge file. 
 
@@ -571,7 +573,7 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Update material from material table
-Checks to see if the part's material name and properties match any material in a file you specify on the Configuration tab. 
+Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab**. 
 
 If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
 
@@ -606,7 +608,7 @@ Checks if any profiles are not fully constrained.
 If the file has any insert part copies, checks if they are up to date.
 
 #### Material not in material table
-Checks the file's material against the material table. The material table is chosen on the Configuration tab. 
+Checks the file's material against the material table. The material table is chosen on the **Configuration Tab**. 
 
 #### Run external program
 Same as the Assembly command of the same name.
@@ -700,14 +702,14 @@ Same as the Assembly command of the same name.
 Checks drawing views one by one, and updates them if needed.
 
 #### Update styles from template
-Creates a new file from a template you specify on the Configuration tab. Copies drawing views, dimensions, etc. from the old file into the new one. If the template has updated styles, a different background sheet, or other changes, the new drawing will inherit them automatically. 
+Creates a new file from a template you specify on the **Configuration Tab**. Copies drawing views, dimensions, etc. from the old file into the new one. If the template has updated styles, a different background sheet, or other changes, the new drawing will inherit them automatically. 
 
-This task has the option to `Allow partial success`.  It is set on the Configuration tab. If the option is set, and some drawing elements were not transferred, it is reported in the log file. Also reported in the log file are instructions for completing the transfer. 
+This task has the option to `Allow partial success`.  It is set on the **Configuration Tab**. If the option is set, and some drawing elements were not transferred, it is reported in the log file. Also reported in the log file are instructions for completing the transfer. 
 
 Note, because this task needs to do a `Save As`, it must be run with no other tasks selected.
 
 #### Update drawing border from template
-Replaces the background border with that of the Draft template specified on the Configuration tab.
+Replaces the background border with that of the Draft template specified on the **Configuration Tab**.
 
 In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
 
@@ -736,7 +738,7 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Print
-Print settings are accessed on the Configuration tab.
+Print settings are accessed on the **Configuration Tab**.
 
 Note, the presence of the Printer Settings dialog is somewhat misleading. The only settings taken from it are the printer name, page height and width, and the number of copies. Any other selections revert back to the Windows defaults when printing. A workaround is to create a new Windows printer with the desired defaults. 
 

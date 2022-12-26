@@ -104,7 +104,7 @@ Public Class LabelToAction
 
         Dim PropertyFindReplace As New L2A
         HelpString = "Searches for text in a specified property and replaces it if found. "
-        HelpString += "The property, search text, and replacement text are entered on the task tab, "
+        HelpString += "The property, search text, and replacement text are entered on the **Task Tab**, "
         HelpString += "below the task list. "
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "System properties are in every Solid Edge file. "
@@ -158,7 +158,7 @@ Public Class LabelToAction
                      RequiresSave:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
-        HelpString = "Updates the file with face and view styles from a file you specify on the Configuration tab. "
+        HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab**. "
         HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
         HelpString += "To create a named style from an override, use `Save As` on the `View Overrides` dialog."
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
@@ -177,7 +177,7 @@ Public Class LabelToAction
 
         Dim FitPictorialView As New L2A
         HelpString = "Maximizes the window, sets the view orientation, and does a fit."
-        HelpString += vbCrLf + vbCrLf + "Select the desired orientation on the Configuration Tab."
+        HelpString += vbCrLf + vbCrLf + "Select the desired orientation on the **Configuration Tab**."
         PopulateList(FitPictorialView,
                      "Fit pictorial view",
                      "FitPictorialView",
@@ -187,7 +187,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
-        HelpString = "Checks if a file property, that you specify on the Configuration tab, matches the file name."
+        HelpString = "Checks if a file property, that you specify on the **Configuration Tab**, matches the file name."
         PopulateList(PartNumberDoesNotMatchFilename,
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
@@ -209,7 +209,7 @@ Public Class LabelToAction
                      HelpString)
 
         Dim LinksOutsideInputDirectory As New L2A
-        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the Home tab. "
+        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
         PopulateList(LinksOutsideInputDirectory,
                      "Links outside input directory",
                      "LinksOutsideInputDirectory",
@@ -231,9 +231,9 @@ Public Class LabelToAction
 
         Dim RunExternalProgram As New L2A
         HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
-        HelpString += "It is located on the task tab below the task list. "
+        HelpString += "It is located on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "Several rules about the program implementation apply. "
-        HelpString += "See **[HousekeeperExternalPrograms](https://github.com/rmcanany/HousekeeperExternalPrograms)** for details and examples. "
+        HelpString += "See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
         PopulateList(RunExternalProgram,
                      "Run external program",
                      "RunExternalProgram",
@@ -259,10 +259,10 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
-        HelpString += "These controls are on the task tab below the task list. "
+        HelpString += "These controls are on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "Images can be saved with the aspect ratio of the model, rather than the window. "
         HelpString += "The option is called `Save as image -- crop to model size`. "
-        HelpString += "It is located on the Configuration tab. "
+        HelpString += "It is located on the **Configuration Tab**. "
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. "
         HelpString += "The PropertySet designation, `System.` or `Custom.` is required. "
@@ -331,7 +331,7 @@ Public Class LabelToAction
 
         Dim UpdateMaterialFromMaterialTable As New L2A
         HelpString = "Checks to see if the part's material name and properties match any material "
-        HelpString += "in a file you specify on the Configuration tab. "
+        HelpString += "in a file you specify on the **Configuration Tab**. "
         HelpString += vbCrLf + vbCrLf + "If the names match, "
         HelpString += "but their properties (e.g., face style) do not, the material is updated. "
         HelpString += "If the names do not match, or no material is assigned, it is reported in the log file."
@@ -420,7 +420,7 @@ Public Class LabelToAction
 
         Dim MaterialNotInMaterialTable As New L2A
         HelpString = "Checks the file's material against the material table. "
-        HelpString += "The material table is chosen on the Configuration tab. "
+        HelpString += "The material table is chosen on the **Configuration Tab**. "
         PopulateList(MaterialNotInMaterialTable,
                      "Material not in material table",
                      "MaterialNotInMaterialTable",
@@ -663,11 +663,11 @@ Public Class LabelToAction
 
 
         Dim UpdateStylesFromTemplate As New L2A
-        HelpString = "Creates a new file from a template you specify on the Configuration tab. "
+        HelpString = "Creates a new file from a template you specify on the **Configuration Tab**. "
         HelpString += "Copies drawing views, dimensions, etc. from the old file into the new one. "
         HelpString += "If the template has updated styles, a different background sheet, or other changes, "
         HelpString += "the new drawing will inherit them automatically. "
-        HelpString += vbCrLf + vbCrLf + "This task has the option to `Allow partial success`.  It is set on the Configuration tab. "
+        HelpString += vbCrLf + vbCrLf + "This task has the option to `Allow partial success`.  It is set on the **Configuration Tab**. "
         HelpString += "If the option is set, and some drawing elements were not transferred, "
         HelpString += "it is reported in the log file. "
         HelpString += "Also reported in the log file are instructions for completing the transfer. "
@@ -680,7 +680,7 @@ Public Class LabelToAction
 
         Dim UpdateDrawingBorderFromTemplate As New L2A
         HelpString = "Replaces the background border with that of the Draft template specified on "
-        HelpString += "the Configuration tab."
+        HelpString += "the **Configuration Tab**."
         HelpString += vbCrLf + vbCrLf + "In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. "
         HelpString += "It does not attempt to update styles or anything else."
         PopulateList(UpdateDrawingBorderFromTemplate,
@@ -751,7 +751,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim Print As New L2A
-        HelpString = "Print settings are accessed on the Configuration tab."
+        HelpString = "Print settings are accessed on the **Configuration Tab**."
         HelpString += vbCrLf + vbCrLf + "Note, the presence of the Printer Settings dialog is somewhat misleading. "
         HelpString += "The only settings taken from it are the printer name, page height and width, "
         HelpString += "and the number of copies. "
