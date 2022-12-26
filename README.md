@@ -11,14 +11,14 @@
 @[Martin Bernhard], @Derek G, @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101
 
-![Interface_Large](My%20Project/media/interface_1100x830.png)
-
 ## DESCRIPTION
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. 
 It can identify failed features in 3D models, detached dimensions in drawings, 
 missing parts in assemblies, and more.  It can also update certain individual 
 file settings to match those in a template you specify.
+
+![Home Tab Done](My%20Project/media/home_tab_done.png)
 
 *Feedback from users*
 
@@ -123,7 +123,8 @@ See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 ### Selection
 
 The Home Tab is where you select which files to process.  As mentioned above,
-using the Selection Toolbar, you can select by folder, subfolder, top-level assembly or list.
+using the Selection Toolbar, you can select by folder, subfolder, top-level 
+assembly, top-level folder, or list.
 There can be any number of each, in any combination.  
 
 Another option is to drag and drop files from Windows File Explorer. 
@@ -131,27 +132,29 @@ You can use drag and drop and the toolbar in combination.
 
 An alternative method is to select files with errors from a previous run. 
 
-All of these options are explained below.
-
-![Toolbar](My%20Project/media/folder_toolbar.png)
+![Toolbar](My%20Project/media/select_toolbar.png)
 
 #### 1. Select by Folder
 
 Choose this option to select files within a single folder, 
-or a folder and its subfolders.  You can select any number of each.
-Referring to the diagram, click the the icon marked **a** to select a 
-single folder, click the icon marked **b** to include sub folders.
+or a folder and its subfolders. 
+Referring to the diagram, 
+click ![Folder](Resources/icons8_Folder_16.png)
+to select a single folder, 
+click ![Folders](Resources/icons8_folder_tree_16.png)
+for a folder and sub folders.
 
 #### 2. Select by Top-Level Assembly
 
 Choose this option to select files linked to an assembly.
-Again referring to the diagram, click **a** to choose the assembly, 
-click **b** to choose where to search for _where used_ files. 
-You can select any number of top-level assemblies and 
-_where used_ folders.
+Again referring to the diagram, 
+click ![Assembly](Resources/ST9%20-%20asm.png)
+to choose the assembly, 
+click ![Assembly Folders](Resources/icons8_Folders_16.png)
+to choose where to search for _where used_ files. 
 
 If you don't specify any *where used* folders, Housekeeper simply finds
-files contained in the specified assembly and subassemblies, without performing  
+files linked to the specified assembly and subassemblies, without performing  
 _where used_ on them.
 
 If you _do_ specify one or more folders, there are two options on how 
@@ -188,8 +191,11 @@ top level assembly.  It is set on the **Configuration Tab**.
 
 #### 3. Select by list
 
-Referring to the diagram, click the icon labeled **a** to import a list, 
-click **b** export one.  
+Referring to the diagram, 
+click ![Import](Resources/icons8_import_16.png)
+to import a list, 
+click ![Export](Resources/icons8_export_16.png)
+to export one.  
 
 If you are importing a list from another source, be aware that the 
 file names must contain the full path.  E.g.,
@@ -199,14 +205,16 @@ file names must contain the full path.  E.g.,
 
 **Select files with errors from the previous run**
 
-Click **a** to select only files that encountered an error. 
+Click ![Errors](Resources/icons8_Error_16.png)
+to select only files that encountered an error. 
 All other files will be removed from the list.  To reproduce the 
 TODO list functionality from previous versions, you can export the 
-resultant list if needed.
+resultant list if desired.
 
 **Remove all**
 
-Click **b** to remove all folders and files from the list.
+Click ![Remove All](Resources/icons8_trash_16.png)
+to remove all folders and files from the list.
 
 **RMB shortcut menu**
 
@@ -221,14 +229,20 @@ section of the list.
 
 #### 5. Update
 
-The update button populates the file list from the File Sources and Filters.
+The update button 
+![Update](Resources/Synch_16.png)
+populates the file list from the File Sources and Filters.
 If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), 
 an update is required.
 
 #### 6. File Type
 
 You can limit the search to return only selected types of Solid Edge files.
-To do so, check/uncheck the appropriate File Type icon. 
+To do so, check/uncheck the appropriate File Type
+![Assembly](Resources/ST9%20-%20asm.png)
+![Part](Resources/ST9%20-%20par.png)
+![Sheet Metal](Resources/ST9%20-%20psm.png)
+![Draft](Resources/ST9%20-%20dft.png) 
 
 ### Filtering
 
@@ -241,130 +255,128 @@ They can be used alone or in combination.
 #### Property Filter
 
 The property filter allows you to select files by their property values.
-To configure a property filter, click the tool icon to the right of
-the Property filter checkbox.  For details see below.
+To configure a property filter, 
+click the tool icon ![Draft](Resources/icons8_tools_16.png)
+to the right of
+the Property filter checkbox. 
+
+This is a powerful tool with a lot
+of options. These are detailed below.
 
 **Composing a Filter**
 
-Compose a filter by defining one or more Conditions, and adding them one-by-one to the list.
-A Condition consists of a Property, a Comparison, and a Value.
-For example, `Material contains Steel`, where `Material` is the Property, 
-`contains` is the Comparison, and `Steel` is the Value.
+![Property Filter](My%20Project/media/property_filter.png)
 
+Compose a filter by defining one or more **Conditions**, and adding them 
+one-by-one to the list.
+A **Condition** consists of a **Property**, a **Comparison**, and a **Value**.
+For example, `Material contains Steel`, where `Material` is the **Property**, 
+`contains` is the **Comparison**, and `Steel` is the **Value**.
 
 Up to six Conditions are allowed for a filter.
-They can be named, saved, modified, and deleted as desired.
+The filters can be named, saved, modified, and deleted as desired.
 
+**Property Set**
 
-**Property**
+In addition to entering the `Property name`, you must also 
+select the `Property set`, either `System` or `Custom`.
 
-Enter the name of the property to be evaluated in the `Property name` textbox.
-Select the Property`s `Property set`, either System or Custom.
-The Property sets are described below.
+`System` properties are in every Solid Edge file.
+They include `Material`, `Project`, etc.
+Note, at this time, they must be in English.
 
-
-System properties are in every Solid Edge file.
-They include Material, Manager, Project, etc.
-Note, at this time, the System property names must be specified in English.
-
-
-Custom properties are ones that you create, probably in a template.
-The custom property names can be in any language.  (In theory, at least -- not tested at this time.)
-
+`Custom` properties are ones that you create, probably in a template.
+Solid Edge also creates some Custom properties for you.
+These include `Exposed Variables` and output from 
+`Inspect > Physical Properties` command.
+The custom property names can be in any language. 
+(In theory, at least -- not tested at this time.
+Not sure about the Solid Edge variables either.)
 
 **Comparison**
 
 Select the Comparison from its dropdown box.
-The choices are `contains`, `is_exactly`, `is_not`, `wildcard_contains`, `>`, or `<`.
-The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self explanatory.
-The two `contains` options are described below.
+The choices are `contains`, `is_exactly`, `is_not`, 
+`wildcard_contains`, `>`, or `<`.
+The options `is_exactly`, `is_not`, `>`, and `<` are hopefully 
+self explanatory.
 
-
-With the `contains` option, 
-the Value you specify can appear anywhere in the property.
-For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, 
-you will get a match.
-Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison.
+`Contains` means the Value can appear anywhere in the property.
+For example, if you specify `Aluminum` and a part file has 
+`Aluminum 6061-T6`, you will get a match.
+Note, at this time, all Values (except see below for dates and numbers) 
+are converted to lower case text before comparison.
 So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
+`Wildcard_contains` is like `contains`, except with wildcards. 
+For example `[bfj]ake` would match
+`bake`, `fake`, and `jake`.  The `contains` part means that
+`I baked the cake!` would also match.
 
-The `wildcard_contains` option is like `contains`, except wildcard characters are used.
-Internally, it is implemented with the VB `Like` operator, 
-which is similar to the old DOS wildcard search, but with a few more options.
-For details and examples, see 
-[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator).
-
+Internally the 
+[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
+is used to make the comparison.  Visit the link for details and examples.
 
 **Default Filter Formula**
 
 Each Condition is assigned a variable name, (`A`, `B`, `...`).
 The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
-
-**Example**
-
-Say you have the following conditions:
-
-    A  System  Material  contains    Aluminum 
-    B  System  Project   is_exactly  7477 
-    C  Custom  Engineer  contains    Fred
-
-
-By default you will get all Aluminum parts in project 7477 engineered by Fred.
-
+Referring to the Property Filter dialog shown above, 
+the default formula means you will get all parts in project 7477 
+made out of Aluminum and engineered by Fred.
 
 **Editing the Formula**
 
 You can optionally change the formula.
 Click the Edit button and type the desired expression.
-For example, if you wanted all Aluminum parts, either from project 7477, or engineered by Fred, 
-you would enter `A AND (B OR C)`.
-
+For example, if you wanted all parts from Project 7477, 
+either made out of Aluminum, 
+or engineered by Fred, you would enter `A AND (B OR C)`.
 
 **Dates and Numbers**
 
 Dates and numbers are converted to their native format when possible.
-This is done to obtain commonsense results for the comparisons `<` and `>`.
-
+This is done to obtain commonsense results for `<` and `>`.
 
 Dates take the form `YYYYMMDD` when converted.
-This is the format that must be used in the `Value` field for comparisons.
+This is the format that must be used in the `Value` field.
+So if you wanted all files dated before January 1, 2022, your condition would be
+`Custom.Date < 20220101`.
 The conversion is supposed to be locale-aware, however this has not been tested.
 Please ask on the Solid Edge Forum if it is not working correctly for you.
 
-
-Numbers are converted to floating point values.
+Numbers are converted to floating point decimals.
 In Solid Edge many numbers, in particular those from the variable table, 
 include units.
 These must be stripped off by the program to make comparisons.
 Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`).
 It`s easy to add more, so please ask on the Forum if you need others.
 
-
 **Saved Settings**
 
-The filters are saved in `property_filters.txt` in the same directory as Housekeeper.exe.
+The filters are saved in `property_filters.txt` in the same directory as 
+Housekeeper.exe.
 If desired, you can create a master copy of the file and share it with others.
 You can manually edit the file, 
 however, note that the field delimiter is the TAB character.
-This was done so that the property name and value fields could contain space (` `) characters.
-
+This was done so that the property name and value fields could contain 
+spaces.
 
 #### Wildcard Filter
 
 Filtering by wildcard is done by entering the wildcard pattern in the 
 provided combobox.  Wildcard patterns are automatically saved for 
 future use.  Delete a pattern that is no longer needed by selecting it 
-and clicking the red 'X' icon. 
+and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
 
-Internally, the search is implemented with the VB `Like` operator, 
-which is similar to the old DOS wildcard search, but with a few more options. 
-For details and examples, see 
-[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator).
+As suggested above, see
+[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
+for details and examples.
 
 ## STARTING, STOPPING, AND MONITORING EXECUTION
 
-![Tabs](My%20Project/media/stop_button.png)
+![Tabs](My%20Project/media/status_bar_running.png)
 
 Press the Process button to start executing the chosen tasks.
 If one or more files on the list were selected, only those are processed.
@@ -378,10 +390,11 @@ detected, a checkmark
 Otherwise, an error indicator 
 ![Error](Resources/icons8_Error_16.png) is displayed.
 
-You can monitor progress with the status bar.  It shows the number of files
+You can monitor progress on the status bar.  It shows the number of files
 processed, the current file, and an estimate of time remaining.
  
-You can also interrupt the program before it finishes.  While processing, 
+You can also interrupt the program before it finishes. 
+As shown above, while processing, 
 the Cancel button changes to a Stop button.  Just click that to halt 
 execution.  It may take several seconds to register the request.  It 
 doesn't hurt to click it a couple of times.
@@ -392,17 +405,18 @@ doesn't hurt to click it a couple of times.
 Since the program can process a large number of files in a short amount of time, 
 it can be very taxing on Solid Edge. 
 To maintain a clean environment, the program restarts Solid Edge periodically. 
+(Set the frequency on the **Configuration** tab.)
 This is by design and does not necessarily indicate a problem.
 
 However, problems can arise. 
-Those cases will be reported in the log file with the message 'Error processing file'. 
-A stack trace will be included.  The stack trace looks scary, but may be 
-useful for program debugging. 
+Those cases will be reported in the log file with the message 
+`Error processing file`. 
+A stack trace will be included, which may be useful for debugging. 
 If four of these errors are detected in a run, the programs halts with the 
-Status Bar message 'Processing aborted'.
+Status Bar message `Processing aborted`.
 
 Please note this is not a perfect program.  It is not guaranteed not to mess 
-up your files.  Back up any files before using it.
+up your work.  Back up any files before using it.
 
 ## KNOWN ISSUES
 
@@ -424,9 +438,9 @@ May not support multiple installed versions on the same machine.
 
 **Printer settings**  
 Does not support all printer settings, e.g., duplexing, collating, etc.  
-*Cause*: Not exposed in the DraftPrintUtility() API.  
+*Cause*: Not exposed in the `DraftPrintUtility()` API.  
 *Possible workaround*: Create a new Windows printer with the desired settings. 
-Refer to the TESTS AND ACTIONS topic below for more details. 
+Refer to the **Draft Tasks -- Print Topic** below for more details. 
 
 **Pathfinder during Interactive Edit**  
 Pathfinder is sometimes blank when running the 'Interactive Edit' task.  
@@ -434,11 +448,12 @@ Pathfinder is sometimes blank when running the 'Interactive Edit' task.
 *Possible workaround*: Refresh the screen by minimizing and maximizing the 
 Solid Edge window. 
 
+## TASK DESCRIPTIONS
 
+![Interface_Large](My%20Project/media/sheetmetal_tab_done.png)
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
-
-## TASK DESCRIPTIONS
+<!-- Start -->
 
 ### Assembly
 
