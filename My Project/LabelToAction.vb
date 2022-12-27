@@ -107,7 +107,7 @@ Public Class LabelToAction
         HelpString += "The property, search text, and replacement text are entered on the **Task Tab**, "
         HelpString += "below the task list. "
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "For more information, see the **Property Filter** section. "
+        HelpString += "For more information, see the **Property Filter** section above. "
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
         HelpString += "the replacement is `ALUMINUM`, "
@@ -155,7 +155,7 @@ Public Class LabelToAction
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab**. "
         HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
-        HelpString += "To create a named style from an override, use `Save As` on the `View Overrides` dialog."
+        HelpString += "To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`."
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
@@ -171,8 +171,8 @@ Public Class LabelToAction
                      RequiresSave:=True)
 
         Dim FitPictorialView As New L2A
-        HelpString = "Maximizes the window, sets the view orientation, and does a fit."
-        HelpString += vbCrLf + vbCrLf + "Select the desired orientation on the **Configuration Tab**."
+        HelpString = "Maximizes the window, sets the view orientation, and does a fit. "
+        HelpString += "Select the desired orientation on the **Configuration Tab**."
         PopulateList(FitPictorialView,
                      "Fit pictorial view",
                      "FitPictorialView",
@@ -227,7 +227,7 @@ Public Class LabelToAction
         Dim RunExternalProgram As New L2A
         HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the **Task Tab** below the task list. "
-        HelpString += vbCrLf + vbCrLf + "Several rules about the program implementation apply. "
+        HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
         HelpString += "See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
         PopulateList(RunExternalProgram,
                      "Run external program",
@@ -236,8 +236,10 @@ Public Class LabelToAction
                      RequiresExternalProgram:=True)
 
         Dim InteractiveEdit As New L2A
-        HelpString = "Brings up files one at a time for manual processing.  Some rules apply."
-        HelpString += vbCrLf + vbCrLf + "It is important to leave Solid Edge in the state you found it when the file was opened. "
+        HelpString = "Brings up files one at a time for manual processing. "
+        HelpString += "A dialog box lets you tell Housekeeper when you are done. "
+        HelpString += vbCrLf + vbCrLf + "Some rules for interactive editing apply. "
+        HelpString += "It is important to leave Solid Edge in the state you found it when the file was opened. "
         HelpString += "For example, if you open another file, such as a drawing, you need to close it. "
         HelpString += "If you add or modify a feature, you need to click Finish. "
         HelpString += vbCrLf + vbCrLf + "Also, do not Close the file or do a Save As on it. "
@@ -260,13 +262,8 @@ Public Class LabelToAction
         HelpString += "It is located on the **Configuration Tab**. "
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. "
-        HelpString += "The PropertySet designation, `System.` or `Custom.` is required. "
-        HelpString += "These refer to where the property is stored in a Solid Edge file. "
-        HelpString += vbCrLf + vbCrLf + "System properties are in every Solid Edge file. "
-        HelpString += "They include Material, Project, etc. "
-        HelpString += "Note, at this time, the System property names must be specified in English. "
-        HelpString += "Custom properties are ones that you create, probably in a template. "
-        HelpString += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
+        HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
+        HelpString += "For more information, see the **Property Filter** section above. "
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
         HelpString += "If that happens, a replacement is read from filename_charmap.txt in the same directory as Housekeeper.exe. "
         HelpString += "You can/should edit it to change the replacement characters to your preference. "

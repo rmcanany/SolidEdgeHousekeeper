@@ -1,14 +1,72 @@
+![Logo](My%20Project/media/logo.png)
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it here:
+Solid Edge Housekeeper is a utility for finding annoying little errors in 
+your project.  It is free and open source and you can find it 
+[**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
-https://github.com/rmcanany/SolidEdgeHousekeeper  (Scroll past the file list for the README)
+Please note, the program has been tested on many of our files, but none 
+of yours.  Do not run it on production work without testing on backups first.
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
+Feel free to report bugs and/or ideas for improvement on the 
+[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
-Feel free to report bugs and/or ideas for improvement on the Solid Edge Community Forum.  https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
+## V2023.1 Enhancements/Fixes
+
+### Redesigned Home Tab
+
+Contributed by @Fiorini (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+The new interface is much more flexible, organized, and colorful 
+than ever!  Select from folders, sub folders, top-level assemblies, top-level
+folders, lists, and drag-and-drop.  Pick any number of each, in any combination.
+
+![Home Tab](My%20Project/media/home_tab_done.png)
+
+### Logo
+
+Contributed by @daysanduski.  Thank you!
+
+See above.  Pretty fun, huh?
+
+### Run external program 
+
+Changed error handling to be more consistent with Housekeeper.
+
+Added a new VBScript example program to the 
+[**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms)
+repo.  
+
+`ChangeToInchAndSaveAsFlatDXF.vbs` shows how to return an `ExitCode`,
+handle error messages and parse the `defaults.txt` file.
+
+### Top-Level Assembly
+
+Improved file link traversal performance in Bottom Up mode
+approx 10X (Thank you @Fiorini).
+Unfortunately, *Where Used* performance is not affected.
 
 
+### Version numbers
+
+Changed to a year-based numbering scheme (Thank you @bshand!).
+
+Added the version number to Housekeeper's main form title bar so you
+can easily check which version you are running.
+
+### Help Tab
+
+Renamed from Readme to 
+[**Help**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme). 
+It is now hosted on GitHub and features a more legible (and bigger) font 
+and lots of pictures (Thank you @Fiorini!).  
+
+To help you find what you need quickly, it also features a
+built in Table of Contents, described
+[**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#getting-help).
+
+Updated the File Selection and Filtering Sections. Added sections on
+Collaborators, User Feedback, and Helping Out. 
 
 ## v0.1.10.3 Enhancements/Fixes
 

@@ -8,11 +8,11 @@
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
 @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
-@[Martin Bernhard], @Derek G, @Chris42, @Jason1607436093479, @Bob Henry, 
+@[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101
 
 Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,
-and others.  Most of the rest copied verbatim from Jason's repo and Tushar's blog.
+and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.
 
 ## DESCRIPTION
 
@@ -36,37 +36,37 @@ file settings to match those in a template you specify.
 
 > *Awesome. It looks like you are still overachieving with this app, and I thank*
 > *you for it. If they ever figure out how to automate me running Housekeeper, I*
-> *will be out of a job. Thank God only I know how to press that "process" button.*
+> *will be out of a job!*
 
 
 ## GETTING HELP
 
 Start with the Readme. 
-To view the Table of Contents, click the *list icon* next to `README.md`.
+To view the Table of Contents, click the icon next to `README.md`
+as shown below.
 
 ![Table of Contents](My%20Project/media/readme_navigation_02.png)
 
-Ask questions or suggest improvements on the 
+Ask questions, report bugs, or suggest improvements on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
-To subscribe to update notices or volunteer to be a beta tester, 
-message me, RobertMcAnany, on the forum. 
-(The `Messages` button is hidden under your profile picture,
-at the very top right of the page). 
-Unsubscribe the same way.  
-
-To combat bots and spam, I will probably 
-ignore requests from `User16612341234...`. 
-(Change you nickname via `My Profile`,
-also hidden under your profile picture). 
 
 ## HELPING OUT
 
-If you want to help out on Housekeeper, sign up as a beta tester! 
+If you want to make Housekeeper better, join us as a beta tester! 
 Beta testing is nothing more than conducting your own workflow on your own 
 files and telling me if you run into problems. 
 It isn't meant to be a lot of work. 
 The big idea is to make the program better for you and me and everyone else!
+
+To sign up, message me, RobertMcAnany, on the forum. 
+(The `Messages` button is hidden under your profile picture,
+at the very top right of the page). 
+Unsubscribe the same way. 
+To combat bots and spam, I will probably 
+ignore requests from `User16612341234...`. 
+(Change you nickname via `My Profile`,
+also under your profile picture). 
 
 If you know .NET, or want to learn, there's more
 to do!  To get started on GitHub collaboration, head over to
@@ -79,15 +79,15 @@ There are instructions and links to get you up to speed.
 There is no installation *per se*.  The preferred method is to download or clone 
 the project and compile it yourself.
 
-The other option is to use the latest 
-[**Release**](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). 
+The other option is to use the 
+[**Latest Release**](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). 
 It will be the top entry on the page. 
 
 
 ![Release Page](My%20Project/media/release_page.png)
 
 Click the 
-file `SolidEdgeHousekeeper-vyyyy-x.zip` 
+file `SolidEdgeHousekeeper-VYYYY.N.zip` 
 (sometimes hidden under the Assets dropdown). 
 It should prompt you to save it. 
 Choose a convenient location on your machine. 
@@ -106,7 +106,8 @@ Versions prior to 0.1.10 won't have `filename_charmap.txt` either.
 
 On each file type's tab, select which tasks to perform. 
 On the Home tab, select which files to process. 
-You can select files by folder, subfolder, top-level assembly or list.
+You can select files by folder, subfolder, top-level assembly,
+top-level folder, list, or drag-and-drop.
 There can be any number of each, in any combination.
 You can refine the search using a property filter, a wildcard filter, or both. 
 See **FILE SELECTION AND FILTERING** below for details. 
@@ -372,7 +373,7 @@ It`s easy to add more, so please ask on the Forum if you need others.
 **Saved Settings**
 
 The filters are saved in `property_filters.txt` in the same directory as 
-Housekeeper.exe.
+`Housekeeper.exe`.
 If desired, you can create a master copy of the file and share it with others.
 You can manually edit the file, 
 however, note that the field delimiter is the TAB character.
@@ -483,7 +484,7 @@ Can run out of memory for very large assemblies.
 #### Property find replace
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the **Task Tab**, below the task list. 
 
-A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section. 
+A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
@@ -507,15 +508,13 @@ Face style overrides change a part's appearance in the assembly. This command ca
 #### Update face and view styles from template
 Updates the file with face and view styles from a file you specify on the **Configuration Tab**. 
 
-Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, use `Save As` on the `View Overrides` dialog.
+Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
 #### Hide constructions
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 #### Fit pictorial view
-Maximizes the window, sets the view orientation, and does a fit.
-
-Select the desired orientation on the **Configuration Tab**.
+Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab**.
 
 #### Part number does not match file name
 Checks if a file property, that you specify on the **Configuration Tab**, matches the file name.
@@ -538,12 +537,12 @@ Checks if any assembly occurrences have missing relationships.
 #### Run external program
 Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
-Several rules about the program implementation apply. See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
+If you are writing your own program, be aware several interoperability rules apply. See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
 #### Interactive edit
-Brings up files one at a time for manual processing.  Some rules apply.
+Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. 
 
-It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. 
+Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. 
 
 Also, do not Close the file or do a Save As on it. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an exception. 
 
@@ -554,9 +553,9 @@ Select the file type using the `Save As` combobox. Select the directory using th
 
 Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab**. 
 
-You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. The PropertySet designation, `System.` or `Custom.` is required. These refer to where the property is stored in a Solid Edge file. 
+You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. 
 
-System properties are in every Solid Edge file. They include Material, Project, etc. Note, at this time, the System property names must be specified in English. Custom properties are ones that you create, probably in a template. The custom property names can be in any language.  (In theory, at least -- not tested at this time.)
+A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the same directory as Housekeeper.exe. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 

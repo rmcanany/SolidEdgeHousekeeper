@@ -244,9 +244,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Housekeeper.ico" />
     <Content Include="Housekeeper_MN.ico" />
-    <Content Include="Housekeeper_New.ico" />
     <None Include="Resources\icons8_Close_Window_16.png" />
     <None Include="Resources\icons8_Circled_Play_16.png" />
     <None Include="Resources\Delete_16.png" />

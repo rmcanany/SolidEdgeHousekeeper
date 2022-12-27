@@ -52,18 +52,24 @@ Public Class CommonTasks
     End Function
 
     Shared Function RunExternalProgram(
-        ExternalProgram As String
+        ExternalProgram As String,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        Configuration As Dictionary(Of String, String),
+        SEApp As SolidEdgeFramework.Application
         ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'Dim ExternalProgram As String = Configuration("TextBoxExternalProgramAssembly")
+
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(ExternalProgram)
         Dim P As New Process
         Dim ExitCode As Integer
         Dim ErrorMessageFilename As String
         Dim ErrorMessages As String()
+
 
         P = Process.Start(ExternalProgram)
         P.WaitForExit()
@@ -91,10 +97,65 @@ Public Class CommonTasks
 
         End If
 
+        If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        End If
+
+
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
 
+    Shared Function InteractiveEdit(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Result As MsgBoxResult
+        Dim msg As String
+        Dim indent As String = "    "
+
+        SEApp.DisplayAlerts = True
+
+        msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
+        msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
+        msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
+
+        Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
+
+        If Result = vbYes Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save read-only file.")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        ElseIf Result = vbNo Then
+            '    ExitStatus = 1
+            '    ErrorMessageList.Add("File was not saved.")
+        Else  ' Cancel was chosen
+            ExitStatus = 99
+            ErrorMessageList.Add("Operation was cancelled.")
+        End If
+
+        SEApp.DisplayAlerts = False
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
     Shared Function ReadExcel(FileName As String) As String()
 

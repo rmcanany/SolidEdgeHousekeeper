@@ -1948,7 +1948,6 @@ Public Class PartTasks
     'End Function
 
 
-
     Public Function InteractiveEdit(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1958,12 +1957,12 @@ Public Class PartTasks
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.PartDocument,
+                               Of SolidEdgeFramework.SolidEdgeDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf InteractiveEditInternal,
-                                   CType(SEDoc, SolidEdgePart.PartDocument),
+                                   AddressOf CommonTasks.InteractiveEdit,
+                                   SEDoc,
                                    Configuration,
                                    SEApp)
 
@@ -1971,52 +1970,72 @@ Public Class PartTasks
 
     End Function
 
-    Private Function InteractiveEditInternal(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
+    'Public Function InteractiveEdit(
+    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim Result As MsgBoxResult
-        Dim msg As String
-        Dim indent As String = "    "
+    '    ErrorMessage = InvokeSTAThread(
+    '                           Of SolidEdgePart.PartDocument,
+    '                           Dictionary(Of String, String),
+    '                           SolidEdgeFramework.Application,
+    '                           Dictionary(Of Integer, List(Of String)))(
+    '                               AddressOf InteractiveEditInternal,
+    '                               CType(SEDoc, SolidEdgePart.PartDocument),
+    '                               Configuration,
+    '                               SEApp)
 
-        SEApp.DisplayAlerts = True
+    '    Return ErrorMessage
 
-        msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
-        msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
-        msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
-        msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
+    'End Function
 
-        Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
+    'Private Function InteractiveEditInternal(
+    '    ByVal SEDoc As SolidEdgePart.PartDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
 
-        If Result = vbYes Then
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save read-only file.")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
-        ElseIf Result = vbNo Then
-            'ExitStatus = 1
-            'ErrorMessageList.Add("File was not saved.")
-        Else  ' Cancel was chosen
-            ExitStatus = 99
-            ErrorMessageList.Add("Operation was cancelled.")
-        End If
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        SEApp.DisplayAlerts = False
+    '    Dim Result As MsgBoxResult
+    '    Dim msg As String
+    '    Dim indent As String = "    "
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    '    SEApp.DisplayAlerts = True
 
+    '    msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
+    '    msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
+    '    msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
+    '    msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
 
+    '    Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
+
+    '    If Result = vbYes Then
+    '        If SEDoc.ReadOnly Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Cannot save read-only file.")
+    '        Else
+    '            SEDoc.Save()
+    '            SEApp.DoIdle()
+    '        End If
+    '    ElseIf Result = vbNo Then
+    '        'ExitStatus = 1
+    '        'ErrorMessageList.Add("File was not saved.")
+    '    Else  ' Cancel was chosen
+    '        ExitStatus = 99
+    '        ErrorMessageList.Add("Operation was cancelled.")
+    '    End If
+
+    '    SEApp.DisplayAlerts = False
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
     Public Function RunExternalProgram(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -2026,60 +2045,87 @@ Public Class PartTasks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.PartDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf RunExternalProgramInternal,
-                                   CType(SEDoc, SolidEdgePart.PartDocument),
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function RunExternalProgramInternal(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim SupplementalErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-
         Dim ExternalProgram As String = Configuration("TextBoxExternalProgramPart")
 
-        SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
+        ErrorMessage = InvokeSTAThread(
+                            Of String,
+                            SolidEdgeFramework.SolidEdgeDocument,
+                            Dictionary(Of String, String),
+                            SolidEdgeFramework.Application,
+                            Dictionary(Of Integer, List(Of String)))(
+                                AddressOf CommonTasks.RunExternalProgram,
+                                ExternalProgram,
+                                SEDoc,
+                                Configuration,
+                                SEApp)
 
-        ExitStatus = SupplementalErrorMessage.Keys(0)
-
-        SupplementalErrorMessageList = SupplementalErrorMessage(ExitStatus)
-
-        If SupplementalErrorMessageList.Count > 0 Then
-            For Each s As String In SupplementalErrorMessageList
-                ErrorMessageList.Add(s)
-            Next
-        End If
-
-        If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
-        End If
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
+
     End Function
+
+
+    'Public Function RunExternalProgram(
+    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    ErrorMessage = InvokeSTAThread(
+    '                           Of SolidEdgePart.PartDocument,
+    '                           Dictionary(Of String, String),
+    '                           SolidEdgeFramework.Application,
+    '                           Dictionary(Of Integer, List(Of String)))(
+    '                               AddressOf RunExternalProgramInternal,
+    '                               CType(SEDoc, SolidEdgePart.PartDocument),
+    '                               Configuration,
+    '                               SEApp)
+
+    '    Return ErrorMessage
+
+    'End Function
+
+    'Private Function RunExternalProgramInternal(
+    '    ByVal SEDoc As SolidEdgePart.PartDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim SupplementalErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    '    Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+
+    '    Dim ExternalProgram As String = Configuration("TextBoxExternalProgramPart")
+
+    '    SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
+
+    '    ExitStatus = SupplementalErrorMessage.Keys(0)
+
+    '    SupplementalErrorMessageList = SupplementalErrorMessage(ExitStatus)
+
+    '    If SupplementalErrorMessageList.Count > 0 Then
+    '        For Each s As String In SupplementalErrorMessageList
+    '            ErrorMessageList.Add(s)
+    '        Next
+    '    End If
+
+    '    If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
+    '        If SEDoc.ReadOnly Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '        Else
+    '            SEDoc.Save()
+    '            SEApp.DoIdle()
+    '        End If
+    '    End If
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
 
 
