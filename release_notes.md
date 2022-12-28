@@ -30,6 +30,8 @@ You'll also notice new icons throughout.  These are drawn from standard Windows 
 Solid Edge libraries and you'll recognize them instantly.  If there's one
 you don't know, a tooltip pops up to tell you what it does.
 
+**Home Tab**
+
 ![Home Tab](My%20Project/media/home_tab_done.png)
 
 **Selection toolbar**
@@ -48,13 +50,13 @@ you don't know, a tooltip pops up to tell you what it does.
 
 Contributed by **@daysanduski**.  Thank you!
 
-See above.  Pretty fun, huh?
+It's at the very top of this page.  Pretty fun, huh?
 
 ### Save As
 
 Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
 
-Eliminate the dependency on `ffmpeg.exe` for image files.
+Eliminate the dependency on the external program `ffmpeg.exe` for image files.
 
 ### Run external program 
 
