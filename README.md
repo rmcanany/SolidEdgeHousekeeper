@@ -143,7 +143,7 @@ You can use drag and drop and the toolbar in combination.
 
 An alternative method is to select files with errors from a previous run. 
 
-![Toolbar](My%20Project/media/select_toolbar.png)
+![Toolbar](My%20Project/media/select_toolbar_labeled.png)
 
 #### 1. Select by Folder
 

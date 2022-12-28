@@ -15,30 +15,50 @@ Feel free to report bugs and/or ideas for improvement on the
 
 ### Redesigned Home Tab
 
-Contributed by @Fiorini (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
 
 The new interface is much more flexible, organized, and colorful 
-than ever!  Select from folders, sub folders, top-level assemblies, top-level
-folders, lists, and drag-and-drop.  Pick any number of each, in any combination.
+than ever!  Select from folders, sub folders, top-level assemblies and 
+folders, lists, drag-and-drop, and more.  Pick any number of each, in any combination.
 
 ![Home Tab](My%20Project/media/home_tab_done.png)
 
+**Selection toolbar**
+
+![Select Toolbar](My%20Project/media/select_toolbar.png)
+
+**Filter toolbar**
+
+![Select Toolbar](My%20Project/media/filter_toolbar.png)
+
 ### Logo
 
-Contributed by @daysanduski.  Thank you!
+Contributed by **@daysanduski**.  Thank you!
 
 See above.  Pretty fun, huh?
+
+### Save As
+
+Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+Eliminate the dependency on `ffmpeg.exe` for image files.
 
 ### Run external program 
 
 Changed error handling to be more consistent with Housekeeper.
 
-Added a new VBScript example program to the 
+Added a new sample program to the 
 [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms)
 repo.  
 
-`ChangeToInchAndSaveAsFlatDXF.vbs` shows how to return an `ExitCode`,
-handle error messages and parse the `defaults.txt` file.
+`ChangeToInchAndSaveAsFlatDXF.vbs` is a more complete VBScript example.  
+It shows how to return an `ExitCode`,
+handle `error messages` and parse the `defaults.txt` file. 
+It sets off space for user code and shows how to do error handling. 
+Practically every line has comments describing what it does.
+At the bottom of the file are helpful links to get you started
+writing your own VBScript files using nothing more than a text editor. 
+(Thank you again **@[Derek G]**!)
 
 ### Top-Level Assembly
 
@@ -49,24 +69,32 @@ Unfortunately, *Where Used* performance is not affected.
 
 ### Version numbers
 
-Changed to a year-based numbering scheme (Thank you @bshand!).
+Changed to a year-based numbering scheme (Thank you **@bshand**!).
 
-Added the version number to Housekeeper's main form title bar so you
+Updated the program title bar so you
 can easily check which version you are running.
 
 ### Help Tab
 
 Renamed from Readme to 
 [**Help**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme). 
-It is now hosted on GitHub and features a more legible (and bigger) font 
+Now hosted on GitHub, it features a more legible (and bigger) font 
 and lots of pictures (Thank you @Fiorini!).  
 
-To help you find what you need quickly, it also features a
-built in Table of Contents, described
-[**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#getting-help).
+To help you quickly navigate, it also features a built in Table of Contents. 
+(It's the icon next to **README.md** in the image below.)
+
+![Table of Contents](My%20Project/media/readme_navigation_02.png)
 
 Updated the File Selection and Filtering Sections. Added sections on
 Collaborators, User Feedback, and Helping Out. 
+
+### ToyProject
+
+Created a repo called [**ToyProject**](https://github.com/rmcanany/ToyProject) for anyone
+who wants to get started collaborating on GitHub. It has links to 
+GitHub's own guides, as well as instructions on how to make your first
+contribution!
 
 ## v0.1.10.3 Enhancements/Fixes
 
