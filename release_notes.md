@@ -19,7 +19,8 @@ Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli
 
 The new interface is much more flexible, organized, and colorful 
 than ever!  Generate your list of files from folders, sub folders, 
-top-level assemblies and their folders, lists, drag-and-drop, and more. 
+top-level assemblies and selected folders (Thank you **@MONKTheOCDEngie**!), 
+lists, drag-and-drop, and more. 
 Pick any number of each, in any combination.
 
 If you select one or more files in the list, there's now a Shortcut Menu 
@@ -92,6 +93,8 @@ Changed to a year-based numbering scheme (Thank you **@bshand**!).
 Updated the program title bar so you
 can easily check which version you are running.
 
+![Table of Contents](My%20Project/media/tabs.png)
+
 ### Help Tab
 
 Renamed from Readme to 
@@ -99,13 +102,13 @@ Renamed from Readme to
 Now hosted on GitHub, it features a more legible (and bigger) font 
 and lots of pictures (Thank you **@Fiorini**!). 
 
-To help you quickly navigate, it also features a built in Table of Contents. 
-(It's the icon next to **README.md** in the image below.)
+For quick navigation, it also features a built in Table of Contents. 
+(It's the icon next to **README.md** shown in the image below.)
 
 ![Table of Contents](My%20Project/media/readme_navigation_02.png)
 
-Updated the File Selection and Filtering Sections. Added sections on
-Collaborators, User Feedback, and Helping Out. 
+Also updated and expanded the File Selection and Filtering Sections. 
+Added sections on Collaborators, User Feedback, and Helping Out. 
 
 ### Beta Program
 
