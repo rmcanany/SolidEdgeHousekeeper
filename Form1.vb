@@ -98,7 +98,7 @@ Public Class Form1
 
         ErrorMessage = CheckStartConditions()
         If ErrorMessage <> "" Then
-            Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKCancel)
+            Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKOnly)
             If result = MsgBoxResult.Cancel Then
                 Exit Sub
             End If
@@ -142,7 +142,11 @@ Public Class Form1
         OleMessageFilter.Unregister()
 
         If StopProcess Then
-            TextBoxStatus.Text = "Processing aborted."
+            If TotalAborts > TotalAbortsMaximum Then
+                TextBoxStatus.Text = "The number of file processing errors exceeded maximum.  Stopping."
+            Else
+                TextBoxStatus.Text = "Processing halted by user."
+            End If
         Else
             ElapsedTime = Now.Subtract(StartTime).TotalMinutes
             If ElapsedTime < 60 Then

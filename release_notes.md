@@ -18,8 +18,17 @@ Feel free to report bugs and/or ideas for improvement on the
 Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
 
 The new interface is much more flexible, organized, and colorful 
-than ever!  Select from folders, sub folders, top-level assemblies and 
-folders, lists, drag-and-drop, and more.  Pick any number of each, in any combination.
+than ever!  Generate your list of files from folders, sub folders, 
+top-level assemblies and their folders, lists, drag-and-drop, and more. 
+Pick any number of each, in any combination.
+
+If you select one or more files in the list, there's now a Shortcut Menu 
+that lets you open the files in Solid Edge, view them in File Explorer, 
+start processing them in Housekeeper, or exclude them from the list.
+
+You'll also notice new icons throughout.  These are drawn from standard Windows and
+Solid Edge libraries and you'll recognize them instantly.  If there's one
+you don't know, a tooltip pops up to tell you what it does.
 
 ![Home Tab](My%20Project/media/home_tab_done.png)
 
@@ -30,6 +39,10 @@ folders, lists, drag-and-drop, and more.  Pick any number of each, in any combin
 **Filter toolbar**
 
 ![Select Toolbar](My%20Project/media/filter_toolbar.png)
+
+**Shortcut menu**
+
+![Select Toolbar](My%20Project/media/RMB_shortcut_menu.png)
 
 ### Logo
 
@@ -51,19 +64,22 @@ Added a new sample program to the
 [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms)
 repo.  
 
-`ChangeToInchAndSaveAsFlatDXF.vbs` is a more complete VBScript example.  
+The program, `ChangeToInchAndSaveAsFlatDXF.vbs`, 
+is a more complete VBScript example. 
+
 It shows how to return an `ExitCode`,
 handle `error messages` and parse the `defaults.txt` file. 
 It sets off space for user code and shows how to do error handling. 
 Practically every line has comments describing what it does.
+
 At the bottom of the file are helpful links to get you started
-writing your own VBScript files using nothing more than a text editor. 
+writing your own VBScript files, using nothing more than a text editor! 
 (Thank you again **@[Derek G]**!)
 
 ### Top-Level Assembly
 
 Improved file link traversal performance in Bottom Up mode
-approx 10X (Thank you @Fiorini).
+approx 10X (Thank you **@Fiorini**).
 Unfortunately, *Where Used* performance is not affected.
 
 
@@ -79,7 +95,7 @@ can easily check which version you are running.
 Renamed from Readme to 
 [**Help**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme). 
 Now hosted on GitHub, it features a more legible (and bigger) font 
-and lots of pictures (Thank you @Fiorini!).  
+and lots of pictures (Thank you **@Fiorini**!). 
 
 To help you quickly navigate, it also features a built in Table of Contents. 
 (It's the icon next to **README.md** in the image below.)
@@ -89,11 +105,24 @@ To help you quickly navigate, it also features a built in Table of Contents.
 Updated the File Selection and Filtering Sections. Added sections on
 Collaborators, User Feedback, and Helping Out. 
 
+### Beta Program
+
+Initiated a way for volunteers to contribute to Housekeeper 
+by testing the program before an upcoming release. 
+
+Beta testing is nothing more than conducting your own workflow on your own 
+files and telling me if you run into problems. 
+It isn't meant to be a lot of work. 
+The big idea is to make the program better for you and me and everyone else!
+
+To sign up message me, RobertMcAnany, on the 
+[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+
 ### ToyProject
 
-Created a repo called [**ToyProject**](https://github.com/rmcanany/ToyProject) for anyone
-who wants to get started collaborating on GitHub. It has links to 
-GitHub's own guides, as well as instructions on how to make your first
+Created a repo called [**ToyProject**](https://github.com/rmcanany/ToyProject) 
+for anyone who wants to get started collaborating on Housekeeper. It has links to 
+GitHub's own guides, as well as detailed instructions on how to make your first
 contribution!
 
 ## v0.1.10.3 Enhancements/Fixes
