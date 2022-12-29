@@ -1,6 +1,6 @@
 
 ![Logo](My%20Project/media/logo.png)
-<p align=center>Robert McAnany 2022
+<p align=center>Robert McAnany 2023
 
 **Contributors**:
 @farfilli (aka @Fiorini), @daysanduski
@@ -11,8 +11,8 @@
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101
 
-Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,
-and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.
+*Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
+*and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
 
 ## DESCRIPTION
 
@@ -41,9 +41,10 @@ file settings to match those in a template you specify.
 
 ## GETTING HELP
 
-Start with the Readme. 
-To view the Table of Contents, click the icon next to `README.md`
-as shown below.
+Start with the Readme.  To quickly navigate, use the Table of Contents
+by clicking
+![Table of Contents](My%20Project/media/table_of_contents_icon.png)
+as shown in the image below.
 
 ![Table of Contents](My%20Project/media/readme_navigation_02.png)
 
