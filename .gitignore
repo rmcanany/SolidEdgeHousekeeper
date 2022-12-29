@@ -5,6 +5,7 @@
 
 # This project
 defaults.txt
+[Rr]eference/
 
 # User-specific files
 *.rsuser
