@@ -133,34 +133,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.ApplicationHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Defaults.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.FileHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.LogFile.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.PrinterHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormPropertyFilter.Designer.vb">
-      <DependentUpon>FormPropertyFilter.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FormPropertyFilter.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -171,6 +143,33 @@
     <Compile Include="My Project\DraftTasks.vb" />
     <Compile Include="My Project\FeatureDoctor.vb" />
     <Compile Include="My Project\FilenameCharmapDoctor.vb" />
+    <Compile Include="My Project\Form1.ApplicationHelperFunctions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form1.Defaults.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Form1.FileHelperFunctions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form1.LogFile.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form1.PrinterHelperFunctions.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\FormPropertyFilter.Designer.vb">
+      <DependentUpon>FormPropertyFilter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormPropertyFilter.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\LabelToAction.vb" />
     <Compile Include="My Project\LaunchTask.vb" />
     <Compile Include="My Project\MaterialDoctorPart.vb" />
@@ -192,11 +191,10 @@
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="My Project\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPropertyFilter.resx">
+    <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
