@@ -144,7 +144,7 @@ You can use drag and drop and the toolbar in combination.
 
 An alternative method is to select files with errors from a previous run. 
 
-![Toolbar](My%20Project/media/select_toolbar_labeled.png)
+![Toolbar](My%20Project/media/selection_toolbar_labeled.png)
 
 #### 1. Select by Folder
 
@@ -230,7 +230,7 @@ to remove all folders and files from the list.
 
 **RMB shortcut menu**
 
-![RMB Shortcut Menu](My%20Project/media/RMB_shortcut_menu.png)
+![RMB Shortcut Menu](My%20Project/media/shortcut_menu.png)
 
 If you select one or more files on the list, you can click the right 
 mouse button for more options.  Use **Open** to view the files in 
@@ -336,17 +336,17 @@ The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
 ![Property Filter Detail](My%20Project/media/property_filter_detail.png)
 
-Referring to the Property Filter dialog shown above, 
-the default formula means you will get all parts in project 7477 
-made out of Aluminum and engineered by Fred,
+Referring to the Property Filter dialog detail shown above, 
+the default formula means you will get all parts in project 7481 
+made out of Stainless and engineered by Fred,
 i.e., `A AND B AND C`.
 
 **Editing the Formula**
 
 You can optionally change the formula.
 Click the Edit button and type the desired expression.
-For example, if you wanted all parts from Project 7477, 
-**either** made out of Aluminum, 
+For example, if you wanted all parts from Project 7481, 
+**either** made out of Stainless, 
 **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
@@ -467,7 +467,7 @@ Solid Edge window.
 
 ## TASK DESCRIPTIONS
 
-![Interface_Large](My%20Project/media/sheetmetal_tab_done.png)
+![Interface_Large](My%20Project/media/sheetmetal_done.png)
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
