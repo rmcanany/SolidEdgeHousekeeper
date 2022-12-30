@@ -55,7 +55,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterCancel
         '
         Me.ButtonPropertyFilterCancel.Location = New System.Drawing.Point(488, 427)
-        Me.ButtonPropertyFilterCancel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterCancel.Name = "ButtonPropertyFilterCancel"
         Me.ButtonPropertyFilterCancel.Size = New System.Drawing.Size(75, 19)
         Me.ButtonPropertyFilterCancel.TabIndex = 22
@@ -65,7 +65,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterOK
         '
         Me.ButtonPropertyFilterOK.Location = New System.Drawing.Point(394, 427)
-        Me.ButtonPropertyFilterOK.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterOK.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterOK.Name = "ButtonPropertyFilterOK"
         Me.ButtonPropertyFilterOK.Size = New System.Drawing.Size(75, 19)
         Me.ButtonPropertyFilterOK.TabIndex = 21
@@ -77,7 +77,7 @@ Partial Class FormPropertyFilter
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(585, 406)
@@ -105,9 +105,9 @@ Partial Class FormPropertyFilter
         Me.TabPage1.Controls.Add(Me.ButtonPropertyFilterSave)
         Me.TabPage1.Controls.Add(Me.ComboBoxPropertyFilterName)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Size = New System.Drawing.Size(577, 380)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Options"
@@ -115,7 +115,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterDelete
         '
         Me.ButtonPropertyFilterDelete.Location = New System.Drawing.Point(469, 24)
-        Me.ButtonPropertyFilterDelete.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterDelete.Name = "ButtonPropertyFilterDelete"
         Me.ButtonPropertyFilterDelete.Size = New System.Drawing.Size(75, 20)
         Me.ButtonPropertyFilterDelete.TabIndex = 36
@@ -125,7 +125,7 @@ Partial Class FormPropertyFilter
         'ButtonFormula
         '
         Me.ButtonFormula.Location = New System.Drawing.Point(469, 353)
-        Me.ButtonFormula.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonFormula.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFormula.Name = "ButtonFormula"
         Me.ButtonFormula.Size = New System.Drawing.Size(75, 19)
         Me.ButtonFormula.TabIndex = 35
@@ -145,7 +145,7 @@ Partial Class FormPropertyFilter
         'TextBoxFormula
         '
         Me.TextBoxFormula.Location = New System.Drawing.Point(19, 353)
-        Me.TextBoxFormula.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxFormula.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFormula.Name = "TextBoxFormula"
         Me.TextBoxFormula.Size = New System.Drawing.Size(432, 20)
         Me.TextBoxFormula.TabIndex = 33
@@ -204,7 +204,7 @@ Partial Class FormPropertyFilter
         '
         Me.ListViewPropertyFilter.HideSelection = False
         Me.ListViewPropertyFilter.Location = New System.Drawing.Point(19, 142)
-        Me.ListViewPropertyFilter.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ListViewPropertyFilter.Margin = New System.Windows.Forms.Padding(2)
         Me.ListViewPropertyFilter.Name = "ListViewPropertyFilter"
         Me.ListViewPropertyFilter.Size = New System.Drawing.Size(526, 184)
         Me.ListViewPropertyFilter.TabIndex = 27
@@ -213,7 +213,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterRemove
         '
         Me.ButtonPropertyFilterRemove.Location = New System.Drawing.Point(469, 114)
-        Me.ButtonPropertyFilterRemove.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterRemove.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterRemove.Name = "ButtonPropertyFilterRemove"
         Me.ButtonPropertyFilterRemove.Size = New System.Drawing.Size(75, 19)
         Me.ButtonPropertyFilterRemove.TabIndex = 26
@@ -223,7 +223,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterAdd
         '
         Me.ButtonPropertyFilterAdd.Location = New System.Drawing.Point(375, 114)
-        Me.ButtonPropertyFilterAdd.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterAdd.Name = "ButtonPropertyFilterAdd"
         Me.ButtonPropertyFilterAdd.Size = New System.Drawing.Size(75, 19)
         Me.ButtonPropertyFilterAdd.TabIndex = 25
@@ -233,7 +233,7 @@ Partial Class FormPropertyFilter
         'TextBoxPropertyFilterValue
         '
         Me.TextBoxPropertyFilterValue.Location = New System.Drawing.Point(394, 81)
-        Me.TextBoxPropertyFilterValue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxPropertyFilterValue.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPropertyFilterValue.Name = "TextBoxPropertyFilterValue"
         Me.TextBoxPropertyFilterValue.Size = New System.Drawing.Size(151, 20)
         Me.TextBoxPropertyFilterValue.TabIndex = 24
@@ -242,7 +242,7 @@ Partial Class FormPropertyFilter
         '
         Me.ComboBoxPropertyFilterComparison.FormattingEnabled = True
         Me.ComboBoxPropertyFilterComparison.Location = New System.Drawing.Point(281, 81)
-        Me.ComboBoxPropertyFilterComparison.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ComboBoxPropertyFilterComparison.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterComparison.Name = "ComboBoxPropertyFilterComparison"
         Me.ComboBoxPropertyFilterComparison.Size = New System.Drawing.Size(95, 21)
         Me.ComboBoxPropertyFilterComparison.TabIndex = 23
@@ -250,7 +250,7 @@ Partial Class FormPropertyFilter
         'TextBoxPropertyFilterPropertyName
         '
         Me.TextBoxPropertyFilterPropertyName.Location = New System.Drawing.Point(131, 81)
-        Me.TextBoxPropertyFilterPropertyName.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxPropertyFilterPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPropertyFilterPropertyName.Name = "TextBoxPropertyFilterPropertyName"
         Me.TextBoxPropertyFilterPropertyName.Size = New System.Drawing.Size(132, 20)
         Me.TextBoxPropertyFilterPropertyName.TabIndex = 22
@@ -259,7 +259,7 @@ Partial Class FormPropertyFilter
         '
         Me.ComboBoxPropertyFilterPropertySet.FormattingEnabled = True
         Me.ComboBoxPropertyFilterPropertySet.Location = New System.Drawing.Point(19, 81)
-        Me.ComboBoxPropertyFilterPropertySet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ComboBoxPropertyFilterPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterPropertySet.Name = "ComboBoxPropertyFilterPropertySet"
         Me.ComboBoxPropertyFilterPropertySet.Size = New System.Drawing.Size(95, 21)
         Me.ComboBoxPropertyFilterPropertySet.TabIndex = 21
@@ -267,7 +267,7 @@ Partial Class FormPropertyFilter
         'ButtonPropertyFilterSave
         '
         Me.ButtonPropertyFilterSave.Location = New System.Drawing.Point(375, 24)
-        Me.ButtonPropertyFilterSave.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ButtonPropertyFilterSave.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterSave.Name = "ButtonPropertyFilterSave"
         Me.ButtonPropertyFilterSave.Size = New System.Drawing.Size(75, 19)
         Me.ButtonPropertyFilterSave.TabIndex = 20
@@ -278,7 +278,7 @@ Partial Class FormPropertyFilter
         '
         Me.ComboBoxPropertyFilterName.FormattingEnabled = True
         Me.ComboBoxPropertyFilterName.Location = New System.Drawing.Point(19, 24)
-        Me.ComboBoxPropertyFilterName.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.ComboBoxPropertyFilterName.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterName.Name = "ComboBoxPropertyFilterName"
         Me.ComboBoxPropertyFilterName.Size = New System.Drawing.Size(338, 21)
         Me.ComboBoxPropertyFilterName.Sorted = True
@@ -289,9 +289,9 @@ Partial Class FormPropertyFilter
         Me.TabPage2.BackColor = System.Drawing.SystemColors.Control
         Me.TabPage2.Controls.Add(Me.TextBoxReadme)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage2.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPage2.Size = New System.Drawing.Size(577, 380)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Readme"
@@ -299,7 +299,7 @@ Partial Class FormPropertyFilter
         'TextBoxReadme
         '
         Me.TextBoxReadme.Location = New System.Drawing.Point(13, 5)
-        Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
         Me.TextBoxReadme.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -315,8 +315,9 @@ Partial Class FormPropertyFilter
         Me.Controls.Add(Me.ButtonPropertyFilterCancel)
         Me.Controls.Add(Me.ButtonPropertyFilterOK)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FormPropertyFilter"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Property Filter"
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
