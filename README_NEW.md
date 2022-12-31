@@ -21,7 +21,9 @@ It can identify failed features in 3D models, detached dimensions in drawings,
 missing parts in assemblies, and more.  It can also update certain individual 
 file settings to match those in a template you specify.
 
-![Home Tab Done](My%20Project/media/home_tab_done.png)
+<p align="center">
+  <img src="My%20Project/media/home_tab_done.png">
+</p>
 
 *Feedback from users*
 
@@ -46,7 +48,7 @@ by clicking
 ![Table of Contents](My%20Project/media/table_of_contents_icon.png)
 as shown in the image below.
 
-![Table of Contents](My%20Project/media/readme_navigation_02.png)
+![Table of Contents](My%20Project/media/table_of_contents.png)
 
 Ask questions, report bugs, or suggest improvements on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
@@ -85,7 +87,9 @@ The other option is to use the
 It will be the top entry on the page. 
 
 
-![Release Page](My%20Project/media/release_page.png)
+<p align="center">
+  <img src="My%20Project/media/release_page.png">
+</p>
 
 Click the 
 file `SolidEdgeHousekeeper-VYYYY.N.zip` 
@@ -277,7 +281,9 @@ of options. These are detailed below.
 
 **Composing a Filter**
 
-![Property Filter](My%20Project/media/property_filter.png)
+<p align="center">
+  <img src="My%20Project/media/property_filter.png">
+</p>
 
 Compose a filter by defining one or more **Conditions**, and adding them 
 one-by-one to the list.
@@ -467,7 +473,9 @@ Solid Edge window.
 
 ## TASK DESCRIPTIONS
 
-![Interface_Large](My%20Project/media/sheetmetal_done.png)
+<p align="center">
+  <img src="My%20Project/media/sheetmetal_done.png">
+</p>
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
