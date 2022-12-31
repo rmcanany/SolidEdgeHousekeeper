@@ -735,6 +735,14 @@ Public Class Form1
         End If
 
         For Each FileToProcess In FilesToProcess
+
+            For Each tmpItem As ListViewItem In ListViewFiles.Items
+                If tmpItem.Name = FileToProcess Then
+                    tmpItem.EnsureVisible()
+                    Exit For
+                End If
+            Next
+
             System.Windows.Forms.Application.DoEvents()
             If StopProcess Then
                 TextBoxStatus.Text = "Processing aborted"
