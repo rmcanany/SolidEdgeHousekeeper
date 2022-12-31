@@ -2373,8 +2373,8 @@ Public Class Form1
     Private Sub BT_FindLinks_Click(sender As Object, e As EventArgs) Handles BT_FindLinks.Click
 
 
-        MsgBox("This command is temporarily disabled.  Please use 'Update' instead.")
-        Exit Sub
+        'MsgBox("This command is temporarily disabled.  Please use 'Update' instead.")
+        'Exit Sub
 
 
         Dim DMApp As New DesignManager.Application

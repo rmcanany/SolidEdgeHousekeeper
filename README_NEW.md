@@ -232,15 +232,21 @@ resultant list if desired.
 Click ![Remove All](Resources/icons8_trash_16.png)
 to remove all folders and files from the list.
 
-**RMB shortcut menu**
-
-![RMB Shortcut Menu](My%20Project/media/shortcut_menu.png)
+**Shortcut menu**
 
 If you select one or more files on the list, you can click the right 
-mouse button for more options.  Use **Open** to view the files in 
-Solid Edge, **Open folder** to view them in File Explorer, 
-**Process selected** to run selected Tasks on only those files, 
-and finally **Remove from list** to move them to the *Excluded files* 
+mouse button for more options.  
+
+![Shortcut Menu](My%20Project/media/shortcut_menu.png)
+
+- **Open:** Opens the files in Solid Edge.
+- **Open folder:** Opens the files in Windows File Explorer.
+- **Find linked files:** Populates the list with files linked to 
+a top-level assembly.  Similar to **Update** but no other File Sources
+are processed.
+- **Process selected:** Runs selected Tasks on the selected files. 
+Same as clicking **Process** at the bottom of the **Home Tab**.
+- **Remove from list:** Moves the files to the *Excluded files* 
 section of the list.
 
 #### 5. Update
