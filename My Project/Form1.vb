@@ -933,7 +933,7 @@ Public Class Form1
 
         ListViewFilesOutOfDate = False
 
-        LinkLabelGitHubReadme.Text = "Help is hosted on GitHub"
+        LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")

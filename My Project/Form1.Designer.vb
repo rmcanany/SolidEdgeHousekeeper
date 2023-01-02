@@ -2281,10 +2281,10 @@ Partial Class Form1
         Me.LinkLabelGitHubReadme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(15, 25)
         Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
-        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(176, 13)
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(193, 13)
         Me.LinkLabelGitHubReadme.TabIndex = 1
         Me.LinkLabelGitHubReadme.TabStop = True
-        Me.LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
+        Me.LinkLabelGitHubReadme.Text = "text populated in Form1.Startup()"
         '
         'TextBoxStatus
         '
