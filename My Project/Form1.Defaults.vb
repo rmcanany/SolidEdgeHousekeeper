@@ -466,52 +466,13 @@ Partial Class Form1
             Next
 
         Catch ex As Exception
-            ' If the file 'defaults.txt' does not exist, this is the first run of the program.
-            ' In that case, display the Help Tab.
-            ' TODO: Figure out how to un-highlight the text
-            TabControl1.SelectedTab = TabControl1.TabPages("TabPageHelp")
+
         End Try
 
         ReconcileFormChanges()
 
     End Sub
 
-
-    'Private Function GetPartsListStyles() As List(Of String)
-    '    Dim PartsListStyles As New List(Of String)
-    '    '<install dir>/Template/Reports/DraftList.txt
-    '    ' Dim InstallData As SEInstallDataLib.SEInstallData = Nothing
-    '    Dim InstallData As New SEInstallDataLib.SEInstallDataClass
-    '    Dim InstallPath As String
-    '    Dim DraftListPath As String
-    '    Dim DraftList As String() = Nothing
-    '    Dim Key As String
-    '    Dim Value As String
-    '    Dim InstallPathList As List(Of String)
-
-    '    InstallPath = InstallData.GetInstalledPath  ' "C:\Program Files\Siemens\Solid Edge 2020\Program"
-    '    ' Need to get rid of the last directory
-    '    InstallPathList = InstallPath.Split("\"c).ToList
-    '    InstallPathList.RemoveAt(InstallPathList.Count - 1)
-    '    InstallPath = String.Join("\", InstallPathList)
-    '    DraftListPath = String.Format("{0}\Template\Reports\DraftList.txt", InstallPath)
-    '    Try
-    '        DraftList = IO.File.ReadAllLines(DraftListPath)
-    '    Catch ex As Exception
-    '        MsgBox(ex.ToString)
-    '    End Try
-    '    ' MsgBox(DraftListPath)
-
-    '    For Each KVPair As String In DraftList
-    '        If KVPair.Contains("CONFIGNAME") Then
-    '            Key = KVPair.Split("="c).ToList(0)
-    '            Value = KVPair.Split("="c).ToList(1)
-    '            PartsListStyles.Add(Value)
-    '        End If
-    '    Next
-    '    'MsgBox("GetPartsListStyles end")
-    '    Return PartsListStyles
-    'End Function
 
     Private Sub SaveDefaults()
         'Format Example

@@ -982,33 +982,9 @@ Public Class Form1
     End Function
 
     Private Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
-        'Dim tf As Boolean
+
         ' Update configuration
         Configuration = GetConfiguration()
-
-        'If ListViewFilesOutOfDate Then
-        '    'ListViewFiles.Items.Clear()
-        '    tf = new_CheckBoxEnablePropertyFilter.Checked
-        '    If tf Then
-        '    Else
-        '        If tf Then
-        '            New_UpdateFileList()
-        '        End If
-        '    End If
-        'End If
-
-
-        'If new_CheckBoxEnablePropertyFilter.Checked Then
-        '    new_ButtonPropertyFilter.Enabled = True
-        'Else
-        '    new_ButtonPropertyFilter.Enabled = False
-        'End If
-
-        'If new_CheckBoxFileSearch.Checked Then
-        '    new_ComboBoxFileSearch.Enabled = True
-        'Else
-        '    new_ComboBoxFileSearch.Enabled = False
-        'End If
 
 
         ' Enable/Disable option controls based on task selection
@@ -1204,21 +1180,6 @@ Public Class Form1
         TextBoxWatermarkScale.Enabled = False
         TextBoxWatermarkX.Enabled = False
         TextBoxWatermarkY.Enabled = False
-
-        'If CheckBoxWatermark.Checked Then
-        '    ButtonWatermark.Enabled = True
-        '    TextBoxWatermarkFilename.Enabled = True
-        '    TextBoxWatermarkScale.Enabled = True
-        '    TextBoxWatermarkX.Enabled = True
-        '    TextBoxWatermarkY.Enabled = True
-        'Else
-        '    ButtonWatermark.Enabled = False
-        '    TextBoxWatermarkFilename.Enabled = False
-        '    TextBoxWatermarkScale.Enabled = False
-        '    TextBoxWatermarkX.Enabled = False
-        '    TextBoxWatermarkY.Enabled = False
-        'End If
-
 
         TextBoxExternalProgramDraft.Enabled = False
         ButtonExternalProgramDraft.Enabled = False
