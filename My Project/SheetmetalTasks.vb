@@ -13,13 +13,23 @@ Public Class SheetmetalTasks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgePart.SheetMetalDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf FailedOrWarnedFeaturesInternal,
+        '                           CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+        '                           Configuration,
+        '                           SEApp)
+
         ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.SheetMetalDocument,
+                               Of SolidEdgeFramework.SolidEdgeDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf FailedOrWarnedFeaturesInternal,
-                                   CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+                                   AddressOf PartTasks.FailedOrWarnedFeaturesInternal,
+                                   SEDoc,
                                    Configuration,
                                    SEApp)
 

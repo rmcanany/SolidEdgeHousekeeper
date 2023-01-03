@@ -200,6 +200,31 @@ Public Class CommonTasks
 
     End Function
 
+    Shared Function GetDocType(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As String
+        ' See SolidEdgeFramework.DocumentTypeConstants
+
+        ' If the type is not recognized, the empty string is returned.
+        Dim DocType As String = ""
+
+        Select Case SEDoc.Type
+
+            Case Is = 3, 7, 10 'asm
+                DocType = "asm"
+
+            Case Is = 1, 8 'par
+                DocType = "par"
+
+            Case Is = 4, 9 'psm
+                DocType = "psm"
+
+            Case Is = 2 'dft
+                DocType = "dft"
+
+        End Select
+
+        Return DocType
+    End Function
+
     Shared Function CropImage(Configuration As Dictionary(Of String, String),
                           SEDoc As SolidEdgeFramework.SolidEdgeDocument,
                           NewFilename As String,

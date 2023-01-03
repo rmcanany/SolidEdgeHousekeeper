@@ -13,13 +13,23 @@ Public Class PartTasks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgePart.PartDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf FailedOrWarnedFeaturesInternal,
+        '                           CType(SEDoc, SolidEdgePart.PartDocument),
+        '                           Configuration,
+        '                           SEApp)
+
         ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.PartDocument,
+                               Of SolidEdgeFramework.SolidEdgeDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
                                    AddressOf FailedOrWarnedFeaturesInternal,
-                                   CType(SEDoc, SolidEdgePart.PartDocument),
+                                   SEDoc,
                                    Configuration,
                                    SEApp)
 
@@ -27,8 +37,8 @@ Public Class PartTasks
 
     End Function
 
-    Private Function FailedOrWarnedFeaturesInternal(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
+    Shared Function FailedOrWarnedFeaturesInternal(
+        ByVal Doc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
         ) As Dictionary(Of Integer, List(Of String))
@@ -37,7 +47,9 @@ Public Class PartTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim Models As SolidEdgePart.Models
+        Dim DocType As String
+
+        Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
         Dim Features As SolidEdgePart.Features
         Dim FeatureName As String
@@ -47,9 +59,25 @@ Public Class PartTasks
         Dim FeatureSystemNames As New List(Of String)
         Dim FeatureSystemName As String
 
-        Models = SEDoc.Models
+        DocType = CommonTasks.GetDocType(Doc)
 
-        If (Models.Count > 0) And (Models.Count < 300) Then
+        If DocType = "par" Then
+            Dim SEDoc As SolidEdgePart.PartDocument
+            SEDoc = CType(Doc, SolidEdgePart.PartDocument)
+            Models = SEDoc.Models
+        ElseIf DocType = "psm" Then
+            Dim SEDoc As SolidEdgePart.SheetMetalDocument
+            SEDoc = CType(Doc, SolidEdgePart.SheetMetalDocument)
+            Models = SEDoc.Models
+        Else
+            Dim SEDoc As SolidEdgePart.PartDocument = Nothing
+        End If
+
+        TF = Not Models Is Nothing
+        TF = TF And Models.Count > 0
+        TF = TF And Models.Count < 300
+
+        If TF Then
             For Each Model In Models
                 Features = Model.Features
                 For Each Feature In Features
@@ -66,8 +94,8 @@ Public Class PartTasks
                             Status = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
                             Of SolidEdgePart.FeatureStatusConstants)(Feature, "Status", CType(0, SolidEdgePart.FeatureStatusConstants))
 
-                            TF = Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed
-                            TF = TF Or Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned
+                            TF = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed)
+                            TF = TF Or (Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned)
                             If TF Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add(FeatureName)
