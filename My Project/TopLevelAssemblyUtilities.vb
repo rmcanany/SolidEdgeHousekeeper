@@ -38,8 +38,8 @@ Public Class TopLevelAssemblyUtilities
 
         ' DMApp = New DesignManager.Application()
 
-        ' DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
-        DMApp.Visible = 0
+        DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+        'DMApp.Visible = 0
 
         Form1.Activate()
 
@@ -136,19 +136,39 @@ Public Class TopLevelAssemblyUtilities
 
         Dim Filename As String
 
+        Dim LinkedDocsName As String
+        Dim ErrorFlag As String = "HousekeeperErrorFile"
+        Dim msg As String = ""
+
         For Each Filename In LinkDict.Keys
-            'Form1.TextBoxStatus.Text = Filename
-            Form1.TextBoxStatus.Text = System.IO.Path.GetFileName(Filename)
+            'Form1.TextBoxStatus.Text = System.IO.Path.GetFileName(Filename)
 
             If CheckInterruptRequest() Then
                 Return LinkDict
             End If
 
-            ' LinkDict = GetDownstreamLinks(DMApp, LinkDict, Filename)
-            LinkDict = GetContains(DMApp, LinkDict, Filename, TopLevelFolder)
+            Dim LinkedDocsNames As New List(Of String)
+
+            LinkedDocsNames = GetContains(DMApp, LinkDict, Filename, ErrorFlag)
+            'LinkDict(Filename)("Contains").Add(CorrectedFilename)
+
+            If LinkedDocsNames.Contains(ErrorFlag) Then
+                If msg = "" Then
+                    msg = String.Format("{0}{1}", "Design Manager could not process the following file(s)", vbCrLf)
+                    msg = String.Format("{0}{1}{2}{2}", msg, "Will continue processing, but please verify results", vbCrLf)
+                End If
+                msg = String.Format("{0}{1}{2}", msg, Filename, vbCrLf)
+            Else
+                For Each LinkedDocsName In LinkedDocsNames
+                    LinkDict(Filename)("Contains").Add(LinkedDocsName)
+                Next
+            End If
         Next
 
-        'LinkDict = GetUpstreamLinks(LinkDict)
+        If msg <> "" Then
+            MsgBox(msg, vbOKOnly)
+        End If
+
         LinkDict = GetContainedBy(LinkDict, TopLevelFolder)
 
         Return LinkDict
@@ -158,39 +178,45 @@ Public Class TopLevelAssemblyUtilities
         DMApp As DesignManager.Application,
         LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
         Filename As String,
-        TopLevelFolder As String
-         ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+        ErrorFlag As String
+         ) As List(Of String)
 
         Dim DMDoc As DesignManager.Document
         Dim LinkedDocs As DesignManager.LinkedDocuments
         Dim LinkedDoc As DesignManager.Document
         Dim CorrectedFilename As String
-        ' Dim tf As Boolean
+
+        Dim LinkedDocsNames As New List(Of String)
+        Dim msg As String = ""
 
         If CheckInterruptRequest() Then
-            Return LinkDict
+            Return LinkedDocsNames
         End If
 
-        UpdateStatus("Follow Links", Filename, TopLevelFolder)
+        UpdateStatus("Follow Links", Filename)
 
-        DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
+        'DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
         ' Some files are corrrupt or have other problems
         Try
+            DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
+
             LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
 
             For Each LinkedDoc In LinkedDocs
                 CorrectedFilename = GetCorrectedFilename(LinkDict, LinkedDoc.FullName)
                 If Not LinkDict(Filename)("Contains").Contains(CorrectedFilename) Then
                     If CorrectedFilename <> "" Then
-                        LinkDict(Filename)("Contains").Add(CorrectedFilename)
+                        LinkedDocsNames.Add(CorrectedFilename)
                     End If
                 End If
             Next
         Catch ex As Exception
+            LinkedDocsNames.Add(ErrorFlag)
         End Try
 
-        Return LinkDict
+
+        Return LinkedDocsNames
     End Function
 
     Private Function GetContainedBy(
@@ -202,7 +228,7 @@ Public Class TopLevelAssemblyUtilities
         Dim ContainsFilename As String
 
         For Each Filename In LinkDict.Keys
-            UpdateStatus("Contained By", Filename, TopLevelFolder)
+            UpdateStatus("Contained By", Filename)
             For Each ContainsFilename In LinkDict(Filename)("Contains")
                 LinkDict(ContainsFilename)("ContainedBy").Add(Filename)
             Next
@@ -221,21 +247,7 @@ Public Class TopLevelAssemblyUtilities
         Dim ContainedByFilename As String
         Dim Extension As String
 
-        UpdateStatus("Visit Links", Filename, TopLevelFolder)
-
-        'For Each LinkedFilename In LinkDict(Filename)("Contains")
-        '    If Not LinkDict(LinkedFilename)("Visited")(0) = "True" Then
-        '        LinkDict(LinkedFilename)("Visited")(0) = "True"
-        '        LinkDict = VisitLinks(LinkedFilename, LinkDict, TopLevelFolder)
-        '    End If
-        'Next
-
-        'For Each LinkedFilename In LinkDict(Filename)("ContainedBy")
-        '    If Not LinkDict(LinkedFilename)("Visited")(0) = "True" Then
-        '        LinkDict(LinkedFilename)("Visited")(0) = "True"
-        '        LinkDict = VisitLinks(LinkedFilename, LinkDict, TopLevelFolder)
-        '    End If
-        'Next
+        UpdateStatus("Visit Links", Filename)
 
         LinkDict(Filename)("Visited")(0) = "True"
         For Each ContainedByFilename In LinkDict(Filename)("ContainedBy")
@@ -448,7 +460,7 @@ Public Class TopLevelAssemblyUtilities
             If tf Then
                 AllLinkedFilenames.Add(Filename)
 
-                UpdateStatus("Follow Links", Filename, TopLevelFolder)
+                UpdateStatus("Follow Links", Filename)
 
                 ' In case of corrupted file or other problem
                 Try
@@ -534,7 +546,7 @@ Public Class TopLevelAssemblyUtilities
         If CheckInterruptRequest() Then
             Return AllWhereUsedFileNames
         End If
-        UpdateStatus("Where Used", Filename, TopLevelFolder)
+        UpdateStatus("Where Used", Filename)
 
         Extension = IO.Path.GetExtension(Filename)
 
@@ -586,10 +598,9 @@ Public Class TopLevelAssemblyUtilities
 
     End Function
 
-    Private Sub UpdateStatus(Description As String, Filename As String, TopLevelFolder As String)
+    Private Sub UpdateStatus(Description As String, Filename As String)
         Dim msg As String
 
-        'msg = Filename.Replace(TopLevelFolder, "")
         msg = System.IO.Path.GetFileName(Filename)
         msg = String.Format("{0} {1}", Description, msg)
 
