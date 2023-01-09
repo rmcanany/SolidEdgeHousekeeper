@@ -141,7 +141,6 @@ Public Class TopLevelAssemblyUtilities
         Dim msg As String = ""
 
         For Each Filename In LinkDict.Keys
-            'Form1.TextBoxStatus.Text = System.IO.Path.GetFileName(Filename)
 
             If CheckInterruptRequest() Then
                 Return LinkDict
@@ -150,7 +149,6 @@ Public Class TopLevelAssemblyUtilities
             Dim LinkedDocsNames As New List(Of String)
 
             LinkedDocsNames = GetContains(DMApp, LinkDict, Filename, ErrorFlag)
-            'LinkDict(Filename)("Contains").Add(CorrectedFilename)
 
             If LinkedDocsNames.Contains(ErrorFlag) Then
                 If msg = "" Then
