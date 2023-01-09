@@ -87,6 +87,9 @@ Public Class Form1
     'any user input.  Finally, the LoadDefaults would need to be updated as required.
 
     Private Sub ProcessAll()
+
+        Me.Cursor = Cursors.WaitCursor
+
         Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
@@ -168,6 +171,8 @@ Public Class Form1
         Else
             TextBoxStatus.Text = TextBoxStatus.Text + "  All checks passed."
         End If
+
+        Me.Cursor = Cursors.Default
 
     End Sub
 
@@ -2033,6 +2038,8 @@ Public Class Form1
 
     Private Sub New_UpdateFileList()
 
+        Me.Cursor = Cursors.WaitCursor
+
         Dim GroupTags As New List(Of String)
         Dim BareTopLevelAssembly As Boolean = False
         Dim msg As String
@@ -2084,6 +2091,8 @@ Public Class Form1
         Next
 
         ListViewFiles.EndUpdate()
+
+        Me.Cursor = Cursors.Default
 
     End Sub
 
