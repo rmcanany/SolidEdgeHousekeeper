@@ -126,6 +126,7 @@ Partial Class Form1
                 tf = CommonTasks.FilenameIsOK(item)
                 tf = tf And IO.File.Exists(item)
                 tf = tf And Not tmpFoundFiles.Contains(item)
+                tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
                 If tf Then
                     tmpFoundFiles.Add(item)
                 End If
