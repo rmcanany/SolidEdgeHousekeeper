@@ -154,7 +154,7 @@ Partial Class Form1
 
             For Each FoundFile In FoundFiles
 
-                TextBoxStatus.Text = System.IO.Path.GetFileName(FoundFile)
+                TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
                 System.Windows.Forms.Application.DoEvents()
 
                 If CommonTasks.FilenameIsOK(FoundFile) Then
@@ -205,6 +205,7 @@ Partial Class Form1
 
         For Each FilePath In FoundFiles
             Filename = System.IO.Path.GetFileName(FilePath)
+            TextBoxStatus.Text = String.Format("Wildcard Search {0}", Filename)
             If Filename Like WildcardString Then
                 LocalFoundFiles.Add(FilePath)
             End If
