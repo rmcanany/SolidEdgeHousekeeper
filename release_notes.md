@@ -1,14 +1,134 @@
+![Logo](My%20Project/media/logo.png)
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it here:
+Solid Edge Housekeeper is a utility for finding annoying little errors in 
+your project.  It is free and open source and you can find it 
+[**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
-https://github.com/rmcanany/SolidEdgeHousekeeper  (Scroll past the file list for the README)
+Please note, the program has been tested on many of our files, but none 
+of yours.  Do not run it on production work without testing on backups first.
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
+Feel free to report bugs and/or ideas for improvement on the 
+[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
-Feel free to report bugs and/or ideas for improvement on the Solid Edge Community Forum.  https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge
+## V2023.1 Enhancements/Fixes
+
+### Redesigned Home Tab
+
+Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+The new interface is much more flexible, organized, and colorful 
+than ever!  Generate your list of files from folders, sub folders, 
+top-level assemblies and selected folders (Thank you **@MONKTheOCDEngie**!), 
+lists, drag-and-drop, and more. 
+Pick any number of each, in any combination.
+
+If you select one or more files in the list, there's now a Shortcut Menu 
+that lets you open the files in Solid Edge, view them in File Explorer, 
+start processing them in Housekeeper, or exclude them from the list.
+
+You'll also notice new icons throughout.  These are taken from standard Windows and
+Solid Edge libraries and you'll recognize them instantly.  If there's one
+you don't know, a tooltip pops up to tell you what it does.
+
+**Home Tab**
+
+![Home Tab](My%20Project/media/home_tab_done.png)
+
+**Selection toolbar**
+
+![Select Toolbar](My%20Project/media/selection_toolbar.png)
+
+**Filter toolbar**
+
+![Select Toolbar](My%20Project/media/filter_toolbar.png)
+
+**Shortcut menu**
+
+![Select Toolbar](My%20Project/media/shortcut_menu.png)
+
+### Logo
+
+Contributed by **@daysanduski**.  Thank you!
+
+It's at the very top of this page.  Pretty fun, huh?
+
+### Save As
+
+Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+Eliminate the dependency on the external program `ffmpeg.exe` for image files.
+
+### Run external program 
+
+Changed error handling to be more consistent with Housekeeper.
+
+Added a new sample program to the 
+[**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms)
+repo.  
+
+The program, `ChangeToInchAndSaveAsFlatDXF.vbs`, 
+is a more complete VBScript example. 
+
+It shows how to return an `ExitCode`,
+handle `error messages` and parse the `defaults.txt` file. 
+It sets off space for user code and shows how to do error handling. 
+Practically every line has comments describing what it does.
+
+At the bottom of the file are helpful links to get you started
+writing your own VBScript files, using nothing more than a text editor! 
+(Thank you again **@[Derek G]**!)
+
+### Top-Level Assembly
+
+Improved file link traversal performance in Bottom Up mode
+approx 10X (Thank you **@Fiorini**).
+Unfortunately, *Where Used* performance is not affected.
 
 
+### Version numbers
+
+Changed to a year-based numbering scheme (Thank you **@bshand**!).
+
+Updated the program title bar so you
+can easily check which version you are running.
+
+![Table of Contents](My%20Project/media/tabs.png)
+
+### Help Tab
+
+Renamed from Readme to 
+[**Help**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme). 
+Now hosted on GitHub, it features a more legible (and bigger) font 
+and lots of pictures (Thank you **@Fiorini**!). 
+
+For quick navigation, it also features a built in Table of Contents. 
+(It's the icon next to **README.md** shown in the image below.)
+
+![Table of Contents](My%20Project/media/table_of_contents.png)
+
+Also updated and expanded the File Selection and Filtering Sections. 
+Added sections on Collaborators, User Feedback, and Helping Out. 
+
+### Beta Program
+
+Initiated a way for volunteers to contribute to Housekeeper 
+by testing the program before an upcoming release. 
+
+Beta testing is nothing more than conducting your own workflow on your own 
+files and telling me if you run into problems. 
+It isn't meant to be a lot of work. 
+The big idea is to make the program better for you and me and everyone else!
+
+To sign up message me, RobertMcAnany, on the 
+[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+
+### ToyProject
+
+Created a repo called [**ToyProject**](https://github.com/rmcanany/ToyProject) 
+for anyone who wants to get started collaborating on Housekeeper. It has links to 
+GitHub's own guides, as well as detailed instructions on how to make your first
+contribution!
 
 ## v0.1.10.3 Enhancements/Fixes
 
@@ -23,6 +143,7 @@ Fixed another issue with `Use subdirectory formula` when the formula contains il
 In the GETTING HELP section, added instructions on how to subscribe to update notifications and/or become a beta tester.
 
 In the INSTALLATION section, added instructions on how to copy settings files from an earlier release to a new one.
+
 
 
 ## v0.1.10 Enhancements/Fixes
