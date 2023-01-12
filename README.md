@@ -102,6 +102,10 @@ Choose a convenient location on your machine.
 Extract the zip file (probably by right-clicking and selecting Extract All). 
 Double-click the `.exe` file to run.
 
+The first time you run it, you may encounter the following dialog.  You can click 
+`More Info` followed by `Run Anyway` to launch the program.
+![Run Anyway](My%20Project/media/run_anyway.png)
+
 If you are upgrading from a previous release, you should be able to copy 
 the settings files from the old version to the new. 
 The files are `defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. 
