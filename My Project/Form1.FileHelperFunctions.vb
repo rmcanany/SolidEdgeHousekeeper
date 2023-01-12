@@ -126,7 +126,13 @@ Partial Class Form1
                 tf = CommonTasks.FilenameIsOK(item)
                 tf = tf And IO.File.Exists(item)
                 tf = tf And Not tmpFoundFiles.Contains(item)
-                tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
+                ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
+                ' Causes a problem comparing extensions
+                Try
+                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
+                Catch ex As Exception
+                    ' MsgBox("Catch")
+                End Try
                 If tf Then
                     tmpFoundFiles.Add(item)
                 End If
