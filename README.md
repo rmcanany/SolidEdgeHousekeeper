@@ -71,7 +71,7 @@ at the very top right of the page).
 Unsubscribe the same way. 
 To combat bots and spam, I will probably 
 ignore requests from `User16612341234...`. 
-(Change you nickname via `My Profile`,
+(Change you nickname in `My Profile`,
 also under your profile picture). 
 
 If you know .NET, or want to learn, there's more
