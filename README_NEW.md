@@ -5,6 +5,9 @@
 **Contributors**:
 @farfilli (aka @Fiorini), @daysanduski
 
+**Beta Testers**:
+@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon
+
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
 @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
@@ -335,7 +338,7 @@ So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 `Wildcard_contains` is like `contains`, except with wildcards. 
 For example `[bfj]ake` would match
 `bake`, `fake`, and `jake`.  The `contains` part means that
-`I baked the cake!` would also match.
+`I baked the pie!` would also match.
 
 Internally the 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
@@ -348,7 +351,7 @@ The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
 ![Property Filter Detail](My%20Project/media/property_filter_detail.png)
 
-Referring to the Property Filter dialog detail shown above, 
+In the image above, 
 the default formula means you will get all parts in project 7481 
 made out of Stainless and engineered by Fred,
 i.e., `A AND B AND C`.

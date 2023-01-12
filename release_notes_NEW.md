@@ -27,7 +27,7 @@ If you select one or more files in the list, there's now a Shortcut Menu
 that lets you open the files in Solid Edge, view them in File Explorer, 
 start processing them in Housekeeper, or exclude them from the list.
 
-You'll also notice new icons throughout.  These are drawn from standard Windows and
+You'll also notice new icons throughout.  These are taken from standard Windows and
 Solid Edge libraries and you'll recognize them instantly.  If there's one
 you don't know, a tooltip pops up to tell you what it does.
 
@@ -37,7 +37,7 @@ you don't know, a tooltip pops up to tell you what it does.
 
 **Selection toolbar**
 
-![Select Toolbar](My%20Project/media/select_toolbar.png)
+![Select Toolbar](My%20Project/media/selection_toolbar.png)
 
 **Filter toolbar**
 
@@ -45,7 +45,7 @@ you don't know, a tooltip pops up to tell you what it does.
 
 **Shortcut menu**
 
-![Select Toolbar](My%20Project/media/RMB_shortcut_menu.png)
+![Select Toolbar](My%20Project/media/shortcut_menu.png)
 
 ### Logo
 
@@ -105,7 +105,7 @@ and lots of pictures (Thank you **@Fiorini**!).
 For quick navigation, it also features a built in Table of Contents. 
 (It's the icon next to **README.md** shown in the image below.)
 
-![Table of Contents](My%20Project/media/readme_navigation_02.png)
+![Table of Contents](My%20Project/media/table_of_contents.png)
 
 Also updated and expanded the File Selection and Filtering Sections. 
 Added sections on Collaborators, User Feedback, and Helping Out. 
