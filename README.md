@@ -289,6 +289,14 @@ click the tool icon ![Configure](Resources/icons8_Tools_16.png)
 to the right of
 the Property filter checkbox. 
 
+The Property Filter checks Draft files, but they
+often don't have properties of their own.
+So for those files, Housekeeper also searches 
+any models in the drawing for the specified properties. 
+If you don't want Draft files included in the results,
+simply uncheck the Draft icon ![Draft](Resources/ST9%20-%20dft.png)
+on the Selection Toolbar.
+
 This is a powerful tool with a lot
 of options. These are detailed below.
 
@@ -402,7 +410,8 @@ spaces.
 
 #### 2. Wildcard Filter
 
-Filtering by wildcard is done by entering the wildcard pattern in the 
+The wildcard filter operates on file names.
+Simply enter the wildcard pattern in the 
 provided combobox.  Wildcard patterns are automatically saved for 
 future use.  Delete a pattern that is no longer needed by selecting it 
 and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
