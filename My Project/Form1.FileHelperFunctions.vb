@@ -57,7 +57,7 @@ Partial Class Form1
 
                     If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
                         Dim tmpList As New Collection
-                        tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
+                        'tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
 
                         For Each item As ListViewItem In ListViewFiles.Items
                             If item.Tag.ToString = "ASM_Folder" Then
