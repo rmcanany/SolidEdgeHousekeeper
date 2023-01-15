@@ -354,7 +354,7 @@ which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc.
 
 Internally the 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
-is used to make the comparison.  Visit the link for details and examples.
+is used to make the wildcard comparison.  Visit the link for details and examples.
 
 **Default Filter Formula**
 
