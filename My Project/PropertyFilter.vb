@@ -194,7 +194,7 @@ Public Class PropertyFilter
             tf = DocValue.ToLower = Value.ToLower
         ElseIf Comparison = "is_not" Then
             tf = DocValue.ToLower <> Value.ToLower
-        ElseIf Comparison = "wildcard_contains" Then
+        ElseIf Comparison = "wildcard_search" Then
             tf = DocValue.ToLower Like Value.ToLower
         ElseIf Comparison = ">" Then
             Try
