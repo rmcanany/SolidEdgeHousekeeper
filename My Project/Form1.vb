@@ -1732,95 +1732,95 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ApplyFilters()
-        ListViewFiles.BeginUpdate()
-        ListViewFiles.Items.Clear()
-        ListViewFiles.Items.AddRange(PropFilter(TextFilter(ListItems_Backup)).ToArray)
-        ListViewFiles.EndUpdate()
-    End Sub
+    'Private Sub ApplyFilters()
+    '    ListViewFiles.BeginUpdate()
+    '    ListViewFiles.Items.Clear()
+    '    ListViewFiles.Items.AddRange(PropFilter(TextFilter(ListItems_Backup)).ToArray)
+    '    ListViewFiles.EndUpdate()
+    'End Sub
 
-    Private Function TextFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
+    'Private Function TextFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
 
-        TextFilter = New List(Of ListViewItem)
+    '    TextFilter = New List(Of ListViewItem)
 
-        For Each item As ListViewItem In FilesList
+    '    For Each item As ListViewItem In FilesList
 
-            Select Case item.Tag.ToString
-                Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
-                    item.Group = ListViewFiles.Groups.Item("Sources")
-                Case Else
-                    item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
-            End Select
+    '        Select Case item.Tag.ToString
+    '            Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
+    '                item.Group = ListViewFiles.Groups.Item("Sources")
+    '            Case Else
+    '                item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
+    '        End Select
 
-            If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
-                If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then TextFilter.Add(item)
-            Else
-                TextFilter.Add(item)
-            End If
+    '        If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
+    '            If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then TextFilter.Add(item)
+    '        Else
+    '            TextFilter.Add(item)
+    '        End If
 
-        Next
+    '    Next
 
-    End Function
+    'End Function
 
-    Private Function PropFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
+    'Private Function PropFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
 
-        PropFilter = New List(Of ListViewItem)
+    '    PropFilter = New List(Of ListViewItem)
 
-        Dim DMApp As DesignManager.Application = Nothing
+    '    Dim DMApp As DesignManager.Application = Nothing
 
-        If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
-            DMApp = New DesignManager.Application
-            DMApp.Visible = 1
-        End If
+    '    If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
+    '        DMApp = New DesignManager.Application
+    '        DMApp.Visible = 1
+    '    End If
 
-        For Each item As ListViewItem In FilesList
+    '    For Each item As ListViewItem In FilesList
 
-            Select Case item.Tag.ToString
-                Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
-                    item.Group = ListViewFiles.Groups.Item("Sources")
-                Case Else
-                    item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
-            End Select
+    '        Select Case item.Tag.ToString
+    '            Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
+    '                item.Group = ListViewFiles.Groups.Item("Sources")
+    '            Case Else
+    '                item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
+    '        End Select
 
-            If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
+    '        If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
 
-                If item.Group.Name = "Sources" Then
-                    'If item.Group.text = "Sources" Then
+    '            If item.Group.Name = "Sources" Then
+    '                'If item.Group.text = "Sources" Then
 
-                    PropFilter.Add(item)
+    '                PropFilter.Add(item)
 
-                Else
+    '            Else
 
-                    'System.Threading.Thread.Sleep(1000)
-                    Dim PropertyFilter As New PropertyFilter(Me)
+    '                'System.Threading.Thread.Sleep(1000)
+    '                Dim PropertyFilter As New PropertyFilter(Me)
 
-                    If StopProcess Then Exit For
+    '                If StopProcess Then Exit For
 
-                    Dim msg As String  ' = CommonTasks.TruncateFullPath(item.Name, Nothing)
+    '                Dim msg As String  ' = CommonTasks.TruncateFullPath(item.Name, Nothing)
 
-                    Try
-                        msg = System.IO.Path.GetFileName(item.Name)
-                    Catch ex As Exception
-                        msg = ""
-                    End Try
+    '                Try
+    '                    msg = System.IO.Path.GetFileName(item.Name)
+    '                Catch ex As Exception
+    '                    msg = ""
+    '                End Try
 
-                    Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+    '                Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
 
-                    If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then PropFilter.Add(item)
+    '                If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then PropFilter.Add(item)
 
-                End If
+    '            End If
 
-            Else
+    '        Else
 
-                PropFilter.Add(item)
+    '            PropFilter.Add(item)
 
-            End If
+    '        End If
 
-        Next
+    '    Next
 
-        If Not IsNothing(DMApp) Then DMApp.Quit()
+    '    If Not IsNothing(DMApp) Then DMApp.Quit()
 
-    End Function
+    'End Function
 
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
         ReconcileFormChanges()
@@ -2274,7 +2274,7 @@ Public Class Form1
 
     Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
         If e.KeyCode = Keys.Enter Then
-            ApplyFilters()
+            'ApplyFilters()
             e.Handled = True
             e.SuppressKeyPress = True
         End If

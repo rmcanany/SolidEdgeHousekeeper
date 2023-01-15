@@ -347,10 +347,10 @@ Note, at this time, all Values (except see below for dates and numbers)
 are converted to lower case text before comparison.
 So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
-`Wildcard_contains` is like `contains`, except with wildcards. 
-For example `[bfj]ake` would match
-`bake`, `fake`, and `jake`.  The `contains` part means that
-`I baked the pie!` would also match.
+`Wildcard_contains` searches for a match with a wildcard pattern.
+For example `[bfj]ake` would match `bake`, `fake`, and `jake`. 
+A more familiar example might be `Aluminum*`,
+which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc.
 
 Internally the 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
