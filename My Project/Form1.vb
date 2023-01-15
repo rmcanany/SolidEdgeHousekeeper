@@ -1718,7 +1718,7 @@ Public Class Form1
 
     Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
 
-        ApplyFilters()
+        'ApplyFilters()
 
     End Sub
 
