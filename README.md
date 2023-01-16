@@ -351,7 +351,8 @@ So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 For example `[bfj]ake` would match `bake`, `fake`, and `jake`. 
 A more familiar example might be `Aluminum*`,
 which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc.
-Unlike with `contains`, however, `Cast Aluminum Jigplate` would *not* match.
+Unlike with `contains`, in this example, 
+`Cast Aluminum Jigplate` would *not* match.
 
 Internally the 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
