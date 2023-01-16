@@ -357,7 +357,7 @@ Public Class FormPropertyFilter
 		ComboBoxPropertyFilterComparison.Items.Add("contains")
 		ComboBoxPropertyFilterComparison.Items.Add("is_exactly")
 		ComboBoxPropertyFilterComparison.Items.Add("is_not")
-		ComboBoxPropertyFilterComparison.Items.Add("wildcard_search")
+		ComboBoxPropertyFilterComparison.Items.Add("wildcard_match")
 		ComboBoxPropertyFilterComparison.Items.Add(">")
 		ComboBoxPropertyFilterComparison.Items.Add("<")
 		'ComboBoxPropertyFilterComparison.Items.Add("=")
@@ -425,7 +425,7 @@ Public Class FormPropertyFilter
 		Paragraphs.Add("Comparison")
 
 		msg = "Select the Comparison from its dropdown box.  "
-		msg += "The choices are 'contains', 'is_exactly', 'is_not', 'wildcard_search', '>', or '<'.  "
+		msg += "The choices are 'contains', 'is_exactly', 'is_not', 'wildcard_match', '>', or '<'.  "
 		msg += "The options 'is_exactly', 'is_not', '>', and '<' are hopefully self explanatory.  "
 		msg += "The two 'contains' options are described below.  "
 		Paragraphs.Add(msg)
@@ -438,7 +438,7 @@ Public Class FormPropertyFilter
 		msg += "So 'ALUMINUM', 'Aluminum', and 'aluminum' would all match.  "
 		Paragraphs.Add(msg)
 
-		msg = "The 'wildcard_search' uses a wildcard pattern.  "
+		msg = "The 'wildcard_match' uses a wildcard pattern.  "
 		msg += "Internally, it is implemented with the VB 'Like' operator, "
 		msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
 		msg += "For details and examples, see "

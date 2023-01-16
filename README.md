@@ -336,7 +336,7 @@ Not sure about the Solid Edge entries either.)
 
 Select the Comparison from its dropdown box.
 The choices are `contains`, `is_exactly`, `is_not`, 
-`wildcard_contains`, `>`, or `<`.
+`wildcard_match`, `>`, or `<`.
 The options `is_exactly`, `is_not`, `>`, and `<` are hopefully 
 self explanatory.
 
@@ -347,7 +347,7 @@ Note, at this time, all Values (except see below for dates and numbers)
 are converted to lower case text before comparison.
 So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
-`Wildcard_contains` searches for a match with a wildcard pattern.
+`Wildcard_match` searches for a match with a wildcard pattern.
 For example `[bfj]ake` would match `bake`, `fake`, and `jake`. 
 A more familiar example might be `Aluminum*`,
 which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc.
