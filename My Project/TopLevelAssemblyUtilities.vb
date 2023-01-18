@@ -383,15 +383,18 @@ Public Class TopLevelAssemblyUtilities
 
         Dim TLADoc As DesignManager.Document
 
-        IndexedDrives = GetIndexedDrives()
+        ' Passing in TopLevelFolder = "" signifies a bare top level assy.  Don't need an indexed drive for that case.
+        If Not TopLevelFolder = "" Then
+            IndexedDrives = GetIndexedDrives()
 
-        If IndexedDrives.Count > 0 Then
-            For Each IndexedDrive In IndexedDrives
-                If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
-                    IsDriveIndexed = True
-                    Exit For
-                End If
-            Next
+            If IndexedDrives.Count > 0 Then
+                For Each IndexedDrive In IndexedDrives
+                    If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
+                        IsDriveIndexed = True
+                        Exit For
+                    End If
+                Next
+            End If
         End If
 
         'DMApp.Visible = 1
