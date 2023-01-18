@@ -2063,12 +2063,14 @@ Public Class Form1
         If (GroupTags.Contains("ASM_Folder")) And Not (GroupTags.Contains("asm")) Then
             msg = "A top level assembly folder was found with no top level assembly.  "
             msg += "Please add an assembly, or delete the folder(s)."
+            Me.Cursor = Cursors.Default
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
 
         If (RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text)) Then
             msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+            Me.Cursor = Cursors.Default
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If

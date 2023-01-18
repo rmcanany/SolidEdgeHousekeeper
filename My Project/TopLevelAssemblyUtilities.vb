@@ -397,8 +397,8 @@ Public Class TopLevelAssemblyUtilities
             End If
         End If
 
-        'DMApp.Visible = 1
-        DMApp.Visible = 0
+        DMApp.Visible = 1
+        'DMApp.Visible = 0
         DMApp.DisplayAlerts = 0
 
         Form1.Activate()
