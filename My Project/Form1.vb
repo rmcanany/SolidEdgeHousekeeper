@@ -2016,6 +2016,36 @@ Public Class Form1
             tmpItem.Name = tmpFileDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
 
+            If CheckBoxTLAAutoIncludeTLF.Checked Then
+                Dim Folder As String = System.IO.Path.GetDirectoryName(tmpFileDialog.FileName)
+
+                Dim tmpItem2 As New ListViewItem
+                tmpItem2.Text = "Top level asm folder"
+                tmpItem2.SubItems.Add(Folder)
+                tmpItem2.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem2.ImageKey = "ASM_Folder"
+                tmpItem2.Tag = "ASM_Folder"
+                tmpItem2.Name = Folder
+                If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
+            End If
+
+        End If
+
+    End Sub
+    Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
+
+        Dim tmpFolderDialog As New CommonOpenFileDialog
+        tmpFolderDialog.IsFolderPicker = True
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Top level asm folder"
+            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.ImageKey = "ASM_Folder"
+            tmpItem.Tag = "ASM_Folder"
+            tmpItem.Name = tmpFolderDialog.FileName
+            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
     End Sub
@@ -2116,24 +2146,6 @@ Public Class Form1
 
             Next
 
-        End If
-
-    End Sub
-
-    Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
-
-        Dim tmpFolderDialog As New CommonOpenFileDialog
-        tmpFolderDialog.IsFolderPicker = True
-
-        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-            Dim tmpItem As New ListViewItem
-            tmpItem.Text = "Top level asm folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-            tmpItem.ImageKey = "ASM_Folder"
-            tmpItem.Tag = "ASM_Folder"
-            tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
         End If
 
     End Sub
@@ -2388,6 +2400,14 @@ Public Class Form1
 
         DMApp.Quit()
 
+    End Sub
+
+    Private Sub CheckBoxTLAAutoIncludeTLF_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAAutoIncludeTLF.CheckedChanged
+        If CheckBoxTLAAutoIncludeTLF.Checked Then
+            CheckBoxWarnBareTLA.Enabled = False
+        Else
+            CheckBoxWarnBareTLA.Enabled = True
+        End If
     End Sub
 
 
