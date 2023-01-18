@@ -2445,6 +2445,8 @@ Partial Class Form1
         'CheckBoxTLAAutoIncludeTLF
         '
         Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
+        Me.CheckBoxTLAAutoIncludeTLF.Checked = True
+        Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(14, 30)
         Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
         Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(406, 17)
@@ -2456,6 +2458,8 @@ Partial Class Form1
         'CheckBoxWarnBareTLA
         '
         Me.CheckBoxWarnBareTLA.AutoSize = True
+        Me.CheckBoxWarnBareTLA.Checked = True
+        Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(14, 54)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
         Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(372, 17)

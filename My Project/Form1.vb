@@ -2079,7 +2079,7 @@ Public Class Form1
         System.Windows.Forms.Application.DoEvents()
 
         ListViewFiles.BeginUpdate()
-        ListItems_Backup.Clear()
+        'ListItems_Backup.Clear()
 
         ' Remove everything except the "Sources" group.
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
@@ -2093,6 +2093,7 @@ Public Class Form1
         If (GroupTags.Contains("ASM_Folder")) And Not (GroupTags.Contains("asm")) Then
             msg = "A top level assembly folder was found with no top level assembly.  "
             msg += "Please add an assembly, or delete the folder(s)."
+            ListViewFiles.EndUpdate()
             Me.Cursor = Cursors.Default
             MsgBox(msg, vbOKOnly)
             Exit Sub
@@ -2100,24 +2101,39 @@ Public Class Form1
 
         If (RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text)) Then
             msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
+            ListViewFiles.EndUpdate()
             Me.Cursor = Cursors.Default
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
 
         If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
-            BareTopLevelAssembly = True
+
+            If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
+                msg = "A top-level assembly with no top-level folder detected.  "
+                msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
+                msg += "Click OK to continue, or Cancel to stop." + vbCrLf
+                msg += "Disable this message on the Configuration tab."
+                Dim result As MsgBoxResult = MsgBox(msg, vbOKCancel)
+                If result = MsgBoxResult.Ok Then
+                    BareTopLevelAssembly = True
+                Else
+                    ListViewFiles.EndUpdate()
+                    Me.Cursor = Cursors.Default
+                    Exit Sub
+                End If
+            Else
+                BareTopLevelAssembly = True
+            End If
         End If
 
-
-        'new_CheckBoxFileSearch.Checked = False
-        'new_ButtonPropertyFilter.Checked = False
 
         ' Only remaining items should be in the "Sources" group.
         For Each item As ListViewItem In ListViewFiles.Items
             UpdateListViewFiles(item, BareTopLevelAssembly)
         Next
 
+        ListItems_Backup.Clear()
         For Each item As ListViewItem In ListViewFiles.Items
             ListItems_Backup.Add(item)
         Next
