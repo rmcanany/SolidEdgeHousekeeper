@@ -170,17 +170,30 @@ for a folder and sub folders.
 #### 2. Select by Top-Level Assembly
 
 Choose this option to select files linked to an assembly.
-Again referring to the diagram, 
-click ![Assembly](Resources/ST9%20-%20asm.png)
+Click ![Assembly](Resources/ST9%20-%20asm.png)
 to choose the assembly, 
 click ![Assembly Folders](Resources/icons8_Folders_16.png)
-to choose where to search for _where used_ files. 
+to choose the search path for *where used* files. 
 
-If you don't specify any *where used* folders, Housekeeper simply finds
-files directly linked to the specified assembly and subassemblies.
+You would be asking for trouble specifying more than one
+top-level assembly.  However, you can have any number of folders.
+Note the program always includes subfolders for *where used* files.
 
-If you _do_ specify one or more folders, there are two options on how 
-the _where used_ is performed, **Top Down** or **Bottom Up** (see next).  Make 
+When selecting a top-level assembly, you can 
+automatically include the folder in which it resides.
+This `auto include` option in on by default. 
+Set it on the **Configuration Tab**.
+
+If `auto include` is turned off, 
+you do not have to specify any folders. 
+In that case, Housekeeper simply finds
+files directly linked to the specified assembly and subassemblies. 
+Note this means that no draft files will be found.
+For that reason, a warning is displayed.
+Disable the warning on the **Configuration Tab**.
+
+If you *do* specify one or more folders, there are two options for performing 
+*where used*, **Top Down** or **Bottom Up** (see next).  Make 
 this selection on the **Configuration Tab**.  Guidelines are given below,
 however it's not a bad idea to try both methods to see which works best
 for you.
@@ -191,7 +204,7 @@ Bottom up is meant for general purpose (hopefully indexed) directories
 (e.g., `\\BIG_SERVER\all_parts\`), where the number of files 
 in the folder(s) far exceed the number of files in the assembly. 
 The program gets links by recursion, then 
-finds draft files with _where used_. 
+finds draft files with *where used*. 
 
 A bottom up search requires a valid Fast Search Scope filename, 
 (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), 
@@ -293,9 +306,6 @@ The Property Filter checks Draft files, but they
 often don't have properties of their own.
 So for those files, Housekeeper also searches 
 any models in the drawing for the specified properties. 
-If you don't want Draft files included in the results,
-simply uncheck the Draft icon ![Draft](Resources/ST9%20-%20dft.png)
-on the Selection Toolbar.
 
 This is a powerful tool with a lot
 of options. These are detailed below.
