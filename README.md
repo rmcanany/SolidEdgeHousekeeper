@@ -179,6 +179,7 @@ You would be asking for trouble specifying more than one
 top-level assembly.  However, you can have any number of folders.
 Note the program always includes subfolders for *where used* files.
 
+
 When selecting a top-level assembly, you can 
 automatically include the folder in which it resides.
 This `auto include` option in on by default. 
