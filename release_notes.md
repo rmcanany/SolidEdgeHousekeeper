@@ -112,11 +112,20 @@ Added sections on Collaborators, User Feedback, and Helping Out.
 
 ### Beta Program
 
-Initiated a way for volunteers to contribute to Housekeeper 
+Implemented a way for volunteers to contribute to Housekeeper 
 by testing the program before an upcoming release. 
 
-Beta testing is nothing more than conducting your own workflow on your own 
-files and telling me if you run into problems. 
+For this round, we had four volunteers:
+@n0minus38, @JayJay101, @Cimarian_RMP, and @xenia.turon.
+Thank you one and all!
+
+Because of their work, we made fifteen new commits to the master branch,
+fixed six bugs, improved the documentation, 
+and tested two release candidates. 
+
+You're welcome to join us for the next release! 
+Beta testing is nothing more than conducting 
+your own workflow on your own files and telling me if you run into problems. 
 It isn't meant to be a lot of work. 
 The big idea is to make the program better for you and me and everyone else!
 
