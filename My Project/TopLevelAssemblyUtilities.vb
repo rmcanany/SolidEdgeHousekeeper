@@ -16,14 +16,16 @@ Public Class TopLevelAssemblyUtilities
         Dim Foundfiles As New List(Of String)
 
         If SearchType.ToLower = "topdown" Then
-            Foundfiles = GetLinksTopDown(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList, Report)
+            MsgBox("For top down search, call GetLinksTopDown directly", vbOKOnly)
+            Return Foundfiles
+            'Foundfiles = GetLinksTopDown(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList, Report)
         Else
             Foundfiles = GetLinksBottomUp(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList)
         End If
         Return Foundfiles
     End Function
 
-    Public Function GetLinksTopDown(TopLevelFolder As String,
+    Public Function GetLinksTopDown(TopLevelFolders As List(Of String),
                                     TopLevelAssembly As String,
                                     ActiveFileExtensionsList As List(Of String),
                                     Report As Boolean) As List(Of String)
@@ -33,30 +35,40 @@ Public Class TopLevelAssemblyUtilities
         Dim FoundFiles As New List(Of String)
         Dim FileExtension As String
         Dim AllFilenames As New Dictionary(Of String, String)
+        Dim tmpAllFilenames As New Dictionary(Of String, String)
         Dim LinkDict As New Dictionary(Of String, Dictionary(Of String, List(Of String)))
         Dim UnrelatedFiles As New List(Of String)
-
-        ' DMApp = New DesignManager.Application()
+        Dim K As String
+        Dim V As String
 
         DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
         'DMApp.Visible = 0
 
         Form1.Activate()
 
-        AllFilenames = GetAllFilenamesTopDown(TopLevelFolder)
+        For Each TopLevelFolder In TopLevelFolders
+            tmpAllFilenames = GetAllFilenamesTopDown(TopLevelFolder)
+            For Each K In tmpAllFilenames.Keys
+                V = tmpAllFilenames(K)
+                If Not AllFilenames.Keys.Contains(K) Then
+                    AllFilenames.Add(K, V)
+                End If
+            Next
+        Next
+
         If Not AllFilenames.Keys.Contains(TopLevelAssembly.ToLower) Then
             AllFilenames.Add(TopLevelAssembly.ToLower, TopLevelAssembly)
         End If
 
         LinkDict = CreateLinkDict(AllFilenames, LinkDict)
 
-        LinkDict = PopulateLinkDict(DMApp, LinkDict, TopLevelFolder)
+        LinkDict = PopulateLinkDict(DMApp, LinkDict, TopLevelAssembly)
 
         If CheckInterruptRequest() Then
             DMApp.Quit()
             Return FoundFiles
         End If
-        LinkDict = VisitLinks(TopLevelAssembly, LinkDict, TopLevelFolder)
+        LinkDict = VisitLinks(TopLevelAssembly, LinkDict)
 
         For Each Filename In LinkDict.Keys
             FileExtension = System.IO.Path.GetExtension(Filename).Replace(".", "*.")
@@ -74,25 +86,20 @@ Public Class TopLevelAssemblyUtilities
                 Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
                 Dim LogfileName As String
                 'Dim msg As String
-                LogfileName = TopLevelFolder + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+                LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
 
                 Try
                     Using writer As New IO.StreamWriter(LogfileName, True)
                         For Each Filename In UnrelatedFiles
-                            Filename = Filename.Replace(TopLevelFolder, "")
+                            ' Filename = Filename.Replace(TopLevelFolder, "")
                             writer.WriteLine(String.Format(Filename))
                         Next
                     End Using
 
                     Process.Start("Notepad.exe", LogfileName)
 
-                    'LogfileName = LogfileName.Replace(TopLevelFolder, "")
-                    'msg = String.Format("Files unrelated to top level assembly found.  See log file{0}", vbCrLf)
-                    'msg += LogfileName
-                    'MsgBox(msg)
                 Catch ex As Exception
                 End Try
-
 
             End If
 
@@ -131,7 +138,7 @@ Public Class TopLevelAssemblyUtilities
     Private Function PopulateLinkDict(
          DMApp As DesignManager.Application,
          LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-         TopLevelFolder As String
+         TopLevelAssembly As String
          ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
 
         Dim Filename As String
@@ -139,6 +146,9 @@ Public Class TopLevelAssemblyUtilities
         Dim LinkedDocsName As String
         Dim ErrorFlag As String = "HousekeeperErrorFile"
         Dim msg As String = ""
+
+        Dim ActiveFileExtensionsList As New List(Of String)
+
 
         For Each Filename In LinkDict.Keys
 
@@ -167,7 +177,7 @@ Public Class TopLevelAssemblyUtilities
             MsgBox(msg, vbOKOnly)
         End If
 
-        LinkDict = GetContainedBy(LinkDict, TopLevelFolder)
+        LinkDict = GetContainedBy(LinkDict)
 
         Return LinkDict
     End Function
@@ -218,8 +228,7 @@ Public Class TopLevelAssemblyUtilities
     End Function
 
     Private Function GetContainedBy(
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-        TopLevelFolder As String
+        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
          ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
 
         Dim Filename As String
@@ -237,8 +246,7 @@ Public Class TopLevelAssemblyUtilities
 
     Private Function VisitLinks(
         Filename As String,
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-        TopLevelFolder As String
+        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
         ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
 
         Dim LinkedFilename As String
@@ -264,7 +272,7 @@ Public Class TopLevelAssemblyUtilities
                         LinkDict(ContainedByFilename)("Visited")(0) = "True"
                     End If
                 Next
-                LinkDict = VisitLinks(LinkedFilename, LinkDict, TopLevelFolder)
+                LinkDict = VisitLinks(LinkedFilename, LinkDict)
             End If
         Next
 

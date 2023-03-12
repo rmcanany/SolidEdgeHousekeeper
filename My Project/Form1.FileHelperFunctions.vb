@@ -56,35 +56,65 @@ Partial Class Form1
                 Case = "asm"
 
                     If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
-                        Dim tmpList As New Collection
+                        Dim tmpFolders As New List(Of String)
                         'tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
 
                         For Each item As ListViewItem In ListViewFiles.Items
                             If item.Tag.ToString = "ASM_Folder" Then
-                                If Not tmpList.Contains(item.Name) Then tmpList.Add(item.Name, item.Name)
+                                If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
                             End If
                         Next
 
                         Dim tmpFoundFiles As New List(Of String)
 
-                        For Each tmpFolder As String In tmpList
+                        If RadioButtonTLABottomUp.Checked Then
+                            For Each tmpFolder As String In tmpFolders
 
-                            Dim TLAU As New TopLevelAssemblyUtilities(Me)
+                                Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
-                            TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                                TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
-                            If RadioButtonTLABottomUp.Checked Then
-                                tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
+                                If RadioButtonTLABottomUp.Checked Then
+                                    tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList))
-                            Else
-                                tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
+                                Else
+                                    tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
                                                        Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-                            End If
+                                End If
 
-                        Next
+                            Next
+                        Else
+                            Dim TLAU As New TopLevelAssemblyUtilities(Me)
+                            tmpFoundFiles.AddRange(TLAU.GetLinksTopDown(tmpFolders,
+                                                       Source.SubItems.Item(1).Text,
+                                                       ActiveFileExtensionsList,
+                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
+
+
+
+                        End If
+
+                        'For Each tmpFolder As String In tmpFolders
+
+                        '    Dim TLAU As New TopLevelAssemblyUtilities(Me)
+
+                        '    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                        '    If RadioButtonTLABottomUp.Checked Then
+                        '        tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
+                        '                               Source.SubItems.Item(1).Text,
+                        '                               ActiveFileExtensionsList))
+                        '    Else
+                        '        tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
+                        '                               Source.SubItems.Item(1).Text,
+                        '                               ActiveFileExtensionsList,
+                        '                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
+                        '    End If
+
+                        'Next
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
