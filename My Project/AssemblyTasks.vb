@@ -2278,13 +2278,23 @@ Public Class AssemblyTasks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgeAssembly.AssemblyDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf PropertyFindReplaceInternal,
+        '                           CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+        '                           Configuration,
+        '                           SEApp)
+
         ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Of SolidEdgeFramework.SolidEdgeDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf PropertyFindReplaceInternal,
-                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+                                   AddressOf CommonTasks.PropertyFindReplace,
+                                   SEDoc,
                                    Configuration,
                                    SEApp)
 
@@ -2292,94 +2302,97 @@ Public Class AssemblyTasks
 
     End Function
 
-    Private Function PropertyFindReplaceInternal(
-        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
+    'Private Function PropertyFindReplaceInternal(
+    '    ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    '    ' Convert glob pattern to regex
+    '    ' https://stackoverflow.com/questions/15275718/regular-expression-wildcard/15275806#15275806
 
-        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
-        Dim Properties As SolidEdgeFramework.Properties = Nothing
-        Dim Prop As SolidEdgeFramework.Property = Nothing
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim PropertyFound As Boolean = False
-        Dim tf As Boolean
-        Dim FindString As String = Configuration("TextBoxFindReplaceFindAssembly")
-        Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplaceAssembly")
+    '    Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+    '    Dim Properties As SolidEdgeFramework.Properties = Nothing
+    '    Dim Prop As SolidEdgeFramework.Property = Nothing
 
-        Dim Proceed As Boolean = True
+    '    Dim PropertyFound As Boolean = False
+    '    Dim tf As Boolean
+    '    Dim FindString As String = Configuration("TextBoxFindReplaceFindAssembly")
+    '    Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplaceAssembly")
 
-        Try
-            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-        Catch ex As Exception
-            Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add("Problem accessing PropertySets.")
-        End Try
+    '    Dim Proceed As Boolean = True
 
-        If Proceed Then
-            For Each Properties In PropertySets
-                For Each Prop In Properties
-                    tf = (Configuration("ComboBoxFindReplacePropertySetAssembly").ToLower = "custom")
-                    tf = tf And (Properties.Name.ToLower = "custom")
-                    If tf Then
-                        ' Some properties do not have names.
-                        Try
-                            If Prop.Name = Configuration("TextBoxFindReplacePropertyNameAssembly") Then
-                                PropertyFound = True
-                                ' Only works on text type properties
-                                Try
-                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                    Properties.Save()
-                                Catch ex As Exception
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-                                End Try
-                                Exit For
-                            End If
-                        Catch ex As Exception
-                        End Try
-                    Else
-                        ' Some properties do not have names.
-                        Try
-                            If Prop.Name = Configuration("TextBoxFindReplacePropertyNameAssembly") Then
-                                PropertyFound = True
-                                ' Only works on text type properties
-                                Try
-                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                    Properties.Save()
-                                Catch ex As Exception
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-                                End Try
-                                Exit For
-                            End If
-                        Catch ex As Exception
-                        End Try
-                    End If
-                Next
-                If PropertyFound Then
-                    Exit For
-                End If
-            Next
+    '    Try
+    '        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+    '    Catch ex As Exception
+    '        Proceed = False
+    '        ExitStatus = 1
+    '        ErrorMessageList.Add("Problem accessing PropertySets.")
+    '    End Try
 
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+    '    If Proceed Then
+    '        For Each Properties In PropertySets
+    '            For Each Prop In Properties
+    '                tf = (Configuration("ComboBoxFindReplacePropertySetAssembly").ToLower = "custom")
+    '                tf = tf And (Properties.Name.ToLower = "custom")
+    '                If tf Then
+    '                    ' Some properties do not have names.
+    '                    Try
+    '                        If Prop.Name = Configuration("TextBoxFindReplacePropertyNameAssembly") Then
+    '                            PropertyFound = True
+    '                            ' Only works on text type properties
+    '                            Try
+    '                                Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+    '                                Properties.Save()
+    '                            Catch ex As Exception
+    '                                ExitStatus = 1
+    '                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+    '                            End Try
+    '                            Exit For
+    '                        End If
+    '                    Catch ex As Exception
+    '                    End Try
+    '                Else
+    '                    ' Some properties do not have names.
+    '                    Try
+    '                        If Prop.Name = Configuration("TextBoxFindReplacePropertyNameAssembly") Then
+    '                            PropertyFound = True
+    '                            ' Only works on text type properties
+    '                            Try
+    '                                Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+    '                                Properties.Save()
+    '                            Catch ex As Exception
+    '                                ExitStatus = 1
+    '                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+    '                            End Try
+    '                            Exit For
+    '                        End If
+    '                    Catch ex As Exception
+    '                    End Try
+    '                End If
+    '            Next
+    '            If PropertyFound Then
+    '                Exit For
+    '            End If
+    '        Next
 
-        End If
+    '        If SEDoc.ReadOnly Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '        Else
+    '            SEDoc.Save()
+    '            SEApp.DoIdle()
+    '        End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    '    End If
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
 
 

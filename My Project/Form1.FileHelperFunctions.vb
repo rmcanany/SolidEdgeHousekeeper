@@ -222,7 +222,8 @@ Partial Class Form1
 
             ListViewFiles.EndUpdate()
 
-            TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
+            'TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
+            TextBoxStatus.Text = String.Format("{0} files found", ListViewFiles.Items.Count)
 
         End If
 
