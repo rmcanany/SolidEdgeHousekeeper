@@ -318,6 +318,31 @@ Public Class Form1
                         msg += "    Enter a valid assembly search string" + Chr(13)
                     End If
                 End If
+
+                tf = CheckBoxFindReplaceFindPTAssembly.Checked
+                tf = tf Or CheckBoxFindReplaceFindWCAssembly.Checked
+                tf = tf Or CheckBoxFindReplaceFindRXAssembly.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Find' text") Then
+                        msg += "    Select a search type for the 'Find' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplacePTAssembly.Checked
+                tf = tf Or CheckBoxFindReplaceReplaceRXAssembly.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Replace' text") Then
+                        msg += "    Select a search type for the 'Replace' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplaceRXAssembly.Checked
+                tf = tf And Not CheckBoxFindReplaceFindRXAssembly.Checked
+                If tf Then
+                    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
+                        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
+                    End If
+                End If
             End If
 
             If LabelToActionAssembly(Label).RequiresPictorialView Then
@@ -423,6 +448,32 @@ Public Class Form1
                         msg += "    Enter a valid part search string" + Chr(13)
                     End If
                 End If
+
+                tf = CheckBoxFindReplaceFindPTPart.Checked
+                tf = tf Or CheckBoxFindReplaceFindWCPart.Checked
+                tf = tf Or CheckBoxFindReplaceFindRXPart.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Find' text") Then
+                        msg += "    Select a search type for the 'Find' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplacePTPart.Checked
+                tf = tf Or CheckBoxFindReplaceReplaceRXPart.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Replace' text") Then
+                        msg += "    Select a search type for the 'Replace' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplaceRXPart.Checked
+                tf = tf And Not CheckBoxFindReplaceFindRXPart.Checked
+                If tf Then
+                    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
+                        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
+                    End If
+                End If
+
             End If
 
             If LabelToActionPart(Label).RequiresPictorialView Then
@@ -546,6 +597,32 @@ Public Class Form1
                         msg += "    Enter a valid sheetmetal search string" + Chr(13)
                     End If
                 End If
+
+                tf = CheckBoxFindReplaceFindPTSheetmetal.Checked
+                tf = tf Or CheckBoxFindReplaceFindWCSheetmetal.Checked
+                tf = tf Or CheckBoxFindReplaceFindRXSheetmetal.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Find' text") Then
+                        msg += "    Select a search type for the 'Find' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplacePTSheetmetal.Checked
+                tf = tf Or CheckBoxFindReplaceReplaceRXSheetmetal.Checked
+                If Not tf Then
+                    If Not msg.Contains("Select a search type for the 'Replace' text") Then
+                        msg += "    Select a search type for the 'Replace' text" + Chr(13)
+                    End If
+                End If
+
+                tf = CheckBoxFindReplaceReplaceRXSheetmetal.Checked
+                tf = tf And Not CheckBoxFindReplaceFindRXSheetmetal.Checked
+                If tf Then
+                    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
+                        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
+                    End If
+                End If
+
             End If
 
             If LabelToActionSheetmetal(Label).RequiresPictorialView Then
@@ -1020,6 +1097,11 @@ Public Class Form1
         TextBoxFindReplacePropertyNameAssembly.Enabled = False
         TextBoxFindReplaceFindAssembly.Enabled = False
         TextBoxFindReplaceReplaceAssembly.Enabled = False
+        CheckBoxFindReplaceFindPTAssembly.Enabled = False
+        CheckBoxFindReplaceFindWCAssembly.Enabled = False
+        CheckBoxFindReplaceFindRXAssembly.Enabled = False
+        CheckBoxFindReplaceReplacePTAssembly.Enabled = False
+        CheckBoxFindReplaceReplaceRXAssembly.Enabled = False
 
         TextBoxExposeVariablesAssembly.Enabled = False
 
@@ -1053,6 +1135,12 @@ Public Class Form1
                 TextBoxFindReplacePropertyNameAssembly.Enabled = True
                 TextBoxFindReplaceFindAssembly.Enabled = True
                 TextBoxFindReplaceReplaceAssembly.Enabled = True
+                CheckBoxFindReplaceFindPTAssembly.Enabled = True
+                CheckBoxFindReplaceFindWCAssembly.Enabled = True
+                CheckBoxFindReplaceFindRXAssembly.Enabled = True
+                CheckBoxFindReplaceReplacePTAssembly.Enabled = True
+                CheckBoxFindReplaceReplaceRXAssembly.Enabled = True
+
             End If
 
             If LabelToActionAssembly(Label).RequiresExposeVariables Then
@@ -1078,6 +1166,11 @@ Public Class Form1
         TextBoxFindReplacePropertyNamePart.Enabled = False
         TextBoxFindReplaceFindPart.Enabled = False
         TextBoxFindReplaceReplacePart.Enabled = False
+        CheckBoxFindReplaceFindPTPart.Enabled = False
+        CheckBoxFindReplaceFindWCPart.Enabled = False
+        CheckBoxFindReplaceFindRXPart.Enabled = False
+        CheckBoxFindReplaceReplacePTPart.Enabled = False
+        CheckBoxFindReplaceReplaceRXPart.Enabled = False
 
         TextBoxExposeVariablesPart.Enabled = False
 
@@ -1111,6 +1204,11 @@ Public Class Form1
                 TextBoxFindReplacePropertyNamePart.Enabled = True
                 TextBoxFindReplaceFindPart.Enabled = True
                 TextBoxFindReplaceReplacePart.Enabled = True
+                CheckBoxFindReplaceFindPTPart.Enabled = True
+                CheckBoxFindReplaceFindWCPart.Enabled = True
+                CheckBoxFindReplaceFindRXPart.Enabled = True
+                CheckBoxFindReplaceReplacePTPart.Enabled = True
+                CheckBoxFindReplaceReplaceRXPart.Enabled = True
             End If
 
             If LabelToActionPart(Label).RequiresExposeVariables Then
@@ -1136,7 +1234,11 @@ Public Class Form1
         TextBoxFindReplacePropertyNameSheetmetal.Enabled = False
         TextBoxFindReplaceFindSheetmetal.Enabled = False
         TextBoxFindReplaceReplaceSheetmetal.Enabled = False
-
+        CheckBoxFindReplaceFindPTSheetmetal.Enabled = False
+        CheckBoxFindReplaceFindWCSheetmetal.Enabled = False
+        CheckBoxFindReplaceFindRXSheetmetal.Enabled = False
+        CheckBoxFindReplaceReplacePTSheetmetal.Enabled = False
+        CheckBoxFindReplaceReplaceRXSheetmetal.Enabled = False
         TextBoxExposeVariablesSheetmetal.Enabled = False
 
         For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
@@ -1170,6 +1272,11 @@ Public Class Form1
                 TextBoxFindReplacePropertyNameSheetmetal.Enabled = True
                 TextBoxFindReplaceFindSheetmetal.Enabled = True
                 TextBoxFindReplaceReplaceSheetmetal.Enabled = True
+                CheckBoxFindReplaceFindPTSheetmetal.Enabled = True
+                CheckBoxFindReplaceFindWCSheetmetal.Enabled = True
+                CheckBoxFindReplaceFindRXSheetmetal.Enabled = True
+                CheckBoxFindReplaceReplacePTSheetmetal.Enabled = True
+                CheckBoxFindReplaceReplaceRXSheetmetal.Enabled = True
             End If
 
             If LabelToActionSheetmetal(Label).RequiresExposeVariables Then
@@ -2434,6 +2541,96 @@ Public Class Form1
             CheckBoxWarnBareTLA.Enabled = True
         End If
     End Sub
+
+    Private Sub CheckBoxFindReplaceFindPTAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindPTAssembly.CheckedChanged
+        If CheckBoxFindReplaceFindPTAssembly.Checked Then
+            CheckBoxFindReplaceFindWCAssembly.Checked = False
+            CheckBoxFindReplaceFindRXAssembly.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindWCAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindWCAssembly.CheckedChanged
+        If CheckBoxFindReplaceFindWCAssembly.Checked Then
+            CheckBoxFindReplaceFindPTAssembly.Checked = False
+            CheckBoxFindReplaceFindRXAssembly.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindRXAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindRXAssembly.CheckedChanged
+        If CheckBoxFindReplaceFindRXAssembly.Checked Then
+            CheckBoxFindReplaceFindPTAssembly.Checked = False
+            CheckBoxFindReplaceFindWCAssembly.Checked = False
+        End If
+    End Sub
+
+    Private Sub CheckBoxFindReplaceReplacePTAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplacePTAssembly.CheckedChanged
+        If CheckBoxFindReplaceReplacePTAssembly.Checked Then
+            CheckBoxFindReplaceReplaceRXAssembly.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceReplaceRXAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplaceRXAssembly.CheckedChanged
+        If CheckBoxFindReplaceReplaceRXAssembly.Checked Then
+            CheckBoxFindReplaceReplacePTAssembly.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindPTPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindPTPart.CheckedChanged
+        If CheckBoxFindReplaceFindPTPart.Checked Then
+            CheckBoxFindReplaceFindWCPart.Checked = False
+            CheckBoxFindReplaceFindRXPart.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindWCPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindWCPart.CheckedChanged
+        If CheckBoxFindReplaceFindWCPart.Checked Then
+            CheckBoxFindReplaceFindPTPart.Checked = False
+            CheckBoxFindReplaceFindRXPart.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindRXPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindRXPart.CheckedChanged
+        If CheckBoxFindReplaceFindRXPart.Checked Then
+            CheckBoxFindReplaceFindPTPart.Checked = False
+            CheckBoxFindReplaceFindWCPart.Checked = False
+        End If
+    End Sub
+
+    Private Sub CheckBoxFindReplaceReplacePTPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplacePTPart.CheckedChanged
+        If CheckBoxFindReplaceReplacePTPart.Checked Then
+            CheckBoxFindReplaceReplaceRXPart.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceReplaceRXPart_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplaceRXPart.CheckedChanged
+        If CheckBoxFindReplaceReplaceRXPart.Checked Then
+            CheckBoxFindReplaceReplacePTPart.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindPTSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindPTSheetmetal.CheckedChanged
+        If CheckBoxFindReplaceFindPTSheetmetal.Checked Then
+            CheckBoxFindReplaceFindWCSheetmetal.Checked = False
+            CheckBoxFindReplaceFindRXSheetmetal.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindWCSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindWCSheetmetal.CheckedChanged
+        If CheckBoxFindReplaceFindWCSheetmetal.Checked Then
+            CheckBoxFindReplaceFindPTSheetmetal.Checked = False
+            CheckBoxFindReplaceFindRXSheetmetal.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceFindRXSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindRXSheetmetal.CheckedChanged
+        If CheckBoxFindReplaceFindRXSheetmetal.Checked Then
+            CheckBoxFindReplaceFindPTSheetmetal.Checked = False
+            CheckBoxFindReplaceFindWCSheetmetal.Checked = False
+        End If
+    End Sub
+
+    Private Sub CheckBoxFindReplaceReplacePTSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplacePTSheetmetal.CheckedChanged
+        If CheckBoxFindReplaceReplacePTSheetmetal.Checked Then
+            CheckBoxFindReplaceReplaceRXSheetmetal.Checked = False
+        End If
+    End Sub
+    Private Sub CheckBoxFindReplaceReplaceRXSheetmetal_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceReplaceRXSheetmetal.CheckedChanged
+        If CheckBoxFindReplaceReplaceRXSheetmetal.Checked Then
+            CheckBoxFindReplaceReplacePTSheetmetal.Checked = False
+        End If
+    End Sub
+
+
 
 
 

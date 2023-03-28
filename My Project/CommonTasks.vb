@@ -1,4 +1,6 @@
+'Option Strict On
 Imports System.IO
+Imports System.Text.RegularExpressions
 Imports ExcelDataReader
 
 Public Class CommonTasks
@@ -163,6 +165,11 @@ Public Class CommonTasks
         ByVal SEApp As SolidEdgeFramework.Application
         ) As Dictionary(Of Integer, List(Of String))
 
+        ' Convert glob to regex 
+        ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
+        ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
+        ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
+
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -175,9 +182,13 @@ Public Class CommonTasks
         Dim PropertyName As String = ""
         Dim FindString As String = ""
         Dim ReplaceString As String = ""
+        Dim FindSearchType As String = ""
+        Dim ReplaceSearchType As String = ""
 
         Dim PropertyFound As Boolean = False
         Dim tf As Boolean
+        Dim tf1 As Boolean
+        Dim tf2 As Boolean
 
         Dim Proceed As Boolean = True
 
@@ -188,21 +199,69 @@ Public Class CommonTasks
             PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
             FindString = Configuration("TextBoxFindReplaceFindAssembly")
             ReplaceString = Configuration("TextBoxFindReplaceReplaceAssembly")
+
+            If Configuration("CheckBoxFindReplaceFindPTAssembly") = "True" Then
+                FindSearchType = "PT"
+            ElseIf Configuration("CheckBoxFindReplaceFindWCAssembly") = "True" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If Configuration("CheckBoxFindReplaceReplacePTAssembly") = "True" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
+
         ElseIf DocType = "par" Then
             PropertySetName = Configuration("ComboBoxFindReplacePropertySetAssembly")
             PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
             FindString = Configuration("TextBoxFindReplaceFindPart")
             ReplaceString = Configuration("TextBoxFindReplaceReplacePart")
+
+            If Configuration("CheckBoxFindReplaceFindPTPart") = "True" Then
+                FindSearchType = "PT"
+            ElseIf Configuration("CheckBoxFindReplaceFindWCPart") = "True" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If Configuration("CheckBoxFindReplaceReplacePTPart") = "True" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
+
         ElseIf DocType = "psm" Then
             PropertySetName = Configuration("ComboBoxFindReplacePropertySetAssembly")
             PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
             FindString = Configuration("TextBoxFindReplaceFindSheetmetal")
             ReplaceString = Configuration("TextBoxFindReplaceReplaceSheetmetal")
+
+            If Configuration("CheckBoxFindReplaceFindPTSheetmetal") = "True" Then
+                FindSearchType = "PT"
+            ElseIf Configuration("CheckBoxFindReplaceFindWCSheetmetal") = "True" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If Configuration("CheckBoxFindReplaceReplacePTSheetmetal") = "True" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
+
         Else
             PropertySetName = ""
             PropertyName = ""
             FindString = ""
             ReplaceString = ""
+            FindSearchType = ""
+            ReplaceSearchType = ""
+
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add("Not implemented for Draft files.")
@@ -222,43 +281,44 @@ Public Class CommonTasks
         If Proceed Then
             For Each Properties In PropertySets
                 For Each Prop In Properties
-                    tf = (PropertySetName.ToLower = "custom")
-                    tf = tf And (Properties.Name.ToLower = "custom")
-                    If tf Then
-                        ' Some properties do not have names.
-                        Try
-                            If Prop.Name = PropertyName Then
-                                PropertyFound = True
-                                ' Only works on text type properties
-                                Try
-                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                    Properties.Save()
-                                Catch ex As Exception
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-                                End Try
-                                Exit For
-                            End If
-                        Catch ex As Exception
-                        End Try
-                    Else
-                        ' Some properties do not have names.
-                        Try
-                            If Prop.Name = PropertyName Then
-                                PropertyFound = True
-                                ' Only works on text type properties
-                                Try
-                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                    Properties.Save()
-                                Catch ex As Exception
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-                                End Try
-                                Exit For
-                            End If
-                        Catch ex As Exception
-                        End Try
+                    'Check if both names are 'custom' or neither are
+                    tf1 = (PropertySetName.ToLower = "custom") And (Properties.Name.ToLower = "custom")
+                    tf2 = (PropertySetName.ToLower <> "custom") And (Properties.Name.ToLower <> "custom")
+
+                    tf = (tf1 Or tf2)
+                    If Not tf Then
+                        Continue For
                     End If
+
+                    ' Some properties do not have names.
+                    Try
+                        If Prop.Name = PropertyName Then
+                            PropertyFound = True
+                            ' Only works on text type properties
+                            Try
+                                If FindSearchType = "PT" Then
+                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                                Else
+                                    If FindSearchType = "WC" Then
+                                        FindString = CommonTasks.GlobToRegex(FindString)
+                                    End If
+                                    If ReplaceSearchType = "PT" Then
+                                        ReplaceString = Regex.Escape(ReplaceString)
+                                    End If
+
+                                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString)
+
+                                End If
+                                Properties.Save()
+                            Catch ex As Exception
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+                            End Try
+                            Exit For
+                        End If
+                    Catch ex As Exception
+                    End Try
+
                 Next
                 If PropertyFound Then
                     Exit For
@@ -278,6 +338,66 @@ Public Class CommonTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+    Public Shared Function GlobToRegex(GlobString As String) As String
+
+        Dim wildcard As String = GlobString
+        Dim outstring As String = ""
+        Dim in_character_class As Boolean = False
+        Dim r As String
+
+
+        For i As Integer = 0 To Len(wildcard) - 1
+            If in_character_class Then
+                If wildcard(i) = "]" Then
+                    in_character_class = False
+                    outstring = outstring + "_META_CLOSE_BRACKET_"
+                ElseIf wildcard(i) = "*" Then
+                    outstring = outstring + "_LITERAL_ASTERIX_"
+                ElseIf wildcard(i) = "?" Then
+                    outstring = outstring + "_LITERAL_QUESTION_MARK_"
+                ElseIf wildcard(i) = "[" Then
+                    outstring = outstring + "_LITERAL_OPEN_BRACKET_"
+                ElseIf wildcard(i) = "#" Then
+                    outstring = outstring + "_LITERAL_HASH_MARK_"
+                Else
+                    outstring = outstring + wildcard(i)
+                End If
+            Else
+                If wildcard(i) = "[" Then
+                    in_character_class = True
+                    outstring = outstring + "_META_OPEN_BRACKET_"
+                Else
+                    outstring = outstring + wildcard(i)
+                End If
+            End If
+        Next
+
+        r = Regex.Escape(outstring)
+
+        r = r.Replace("\*", ".*")
+        r = r.Replace("\?", ".")
+        r = r.Replace("\[", "[")
+        ' r = r.Replace("[!", "[^")
+        r = r.Replace("_META_OPEN_BRACKET_!", "[^")
+        r = r.Replace("_META_OPEN_BRACKET_", "[")
+        r = r.Replace("\#", "[0-9]")
+        r = r.Replace("_LITERAL_OPEN_BRACKET_", "\[")
+        r = r.Replace("_META_CLOSE_BRACKET_", "]")
+        r = r.Replace("_LITERAL_ASTERIX_", "\*")
+        r = r.Replace("_LITERAL_QUESTION_MARK_", "\?")
+        r = r.Replace("_LITERAL_HASH_MARK_", "\#")
+
+        ' The following prevents a second match on the ending empty string.
+        ' https://stackoverflow.com/questions/52351217/why-do-some-regex-engines-match-twice-in-a-single-input-string/52352744#52352744
+        If r = ".*" Then
+            r = "^.*"
+        End If
+
+        Return r
+
+    End Function
+
 
     Shared Function ReadExcel(FileName As String) As String()
 

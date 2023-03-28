@@ -530,6 +530,8 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
+There are three search modes, `PT`, `WC`, and `RX`.  `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  `RX` stands for 'Regex'.  It is a more comprehensive (and notorious) method of matching text.  
+
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 #### Expose variables missing
