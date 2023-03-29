@@ -285,7 +285,7 @@ Public Class CommonTasks
                     tf1 = (PropertySetName.ToLower = "custom") And (Properties.Name.ToLower = "custom")
                     tf2 = (PropertySetName.ToLower <> "custom") And (Properties.Name.ToLower <> "custom")
 
-                    tf = (tf1 Or tf2)
+                    tf = tf1 Or tf2
                     If Not tf Then
                         Continue For
                     End If
