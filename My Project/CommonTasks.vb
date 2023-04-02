@@ -159,6 +159,162 @@ Public Class CommonTasks
         Return ErrorMessage
     End Function
 
+    Shared Function SubstitutePropertyFormula(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Instring As String
+        ) As String
+
+        ' Replaces property formulas in a string
+        ' "Material: %{System.Material}, Engineer: %{Custom.Engineer}" --> "Material: STEEL, Engineer: FRED"
+
+        Dim Outstring As String = ""
+        Dim tf As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim PropertySet As String
+        Dim PropertyName As String
+        Dim FoundProp As SolidEdgeFramework.Property
+
+        Dim DocValues As New List(Of String)
+        'Dim DocValue As String
+
+        'Dim StartPositions As New List(Of Integer)
+        'Dim StartPosition As Integer
+        'Dim EndPositions As New List(Of Integer)
+        'Dim EndPosition As Integer
+        'Dim Length As Integer
+        Dim i As Integer
+        'Dim msg As String
+
+
+        Dim Formulas As New List(Of String)
+        Dim Formula As String
+
+        Dim Matches As MatchCollection
+        Dim MatchString As Match
+        Dim Pattern As String
+
+
+        tf = Instring.Contains("%{System")
+        tf = tf Or Instring.Contains("%{Custom")
+
+        If Not tf Then
+            Outstring = Instring
+            Proceed = False
+        End If
+
+        If Proceed Then
+            ' Any number of substrings that start with "%{" and end with the first encountered "}".
+            Pattern = "%{[^}]*}"
+            Matches = Regex.Matches(Instring, Pattern)
+            For Each MatchString In Matches
+                Formulas.Add(MatchString.Value)
+            Next
+        End If
+
+        If Proceed Then
+            For Each Formula In Formulas
+                Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
+                Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
+                i = Formula.IndexOf(".")  ' First occurrence
+                PropertySet = Formula.Substring(0, i)    ' "Custom"
+                PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
+
+                If PropertyName.ToLower = "File Name".ToLower Then
+                    DocValues.Add(System.IO.Path.GetFileName(SEDoc.FullName))  ' C:\project\part.par -> part.par
+                    ' Proceed = False
+                ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
+                    DocValues.Add(SEDoc.FullName)
+                    ' Proceed = False
+                ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
+                    DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))  ' C:\project\part.par -> part
+                    ' Proceed = False
+                Else
+                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName)
+                    If Not FoundProp Is Nothing Then
+                        DocValues.Add(FoundProp.Value)
+                    Else
+                        DocValues.Add("")
+                    End If
+
+                End If
+
+            Next
+        End If
+
+        If Proceed Then
+            Outstring = Instring
+
+            For i = 0 To DocValues.Count - 1
+                Outstring = Outstring.Replace(Formulas(i), DocValues(i))
+            Next
+
+        End If
+
+
+        Return Outstring
+
+    End Function
+
+    Shared Function GetProp(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String
+        ) As SolidEdgeFramework.Property
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+        Dim Properties As SolidEdgeFramework.Properties = Nothing
+        Dim Prop As SolidEdgeFramework.Property = Nothing
+        Dim FoundProp As SolidEdgeFramework.Property = Nothing
+        Dim Proceed As Boolean = True
+        Dim tf As Boolean
+        Dim tf1 As Boolean
+        Dim tf2 As Boolean
+        Dim PropertyFound As Boolean
+
+        Try
+            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Catch ex As Exception
+            Proceed = False
+        End Try
+
+        If Proceed Then
+            For Each Properties In PropertySets
+                For Each Prop In Properties
+                    'Check if both names are 'custom' or neither are
+                    tf1 = (PropertySetName.ToLower = "custom") And (Properties.Name.ToLower = "custom")
+                    tf2 = (PropertySetName.ToLower <> "custom") And (Properties.Name.ToLower <> "custom")
+
+                    tf = tf1 Or tf2
+                    If Not tf Then
+                        Continue For
+                    End If
+
+                    ' Some properties do not have names.
+                    Try
+                        If Prop.Name = PropertyName Then
+                            FoundProp = Prop
+                            PropertyFound = True
+                            Exit For
+                        End If
+                    Catch ex As Exception
+                    End Try
+
+                Next
+
+                If PropertyFound Then
+                    Exit For
+                End If
+            Next
+
+        End If
+
+        Return FoundProp
+
+    End Function
+
     Shared Function PropertyFindReplace(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -215,8 +371,8 @@ Public Class CommonTasks
             End If
 
         ElseIf DocType = "par" Then
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetAssembly")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
+            PropertySetName = Configuration("ComboBoxFindReplacePropertySetPart")
+            PropertyName = Configuration("TextBoxFindReplacePropertyNamePart")
             FindString = Configuration("TextBoxFindReplaceFindPart")
             ReplaceString = Configuration("TextBoxFindReplaceReplacePart")
 
@@ -235,8 +391,8 @@ Public Class CommonTasks
             End If
 
         ElseIf DocType = "psm" Then
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetAssembly")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
+            PropertySetName = Configuration("ComboBoxFindReplacePropertySetSheetmetal")
+            PropertyName = Configuration("TextBoxFindReplacePropertyNameSheetmetal")
             FindString = Configuration("TextBoxFindReplaceFindSheetmetal")
             ReplaceString = Configuration("TextBoxFindReplaceReplaceSheetmetal")
 
@@ -270,70 +426,84 @@ Public Class CommonTasks
 
         If Proceed Then
             Try
-                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+                FindString = SubstitutePropertyFormula(SEDoc, FindString)
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
-                ErrorMessageList.Add("Problem accessing PropertySets.")
+                ErrorMessageList.Add("Find text not recognized.")
+            End Try
+
+            Try
+                ReplaceString = SubstitutePropertyFormula(SEDoc, ReplaceString)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Replace text not recognized.")
             End Try
         End If
 
         If Proceed Then
-            For Each Properties In PropertySets
-                For Each Prop In Properties
-                    'Check if both names are 'custom' or neither are
-                    tf1 = (PropertySetName.ToLower = "custom") And (Properties.Name.ToLower = "custom")
-                    tf2 = (PropertySetName.ToLower <> "custom") And (Properties.Name.ToLower <> "custom")
-
-                    tf = tf1 Or tf2
-                    If Not tf Then
-                        Continue For
-                    End If
-
-                    ' Some properties do not have names.
-                    Try
-                        If Prop.Name = PropertyName Then
-                            PropertyFound = True
-                            ' Only works on text type properties
-                            Try
-                                If FindSearchType = "PT" Then
-                                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                Else
-                                    If FindSearchType = "WC" Then
-                                        FindString = CommonTasks.GlobToRegex(FindString)
-                                    End If
-                                    If ReplaceSearchType = "PT" Then
-                                        ReplaceString = Regex.Escape(ReplaceString)
-                                    End If
-
-                                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString)
-
-                                End If
-                                Properties.Save()
-                            Catch ex As Exception
-                                ExitStatus = 1
-                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-                            End Try
-                            Exit For
-                        End If
-                    Catch ex As Exception
-                    End Try
-
-                Next
-                If PropertyFound Then
-                    Exit For
+            Try
+                Prop = GetProp(SEDoc, PropertySetName, PropertyName)
+                If Prop Is Nothing Then
+                    Proceed = False
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Property not found or not recognized.")
                 End If
-            Next
-
-            If SEDoc.ReadOnly Then
+            Catch ex As Exception
+                Proceed = False
                 ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
+                ErrorMessageList.Add("Property not found or not recognized.")
+            End Try
 
         End If
+
+        If Proceed Then
+            Try
+                If FindSearchType = "PT" Then
+                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                Else
+                    If FindSearchType = "WC" Then
+                        FindString = CommonTasks.GlobToRegex(FindString)
+                    End If
+                    If ReplaceSearchType = "PT" Then
+                        ' ReplaceString = Regex.Escape(ReplaceString)
+                    End If
+
+                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString)
+
+                End If
+                ' Properties.Save()
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
+            End Try
+
+        End If
+
+        If Proceed Then
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+                For Each Properties In PropertySets
+                    Properties.Save()
+                    SEApp.DoIdle()
+                Next
+                If SEDoc.ReadOnly Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+                Else
+                    SEDoc.Save()
+                    SEApp.DoIdle()
+                End If
+
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem accessing or saving Property.")
+            End Try
+        End If
+
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
