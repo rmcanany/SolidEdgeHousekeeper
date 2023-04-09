@@ -2406,7 +2406,7 @@ Public Class DraftTasks
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim SupplementalExitStatus As Integer
+        ' Dim SupplementalExitStatus As Integer
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
@@ -2416,8 +2416,8 @@ Public Class DraftTasks
         Dim SubDir As String
         Dim Formula As String
         Dim Proceed As Boolean = True
-        Dim msg As String
-
+        ' Dim msg As String
+        Dim FCD As New FilenameCharmapDoctor()
 
         ' ComboBoxSaveAsSheetmetalFileType
         ' Format: Parasolid (*.xt), IGES (*.igs)
@@ -2434,30 +2434,44 @@ Public Class DraftTasks
             If Configuration("CheckBoxSaveAsFormulaDraft").ToLower = "true" Then
                 Formula = Configuration("TextBoxSaveAsFormulaDraft")
 
-                SupplementalErrorMessage = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
-                ' SubDir = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
-                SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                If SupplementalExitStatus = 0 Then
-                    SubDir = SupplementalErrorMessage(0)(0)
+                SubDir = CommonTasks.SubstitutePropertyFormula(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Formula)
+                SubDir = FCD.SubstituteIllegalCharacters(SubDir)
 
-                    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                        Try
-                            FileIO.FileSystem.CreateDirectory(BaseDir)
-                        Catch ex As Exception
-                            Proceed = False
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                        End Try
-                    End If
-                Else
-                    ExitStatus = 1
-                    Proceed = False
-                    For Each msg In SupplementalErrorMessage(SupplementalExitStatus)
-                        ErrorMessageList.Add(msg)
-                    Next
-                    ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
+                BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
+                If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
+                    Try
+                        FileIO.FileSystem.CreateDirectory(BaseDir)
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
+                    End Try
                 End If
+
+                'SupplementalErrorMessage = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
+                '' SubDir = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
+                'SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                'If SupplementalExitStatus = 0 Then
+                '    SubDir = SupplementalErrorMessage(0)(0)
+
+                '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
+                '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
+                '        Try
+                '            FileIO.FileSystem.CreateDirectory(BaseDir)
+                '        Catch ex As Exception
+                '            Proceed = False
+                '            ExitStatus = 1
+                '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
+                '        End Try
+                '    End If
+                'Else
+                '    ExitStatus = 1
+                '    Proceed = False
+                '    For Each msg In SupplementalErrorMessage(SupplementalExitStatus)
+                '        ErrorMessageList.Add(msg)
+                '    Next
+                '    ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
+                'End If
 
             End If
 

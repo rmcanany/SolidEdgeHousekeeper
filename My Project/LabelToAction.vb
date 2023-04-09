@@ -111,7 +111,7 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`.  "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  "
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  "
-        HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notorious) method of matching text.  "
+        HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  "
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
         HelpString += "the replacement is `ALUMINUM`, "

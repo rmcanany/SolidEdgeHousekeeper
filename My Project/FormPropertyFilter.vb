@@ -358,6 +358,7 @@ Public Class FormPropertyFilter
 		ComboBoxPropertyFilterComparison.Items.Add("is_exactly")
 		ComboBoxPropertyFilterComparison.Items.Add("is_not")
 		ComboBoxPropertyFilterComparison.Items.Add("wildcard_match")
+		ComboBoxPropertyFilterComparison.Items.Add("regex_match")
 		ComboBoxPropertyFilterComparison.Items.Add(">")
 		ComboBoxPropertyFilterComparison.Items.Add("<")
 		'ComboBoxPropertyFilterComparison.Items.Add("=")

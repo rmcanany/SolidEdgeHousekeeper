@@ -1493,6 +1493,33 @@ Public Class SheetmetalTasks
         Dim RefPlane As SolidEdgePart.RefPlane
         Dim Models As SolidEdgePart.Models
 
+        Dim PMI As SolidEdgeFrameworkSupport.PMI
+
+        Dim Sketches As SolidEdgePart.Sketchs
+        Dim Sketch As SolidEdgePart.Sketch
+        Dim Profiles As SolidEdgePart.Profiles
+        Dim Profile As SolidEdgePart.Profile
+
+        Try
+            Sketches = SEDoc.Sketches
+            For Each Sketch In Sketches
+                Profiles = Sketch.Profiles
+                For Each Profile In Profiles
+                    Profile.Visible = False
+                Next
+            Next
+        Catch ex As Exception
+        End Try
+
+        Try
+            PMI = CType(SEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+            PMI.Show = False
+            PMI.ShowDimensions = False
+            PMI.ShowAnnotations = False
+        Catch ex As Exception
+        End Try
+
+
         Models = SEDoc.Models
 
         If Models.Count > 0 Then

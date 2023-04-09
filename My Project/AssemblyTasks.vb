@@ -1147,6 +1147,32 @@ Public Class AssemblyTasks
         Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
         'Dim Occurrence As SolidEdgeAssembly.Occurrence
 
+        Dim PMI As SolidEdgeFrameworkSupport.PMI
+
+        Dim Sketches As SolidEdgeAssembly.ComponentLayouts
+        Dim Sketch As SolidEdgeAssembly.Layout
+        'Dim Profiles As SolidEdgePart.Profiles
+        Dim Profile As SolidEdgePart.Profile
+
+        Try
+            Sketches = SEDoc.ComponentLayouts
+            For Each Sketch In Sketches
+                Profile = CType(Sketch.Profile, SolidEdgePart.Profile)
+                Profile.Visible = False
+            Next
+        Catch ex As Exception
+        End Try
+
+        Try
+            PMI = CType(SEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+            PMI.Show = False
+            PMI.ShowDimensions = False
+            PMI.ShowAnnotations = False
+        Catch ex As Exception
+        End Try
+
+
+
         If Occurrences.Count = 0 Then
             AsmRefPlanes.Visible = True
             For Each AsmRefPlane In AsmRefPlanes

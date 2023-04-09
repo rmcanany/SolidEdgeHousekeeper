@@ -194,6 +194,8 @@ Public Class CommonTasks
         Dim MatchString As Match
         Dim Pattern As String
 
+        Dim ModelIdx As Integer
+
 
         tf = Instring.Contains("%{System")
         tf = tf Or Instring.Contains("%{Custom")
@@ -219,20 +221,24 @@ Public Class CommonTasks
                 i = Formula.IndexOf(".")  ' First occurrence
                 PropertySet = Formula.Substring(0, i)    ' "Custom"
                 PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+                If PropertyName.Contains("|R") Then
+                    i = PropertyName.IndexOf("|")
+                    ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
+                    PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
+                Else
+                    ModelIdx = 0
+                End If
 
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
 
                 If PropertyName.ToLower = "File Name".ToLower Then
                     DocValues.Add(System.IO.Path.GetFileName(SEDoc.FullName))  ' C:\project\part.par -> part.par
-                    ' Proceed = False
                 ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
                     DocValues.Add(SEDoc.FullName)
-                    ' Proceed = False
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
                     DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))  ' C:\project\part.par -> part
-                    ' Proceed = False
                 Else
-                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName)
+                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx)
                     If Not FoundProp Is Nothing Then
                         DocValues.Add(FoundProp.Value)
                     Else
@@ -261,7 +267,8 @@ Public Class CommonTasks
     Shared Function GetProp(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         PropertySetName As String,
-        PropertyName As String
+        PropertyName As String,
+        ModelLinkIdx As Integer
         ) As SolidEdgeFramework.Property
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
@@ -274,11 +281,46 @@ Public Class CommonTasks
         Dim tf2 As Boolean
         Dim PropertyFound As Boolean
 
-        Try
-            PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-        Catch ex As Exception
-            Proceed = False
-        End Try
+        If ModelLinkIdx = 0 Then
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        Else
+            Dim ModelLink As SolidEdgeDraft.ModelLink
+            Dim Typename As String = ""
+            Dim ModelDocName As String = ""
+
+            Try
+                ModelLink = SEDoc.ModelLinks.Item(ModelLinkIdx)
+                Typename = GetDocType(ModelLink.ModelDocument)
+
+                tf = True
+
+                If Typename.ToLower = "par" Then
+                    Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "psm" Then
+                    Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "asm" Then
+                    Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+            Catch ex As Exception
+                Proceed = False
+            End Try
+
+        End If
+
 
         If Proceed Then
             For Each Properties In PropertySets
@@ -342,9 +384,9 @@ Public Class CommonTasks
         Dim ReplaceSearchType As String = ""
 
         Dim PropertyFound As Boolean = False
-        Dim tf As Boolean
-        Dim tf1 As Boolean
-        Dim tf2 As Boolean
+        'Dim tf As Boolean
+        'Dim tf1 As Boolean
+        'Dim tf2 As Boolean
 
         Dim Proceed As Boolean = True
 
@@ -444,7 +486,7 @@ Public Class CommonTasks
 
         If Proceed Then
             Try
-                Prop = GetProp(SEDoc, PropertySetName, PropertyName)
+                Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0)
                 If Prop Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
@@ -470,7 +512,7 @@ Public Class CommonTasks
                         ' ReplaceString = Regex.Escape(ReplaceString)
                     End If
 
-                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString)
+                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
 
                 End If
                 ' Properties.Save()

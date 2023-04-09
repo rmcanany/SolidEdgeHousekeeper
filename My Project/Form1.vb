@@ -1975,6 +1975,7 @@ Public Class Form1
             CheckBoxTLAReportUnrelatedFiles.Enabled = False
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
+            CheckBoxDraftAndModelSameName.Enabled = True
         End If
 
         ReconcileFormChanges()
@@ -1988,6 +1989,7 @@ Public Class Form1
             CheckBoxTLAReportUnrelatedFiles.Enabled = True
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
+            CheckBoxDraftAndModelSameName.Enabled = False
         End If
 
         ReconcileFormChanges()

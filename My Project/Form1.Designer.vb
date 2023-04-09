@@ -58,6 +58,11 @@ Partial Class Form1
         Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.CheckBoxFindReplaceReplaceRXAssembly = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceReplacePTAssembly = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindRXAssembly = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindWCAssembly = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindPTAssembly = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaAssembly = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaAssembly = New System.Windows.Forms.CheckBox()
         Me.TextBoxExposeVariablesAssembly = New System.Windows.Forms.TextBox()
@@ -81,6 +86,11 @@ Partial Class Form1
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.CheckBoxFindReplaceReplaceRXPart = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceReplacePTPart = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindRXPart = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindWCPart = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindPTPart = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaPart = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaPart = New System.Windows.Forms.CheckBox()
         Me.TextBoxExposeVariablesPart = New System.Windows.Forms.TextBox()
@@ -104,6 +114,12 @@ Partial Class Form1
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceReplacePTSheetmetal = New System.Windows.Forms.CheckBox()
+        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindRXSheetmetal = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindWCSheetmetal = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindPTSheetmetal = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaSheetmetal = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaSheetmetal = New System.Windows.Forms.CheckBox()
         Me.TextBoxExposeVariablesSheetmetal = New System.Windows.Forms.TextBox()
@@ -229,22 +245,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxFindReplaceFindPTAssembly = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindWCAssembly = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindRXAssembly = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindPTPart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindWCPart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindRXPart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindPTSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindWCSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindRXSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplacePTAssembly = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplaceRXAssembly = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplacePTPart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplaceRXPart = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplacePTSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -628,6 +629,56 @@ Partial Class Form1
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
         '
+        'CheckBoxFindReplaceReplaceRXAssembly
+        '
+        Me.CheckBoxFindReplaceReplaceRXAssembly.AutoSize = True
+        Me.CheckBoxFindReplaceReplaceRXAssembly.Location = New System.Drawing.Point(390, 496)
+        Me.CheckBoxFindReplaceReplaceRXAssembly.Name = "CheckBoxFindReplaceReplaceRXAssembly"
+        Me.CheckBoxFindReplaceReplaceRXAssembly.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceReplaceRXAssembly.TabIndex = 26
+        Me.CheckBoxFindReplaceReplaceRXAssembly.Text = "RX"
+        Me.CheckBoxFindReplaceReplaceRXAssembly.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceReplacePTAssembly
+        '
+        Me.CheckBoxFindReplaceReplacePTAssembly.AutoSize = True
+        Me.CheckBoxFindReplaceReplacePTAssembly.Location = New System.Drawing.Point(350, 496)
+        Me.CheckBoxFindReplaceReplacePTAssembly.Name = "CheckBoxFindReplaceReplacePTAssembly"
+        Me.CheckBoxFindReplaceReplacePTAssembly.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceReplacePTAssembly.TabIndex = 25
+        Me.CheckBoxFindReplaceReplacePTAssembly.Text = "PT"
+        Me.CheckBoxFindReplaceReplacePTAssembly.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindRXAssembly
+        '
+        Me.CheckBoxFindReplaceFindRXAssembly.AutoSize = True
+        Me.CheckBoxFindReplaceFindRXAssembly.Location = New System.Drawing.Point(300, 496)
+        Me.CheckBoxFindReplaceFindRXAssembly.Name = "CheckBoxFindReplaceFindRXAssembly"
+        Me.CheckBoxFindReplaceFindRXAssembly.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceFindRXAssembly.TabIndex = 24
+        Me.CheckBoxFindReplaceFindRXAssembly.Text = "RX"
+        Me.CheckBoxFindReplaceFindRXAssembly.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindWCAssembly
+        '
+        Me.CheckBoxFindReplaceFindWCAssembly.AutoSize = True
+        Me.CheckBoxFindReplaceFindWCAssembly.Location = New System.Drawing.Point(255, 496)
+        Me.CheckBoxFindReplaceFindWCAssembly.Name = "CheckBoxFindReplaceFindWCAssembly"
+        Me.CheckBoxFindReplaceFindWCAssembly.Size = New System.Drawing.Size(44, 17)
+        Me.CheckBoxFindReplaceFindWCAssembly.TabIndex = 23
+        Me.CheckBoxFindReplaceFindWCAssembly.Text = "WC"
+        Me.CheckBoxFindReplaceFindWCAssembly.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindPTAssembly
+        '
+        Me.CheckBoxFindReplaceFindPTAssembly.AutoSize = True
+        Me.CheckBoxFindReplaceFindPTAssembly.Location = New System.Drawing.Point(215, 496)
+        Me.CheckBoxFindReplaceFindPTAssembly.Name = "CheckBoxFindReplaceFindPTAssembly"
+        Me.CheckBoxFindReplaceFindPTAssembly.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceFindPTAssembly.TabIndex = 22
+        Me.CheckBoxFindReplaceFindPTAssembly.Text = "PT"
+        Me.CheckBoxFindReplaceFindPTAssembly.UseVisualStyleBackColor = True
+        '
         'TextBoxSaveAsFormulaAssembly
         '
         Me.TextBoxSaveAsFormulaAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -900,6 +951,56 @@ Partial Class Form1
         Me.TabPagePart.Size = New System.Drawing.Size(511, 594)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
+        '
+        'CheckBoxFindReplaceReplaceRXPart
+        '
+        Me.CheckBoxFindReplaceReplaceRXPart.AutoSize = True
+        Me.CheckBoxFindReplaceReplaceRXPart.Location = New System.Drawing.Point(390, 496)
+        Me.CheckBoxFindReplaceReplaceRXPart.Name = "CheckBoxFindReplaceReplaceRXPart"
+        Me.CheckBoxFindReplaceReplaceRXPart.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceReplaceRXPart.TabIndex = 34
+        Me.CheckBoxFindReplaceReplaceRXPart.Text = "RX"
+        Me.CheckBoxFindReplaceReplaceRXPart.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceReplacePTPart
+        '
+        Me.CheckBoxFindReplaceReplacePTPart.AutoSize = True
+        Me.CheckBoxFindReplaceReplacePTPart.Location = New System.Drawing.Point(350, 496)
+        Me.CheckBoxFindReplaceReplacePTPart.Name = "CheckBoxFindReplaceReplacePTPart"
+        Me.CheckBoxFindReplaceReplacePTPart.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceReplacePTPart.TabIndex = 33
+        Me.CheckBoxFindReplaceReplacePTPart.Text = "PT"
+        Me.CheckBoxFindReplaceReplacePTPart.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindRXPart
+        '
+        Me.CheckBoxFindReplaceFindRXPart.AutoSize = True
+        Me.CheckBoxFindReplaceFindRXPart.Location = New System.Drawing.Point(300, 496)
+        Me.CheckBoxFindReplaceFindRXPart.Name = "CheckBoxFindReplaceFindRXPart"
+        Me.CheckBoxFindReplaceFindRXPart.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceFindRXPart.TabIndex = 32
+        Me.CheckBoxFindReplaceFindRXPart.Text = "RX"
+        Me.CheckBoxFindReplaceFindRXPart.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindWCPart
+        '
+        Me.CheckBoxFindReplaceFindWCPart.AutoSize = True
+        Me.CheckBoxFindReplaceFindWCPart.Location = New System.Drawing.Point(255, 496)
+        Me.CheckBoxFindReplaceFindWCPart.Name = "CheckBoxFindReplaceFindWCPart"
+        Me.CheckBoxFindReplaceFindWCPart.Size = New System.Drawing.Size(44, 17)
+        Me.CheckBoxFindReplaceFindWCPart.TabIndex = 31
+        Me.CheckBoxFindReplaceFindWCPart.Text = "WC"
+        Me.CheckBoxFindReplaceFindWCPart.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindPTPart
+        '
+        Me.CheckBoxFindReplaceFindPTPart.AutoSize = True
+        Me.CheckBoxFindReplaceFindPTPart.Location = New System.Drawing.Point(215, 496)
+        Me.CheckBoxFindReplaceFindPTPart.Name = "CheckBoxFindReplaceFindPTPart"
+        Me.CheckBoxFindReplaceFindPTPart.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceFindPTPart.TabIndex = 30
+        Me.CheckBoxFindReplaceFindPTPart.Text = "PT"
+        Me.CheckBoxFindReplaceFindPTPart.UseVisualStyleBackColor = True
         '
         'TextBoxSaveAsFormulaPart
         '
@@ -1174,6 +1275,66 @@ Partial Class Form1
         Me.TabPageSheetmetal.Size = New System.Drawing.Size(511, 594)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'CheckBoxFindReplaceReplaceRXSheetmetal
+        '
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.AutoSize = True
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Location = New System.Drawing.Point(390, 496)
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Name = "CheckBoxFindReplaceReplaceRXSheetmetal"
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.TabIndex = 43
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Text = "RX"
+        Me.CheckBoxFindReplaceReplaceRXSheetmetal.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceReplacePTSheetmetal
+        '
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.AutoSize = True
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.Location = New System.Drawing.Point(350, 496)
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.Name = "CheckBoxFindReplaceReplacePTSheetmetal"
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.TabIndex = 42
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.Text = "PT"
+        Me.CheckBoxFindReplaceReplacePTSheetmetal.UseVisualStyleBackColor = True
+        '
+        'CheckBox10
+        '
+        Me.CheckBox10.AutoSize = True
+        Me.CheckBox10.Location = New System.Drawing.Point(8, 8)
+        Me.CheckBox10.Name = "CheckBox10"
+        Me.CheckBox10.Size = New System.Drawing.Size(87, 17)
+        Me.CheckBox10.TabIndex = 41
+        Me.CheckBox10.Text = "CheckBox10"
+        Me.CheckBox10.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindRXSheetmetal
+        '
+        Me.CheckBoxFindReplaceFindRXSheetmetal.AutoSize = True
+        Me.CheckBoxFindReplaceFindRXSheetmetal.Location = New System.Drawing.Point(300, 496)
+        Me.CheckBoxFindReplaceFindRXSheetmetal.Name = "CheckBoxFindReplaceFindRXSheetmetal"
+        Me.CheckBoxFindReplaceFindRXSheetmetal.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceFindRXSheetmetal.TabIndex = 40
+        Me.CheckBoxFindReplaceFindRXSheetmetal.Text = "RX"
+        Me.CheckBoxFindReplaceFindRXSheetmetal.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindWCSheetmetal
+        '
+        Me.CheckBoxFindReplaceFindWCSheetmetal.AutoSize = True
+        Me.CheckBoxFindReplaceFindWCSheetmetal.Location = New System.Drawing.Point(255, 496)
+        Me.CheckBoxFindReplaceFindWCSheetmetal.Name = "CheckBoxFindReplaceFindWCSheetmetal"
+        Me.CheckBoxFindReplaceFindWCSheetmetal.Size = New System.Drawing.Size(44, 17)
+        Me.CheckBoxFindReplaceFindWCSheetmetal.TabIndex = 39
+        Me.CheckBoxFindReplaceFindWCSheetmetal.Text = "WC"
+        Me.CheckBoxFindReplaceFindWCSheetmetal.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindPTSheetmetal
+        '
+        Me.CheckBoxFindReplaceFindPTSheetmetal.AutoSize = True
+        Me.CheckBoxFindReplaceFindPTSheetmetal.Location = New System.Drawing.Point(215, 496)
+        Me.CheckBoxFindReplaceFindPTSheetmetal.Name = "CheckBoxFindReplaceFindPTSheetmetal"
+        Me.CheckBoxFindReplaceFindPTSheetmetal.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceFindPTSheetmetal.TabIndex = 38
+        Me.CheckBoxFindReplaceFindPTSheetmetal.Text = "PT"
+        Me.CheckBoxFindReplaceFindPTSheetmetal.UseVisualStyleBackColor = True
         '
         'TextBoxSaveAsFormulaSheetmetal
         '
@@ -1729,7 +1890,7 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 799)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 850)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
         Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(289, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
@@ -1897,7 +2058,7 @@ Partial Class Form1
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
-        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 764)
+        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 813)
         Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
         Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(194, 17)
         Me.CheckBoxSaveAsImageCrop.TabIndex = 37
@@ -1907,7 +2068,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 689)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 738)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(227, 17)
         Me.CheckBoxBackgroundProcessing.TabIndex = 36
@@ -1917,7 +2078,7 @@ Partial Class Form1
         'CheckBoxRunExternalProgramSaveFile
         '
         Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
-        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 739)
+        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 788)
         Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
         Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(222, 17)
         Me.CheckBoxRunExternalProgramSaveFile.TabIndex = 35
@@ -1929,7 +2090,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1099)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1150)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -1979,7 +2140,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 664)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 713)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(235, 17)
@@ -1990,7 +2151,7 @@ Partial Class Form1
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 714)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 763)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(266, 17)
@@ -2000,6 +2161,7 @@ Partial Class Form1
         '
         'GroupBoxTLAOptions
         '
+        Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxDraftAndModelSameName)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxWarnBareTLA)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF)
         Me.GroupBoxTLAOptions.Controls.Add(Me.ButtonFastSearchScopeFilename)
@@ -2012,7 +2174,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 215)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 255)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top-level assembly options -- See File Selection in Help for details"
@@ -2044,7 +2206,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 132)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 155)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2056,7 +2218,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 133)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 156)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(355, 20)
@@ -2065,7 +2227,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 113)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 136)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(143, 13)
@@ -2075,7 +2237,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 188)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 220)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(227, 17)
@@ -2087,7 +2249,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 168)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 200)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(315, 17)
@@ -2113,7 +2275,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 639)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 688)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(170, 17)
         Me.CheckBoxWarnSave.TabIndex = 16
@@ -2510,165 +2672,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxFindReplaceFindPTAssembly
+        'CheckBoxDraftAndModelSameName
         '
-        Me.CheckBoxFindReplaceFindPTAssembly.AutoSize = True
-        Me.CheckBoxFindReplaceFindPTAssembly.Location = New System.Drawing.Point(215, 496)
-        Me.CheckBoxFindReplaceFindPTAssembly.Name = "CheckBoxFindReplaceFindPTAssembly"
-        Me.CheckBoxFindReplaceFindPTAssembly.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceFindPTAssembly.TabIndex = 22
-        Me.CheckBoxFindReplaceFindPTAssembly.Text = "PT"
-        Me.CheckBoxFindReplaceFindPTAssembly.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindWCAssembly
-        '
-        Me.CheckBoxFindReplaceFindWCAssembly.AutoSize = True
-        Me.CheckBoxFindReplaceFindWCAssembly.Location = New System.Drawing.Point(255, 496)
-        Me.CheckBoxFindReplaceFindWCAssembly.Name = "CheckBoxFindReplaceFindWCAssembly"
-        Me.CheckBoxFindReplaceFindWCAssembly.Size = New System.Drawing.Size(44, 17)
-        Me.CheckBoxFindReplaceFindWCAssembly.TabIndex = 23
-        Me.CheckBoxFindReplaceFindWCAssembly.Text = "WC"
-        Me.CheckBoxFindReplaceFindWCAssembly.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindRXAssembly
-        '
-        Me.CheckBoxFindReplaceFindRXAssembly.AutoSize = True
-        Me.CheckBoxFindReplaceFindRXAssembly.Location = New System.Drawing.Point(300, 496)
-        Me.CheckBoxFindReplaceFindRXAssembly.Name = "CheckBoxFindReplaceFindRXAssembly"
-        Me.CheckBoxFindReplaceFindRXAssembly.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceFindRXAssembly.TabIndex = 24
-        Me.CheckBoxFindReplaceFindRXAssembly.Text = "RX"
-        Me.CheckBoxFindReplaceFindRXAssembly.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindPTPart
-        '
-        Me.CheckBoxFindReplaceFindPTPart.AutoSize = True
-        Me.CheckBoxFindReplaceFindPTPart.Location = New System.Drawing.Point(215, 496)
-        Me.CheckBoxFindReplaceFindPTPart.Name = "CheckBoxFindReplaceFindPTPart"
-        Me.CheckBoxFindReplaceFindPTPart.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceFindPTPart.TabIndex = 30
-        Me.CheckBoxFindReplaceFindPTPart.Text = "PT"
-        Me.CheckBoxFindReplaceFindPTPart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindWCPart
-        '
-        Me.CheckBoxFindReplaceFindWCPart.AutoSize = True
-        Me.CheckBoxFindReplaceFindWCPart.Location = New System.Drawing.Point(255, 496)
-        Me.CheckBoxFindReplaceFindWCPart.Name = "CheckBoxFindReplaceFindWCPart"
-        Me.CheckBoxFindReplaceFindWCPart.Size = New System.Drawing.Size(44, 17)
-        Me.CheckBoxFindReplaceFindWCPart.TabIndex = 31
-        Me.CheckBoxFindReplaceFindWCPart.Text = "WC"
-        Me.CheckBoxFindReplaceFindWCPart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindRXPart
-        '
-        Me.CheckBoxFindReplaceFindRXPart.AutoSize = True
-        Me.CheckBoxFindReplaceFindRXPart.Location = New System.Drawing.Point(300, 496)
-        Me.CheckBoxFindReplaceFindRXPart.Name = "CheckBoxFindReplaceFindRXPart"
-        Me.CheckBoxFindReplaceFindRXPart.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceFindRXPart.TabIndex = 32
-        Me.CheckBoxFindReplaceFindRXPart.Text = "RX"
-        Me.CheckBoxFindReplaceFindRXPart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindPTSheetmetal
-        '
-        Me.CheckBoxFindReplaceFindPTSheetmetal.AutoSize = True
-        Me.CheckBoxFindReplaceFindPTSheetmetal.Location = New System.Drawing.Point(215, 496)
-        Me.CheckBoxFindReplaceFindPTSheetmetal.Name = "CheckBoxFindReplaceFindPTSheetmetal"
-        Me.CheckBoxFindReplaceFindPTSheetmetal.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceFindPTSheetmetal.TabIndex = 38
-        Me.CheckBoxFindReplaceFindPTSheetmetal.Text = "PT"
-        Me.CheckBoxFindReplaceFindPTSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindWCSheetmetal
-        '
-        Me.CheckBoxFindReplaceFindWCSheetmetal.AutoSize = True
-        Me.CheckBoxFindReplaceFindWCSheetmetal.Location = New System.Drawing.Point(255, 496)
-        Me.CheckBoxFindReplaceFindWCSheetmetal.Name = "CheckBoxFindReplaceFindWCSheetmetal"
-        Me.CheckBoxFindReplaceFindWCSheetmetal.Size = New System.Drawing.Size(44, 17)
-        Me.CheckBoxFindReplaceFindWCSheetmetal.TabIndex = 39
-        Me.CheckBoxFindReplaceFindWCSheetmetal.Text = "WC"
-        Me.CheckBoxFindReplaceFindWCSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindRXSheetmetal
-        '
-        Me.CheckBoxFindReplaceFindRXSheetmetal.AutoSize = True
-        Me.CheckBoxFindReplaceFindRXSheetmetal.Location = New System.Drawing.Point(300, 496)
-        Me.CheckBoxFindReplaceFindRXSheetmetal.Name = "CheckBoxFindReplaceFindRXSheetmetal"
-        Me.CheckBoxFindReplaceFindRXSheetmetal.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceFindRXSheetmetal.TabIndex = 40
-        Me.CheckBoxFindReplaceFindRXSheetmetal.Text = "RX"
-        Me.CheckBoxFindReplaceFindRXSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBox10
-        '
-        Me.CheckBox10.AutoSize = True
-        Me.CheckBox10.Location = New System.Drawing.Point(8, 8)
-        Me.CheckBox10.Name = "CheckBox10"
-        Me.CheckBox10.Size = New System.Drawing.Size(87, 17)
-        Me.CheckBox10.TabIndex = 41
-        Me.CheckBox10.Text = "CheckBox10"
-        Me.CheckBox10.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplacePTAssembly
-        '
-        Me.CheckBoxFindReplaceReplacePTAssembly.AutoSize = True
-        Me.CheckBoxFindReplaceReplacePTAssembly.Location = New System.Drawing.Point(350, 496)
-        Me.CheckBoxFindReplaceReplacePTAssembly.Name = "CheckBoxFindReplaceReplacePTAssembly"
-        Me.CheckBoxFindReplaceReplacePTAssembly.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceReplacePTAssembly.TabIndex = 25
-        Me.CheckBoxFindReplaceReplacePTAssembly.Text = "PT"
-        Me.CheckBoxFindReplaceReplacePTAssembly.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplaceRXAssembly
-        '
-        Me.CheckBoxFindReplaceReplaceRXAssembly.AutoSize = True
-        Me.CheckBoxFindReplaceReplaceRXAssembly.Location = New System.Drawing.Point(390, 496)
-        Me.CheckBoxFindReplaceReplaceRXAssembly.Name = "CheckBoxFindReplaceReplaceRXAssembly"
-        Me.CheckBoxFindReplaceReplaceRXAssembly.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceReplaceRXAssembly.TabIndex = 26
-        Me.CheckBoxFindReplaceReplaceRXAssembly.Text = "RX"
-        Me.CheckBoxFindReplaceReplaceRXAssembly.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplacePTPart
-        '
-        Me.CheckBoxFindReplaceReplacePTPart.AutoSize = True
-        Me.CheckBoxFindReplaceReplacePTPart.Location = New System.Drawing.Point(350, 496)
-        Me.CheckBoxFindReplaceReplacePTPart.Name = "CheckBoxFindReplaceReplacePTPart"
-        Me.CheckBoxFindReplaceReplacePTPart.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceReplacePTPart.TabIndex = 33
-        Me.CheckBoxFindReplaceReplacePTPart.Text = "PT"
-        Me.CheckBoxFindReplaceReplacePTPart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplaceRXPart
-        '
-        Me.CheckBoxFindReplaceReplaceRXPart.AutoSize = True
-        Me.CheckBoxFindReplaceReplaceRXPart.Location = New System.Drawing.Point(390, 496)
-        Me.CheckBoxFindReplaceReplaceRXPart.Name = "CheckBoxFindReplaceReplaceRXPart"
-        Me.CheckBoxFindReplaceReplaceRXPart.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceReplaceRXPart.TabIndex = 34
-        Me.CheckBoxFindReplaceReplaceRXPart.Text = "RX"
-        Me.CheckBoxFindReplaceReplaceRXPart.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplacePTSheetmetal
-        '
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.AutoSize = True
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.Location = New System.Drawing.Point(350, 496)
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.Name = "CheckBoxFindReplaceReplacePTSheetmetal"
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.TabIndex = 42
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.Text = "PT"
-        Me.CheckBoxFindReplaceReplacePTSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplaceRXSheetmetal
-        '
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.AutoSize = True
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Location = New System.Drawing.Point(390, 496)
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Name = "CheckBoxFindReplaceReplaceRXSheetmetal"
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.TabIndex = 43
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.Text = "RX"
-        Me.CheckBoxFindReplaceReplaceRXSheetmetal.UseVisualStyleBackColor = True
+        Me.CheckBoxDraftAndModelSameName.AutoSize = True
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 111)
+        Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
+        Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
+        Me.CheckBoxDraftAndModelSameName.TabIndex = 8
+        Me.CheckBoxDraftAndModelSameName.Text = "Draft and model have same name and are in same folder"
+        Me.CheckBoxDraftAndModelSameName.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -2939,4 +2951,5 @@ Partial Class Form1
     Friend WithEvents CheckBoxFindReplaceReplaceRXSheetmetal As CheckBox
     Friend WithEvents CheckBoxFindReplaceReplacePTSheetmetal As CheckBox
     Friend WithEvents CheckBox10 As CheckBox
+    Friend WithEvents CheckBoxDraftAndModelSameName As CheckBox
 End Class

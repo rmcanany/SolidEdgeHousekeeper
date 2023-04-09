@@ -548,6 +548,8 @@ Public Class TopLevelAssemblyUtilities
 
         Dim arrDocUsed As Object = Nothing
 
+        UpdateStatus("Where Used", Filename)
+
         If TopLevelFolder = "" Then
             Return AllWhereUsedFileNames
         End If
@@ -555,7 +557,6 @@ Public Class TopLevelAssemblyUtilities
         If CheckInterruptRequest() Then
             Return AllWhereUsedFileNames
         End If
-        UpdateStatus("Where Used", Filename)
 
         Extension = IO.Path.GetExtension(Filename)
 

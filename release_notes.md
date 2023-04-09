@@ -11,6 +11,29 @@ of yours.  Do not run it on production work without testing on backups first.
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
+## V2023.2 Enhancements/Fixes
+
+### Property Find/Replace
+
+Enhanced with the addition of wildcard and regular expression search options (Thank you **@DaveG**).  
+
+### Property Filter
+
+Added regular expression comparison operator, `regex_match`.  
+
+### Top Level Assembly Search
+
+Fixed an issue where a Top Level search with multiple folders was not finding all related files (Thank you **@MonkTheOCD_Engie**).
+
+### Hide Constructions:  
+
+Fixed an issue where sketches, and PMI dimensions and annotations were not hidden (Thank you **@tempod** (github)).
+
+### Home Tab file count
+
+Fixed an issue where the file count was incorrect for a multi-folder search.  
+
+
 ## V2023.1 Enhancements/Fixes
 
 ### Redesigned Home Tab

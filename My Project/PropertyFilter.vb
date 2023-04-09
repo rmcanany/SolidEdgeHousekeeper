@@ -1,4 +1,5 @@
 ﻿Option Strict Off
+Imports System.Text.RegularExpressions
 
 Public Class PropertyFilter
     Private _mainInstance As Form1
@@ -196,6 +197,8 @@ Public Class PropertyFilter
             tf = DocValue.ToLower <> Value.ToLower
         ElseIf Comparison = "wildcard_match" Then
             tf = DocValue.ToLower Like Value.ToLower
+        ElseIf Comparison = "regex_match" Then
+            tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
         ElseIf Comparison = ">" Then
             Try
                 tf = TextToDouble(DocValue) > TextToDouble(Value)

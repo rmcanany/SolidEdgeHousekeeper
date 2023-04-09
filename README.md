@@ -12,7 +12,7 @@
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
 @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
-@JayJay101
+@JayJay101, @DaveG, @tempod
 
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
 *and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -347,7 +347,7 @@ Not sure about the Solid Edge entries either.)
 
 Select the Comparison from its dropdown box.
 The choices are `contains`, `is_exactly`, `is_not`, 
-`wildcard_match`, `>`, or `<`.
+`wildcard_match`, `regex_match`, `>`, or `<`.
 The options `is_exactly`, `is_not`, `>`, and `<` are hopefully 
 self explanatory.
 
@@ -368,6 +368,10 @@ Unlike with `contains`, in this example,
 Internally the 
 [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
 is used to make the wildcard comparison.  Visit the link for details and examples.
+
+`Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document.
+For more information see 
+[**REGEX in .NET**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference)
 
 **Default Filter Formula**
 
@@ -534,7 +538,7 @@ There are three search modes, `PT`, `WC`, and `RX`.
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  
-- `RX` stands for 'Regex'.  It is a more comprehensive (and notorious) method of matching text.  
+- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
