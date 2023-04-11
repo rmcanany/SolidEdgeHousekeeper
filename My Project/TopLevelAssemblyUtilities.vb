@@ -8,22 +8,22 @@ Public Class TopLevelAssemblyUtilities
         _mainInstance = mainInstance
     End Sub
 
-    Public Function GetLinks(SearchType As String,
-                             TopLevelFolder As String,
-                             TopLevelAssembly As String,
-                             ActiveFileExtensionsList As List(Of String),
-                             Optional Report As Boolean = False) As List(Of String)
-        Dim Foundfiles As New List(Of String)
+    'Public Function GetLinks(SearchType As String,
+    '                         TopLevelFolder As String,
+    '                         TopLevelAssembly As String,
+    '                         ActiveFileExtensionsList As List(Of String),
+    '                         Optional Report As Boolean = False) As List(Of String)
+    '    Dim Foundfiles As New List(Of String)
 
-        If SearchType.ToLower = "topdown" Then
-            MsgBox("For top down search, call GetLinksTopDown directly", vbOKOnly)
-            Return Foundfiles
-            'Foundfiles = GetLinksTopDown(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList, Report)
-        Else
-            Foundfiles = GetLinksBottomUp(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList)
-        End If
-        Return Foundfiles
-    End Function
+    '    If SearchType.ToLower = "topdown" Then
+    '        MsgBox("For top down search, call GetLinksTopDown directly", vbOKOnly)
+    '        Return Foundfiles
+    '        'Foundfiles = GetLinksTopDown(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList, Report)
+    '    Else
+    '        Foundfiles = GetLinksBottomUp(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList)
+    '    End If
+    '    Return Foundfiles
+    'End Function
 
     Public Function GetLinksTopDown(TopLevelFolders As List(Of String),
                                     TopLevelAssembly As String,
@@ -378,7 +378,8 @@ Public Class TopLevelAssemblyUtilities
 
     Public Function GetLinksBottomUp(TopLevelFolder As String,
                              TopLevelAssembly As String,
-                             ActiveFileExtensionsList As List(Of String)) As List(Of String)
+                             ActiveFileExtensionsList As List(Of String),
+                             DraftAndModelSameName As Boolean) As List(Of String)
 
         Dim DMApp As New DesignManager.Application
         Dim AllLinkedFilenames As New List(Of String)
@@ -390,6 +391,8 @@ Public Class TopLevelAssemblyUtilities
         Dim IsDriveIndexed As Boolean = False
 
         Dim TLADoc As DesignManager.Document
+
+
 
         ' Passing in TopLevelFolder = "" signifies a bare top level assy.  Don't need an indexed drive for that case.
         If Not TopLevelFolder = "" Then
@@ -416,7 +419,7 @@ Public Class TopLevelAssemblyUtilities
         TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
 
         AllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
-                                                 TopLevelFolder, AllFilenames, IsDriveIndexed)
+                                                 TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
 
         DMApp.Quit()
 
@@ -429,6 +432,7 @@ Public Class TopLevelAssemblyUtilities
             End If
         Next
 
+
         Return FoundFiles
 
     End Function
@@ -438,7 +442,8 @@ Public Class TopLevelAssemblyUtilities
                                          AllLinkedFilenames As List(Of String),
                                          TopLevelFolder As String,
                                          AllFilenames As Dictionary(Of String, String),
-                                         IsDriveIndexed As Boolean) As List(Of String)
+                                         IsDriveIndexed As Boolean,
+                                         DraftAndModelSameName As Boolean) As List(Of String)
 
         'Dim DMDoc As DesignManager.Document
         Dim LinkedDocs As DesignManager.LinkedDocuments
@@ -476,7 +481,7 @@ Public Class TopLevelAssemblyUtilities
                     'DMDoc = CType(DMApp.OpenFileInDesignManager(Filename), DesignManager.Document)
 
                     ' Get any draft files containing this file.
-                    WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed)
+                    WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed, DraftAndModelSameName)
                     For Each WhereUsedFile In WhereUsedFiles
                         Extension = IO.Path.GetExtension(WhereUsedFile)
                         If Extension = ".dft" Then
@@ -509,7 +514,7 @@ Public Class TopLevelAssemblyUtilities
                                         'AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
                                         '                                         TopLevelFolder, AllFilenames, IsDriveIndexed)
                                         AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
-                                                                             TopLevelFolder, AllFilenames, IsDriveIndexed)
+                                                                             TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
                                     End If
                                 End If
                             Next
@@ -537,7 +542,8 @@ Public Class TopLevelAssemblyUtilities
                      DMApp As DesignManager.Application,
                      TopLevelFolder As String,
                      Filename As String,
-                     IsDriveIndexed As Boolean) As List(Of String)
+                     IsDriveIndexed As Boolean,
+                     DraftAndModelSameName As Boolean) As List(Of String)
 
         Dim AllWhereUsedFileNames As New List(Of String)
         ' Dim msg As String
@@ -548,6 +554,8 @@ Public Class TopLevelAssemblyUtilities
 
         Dim arrDocUsed As Object = Nothing
 
+        Dim DraftFilename As String
+
         UpdateStatus("Where Used", Filename)
 
         If TopLevelFolder = "" Then
@@ -555,6 +563,13 @@ Public Class TopLevelAssemblyUtilities
         End If
 
         If CheckInterruptRequest() Then
+            Return AllWhereUsedFileNames
+        End If
+
+        If DraftAndModelSameName Then
+            'DraftFilename = String.Format("{0}{1}", System.IO.Path.GetFileNameWithoutExtension(Filename), ".dft")
+            DraftFilename = System.IO.Path.ChangeExtension(Filename, ".dft")
+            AllWhereUsedFileNames.Add(DraftFilename)
             Return AllWhereUsedFileNames
         End If
 

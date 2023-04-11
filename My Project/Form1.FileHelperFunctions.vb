@@ -13,6 +13,11 @@ Partial Class Form1
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
+        Dim ElapsedTime As Double
+        Dim ElapsedTimeText As String
+
+        StartTime = Now
+
         ListViewFilesOutOfDate = False
 
         StopProcess = False
@@ -74,16 +79,28 @@ Partial Class Form1
 
                                 TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
-                                If RadioButtonTLABottomUp.Checked Then
-                                    tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
-                                                       Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList))
-                                Else
-                                    tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
-                                                       Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList,
-                                                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-                                End If
+                                tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList,
+                                                           CheckBoxDraftAndModelSameName.Checked))
+                                'If RadioButtonTLABottomUp.Checked Then
+                                '    'tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
+                                '    '                   Source.SubItems.Item(1).Text,
+                                '    '                   ActiveFileExtensionsList))
+                                '    tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
+                                '                           Source.SubItems.Item(1).Text,
+                                '                           ActiveFileExtensionsList,
+                                '                           CheckBoxDraftAndModelSameName.Checked))
+                                'Else
+                                '    'tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
+                                '    '                   Source.SubItems.Item(1).Text,
+                                '    '                   ActiveFileExtensionsList,
+                                '    '                   Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
+                                '    tmpFoundFiles.AddRange(TLAU.GetLinksTopDown(tmpFolders,
+                                '                       Source.SubItems.Item(1).Text,
+                                '                       ActiveFileExtensionsList,
+                                '                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
+                                'End If
 
                             Next
                         Else
@@ -131,10 +148,14 @@ Partial Class Form1
                         ' Set TopLevelFolder to the empty string (""), which means this is a
                         ' bare top level assembly.  No 'where used' is performed.
                         ' Bare top level assemblies are always processed bottom up.
+                        tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp("",
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList,
+                                                           CheckBoxDraftAndModelSameName.Checked))
 
-                        tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", "",
-                                                       Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList))
+                        'tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", "",
+                        '                               Source.SubItems.Item(1).Text,
+                        '                               ActiveFileExtensionsList))
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
@@ -222,8 +243,16 @@ Partial Class Form1
 
             ListViewFiles.EndUpdate()
 
+            ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+            If ElapsedTime < 60 Then
+                ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+            Else
+                ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+            End If
+
+
             'TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
-            TextBoxStatus.Text = String.Format("{0} files found", ListViewFiles.Items.Count)
+            TextBoxStatus.Text = String.Format("{0} files found in {1}", ListViewFiles.Items.Count, ElapsedTimeText)
 
         End If
 

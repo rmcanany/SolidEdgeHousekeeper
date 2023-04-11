@@ -192,6 +192,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
         Me.GroupBoxTLAOptions = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnBareTLA = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAAutoIncludeTLF = New System.Windows.Forms.CheckBox()
         Me.ButtonFastSearchScopeFilename = New System.Windows.Forms.Button()
@@ -245,7 +246,6 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -720,7 +720,8 @@ Partial Class Form1
         '
         'TextBoxFindReplaceReplaceAssembly
         '
-        Me.TextBoxFindReplaceReplaceAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFindReplaceReplaceAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxFindReplaceReplaceAssembly.Location = New System.Drawing.Point(350, 516)
         Me.TextBoxFindReplaceReplaceAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFindReplaceReplaceAssembly.Name = "TextBoxFindReplaceReplaceAssembly"
@@ -2179,6 +2180,16 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top-level assembly options -- See File Selection in Help for details"
         '
+        'CheckBoxDraftAndModelSameName
+        '
+        Me.CheckBoxDraftAndModelSameName.AutoSize = True
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 111)
+        Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
+        Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
+        Me.CheckBoxDraftAndModelSameName.TabIndex = 8
+        Me.CheckBoxDraftAndModelSameName.Text = "Draft and model have same name and are in same folder"
+        Me.CheckBoxDraftAndModelSameName.UseVisualStyleBackColor = True
+        '
         'CheckBoxWarnBareTLA
         '
         Me.CheckBoxWarnBareTLA.AutoSize = True
@@ -2671,16 +2682,6 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'CheckBoxDraftAndModelSameName
-        '
-        Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 111)
-        Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
-        Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
-        Me.CheckBoxDraftAndModelSameName.TabIndex = 8
-        Me.CheckBoxDraftAndModelSameName.Text = "Draft and model have same name and are in same folder"
-        Me.CheckBoxDraftAndModelSameName.UseVisualStyleBackColor = True
         '
         'Form1
         '
