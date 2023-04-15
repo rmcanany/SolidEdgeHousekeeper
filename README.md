@@ -206,6 +206,8 @@ Bottom up is meant for general purpose (hopefully indexed) directories
 in the folder(s) far exceed the number of files in the assembly. 
 The program gets links by recursion, then 
 finds draft files with *where used*. 
+If your draft files have the same name as the model they depict, 
+you can bypass *where used*.  Set this option on the **Configuration Tab**.
 
 A bottom up search requires a valid Fast Search Scope filename, 
 (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), 
@@ -541,6 +543,8 @@ There are three search modes, `PT`, `WC`, and `RX`.
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+
+In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, for example *%\{System.Material}*.
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.

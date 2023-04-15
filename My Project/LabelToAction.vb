@@ -117,6 +117,12 @@ Public Class LabelToAction
         HelpString += "the replacement is `ALUMINUM`, "
         HelpString += "and the property value is `Aluminum 6061-T6`. "
         HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
+        HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
+        HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
+        HelpString += "for example *%\{System.Material}*."
+        HelpString += ""
+        HelpString += ""
+        HelpString += ""
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",

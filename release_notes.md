@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the
 
 ### Property Find/Replace
 
-Added Wildcard and Regular Expression search options (Thank you **@DaveG**).  Also added Property Formula substitution.  
+Added Wildcard and Regular Expression search options (Thank you **@DaveG, @mmtrebuchet**).  Also added Property Formula substitution.  
 
 ![Find_Replace](My%20Project/media/property_find_replace.png)
 
