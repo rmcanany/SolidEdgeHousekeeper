@@ -539,7 +539,7 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
-There are three search modes, `PT`, `WC`, and `RX`.  
+There are three search modes: `PT`, `WC`, and `RX`.  
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  
