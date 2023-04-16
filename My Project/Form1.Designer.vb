@@ -116,7 +116,6 @@ Partial Class Form1
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
         Me.CheckBoxFindReplaceReplaceRXSheetmetal = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceReplacePTSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.CheckBox10 = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindRXSheetmetal = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindWCSheetmetal = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindPTSheetmetal = New System.Windows.Forms.CheckBox()
@@ -1242,7 +1241,6 @@ Partial Class Form1
         Me.TabPageSheetmetal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceReplaceRXSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceReplacePTSheetmetal)
-        Me.TabPageSheetmetal.Controls.Add(Me.CheckBox10)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceFindRXSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceFindWCSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceFindPTSheetmetal)
@@ -1296,16 +1294,6 @@ Partial Class Form1
         Me.CheckBoxFindReplaceReplacePTSheetmetal.TabIndex = 42
         Me.CheckBoxFindReplaceReplacePTSheetmetal.Text = "PT"
         Me.CheckBoxFindReplaceReplacePTSheetmetal.UseVisualStyleBackColor = True
-        '
-        'CheckBox10
-        '
-        Me.CheckBox10.AutoSize = True
-        Me.CheckBox10.Location = New System.Drawing.Point(8, 8)
-        Me.CheckBox10.Name = "CheckBox10"
-        Me.CheckBox10.Size = New System.Drawing.Size(87, 17)
-        Me.CheckBox10.TabIndex = 41
-        Me.CheckBox10.Text = "CheckBox10"
-        Me.CheckBox10.UseVisualStyleBackColor = True
         '
         'CheckBoxFindReplaceFindRXSheetmetal
         '
@@ -2951,6 +2939,5 @@ Partial Class Form1
     Friend WithEvents CheckBoxFindReplaceReplacePTPart As CheckBox
     Friend WithEvents CheckBoxFindReplaceReplaceRXSheetmetal As CheckBox
     Friend WithEvents CheckBoxFindReplaceReplacePTSheetmetal As CheckBox
-    Friend WithEvents CheckBox10 As CheckBox
     Friend WithEvents CheckBoxDraftAndModelSameName As CheckBox
 End Class

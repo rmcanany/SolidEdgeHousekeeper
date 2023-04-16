@@ -2,17 +2,18 @@
 ![Logo](My%20Project/media/logo.png)
 <p align=center>Robert McAnany 2023
 
-**Contributors**:
-@farfilli (aka @Fiorini), @daysanduski
+**Contributors:**
+@farfilli (aka @Fiorini), @daysanduski, @mmtrebuchet
 
-**Beta Testers**:
-@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon
+**Beta Testers:**
+@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie
 
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
 @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
-@JayJay101, @DaveG, @tempod
+@JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
+@KennyG, @Alex_H, @Nosybottle
 
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
 *and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -219,7 +220,7 @@ Set the Fast Search Scope filename on the **Configuration Tab**.
 Top down is meant for self-contained project directories 
 (e.g., `C:\Projects\Project123\`), where most of the files 
 in the folder(s) are related to the assembly. 
-The program opens every file within and below the 
+The program launches Design Manager to open every file within and below the 
 top-level assembly folder(s). 
 As it does, it creates a graph of the links. 
 The graph is subsequently traversed to find related files. 
@@ -534,17 +535,21 @@ Can run out of memory for very large assemblies.
 #### Property find replace
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the **Task Tab**, below the task list. 
 
+![Find_Replace](My%20Project/media/property_find_replace.png)
+
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
 There are three search modes, `PT`, `WC`, and `RX`.  
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  
-- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  
+- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
-In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, for example *%\{System.Material}*.
+![Property Formula](My%20Project/media/property_formula.png)
+
+In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with 'System.' or 'Custom.' as above.  
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.

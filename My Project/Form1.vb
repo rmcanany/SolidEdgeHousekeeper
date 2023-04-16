@@ -2227,7 +2227,8 @@ Public Class Form1
 
         If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
 
-            If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
+            'If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
+            If CheckBoxWarnBareTLA.Checked Then
                 msg = "A top-level assembly with no top-level folder detected.  "
                 msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
                 msg += "Click OK to continue, or Cancel to stop." + vbCrLf
@@ -2536,13 +2537,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub CheckBoxTLAAutoIncludeTLF_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAAutoIncludeTLF.CheckedChanged
-        If CheckBoxTLAAutoIncludeTLF.Checked Then
-            CheckBoxWarnBareTLA.Enabled = False
-        Else
-            CheckBoxWarnBareTLA.Enabled = True
-        End If
-    End Sub
+    'Private Sub CheckBoxTLAAutoIncludeTLF_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAAutoIncludeTLF.CheckedChanged
+    '    If CheckBoxTLAAutoIncludeTLF.Checked Then
+    '        CheckBoxWarnBareTLA.Enabled = False
+    '    Else
+    '        CheckBoxWarnBareTLA.Enabled = True
+    '    End If
+    'End Sub
 
     Private Sub CheckBoxFindReplaceFindPTAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFindReplaceFindPTAssembly.CheckedChanged
         If CheckBoxFindReplaceFindPTAssembly.Checked Then

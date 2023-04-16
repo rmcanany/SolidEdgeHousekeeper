@@ -15,17 +15,26 @@ Feel free to report bugs and/or ideas for improvement on the
 
 ### Property Find/Replace
 
-Added Wildcard and Regular Expression search options (Thank you **@DaveG, @mmtrebuchet**).  Also added Property Formula substitution.  
+Added Wildcard and Regular Expression search options 
+(Thank you **@DaveG, @mmtrebuchet**).  Also added 
+Property Formula substitution (Thank you **@64Pacific**, **@ben.steele6044**).  
 
 ![Find_Replace](My%20Project/media/property_find_replace.png)
 
-The example above would replace anything (including nothing) in Custom.Engineer with "Superman".  (The checkboxes determine the search type, either Plain Text (PT), Wildcard (WC), or Regular Expression (RT).)
+The example above would replace anything (including nothing) 
+in Custom.Engineer with "Superman".  The checkboxes set the 
+search type, either Plain Text (PT), Wildcard (WC), or Regular Expression (RX).
 
-Regular Expressions are more powerful than wildcards.  They are also notoriously cryptic.  If you need help creating the match pattern, try asking on the Forum.
+Regular Expressions are more powerful than wildcards.  They 
+are also notoriously cryptic.  To get started, check out the 
+[**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference).
 
 ![Property Formula](My%20Project/media/property_formula.png)
 
-The property formula uses the same syntax as a Callout.  The example above would replace anything in Custom.Description with a profile definition and its cut length.  (Assuming they are present in the file.)
+The Property Formula has the same syntax as the Callout command, except 
+preceeded with 'System.' or 'Custom.' as shown.  This example 
+would replace anything in Custom.Description with a profile 
+definition and its cut length.  (Assuming they are present in the file.)
 
 ### Property Filter
 
@@ -33,13 +42,21 @@ Added a regular expression comparison operator, `regex_match`.
 
 ### Top Level Assembly Search
 
-Added a search option for Draft files with the same name as the model (Thank you **@n0minus38, @KennyG, @Alex_H, @bshand, @Nosybottle, @wku, @nate.arinta5649**).  In a test on a small top level assembly and a top level folder with 20k files, the new option completed a search in 0.3 minutes.  A top-down search took 11.3 minutes.  A bottom-up search (on a non-indexed drive) was terminated after an hour.
+Added a search option for Draft files with the same name as the 
+model (Thank you for all the input **@n0minus38, @KennyG, @Alex_H, @bshand,**
+**@Nosybottle, @wku, @nate.arinta5649**).  In a test on a 
+small top level assembly and a top level folder with 20k files, 
+the new option completed a search in 0.3 minutes.  A top-down 
+search took 11.3 minutes.  A bottom-up search (on a non-indexed 
+drive) was terminated after an hour.
 
-Fixed an issue where a Top Level search with multiple folders was not finding all related files (Thank you **@MonkTheOCD_Engie**).
+Fixed an issue where a Top Level search with multiple folders was 
+not finding all related files (Thank you **@MonkTheOCD_Engie**).
 
-### Hide Constructions:  
+### Hide Constructions
 
-Fixed an issue where sketches, and PMI dimensions and annotations were not hidden (Thank you **@tempod** (github)).
+Fixed an issue where sketches, and PMI dimensions and annotations 
+were not hidden (Thank you **@tempod** (github)).
 
 ### Home Tab file count
 
