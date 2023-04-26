@@ -847,6 +847,9 @@ Public Class SheetmetalTasks
 
         Dim TF As Boolean
 
+        Dim PMI As SolidEdgeFrameworkSupport.PMI
+
+
         If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
@@ -876,6 +879,20 @@ Public Class SheetmetalTasks
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
+
+        'Update PMI
+        Try
+            'PMI = CType(SEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+            'PMI.Show = False
+            'PMI.ShowDimensions = False
+            'PMI.ShowAnnotations = False
+            SEApp.StartCommand(CType(10180, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.DoIdle()
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add("Unable to update PMI")
+        End Try
+
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -1493,6 +1510,10 @@ Public Class SheetmetalTasks
         Dim RefPlane As SolidEdgePart.RefPlane
         Dim Models As SolidEdgePart.Models
 
+        Dim Model As SolidEdgePart.Model
+        Dim Etches As SolidEdgePart.Etches
+        Dim Etch As SolidEdgePart.Etch
+
         Dim PMI As SolidEdgeFrameworkSupport.PMI
 
         Dim Sketches As SolidEdgePart.Sketchs
@@ -1542,8 +1563,20 @@ Public Class SheetmetalTasks
 
         SEDoc.CoordinateSystems.Visible = False
 
-        'SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
-        'SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
+        If Models.Count > 0 Then
+            For Each Model In Models
+                Try
+                    Etches = Model.Etches
+                    If Not Etches Is Nothing Then
+                        For Each Etch In Etches
+                            Etch.Visible = True
+                        Next
+                    End If
+                Catch ex As Exception
+                End Try
+            Next
+        End If
+
 
         If SEDoc.ReadOnly Then
             ExitStatus = 1
