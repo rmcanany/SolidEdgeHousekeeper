@@ -847,7 +847,7 @@ Public Class SheetmetalTasks
 
         Dim TF As Boolean
 
-        Dim PMI As SolidEdgeFrameworkSupport.PMI
+        'Dim PMI As SolidEdgeFrameworkSupport.PMI
 
 
         If (Models.Count > 0) And (Models.Count < 300) Then
@@ -868,8 +868,8 @@ Public Class SheetmetalTasks
                             Else
                                 SEDoc.Save()
                                 SEApp.DoIdle()
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
+                                'ExitStatus = 1
+                                'ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
                             End If
                         End If
                     Next
@@ -886,8 +886,11 @@ Public Class SheetmetalTasks
             'PMI.Show = False
             'PMI.ShowDimensions = False
             'PMI.ShowAnnotations = False
-            SEApp.StartCommand(CType(10180, SolidEdgeFramework.SolidEdgeCommandConstants))
+            SEApp.StartCommand(CType(10180, SolidEdgeFramework.SolidEdgeCommandConstants))  ' Update PMI
             SEApp.DoIdle()
+            SEDoc.Save()
+            SEApp.DoIdle()
+
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add("Unable to update PMI")
