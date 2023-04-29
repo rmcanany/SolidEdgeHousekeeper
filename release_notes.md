@@ -53,10 +53,21 @@ drive) was terminated after an hour.
 Fixed an issue where a Top Level search with multiple folders was 
 not finding all related files (Thank you **@MonkTheOCD_Engie**).
 
+Added a **Configuration Tab** option `Include part copies in search results`.  Disabling
+the option can eliminate extraneous files from being reported in some 
+cases.  (Thank you **@n0minus38**)
+
 ### Hide Constructions
 
 Fixed an issue where sketches, and PMI dimensions and annotations 
 were not hidden (Thank you **@tempod** (github)).
+
+Fixed an issue where etches were being hidden.
+
+### Update Insert Part Copies
+
+Added PMI Update all.  Fixed an issue where PMI Update All was causing
+the flat pattern to become out of date.
 
 ### Home Tab file count
 
