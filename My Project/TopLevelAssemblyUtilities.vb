@@ -146,6 +146,8 @@ Public Class TopLevelAssemblyUtilities
         Dim LinkedDocsName As String
         Dim ErrorFlag As String = "HousekeeperErrorFile"
         Dim msg As String = ""
+        Dim tf As Boolean
+        Dim Extension As String
 
         Dim ActiveFileExtensionsList As New List(Of String)
 
@@ -167,9 +169,21 @@ Public Class TopLevelAssemblyUtilities
                 End If
                 msg = String.Format("{0}{1}{2}", msg, Filename, vbCrLf)
             Else
-                For Each LinkedDocsName In LinkedDocsNames
-                    LinkDict(Filename)("Contains").Add(LinkedDocsName)
-                Next
+                tf = Form1.CheckBoxTLAIncludePartCopies.Checked
+                If tf Then
+                    For Each LinkedDocsName In LinkedDocsNames
+                        LinkDict(Filename)("Contains").Add(LinkedDocsName)
+                    Next
+                Else  ' Don't include part copies
+                    Extension = IO.Path.GetExtension(Filename)
+                    tf = Extension = ".par"
+                    tf = (tf) Or (Extension = ".psm")
+                    If Not tf Then
+                        For Each LinkedDocsName In LinkedDocsNames
+                            LinkDict(Filename)("Contains").Add(LinkedDocsName)
+                        Next
+                    End If
+                End If
             End If
         Next
 
@@ -491,9 +505,14 @@ Public Class TopLevelAssemblyUtilities
                         End If
                     Next
 
+                    If Form1.CheckBoxTLAIncludePartCopies.Checked Then
+                        tf = System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft"
+                    Else
+                        tf = System.IO.Path.GetExtension(DMDoc.FullName) = ".asm"
+                    End If
+
                     ' Follow links contained by this file, if any.
-                    'If System.IO.Path.GetExtension(DMDoc.FullName) = ".asm" Then  ' In testing, this is no faster than just excluding Draft files
-                    If System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft" Then  ' This way, part copy source documents are also found.
+                    If tf Then
                         LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
                         If LinkedDocs.Count > 0 Then
                             For Each LinkedDoc In LinkedDocs

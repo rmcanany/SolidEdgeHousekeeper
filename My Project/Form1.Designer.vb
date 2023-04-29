@@ -245,6 +245,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2150,6 +2151,7 @@ Partial Class Form1
         '
         'GroupBoxTLAOptions
         '
+        Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAIncludePartCopies)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxDraftAndModelSameName)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxWarnBareTLA)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF)
@@ -2163,7 +2165,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 255)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 275)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top-level assembly options -- See File Selection in Help for details"
@@ -2171,7 +2173,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 111)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 131)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
         Me.CheckBoxDraftAndModelSameName.TabIndex = 8
@@ -2205,7 +2207,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 155)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 175)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2217,7 +2219,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 156)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 176)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(355, 20)
@@ -2226,7 +2228,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 136)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 156)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(143, 13)
@@ -2236,7 +2238,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 220)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 240)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(227, 17)
@@ -2248,7 +2250,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 200)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 220)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(315, 17)
@@ -2260,7 +2262,7 @@ Partial Class Form1
         'RadioButtonTLABottomUp
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(11, 88)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(11, 108)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(290, 17)
@@ -2671,6 +2673,16 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'CheckBoxTLAIncludePartCopies
+        '
+        Me.CheckBoxTLAIncludePartCopies.AutoSize = True
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(11, 78)
+        Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
+        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(195, 17)
+        Me.CheckBoxTLAIncludePartCopies.TabIndex = 9
+        Me.CheckBoxTLAIncludePartCopies.Text = "Include part copies in search results"
+        Me.CheckBoxTLAIncludePartCopies.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2940,4 +2952,5 @@ Partial Class Form1
     Friend WithEvents CheckBoxFindReplaceReplaceRXSheetmetal As CheckBox
     Friend WithEvents CheckBoxFindReplaceReplacePTSheetmetal As CheckBox
     Friend WithEvents CheckBoxDraftAndModelSameName As CheckBox
+    Friend WithEvents CheckBoxTLAIncludePartCopies As CheckBox
 End Class
