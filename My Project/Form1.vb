@@ -196,6 +196,10 @@ Public Class Form1
             msg += "    Close Design Manager" + Chr(13)
         End If
 
+        If ListViewFilesOutOfDate Then
+            msg += "    Update the file list" + Chr(13)
+        End If
+
         tf = CheckedListBoxAssembly.CheckedItems.Count = 0
         tf = tf And CheckedListBoxPart.CheckedItems.Count = 0
         tf = tf And CheckedListBoxSheetmetal.CheckedItems.Count = 0
@@ -1077,6 +1081,17 @@ Public Class Form1
         ' Update configuration
         Configuration = GetConfiguration()
 
+        Dim backcolor As New Color
+        backcolor = BT_Update.BackColor
+
+        BT_Update.BackColor = Color.FromName("Control")
+
+        If ListViewFilesOutOfDate Then
+            BT_Update.BackColor = Color.Orange
+        Else
+            BT_Update.BackColor = Color.FromName("Control")
+        End If
+        'MsgBox("Here")
 
         ' Enable/Disable option controls based on task selection
 
@@ -1655,6 +1670,9 @@ Public Class Form1
             new_ButtonPropertyFilter.Enabled = False
         End If
 
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
         'ApplyFilters()
 
     End Sub
@@ -1668,6 +1686,9 @@ Public Class Form1
             new_CheckBoxFileSearch.Image = My.Resources.Unchecked
             new_ComboBoxFileSearch.Enabled = False
         End If
+
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
 
         'ApplyFilters()
 
@@ -1781,6 +1802,9 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxTLAReportUnrelatedFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAReportUnrelatedFiles.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
         ReconcileFormChanges()
     End Sub
 
@@ -1978,6 +2002,9 @@ Public Class Form1
             CheckBoxDraftAndModelSameName.Enabled = True
         End If
 
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
         ReconcileFormChanges()
     End Sub
 
@@ -1991,6 +2018,9 @@ Public Class Form1
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
         End If
+
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
 
         ReconcileFormChanges()
     End Sub
@@ -2061,6 +2091,9 @@ Public Class Form1
             tmpItem.Tag = "Folder"
             tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
         End If
 
     End Sub
@@ -2079,6 +2112,10 @@ Public Class Form1
             tmpItem.Tag = "Folders"
             tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
+
         End If
 
     End Sub
@@ -2147,6 +2184,9 @@ Public Class Form1
                 If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
             End If
 
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
+
         End If
 
     End Sub
@@ -2164,6 +2204,10 @@ Public Class Form1
             tmpItem.Tag = "ASM_Folder"
             tmpItem.Name = tmpFolderDialog.FileName
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
+
         End If
 
     End Sub
@@ -2175,6 +2219,9 @@ Public Class Form1
         ListViewFiles.EndUpdate()
 
         ListItems_Backup.Clear()
+
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -2280,6 +2327,9 @@ Public Class Form1
                 End If
 
             Next
+
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -2631,6 +2681,17 @@ Public Class Form1
         If CheckBoxFindReplaceReplaceRXSheetmetal.Checked Then
             CheckBoxFindReplaceReplacePTSheetmetal.Checked = False
         End If
+    End Sub
+
+    Private Sub CheckBoxTLAIncludePartCopies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAIncludePartCopies.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+    End Sub
+
+    Private Sub CheckBoxDraftAndModelSameName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDraftAndModelSameName.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
     End Sub
 
 

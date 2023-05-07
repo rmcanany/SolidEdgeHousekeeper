@@ -191,6 +191,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
         Me.GroupBoxTLAOptions = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
         Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnBareTLA = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAAutoIncludeTLF = New System.Windows.Forms.CheckBox()
@@ -245,7 +246,6 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2170,6 +2170,16 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "Top-level assembly options -- See File Selection in Help for details"
         '
+        'CheckBoxTLAIncludePartCopies
+        '
+        Me.CheckBoxTLAIncludePartCopies.AutoSize = True
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(11, 78)
+        Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
+        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(195, 17)
+        Me.CheckBoxTLAIncludePartCopies.TabIndex = 9
+        Me.CheckBoxTLAIncludePartCopies.Text = "Include part copies in search results"
+        Me.CheckBoxTLAIncludePartCopies.UseVisualStyleBackColor = True
+        '
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
@@ -2672,16 +2682,6 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'CheckBoxTLAIncludePartCopies
-        '
-        Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(11, 78)
-        Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
-        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(195, 17)
-        Me.CheckBoxTLAIncludePartCopies.TabIndex = 9
-        Me.CheckBoxTLAIncludePartCopies.Text = "Include part copies in search results"
-        Me.CheckBoxTLAIncludePartCopies.UseVisualStyleBackColor = True
         '
         'Form1
         '

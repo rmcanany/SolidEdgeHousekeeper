@@ -19,6 +19,7 @@ Partial Class Form1
         StartTime = Now
 
         ListViewFilesOutOfDate = False
+        BT_Update.BackColor = Color.FromName("Control")
 
         StopProcess = False
         ButtonCancel.Text = "Stop"

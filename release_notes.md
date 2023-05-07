@@ -57,6 +57,14 @@ Added a **Configuration Tab** option `Include part copies in search results`.  D
 the option can eliminate extraneous files from being reported in some 
 cases.  (Thank you **@n0minus38**)
 
+### File List Out Of Date
+
+Added a flag to detect when the file list becomes out of date.
+It works by tracking any change to the file selection or filter inputs.
+Added a visual indicator -- the Update Button turns orange.
+Added a check to ensure the file list is
+up to date before processing can begin.
+
 ### Hide Constructions
 
 Fixed an issue where sketches, and PMI dimensions and annotations 
