@@ -406,8 +406,6 @@ Public Class TopLevelAssemblyUtilities
 
         Dim TLADoc As DesignManager.Document
 
-
-
         ' Passing in TopLevelFolder = "" signifies a bare top level assy.  Don't need an indexed drive for that case.
         If Not TopLevelFolder = "" Then
             IndexedDrives = GetIndexedDrives()

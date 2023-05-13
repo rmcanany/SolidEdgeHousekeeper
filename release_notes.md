@@ -11,7 +11,7 @@ of yours.  Do not run it on production work without testing on backups first.
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
-## V2023.2 Enhancements/Fixes
+## V2023.3 Enhancements/Fixes
 
 ### Property Find/Replace
 
@@ -43,7 +43,7 @@ Added a regular expression comparison operator, `regex_match`.
 ### Top Level Assembly Search
 
 Added a search option for Draft files with the same name as the 
-model (Thank you for all the input **@n0minus38, @KennyG, @Alex_H, @bshand,**
+model (Thank you for input **@n0minus38, @KennyG, @Alex_H, @bshand,**
 **@Nosybottle, @wku, @nate.arinta5649**).  In a test on a 
 small top level assembly and a top level folder with 20k files, 
 the new option completed a search in 0.3 minutes.  A top-down 
@@ -59,9 +59,10 @@ cases.  (Thank you **@n0minus38**)
 
 ### File List Out Of Date
 
-Added a flag to detect when the file list becomes out of date.
-It works by tracking any change to the file selection or filter inputs.
-Added a visual indicator -- the Update Button turns orange.
+Added a flag to detect when the file list goes out of date.
+It is set when any change occurs to the file selection or filter inputs.
+As a visual indicator, the Update Button turns orange.
+
 Added a check to ensure the file list is
 up to date before processing can begin.
 

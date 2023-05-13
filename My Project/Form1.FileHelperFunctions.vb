@@ -84,25 +84,6 @@ Partial Class Form1
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
                                                            CheckBoxDraftAndModelSameName.Checked))
-                                'If RadioButtonTLABottomUp.Checked Then
-                                '    'tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
-                                '    '                   Source.SubItems.Item(1).Text,
-                                '    '                   ActiveFileExtensionsList))
-                                '    tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
-                                '                           Source.SubItems.Item(1).Text,
-                                '                           ActiveFileExtensionsList,
-                                '                           CheckBoxDraftAndModelSameName.Checked))
-                                'Else
-                                '    'tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
-                                '    '                   Source.SubItems.Item(1).Text,
-                                '    '                   ActiveFileExtensionsList,
-                                '    '                   Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-                                '    tmpFoundFiles.AddRange(TLAU.GetLinksTopDown(tmpFolders,
-                                '                       Source.SubItems.Item(1).Text,
-                                '                       ActiveFileExtensionsList,
-                                '                       Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-                                'End If
-
                             Next
                         Else
                             Dim TLAU As New TopLevelAssemblyUtilities(Me)
@@ -110,29 +91,7 @@ Partial Class Form1
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
                                                        Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-
-
-
                         End If
-
-                        'For Each tmpFolder As String In tmpFolders
-
-                        '    Dim TLAU As New TopLevelAssemblyUtilities(Me)
-
-                        '    TextBoxStatus.Text = "Finding all linked files.  This may take some time."
-
-                        '    If RadioButtonTLABottomUp.Checked Then
-                        '        tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", tmpFolder,
-                        '                               Source.SubItems.Item(1).Text,
-                        '                               ActiveFileExtensionsList))
-                        '    Else
-                        '        tmpFoundFiles.AddRange(TLAU.GetLinks("TopDown", tmpFolder,
-                        '                               Source.SubItems.Item(1).Text,
-                        '                               ActiveFileExtensionsList,
-                        '                               Report:=CheckBoxTLAReportUnrelatedFiles.Checked))
-                        '    End If
-
-                        'Next
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
@@ -153,10 +112,6 @@ Partial Class Form1
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
                                                            CheckBoxDraftAndModelSameName.Checked))
-
-                        'tmpFoundFiles.AddRange(TLAU.GetLinks("BottomUp", "",
-                        '                               Source.SubItems.Item(1).Text,
-                        '                               ActiveFileExtensionsList))
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
