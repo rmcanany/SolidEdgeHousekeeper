@@ -694,6 +694,16 @@ Public Class LabelToAction
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True)
 
+        Dim UpdateDimensionStylesFromTemplate As New L2A
+        HelpString = "Replaces Styles with that of the Draft template specified on "
+        HelpString += "the **Configuration Tab**."
+        HelpString += vbCrLf + vbCrLf + "In contrast to `UpdateStylesFromTemplate`, this command does not create a new file. "
+        PopulateList(UpdateDimensionStylesFromTemplate,
+                     "Update dimension styles from template",
+                     "UpdateDimensionStylesFromTemplate",
+                     HelpString,
+                     RequiresTemplate:=True, RequiresSave:=True)
+
         Dim FitView As New L2A
         HelpString = "Same as the Assembly command of the same name."
         PopulateList(FitView,

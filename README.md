@@ -780,6 +780,11 @@ Replaces the background border with that of the Draft template specified on the 
 
 In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
 
+#### Update dimension styles from template
+Replaces the background border with that of the Draft template specified on the **Configuration Tab**.
+
+In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
+
 #### Fit view
 Same as the Assembly command of the same name.
 

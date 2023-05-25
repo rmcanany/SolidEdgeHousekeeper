@@ -627,70 +627,84 @@ Public Class DraftTasks
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
         SEApp.DoIdle()
 
-        DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-        DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+        Try
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igDimensionStyle, True, SETemplateDoc)
+            'SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igLineStyle, True, SETemplateDoc)
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igTableStyle, True, SETemplateDoc)
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igFillStyle, True, SETemplateDoc)
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igHatchStyle, True, SETemplateDoc)
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igDrawingViewStyle, True, SETemplateDoc)
+            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igTextStyle, True, SETemplateDoc)
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add("Error applying styles")
+        End Try
 
-        For Each DimensionStyle In DimensionStyles
-            DocDimensionStyles.AddEx(DimensionStyle.Name, True, SETemplateDoc)
-        Next
+
+        'DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+        'DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+
+        'For Each DimensionStyle In DimensionStyles
+        '    DocDimensionStyles.AddEx(DimensionStyle.Name, True, SETemplateDoc)
+        'Next
 
         SETemplateDoc.Close()
-        SEApp.DoIdle()
+        'SEApp.DoIdle()
 
-        'Dimensions and callouts with overrides are not automatically updated to the new style.
-        Sections = SEDoc.Sections
+        ''Dimensions and callouts with overrides are not automatically updated to the new style.
+        'Sections = SEDoc.Sections
 
-        For Each Section In Sections
-            SectionSheets = Section.Sheets
-            For Each Sheet In SectionSheets
-                Dimensions = CType(Sheet.Dimensions, SolidEdgeFrameworkSupport.Dimensions)
-                For Each Dimension In Dimensions
-                    For Each DimensionStyle In DocDimensionStyles
-                        If DimensionStyle.Name = Dimension.Style.Name Then
-                            ActiveDimensionStyle = DimensionStyle
-                        End If
-                    Next
-                    If Dimension.Style.PrimaryDecimalRoundOff <> ActiveDimensionStyle.PrimaryDecimalRoundOff Then
-                        PrimaryDecimalRoundOffThisDimension = Dimension.Style.PrimaryDecimalRoundOff
-                        Dimension.Style.Name = ActiveDimensionStyle.Name
-                        Dimension.Style.PrimaryDecimalRoundOff = PrimaryDecimalRoundOffThisDimension
-                    End If
-                Next
-            Next
-        Next
+        'For Each Section In Sections
+        '    SectionSheets = Section.Sheets
+        '    For Each Sheet In SectionSheets
+        '        Dimensions = CType(Sheet.Dimensions, SolidEdgeFrameworkSupport.Dimensions)
+        '        For Each Dimension In Dimensions
+        '            For Each DimensionStyle In DocDimensionStyles
+        '                If DimensionStyle.Name = Dimension.Style.Name Then
+        '                    ActiveDimensionStyle = DimensionStyle
+        '                End If
+        '            Next
+        '            If Dimension.Style.PrimaryDecimalRoundOff <> ActiveDimensionStyle.PrimaryDecimalRoundOff Then
+        '                PrimaryDecimalRoundOffThisDimension = Dimension.Style.PrimaryDecimalRoundOff
+        '                Dimension.Style.Name = ActiveDimensionStyle.Name
+        '                Dimension.Style.PrimaryDecimalRoundOff = PrimaryDecimalRoundOffThisDimension
+        '            End If
+        '        Next
+        '    Next
+        'Next
 
-        Section = Nothing
-        SectionSheets = Nothing
-        Sheet = Nothing
-        SEApp.DoIdle()
+        'Section = Nothing
+        'SectionSheets = Nothing
+        'Sheet = Nothing
+        'SEApp.DoIdle()
 
-        For Each Section In Sections
-            SectionSheets = Section.Sheets
-            For Each Sheet In SectionSheets
-                Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
-                For Each Balloon In Balloons
-                    For Each DimensionStyle In DocDimensionStyles
-                        If DimensionStyle.Name = Balloon.Style.Name Then
-                            ActiveDimensionStyle = DimensionStyle
-                        End If
-                    Next
-                    If Balloon.Style.Height <> ActiveDimensionStyle.Height Then
-                        TextHeightThisDimension = Balloon.Style.Height
-                        Balloon.Style.Name = ActiveDimensionStyle.Name
-                        Balloon.Style.Height = TextHeightThisDimension
-                    Else
-                        Balloon.Style.Name = ActiveDimensionStyle.Name
-                    End If
-                Next
-            Next
-        Next
+        'For Each Section In Sections
+        '    SectionSheets = Section.Sheets
+        '    For Each Sheet In SectionSheets
+        '        Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
+        '        For Each Balloon In Balloons
+        '            For Each DimensionStyle In DocDimensionStyles
+        '                If DimensionStyle.Name = Balloon.Style.Name Then
+        '                    ActiveDimensionStyle = DimensionStyle
+        '                End If
+        '            Next
+        '            If Balloon.Style.Height <> ActiveDimensionStyle.Height Then
+        '                TextHeightThisDimension = Balloon.Style.Height
+        '                Balloon.Style.Name = ActiveDimensionStyle.Name
+        '                Balloon.Style.Height = TextHeightThisDimension
+        '            Else
+        '                Balloon.Style.Name = ActiveDimensionStyle.Name
+        '            End If
+        '        Next
+        '    Next
+        'Next
 
-        Section = Nothing
-        SectionSheets = Nothing
-        Sheet = Nothing
-        SEApp.DoIdle()
+        'Section = Nothing
+        'SectionSheets = Nothing
+        'Sheet = Nothing
+        'SEApp.DoIdle()
 
-        Section = Sections.WorkingSection
+        'Section = Sections.WorkingSection
 
         SEApp.DoIdle()
 
