@@ -1,5 +1,6 @@
 'Option Strict On
 Imports System.IO
+Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ExcelDataReader
 
@@ -158,6 +159,35 @@ Public Class CommonTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+    Public Shared Sub CopyProperties(Source As Object, Destination As Object)
+
+        Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
+        Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
+
+        Dim destProps() As PropertyInfo = destType.GetProperties()
+        Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
+
+        For Each sourceProp As PropertyInfo In sourceProps
+            For Each destProp As PropertyInfo In destProps
+                If destProp.CanWrite Then
+                    If destProp.Name <> "Parent" Then
+                        If destProp.Name = sourceProp.Name Then
+                            If destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType) Then
+                                Try
+                                    Dim tmpValue = sourceProp.GetValue(Source, Nothing)
+                                    If tmpValue <> Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
+                                Catch ex As Exception
+                                    Console.WriteLine(destType.FullName & " - " & destProp.Name)
+                                End Try
+                            End If
+                        End If
+                    End If
+                End If
+            Next
+        Next
+
+    End Sub
 
     Shared Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,

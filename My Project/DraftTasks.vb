@@ -606,106 +606,19 @@ Public Class DraftTasks
 
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
-        Dim DimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
-        Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
-        Dim DimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle
-        Dim ActiveDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle = Nothing
-        Dim PrimaryDecimalRoundOffThisDimension As SolidEdgeFrameworkSupport.DimDecimalRoundOffTypeConstants
-        Dim TextHeightThisDimension As Double
-        Dim Dimensions As SolidEdgeFrameworkSupport.Dimensions = Nothing
-        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
 
-        Dim Balloons As SolidEdgeFrameworkSupport.Balloons
-        Dim Balloon As SolidEdgeFrameworkSupport.Balloon
-
-        Dim Sections As SolidEdgeDraft.Sections = Nothing
-        Dim Section As SolidEdgeDraft.Section = Nothing
-        Dim SectionSheets As SolidEdgeDraft.SectionSheets = Nothing
-        Dim Sheet As SolidEdgeDraft.Sheet = Nothing
-
-        'Copy DimensionStyles from template
+        'Open template
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
         SEApp.DoIdle()
 
         Try
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igDimensionStyle, True, SETemplateDoc)
-            'SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igLineStyle, True, SETemplateDoc)
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igTableStyle, True, SETemplateDoc)
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igFillStyle, True, SETemplateDoc)
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igHatchStyle, True, SETemplateDoc)
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igDrawingViewStyle, True, SETemplateDoc)
-            SEDoc.ImportStyles2(SolidEdgeFramework.seStyleTypeConstants.igTextStyle, True, SETemplateDoc)
+            CommonTasks.CopyProperties(SETemplateDoc, SEDoc)
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add("Error applying styles")
         End Try
 
-
-        'DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-        'DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-
-        'For Each DimensionStyle In DimensionStyles
-        '    DocDimensionStyles.AddEx(DimensionStyle.Name, True, SETemplateDoc)
-        'Next
-
         SETemplateDoc.Close()
-        'SEApp.DoIdle()
-
-        ''Dimensions and callouts with overrides are not automatically updated to the new style.
-        'Sections = SEDoc.Sections
-
-        'For Each Section In Sections
-        '    SectionSheets = Section.Sheets
-        '    For Each Sheet In SectionSheets
-        '        Dimensions = CType(Sheet.Dimensions, SolidEdgeFrameworkSupport.Dimensions)
-        '        For Each Dimension In Dimensions
-        '            For Each DimensionStyle In DocDimensionStyles
-        '                If DimensionStyle.Name = Dimension.Style.Name Then
-        '                    ActiveDimensionStyle = DimensionStyle
-        '                End If
-        '            Next
-        '            If Dimension.Style.PrimaryDecimalRoundOff <> ActiveDimensionStyle.PrimaryDecimalRoundOff Then
-        '                PrimaryDecimalRoundOffThisDimension = Dimension.Style.PrimaryDecimalRoundOff
-        '                Dimension.Style.Name = ActiveDimensionStyle.Name
-        '                Dimension.Style.PrimaryDecimalRoundOff = PrimaryDecimalRoundOffThisDimension
-        '            End If
-        '        Next
-        '    Next
-        'Next
-
-        'Section = Nothing
-        'SectionSheets = Nothing
-        'Sheet = Nothing
-        'SEApp.DoIdle()
-
-        'For Each Section In Sections
-        '    SectionSheets = Section.Sheets
-        '    For Each Sheet In SectionSheets
-        '        Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
-        '        For Each Balloon In Balloons
-        '            For Each DimensionStyle In DocDimensionStyles
-        '                If DimensionStyle.Name = Balloon.Style.Name Then
-        '                    ActiveDimensionStyle = DimensionStyle
-        '                End If
-        '            Next
-        '            If Balloon.Style.Height <> ActiveDimensionStyle.Height Then
-        '                TextHeightThisDimension = Balloon.Style.Height
-        '                Balloon.Style.Name = ActiveDimensionStyle.Name
-        '                Balloon.Style.Height = TextHeightThisDimension
-        '            Else
-        '                Balloon.Style.Name = ActiveDimensionStyle.Name
-        '            End If
-        '        Next
-        '    Next
-        'Next
-
-        'Section = Nothing
-        'SectionSheets = Nothing
-        'Sheet = Nothing
-        'SEApp.DoIdle()
-
-        'Section = Sections.WorkingSection
-
         SEApp.DoIdle()
 
         If SEDoc.ReadOnly Then
