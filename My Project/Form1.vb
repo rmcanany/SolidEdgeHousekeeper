@@ -938,34 +938,34 @@ Public Class Form1
                 End If
             Next
 
-            If LabelText = "Update styles from template" Then
-                OriginalFilename = SEDoc.FullName
-                ModifiedFilename = String.Format("{0}\{1}-Housekeeper.dft",
-                                            System.IO.Path.GetDirectoryName(SEDoc.FullName),
-                                            System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
-                RemnantsFilename = ModifiedFilename.Replace("Housekeeper", "HousekeeperOld")
-            End If
+            'If LabelText = "Update styles from template" Then
+            '    OriginalFilename = SEDoc.FullName
+            '    ModifiedFilename = String.Format("{0}\{1}-Housekeeper.dft",
+            '                                System.IO.Path.GetDirectoryName(SEDoc.FullName),
+            '                                System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+            '    RemnantsFilename = ModifiedFilename.Replace("Housekeeper", "HousekeeperOld")
+            'End If
 
             SEDoc.Close(False)
             SEApp.DoIdle()
 
-            If LabelText = "Update styles from template" Then
-                If ExitStatus = 0 Then
-                    System.IO.File.Delete(OriginalFilename)
-                    FileSystem.Rename(ModifiedFilename, OriginalFilename)
-                ElseIf ExitStatus = 1 Then
-                    If System.IO.File.Exists(RemnantsFilename) Then
-                        System.IO.File.Delete(RemnantsFilename)
-                    End If
-                    If System.IO.File.Exists(ModifiedFilename) Then  ' Not created if a task-generated file was processed
-                        FileSystem.Rename(OriginalFilename, RemnantsFilename)
-                        FileSystem.Rename(ModifiedFilename, OriginalFilename)
-                    End If
-                ElseIf ExitStatus = 2 Then
-                    ' Nothing was saved.  Leave SEDoc unmodified.
-                End If
+            'If LabelText = "Update styles from template" Then
+            '    If ExitStatus = 0 Then
+            '        System.IO.File.Delete(OriginalFilename)
+            '        FileSystem.Rename(ModifiedFilename, OriginalFilename)
+            '    ElseIf ExitStatus = 1 Then
+            '        If System.IO.File.Exists(RemnantsFilename) Then
+            '            System.IO.File.Delete(RemnantsFilename)
+            '        End If
+            '        If System.IO.File.Exists(ModifiedFilename) Then  ' Not created if a task-generated file was processed
+            '            FileSystem.Rename(OriginalFilename, RemnantsFilename)
+            '            FileSystem.Rename(ModifiedFilename, OriginalFilename)
+            '        End If
+            '    ElseIf ExitStatus = 2 Then
+            '        ' Nothing was saved.  Leave SEDoc unmodified.
+            '    End If
 
-            End If
+            'End If
 
         Catch ex As Exception
             Dim AbortList As New List(Of String)
