@@ -612,7 +612,93 @@ Public Class DraftTasks
         SEApp.DoIdle()
 
         Try
-            CommonTasks.CopyProperties(SETemplateDoc, SEDoc)
+
+            Dim objDimStyles As SolidEdgeFrameworkSupport.DimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+            Dim objDimStyles_src As SolidEdgeFrameworkSupport.DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+
+            For Each tmpDimStyle As SolidEdgeFrameworkSupport.DimensionStyle In objDimStyles
+
+                For Each item_src As SolidEdgeFrameworkSupport.DimensionStyle In objDimStyles_src
+                    If tmpDimStyle.Name = item_src.Name Then
+                        CommonTasks.CopyProperties(item_src, tmpDimStyle)
+                    End If
+                Next
+
+            Next
+
+
+            '############### Following code is to update other styles than dimension styles
+
+            ''Update Line styles
+            'Dim objLineStyles As SolidEdgeFramework.LinearStyles = CType(SEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+            'Dim objLineStyles_src As SolidEdgeFramework.LinearStyles = CType(SETemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+            'For d = 1 To objLineStyles.Count
+            '    For s = 1 To objLineStyles_src.Count
+            '        If objLineStyles.Item(d).Name = objLineStyles_src.Item(s).Name Then
+            '            CommonTasks.CopyProperties(objLineStyles_src.Item(s), objLineStyles.Item(d))
+            '        End If
+            '    Next s
+            'Next d
+
+            ''Update Drawing Views styles
+            'Dim objDVStyles As SolidEdgeFrameworkSupport.DrawingViewStyles = SEDoc.DrawingViewStyles
+            'Dim objDVStyles_src As SolidEdgeFrameworkSupport.DrawingViewStyles = SETemplateDoc.DrawingViewStyles
+
+            'For Each tmpDVStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objDVStyles
+            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objDVStyles_src
+            '        If tmpDVStyle.Name = item_src.Name Then
+            '            CommonTasks.CopyProperties(item_src, tmpDVStyle)
+            '        End If
+            '    Next
+            'Next
+
+            ''Update Text styles
+            'Dim objCharStyles As SolidEdgeFramework.TextCharStyles = CType(SEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+            'Dim objCharStyles_src As SolidEdgeFramework.TextCharStyles = CType(SETemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+            'For Each tmpCharStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objCharStyles
+            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objCharStyles_src
+            '        If tmpCharStyle.Name = item_src.Name Then
+            '            CommonTasks.CopyProperties(item_src, tmpCharStyle)
+            '        End If
+            '    Next
+            'Next
+
+            'Dim objTxtStyles As SolidEdgeFramework.TextStyles = CType(SEDoc.TextStyles, SolidEdgeFramework.TextStyles)
+            'Dim objTxtStyles_src As SolidEdgeFramework.TextStyles = CType(SETemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+            'For Each tmpTxtStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objTxtStyles
+            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objTxtStyles_src
+            '        If tmpTxtStyle.Name = item_src.Name Then
+            '            CommonTasks.CopyProperties(item_src, tmpTxtStyle)
+            '        End If
+            '    Next
+            'Next
+
+            ''Update Table styles
+            'Dim objTableStyles As SolidEdgeFrameworkSupport.TableStyles = SEDoc.TableStyles
+            'Dim objTableStyles_src As SolidEdgeFrameworkSupport.TableStyles = SETemplateDoc.TableStyles
+
+            'For Each tmpTableStyle As SolidEdgeFrameworkSupport.TableStyle In objTableStyles
+            '    For Each item_src As SolidEdgeFrameworkSupport.TableStyle In objTableStyles_src
+            '        If tmpTableStyle.Name = item_src.Name Then
+            '            CommonTasks.CopyProperties(item_src, tmpTableStyle)
+
+            '            '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
+            '            For c = 0 To 6
+            '                tmpTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+            '                tmpTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+            '                tmpTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+            '            Next
+
+            '        End If
+            '    Next
+            'Next
+
+
+            '###############
+
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add("Error applying styles")
