@@ -769,21 +769,12 @@ Same as the Assembly command of the same name.
 Checks drawing views one by one, and updates them if needed.
 
 #### Update styles from template
-Creates a new file from a template you specify on the **Configuration Tab**. Copies drawing views, dimensions, etc. from the old file into the new one. If the template has updated styles, a different background sheet, or other changes, the new drawing will inherit them automatically. 
-
-This task has the option to `Allow partial success`.  It is set on the **Configuration Tab**. If the option is set, and some drawing elements were not transferred, it is reported in the log file. Also reported in the log file are instructions for completing the transfer. 
-
-Note, because this task needs to do a `Save As`, it must be run with no other tasks selected.
+Updates styles from a template you specify on the **Configuration Tab**. Also replaces the contents of the background sheets from the template. These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.
 
 #### Update drawing border from template
 Replaces the background border with that of the Draft template specified on the **Configuration Tab**.
 
 In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
-
-#### Update dimension styles from template
-Replaces Styles with that of the Draft template specified on the **Configuration Tab**.
-
-In contrast to `UpdateStylesFromTemplate`, this command does not create a new file. 
 
 #### Fit view
 Same as the Assembly command of the same name.

@@ -572,7 +572,7 @@ Public Class DraftTasks
 
 
 
-    Public Function UpdateDimensionStylesFromTemplate(
+    Public Function UpdateStylesFromTemplate(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -585,7 +585,7 @@ Public Class DraftTasks
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf UpdateDimensionStylesFromTemplateInternal,
+                                   AddressOf UpdateStylesFromTemplateInternal,
                                    CType(SEDoc, SolidEdgeDraft.DraftDocument),
                                    Configuration,
                                    SEApp)
@@ -594,7 +594,22 @@ Public Class DraftTasks
 
     End Function
 
-    Private Function UpdateDimensionStylesFromTemplateInternal(
+    Private Function DocStyleNotInTemplate(
+       DocStyleNameList As List(Of String),
+       TemplateStyleNameList As List(Of String)
+       ) As String
+        Dim Names As String = ""
+        For Each s As String In DocStyleNameList
+            If Not TemplateStyleNameList.Contains(s) Then
+                Names = String.Format("{0} {1},", Names, s)
+            End If
+        Next
+
+        Return Names
+    End Function
+
+
+    Private Function UpdateStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -607,102 +622,264 @@ Public Class DraftTasks
         Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
 
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim SupplementalExitStatus As Integer = 0
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ' Update drawing border
+        SupplementalErrorMessage = UpdateDrawingBorderFromTemplate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
+        If SupplementalErrorMessage.Keys(0) <> 0 Then
+            ExitStatus = SupplementalErrorMessage.Keys(0)
+            ErrorMessageList.Add("Problem updating drawing border")
+        End If
+
+
         'Open template
         SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeDraft.DraftDocument)
         SEApp.DoIdle()
 
-        Try
+        SEDoc.Activate()
+        SEApp.DoIdle()
 
-            Dim objDimStyles As SolidEdgeFrameworkSupport.DimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
-            Dim objDimStyles_src As SolidEdgeFrameworkSupport.DimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+        ' All style collections.
+        ' DashStyles, DimensionStyles, DrawingViewStyles, FillStyles, HatchPatternStyles, 
+        ' LinearStyles, SmartFrame2dStyles, TableStyles, TextCharStyles, TextStyles
 
-            For Each tmpDimStyle As SolidEdgeFrameworkSupport.DimensionStyle In objDimStyles
+        ' Style collections to receive updates.
+        ' DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles
 
-                For Each item_src As SolidEdgeFrameworkSupport.DimensionStyle In objDimStyles_src
-                    If tmpDimStyle.Name = item_src.Name Then
-                        CommonTasks.CopyProperties(item_src, tmpDimStyle)
-                    End If
-                Next
 
+        ' ############  DimensionStyles ############
+        Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
+        DocDimensionStyles = CType(SEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+
+        Dim TemplateDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
+        TemplateDimensionStyles = CType(SETemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+
+        For Each TemplateDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In TemplateDimensionStyles
+            If Not TemplateStyleNames.Contains(TemplateDimensionStyle.Name) Then
+                TemplateStyleNames.Add(TemplateDimensionStyle.Name)
+            End If
+            For Each DocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In DocDimensionStyles
+                If Not DocStyleNames.Contains(DocDimensionStyle.Name) Then
+                    DocStyleNames.Add(DocDimensionStyle.Name)
+                End If
+                If TemplateDimensionStyle.Name = DocDimensionStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                    End Try
+                End If
             Next
+        Next
 
-
-            '############### Following code is to update other styles than dimension styles
-
-            ''Update Line styles
-            'Dim objLineStyles As SolidEdgeFramework.LinearStyles = CType(SEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
-            'Dim objLineStyles_src As SolidEdgeFramework.LinearStyles = CType(SETemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
-
-            'For d = 1 To objLineStyles.Count
-            '    For s = 1 To objLineStyles_src.Count
-            '        If objLineStyles.Item(d).Name = objLineStyles_src.Item(s).Name Then
-            '            CommonTasks.CopyProperties(objLineStyles_src.Item(s), objLineStyles.Item(d))
-            '        End If
-            '    Next s
-            'Next d
-
-            ''Update Drawing Views styles
-            'Dim objDVStyles As SolidEdgeFrameworkSupport.DrawingViewStyles = SEDoc.DrawingViewStyles
-            'Dim objDVStyles_src As SolidEdgeFrameworkSupport.DrawingViewStyles = SETemplateDoc.DrawingViewStyles
-
-            'For Each tmpDVStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objDVStyles
-            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objDVStyles_src
-            '        If tmpDVStyle.Name = item_src.Name Then
-            '            CommonTasks.CopyProperties(item_src, tmpDVStyle)
-            '        End If
-            '    Next
-            'Next
-
-            ''Update Text styles
-            'Dim objCharStyles As SolidEdgeFramework.TextCharStyles = CType(SEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
-            'Dim objCharStyles_src As SolidEdgeFramework.TextCharStyles = CType(SETemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
-
-            'For Each tmpCharStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objCharStyles
-            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objCharStyles_src
-            '        If tmpCharStyle.Name = item_src.Name Then
-            '            CommonTasks.CopyProperties(item_src, tmpCharStyle)
-            '        End If
-            '    Next
-            'Next
-
-            'Dim objTxtStyles As SolidEdgeFramework.TextStyles = CType(SEDoc.TextStyles, SolidEdgeFramework.TextStyles)
-            'Dim objTxtStyles_src As SolidEdgeFramework.TextStyles = CType(SETemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
-
-            'For Each tmpTxtStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In objTxtStyles
-            '    For Each item_src As SolidEdgeFrameworkSupport.DrawingViewStyle In objTxtStyles_src
-            '        If tmpTxtStyle.Name = item_src.Name Then
-            '            CommonTasks.CopyProperties(item_src, tmpTxtStyle)
-            '        End If
-            '    Next
-            'Next
-
-            ''Update Table styles
-            'Dim objTableStyles As SolidEdgeFrameworkSupport.TableStyles = SEDoc.TableStyles
-            'Dim objTableStyles_src As SolidEdgeFrameworkSupport.TableStyles = SETemplateDoc.TableStyles
-
-            'For Each tmpTableStyle As SolidEdgeFrameworkSupport.TableStyle In objTableStyles
-            '    For Each item_src As SolidEdgeFrameworkSupport.TableStyle In objTableStyles_src
-            '        If tmpTableStyle.Name = item_src.Name Then
-            '            CommonTasks.CopyProperties(item_src, tmpTableStyle)
-
-            '            '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
-            '            For c = 0 To 6
-            '                tmpTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                tmpTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '                tmpTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = item_src.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
-            '            Next
-
-            '        End If
-            '    Next
-            'Next
-
-
-            '###############
-
-        Catch ex As Exception
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
             ExitStatus = 1
-            ErrorMessageList.Add("Error applying styles")
-        End Try
+            ErrorMessageList.Add(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+        Dim DocDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
+        DocDrawingViewStyles = CType(SEDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
+
+        Dim TemplateDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
+        TemplateDrawingViewStyles = CType(SETemplateDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
+
+        For Each TemplateDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In TemplateDrawingViewStyles
+            If Not TemplateStyleNames.Contains(TemplateDrawingViewStyle.Name) Then
+                TemplateStyleNames.Add(TemplateDrawingViewStyle.Name)
+            End If
+            For Each DocDrawingViewStyle As SolidEdgeFrameworkSupport.DrawingViewStyle In DocDrawingViewStyles
+                If Not DocStyleNames.Contains(DocDrawingViewStyle.Name) Then
+                    DocStyleNames.Add(DocDrawingViewStyle.Name)
+                End If
+                If TemplateDrawingViewStyle.Name = DocDrawingViewStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
+                    End Try
+                End If
+            Next
+        Next
+
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+
+
+        Dim DocLinearStyles As SolidEdgeFramework.LinearStyles
+        DocLinearStyles = CType(SEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+        Dim TemplateLinearStyles As SolidEdgeFramework.LinearStyles
+        TemplateLinearStyles = CType(SETemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+        For Each TemplateLinearStyle As SolidEdgeFramework.LinearStyle In TemplateLinearStyles
+            If Not TemplateStyleNames.Contains(TemplateLinearStyle.Name) Then
+                TemplateStyleNames.Add(TemplateLinearStyle.Name)
+            End If
+            For Each DocLinearStyle As SolidEdgeFramework.LinearStyle In DocLinearStyles
+                If Not DocStyleNames.Contains(DocLinearStyle.Name) Then
+                    DocStyleNames.Add(DocLinearStyle.Name)
+                End If
+                If TemplateLinearStyle.Name = DocLinearStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                    End Try
+                End If
+            Next
+        Next
+
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Linear styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+
+
+
+
+        Dim DocTableStyles As SolidEdgeFrameworkSupport.TableStyles
+        DocTableStyles = CType(SEDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
+
+        Dim TemplateTableStyles As SolidEdgeFrameworkSupport.TableStyles
+        TemplateTableStyles = CType(SETemplateDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
+
+        For Each TemplateTableStyle As SolidEdgeFrameworkSupport.TableStyle In TemplateTableStyles
+            If Not TemplateStyleNames.Contains(TemplateTableStyle.Name) Then
+                TemplateStyleNames.Add(TemplateTableStyle.Name)
+            End If
+            For Each DocTableStyle As SolidEdgeFrameworkSupport.TableStyle In DocTableStyles
+                If Not DocStyleNames.Contains(DocTableStyle.Name) Then
+                    DocStyleNames.Add(DocTableStyle.Name)
+                End If
+                If TemplateTableStyle.Name = DocTableStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateTableStyle, DocTableStyle)
+                        '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
+                        For c = 0 To 6
+                            DocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                            DocTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineDashType(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                            DocTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineWidth(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
+                        Next
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
+                    End Try
+                End If
+            Next
+        Next
+
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Table styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+
+
+        Dim DocTextCharStyles As SolidEdgeFramework.TextCharStyles
+        DocTextCharStyles = CType(SEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+        Dim TemplateTextCharStyles As SolidEdgeFramework.TextCharStyles
+        TemplateTextCharStyles = CType(SETemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+        For Each TemplateTextCharStyle As SolidEdgeFramework.TextCharStyle In TemplateTextCharStyles
+            If Not TemplateStyleNames.Contains(TemplateTextCharStyle.Name) Then
+                TemplateStyleNames.Add(TemplateTextCharStyle.Name)
+            End If
+            For Each DocTextCharStyle As SolidEdgeFramework.TextCharStyle In DocTextCharStyles
+                If Not DocStyleNames.Contains(DocTextCharStyle.Name) Then
+                    DocStyleNames.Add(DocTextCharStyle.Name)
+                End If
+                If TemplateTextCharStyle.Name = DocTextCharStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                    End Try
+                End If
+            Next
+        Next
+
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Text Char styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+
+
+        Dim DocTextStyles As SolidEdgeFramework.TextStyles
+        DocTextStyles = CType(SEDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+        Dim TemplateTextStyles As SolidEdgeFramework.TextStyles
+        TemplateTextStyles = CType(SETemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+        For Each TemplateTextStyle As SolidEdgeFramework.TextStyle In TemplateTextStyles
+            If Not TemplateStyleNames.Contains(TemplateTextStyle.Name) Then
+                TemplateStyleNames.Add(TemplateTextStyle.Name)
+            End If
+            For Each DocTextStyle As SolidEdgeFramework.TextStyle In DocTextStyles
+                If Not DocStyleNames.Contains(DocTextStyle.Name) Then
+                    DocStyleNames.Add(DocTextStyle.Name)
+                End If
+                If TemplateTextStyle.Name = DocTextStyle.Name Then
+                    Try
+                        CommonTasks.CopyProperties(TemplateTextStyle, DocTextStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                    End Try
+                End If
+            Next
+        Next
+
+        MissingStyles = DocStyleNotInTemplate(DocStyleNames, TemplateStyleNames)
+        If Len(MissingStyles) > 0 Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Text styles in Draft but not in Template: {0}", MissingStyles))
+        End If
+        DocStyleNames.Clear()
+        TemplateStyleNames.Clear()
+        MissingStyles = ""
+
+
+
 
         SETemplateDoc.Close()
         SEApp.DoIdle()
@@ -721,6 +898,819 @@ Public Class DraftTasks
 
 
 
+    'Public Function MoveDrawingToNewTemplate(
+    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    ErrorMessage = InvokeSTAThread(
+    '                           Of SolidEdgeDraft.DraftDocument,
+    '                           Dictionary(Of String, String),
+    '                           SolidEdgeFramework.Application,
+    '                           Dictionary(Of Integer, List(Of String)))(
+    '                               AddressOf MoveDrawingToNewTemplateInternal,
+    '                               CType(SEDoc, SolidEdgeDraft.DraftDocument),
+    '                               Configuration,
+    '                               SEApp)
+
+    '    Return ErrorMessage
+
+    'End Function
+
+    'Private Function MoveDrawingToNewTemplateInternal(
+    '    ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    Dim CheckAutoGeneratedFile As Func(Of SolidEdgeDraft.DraftDocument, Boolean)
+    '    CheckAutoGeneratedFile = Function(SourceDoc)
+    '                                 Dim Filename As String = System.IO.Path.GetFileName(SourceDoc.FullName)
+
+    '                                 If Filename.Contains("-HousekeeperOld") Then
+    '                                     ExitStatus = 1
+    '                                     ErrorMessageList.Add(String.Format("Auto-generated file not processed {0}", Filename))
+    '                                     Return True
+    '                                 Else
+    '                                     Return False
+    '                                 End If
+    '                             End Function
+
+    '    Dim GetNewDocFilename As Func(Of SolidEdgeDraft.DraftDocument, String)
+    '    GetNewDocFilename = Function(SourceDoc)
+    '                            Dim NewFilename As String
+    '                            NewFilename = String.Format("{0}\{1}-Housekeeper.dft",
+    '                                                        System.IO.Path.GetDirectoryName(SEDoc.FullName),
+    '                                                        System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+    '                            Return NewFilename
+    '                        End Function
+
+    '    Dim GetRemnantsDocFilename As Func(Of SolidEdgeDraft.DraftDocument, String)
+    '    GetRemnantsDocFilename = Function(SourceDoc)
+    '                                 Dim NewFilename As String
+    '                                 NewFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
+    '                                                             System.IO.Path.GetDirectoryName(SEDoc.FullName),
+    '                                                             System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+    '                                 Return NewFilename
+    '                             End Function
+
+    '    Dim GetSheets As Func(Of SolidEdgeDraft.DraftDocument, String, List(Of SolidEdgeDraft.Sheet))
+    '    GetSheets = Function(Doc, SectionType)
+    '                    Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
+    '                    Dim Sheet As SolidEdgeDraft.Sheet
+    '                    Dim Section As SolidEdgeDraft.Section = Nothing
+    '                    Dim SectionSheets As SolidEdgeDraft.SectionSheets
+    '                    Dim SheetGroups As SolidEdgeDraft.SheetGroups
+    '                    Dim SheetGroup As SolidEdgeDraft.SheetGroup
+
+    '                    Dim count As Integer
+
+    '                    If SectionType = "Working" Then
+    '                        Section = Doc.Sections.WorkingSection
+    '                    ElseIf SectionType = "Background" Then
+    '                        Section = Doc.Sections.BackgroundSection
+    '                    ElseIf SectionType = "2DModel" Then
+    '                        Section = Doc.Sections.WorkingSection  ' Ignored below
+    '                    ElseIf SectionType = "UserGenerated" Then
+    '                        Section = Doc.Sections.WorkingSection
+    '                        SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+    '                    ElseIf SectionType = "AutoGenerated" Then
+    '                        Section = Doc.Sections.WorkingSection
+    '                        SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+    '                    Else
+    '                        MsgBox(String.Format("SectionType '{0}' not recognized.  Quitting...", SectionType))
+    '                    End If
+
+    '                    SectionSheets = Section.Sheets
+
+    '                    If (SectionType = "Working") Or (SectionType = "Background") Then
+    '                        For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
+    '                            SheetList.Add(Sheet)
+    '                        Next
+    '                    ElseIf (SectionType = "2DModel") Then
+    '                        SheetList.Add(Doc.Sections.Get2DModelSheet)
+    '                    Else
+    '                        SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
+    '                        count = 0
+    '                        For Each SheetGroup In SheetGroups
+    '                            For Each Sheet In SheetGroup.Sheets.OfType(Of SolidEdgeDraft.Sheet)()
+    '                                If (SectionType = "UserGenerated") And (count = 0) Then
+    '                                    SheetList.Add(Sheet)
+    '                                End If
+    '                                If (SectionType = "AutoGenerated") And (count > 0) Then
+    '                                    SheetList.Add(Sheet)
+    '                                End If
+    '                            Next
+    '                            count += 1
+    '                        Next
+    '                    End If
+
+    '                    Return SheetList
+    '                End Function
+
+    '    Dim SheetNameToObject As Func(Of SolidEdgeDraft.DraftDocument, String, String, SolidEdgeDraft.Sheet)
+    '    SheetNameToObject = Function(Doc, SectionType, SheetName)
+    '                            Dim Sheet As SolidEdgeDraft.Sheet
+
+    '                            For Each Sheet In GetSheets(Doc, SectionType)
+    '                                If Sheet.Name = SheetName Then
+    '                                    Return Sheet
+    '                                End If
+    '                            Next
+    '                            Return Nothing
+    '                        End Function
+
+    '    Dim AddSheet As Action(Of SolidEdgeDraft.DraftDocument, String)
+    '    AddSheet = Sub(Doc, SheetName)
+    '                   Dim Sheet As SolidEdgeDraft.Sheet
+    '                   Dim SheetAlreadyExists As Boolean = False
+
+    '                   For Each Sheet In GetSheets(Doc, "Working")
+    '                       If SheetName = Sheet.Name Then
+    '                           SheetAlreadyExists = True
+    '                       End If
+    '                   Next
+
+    '                   If Not SheetAlreadyExists Then
+    '                       Doc.Sheets.AddSheet(SheetName, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
+    '                   End If
+    '               End Sub
+
+    '    Dim SetTargetBackgrounds As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
+    '    SetTargetBackgrounds = Sub(SourceDoc, TargetDoc, DummyName)
+    '                               Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "Working")
+    '                               Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "Working")
+
+    '                               Dim SourceSheet As SolidEdgeDraft.Sheet
+    '                               Dim TargetSheet As SolidEdgeDraft.Sheet
+
+    '                               Dim SourceSheetNames As New List(Of String)
+    '                               Dim TargetSheetNames As New List(Of String)
+
+    '                               Dim SourceBackgroundSheet As SolidEdgeDraft.Sheet
+    '                               Dim TargetBackgroundSheet As SolidEdgeDraft.Sheet
+
+    '                               Dim msg2 As String = ""
+
+    '                               For Each TargetSheet In TargetSheets
+    '                                   If Not TargetSheet.Name = DummyName Then
+    '                                       SourceSheet = SheetNameToObject(SourceDoc, "Working", TargetSheet.Name)
+    '                                       ' SourceSheetNames.Add(SourceSheet.Name)
+    '                                       ' Not all sheets have a background defined
+    '                                       Try
+    '                                           SourceBackgroundSheet = SourceSheet.Background
+    '                                           TargetBackgroundSheet = SheetNameToObject(TargetDoc, "Background", SourceBackgroundSheet.Name)
+    '                                           If Not TargetBackgroundSheet Is Nothing Then
+    '                                               TargetSheet.Background = TargetBackgroundSheet
+    '                                               TargetSheet.BackgroundVisible = SourceSheet.BackgroundVisible
+    '                                               TargetSheet.SheetSetup.SheetSizeOption = SourceSheet.SheetSetup.SheetSizeOption
+    '                                           Else
+    '                                               ExitStatus = 1
+    '                                               msg2 = String.Format("Template does not have a background named '{0}'", SourceBackgroundSheet.Name)
+    '                                               If Not ErrorMessageList.Contains(msg2) Then
+    '                                                   ErrorMessageList.Add(msg2)
+    '                                               End If
+    '                                           End If
+    '                                       Catch ex As Exception
+    '                                       End Try
+    '                                   End If
+    '                               Next
+    '                           End Sub
+
+    '    Dim AddSheetsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
+    '    AddSheetsToTarget = Sub(SourceDoc, TargetDoc, DummyName)
+    '                            ' Add sheets to target to match source.
+    '                            ' Remove sheets from target that don't match.
+    '                            ' Set backgrounds to match.  Report to log if target does not have the background sheet.
+
+    '                            Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
+    '                            Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
+
+    '                            Dim SourceSheet As SolidEdgeDraft.Sheet
+    '                            Dim TargetSheet As SolidEdgeDraft.Sheet
+
+    '                            Dim SourceSheetNames As New List(Of String)
+    '                            Dim TargetSheetNames As New List(Of String)
+
+    '                            For Each SourceSheet In SourceSheets
+    '                                SourceSheetNames.Add(SourceSheet.Name)
+    '                            Next
+
+    '                            For Each TargetSheet In TargetSheets
+    '                                TargetSheetNames.Add(TargetSheet.Name)
+    '                            Next
+
+    '                            For Each SourceSheet In SourceSheets
+    '                                If Not TargetSheetNames.Contains(SourceSheet.Name) Then
+    '                                    AddSheet(TargetDoc, SourceSheet.Name)
+    '                                End If
+    '                            Next
+
+    '                            For Each TargetSheetName In TargetSheetNames
+    '                                If Not SourceSheetNames.Contains(TargetSheetName) Then
+    '                                    SheetNameToObject(TargetDoc, "Working", TargetSheetName).Delete()
+    '                                End If
+    '                            Next
+
+    '                            SetTargetBackgrounds(SourceDoc, TargetDoc, DummyName)
+
+    '                        End Sub
+
+    '    Dim MoveDVsToDummySheet As Func(Of SolidEdgeDraft.DraftDocument, String, List(Of String))
+    '    MoveDVsToDummySheet = Function(SourceDoc, SourceDocDummySheetName)
+    '                              Dim DVSheetNames As New List(Of String)
+    '                              Dim Sheet As SolidEdgeDraft.Sheet
+    '                              Dim DrawingView As SolidEdgeDraft.DrawingView
+    '                              Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(SourceDoc, "UserGenerated", SourceDocDummySheetName)
+    '                              Dim msg2 As String
+
+    '                              For Each Sheet In GetSheets(SourceDoc, "UserGenerated")
+    '                                  If Not Sheet.Name = SourceDocDummySheetName Then
+    '                                      For Each DrawingView In Sheet.DrawingViews
+    '                                          DVSheetNames.Add(Sheet.Name)
+    '                                          'Dim Name As String = DrawingView.Name
+    '                                          ' Issue with broken out section view
+    '                                          Try
+    '                                              DrawingView.Sheet = TargetSheet
+    '                                          Catch ex As Exception
+    '                                              ExitStatus = 1
+    '                                              msg2 = "Some drawing views may not have transferred"
+    '                                              If Not ErrorMessageList.Contains(msg2) Then
+    '                                                  ErrorMessageList.Add(msg2)
+    '                                              End If
+    '                                          End Try
+    '                                      Next
+    '                                  End If
+    '                              Next
+
+    '                              Return DVSheetNames
+    '                          End Function
+
+
+    '    Dim MoveDVsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, List(Of String), String)
+    '    MoveDVsToTarget = Sub(SourceDoc, TargetDoc, DrawingViewSheetnames, DummyName)
+
+
+    '                          Dim SourceSheet As SolidEdgeDraft.Sheet = SheetNameToObject(SourceDoc, "UserGenerated", DummyName)
+    '                          Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
+    '                          Dim SheetWindow As SolidEdgeDraft.SheetWindow
+    '                          Dim DrawingView As SolidEdgeDraft.DrawingView
+
+    '                          If DrawingViewSheetnames.Count > 0 Then
+    '                              ' Sometimes get cut/paste error on drawing views.  Need a do-over.  Don't save anything.
+    '                              Try
+    '                                  SourceDoc.Activate()
+    '                                  SourceSheet.Activate()
+    '                                  SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+    '                                  For Each DrawingView In SourceSheet.DrawingViews
+    '                                      DrawingView.Select()
+    '                                      DrawingView.AddConnectedAnnotationsToSelectSet()
+    '                                      DrawingView.AddConnectedDimensionsToSelectSet()
+    '                                  Next
+
+    '                                  SEApp.DoIdle()
+    '                                  SheetWindow.Cut()
+    '                                  SEApp.DoIdle()
+
+    '                                  TargetDoc.Activate()
+    '                                  TargetSheet.Activate()
+    '                                  SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                                  SheetWindow.Paste()
+    '                                  SEApp.DoIdle()
+    '                              Catch ex As Exception
+    '                                  ExitStatus = 2
+    '                                  Exit Sub
+    '                              End Try
+
+    '                          End If
+
+    '                      End Sub
+
+    '    Dim MoveDVsToCorrectSheet As Action(Of SolidEdgeDraft.DraftDocument, List(Of String), String)
+    '    MoveDVsToCorrectSheet = Sub(TargetDoc, DrawingViewSheetNames, DummyName)
+
+    '                                Dim DrawingView As SolidEdgeDraft.DrawingView
+
+    '                                Dim DummySheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
+    '                                Dim count As Integer = 0
+    '                                Dim msg2 As String
+    '                                Dim tf2 As Boolean
+
+    '                                If DrawingViewSheetNames.Count > 0 Then
+    '                                    TargetDoc.Activate()
+
+    '                                    For Each DrawingView In DummySheet.DrawingViews
+    '                                        Dim Name As String = DrawingView.Name
+
+    '                                        tf2 = DrawingView.IsBrokenOutSectionTarget
+    '                                        ' Issue with broken out section view
+    '                                        Try
+    '                                            DrawingView.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DrawingViewSheetNames(count))
+    '                                        Catch ex As Exception
+    '                                            ExitStatus = 1
+    '                                            msg2 = "Some drawing views may not have transferred"
+    '                                            If Not ErrorMessageList.Contains(msg2) Then
+    '                                                ErrorMessageList.Add(msg2)
+    '                                            End If
+    '                                        End Try
+    '                                        count += 1
+    '                                    Next
+    '                                End If
+
+    '                            End Sub
+
+    '    Dim UpdateRange As Func(Of Double, Double, Double, Double, List(Of Double), List(Of Double))
+    '    UpdateRange = Function(XMin, YMin, XMax, YMax, Ranges)
+    '                      Dim NewRanges As New List(Of Double)
+
+    '                      If XMin < Ranges(0) Then
+    '                          NewRanges.Add(XMin)
+    '                      Else
+    '                          NewRanges.Add(Ranges(0))
+    '                      End If
+
+    '                      If YMin < Ranges(1) Then
+    '                          NewRanges.Add(YMin)
+    '                      Else
+    '                          NewRanges.Add(Ranges(1))
+    '                      End If
+
+    '                      If XMax > Ranges(2) Then
+    '                          NewRanges.Add(XMax)
+    '                      Else
+    '                          NewRanges.Add(Ranges(2))
+    '                      End If
+
+    '                      If YMax > Ranges(3) Then
+    '                          NewRanges.Add(YMax)
+    '                      Else
+    '                          NewRanges.Add(Ranges(3))
+    '                      End If
+
+    '                      Return NewRanges
+    '                  End Function
+
+    '    Dim GetCenter As Func(Of SolidEdgeDraft.DrawingView, List(Of Double))
+    '    GetCenter = Function(DrawingView)
+    '                    Dim Center As New List(Of Double)
+    '                    Dim CenterX As Double
+    '                    Dim CenterY As Double
+
+    '                    DrawingView.GetOrigin(CenterX, CenterY)
+    '                    Center.Add(CenterX)
+    '                    Center.Add(CenterY)
+    '                    Return Center
+    '                End Function
+
+    '    Dim CloseEnough As Func(Of Double, Double, Double, Boolean)
+    '    CloseEnough = Function(D1, D2, MaxDiff)
+    '                      If Math.Abs(D1 - D2) < MaxDiff Then
+    '                          Return True
+    '                      Else
+    '                          Return False
+    '                      End If
+
+    '                  End Function
+
+    '    Dim GetAlignedDVs As Func(Of SolidEdgeDraft.Sheet, Dictionary(Of SolidEdgeDraft.DrawingView, List(Of Double)), List(Of SolidEdgeDraft.DrawingView))
+    '    GetAlignedDVs = Function(Sheet, DVCenters)
+    '                        Dim AlignedDVs As New List(Of SolidEdgeDraft.DrawingView)
+    '                        Dim DrawingView As SolidEdgeDraft.DrawingView
+    '                        Dim DVList As New List(Of SolidEdgeDraft.DrawingView)
+    '                        Dim DVX As New Dictionary(Of Integer, Double)
+    '                        Dim DVY As New Dictionary(Of Integer, Double)
+    '                        Dim SortedDictionary As New Dictionary(Of Integer, Double)
+    '                        Dim XOrder As New List(Of Integer)
+    '                        Dim YOrder As New List(Of Integer)
+
+    '                        Dim count As Integer
+    '                        Dim i As Integer
+    '                        Dim x1 As Double
+    '                        Dim x2 As Double
+    '                        Dim y1 As Double
+    '                        Dim y2 As Double
+
+    '                        count = 0
+    '                        For Each DrawingView In Sheet.DrawingViews
+    '                            DVList.Add(DrawingView)
+    '                            DVX(count) = DVCenters(DrawingView)(0)
+    '                            DVY(count) = DVCenters(DrawingView)(1)
+    '                            count += 1
+    '                        Next
+
+    '                        Dim XSorted = From pair In DVX
+    '                                      Order By pair.Value
+    '                        SortedDictionary = XSorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
+    '                        XOrder = SortedDictionary.Keys.ToList
+
+    '                        Dim YSorted = From pair In DVY
+    '                                      Order By pair.Value
+    '                        SortedDictionary = YSorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
+    '                        YOrder = SortedDictionary.Keys.ToList
+
+    '                        For i = 1 To XOrder.Count - 1
+    '                            x1 = DVCenters(DVList(XOrder(i - 1)))(0)
+    '                            x2 = DVCenters(DVList(XOrder(i)))(0)
+    '                            If CloseEnough(x1, x2, 0.000001) Then
+    '                                AlignedDVs.Add(DVList(XOrder(i - 1)))
+    '                                AlignedDVs.Add(DVList(XOrder(i)))
+    '                            End If
+    '                        Next
+
+    '                        For i = 1 To YOrder.Count - 1
+    '                            y1 = DVCenters(DVList(YOrder(i - 1)))(1)
+    '                            y2 = DVCenters(DVList(YOrder(i)))(1)
+    '                            If CloseEnough(y1, y2, 0.000001) Then
+    '                                AlignedDVs.Add(DVList(YOrder(i - 1)))
+    '                                AlignedDVs.Add(DVList(YOrder(i)))
+    '                            End If
+    '                        Next
+
+    '                        AlignedDVs = AlignedDVs.Distinct.ToList
+
+    '                        Return AlignedDVs
+    '                    End Function
+
+    '    Dim AlignSheetViews As Action(Of SolidEdgeDraft.Sheet)
+    '    AlignSheetViews = Sub(Sheet)
+    '                          Dim DrawingView As SolidEdgeDraft.DrawingView
+    '                          Dim DVCenters As New Dictionary(Of SolidEdgeDraft.DrawingView, List(Of Double))
+    '                          Dim DVX As New Dictionary(Of Integer, Double)
+    '                          Dim DVY As New Dictionary(Of Integer, Double)
+    '                          Dim AlignedDrawingViews As New List(Of SolidEdgeDraft.DrawingView)
+    '                          Dim SheetWindow As SolidEdgeDraft.SheetWindow
+    '                          Dim SelectSet As SolidEdgeFramework.SelectSet
+
+    '                          If Sheet.DrawingViews.Count > 1 Then
+    '                              For Each DrawingView In Sheet.DrawingViews
+    '                                  DVCenters(DrawingView) = GetCenter(DrawingView)
+    '                              Next
+
+    '                              AlignedDrawingViews = GetAlignedDVs(Sheet, DVCenters)
+
+    '                              If AlignedDrawingViews.Count > 1 Then
+    '                                  Sheet.Activate()
+    '                                  SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                                  SelectSet = SheetWindow.SelectSet
+
+    '                                  For Each DrawingView In AlignedDrawingViews
+    '                                      SelectSet.Add(DrawingView)
+    '                                  Next
+
+    '                                  SEApp.StartCommand(
+    '                                      CType(SolidEdgeConstants.DetailCommandConstants.DetailRelationshipsAlignViews,
+    '                                            SolidEdgeFramework.SolidEdgeCommandConstants))
+    '                              End If
+
+    '                          End If
+
+    '                      End Sub
+
+
+    '    Dim AlignViews As Action(Of SolidEdgeDraft.DraftDocument)
+    '    AlignViews = Sub(TargetDoc)
+    '                     Dim Sheet As SolidEdgeDraft.Sheet
+
+    '                     For Each Sheet In GetSheets(TargetDoc, "UserGenerated")
+    '                         AlignSheetViews(Sheet)
+    '                     Next
+    '                 End Sub
+
+    '    Dim Move2DModelsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument)
+    '    Move2DModelsToTarget = Sub(SourceDoc, TargetDoc)
+    '                               Dim SheetWindow As SolidEdgeDraft.SheetWindow
+    '                               'Dim Sections As SolidEdgeDraft.Sections
+
+    '                               Dim Source2DSheet As SolidEdgeDraft.Sheet = GetSheets(SourceDoc, "2DModel")(0)
+    '                               Dim Target2DSheet As SolidEdgeDraft.Sheet = GetSheets(TargetDoc, "2DModel")(0)
+
+    '                               Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
+    '                               Dim SelectSet As SolidEdgeFramework.SelectSet
+
+    '                               DrawingObjects = Source2DSheet.DrawingObjects
+
+    '                               If DrawingObjects.Count > 0 Then
+    '                                   Try
+    '                                       SourceDoc.Activate()
+    '                                       Source2DSheet.Activate()
+    '                                       SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                                       SelectSet = SheetWindow.SelectSet
+
+    '                                       For Each DrawingObject In DrawingObjects
+    '                                           SelectSet.Add(DrawingObject)
+    '                                       Next
+
+    '                                       SEApp.DoIdle()
+    '                                       SheetWindow.Cut()
+    '                                       SEApp.DoIdle()
+    '                                       SheetWindow.Display2DModelSheetTab = False
+    '                                       SheetWindow.DisplayBackgroundSheetTabs = False
+
+    '                                       TargetDoc.Activate()
+    '                                       Target2DSheet.Activate()
+    '                                       SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+    '                                       SheetWindow.Paste()
+    '                                       SEApp.DoIdle()
+    '                                       SheetWindow.Display2DModelSheetTab = False
+    '                                       SheetWindow.DisplayBackgroundSheetTabs = False
+
+    '                                   Catch ex As Exception
+    '                                       ExitStatus = 2
+    '                                       Exit Sub
+    '                                   End Try
+    '                               End If
+
+    '                           End Sub
+
+    '    Dim MoveRemainingItemsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument)
+    '    MoveRemainingItemsToTarget = Sub(SourceDoc, TargetDoc)
+    '                                     Dim SheetWindow As SolidEdgeDraft.SheetWindow
+    '                                     Dim SourceSheet As SolidEdgeDraft.Sheet
+    '                                     Dim TargetSheet As SolidEdgeDraft.Sheet
+    '                                     Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
+    '                                     Dim SelectSet As SolidEdgeFramework.SelectSet
+
+    '                                     Dim msg2 As String = ""
+
+    '                                     For Each SourceSheet In GetSheets(SourceDoc, "UserGenerated")
+    '                                         If SourceSheet.DrawingObjects.Count > 0 Then
+    '                                             SourceDoc.Activate()
+    '                                             SourceSheet.Activate()
+    '                                             SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                                             SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitAll)
+    '                                             SelectSet = SheetWindow.SelectSet
+
+    '                                             DrawingObjects = SourceSheet.DrawingObjects
+    '                                             For Each DrawingObject In DrawingObjects
+    '                                                 SelectSet.Add(DrawingObject)
+    '                                             Next
+    '                                             ' Catch copy/paste problem
+    '                                             Try
+    '                                                 SEApp.DoIdle()
+    '                                                 SheetWindow.Cut()
+    '                                                 SEApp.DoIdle()
+
+    '                                                 TargetDoc.Activate()
+    '                                                 TargetSheet = SheetNameToObject(TargetDoc, "UserGenerated", SourceSheet.Name)
+    '                                                 TargetSheet.Activate()
+    '                                                 SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+    '                                                 SheetWindow.Paste()
+    '                                                 SEApp.DoIdle()
+
+    '                                             Catch ex As Exception
+    '                                                 ExitStatus = 2
+    '                                                 Exit Sub
+    '                                             End Try
+    '                                         End If
+    '                                     Next
+
+    '                                 End Sub
+
+    '    Dim CheckAutoGeneratedSheets As Action(Of SolidEdgeDraft.DraftDocument)
+    '    CheckAutoGeneratedSheets = Sub(SourceDoc)
+    '                                   Dim AutoGeneratedSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "AutoGenerated")
+    '                                   Dim msg2 As String = ""
+
+    '                                   If AutoGeneratedSheets.Count > 0 Then
+    '                                       ExitStatus = 1
+    '                                       ErrorMessageList.Add("Auto generated sheets not processed.  Please regenerate.")
+    '                                       For Each Sheet In AutoGeneratedSheets
+    '                                           msg2 += String.Format("{0}, ", Sheet.Name)
+    '                                       Next
+    '                                       ErrorMessageList.Add(msg2)
+    '                                   End If
+    '                               End Sub
+
+    '    Dim CheckDVsOnBackground As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
+    '    CheckDVsOnBackground = Sub(SourceDoc, TargetDoc, DummyName)
+    '                               Dim BackgroundSheet As SolidEdgeDraft.Sheet
+    '                               Dim SheetWindow As SolidEdgeDraft.SheetWindow
+    '                               Dim DrawingView As SolidEdgeDraft.DrawingView
+    '                               Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
+
+    '                               Dim msg2 As String = ""
+
+    '                               For Each BackgroundSheet In GetSheets(SourceDoc, "Background")
+    '                                   If BackgroundSheet.DrawingViews.Count > 0 Then
+    '                                       ExitStatus = 1
+    '                                       msg2 = String.Format("Drawing view found on background '{0}'.  Moved to sheet '{1}'.", BackgroundSheet.Name, DummyName)
+    '                                       ErrorMessageList.Add(msg2)
+    '                                       msg2 = "Verify all items were transferred from "
+    '                                       msg2 += String.Format("{0}", System.IO.Path.GetFileName(GetRemnantsDocFilename(SEDoc)))
+    '                                       ErrorMessageList.Add(String.Format("    {0}", msg2))
+
+    '                                       SourceDoc.Activate()
+    '                                       BackgroundSheet.Activate()
+    '                                       SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+
+    '                                       For Each DrawingView In BackgroundSheet.DrawingViews
+    '                                           DrawingView.Select()
+    '                                           DrawingView.AddConnectedAnnotationsToSelectSet()
+    '                                           DrawingView.AddConnectedDimensionsToSelectSet()
+    '                                       Next
+
+    '                                       ' Catch copy/paste problems
+    '                                       Try
+    '                                           SheetWindow.Cut()
+
+    '                                           TargetDoc.Activate()
+    '                                           TargetSheet.Activate()
+    '                                           SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                                           SheetWindow.Paste()
+
+    '                                       Catch ex As Exception
+    '                                           ExitStatus = 2
+    '                                           Exit Sub
+    '                                       End Try
+
+    '                                   End If
+    '                               Next
+    '                           End Sub
+
+    '    Dim CheckForOrphanedItems As Action(Of SolidEdgeDraft.DraftDocument, String)
+    '    CheckForOrphanedItems = Sub(TargetDoc, DummyName)
+    '                                Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
+    '                                Dim ContainsSubstring As Boolean = False
+    '                                Dim s As String
+
+    '                                TargetDoc.Activate()
+
+    '                                If TargetSheet.DrawingObjects.Count > 0 Then
+    '                                    ExitStatus = 1
+    '                                    For Each s In ErrorMessageList
+    '                                        If s.Contains("Drawing view found on sheet") Then
+    '                                            ContainsSubstring = True
+    '                                        End If
+    '                                    Next
+    '                                    If Not ContainsSubstring Then
+    '                                        ErrorMessageList.Add(String.Format("Orphaned items on sheet '{0}'", DummyName))
+    '                                        ErrorMessageList.Add(String.Format(
+    '                                                         "    Please transfer to the correct sheet, then delete '{0}'", DummyName))
+    '                                    End If
+    '                                Else
+    '                                    TargetDoc.Sheets.Item(1).Activate()
+    '                                    TargetSheet.Delete()
+    '                                End If
+
+    '                            End Sub
+
+    '    Dim TidyUp As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
+    '    TidyUp = Sub(SourceDoc, TargetDoc, DummyName)
+    '                 Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
+    '                 Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
+    '                 Dim SheetWindow As SolidEdgeDraft.SheetWindow
+
+    '                 SourceDoc.Activate()
+    '                 SourceSheets(0).Activate()
+    '                 SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                 SheetWindow.Display2DModelSheetTab = False
+    '                 'SheetWindow.DisplayBackgroundSheetTabs = False
+
+    '                 For Each SourceSheet In SourceSheets
+    '                     If SourceSheet.Name = DummyName Then
+    '                         SourceSheet.Delete()
+    '                         Exit For
+    '                     End If
+    '                 Next
+
+    '                 TargetDoc.Activate()
+    '                 For Each TargetSheet In TargetSheets
+    '                     TargetSheet.Activate()
+    '                     SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '                     SheetWindow.Display2DModelSheetTab = False
+    '                     SheetWindow.DisplayBackgroundSheetTabs = False
+    '                     SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitSheet)
+    '                 Next
+    '                 TargetSheets(0).Activate()
+
+    '             End Sub
+
+    '    Dim NewDoc As SolidEdgeDraft.DraftDocument
+
+    '    Dim NewDocFilename As String
+    '    Dim SEDocDVSheetNames As New List(Of String)  ' List of sheet names in order of drawing views
+
+    '    Dim msg As String = ""
+    '    Dim tf As Boolean
+
+    '    'Dim SEDocUserSheetGroupSheetNames As New List(Of String)
+    '    'Dim SEDocAutoSheetGroupSheetNames As New List(Of String)
+
+    '    Dim DummySheetName As String = "Housekeeper"
+
+    '    ' Open target document
+    '    NewDocFilename = GetNewDocFilename(SEDoc)
+    '    NewDoc = CType(SEApp.Documents.Add("SolidEdge.DraftDocument",
+    '                                       Configuration("TextBoxTemplateDraft")),
+    '                                       SolidEdgeDraft.DraftDocument)
+
+    '    ' Make sure the file is not an auto-generated file from previous runs of this task
+    '    ' Note an AutoGenerateFile is not the same thing as as AutoGeneratedSheet.
+    '    ' The former is created by Housekeeper and may be left over if not everything transfered.
+    '    ' The latter is a set of sheets SE creates, for example for a BOM that is configured to be placed
+    '    ' on its own sheet(s)
+
+    '    If Not CheckAutoGeneratedFile(SEDoc) Then
+    '        ' Create dummy sheet source document
+    '        AddSheet(SEDoc, DummySheetName)
+
+    '        ' Create new sheets in target.  Delete any sheets in target not in source.  Set background each sheet.
+    '        AddSheetsToTarget(SEDoc, NewDoc, DummySheetName)
+
+    '        ' Move source drawing views to dummy sheet.  Return original drawing view sheet names
+    '        SEDocDVSheetNames = MoveDVsToDummySheet(SEDoc, DummySheetName)
+
+    '        ' Move source drawing views to target dummy sheet
+    '        ' If this fails, it sets ExitStatus = 2.  Time to bail.
+    '        MoveDVsToTarget(SEDoc, NewDoc, SEDocDVSheetNames, DummySheetName)
+
+    '        If Not ExitStatus = 2 Then
+    '            ' Move target drawing views to correct sheets using original drawing view sheet names
+    '            MoveDVsToCorrectSheet(NewDoc, SEDocDVSheetNames, DummySheetName)
+
+    '            ' Create view alignments that get lost when transferring drawing views to other sheets.
+    '            AlignViews(NewDoc)
+
+    '            ' Move source 2D models to target
+    '            Move2DModelsToTarget(SEDoc, NewDoc)
+
+    '            If Not ExitStatus = 2 Then
+    '                ' Move remaining drawing objects from source to target
+    '                MoveRemainingItemsToTarget(SEDoc, NewDoc)
+
+    '                If Not ExitStatus = 2 Then
+    '                    ' Check if there are auto-generated sheets in source
+    '                    CheckAutoGeneratedSheets(SEDoc)
+
+    '                    ' Check if there are any drawing views on background sheets.  Move to target dummy sheet
+    '                    CheckDVsOnBackground(SEDoc, NewDoc, DummySheetName)
+
+    '                    If Not ExitStatus = 2 Then
+    '                        ' Check for orphaned drawing objects on target dummy sheet
+    '                        CheckForOrphanedItems(NewDoc, DummySheetName)
+
+    '                        ' Tidy up
+    '                        TidyUp(SEDoc, NewDoc, DummySheetName)
+
+    '                        tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
+    '                        tf = tf And ExitStatus = 1
+    '                        tf = tf Or ExitStatus = 0
+    '                        If tf Then
+    '                            NewDoc.SaveAs(NewDocFilename)
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+    '        End If
+    '    End If
+
+    '    NewDoc.Close()
+    '    SEApp.DoIdle()
+
+    '    tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
+    '    tf = tf And ExitStatus = 1
+
+    '    If tf Then
+    '        If SEDoc.ReadOnly Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '        Else
+    '            SEDoc.Save()
+    '            SEApp.DoIdle()
+    '            Dim RemnantsDocFilename As String
+    '            RemnantsDocFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
+    '                                                             System.IO.Path.GetDirectoryName(SEDoc.FullName),
+    '                                                             System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+
+    '            msg = String.Format("After correcting issues, please delete {0}", RemnantsDocFilename)
+    '            ErrorMessageList.Add(msg)
+    '        End If
+    '    ElseIf (Not tf) Or (ExitStatus = 2) Then
+    '        If Not tf Then
+    '            ErrorMessageList.Add("Partial success, but no changes made.  If desired, change this behavior on the Configuration tab.")
+    '        Else
+    '            ' Botched cut/paste.  Don't save anything.
+    '            ErrorMessageList.Add("Problem with cut/paste.  No changes made.  Please try again or transfer manually.")
+    '        End If
+
+    '    End If
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
+
+
+    ' MoveDrawingToNewTemplate
     Public Function MoveDrawingToNewTemplate(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -744,819 +1734,6 @@ Public Class DraftTasks
     End Function
 
     Private Function MoveDrawingToNewTemplateInternal(
-        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim CheckAutoGeneratedFile As Func(Of SolidEdgeDraft.DraftDocument, Boolean)
-        CheckAutoGeneratedFile = Function(SourceDoc)
-                                     Dim Filename As String = System.IO.Path.GetFileName(SourceDoc.FullName)
-
-                                     If Filename.Contains("-HousekeeperOld") Then
-                                         ExitStatus = 1
-                                         ErrorMessageList.Add(String.Format("Auto-generated file not processed {0}", Filename))
-                                         Return True
-                                     Else
-                                         Return False
-                                     End If
-                                 End Function
-
-        Dim GetNewDocFilename As Func(Of SolidEdgeDraft.DraftDocument, String)
-        GetNewDocFilename = Function(SourceDoc)
-                                Dim NewFilename As String
-                                NewFilename = String.Format("{0}\{1}-Housekeeper.dft",
-                                                            System.IO.Path.GetDirectoryName(SEDoc.FullName),
-                                                            System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
-                                Return NewFilename
-                            End Function
-
-        Dim GetRemnantsDocFilename As Func(Of SolidEdgeDraft.DraftDocument, String)
-        GetRemnantsDocFilename = Function(SourceDoc)
-                                     Dim NewFilename As String
-                                     NewFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
-                                                                 System.IO.Path.GetDirectoryName(SEDoc.FullName),
-                                                                 System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
-                                     Return NewFilename
-                                 End Function
-
-        Dim GetSheets As Func(Of SolidEdgeDraft.DraftDocument, String, List(Of SolidEdgeDraft.Sheet))
-        GetSheets = Function(Doc, SectionType)
-                        Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
-                        Dim Sheet As SolidEdgeDraft.Sheet
-                        Dim Section As SolidEdgeDraft.Section = Nothing
-                        Dim SectionSheets As SolidEdgeDraft.SectionSheets
-                        Dim SheetGroups As SolidEdgeDraft.SheetGroups
-                        Dim SheetGroup As SolidEdgeDraft.SheetGroup
-
-                        Dim count As Integer
-
-                        If SectionType = "Working" Then
-                            Section = Doc.Sections.WorkingSection
-                        ElseIf SectionType = "Background" Then
-                            Section = Doc.Sections.BackgroundSection
-                        ElseIf SectionType = "2DModel" Then
-                            Section = Doc.Sections.WorkingSection  ' Ignored below
-                        ElseIf SectionType = "UserGenerated" Then
-                            Section = Doc.Sections.WorkingSection
-                            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
-                        ElseIf SectionType = "AutoGenerated" Then
-                            Section = Doc.Sections.WorkingSection
-                            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
-                        Else
-                            MsgBox(String.Format("SectionType '{0}' not recognized.  Quitting...", SectionType))
-                        End If
-
-                        SectionSheets = Section.Sheets
-
-                        If (SectionType = "Working") Or (SectionType = "Background") Then
-                            For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
-                                SheetList.Add(Sheet)
-                            Next
-                        ElseIf (SectionType = "2DModel") Then
-                            SheetList.Add(Doc.Sections.Get2DModelSheet)
-                        Else
-                            SheetGroups = CType(Doc.SheetGroups, SolidEdgeDraft.SheetGroups)
-                            count = 0
-                            For Each SheetGroup In SheetGroups
-                                For Each Sheet In SheetGroup.Sheets.OfType(Of SolidEdgeDraft.Sheet)()
-                                    If (SectionType = "UserGenerated") And (count = 0) Then
-                                        SheetList.Add(Sheet)
-                                    End If
-                                    If (SectionType = "AutoGenerated") And (count > 0) Then
-                                        SheetList.Add(Sheet)
-                                    End If
-                                Next
-                                count += 1
-                            Next
-                        End If
-
-                        Return SheetList
-                    End Function
-
-        Dim SheetNameToObject As Func(Of SolidEdgeDraft.DraftDocument, String, String, SolidEdgeDraft.Sheet)
-        SheetNameToObject = Function(Doc, SectionType, SheetName)
-                                Dim Sheet As SolidEdgeDraft.Sheet
-
-                                For Each Sheet In GetSheets(Doc, SectionType)
-                                    If Sheet.Name = SheetName Then
-                                        Return Sheet
-                                    End If
-                                Next
-                                Return Nothing
-                            End Function
-
-        Dim AddSheet As Action(Of SolidEdgeDraft.DraftDocument, String)
-        AddSheet = Sub(Doc, SheetName)
-                       Dim Sheet As SolidEdgeDraft.Sheet
-                       Dim SheetAlreadyExists As Boolean = False
-
-                       For Each Sheet In GetSheets(Doc, "Working")
-                           If SheetName = Sheet.Name Then
-                               SheetAlreadyExists = True
-                           End If
-                       Next
-
-                       If Not SheetAlreadyExists Then
-                           Doc.Sheets.AddSheet(SheetName, SolidEdgeDraft.SheetSectionTypeConstants.igWorkingSection)
-                       End If
-                   End Sub
-
-        Dim SetTargetBackgrounds As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
-        SetTargetBackgrounds = Sub(SourceDoc, TargetDoc, DummyName)
-                                   Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "Working")
-                                   Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "Working")
-
-                                   Dim SourceSheet As SolidEdgeDraft.Sheet
-                                   Dim TargetSheet As SolidEdgeDraft.Sheet
-
-                                   Dim SourceSheetNames As New List(Of String)
-                                   Dim TargetSheetNames As New List(Of String)
-
-                                   Dim SourceBackgroundSheet As SolidEdgeDraft.Sheet
-                                   Dim TargetBackgroundSheet As SolidEdgeDraft.Sheet
-
-                                   Dim msg2 As String = ""
-
-                                   For Each TargetSheet In TargetSheets
-                                       If Not TargetSheet.Name = DummyName Then
-                                           SourceSheet = SheetNameToObject(SourceDoc, "Working", TargetSheet.Name)
-                                           ' SourceSheetNames.Add(SourceSheet.Name)
-                                           ' Not all sheets have a background defined
-                                           Try
-                                               SourceBackgroundSheet = SourceSheet.Background
-                                               TargetBackgroundSheet = SheetNameToObject(TargetDoc, "Background", SourceBackgroundSheet.Name)
-                                               If Not TargetBackgroundSheet Is Nothing Then
-                                                   TargetSheet.Background = TargetBackgroundSheet
-                                                   TargetSheet.BackgroundVisible = SourceSheet.BackgroundVisible
-                                                   TargetSheet.SheetSetup.SheetSizeOption = SourceSheet.SheetSetup.SheetSizeOption
-                                               Else
-                                                   ExitStatus = 1
-                                                   msg2 = String.Format("Template does not have a background named '{0}'", SourceBackgroundSheet.Name)
-                                                   If Not ErrorMessageList.Contains(msg2) Then
-                                                       ErrorMessageList.Add(msg2)
-                                                   End If
-                                               End If
-                                           Catch ex As Exception
-                                           End Try
-                                       End If
-                                   Next
-                               End Sub
-
-        Dim AddSheetsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
-        AddSheetsToTarget = Sub(SourceDoc, TargetDoc, DummyName)
-                                ' Add sheets to target to match source.
-                                ' Remove sheets from target that don't match.
-                                ' Set backgrounds to match.  Report to log if target does not have the background sheet.
-
-                                Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
-                                Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
-
-                                Dim SourceSheet As SolidEdgeDraft.Sheet
-                                Dim TargetSheet As SolidEdgeDraft.Sheet
-
-                                Dim SourceSheetNames As New List(Of String)
-                                Dim TargetSheetNames As New List(Of String)
-
-                                For Each SourceSheet In SourceSheets
-                                    SourceSheetNames.Add(SourceSheet.Name)
-                                Next
-
-                                For Each TargetSheet In TargetSheets
-                                    TargetSheetNames.Add(TargetSheet.Name)
-                                Next
-
-                                For Each SourceSheet In SourceSheets
-                                    If Not TargetSheetNames.Contains(SourceSheet.Name) Then
-                                        AddSheet(TargetDoc, SourceSheet.Name)
-                                    End If
-                                Next
-
-                                For Each TargetSheetName In TargetSheetNames
-                                    If Not SourceSheetNames.Contains(TargetSheetName) Then
-                                        SheetNameToObject(TargetDoc, "Working", TargetSheetName).Delete()
-                                    End If
-                                Next
-
-                                SetTargetBackgrounds(SourceDoc, TargetDoc, DummyName)
-
-                            End Sub
-
-        Dim MoveDVsToDummySheet As Func(Of SolidEdgeDraft.DraftDocument, String, List(Of String))
-        MoveDVsToDummySheet = Function(SourceDoc, SourceDocDummySheetName)
-                                  Dim DVSheetNames As New List(Of String)
-                                  Dim Sheet As SolidEdgeDraft.Sheet
-                                  Dim DrawingView As SolidEdgeDraft.DrawingView
-                                  Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(SourceDoc, "UserGenerated", SourceDocDummySheetName)
-                                  Dim msg2 As String
-
-                                  For Each Sheet In GetSheets(SourceDoc, "UserGenerated")
-                                      If Not Sheet.Name = SourceDocDummySheetName Then
-                                          For Each DrawingView In Sheet.DrawingViews
-                                              DVSheetNames.Add(Sheet.Name)
-                                              'Dim Name As String = DrawingView.Name
-                                              ' Issue with broken out section view
-                                              Try
-                                                  DrawingView.Sheet = TargetSheet
-                                              Catch ex As Exception
-                                                  ExitStatus = 1
-                                                  msg2 = "Some drawing views may not have transferred"
-                                                  If Not ErrorMessageList.Contains(msg2) Then
-                                                      ErrorMessageList.Add(msg2)
-                                                  End If
-                                              End Try
-                                          Next
-                                      End If
-                                  Next
-
-                                  Return DVSheetNames
-                              End Function
-
-
-        Dim MoveDVsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, List(Of String), String)
-        MoveDVsToTarget = Sub(SourceDoc, TargetDoc, DrawingViewSheetnames, DummyName)
-
-
-                              Dim SourceSheet As SolidEdgeDraft.Sheet = SheetNameToObject(SourceDoc, "UserGenerated", DummyName)
-                              Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
-                              Dim SheetWindow As SolidEdgeDraft.SheetWindow
-                              Dim DrawingView As SolidEdgeDraft.DrawingView
-
-                              If DrawingViewSheetnames.Count > 0 Then
-                                  ' Sometimes get cut/paste error on drawing views.  Need a do-over.  Don't save anything.
-                                  Try
-                                      SourceDoc.Activate()
-                                      SourceSheet.Activate()
-                                      SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-
-                                      For Each DrawingView In SourceSheet.DrawingViews
-                                          DrawingView.Select()
-                                          DrawingView.AddConnectedAnnotationsToSelectSet()
-                                          DrawingView.AddConnectedDimensionsToSelectSet()
-                                      Next
-
-                                      SEApp.DoIdle()
-                                      SheetWindow.Cut()
-                                      SEApp.DoIdle()
-
-                                      TargetDoc.Activate()
-                                      TargetSheet.Activate()
-                                      SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                                      SheetWindow.Paste()
-                                      SEApp.DoIdle()
-                                  Catch ex As Exception
-                                      ExitStatus = 2
-                                      Exit Sub
-                                  End Try
-
-                              End If
-
-                          End Sub
-
-        Dim MoveDVsToCorrectSheet As Action(Of SolidEdgeDraft.DraftDocument, List(Of String), String)
-        MoveDVsToCorrectSheet = Sub(TargetDoc, DrawingViewSheetNames, DummyName)
-
-                                    Dim DrawingView As SolidEdgeDraft.DrawingView
-
-                                    Dim DummySheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
-                                    Dim count As Integer = 0
-                                    Dim msg2 As String
-                                    Dim tf2 As Boolean
-
-                                    If DrawingViewSheetNames.Count > 0 Then
-                                        TargetDoc.Activate()
-
-                                        For Each DrawingView In DummySheet.DrawingViews
-                                            Dim Name As String = DrawingView.Name
-
-                                            tf2 = DrawingView.IsBrokenOutSectionTarget
-                                            ' Issue with broken out section view
-                                            Try
-                                                DrawingView.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DrawingViewSheetNames(count))
-                                            Catch ex As Exception
-                                                ExitStatus = 1
-                                                msg2 = "Some drawing views may not have transferred"
-                                                If Not ErrorMessageList.Contains(msg2) Then
-                                                    ErrorMessageList.Add(msg2)
-                                                End If
-                                            End Try
-                                            count += 1
-                                        Next
-                                    End If
-
-                                End Sub
-
-        Dim UpdateRange As Func(Of Double, Double, Double, Double, List(Of Double), List(Of Double))
-        UpdateRange = Function(XMin, YMin, XMax, YMax, Ranges)
-                          Dim NewRanges As New List(Of Double)
-
-                          If XMin < Ranges(0) Then
-                              NewRanges.Add(XMin)
-                          Else
-                              NewRanges.Add(Ranges(0))
-                          End If
-
-                          If YMin < Ranges(1) Then
-                              NewRanges.Add(YMin)
-                          Else
-                              NewRanges.Add(Ranges(1))
-                          End If
-
-                          If XMax > Ranges(2) Then
-                              NewRanges.Add(XMax)
-                          Else
-                              NewRanges.Add(Ranges(2))
-                          End If
-
-                          If YMax > Ranges(3) Then
-                              NewRanges.Add(YMax)
-                          Else
-                              NewRanges.Add(Ranges(3))
-                          End If
-
-                          Return NewRanges
-                      End Function
-
-        Dim GetCenter As Func(Of SolidEdgeDraft.DrawingView, List(Of Double))
-        GetCenter = Function(DrawingView)
-                        Dim Center As New List(Of Double)
-                        Dim CenterX As Double
-                        Dim CenterY As Double
-
-                        DrawingView.GetOrigin(CenterX, CenterY)
-                        Center.Add(CenterX)
-                        Center.Add(CenterY)
-                        Return Center
-                    End Function
-
-        Dim CloseEnough As Func(Of Double, Double, Double, Boolean)
-        CloseEnough = Function(D1, D2, MaxDiff)
-                          If Math.Abs(D1 - D2) < MaxDiff Then
-                              Return True
-                          Else
-                              Return False
-                          End If
-
-                      End Function
-
-        Dim GetAlignedDVs As Func(Of SolidEdgeDraft.Sheet, Dictionary(Of SolidEdgeDraft.DrawingView, List(Of Double)), List(Of SolidEdgeDraft.DrawingView))
-        GetAlignedDVs = Function(Sheet, DVCenters)
-                            Dim AlignedDVs As New List(Of SolidEdgeDraft.DrawingView)
-                            Dim DrawingView As SolidEdgeDraft.DrawingView
-                            Dim DVList As New List(Of SolidEdgeDraft.DrawingView)
-                            Dim DVX As New Dictionary(Of Integer, Double)
-                            Dim DVY As New Dictionary(Of Integer, Double)
-                            Dim SortedDictionary As New Dictionary(Of Integer, Double)
-                            Dim XOrder As New List(Of Integer)
-                            Dim YOrder As New List(Of Integer)
-
-                            Dim count As Integer
-                            Dim i As Integer
-                            Dim x1 As Double
-                            Dim x2 As Double
-                            Dim y1 As Double
-                            Dim y2 As Double
-
-                            count = 0
-                            For Each DrawingView In Sheet.DrawingViews
-                                DVList.Add(DrawingView)
-                                DVX(count) = DVCenters(DrawingView)(0)
-                                DVY(count) = DVCenters(DrawingView)(1)
-                                count += 1
-                            Next
-
-                            Dim XSorted = From pair In DVX
-                                          Order By pair.Value
-                            SortedDictionary = XSorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
-                            XOrder = SortedDictionary.Keys.ToList
-
-                            Dim YSorted = From pair In DVY
-                                          Order By pair.Value
-                            SortedDictionary = YSorted.ToDictionary(Function(p) p.Key, Function(p) p.Value)
-                            YOrder = SortedDictionary.Keys.ToList
-
-                            For i = 1 To XOrder.Count - 1
-                                x1 = DVCenters(DVList(XOrder(i - 1)))(0)
-                                x2 = DVCenters(DVList(XOrder(i)))(0)
-                                If CloseEnough(x1, x2, 0.000001) Then
-                                    AlignedDVs.Add(DVList(XOrder(i - 1)))
-                                    AlignedDVs.Add(DVList(XOrder(i)))
-                                End If
-                            Next
-
-                            For i = 1 To YOrder.Count - 1
-                                y1 = DVCenters(DVList(YOrder(i - 1)))(1)
-                                y2 = DVCenters(DVList(YOrder(i)))(1)
-                                If CloseEnough(y1, y2, 0.000001) Then
-                                    AlignedDVs.Add(DVList(YOrder(i - 1)))
-                                    AlignedDVs.Add(DVList(YOrder(i)))
-                                End If
-                            Next
-
-                            AlignedDVs = AlignedDVs.Distinct.ToList
-
-                            Return AlignedDVs
-                        End Function
-
-        Dim AlignSheetViews As Action(Of SolidEdgeDraft.Sheet)
-        AlignSheetViews = Sub(Sheet)
-                              Dim DrawingView As SolidEdgeDraft.DrawingView
-                              Dim DVCenters As New Dictionary(Of SolidEdgeDraft.DrawingView, List(Of Double))
-                              Dim DVX As New Dictionary(Of Integer, Double)
-                              Dim DVY As New Dictionary(Of Integer, Double)
-                              Dim AlignedDrawingViews As New List(Of SolidEdgeDraft.DrawingView)
-                              Dim SheetWindow As SolidEdgeDraft.SheetWindow
-                              Dim SelectSet As SolidEdgeFramework.SelectSet
-
-                              If Sheet.DrawingViews.Count > 1 Then
-                                  For Each DrawingView In Sheet.DrawingViews
-                                      DVCenters(DrawingView) = GetCenter(DrawingView)
-                                  Next
-
-                                  AlignedDrawingViews = GetAlignedDVs(Sheet, DVCenters)
-
-                                  If AlignedDrawingViews.Count > 1 Then
-                                      Sheet.Activate()
-                                      SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                                      SelectSet = SheetWindow.SelectSet
-
-                                      For Each DrawingView In AlignedDrawingViews
-                                          SelectSet.Add(DrawingView)
-                                      Next
-
-                                      SEApp.StartCommand(
-                                          CType(SolidEdgeConstants.DetailCommandConstants.DetailRelationshipsAlignViews,
-                                                SolidEdgeFramework.SolidEdgeCommandConstants))
-                                  End If
-
-                              End If
-
-                          End Sub
-
-
-        Dim AlignViews As Action(Of SolidEdgeDraft.DraftDocument)
-        AlignViews = Sub(TargetDoc)
-                         Dim Sheet As SolidEdgeDraft.Sheet
-
-                         For Each Sheet In GetSheets(TargetDoc, "UserGenerated")
-                             AlignSheetViews(Sheet)
-                         Next
-                     End Sub
-
-        Dim Move2DModelsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument)
-        Move2DModelsToTarget = Sub(SourceDoc, TargetDoc)
-                                   Dim SheetWindow As SolidEdgeDraft.SheetWindow
-                                   'Dim Sections As SolidEdgeDraft.Sections
-
-                                   Dim Source2DSheet As SolidEdgeDraft.Sheet = GetSheets(SourceDoc, "2DModel")(0)
-                                   Dim Target2DSheet As SolidEdgeDraft.Sheet = GetSheets(TargetDoc, "2DModel")(0)
-
-                                   Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
-                                   Dim SelectSet As SolidEdgeFramework.SelectSet
-
-                                   DrawingObjects = Source2DSheet.DrawingObjects
-
-                                   If DrawingObjects.Count > 0 Then
-                                       Try
-                                           SourceDoc.Activate()
-                                           Source2DSheet.Activate()
-                                           SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                                           SelectSet = SheetWindow.SelectSet
-
-                                           For Each DrawingObject In DrawingObjects
-                                               SelectSet.Add(DrawingObject)
-                                           Next
-
-                                           SEApp.DoIdle()
-                                           SheetWindow.Cut()
-                                           SEApp.DoIdle()
-                                           SheetWindow.Display2DModelSheetTab = False
-                                           SheetWindow.DisplayBackgroundSheetTabs = False
-
-                                           TargetDoc.Activate()
-                                           Target2DSheet.Activate()
-                                           SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-
-                                           SheetWindow.Paste()
-                                           SEApp.DoIdle()
-                                           SheetWindow.Display2DModelSheetTab = False
-                                           SheetWindow.DisplayBackgroundSheetTabs = False
-
-                                       Catch ex As Exception
-                                           ExitStatus = 2
-                                           Exit Sub
-                                       End Try
-                                   End If
-
-                               End Sub
-
-        Dim MoveRemainingItemsToTarget As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument)
-        MoveRemainingItemsToTarget = Sub(SourceDoc, TargetDoc)
-                                         Dim SheetWindow As SolidEdgeDraft.SheetWindow
-                                         Dim SourceSheet As SolidEdgeDraft.Sheet
-                                         Dim TargetSheet As SolidEdgeDraft.Sheet
-                                         Dim DrawingObjects As SolidEdgeFrameworkSupport.DrawingObjects
-                                         Dim SelectSet As SolidEdgeFramework.SelectSet
-
-                                         Dim msg2 As String = ""
-
-                                         For Each SourceSheet In GetSheets(SourceDoc, "UserGenerated")
-                                             If SourceSheet.DrawingObjects.Count > 0 Then
-                                                 SourceDoc.Activate()
-                                                 SourceSheet.Activate()
-                                                 SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                                                 SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitAll)
-                                                 SelectSet = SheetWindow.SelectSet
-
-                                                 DrawingObjects = SourceSheet.DrawingObjects
-                                                 For Each DrawingObject In DrawingObjects
-                                                     SelectSet.Add(DrawingObject)
-                                                 Next
-                                                 ' Catch copy/paste problem
-                                                 Try
-                                                     SEApp.DoIdle()
-                                                     SheetWindow.Cut()
-                                                     SEApp.DoIdle()
-
-                                                     TargetDoc.Activate()
-                                                     TargetSheet = SheetNameToObject(TargetDoc, "UserGenerated", SourceSheet.Name)
-                                                     TargetSheet.Activate()
-                                                     SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-
-                                                     SheetWindow.Paste()
-                                                     SEApp.DoIdle()
-
-                                                 Catch ex As Exception
-                                                     ExitStatus = 2
-                                                     Exit Sub
-                                                 End Try
-                                             End If
-                                         Next
-
-                                     End Sub
-
-        Dim CheckAutoGeneratedSheets As Action(Of SolidEdgeDraft.DraftDocument)
-        CheckAutoGeneratedSheets = Sub(SourceDoc)
-                                       Dim AutoGeneratedSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "AutoGenerated")
-                                       Dim msg2 As String = ""
-
-                                       If AutoGeneratedSheets.Count > 0 Then
-                                           ExitStatus = 1
-                                           ErrorMessageList.Add("Auto generated sheets not processed.  Please regenerate.")
-                                           For Each Sheet In AutoGeneratedSheets
-                                               msg2 += String.Format("{0}, ", Sheet.Name)
-                                           Next
-                                           ErrorMessageList.Add(msg2)
-                                       End If
-                                   End Sub
-
-        Dim CheckDVsOnBackground As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
-        CheckDVsOnBackground = Sub(SourceDoc, TargetDoc, DummyName)
-                                   Dim BackgroundSheet As SolidEdgeDraft.Sheet
-                                   Dim SheetWindow As SolidEdgeDraft.SheetWindow
-                                   Dim DrawingView As SolidEdgeDraft.DrawingView
-                                   Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
-
-                                   Dim msg2 As String = ""
-
-                                   For Each BackgroundSheet In GetSheets(SourceDoc, "Background")
-                                       If BackgroundSheet.DrawingViews.Count > 0 Then
-                                           ExitStatus = 1
-                                           msg2 = String.Format("Drawing view found on background '{0}'.  Moved to sheet '{1}'.", BackgroundSheet.Name, DummyName)
-                                           ErrorMessageList.Add(msg2)
-                                           msg2 = "Verify all items were transferred from "
-                                           msg2 += String.Format("{0}", System.IO.Path.GetFileName(GetRemnantsDocFilename(SEDoc)))
-                                           ErrorMessageList.Add(String.Format("    {0}", msg2))
-
-                                           SourceDoc.Activate()
-                                           BackgroundSheet.Activate()
-                                           SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-
-                                           For Each DrawingView In BackgroundSheet.DrawingViews
-                                               DrawingView.Select()
-                                               DrawingView.AddConnectedAnnotationsToSelectSet()
-                                               DrawingView.AddConnectedDimensionsToSelectSet()
-                                           Next
-
-                                           ' Catch copy/paste problems
-                                           Try
-                                               SheetWindow.Cut()
-
-                                               TargetDoc.Activate()
-                                               TargetSheet.Activate()
-                                               SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                                               SheetWindow.Paste()
-
-                                           Catch ex As Exception
-                                               ExitStatus = 2
-                                               Exit Sub
-                                           End Try
-
-                                       End If
-                                   Next
-                               End Sub
-
-        Dim CheckForOrphanedItems As Action(Of SolidEdgeDraft.DraftDocument, String)
-        CheckForOrphanedItems = Sub(TargetDoc, DummyName)
-                                    Dim TargetSheet As SolidEdgeDraft.Sheet = SheetNameToObject(TargetDoc, "UserGenerated", DummyName)
-                                    Dim ContainsSubstring As Boolean = False
-                                    Dim s As String
-
-                                    TargetDoc.Activate()
-
-                                    If TargetSheet.DrawingObjects.Count > 0 Then
-                                        ExitStatus = 1
-                                        For Each s In ErrorMessageList
-                                            If s.Contains("Drawing view found on sheet") Then
-                                                ContainsSubstring = True
-                                            End If
-                                        Next
-                                        If Not ContainsSubstring Then
-                                            ErrorMessageList.Add(String.Format("Orphaned items on sheet '{0}'", DummyName))
-                                            ErrorMessageList.Add(String.Format(
-                                                             "    Please transfer to the correct sheet, then delete '{0}'", DummyName))
-                                        End If
-                                    Else
-                                        TargetDoc.Sheets.Item(1).Activate()
-                                        TargetSheet.Delete()
-                                    End If
-
-                                End Sub
-
-        Dim TidyUp As Action(Of SolidEdgeDraft.DraftDocument, SolidEdgeDraft.DraftDocument, String)
-        TidyUp = Sub(SourceDoc, TargetDoc, DummyName)
-                     Dim SourceSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(SourceDoc, "UserGenerated")
-                     Dim TargetSheets As List(Of SolidEdgeDraft.Sheet) = GetSheets(TargetDoc, "UserGenerated")
-                     Dim SheetWindow As SolidEdgeDraft.SheetWindow
-
-                     SourceDoc.Activate()
-                     SourceSheets(0).Activate()
-                     SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                     SheetWindow.Display2DModelSheetTab = False
-                     'SheetWindow.DisplayBackgroundSheetTabs = False
-
-                     For Each SourceSheet In SourceSheets
-                         If SourceSheet.Name = DummyName Then
-                             SourceSheet.Delete()
-                             Exit For
-                         End If
-                     Next
-
-                     TargetDoc.Activate()
-                     For Each TargetSheet In TargetSheets
-                         TargetSheet.Activate()
-                         SheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                         SheetWindow.Display2DModelSheetTab = False
-                         SheetWindow.DisplayBackgroundSheetTabs = False
-                         SheetWindow.FitEx(SolidEdgeDraft.SheetFitConstants.igFitSheet)
-                     Next
-                     TargetSheets(0).Activate()
-
-                 End Sub
-
-        Dim NewDoc As SolidEdgeDraft.DraftDocument
-
-        Dim NewDocFilename As String
-        Dim SEDocDVSheetNames As New List(Of String)  ' List of sheet names in order of drawing views
-
-        Dim msg As String = ""
-        Dim tf As Boolean
-
-        'Dim SEDocUserSheetGroupSheetNames As New List(Of String)
-        'Dim SEDocAutoSheetGroupSheetNames As New List(Of String)
-
-        Dim DummySheetName As String = "Housekeeper"
-
-        ' Open target document
-        NewDocFilename = GetNewDocFilename(SEDoc)
-        NewDoc = CType(SEApp.Documents.Add("SolidEdge.DraftDocument",
-                                           Configuration("TextBoxTemplateDraft")),
-                                           SolidEdgeDraft.DraftDocument)
-
-        ' Make sure the file is not an auto-generated file from previous runs of this task
-        ' Note an AutoGenerateFile is not the same thing as as AutoGeneratedSheet.
-        ' The former is created by Housekeeper and may be left over if not everything transfered.
-        ' The latter is a set of sheets SE creates, for example for a BOM that is configured to be placed
-        ' on its own sheet(s)
-
-        If Not CheckAutoGeneratedFile(SEDoc) Then
-            ' Create dummy sheet source document
-            AddSheet(SEDoc, DummySheetName)
-
-            ' Create new sheets in target.  Delete any sheets in target not in source.  Set background each sheet.
-            AddSheetsToTarget(SEDoc, NewDoc, DummySheetName)
-
-            ' Move source drawing views to dummy sheet.  Return original drawing view sheet names
-            SEDocDVSheetNames = MoveDVsToDummySheet(SEDoc, DummySheetName)
-
-            ' Move source drawing views to target dummy sheet
-            ' If this fails, it sets ExitStatus = 2.  Time to bail.
-            MoveDVsToTarget(SEDoc, NewDoc, SEDocDVSheetNames, DummySheetName)
-
-            If Not ExitStatus = 2 Then
-                ' Move target drawing views to correct sheets using original drawing view sheet names
-                MoveDVsToCorrectSheet(NewDoc, SEDocDVSheetNames, DummySheetName)
-
-                ' Create view alignments that get lost when transferring drawing views to other sheets.
-                AlignViews(NewDoc)
-
-                ' Move source 2D models to target
-                Move2DModelsToTarget(SEDoc, NewDoc)
-
-                If Not ExitStatus = 2 Then
-                    ' Move remaining drawing objects from source to target
-                    MoveRemainingItemsToTarget(SEDoc, NewDoc)
-
-                    If Not ExitStatus = 2 Then
-                        ' Check if there are auto-generated sheets in source
-                        CheckAutoGeneratedSheets(SEDoc)
-
-                        ' Check if there are any drawing views on background sheets.  Move to target dummy sheet
-                        CheckDVsOnBackground(SEDoc, NewDoc, DummySheetName)
-
-                        If Not ExitStatus = 2 Then
-                            ' Check for orphaned drawing objects on target dummy sheet
-                            CheckForOrphanedItems(NewDoc, DummySheetName)
-
-                            ' Tidy up
-                            TidyUp(SEDoc, NewDoc, DummySheetName)
-
-                            tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
-                            tf = tf And ExitStatus = 1
-                            tf = tf Or ExitStatus = 0
-                            If tf Then
-                                NewDoc.SaveAs(NewDocFilename)
-                            End If
-                        End If
-                    End If
-                End If
-            End If
-        End If
-
-        NewDoc.Close()
-        SEApp.DoIdle()
-
-        tf = Configuration("CheckBoxMoveDrawingViewAllowPartialSuccess") = "True"
-        tf = tf And ExitStatus = 1
-
-        If tf Then
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-                Dim RemnantsDocFilename As String
-                RemnantsDocFilename = String.Format("{0}\{1}-HousekeeperOld.dft",
-                                                                 System.IO.Path.GetDirectoryName(SEDoc.FullName),
-                                                                 System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
-
-                msg = String.Format("After correcting issues, please delete {0}", RemnantsDocFilename)
-                ErrorMessageList.Add(msg)
-            End If
-        ElseIf (Not tf) Or (ExitStatus = 2) Then
-            If Not tf Then
-                ErrorMessageList.Add("Partial success, but no changes made.  If desired, change this behavior on the Configuration tab.")
-            Else
-                ' Botched cut/paste.  Don't save anything.
-                ErrorMessageList.Add("Problem with cut/paste.  No changes made.  Please try again or transfer manually.")
-            End If
-
-        End If
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
-
-
-
-    Public Function UpdateStylesFromTemplate(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeDraft.DraftDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf UpdateStylesFromTemplateInternal,
-                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function UpdateStylesFromTemplateInternal(
         ByVal SEDoc As SolidEdgeDraft.DraftDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
