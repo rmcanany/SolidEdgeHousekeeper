@@ -571,6 +571,30 @@ Public Class DraftTasks
     End Function
 
 
+    'Public Function ProcessStyles(
+    '    DocStyles As Object,
+    '    TemplateDoc As SolidEdgeDraft.DraftDocument,
+    '    StyleName As String
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    Dim T As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(DocStyles)
+    '    Dim T2 As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(DocStyles.Item(1))
+
+    '    'If StyleName = "DimensionStyles" Then
+    '    '    T = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(SEDoc.DimensionStyles)
+    '    '    T2 = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(SEDoc.DimensionStyles.item(1))
+    '    'ElseIf StyleName = "DrawingViewStyles" Then
+    '    '    T = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(SEDoc.DrawingViewStyles)
+    '    'Else
+    '    '    T = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(SEDoc.DrawingViewStyles)
+    '    'End If
+
+    '    ''Dim DocStyles As T
+
+    '    Return ErrorMessage
+    'End Function
 
     Public Function UpdateStylesFromTemplate(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -605,6 +629,11 @@ Public Class DraftTasks
             End If
         Next
 
+        If Len(Names) > 0 Then
+            ' Remove trailing comma.
+            Names = Names.Substring(0, Len(Names) - 1)
+        End If
+
         Return Names
     End Function
 
@@ -633,7 +662,9 @@ Public Class DraftTasks
         SupplementalErrorMessage = UpdateDrawingBorderFromTemplate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
         If SupplementalErrorMessage.Keys(0) <> 0 Then
             ExitStatus = SupplementalErrorMessage.Keys(0)
-            ErrorMessageList.Add("Problem updating drawing border")
+            For Each V As String In SupplementalErrorMessage(ExitStatus)
+                ErrorMessageList.Add(V)
+            Next
         End If
 
 
@@ -650,6 +681,10 @@ Public Class DraftTasks
 
         ' Style collections to receive updates.
         ' DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles
+
+        ' Styles not updated at this time.
+        ' DashStyles, FillStyles, HatchPatternStyles, SmartFrame2dStyles
+
 
 
         ' ############  DimensionStyles ############

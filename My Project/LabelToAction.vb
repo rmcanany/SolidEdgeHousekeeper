@@ -668,9 +668,12 @@ Public Class LabelToAction
 
 
         Dim UpdateStylesFromTemplate As New L2A
-        HelpString = "Updates styles from a template you specify on the **Configuration Tab**. "
-        HelpString += "Also replaces the contents of the background sheets from the template. "
-        HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles."
+        HelpString = "Updates styles and background sheets from a template you specify on the **Configuration Tab**. "
+        HelpString += vbCrLf + vbCrLf
+        HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.  "
+        HelpString += "These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles.  "
+        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated.  "
+        HelpString += "If you need one or more of those styles updated, please ask on the Forum.  "
         PopulateList(UpdateStylesFromTemplate,
                      "Update styles from template",
                      "UpdateStylesFromTemplate",
@@ -687,16 +690,6 @@ Public Class LabelToAction
                      "UpdateDrawingBorderFromTemplate",
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True)
-
-        'Dim UpdateDimensionStylesFromTemplate As New L2A
-        'HelpString = "Replaces Styles with that of the Draft template specified on "
-        'HelpString += "the **Configuration Tab**."
-        'HelpString += vbCrLf + vbCrLf + "In contrast to `UpdateStylesFromTemplate`, this command does not create a new file. "
-        'PopulateList(UpdateDimensionStylesFromTemplate,
-        '             "Update dimension styles from template",
-        '             "UpdateDimensionStylesFromTemplate",
-        '             HelpString,
-        '             RequiresTemplate:=True, RequiresSave:=True)
 
         Dim FitView As New L2A
         HelpString = "Same as the Assembly command of the same name."
