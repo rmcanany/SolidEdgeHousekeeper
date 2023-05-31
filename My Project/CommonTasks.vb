@@ -178,7 +178,7 @@ Public Class CommonTasks
                                     Dim tmpValue = sourceProp.GetValue(Source, Nothing)
                                     If tmpValue <> Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
                                 Catch ex As Exception
-                                    Console.WriteLine(destType.FullName & " - " & destProp.Name)
+                                    'Console.WriteLine(destType.FullName & " - " & destProp.Name)
                                 End Try
                             End If
                         End If
@@ -482,17 +482,25 @@ Public Class CommonTasks
                 ReplaceSearchType = "RX"
             End If
 
-        Else
-            PropertySetName = ""
-            PropertyName = ""
-            FindString = ""
-            ReplaceString = ""
-            FindSearchType = ""
-            ReplaceSearchType = ""
+        Else  ' Must be a Draft file.  Hopefully.
+            PropertySetName = Configuration("ComboBoxFindReplacePropertySetDraft")
+            PropertyName = Configuration("TextBoxFindReplacePropertyNameDraft")
+            FindString = Configuration("TextBoxFindReplaceFindDraft")
+            ReplaceString = Configuration("TextBoxFindReplaceReplaceDraft")
 
-            Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add("Not implemented for Draft files.")
+            If Configuration("CheckBoxFindReplaceFindPTDraft") = "True" Then
+                FindSearchType = "PT"
+            ElseIf Configuration("CheckBoxFindReplaceFindWCDraft") = "True" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If Configuration("CheckBoxFindReplaceReplacePTDraft") = "True" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
 
         End If
 

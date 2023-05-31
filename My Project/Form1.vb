@@ -1320,6 +1320,17 @@ Public Class Form1
         TextBoxExternalProgramDraft.Enabled = False
         ButtonExternalProgramDraft.Enabled = False
 
+        ComboBoxFindReplacePropertySetDraft.Enabled = False
+        TextBoxFindReplacePropertyNameDraft.Enabled = False
+        TextBoxFindReplaceFindDraft.Enabled = False
+        TextBoxFindReplaceReplaceDraft.Enabled = False
+        CheckBoxFindReplaceFindPTDraft.Enabled = False
+        CheckBoxFindReplaceFindWCDraft.Enabled = False
+        CheckBoxFindReplaceFindRXDraft.Enabled = False
+        CheckBoxFindReplaceReplacePTDraft.Enabled = False
+        CheckBoxFindReplaceReplaceRXDraft.Enabled = False
+
+
 
         For Each Label As String In CheckedListBoxDraft.CheckedItems
 
@@ -1358,6 +1369,18 @@ Public Class Form1
                     TextBoxWatermarkY.Enabled = False
                 End If
 
+            End If
+
+            If LabelToActionDraft(Label).RequiresFindReplaceFields Then
+                ComboBoxFindReplacePropertySetDraft.Enabled = True
+                TextBoxFindReplacePropertyNameDraft.Enabled = True
+                TextBoxFindReplaceFindDraft.Enabled = True
+                TextBoxFindReplaceReplaceDraft.Enabled = True
+                CheckBoxFindReplaceFindPTDraft.Enabled = True
+                CheckBoxFindReplaceFindWCDraft.Enabled = True
+                CheckBoxFindReplaceFindRXDraft.Enabled = True
+                CheckBoxFindReplaceReplacePTDraft.Enabled = True
+                CheckBoxFindReplaceReplaceRXDraft.Enabled = True
             End If
 
             If LabelToActionDraft(Label).RequiresExternalProgram Then

@@ -279,6 +279,14 @@ Partial Class Form1
         Next
         ComboBoxFindReplacePropertySetSheetmetal.Text = CType(ComboBoxFindReplacePropertySetSheetmetal.Items(0), String)
 
+        'ComboBoxFindReplacePropertySetDraft
+        ComboBoxFindReplacePropertySetDraft.Items.Clear()
+        For Each s As String In Split("System Custom")
+            ComboBoxFindReplacePropertySetDraft.Items.Add(s)
+        Next
+        ComboBoxFindReplacePropertySetDraft.Text = CType(ComboBoxFindReplacePropertySetDraft.Items(0), String)
+
+
     End Sub
 
     Private Sub CreateFilenameCharmap()

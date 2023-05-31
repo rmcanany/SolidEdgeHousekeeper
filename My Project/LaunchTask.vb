@@ -253,6 +253,8 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
+                Case "PropertyFindReplace"
+                    ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case "BrokenLinks"
                     ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
@@ -263,6 +265,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.PartsListMissingOrOutOfDate(SEDoc, Configuration, SEApp)
                 Case "FileNameDoesNotMatchModelFilename"
                     ErrorMessage = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
+                Case "DrawingViewOnBackgroundSheet"
+                    ErrorMessage = task.Proxy.DrawingViewOnBackgroundSheet(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingViews"
                     ErrorMessage = task.Proxy.UpdateDrawingViews(SEDoc, Configuration, SEApp)
                 'Case "MoveDrawingToNewTemplate"

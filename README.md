@@ -765,16 +765,24 @@ The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing 
 #### Open/Save
 Same as the Assembly command of the same name.
 
+#### Property find replace
+Same as the Assembly command of the same name.
+
 #### Update drawing views
 Checks drawing views one by one, and updates them if needed.
 
 #### Update styles from template
-Updates styles from a template you specify on the **Configuration Tab**. Also replaces the contents of the background sheets from the template. These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.
+Updates styles and background sheets from a template you specify on the **Configuration Tab**. 
+
+These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.  These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles.  The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated.  If you need one or more of those styles updated, please ask on the Forum.  
 
 #### Update drawing border from template
 Replaces the background border with that of the Draft template specified on the **Configuration Tab**.
 
 In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
+
+#### Drawing view on background sheet
+Checks background sheets for the presence of drawing views.
 
 #### Fit view
 Same as the Assembly command of the same name.

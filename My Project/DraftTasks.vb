@@ -3338,6 +3338,87 @@ Public Class DraftTasks
     'End Function
 
 
+
+
+    'End Class
+    Public Function DrawingViewOnBackgroundSheet(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeDraft.DraftDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf DrawingViewOnBackgroundSheetInternal,
+                                   CType(SEDoc, SolidEdgeDraft.DraftDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function DrawingViewOnBackgroundSheetInternal(
+        ByVal SEDoc As SolidEdgeDraft.DraftDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim BackgroundSheet As SolidEdgeDraft.Sheet
+        For Each BackgroundSheet In GetSheets(SEDoc, "Background")
+            If BackgroundSheet.DrawingViews.Count > 0 Then
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name))
+
+            End If
+        Next
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Public Function PropertyFindReplace(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgePart.SheetMetalDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf PropertyFindReplaceInternal,
+        '                           CType(SEDoc, SolidEdgePart.SheetMetalDocument),
+        '                           Configuration,
+        '                           SEApp)
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeFramework.SolidEdgeDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf CommonTasks.PropertyFindReplace,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+
     Public Function Dummy(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -3374,6 +3455,5 @@ Public Class DraftTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
-
 
 End Class

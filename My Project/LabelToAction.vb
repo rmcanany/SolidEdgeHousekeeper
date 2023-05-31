@@ -658,6 +658,14 @@ Public Class LabelToAction
                      HelpString,
                      RequiresSave:=True)
 
+        Dim PropertyFindReplace As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(PropertyFindReplace,
+                     "Property find replace",
+                     "PropertyFindReplace",
+                     HelpString,
+                     RequiresFindReplaceFields:=True, RequiresSave:=True)
+
         Dim UpdateDrawingViews As New L2A
         HelpString = "Checks drawing views one by one, and updates them if needed."
         PopulateList(UpdateDrawingViews,
@@ -690,6 +698,14 @@ Public Class LabelToAction
                      "UpdateDrawingBorderFromTemplate",
                      HelpString,
                      RequiresTemplate:=True, RequiresSave:=True)
+
+        Dim DrawingViewOnBackgroundSheet As New L2A
+        HelpString = "Checks background sheets for the presence of drawing views."
+        PopulateList(DrawingViewOnBackgroundSheet,
+                     "Drawing view on background sheet",
+                      "DrawingViewOnBackgroundSheet",
+                      HelpString)
+
 
         Dim FitView As New L2A
         HelpString = "Same as the Assembly command of the same name."
