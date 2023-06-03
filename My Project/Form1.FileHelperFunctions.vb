@@ -63,7 +63,6 @@ Partial Class Form1
 
                     If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
                         Dim tmpFolders As New List(Of String)
-                        'tmpList.Add(IO.Path.GetDirectoryName(Source.Name), IO.Path.GetDirectoryName(Source.Name))
 
                         For Each item As ListViewItem In ListViewFiles.Items
                             If item.Tag.ToString = "ASM_Folder" Then
@@ -74,17 +73,27 @@ Partial Class Form1
                         Dim tmpFoundFiles As New List(Of String)
 
                         If RadioButtonTLABottomUp.Checked Then
-                            For Each tmpFolder As String In tmpFolders
+                            Dim TLAU As New TopLevelAssemblyUtilities(Me)
 
-                                Dim TLAU As New TopLevelAssemblyUtilities(Me)
+                            TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
-                                TextBoxStatus.Text = "Finding all linked files.  This may take some time."
-
-                                tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
+                            tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           CheckBoxDraftAndModelSameName.Checked))
-                            Next
+                                                           CheckBoxDraftAndModelSameName.Checked,
+                                                           CheckBoxTLAReportUnrelatedFiles.Checked))
+
+                            'For Each tmpFolder As String In tmpFolders
+
+                            '    'Dim TLAU As New TopLevelAssemblyUtilities(Me)
+
+                            '    'TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                            '    'tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
+                            '    '                           Source.SubItems.Item(1).Text,
+                            '    '                           ActiveFileExtensionsList,
+                            '    '                           CheckBoxDraftAndModelSameName.Checked))
+                            'Next
                         Else
                             Dim TLAU As New TopLevelAssemblyUtilities(Me)
                             tmpFoundFiles.AddRange(TLAU.GetLinksTopDown(tmpFolders,
@@ -104,14 +113,16 @@ Partial Class Form1
                         TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                         Dim tmpFoundFiles As New List(Of String)
+                        Dim tmpFolders As New List(Of String)
 
-                        ' Set TopLevelFolder to the empty string (""), which means this is a
-                        ' bare top level assembly.  No 'where used' is performed.
+                        ' Empty list of strings is flag for BareTopLevelAssembly
+                        ' No 'where used' is performed.
                         ' Bare top level assemblies are always processed bottom up.
-                        tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp("",
+                        tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           CheckBoxDraftAndModelSameName.Checked))
+                                                           CheckBoxDraftAndModelSameName.Checked,
+                                                           CheckBoxTLAReportUnrelatedFiles.Checked))
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 

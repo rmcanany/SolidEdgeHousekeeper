@@ -2019,7 +2019,7 @@ Public Class Form1
 
         tf = RadioButtonTLABottomUp.Checked
         If tf Then
-            CheckBoxTLAReportUnrelatedFiles.Enabled = False
+            'CheckBoxTLAReportUnrelatedFiles.Enabled = False
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
@@ -2036,7 +2036,7 @@ Public Class Form1
 
         tf = RadioButtonTLATopDown.Checked
         If tf Then
-            CheckBoxTLAReportUnrelatedFiles.Enabled = True
+            'CheckBoxTLAReportUnrelatedFiles.Enabled = True
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False

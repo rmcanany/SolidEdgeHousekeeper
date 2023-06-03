@@ -68,6 +68,7 @@ Public Class TopLevelAssemblyUtilities
             DMApp.Quit()
             Return FoundFiles
         End If
+
         LinkDict = VisitLinks(TopLevelAssembly, LinkDict)
 
         For Each Filename In LinkDict.Keys
@@ -82,26 +83,28 @@ Public Class TopLevelAssemblyUtilities
         Next
 
         If Report Then
-            If UnrelatedFiles.Count > 0 Then
-                Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-                Dim LogfileName As String
-                'Dim msg As String
-                LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+            ReportUnrelatedFiles(TopLevelFolders, FoundFiles)
 
-                Try
-                    Using writer As New IO.StreamWriter(LogfileName, True)
-                        For Each Filename In UnrelatedFiles
-                            ' Filename = Filename.Replace(TopLevelFolder, "")
-                            writer.WriteLine(String.Format(Filename))
-                        Next
-                    End Using
+            'If UnrelatedFiles.Count > 0 Then
+            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            '    Dim LogfileName As String
+            '    'Dim msg As String
+            '    LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
 
-                    Process.Start("Notepad.exe", LogfileName)
+            '    Try
+            '        Using writer As New IO.StreamWriter(LogfileName, True)
+            '            For Each Filename In UnrelatedFiles
+            '                ' Filename = Filename.Replace(TopLevelFolder, "")
+            '                writer.WriteLine(String.Format(Filename))
+            '            Next
+            '        End Using
 
-                Catch ex As Exception
-                End Try
+            '        Process.Start("Notepad.exe", LogfileName)
 
-            End If
+            '    Catch ex As Exception
+            '    End Try
+
+            'End If
 
         End If
 
@@ -387,16 +390,73 @@ Public Class TopLevelAssemblyUtilities
     End Function
 
 
+    Private Sub ReportUnrelatedFiles(
+               TopLevelFolders As List(Of String),
+               Foundfiles As List(Of String))
+
+        Dim AllFiles As New List(Of String)
+        Dim SomeFiles As IReadOnlyCollection(Of String)
+        Dim ActiveFileExtensionsList As New List(Of String)
+        Dim UnrelatedFiles As New List(Of String)
+
+        If TopLevelFolders.Count = 0 Then
+            Exit Sub
+        End If
+
+        ActiveFileExtensionsList.Add("*.asm")
+        ActiveFileExtensionsList.Add("*.par")
+        ActiveFileExtensionsList.Add("*.psm")
+        ActiveFileExtensionsList.Add("*.dft")
+
+        For Each TopLevelFolder In TopLevelFolders
+            SomeFiles = FileIO.FileSystem.GetFiles(TopLevelFolder,
+                        FileIO.SearchOption.SearchAllSubDirectories,
+                        ActiveFileExtensionsList.ToArray)
+
+            For Each Filename In SomeFiles
+                If Not Foundfiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
+                    If Not UnrelatedFiles.Contains(Filename, StringComparer.OrdinalIgnoreCase) Then
+                        UnrelatedFiles.Add(Filename)
+                    End If
+                End If
+            Next
+
+        Next
+
+        If UnrelatedFiles.Count > 0 Then
+            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            Dim LogfileName As String
+            LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+
+            Try
+                Using writer As New IO.StreamWriter(LogfileName, True)
+                    writer.WriteLine("UNRELATED FILES")
+                    writer.WriteLine("")
+                    For Each Filename In UnrelatedFiles
+                        ' Filename = Filename.Replace(TopLevelFolder, "")
+                        writer.WriteLine(String.Format(Filename))
+                    Next
+                End Using
+
+                Process.Start("Notepad.exe", LogfileName)
+
+            Catch ex As Exception
+            End Try
+
+        End If
+
+    End Sub
 
 
-
-    Public Function GetLinksBottomUp(TopLevelFolder As String,
+    Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
                              TopLevelAssembly As String,
                              ActiveFileExtensionsList As List(Of String),
-                             DraftAndModelSameName As Boolean) As List(Of String)
+                             DraftAndModelSameName As Boolean,
+                             Report As Boolean) As List(Of String)
 
         Dim DMApp As New DesignManager.Application
         Dim AllLinkedFilenames As New List(Of String)
+        Dim tmpAllLinkedFilenames As New List(Of String)
         Dim FoundFiles As New List(Of String)
         Dim FileExtension As String
         Dim AllFilenames As New Dictionary(Of String, String)
@@ -404,18 +464,23 @@ Public Class TopLevelAssemblyUtilities
         Dim IndexedDrives As New List(Of String)
         Dim IsDriveIndexed As Boolean = False
 
+        Dim TopLevelFolder As String
+        Dim tmpAllLinkedFilename As String
+
         Dim TLADoc As DesignManager.Document
 
-        ' Passing in TopLevelFolder = "" signifies a bare top level assy.  Don't need an indexed drive for that case.
-        If Not TopLevelFolder = "" Then
+        ' Passing in an empty TopLevelFolders signifies a bare top level assy.  Don't need an indexed drive for that case.
+        If Not TopLevelFolders.Count = 0 Then
             IndexedDrives = GetIndexedDrives()
 
             If IndexedDrives.Count > 0 Then
                 For Each IndexedDrive In IndexedDrives
-                    If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
-                        IsDriveIndexed = True
-                        Exit For
-                    End If
+                    For Each TopLevelFolder In TopLevelFolders
+                        If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
+                            IsDriveIndexed = True
+                            Exit For
+                        End If
+                    Next
                 Next
             End If
         End If
@@ -430,8 +495,17 @@ Public Class TopLevelAssemblyUtilities
 
         TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
 
-        AllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+        For Each TopLevelFolder In TopLevelFolders
+            tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
                                                  TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+
+            For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+                If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename) Then
+                    AllLinkedFilenames.Add(tmpAllLinkedFilename)
+                End If
+            Next
+
+        Next
 
         DMApp.Quit()
 
@@ -444,6 +518,66 @@ Public Class TopLevelAssemblyUtilities
             End If
         Next
 
+        If Report Then
+            ReportUnrelatedFiles(TopLevelFolders, FoundFiles)
+
+            ''Dim EveryFile As New List(Of String)
+            ''Dim tmpEveryFile As New List(Of String)
+            'Dim tmpEveryFile As IReadOnlyCollection(Of String)
+            'Dim tmpActiveFileExtensionsList As New List(Of String)
+            'Dim UnrelatedFiles As New List(Of String)
+
+            'tmpActiveFileExtensionsList.Add("*.asm")
+            'tmpActiveFileExtensionsList.Add("*.par")
+            'tmpActiveFileExtensionsList.Add("*.psm")
+            'tmpActiveFileExtensionsList.Add("*.dft")
+
+            'For Each TopLevelFolder In TopLevelFolders
+            '    tmpEveryFile = FileIO.FileSystem.GetFiles(TopLevelFolder,
+            '            FileIO.SearchOption.SearchAllSubDirectories,
+            '            tmpActiveFileExtensionsList.ToArray)
+
+            '    For Each Filename In tmpEveryFile
+            '        If Not FoundFiles.Contains(Filename) Then
+            '            If Not UnrelatedFiles.Contains(Filename) Then
+            '                UnrelatedFiles.Add(Filename)
+            '            End If
+            '        End If
+            '    Next
+
+            'Next
+
+            'If UnrelatedFiles.Count > 0 Then
+            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            '    Dim LogfileName As String
+            '    'Dim msg As String
+            '    LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
+
+            '    Try
+            '        Using writer As New IO.StreamWriter(LogfileName, True)
+            '            For Each Filename In UnrelatedFiles
+            '                ' Filename = Filename.Replace(TopLevelFolder, "")
+            '                writer.WriteLine(String.Format(Filename))
+            '            Next
+            '        End Using
+
+            '        Process.Start("Notepad.exe", LogfileName)
+
+            '    Catch ex As Exception
+            '    End Try
+
+            'End If
+
+            ''AllFilenames = FileIO.FileSystem.GetFiles(TopLevelFolder,
+            ''            FileIO.SearchOption.SearchAllSubDirectories,
+            ''            ActiveFileExtensionsList.ToArray)
+
+            ''For Each Filename In AllFilenames
+            ''    AllFilenamesDict.Add(Filename.ToLower, Filename)
+            ''Next
+
+
+        End If
 
         Return FoundFiles
 

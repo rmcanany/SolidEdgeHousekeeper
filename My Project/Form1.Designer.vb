@@ -142,6 +142,19 @@ Partial Class Form1
         Me.LabelSheetmetalTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
+        Me.CheckBoxFindReplaceReplaceRXDraft = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceReplacePTDraft = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindRXDraft = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindWCDraft = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxFindReplaceFindPTDraft = New System.Windows.Forms.CheckBox()
+        Me.TextBoxFindReplaceReplaceDraft = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplaceFindDraft = New System.Windows.Forms.TextBox()
+        Me.TextBoxFindReplacePropertyNameDraft = New System.Windows.Forms.TextBox()
+        Me.ComboBoxFindReplacePropertySetDraft = New System.Windows.Forms.ComboBox()
+        Me.LabelFindReplaceReplaceDraft = New System.Windows.Forms.Label()
+        Me.LabelFindReplaceFindDraft = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertyNameDraft = New System.Windows.Forms.Label()
+        Me.LabelFindReplacePropertySetDraft = New System.Windows.Forms.Label()
         Me.TextBoxSaveAsFormulaDraft = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaDraft = New System.Windows.Forms.CheckBox()
         Me.ButtonWatermark = New System.Windows.Forms.Button()
@@ -246,19 +259,6 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxFindReplaceReplaceRXDraft = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceReplacePTDraft = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindRXDraft = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindWCDraft = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxFindReplaceFindPTDraft = New System.Windows.Forms.CheckBox()
-        Me.TextBoxFindReplaceReplaceDraft = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplaceFindDraft = New System.Windows.Forms.TextBox()
-        Me.TextBoxFindReplacePropertyNameDraft = New System.Windows.Forms.TextBox()
-        Me.ComboBoxFindReplacePropertySetDraft = New System.Windows.Forms.ComboBox()
-        Me.LabelFindReplaceReplaceDraft = New System.Windows.Forms.Label()
-        Me.LabelFindReplaceFindDraft = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertyNameDraft = New System.Windows.Forms.Label()
-        Me.LabelFindReplacePropertySetDraft = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1619,6 +1619,137 @@ Partial Class Form1
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
         '
+        'CheckBoxFindReplaceReplaceRXDraft
+        '
+        Me.CheckBoxFindReplaceReplaceRXDraft.AutoSize = True
+        Me.CheckBoxFindReplaceReplaceRXDraft.Location = New System.Drawing.Point(395, 531)
+        Me.CheckBoxFindReplaceReplaceRXDraft.Name = "CheckBoxFindReplaceReplaceRXDraft"
+        Me.CheckBoxFindReplaceReplaceRXDraft.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceReplaceRXDraft.TabIndex = 56
+        Me.CheckBoxFindReplaceReplaceRXDraft.Text = "RX"
+        Me.CheckBoxFindReplaceReplaceRXDraft.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceReplacePTDraft
+        '
+        Me.CheckBoxFindReplaceReplacePTDraft.AutoSize = True
+        Me.CheckBoxFindReplaceReplacePTDraft.Location = New System.Drawing.Point(355, 531)
+        Me.CheckBoxFindReplaceReplacePTDraft.Name = "CheckBoxFindReplaceReplacePTDraft"
+        Me.CheckBoxFindReplaceReplacePTDraft.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceReplacePTDraft.TabIndex = 55
+        Me.CheckBoxFindReplaceReplacePTDraft.Text = "PT"
+        Me.CheckBoxFindReplaceReplacePTDraft.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindRXDraft
+        '
+        Me.CheckBoxFindReplaceFindRXDraft.AutoSize = True
+        Me.CheckBoxFindReplaceFindRXDraft.Location = New System.Drawing.Point(305, 531)
+        Me.CheckBoxFindReplaceFindRXDraft.Name = "CheckBoxFindReplaceFindRXDraft"
+        Me.CheckBoxFindReplaceFindRXDraft.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxFindReplaceFindRXDraft.TabIndex = 54
+        Me.CheckBoxFindReplaceFindRXDraft.Text = "RX"
+        Me.CheckBoxFindReplaceFindRXDraft.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindWCDraft
+        '
+        Me.CheckBoxFindReplaceFindWCDraft.AutoSize = True
+        Me.CheckBoxFindReplaceFindWCDraft.Location = New System.Drawing.Point(260, 531)
+        Me.CheckBoxFindReplaceFindWCDraft.Name = "CheckBoxFindReplaceFindWCDraft"
+        Me.CheckBoxFindReplaceFindWCDraft.Size = New System.Drawing.Size(44, 17)
+        Me.CheckBoxFindReplaceFindWCDraft.TabIndex = 53
+        Me.CheckBoxFindReplaceFindWCDraft.Text = "WC"
+        Me.CheckBoxFindReplaceFindWCDraft.UseVisualStyleBackColor = True
+        '
+        'CheckBoxFindReplaceFindPTDraft
+        '
+        Me.CheckBoxFindReplaceFindPTDraft.AutoSize = True
+        Me.CheckBoxFindReplaceFindPTDraft.Location = New System.Drawing.Point(220, 531)
+        Me.CheckBoxFindReplaceFindPTDraft.Name = "CheckBoxFindReplaceFindPTDraft"
+        Me.CheckBoxFindReplaceFindPTDraft.Size = New System.Drawing.Size(40, 17)
+        Me.CheckBoxFindReplaceFindPTDraft.TabIndex = 52
+        Me.CheckBoxFindReplaceFindPTDraft.Text = "PT"
+        Me.CheckBoxFindReplaceFindPTDraft.UseVisualStyleBackColor = True
+        '
+        'TextBoxFindReplaceReplaceDraft
+        '
+        Me.TextBoxFindReplaceReplaceDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFindReplaceReplaceDraft.Location = New System.Drawing.Point(355, 551)
+        Me.TextBoxFindReplaceReplaceDraft.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxFindReplaceReplaceDraft.Name = "TextBoxFindReplaceReplaceDraft"
+        Me.TextBoxFindReplaceReplaceDraft.Size = New System.Drawing.Size(125, 20)
+        Me.TextBoxFindReplaceReplaceDraft.TabIndex = 51
+        '
+        'TextBoxFindReplaceFindDraft
+        '
+        Me.TextBoxFindReplaceFindDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFindReplaceFindDraft.Location = New System.Drawing.Point(220, 551)
+        Me.TextBoxFindReplaceFindDraft.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxFindReplaceFindDraft.Name = "TextBoxFindReplaceFindDraft"
+        Me.TextBoxFindReplaceFindDraft.Size = New System.Drawing.Size(125, 20)
+        Me.TextBoxFindReplaceFindDraft.TabIndex = 50
+        '
+        'TextBoxFindReplacePropertyNameDraft
+        '
+        Me.TextBoxFindReplacePropertyNameDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFindReplacePropertyNameDraft.Location = New System.Drawing.Point(105, 551)
+        Me.TextBoxFindReplacePropertyNameDraft.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxFindReplacePropertyNameDraft.Name = "TextBoxFindReplacePropertyNameDraft"
+        Me.TextBoxFindReplacePropertyNameDraft.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxFindReplacePropertyNameDraft.TabIndex = 49
+        '
+        'ComboBoxFindReplacePropertySetDraft
+        '
+        Me.ComboBoxFindReplacePropertySetDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ComboBoxFindReplacePropertySetDraft.FormattingEnabled = True
+        Me.ComboBoxFindReplacePropertySetDraft.Location = New System.Drawing.Point(13, 551)
+        Me.ComboBoxFindReplacePropertySetDraft.Margin = New System.Windows.Forms.Padding(2)
+        Me.ComboBoxFindReplacePropertySetDraft.Name = "ComboBoxFindReplacePropertySetDraft"
+        Me.ComboBoxFindReplacePropertySetDraft.Size = New System.Drawing.Size(80, 21)
+        Me.ComboBoxFindReplacePropertySetDraft.TabIndex = 48
+        '
+        'LabelFindReplaceReplaceDraft
+        '
+        Me.LabelFindReplaceReplaceDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelFindReplaceReplaceDraft.AutoSize = True
+        Me.LabelFindReplaceReplaceDraft.Location = New System.Drawing.Point(355, 511)
+        Me.LabelFindReplaceReplaceDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelFindReplaceReplaceDraft.Name = "LabelFindReplaceReplaceDraft"
+        Me.LabelFindReplaceReplaceDraft.Size = New System.Drawing.Size(47, 13)
+        Me.LabelFindReplaceReplaceDraft.TabIndex = 47
+        Me.LabelFindReplaceReplaceDraft.Text = "Replace"
+        '
+        'LabelFindReplaceFindDraft
+        '
+        Me.LabelFindReplaceFindDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelFindReplaceFindDraft.AutoSize = True
+        Me.LabelFindReplaceFindDraft.Location = New System.Drawing.Point(220, 511)
+        Me.LabelFindReplaceFindDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelFindReplaceFindDraft.Name = "LabelFindReplaceFindDraft"
+        Me.LabelFindReplaceFindDraft.Size = New System.Drawing.Size(27, 13)
+        Me.LabelFindReplaceFindDraft.TabIndex = 46
+        Me.LabelFindReplaceFindDraft.Text = "Find"
+        '
+        'LabelFindReplacePropertyNameDraft
+        '
+        Me.LabelFindReplacePropertyNameDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelFindReplacePropertyNameDraft.AutoSize = True
+        Me.LabelFindReplacePropertyNameDraft.Location = New System.Drawing.Point(105, 531)
+        Me.LabelFindReplacePropertyNameDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelFindReplacePropertyNameDraft.Name = "LabelFindReplacePropertyNameDraft"
+        Me.LabelFindReplacePropertyNameDraft.Size = New System.Drawing.Size(75, 13)
+        Me.LabelFindReplacePropertyNameDraft.TabIndex = 45
+        Me.LabelFindReplacePropertyNameDraft.Text = "Property name"
+        '
+        'LabelFindReplacePropertySetDraft
+        '
+        Me.LabelFindReplacePropertySetDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelFindReplacePropertySetDraft.AutoSize = True
+        Me.LabelFindReplacePropertySetDraft.Location = New System.Drawing.Point(13, 531)
+        Me.LabelFindReplacePropertySetDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelFindReplacePropertySetDraft.Name = "LabelFindReplacePropertySetDraft"
+        Me.LabelFindReplacePropertySetDraft.Size = New System.Drawing.Size(65, 13)
+        Me.LabelFindReplacePropertySetDraft.TabIndex = 44
+        Me.LabelFindReplacePropertySetDraft.Text = "Property Set"
+        '
         'TextBoxSaveAsFormulaDraft
         '
         Me.TextBoxSaveAsFormulaDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
@@ -2209,7 +2340,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 131)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 180)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
         Me.CheckBoxDraftAndModelSameName.TabIndex = 8
@@ -2243,7 +2374,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 175)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 224)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2255,7 +2386,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 176)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 225)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(355, 20)
@@ -2264,7 +2395,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 156)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 205)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(143, 13)
@@ -2274,7 +2405,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 240)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 100)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(227, 17)
@@ -2286,7 +2417,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 220)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 131)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(315, 17)
@@ -2298,7 +2429,7 @@ Partial Class Form1
         'RadioButtonTLABottomUp
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(11, 108)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(11, 157)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(290, 17)
@@ -2708,137 +2839,6 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'CheckBoxFindReplaceReplaceRXDraft
-        '
-        Me.CheckBoxFindReplaceReplaceRXDraft.AutoSize = True
-        Me.CheckBoxFindReplaceReplaceRXDraft.Location = New System.Drawing.Point(395, 531)
-        Me.CheckBoxFindReplaceReplaceRXDraft.Name = "CheckBoxFindReplaceReplaceRXDraft"
-        Me.CheckBoxFindReplaceReplaceRXDraft.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceReplaceRXDraft.TabIndex = 56
-        Me.CheckBoxFindReplaceReplaceRXDraft.Text = "RX"
-        Me.CheckBoxFindReplaceReplaceRXDraft.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceReplacePTDraft
-        '
-        Me.CheckBoxFindReplaceReplacePTDraft.AutoSize = True
-        Me.CheckBoxFindReplaceReplacePTDraft.Location = New System.Drawing.Point(355, 531)
-        Me.CheckBoxFindReplaceReplacePTDraft.Name = "CheckBoxFindReplaceReplacePTDraft"
-        Me.CheckBoxFindReplaceReplacePTDraft.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceReplacePTDraft.TabIndex = 55
-        Me.CheckBoxFindReplaceReplacePTDraft.Text = "PT"
-        Me.CheckBoxFindReplaceReplacePTDraft.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindRXDraft
-        '
-        Me.CheckBoxFindReplaceFindRXDraft.AutoSize = True
-        Me.CheckBoxFindReplaceFindRXDraft.Location = New System.Drawing.Point(305, 531)
-        Me.CheckBoxFindReplaceFindRXDraft.Name = "CheckBoxFindReplaceFindRXDraft"
-        Me.CheckBoxFindReplaceFindRXDraft.Size = New System.Drawing.Size(41, 17)
-        Me.CheckBoxFindReplaceFindRXDraft.TabIndex = 54
-        Me.CheckBoxFindReplaceFindRXDraft.Text = "RX"
-        Me.CheckBoxFindReplaceFindRXDraft.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindWCDraft
-        '
-        Me.CheckBoxFindReplaceFindWCDraft.AutoSize = True
-        Me.CheckBoxFindReplaceFindWCDraft.Location = New System.Drawing.Point(260, 531)
-        Me.CheckBoxFindReplaceFindWCDraft.Name = "CheckBoxFindReplaceFindWCDraft"
-        Me.CheckBoxFindReplaceFindWCDraft.Size = New System.Drawing.Size(44, 17)
-        Me.CheckBoxFindReplaceFindWCDraft.TabIndex = 53
-        Me.CheckBoxFindReplaceFindWCDraft.Text = "WC"
-        Me.CheckBoxFindReplaceFindWCDraft.UseVisualStyleBackColor = True
-        '
-        'CheckBoxFindReplaceFindPTDraft
-        '
-        Me.CheckBoxFindReplaceFindPTDraft.AutoSize = True
-        Me.CheckBoxFindReplaceFindPTDraft.Location = New System.Drawing.Point(220, 531)
-        Me.CheckBoxFindReplaceFindPTDraft.Name = "CheckBoxFindReplaceFindPTDraft"
-        Me.CheckBoxFindReplaceFindPTDraft.Size = New System.Drawing.Size(40, 17)
-        Me.CheckBoxFindReplaceFindPTDraft.TabIndex = 52
-        Me.CheckBoxFindReplaceFindPTDraft.Text = "PT"
-        Me.CheckBoxFindReplaceFindPTDraft.UseVisualStyleBackColor = True
-        '
-        'TextBoxFindReplaceReplaceDraft
-        '
-        Me.TextBoxFindReplaceReplaceDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceReplaceDraft.Location = New System.Drawing.Point(355, 551)
-        Me.TextBoxFindReplaceReplaceDraft.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxFindReplaceReplaceDraft.Name = "TextBoxFindReplaceReplaceDraft"
-        Me.TextBoxFindReplaceReplaceDraft.Size = New System.Drawing.Size(125, 20)
-        Me.TextBoxFindReplaceReplaceDraft.TabIndex = 51
-        '
-        'TextBoxFindReplaceFindDraft
-        '
-        Me.TextBoxFindReplaceFindDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplaceFindDraft.Location = New System.Drawing.Point(220, 551)
-        Me.TextBoxFindReplaceFindDraft.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxFindReplaceFindDraft.Name = "TextBoxFindReplaceFindDraft"
-        Me.TextBoxFindReplaceFindDraft.Size = New System.Drawing.Size(125, 20)
-        Me.TextBoxFindReplaceFindDraft.TabIndex = 50
-        '
-        'TextBoxFindReplacePropertyNameDraft
-        '
-        Me.TextBoxFindReplacePropertyNameDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFindReplacePropertyNameDraft.Location = New System.Drawing.Point(105, 551)
-        Me.TextBoxFindReplacePropertyNameDraft.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxFindReplacePropertyNameDraft.Name = "TextBoxFindReplacePropertyNameDraft"
-        Me.TextBoxFindReplacePropertyNameDraft.Size = New System.Drawing.Size(100, 20)
-        Me.TextBoxFindReplacePropertyNameDraft.TabIndex = 49
-        '
-        'ComboBoxFindReplacePropertySetDraft
-        '
-        Me.ComboBoxFindReplacePropertySetDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ComboBoxFindReplacePropertySetDraft.FormattingEnabled = True
-        Me.ComboBoxFindReplacePropertySetDraft.Location = New System.Drawing.Point(13, 551)
-        Me.ComboBoxFindReplacePropertySetDraft.Margin = New System.Windows.Forms.Padding(2)
-        Me.ComboBoxFindReplacePropertySetDraft.Name = "ComboBoxFindReplacePropertySetDraft"
-        Me.ComboBoxFindReplacePropertySetDraft.Size = New System.Drawing.Size(80, 21)
-        Me.ComboBoxFindReplacePropertySetDraft.TabIndex = 48
-        '
-        'LabelFindReplaceReplaceDraft
-        '
-        Me.LabelFindReplaceReplaceDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelFindReplaceReplaceDraft.AutoSize = True
-        Me.LabelFindReplaceReplaceDraft.Location = New System.Drawing.Point(355, 511)
-        Me.LabelFindReplaceReplaceDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFindReplaceReplaceDraft.Name = "LabelFindReplaceReplaceDraft"
-        Me.LabelFindReplaceReplaceDraft.Size = New System.Drawing.Size(47, 13)
-        Me.LabelFindReplaceReplaceDraft.TabIndex = 47
-        Me.LabelFindReplaceReplaceDraft.Text = "Replace"
-        '
-        'LabelFindReplaceFindDraft
-        '
-        Me.LabelFindReplaceFindDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelFindReplaceFindDraft.AutoSize = True
-        Me.LabelFindReplaceFindDraft.Location = New System.Drawing.Point(220, 511)
-        Me.LabelFindReplaceFindDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFindReplaceFindDraft.Name = "LabelFindReplaceFindDraft"
-        Me.LabelFindReplaceFindDraft.Size = New System.Drawing.Size(27, 13)
-        Me.LabelFindReplaceFindDraft.TabIndex = 46
-        Me.LabelFindReplaceFindDraft.Text = "Find"
-        '
-        'LabelFindReplacePropertyNameDraft
-        '
-        Me.LabelFindReplacePropertyNameDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelFindReplacePropertyNameDraft.AutoSize = True
-        Me.LabelFindReplacePropertyNameDraft.Location = New System.Drawing.Point(105, 531)
-        Me.LabelFindReplacePropertyNameDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFindReplacePropertyNameDraft.Name = "LabelFindReplacePropertyNameDraft"
-        Me.LabelFindReplacePropertyNameDraft.Size = New System.Drawing.Size(75, 13)
-        Me.LabelFindReplacePropertyNameDraft.TabIndex = 45
-        Me.LabelFindReplacePropertyNameDraft.Text = "Property name"
-        '
-        'LabelFindReplacePropertySetDraft
-        '
-        Me.LabelFindReplacePropertySetDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelFindReplacePropertySetDraft.AutoSize = True
-        Me.LabelFindReplacePropertySetDraft.Location = New System.Drawing.Point(13, 531)
-        Me.LabelFindReplacePropertySetDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFindReplacePropertySetDraft.Name = "LabelFindReplacePropertySetDraft"
-        Me.LabelFindReplacePropertySetDraft.Size = New System.Drawing.Size(65, 13)
-        Me.LabelFindReplacePropertySetDraft.TabIndex = 44
-        Me.LabelFindReplacePropertySetDraft.Text = "Property Set"
         '
         'Form1
         '
