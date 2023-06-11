@@ -828,7 +828,7 @@ Public Class SheetmetalTasks
 
     End Function
 
-    Private Function UpdateInsertPartCopiesInternal(
+    Public Function UpdateInsertPartCopiesInternal(
         ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -837,6 +837,9 @@ Public Class SheetmetalTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalExitStatus As Integer = 0
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -847,9 +850,6 @@ Public Class SheetmetalTasks
 
         Dim TF As Boolean
 
-        'Dim PMI As SolidEdgeFrameworkSupport.PMI
-
-
         If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
                 CopiedParts = Model.CopiedParts
@@ -859,9 +859,47 @@ Public Class SheetmetalTasks
                         TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                         If Not TF Then
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Insert part copy file not found: {0}", CopiedPart.FileName))
-                        ElseIf Not CopiedPart.IsUpToDate Then
-                            CopiedPart.Update()
+                            ErrorMessageList.Add(String.Format("Insert part copy file not found: '{0}'", CopiedPart.FileName))
+                        Else
+                            '' Try a recursion
+                            'Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
+
+                            'If Filetype = ".par" Then
+                            '    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
+                            '    Dim PT As New PartTasks
+
+                            '    SupplementalErrorMessage = PT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            '    If SupplementalExitStatus > 0 Then
+                            '        ExitStatus = SupplementalExitStatus
+                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                            '            ErrorMessageList.Add(s)
+                            '        Next
+                            '    End If
+                            '    ParentDoc.Close()
+                            '    SEApp.DoIdle()
+
+                            'ElseIf Filetype = ".psm" Then
+                            '    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
+                            '    Dim SMT As New SheetmetalTasks
+
+                            '    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            '    If SupplementalExitStatus > 0 Then
+                            '        ExitStatus = SupplementalExitStatus
+                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                            '            ErrorMessageList.Add(s)
+                            '        Next
+                            '    End If
+                            '    ParentDoc.Close()
+                            '    SEApp.DoIdle()
+
+                            'End If
+
+                            If Not CopiedPart.IsUpToDate Then
+                                CopiedPart.Update()
+                            End If
+
                             If SEDoc.ReadOnly Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
@@ -896,10 +934,82 @@ Public Class SheetmetalTasks
             ErrorMessageList.Add("Unable to update PMI")
         End Try
 
-
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
+    'Public Function UpdateInsertPartCopiesInternal(
+    '    ByVal SEDoc As SolidEdgePart.SheetMetalDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    Dim Models As SolidEdgePart.Models
+    '    Dim Model As SolidEdgePart.Model
+    '    Dim CopiedParts As SolidEdgePart.CopiedParts
+    '    Dim CopiedPart As SolidEdgePart.CopiedPart
+
+    '    Models = SEDoc.Models
+
+    '    Dim TF As Boolean
+
+    '    'Dim PMI As SolidEdgeFrameworkSupport.PMI
+
+
+    '    If (Models.Count > 0) And (Models.Count < 300) Then
+    '        For Each Model In Models
+    '            CopiedParts = Model.CopiedParts
+    '            If CopiedParts.Count > 0 Then
+    '                For Each CopiedPart In CopiedParts
+    '                    TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
+    '                    TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
+    '                    If Not TF Then
+    '                        ExitStatus = 1
+    '                        ErrorMessageList.Add(String.Format("Insert part copy file not found: {0}", CopiedPart.FileName))
+    '                    ElseIf Not CopiedPart.IsUpToDate Then
+    '                        CopiedPart.Update()
+    '                        If SEDoc.ReadOnly Then
+    '                            ExitStatus = 1
+    '                            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '                        Else
+    '                            SEDoc.Save()
+    '                            SEApp.DoIdle()
+    '                            'ExitStatus = 1
+    '                            'ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
+    '                        End If
+    '                    End If
+    '                Next
+    '            End If
+    '        Next
+    '    ElseIf Models.Count >= 300 Then
+    '        ExitStatus = 1
+    '        ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+    '    End If
+
+    '    'Update PMI
+    '    Try
+    '        'PMI = CType(SEDoc.PMI, SolidEdgeFrameworkSupport.PMI)
+    '        'PMI.Show = False
+    '        'PMI.ShowDimensions = False
+    '        'PMI.ShowAnnotations = False
+    '        SEApp.StartCommand(CType(10180, SolidEdgeFramework.SolidEdgeCommandConstants))  ' Update PMI
+    '        SEApp.DoIdle()
+    '        SEDoc.Save()
+    '        SEApp.DoIdle()
+
+    '    Catch ex As Exception
+    '        ExitStatus = 1
+    '        ErrorMessageList.Add("Unable to update PMI")
+    '    End Try
+
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
 
 

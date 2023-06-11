@@ -259,6 +259,12 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.GroupBoxFileListOptions = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
+        Me.GroupBoxMiscOptions = New System.Windows.Forms.GroupBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -275,6 +281,8 @@ Partial Class Form1
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
+        Me.GroupBoxFileListOptions.SuspendLayout()
+        Me.GroupBoxMiscOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -326,7 +334,6 @@ Partial Class Form1
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.Size = New System.Drawing.Size(505, 540)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
-        Me.ListViewFiles.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
         Me.ListViewFiles.View = System.Windows.Forms.View.Details
@@ -1981,23 +1988,11 @@ Partial Class Form1
         Me.TabPageConfiguration.AutoScroll = True
         Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageConfiguration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageConfiguration.Controls.Add(Me.GroupBoxMiscOptions)
+        Me.TabPageConfiguration.Controls.Add(Me.GroupBoxFileListOptions)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxPrinterSettings)
-        Me.TabPageConfiguration.Controls.Add(Me.LabelFontSize)
-        Me.TabPageConfiguration.Controls.Add(Me.TextBoxFontSize)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxSaveAsImageCrop)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxBackgroundProcessing)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxPictorialViews)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxRememberTasks)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxMoveDrawingViewAllowPartialSuccess)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxTLAOptions)
-        Me.TabPageConfiguration.Controls.Add(Me.CheckBoxWarnSave)
-        Me.TabPageConfiguration.Controls.Add(Me.TextBoxRestartAfter)
-        Me.TabPageConfiguration.Controls.Add(Me.LabelRestartAfter)
-        Me.TabPageConfiguration.Controls.Add(Me.TextBoxPartNumberPropertyName)
-        Me.TabPageConfiguration.Controls.Add(Me.LabelPartNumberPropertyName)
-        Me.TabPageConfiguration.Controls.Add(Me.ComboBoxPartNumberPropertySet)
-        Me.TabPageConfiguration.Controls.Add(Me.LabelPartNumberPropertySet)
         Me.TabPageConfiguration.Controls.Add(Me.ButtonActiveMaterialLibrary)
         Me.TabPageConfiguration.Controls.Add(Me.TextBoxActiveMaterialLibrary)
         Me.TabPageConfiguration.Controls.Add(Me.LabelActiveMaterialLibrary)
@@ -2037,12 +2032,12 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 850)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1052)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
-        Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(289, 281)
+        Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(475, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
         Me.GroupBoxPrinterSettings.TabStop = False
-        Me.GroupBoxPrinterSettings.Text = "Printer settings"
+        Me.GroupBoxPrinterSettings.Text = "PRINTER OPTIONS"
         '
         'TextBoxPrintOptionsCopies
         '
@@ -2188,24 +2183,24 @@ Partial Class Form1
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(8, 305)
+        Me.LabelFontSize.Location = New System.Drawing.Point(8, 30)
         Me.LabelFontSize.Name = "LabelFontSize"
-        Me.LabelFontSize.Size = New System.Drawing.Size(95, 13)
+        Me.LabelFontSize.Size = New System.Drawing.Size(49, 13)
         Me.LabelFontSize.TabIndex = 39
-        Me.LabelFontSize.Text = "Font size for file list"
+        Me.LabelFontSize.Text = "Font size"
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(8, 321)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(63, 27)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
-        Me.TextBoxFontSize.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxFontSize.Size = New System.Drawing.Size(38, 20)
         Me.TextBoxFontSize.TabIndex = 38
         Me.TextBoxFontSize.Text = "8"
         '
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
-        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 813)
+        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 224)
         Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
         Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(194, 17)
         Me.CheckBoxSaveAsImageCrop.TabIndex = 37
@@ -2215,7 +2210,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 738)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 157)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(227, 17)
         Me.CheckBoxBackgroundProcessing.TabIndex = 36
@@ -2225,7 +2220,7 @@ Partial Class Form1
         'CheckBoxRunExternalProgramSaveFile
         '
         Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
-        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 788)
+        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 201)
         Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
         Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(222, 17)
         Me.CheckBoxRunExternalProgramSaveFile.TabIndex = 35
@@ -2237,14 +2232,14 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1150)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1372)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxPictorialViews.Size = New System.Drawing.Size(112, 81)
+        Me.GroupBoxPictorialViews.Size = New System.Drawing.Size(475, 81)
         Me.GroupBoxPictorialViews.TabIndex = 34
         Me.GroupBoxPictorialViews.TabStop = False
-        Me.GroupBoxPictorialViews.Text = "Pictorial views"
+        Me.GroupBoxPictorialViews.Text = "PICTORIAL VIEW OPTIONS"
         '
         'RadioButtonPictorialViewTrimetric
         '
@@ -2287,7 +2282,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 713)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 135)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(235, 17)
@@ -2298,7 +2293,7 @@ Partial Class Form1
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 763)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 179)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(266, 17)
@@ -2318,19 +2313,19 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
-        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 402)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 755)
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 275)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 260)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
-        Me.GroupBoxTLAOptions.Text = "Top-level assembly options -- See File Selection in Help for details"
+        Me.GroupBoxTLAOptions.Text = "TOP LEVEL ASSEMBLY OPTIONS"
         '
         'CheckBoxTLAIncludePartCopies
         '
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(11, 78)
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(8, 78)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
         Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(195, 17)
         Me.CheckBoxTLAIncludePartCopies.TabIndex = 9
@@ -2340,7 +2335,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(11, 180)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(8, 180)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
         Me.CheckBoxDraftAndModelSameName.TabIndex = 8
@@ -2352,7 +2347,7 @@ Partial Class Form1
         Me.CheckBoxWarnBareTLA.AutoSize = True
         Me.CheckBoxWarnBareTLA.Checked = True
         Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(11, 54)
+        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(8, 54)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
         Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(372, 17)
         Me.CheckBoxWarnBareTLA.TabIndex = 7
@@ -2364,7 +2359,7 @@ Partial Class Form1
         Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
         Me.CheckBoxTLAAutoIncludeTLF.Checked = True
         Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(11, 30)
+        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(8, 30)
         Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
         Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(326, 17)
         Me.CheckBoxTLAAutoIncludeTLF.TabIndex = 6
@@ -2386,7 +2381,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(11, 225)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(8, 225)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(355, 20)
@@ -2395,7 +2390,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(11, 205)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(8, 205)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(143, 13)
@@ -2405,7 +2400,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(11, 100)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(8, 100)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(227, 17)
@@ -2417,7 +2412,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(11, 131)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(8, 131)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(315, 17)
@@ -2429,7 +2424,7 @@ Partial Class Form1
         'RadioButtonTLABottomUp
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(11, 157)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(8, 157)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(290, 17)
@@ -2443,7 +2438,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 688)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 111)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(170, 17)
         Me.CheckBoxWarnSave.TabIndex = 16
@@ -2452,7 +2447,7 @@ Partial Class Form1
         '
         'TextBoxRestartAfter
         '
-        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(8, 371)
+        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(216, 82)
         Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(76, 20)
@@ -2462,7 +2457,7 @@ Partial Class Form1
         'LabelRestartAfter
         '
         Me.LabelRestartAfter.AutoSize = True
-        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 355)
+        Me.LabelRestartAfter.Location = New System.Drawing.Point(8, 83)
         Me.LabelRestartAfter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelRestartAfter.Name = "LabelRestartAfter"
         Me.LabelRestartAfter.Size = New System.Drawing.Size(195, 13)
@@ -2471,7 +2466,7 @@ Partial Class Form1
         '
         'TextBoxPartNumberPropertyName
         '
-        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 268)
+        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(172, 46)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
         Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(200, 20)
@@ -2480,7 +2475,7 @@ Partial Class Form1
         'LabelPartNumberPropertyName
         '
         Me.LabelPartNumberPropertyName.AutoSize = True
-        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(172, 252)
+        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(172, 30)
         Me.LabelPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertyName.Name = "LabelPartNumberPropertyName"
         Me.LabelPartNumberPropertyName.Size = New System.Drawing.Size(139, 13)
@@ -2491,7 +2486,7 @@ Partial Class Form1
         '
         Me.ComboBoxPartNumberPropertySet.FormattingEnabled = True
         Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(8, 268)
+        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(8, 46)
         Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPartNumberPropertySet.Name = "ComboBoxPartNumberPropertySet"
         Me.ComboBoxPartNumberPropertySet.Size = New System.Drawing.Size(132, 21)
@@ -2501,7 +2496,7 @@ Partial Class Form1
         'LabelPartNumberPropertySet
         '
         Me.LabelPartNumberPropertySet.AutoSize = True
-        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(8, 252)
+        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(8, 30)
         Me.LabelPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertySet.Name = "LabelPartNumberPropertySet"
         Me.LabelPartNumberPropertySet.Size = New System.Drawing.Size(127, 13)
@@ -2840,6 +2835,84 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'GroupBoxFileListOptions
+        '
+        Me.GroupBoxFileListOptions.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
+        Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortDependency)
+        Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortAlphabetical)
+        Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortNone)
+        Me.GroupBoxFileListOptions.Controls.Add(Me.LabelFontSize)
+        Me.GroupBoxFileListOptions.Controls.Add(Me.TextBoxFontSize)
+        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 555)
+        Me.GroupBoxFileListOptions.Name = "GroupBoxFileListOptions"
+        Me.GroupBoxFileListOptions.Size = New System.Drawing.Size(475, 160)
+        Me.GroupBoxFileListOptions.TabIndex = 41
+        Me.GroupBoxFileListOptions.TabStop = False
+        Me.GroupBoxFileListOptions.Text = "FILE LIST OPTIONS"
+        '
+        'RadioButtonListSortNone
+        '
+        Me.RadioButtonListSortNone.AutoSize = True
+        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(8, 51)
+        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
+        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(68, 17)
+        Me.RadioButtonListSortNone.TabIndex = 40
+        Me.RadioButtonListSortNone.Text = "Unsorted"
+        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortAlphabetical
+        '
+        Me.RadioButtonListSortAlphabetical.AutoSize = True
+        Me.RadioButtonListSortAlphabetical.Checked = True
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(8, 74)
+        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
+        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(154, 17)
+        Me.RadioButtonListSortAlphabetical.TabIndex = 41
+        Me.RadioButtonListSortAlphabetical.TabStop = True
+        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
+        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortDependency
+        '
+        Me.RadioButtonListSortDependency.AutoSize = True
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(9, 99)
+        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
+        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(156, 17)
+        Me.RadioButtonListSortDependency.TabIndex = 42
+        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
+        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
+        '
+        'CheckBoxListIncludeNoDependencies
+        '
+        Me.CheckBoxListIncludeNoDependencies.AutoSize = True
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(36, 124)
+        Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
+        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(268, 17)
+        Me.CheckBoxListIncludeNoDependencies.TabIndex = 43
+        Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no dependencies in search results"
+        Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
+        '
+        'GroupBoxMiscOptions
+        '
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxMoveDrawingViewAllowPartialSuccess)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxBackgroundProcessing)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRememberTasks)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.TextBoxPartNumberPropertyName)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.LabelPartNumberPropertyName)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.TextBoxRestartAfter)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.ComboBoxPartNumberPropertySet)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxWarnSave)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.LabelPartNumberPropertySet)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.LabelRestartAfter)
+        Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 272)
+        Me.GroupBoxMiscOptions.Name = "GroupBoxMiscOptions"
+        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 254)
+        Me.GroupBoxMiscOptions.TabIndex = 42
+        Me.GroupBoxMiscOptions.TabStop = False
+        Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2883,6 +2956,10 @@ Partial Class Form1
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
+        Me.GroupBoxFileListOptions.ResumeLayout(False)
+        Me.GroupBoxFileListOptions.PerformLayout()
+        Me.GroupBoxMiscOptions.ResumeLayout(False)
+        Me.GroupBoxMiscOptions.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3123,4 +3200,10 @@ Partial Class Form1
     Friend WithEvents LabelFindReplaceFindDraft As Label
     Friend WithEvents LabelFindReplacePropertyNameDraft As Label
     Friend WithEvents LabelFindReplacePropertySetDraft As Label
+    Friend WithEvents GroupBoxFileListOptions As GroupBox
+    Friend WithEvents CheckBoxListIncludeNoDependencies As CheckBox
+    Friend WithEvents RadioButtonListSortDependency As RadioButton
+    Friend WithEvents RadioButtonListSortAlphabetical As RadioButton
+    Friend WithEvents RadioButtonListSortNone As RadioButton
+    Friend WithEvents GroupBoxMiscOptions As GroupBox
 End Class

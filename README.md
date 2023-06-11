@@ -180,6 +180,10 @@ You would be asking for trouble specifying more than one
 top-level assembly.  However, you can have any number of folders.
 Note the program always includes subfolders for *where used* files.
 
+![Top level assembly options](My%20Project/media/top_level_assy_options.png)
+
+A top level assembly search can optionally report files with no links to the 
+assembly.  Set this option on the **Configuration Tab**.
 
 When selecting a top-level assembly, you can 
 automatically include the folder in which it resides.
@@ -226,8 +230,7 @@ As it does, it creates a graph of the links.
 The graph is subsequently traversed to find related files. 
 I don't know how it works; my son did that part. 
 
-A top down search can optionally report files with no links to the 
-top level assembly.  It is set on the **Configuration Tab**.
+
 
 #### 3. Select by list
 

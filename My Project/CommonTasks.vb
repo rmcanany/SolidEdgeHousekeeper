@@ -692,6 +692,11 @@ Public Class CommonTasks
 
     End Function
 
+    Shared Function GetDocTypeByExtension(Filename As String) As String
+        Dim Extension As String = IO.Path.GetExtension(Filename)
+        Return Extension
+    End Function
+
     Shared Function GetDocType(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As String
         ' See SolidEdgeFramework.DocumentTypeConstants
 

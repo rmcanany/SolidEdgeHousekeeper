@@ -590,7 +590,7 @@ Public Class PartTasks
 
     End Function
 
-    Private Function UpdateInsertPartCopiesInternal(
+    Public Function UpdateInsertPartCopiesInternal(
         ByVal SEDoc As SolidEdgePart.PartDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -599,6 +599,9 @@ Public Class PartTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalExitStatus As Integer = 0
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
         Dim Model As SolidEdgePart.Model
@@ -618,17 +621,53 @@ Public Class PartTasks
                         TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                         If Not TF Then
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Insert part copy file not found: {0}", CopiedPart.FileName))
-                        ElseIf Not CopiedPart.IsUpToDate Then
-                            CopiedPart.Update()
+                            ErrorMessageList.Add(String.Format("Insert part copy file not found: '{0}'", CopiedPart.FileName))
+                        Else
+                            '' Try a recursion
+                            'Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
+
+                            'If Filetype = ".par" Then
+                            '    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
+                            '    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            '    If SupplementalExitStatus > 0 Then
+                            '        ExitStatus = SupplementalExitStatus
+                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                            '            ErrorMessageList.Add(s)
+                            '        Next
+                            '    End If
+                            '    ParentDoc.Close()
+                            '    SEApp.DoIdle()
+
+                            'ElseIf Filetype = ".psm" Then
+                            '    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
+                            '    Dim SMT As New SheetmetalTasks
+
+                            '    SupplementalErrorMessage = SMT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            '    If SupplementalExitStatus > 0 Then
+                            '        ExitStatus = SupplementalExitStatus
+                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                            '            ErrorMessageList.Add(s)
+                            '        Next
+                            '    End If
+                            '    ParentDoc.Close()
+                            '    SEApp.DoIdle()
+
+                            'End If
+
+                            If Not CopiedPart.IsUpToDate Then
+                                CopiedPart.Update()
+                            End If
+
                             If SEDoc.ReadOnly Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
                             Else
                                 SEDoc.Save()
                                 SEApp.DoIdle()
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
+                                'ExitStatus = 1
+                                'ErrorMessageList.Add(String.Format("Updated insert part copy: {0}", CopiedPart.Name))
                             End If
                         End If
                     Next

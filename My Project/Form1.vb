@@ -1025,15 +1025,27 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023.3"
+        Me.Text = "Solid Edge Housekeeper 2023.4"
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
         new_CheckBoxEnablePropertyFilter.Checked = False
         new_ButtonPropertyFilter.Enabled = False
 
+        If RadioButtonListSortDependency.Checked Then
+            CheckBoxListIncludeNoDependencies.Enabled = True
+            'ListViewFiles.Sorting = SortOrder.None
+        Else
+            CheckBoxListIncludeNoDependencies.Enabled = False
+        End If
 
+        If RadioButtonListSortAlphabetical.Checked Then
+            'ListViewFiles.Sorting = SortOrder.Ascending
+        End If
 
+        If RadioButtonListSortNone.Checked Then
+            'ListViewFiles.Sorting = SortOrder.None
+        End If
 
     End Sub
 
@@ -2283,6 +2295,7 @@ Public Class Form1
             msg += "Please add an assembly, or delete the folder(s)."
             ListViewFiles.EndUpdate()
             Me.Cursor = Cursors.Default
+            TextBoxStatus.Text = ""
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
@@ -2291,6 +2304,7 @@ Public Class Form1
             msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
             ListViewFiles.EndUpdate()
             Me.Cursor = Cursors.Default
+            TextBoxStatus.Text = ""
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
@@ -2309,6 +2323,7 @@ Public Class Form1
                 Else
                     ListViewFiles.EndUpdate()
                     Me.Cursor = Cursors.Default
+                    TextBoxStatus.Text = ""
                     Exit Sub
                 End If
             Else
@@ -2330,6 +2345,9 @@ Public Class Form1
         ListViewFiles.EndUpdate()
 
         Me.Cursor = Cursors.Default
+        If TextBoxStatus.Text = "Updating list..." Then
+            TextBoxStatus.Text = "No files found"
+        End If
 
     End Sub
 
@@ -2564,9 +2582,12 @@ Public Class Form1
 
     Private Sub BT_FindLinks_Click(sender As Object, e As EventArgs) Handles BT_FindLinks.Click
 
+        ' A user reported he was confused by this command.  In particular that it didn't
+        ' find Draft files or use his Property Filter settings.
+        ' Disabling for now.
 
-        'MsgBox("This command is temporarily disabled.  Please use 'Update' instead.")
-        'Exit Sub
+        MsgBox("This command is temporarily disabled.  Please use 'Update' instead.")
+        Exit Sub
 
 
         Dim DMApp As New DesignManager.Application
@@ -2712,6 +2733,50 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxDraftAndModelSameName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDraftAndModelSameName.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+    End Sub
+
+    Private Sub RadioButtonListSortDependency_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortDependency.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+        If RadioButtonListSortDependency.Checked Then
+            CheckBoxListIncludeNoDependencies.Enabled = True
+            ''ListViewFiles.Sorting = SortOrder.None
+        Else
+            CheckBoxListIncludeNoDependencies.Enabled = False
+        End If
+
+        If RadioButtonListSortNone.Checked Then
+            'ListViewFiles.Sorting = SortOrder.None
+        End If
+
+        If RadioButtonListSortAlphabetical.Checked Then
+            'ListViewFiles.Sorting = SortOrder.Ascending
+        End If
+    End Sub
+
+    Private Sub RadioButtonListSortNone_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortNone.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+        If RadioButtonListSortNone.Checked Then
+            'ListViewFiles.Sorting = SortOrder.None
+        End If
+    End Sub
+
+    Private Sub RadioButtonListSortAlphabetical_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortAlphabetical.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+        If RadioButtonListSortAlphabetical.Checked Then
+            'ListViewFiles.Sorting = SortOrder.Ascending
+        End If
+    End Sub
+
+    Private Sub CheckBoxListIncludeNoDependencies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxListIncludeNoDependencies.CheckedChanged
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 

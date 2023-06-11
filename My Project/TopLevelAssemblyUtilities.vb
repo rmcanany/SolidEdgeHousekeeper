@@ -469,6 +469,8 @@ Public Class TopLevelAssemblyUtilities
 
         Dim TLADoc As DesignManager.Document
 
+        ' TODO: Deal with a mix of indexed and non-indexed drives
+
         ' Passing in an empty TopLevelFolders signifies a bare top level assy.  Don't need an indexed drive for that case.
         If Not TopLevelFolders.Count = 0 Then
             IndexedDrives = GetIndexedDrives()

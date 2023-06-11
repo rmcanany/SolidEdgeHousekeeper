@@ -11,6 +11,57 @@ of yours.  Do not run it on production work without testing on backups first.
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
+## V2023.4 Enhancements/Fixes
+
+### Update Draft Styles from Template
+
+Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+Now does an in-place update, rather than creating a new file.  
+
+The new method preserves the file creation date, which was requested by 
+several users.  It also reports styles and background 
+sheets not updated because they were not found in the template.
+
+These styles are processed: DimensionStyles, DrawingViewStyles, 
+LinearStyles, TableStyles, TextCharStyles, TextStyles.  
+
+These are not: DashStyles, FillStyles, HatchPatternStyles, 
+SmartFrame2dStyles.  
+
+The latter group encountered errors in testing.  However, the cause
+was not thoroughly investigated.  If you need them updated, 
+please ask on the Forum. 
+
+Note, the previous method (the one that creates a new file) is not 
+exposed in the user interface, but has not been removed from the 
+code.   If you prefer that version, please ask on the Forum.
+
+### Property Find/Replace
+
+Added this functionality for Draft files (Thank you **@Seva**).
+
+Includes wildcard search, Regex processing, and Property formula
+substitution.
+For details, see the Help topic under Assembly Tasks: Property
+Find/Replace.
+
+![Draft Property Find/Replace](My%20Project/media/copy_model_properties_to_draft.png)
+
+The example shown above would populate the Draft file's Title with the
+Title of the model file.
+
+### Drawing View on Background Sheet
+
+Checks all background sheets of a Draft file for the presence
+of a drawing view.
+
+### Top Level Assembly Search
+
+Added the ability to report files unrelated to a top level
+assembly using a Bottom-Up search.  Previously only Top-Down
+search had this option.
+
 ## V2023.3 Enhancements/Fixes
 
 ### Property Find/Replace
