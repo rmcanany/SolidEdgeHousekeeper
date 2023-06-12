@@ -37,6 +37,21 @@ Note, the previous method (the one that creates a new file) is not
 exposed in the user interface, but has not been removed from the 
 code.   If you prefer that version, please ask on the Forum.
 
+### File List Sorting
+
+Added sorting options of `None`, `Alphabetic`, and 
+`Dependency` (Thank you **@HIL**). Previously
+the list was always sorted alphabetically.
+
+![File list sorting options](My%20Project/media/file_sort_options.png)
+
+
+The `Dependency` order is intended to help eliminate
+the annoying dark gray corners on drawings.  The `None` option is primarily 
+intended to preserve the order on imported lists.
+
+These options are set on the **Configuration** Tab.
+
 ### Property Find/Replace
 
 Added this functionality for Draft files (Thank you **@Seva**).

@@ -10,7 +10,7 @@ Partial Class Form1
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
         Try
-            Using writer As New IO.StreamWriter(LogfileName, True)
+            Using writer As New IO.StreamWriter(MissingFilesFileName, True)
                 writer.WriteLine(CommonTasks.TruncateFullPath(Filename, Nothing))
                 For Each Key In ErrorMessagesCombined.Keys
                     writer.WriteLine(String.Format("    {0}", Key))
@@ -37,7 +37,7 @@ Partial Class Form1
 
     Private Sub LogfileSetName()
         Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-        LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + ".log"
+        MissingFilesFileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + ".log"
 
         ErrorsOccurred = False
     End Sub

@@ -6,14 +6,15 @@
 @farfilli (aka @Fiorini), @daysanduski, @mmtrebuchet
 
 **Beta Testers:**
-@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie
+@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie,
+@HIL
 
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
 @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
-@KennyG, @Alex_H, @Nosybottle
+@KennyG, @Alex_H, @Nosybottle, @Seva, @HIL
 
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
 *and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -292,6 +293,29 @@ To do so, check/uncheck the appropriate File Type
 ![Part](Resources/ST9%20-%20par.png)
 ![Sheet Metal](Resources/ST9%20-%20psm.png)
 ![Draft](Resources/ST9%20-%20dft.png) 
+
+### Sorting
+
+![File list sorting options](My%20Project/media/file_sort_options.png)
+
+You can choose sorting options of `None`, `Alphabetic`, or 
+`Dependency`.  These options are set on the 
+**Configuration** Tab.
+
+The `None` option is primarily 
+intended to preserve the order on imported lists.
+
+The `Dependency` option is useful in conjunction with
+the `Update part copy` commands.  It is intended to help eliminate
+the tedious `model out-of-date` (dark gray corners) on drawings. 
+
+In practice, along with `Update part copies` command,
+you would probably also want to run the `Activate and update all` 
+Assembly command, and the `Update drawing views` Draft command.
+
+The dependency ordering is not fool proof.  It has trouble with
+mutual dependencies, such as Interpart copies.  I've had some luck
+simply running the process two times in a row.
 
 ### Filtering
 

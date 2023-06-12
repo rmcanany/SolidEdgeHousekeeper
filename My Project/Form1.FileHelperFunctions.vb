@@ -13,10 +13,10 @@ Partial Class Form1
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
-        Dim ElapsedTime As Double
-        Dim ElapsedTimeText As String
+        'Dim ElapsedTime As Double
+        'Dim ElapsedTimeText As String
 
-        StartTime = Now
+        'StartTime = Now
 
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
@@ -227,19 +227,19 @@ Partial Class Form1
             TextBoxStatus.Text = ""
 
 
-            ElapsedTime = Now.Subtract(StartTime).TotalMinutes
-            If ElapsedTime < 60 Then
-                ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
-            Else
-                ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
-            End If
+            'ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+            'If ElapsedTime < 60 Then
+            '    ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+            'Else
+            '    ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
+            'End If
 
 
-            'TextBoxStatus.Text = String.Format("{0} files found", FoundFiles.Count)
-            TextBoxStatus.Text = String.Format("{0} files found in {1}", ListViewFiles.Items.Count, ElapsedTimeText)
+            'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+            'TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
 
         Else
-            TextBoxStatus.Text = "No files found"
+            'TextBoxStatus.Text = "No files found"
         End If
 
 
@@ -318,20 +318,27 @@ Partial Class Form1
 
     Private Function GetDependencySortedFiles(Foundfiles As IReadOnlyCollection(Of String)) As IReadOnlyCollection(Of String)
         Dim OutList As New List(Of String)
+        Dim MissingFilesList As New List(Of String)
+        'Dim tmpMissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
-        Dim DMApp As New DesignManager.Application
         Dim Filename As String
         Dim DMDoc As DesignManager.Document
 
+        Dim DMApp As New DesignManager.Application
+        DMApp.Visible = 1
+
+        Me.Activate()
+
+
         For Each Filename In Foundfiles
 
-            TextBoxStatus.Text = String.Format("Opening {0}.  This can take some time.", IO.Path.GetFileName(Filename))
+            TextBoxStatus.Text = String.Format("Dependency Sort opening {0}.  This can take some time.", IO.Path.GetFileName(Filename))
 
             DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
             Dim tmp_DependencyDict As New Dictionary(Of String, List(Of String))
 
-            tmp_DependencyDict = GetLinks(DMDoc, tmp_DependencyDict)
+            tmp_DependencyDict = GetLinks(DMDoc, tmp_DependencyDict, MissingFilesList)
 
             For Each s As String In tmp_DependencyDict.Keys
                 TextBoxStatus.Text = s
@@ -347,13 +354,36 @@ Partial Class Form1
 
         DMApp.Quit()
 
+        If MissingFilesList.Count > 0 Then
+            Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
+            Dim MissingFilesFileName As String
+            'Dim msg As String
+            MissingFilesFileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Missing_Files.log"
+
+            Try
+                Using writer As New IO.StreamWriter(MissingFilesFileName, True)
+                    writer.WriteLine("FILES NOT FOUND")
+                    For Each Filename In MissingFilesList
+                        ' Filename = Filename.Replace(TopLevelFolder, "")
+                        writer.WriteLine(String.Format(Filename))
+                    Next
+                End Using
+
+                Process.Start("Notepad.exe", MissingFilesFileName)
+
+            Catch ex As Exception
+            End Try
+
+        End If
+
         Return OutList
 
     End Function
 
     Private Function GetLinks(
         DMDoc As DesignManager.Document,
-        LinkDict As Dictionary(Of String, List(Of String))
+        LinkDict As Dictionary(Of String, List(Of String)),
+        MissingFilesList As List(Of String)
         ) As Dictionary(Of String, List(Of String))
 
         'Dim LinkDict As New Dictionary(Of String, List(Of String))
@@ -362,7 +392,7 @@ Partial Class Form1
         Dim DMDocName As String
         Dim LinkDocName As String
         'Dim Filename As String
-
+        Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
         Dim tf As Boolean
 
         'For Each Filename In OriginalLinkDict.Keys
@@ -402,8 +432,16 @@ Partial Class Form1
                                 LinkDocName = LinkDocName.Split("!"c)(0)
                             End If
 
-                            LinkDict(DMDocName).Add(LinkDocName)
-                            LinkDict = GetLinks(LinkDoc, LinkDict)
+                            If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
+                                If IO.File.Exists(LinkDocName) Then
+                                    LinkDict(DMDocName).Add(LinkDocName)
+                                    LinkDict = GetLinks(LinkDoc, LinkDict, MissingFilesList)
+                                Else
+                                    If Not MissingFilesList.Contains(LinkDocName) Then
+                                        MissingFilesList.Add(LinkDocName)
+                                    End If
+                                End If
+                            End If
                         Next
                     End If
 
@@ -448,6 +486,8 @@ Partial Class Form1
             End If
         Next
 
+        Dim NumPasses As Integer = 0
+
         While OldCount > Count
             For Each Filename In LinkDict.Keys
                 TextBoxStatus.Text = IO.Path.GetFileName(Filename)
@@ -483,7 +523,12 @@ Partial Class Form1
                 Dim ExtensionList As New List(Of String)
                 Dim Extension As String
                 Dim RemainingFileList As New List(Of String)
+                Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
+                Dim ValidExtension As String
 
+                NumPasses += 1
+
+                ' See what type of files remain
                 For Each Filename In LinkDict.Keys
                     RemainingFileList.Add(Filename)
                     Extension = IO.Path.GetExtension(Filename)
@@ -492,36 +537,18 @@ Partial Class Form1
                     End If
                 Next
 
-                If ExtensionList.Contains(".par") Then
-                    For Each Filename In RemainingFileList
-                        If IO.Path.GetExtension(Filename) = ".par" Then
-                            Outlist.Add(Filename)
-                            LinkDict.Remove(Filename)
-                        End If
-                    Next
-                ElseIf ExtensionList.Contains(".psm") Then
-                    For Each Filename In RemainingFileList
-                        If IO.Path.GetExtension(Filename) = ".psm" Then
-                            Outlist.Add(Filename)
-                            LinkDict.Remove(Filename)
-                        End If
-                    Next
-                ElseIf ExtensionList.Contains(".asm") Then
-                    For Each Filename In RemainingFileList
-                        If IO.Path.GetExtension(Filename) = ".asm" Then
-                            Outlist.Add(Filename)
-                            LinkDict.Remove(Filename)
-                        End If
-                    Next
-                ElseIf ExtensionList.Contains(".dft") Then
-                    For Each Filename In RemainingFileList
-                        If IO.Path.GetExtension(Filename) = ".dft" Then
-                            Outlist.Add(Filename)
-                            LinkDict.Remove(Filename)
-                        End If
-                    Next
-                End If
-
+                ' Remove one type of file starting with .par, then .psm, .asm, .dft in that order
+                For Each ValidExtension In ValidExtensions
+                    If ExtensionList.Contains(ValidExtension) Then
+                        For Each Filename In RemainingFileList
+                            If IO.Path.GetExtension(Filename) = ValidExtension Then
+                                Outlist.Add(Filename)
+                                LinkDict.Remove(Filename)
+                            End If
+                        Next
+                        Exit For
+                    End If
+                Next
             End If
 
             Count = LinkDict.Count
@@ -571,28 +598,13 @@ Partial Class Form1
 
         End If
 
-
-
-        'Dim msg As String = ""
-        'If Count > 0 Then
-        '    For Each Filename In LinkDict.Keys
-        '        If Not Outlist.Contains(Filename) Then
-        '            For Each LinkDocName As String In LinkDict(Filename)
-        '                If Not Outlist.Contains(LinkDocName) Then
-        '                    msg = String.Format("{0}{1}{1}{2}: {3}", msg, vbCrLf, IO.Path.GetFileName(Filename), LinkDocName)
-
-        '                End If
-        '            Next
-        '        End If
-        '    Next
-        '    MsgBox(msg)
-        'End If
-
         If Count > 0 Then
             For Each Filename In LinkDict.Keys
                 Outlist.Add(Filename)
             Next
         End If
+
+        'MsgBox(NumPasses.ToString)
 
         Return Outlist
 

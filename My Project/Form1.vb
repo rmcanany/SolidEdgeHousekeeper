@@ -9,7 +9,7 @@ Public Class Form1
     Public SEApp As SolidEdgeFramework.Application
 
     Private DefaultsFilename As String
-    Private LogfileName As String
+    Private MissingFilesFileName As String
 
     Private ErrorsOccurred As Boolean
     Private TotalAborts As Double
@@ -168,7 +168,7 @@ Public Class Form1
         ButtonCancel.Text = "Cancel"
 
         If ErrorsOccurred Then
-            Process.Start("Notepad.exe", LogfileName)
+            Process.Start("Notepad.exe", MissingFilesFileName)
         Else
             TextBoxStatus.Text = TextBoxStatus.Text + "  All checks passed."
         End If
@@ -1017,6 +1017,8 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup4)
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
+
+        '
 
         ListViewFilesOutOfDate = False
 
@@ -2274,6 +2276,12 @@ Public Class Form1
         Dim BareTopLevelAssembly As Boolean = False
         Dim msg As String
 
+        Dim ElapsedTime As Double
+        Dim ElapsedTimeText As String
+
+        StartTime = Now
+
+
         TextBoxStatus.Text = "Updating list..."
         LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
@@ -2345,9 +2353,21 @@ Public Class Form1
         ListViewFiles.EndUpdate()
 
         Me.Cursor = Cursors.Default
-        If TextBoxStatus.Text = "Updating list..." Then
-            TextBoxStatus.Text = "No files found"
+        'If TextBoxStatus.Text = "Updating list..." Then
+        '    TextBoxStatus.Text = "No files found"
+        'End If
+
+        ElapsedTime = Now.Subtract(StartTime).TotalMinutes
+        If ElapsedTime < 60 Then
+            ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
+        Else
+            ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
         End If
+
+
+        Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
+        TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
+
 
     End Sub
 
