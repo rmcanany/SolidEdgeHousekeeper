@@ -77,6 +77,12 @@ Added the ability to report files unrelated to a top level
 assembly using a Bottom-Up search.  Previously only Top-Down
 search had this option.
 
+### File Drag and Drop
+
+Fixed an issue where files added by drag-and-drop were
+deleted from the list when running the `Update File List`
+command (Thank you **@HIL**).
+
 ## V2023.3 Enhancements/Fixes
 
 ### Property Find/Replace

@@ -48,15 +48,31 @@ Partial Class Form1
                     End If
 
                 Case = "Folders"
-                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                    If FileIO.FileSystem.DirectoryExists(Source.Name) Then
+                        FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
                                     FileIO.SearchOption.SearchAllSubDirectories,
                                     ActiveFileExtensionsList.ToArray)
+                    End If
 
                 Case = "csv", "txt"
-                    If FileIO.FileSystem.FileExists(Source.Name) Then FoundFiles = IO.File.ReadAllLines(Source.Name)
+                    If FileIO.FileSystem.FileExists(Source.Name) Then
+                        FoundFiles = IO.File.ReadAllLines(Source.Name)
+                    End If
 
                 Case = "excel"
-                    If FileIO.FileSystem.FileExists(Source.Name) Then FoundFiles = CommonTasks.ReadExcel(Source.Name)
+                    If FileIO.FileSystem.FileExists(Source.Name) Then
+                        FoundFiles = CommonTasks.ReadExcel(Source.Name)
+                    End If
+
+                Case = "DragDrop"
+                    Dim tmpFoundFiles As New List(Of String)
+
+                    For Each tmpItem As ListViewItem In DragDropCache
+                        tmpFoundFiles.Add(tmpItem.Name)
+                    Next
+                    FoundFiles = tmpFoundFiles
+
+                    'MsgBox("Here")
 
                 Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'

@@ -21,7 +21,9 @@ Public Class Form1
 
     Public Shared StopProcess As Boolean
 
-    Private ListItems_Backup As New List(Of ListViewItem)
+    Private DragDropCache As New List(Of ListViewItem)
+    Private DragDropCacheExcluded As New List(Of ListViewItem)
+
     Private ListItems_TextFiltered As New List(Of ListViewItem)
     Private ListItems_PropFiltered As New List(Of ListViewItem)
 
@@ -1020,14 +1022,14 @@ Public Class Form1
 
         '
 
-        ListViewFilesOutOfDate = False
+        'ListViewFilesOutOfDate = False
 
         LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023.4"
+        Me.Text = "Solid Edge Housekeeper 2023.4.1"
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
@@ -1048,6 +1050,10 @@ Public Class Form1
         If RadioButtonListSortNone.Checked Then
             'ListViewFiles.Sorting = SortOrder.None
         End If
+
+        ListViewFilesOutOfDate = False
+        BT_Update.BackColor = Color.FromName("Control")
+
 
     End Sub
 
@@ -1909,96 +1915,6 @@ Public Class Form1
 
     End Sub
 
-    'Private Sub ApplyFilters()
-    '    ListViewFiles.BeginUpdate()
-    '    ListViewFiles.Items.Clear()
-    '    ListViewFiles.Items.AddRange(PropFilter(TextFilter(ListItems_Backup)).ToArray)
-    '    ListViewFiles.EndUpdate()
-    'End Sub
-
-    'Private Function TextFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
-
-    '    TextFilter = New List(Of ListViewItem)
-
-    '    For Each item As ListViewItem In FilesList
-
-    '        Select Case item.Tag.ToString
-    '            Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
-    '                item.Group = ListViewFiles.Groups.Item("Sources")
-    '            Case Else
-    '                item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
-    '        End Select
-
-    '        If new_CheckBoxFileSearch.Checked And new_ComboBoxFileSearch.Text <> "" Then
-    '            If (item.Text Like new_ComboBoxFileSearch.Text) Or (item.Group.Name = "Sources") Then TextFilter.Add(item)
-    '        Else
-    '            TextFilter.Add(item)
-    '        End If
-
-    '    Next
-
-    'End Function
-
-    'Private Function PropFilter(FilesList As List(Of ListViewItem)) As List(Of ListViewItem)
-
-    '    PropFilter = New List(Of ListViewItem)
-
-    '    Dim DMApp As DesignManager.Application = Nothing
-
-    '    If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
-    '        DMApp = New DesignManager.Application
-    '        DMApp.Visible = 1
-    '    End If
-
-    '    For Each item As ListViewItem In FilesList
-
-    '        Select Case item.Tag.ToString
-    '            Case Is = "Folder", "Folders", "txt", "csv", "excel", "asm", "ASM_folder"
-    '                item.Group = ListViewFiles.Groups.Item("Sources")
-    '            Case Else
-    '                item.Group = ListViewFiles.Groups.Item(item.Tag.ToString)
-    '        End Select
-
-    '        If new_CheckBoxEnablePropertyFilter.Checked And PropertyFilterFormula <> "" Then
-
-    '            If item.Group.Name = "Sources" Then
-    '                'If item.Group.text = "Sources" Then
-
-    '                PropFilter.Add(item)
-
-    '            Else
-
-    '                'System.Threading.Thread.Sleep(1000)
-    '                Dim PropertyFilter As New PropertyFilter(Me)
-
-    '                If StopProcess Then Exit For
-
-    '                Dim msg As String  ' = CommonTasks.TruncateFullPath(item.Name, Nothing)
-
-    '                Try
-    '                    msg = System.IO.Path.GetFileName(item.Name)
-    '                Catch ex As Exception
-    '                    msg = ""
-    '                End Try
-
-    '                Me.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
-
-    '                If PropertyFilter.ProcessFile(DMApp, item.Name, PropertyFilterDict, PropertyFilterFormula) Then PropFilter.Add(item)
-
-    '            End If
-
-    '        Else
-
-    '            PropFilter.Add(item)
-
-    '        End If
-
-    '    Next
-
-    '    If Not IsNothing(DMApp) Then DMApp.Quit()
-
-    'End Function
-
     Private Sub ComboBoxPartNumberPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPartNumberPropertySet.SelectedIndexChanged
         ReconcileFormChanges()
     End Sub
@@ -2255,7 +2171,8 @@ Public Class Form1
         ListViewFiles.Items.Clear()
         ListViewFiles.EndUpdate()
 
-        ListItems_Backup.Clear()
+        DragDropCache.Clear()
+        DragDropCacheExcluded.Clear()
 
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
@@ -2287,7 +2204,6 @@ Public Class Form1
         System.Windows.Forms.Application.DoEvents()
 
         ListViewFiles.BeginUpdate()
-        'ListItems_Backup.Clear()
 
         ' Remove everything except the "Sources" group.
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
@@ -2345,10 +2261,10 @@ Public Class Form1
             UpdateListViewFiles(item, BareTopLevelAssembly)
         Next
 
-        ListItems_Backup.Clear()
-        For Each item As ListViewItem In ListViewFiles.Items
-            ListItems_Backup.Add(item)
-        Next
+        'DragDropCache.Clear()
+        'For Each item As ListViewItem In ListViewFiles.Items
+        '    DragDropCache.Add(item)
+        'Next
 
         ListViewFiles.EndUpdate()
 
@@ -2381,16 +2297,33 @@ Public Class Form1
                 Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
                 If tmpItem.Group.Name = "Sources" Then
                     tmpItem.Remove()
+                    ListViewFilesOutOfDate = True
+                    BT_Update.BackColor = Color.Orange
+
                 ElseIf tmpItem.Group.Name <> "Excluded" Then
+                    ' Move item to "Excluded" group
                     tmpItem.Group = ListViewFiles.Groups.Item("Excluded")
+
+                    If DragDropCache.Contains(tmpItem) Then
+                        DragDropCacheExcluded.Add(tmpItem)
+                        DragDropCache.Remove(tmpItem)
+                    End If
                 Else
+                    ' Move item from "Excluded" group back to the group matching the file's extension
                     tmpItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(tmpItem.Name))
+
+                    If DragDropCacheExcluded.Contains(tmpItem) Then
+                        DragDropCache.Add(tmpItem)
+                        DragDropCacheExcluded.Remove(tmpItem)
+
+                    End If
+
                 End If
 
             Next
 
-            ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'ListViewFilesOutOfDate = True
+            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -2550,6 +2483,28 @@ Public Class Form1
 
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
 
+            Dim DragDropGroupPresent As Boolean
+
+            DragDropGroupPresent = False
+            For Each g As ListViewGroup In ListViewFiles.Groups
+                If g.Name = "DragDrop" Then
+                    DragDropGroupPresent = True
+                    Exit For
+                End If
+            Next
+
+            If Not DragDropGroupPresent Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = "DragDrop"
+                'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+                tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.ImageKey = "ASM_Folder"
+                tmpItem.Tag = "DragDrop"
+                tmpItem.Name = "DragDrop"
+                If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+            End If
+
             ListViewFiles.BeginUpdate()
 
             Dim extFilter As New List(Of String)
@@ -2558,27 +2513,38 @@ Public Class Form1
             If new_CheckBoxFilterPsm.Checked Then extFilter.Add(".psm")
             If new_CheckBoxFilterDft.Checked Then extFilter.Add(".dft")
 
-            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-            For Each item In files
+            Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each FileName As String In Filenames
 
-                If CommonTasks.FilenameIsOK(item) Then
+                If CommonTasks.FilenameIsOK(FileName) Then
 
-                    If Not extFilter.Contains(IO.Path.GetExtension(item).ToLower) Then Continue For
+                    If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
 
-                    If IO.File.Exists(item) Then
+                    If IO.File.Exists(FileName) Then
 
-                        If Not ListViewFiles.Items.ContainsKey(item) Then
+                        If Not ListViewFiles.Items.ContainsKey(FileName) Then
 
                             Dim tmpLVItem As New ListViewItem
-                            tmpLVItem.Text = IO.Path.GetFileName(item)
-                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(item))
+                            tmpLVItem.Text = IO.Path.GetFileName(FileName)
+                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FileName))
                             tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = IO.Path.GetExtension(item).ToLower 'Backup gruppo
-                            tmpLVItem.Name = item
-                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(item).ToLower)
+                            tmpLVItem.Tag = IO.Path.GetExtension(FileName).ToLower 'Backup gruppo
+                            tmpLVItem.Name = FileName
+                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FileName).ToLower)
                             ListViewFiles.Items.Add(tmpLVItem)
 
-                            ListItems_Backup.Add(tmpLVItem)
+                            Dim ItemPresent As Boolean
+
+                            ItemPresent = False
+                            For Each CacheItem As ListViewItem In DragDropCache
+                                If tmpLVItem.Name = CacheItem.Name Then
+                                    ItemPresent = True
+                                    Exit For
+                                End If
+                            Next
+                            If Not ItemPresent Then
+                                DragDropCache.Add(tmpLVItem)
+                            End If
 
                         End If
 
