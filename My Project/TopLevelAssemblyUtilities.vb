@@ -497,9 +497,22 @@ Public Class TopLevelAssemblyUtilities
 
         TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
 
-        For Each TopLevelFolder In TopLevelFolders
-            tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+        If TopLevelFolders.Count > 0 Then
+            For Each TopLevelFolder In TopLevelFolders
+                tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
                                                  TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+
+                For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+                    If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename) Then
+                        AllLinkedFilenames.Add(tmpAllLinkedFilename)
+                    End If
+                Next
+
+            Next
+        Else
+            ' Bare top level assy.  Call FollowLinksBottomUp with TopLevelFolder = ""
+            tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+                                                 "", AllFilenames, IsDriveIndexed, DraftAndModelSameName)
 
             For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
                 If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename) Then
@@ -507,7 +520,7 @@ Public Class TopLevelAssemblyUtilities
                 End If
             Next
 
-        Next
+        End If
 
         DMApp.Quit()
 
@@ -522,62 +535,6 @@ Public Class TopLevelAssemblyUtilities
 
         If Report Then
             ReportUnrelatedFiles(TopLevelFolders, FoundFiles)
-
-            ''Dim EveryFile As New List(Of String)
-            ''Dim tmpEveryFile As New List(Of String)
-            'Dim tmpEveryFile As IReadOnlyCollection(Of String)
-            'Dim tmpActiveFileExtensionsList As New List(Of String)
-            'Dim UnrelatedFiles As New List(Of String)
-
-            'tmpActiveFileExtensionsList.Add("*.asm")
-            'tmpActiveFileExtensionsList.Add("*.par")
-            'tmpActiveFileExtensionsList.Add("*.psm")
-            'tmpActiveFileExtensionsList.Add("*.dft")
-
-            'For Each TopLevelFolder In TopLevelFolders
-            '    tmpEveryFile = FileIO.FileSystem.GetFiles(TopLevelFolder,
-            '            FileIO.SearchOption.SearchAllSubDirectories,
-            '            tmpActiveFileExtensionsList.ToArray)
-
-            '    For Each Filename In tmpEveryFile
-            '        If Not FoundFiles.Contains(Filename) Then
-            '            If Not UnrelatedFiles.Contains(Filename) Then
-            '                UnrelatedFiles.Add(Filename)
-            '            End If
-            '        End If
-            '    Next
-
-            'Next
-
-            'If UnrelatedFiles.Count > 0 Then
-            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-            '    Dim LogfileName As String
-            '    'Dim msg As String
-            '    LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
-
-            '    Try
-            '        Using writer As New IO.StreamWriter(LogfileName, True)
-            '            For Each Filename In UnrelatedFiles
-            '                ' Filename = Filename.Replace(TopLevelFolder, "")
-            '                writer.WriteLine(String.Format(Filename))
-            '            Next
-            '        End Using
-
-            '        Process.Start("Notepad.exe", LogfileName)
-
-            '    Catch ex As Exception
-            '    End Try
-
-            'End If
-
-            ''AllFilenames = FileIO.FileSystem.GetFiles(TopLevelFolder,
-            ''            FileIO.SearchOption.SearchAllSubDirectories,
-            ''            ActiveFileExtensionsList.ToArray)
-
-            ''For Each Filename In AllFilenames
-            ''    AllFilenamesDict.Add(Filename.ToLower, Filename)
-            ''Next
-
 
         End If
 
