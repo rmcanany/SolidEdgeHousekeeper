@@ -73,6 +73,9 @@ of a drawing view.
 
 ### Top Level Assembly Search
 
+Fixed an issue where a top-level search with no top-level folders
+resulted in no files being found (Thank you **@MonkTheOCD_Engie**)
+
 Added the ability to report files unrelated to a top level
 assembly using a Bottom-Up search.  Previously only Top-Down
 search had this option.

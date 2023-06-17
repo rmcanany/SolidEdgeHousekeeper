@@ -2475,9 +2475,10 @@ Partial Class Form1
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
         Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(8, 78)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
-        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(195, 17)
+        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(451, 17)
         Me.CheckBoxTLAIncludePartCopies.TabIndex = 9
-        Me.CheckBoxTLAIncludePartCopies.Text = "Include part copies in search results"
+        Me.CheckBoxTLAIncludePartCopies.Text = "Include parents of all part copies in search results, even if they are not in the" &
+    " top level assy"
         Me.CheckBoxTLAIncludePartCopies.UseVisualStyleBackColor = True
         '
         'CheckBoxDraftAndModelSameName

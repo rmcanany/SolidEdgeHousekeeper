@@ -45,6 +45,7 @@ file settings to match those in a template you specify.
 > *you for it. If they ever figure out how to automate me running Housekeeper, I*
 > *will be out of a job!*
 
+> *Rad, this saves a mountain of time for me. Thanks!*
 
 ## GETTING HELP
 
@@ -231,7 +232,15 @@ As it does, it creates a graph of the links.
 The graph is subsequently traversed to find related files. 
 I don't know how it works; my son did that part. 
 
+**Include parents of part copies option**
 
+![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
+
+This option may be confusing.  Referring to the diagram, 
+note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`,
+while `C.par` is not.
+Enabling the option means that 
+`C.par` would be included in the search results.
 
 #### 3. Select by list
 

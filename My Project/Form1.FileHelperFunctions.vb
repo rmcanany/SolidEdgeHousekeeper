@@ -133,9 +133,10 @@ Partial Class Form1
                         Dim tmpFoundFiles As New List(Of String)
                         Dim tmpFolders As New List(Of String)
 
-                        ' Empty list of strings is flag for BareTopLevelAssembly
+                        ' Empty tmpFolders is flag for BareTopLevelAssembly
                         ' No 'where used' is performed.
                         ' Bare top level assemblies are always processed bottom up.
+
                         tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
