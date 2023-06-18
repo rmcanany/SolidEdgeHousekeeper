@@ -265,6 +265,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.CheckBoxPartCopiesRecursiveSearch = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2018,6 +2019,7 @@ Partial Class Form1
         '
         'GroupBoxMiscOptions
         '
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxPartCopiesRecursiveSearch)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxMoveDrawingViewAllowPartialSuccess)
@@ -2032,7 +2034,7 @@ Partial Class Form1
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelRestartAfter)
         Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 272)
         Me.GroupBoxMiscOptions.Name = "GroupBoxMiscOptions"
-        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 254)
+        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 275)
         Me.GroupBoxMiscOptions.TabIndex = 42
         Me.GroupBoxMiscOptions.TabStop = False
         Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
@@ -2169,7 +2171,7 @@ Partial Class Form1
         Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortNone)
         Me.GroupBoxFileListOptions.Controls.Add(Me.LabelFontSize)
         Me.GroupBoxFileListOptions.Controls.Add(Me.TextBoxFontSize)
-        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 555)
+        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 575)
         Me.GroupBoxFileListOptions.Name = "GroupBoxFileListOptions"
         Me.GroupBoxFileListOptions.Size = New System.Drawing.Size(475, 160)
         Me.GroupBoxFileListOptions.TabIndex = 41
@@ -2251,7 +2253,7 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1052)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1075)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
         Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(475, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
@@ -2404,7 +2406,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1372)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1400)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -2461,7 +2463,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
-        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 755)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 775)
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
@@ -2914,6 +2916,16 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'CheckBoxPartCopiesRecursiveSearch
+        '
+        Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
+        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(8, 250)
+        Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
+        Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(239, 17)
+        Me.CheckBoxPartCopiesRecursiveSearch.TabIndex = 38
+        Me.CheckBoxPartCopiesRecursiveSearch.Text = "Update insert part copies -- Recursive search"
+        Me.CheckBoxPartCopiesRecursiveSearch.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3207,4 +3219,5 @@ Partial Class Form1
     Friend WithEvents RadioButtonListSortAlphabetical As RadioButton
     Friend WithEvents RadioButtonListSortNone As RadioButton
     Friend WithEvents GroupBoxMiscOptions As GroupBox
+    Friend WithEvents CheckBoxPartCopiesRecursiveSearch As CheckBox
 End Class

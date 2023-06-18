@@ -45,12 +45,22 @@ the list was always sorted alphabetically.
 
 ![File list sorting options](My%20Project/media/file_sort_options.png)
 
-
 The `Dependency` order is intended to help eliminate
 the annoying dark gray corners on drawings.  The `None` option is primarily 
 intended to preserve the order on imported lists.
 
-These options are set on the **Configuration** Tab.
+These options are set on the **Configuration Tab -- File List Group**.
+
+### Update Part Copies
+
+Added an option to recursively update part copies.  It is yet
+another technique to help eliminate gray corners on drawings.
+
+Recursion means
+that if a Part Copy is encountered, the parent file is opened.
+If *that* file has a Part Copy, its parent is opened, etc.
+
+The option is set on the **Configuration Tab -- Miscellaneous Group**.
 
 ### Property Find/Replace
 

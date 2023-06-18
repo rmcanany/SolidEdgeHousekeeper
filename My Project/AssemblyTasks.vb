@@ -361,7 +361,7 @@ Public Class AssemblyTasks
 
     End Function
 
-    Private Function ActivateAndUpdateAllInternal(
+    Public Function ActivateAndUpdateAllInternal(
         ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application

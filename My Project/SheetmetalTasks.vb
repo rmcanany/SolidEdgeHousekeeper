@@ -861,40 +861,43 @@ Public Class SheetmetalTasks
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Insert part copy file not found: '{0}'", CopiedPart.FileName))
                         Else
-                            '' Try a recursion
-                            'Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
+                            If Configuration("CheckBoxPartCopiesRecursiveSearch") = "True" Then
+                                ' Try a recursion
+                                Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
 
-                            'If Filetype = ".par" Then
-                            '    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
-                            '    Dim PT As New PartTasks
+                                If Filetype = ".par" Then
+                                    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
+                                    Dim PT As New PartTasks
 
-                            '    SupplementalErrorMessage = PT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
-                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                            '    If SupplementalExitStatus > 0 Then
-                            '        ExitStatus = SupplementalExitStatus
-                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                            '            ErrorMessageList.Add(s)
-                            '        Next
-                            '    End If
-                            '    ParentDoc.Close()
-                            '    SEApp.DoIdle()
+                                    SupplementalErrorMessage = PT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                                    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                                    If SupplementalExitStatus > 0 Then
+                                        ExitStatus = SupplementalExitStatus
+                                        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                                            ErrorMessageList.Add(s)
+                                        Next
+                                    End If
+                                    ParentDoc.Close()
+                                    SEApp.DoIdle()
 
-                            'ElseIf Filetype = ".psm" Then
-                            '    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
-                            '    Dim SMT As New SheetmetalTasks
+                                ElseIf Filetype = ".psm" Then
+                                    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
+                                    Dim SMT As New SheetmetalTasks
 
-                            '    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
-                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                            '    If SupplementalExitStatus > 0 Then
-                            '        ExitStatus = SupplementalExitStatus
-                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                            '            ErrorMessageList.Add(s)
-                            '        Next
-                            '    End If
-                            '    ParentDoc.Close()
-                            '    SEApp.DoIdle()
+                                    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                                    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                                    If SupplementalExitStatus > 0 Then
+                                        ExitStatus = SupplementalExitStatus
+                                        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                                            ErrorMessageList.Add(s)
+                                        Next
+                                    End If
+                                    ParentDoc.Close()
+                                    SEApp.DoIdle()
 
-                            'End If
+                                End If
+
+                            End If
 
                             If Not CopiedPart.IsUpToDate Then
                                 CopiedPart.Update()

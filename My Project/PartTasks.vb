@@ -608,9 +608,12 @@ Public Class PartTasks
         Dim CopiedParts As SolidEdgePart.CopiedParts
         Dim CopiedPart As SolidEdgePart.CopiedPart
 
+
         Models = SEDoc.Models
 
         Dim TF As Boolean
+
+        ' Part Copies
 
         If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
@@ -623,38 +626,41 @@ Public Class PartTasks
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Insert part copy file not found: '{0}'", CopiedPart.FileName))
                         Else
-                            '' Try a recursion
-                            'Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
+                            If Configuration("CheckBoxPartCopiesRecursiveSearch") = "True" Then
+                                ' Try a recursion
+                                Dim Filetype As String = CommonTasks.GetDocTypeByExtension(CopiedPart.FileName)
 
-                            'If Filetype = ".par" Then
-                            '    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
-                            '    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
-                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                            '    If SupplementalExitStatus > 0 Then
-                            '        ExitStatus = SupplementalExitStatus
-                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                            '            ErrorMessageList.Add(s)
-                            '        Next
-                            '    End If
-                            '    ParentDoc.Close()
-                            '    SEApp.DoIdle()
+                                If Filetype = ".par" Then
+                                    Dim ParentDoc As SolidEdgePart.PartDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.PartDocument)
+                                    SupplementalErrorMessage = UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                                    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                                    If SupplementalExitStatus > 0 Then
+                                        ExitStatus = SupplementalExitStatus
+                                        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                                            ErrorMessageList.Add(s)
+                                        Next
+                                    End If
+                                    ParentDoc.Close()
+                                    SEApp.DoIdle()
 
-                            'ElseIf Filetype = ".psm" Then
-                            '    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
-                            '    Dim SMT As New SheetmetalTasks
+                                ElseIf Filetype = ".psm" Then
+                                    Dim ParentDoc As SolidEdgePart.SheetMetalDocument = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgePart.SheetMetalDocument)
+                                    Dim SMT As New SheetmetalTasks
 
-                            '    SupplementalErrorMessage = SMT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
-                            '    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                            '    If SupplementalExitStatus > 0 Then
-                            '        ExitStatus = SupplementalExitStatus
-                            '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                            '            ErrorMessageList.Add(s)
-                            '        Next
-                            '    End If
-                            '    ParentDoc.Close()
-                            '    SEApp.DoIdle()
+                                    SupplementalErrorMessage = SMT.UpdateInsertPartCopiesInternal(ParentDoc, Configuration, SEApp)
+                                    SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                                    If SupplementalExitStatus > 0 Then
+                                        ExitStatus = SupplementalExitStatus
+                                        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                                            ErrorMessageList.Add(s)
+                                        Next
+                                    End If
+                                    ParentDoc.Close()
+                                    SEApp.DoIdle()
 
-                            'End If
+                                End If
+
+                            End If
 
                             If Not CopiedPart.IsUpToDate Then
                                 CopiedPart.Update()
@@ -677,6 +683,45 @@ Public Class PartTasks
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
+
+
+        '' Interpart Copies
+
+        'Dim Constructions As SolidEdgePart.Constructions
+        'Dim InterpartConstructions As SolidEdgePart.InterpartConstructions
+        'Dim InterpartConstruction As SolidEdgePart.InterpartConstruction
+        'Dim AsmSource As SolidEdgeFramework.Reference
+        'Dim ImmediateParent As SolidEdgeFramework.Reference
+        'Dim Occurrence As SolidEdgeAssembly.Occurrence
+        'Dim TopLevelDocument As SolidEdgeAssembly.AssemblyDocument
+
+        'Constructions = SEDoc.Constructions
+
+        'If Constructions.Count > 0 Then
+        '    InterpartConstructions = Constructions.InterpartConstructions
+        '    If InterpartConstructions.Count > 0 Then
+        '        For Each InterpartConstruction In InterpartConstructions
+        '            AsmSource = CType(InterpartConstruction.AsmSource, SolidEdgeFramework.Reference)
+        '            ImmediateParent = CType(AsmSource.ImmediateParent, SolidEdgeFramework.Reference)
+        '            Occurrence = CType(ImmediateParent.Object, SolidEdgeAssembly.Occurrence)
+        '            TopLevelDocument = Occurrence.TopLevelDocument
+
+        '            Dim AT As New AssemblyTasks
+
+        '            SupplementalErrorMessage = AT.ActivateAndUpdateAllInternal(TopLevelDocument, Configuration, SEApp)
+        '            SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+        '            If SupplementalExitStatus > 0 Then
+        '                ExitStatus = SupplementalExitStatus
+        '                For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+        '                    ErrorMessageList.Add(s)
+        '                Next
+        '            End If
+        '            TopLevelDocument.Close()
+        '            SEApp.DoIdle()
+
+        '        Next
+        '    End If
+        'End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

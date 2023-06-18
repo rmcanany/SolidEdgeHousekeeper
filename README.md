@@ -47,6 +47,12 @@ file settings to match those in a template you specify.
 
 > *Rad, this saves a mountain of time for me. Thanks!*
 
+Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
+Google's Bard said:
+
+> *Why did the Solid Edge Housekeeper get a promotion?*  
+> *She was the only one who could clean up the mess that Solid Edge users make.*
+
 ## GETTING HELP
 
 Start with the Readme.  To quickly navigate, use the Table of Contents
