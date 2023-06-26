@@ -1024,7 +1024,9 @@ Public Class AssemblyTasks
         Dim AllOccurrences As New List(Of SolidEdgeAssembly.Occurrence)
         Dim AllOccurrencesNames As New List(Of String)
 
-        Dim OccurrenceGetter As New OccurrenceGetter(SEDoc)
+        Dim IgnoreIncludeInReports As Boolean = Configuration("CheckBoxTLAIgnoreIncludeInReports").ToLower = "true"
+
+        Dim OccurrenceGetter As New OccurrenceGetter(SEDoc, IgnoreIncludeInReports)
 
         For Each Occurrence In OccurrenceGetter.AllOccurrences
 
@@ -1175,10 +1177,17 @@ Public Class AssemblyTasks
 
         If Occurrences.Count = 0 Then
             AsmRefPlanes.Visible = True
-            For Each AsmRefPlane In AsmRefPlanes
-                AsmRefPlane.Visible = False
-                AsmRefPlane.Visible = True
-            Next
+
+            ' Some files containing nothing but sketches fail here
+            Try
+                For Each AsmRefPlane In AsmRefPlanes
+                    AsmRefPlane.Visible = False
+                    AsmRefPlane.Visible = True
+                Next
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem processing reference planes.  Please verify results.")
+            End Try
         Else
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
@@ -1246,10 +1255,16 @@ Public Class AssemblyTasks
 
         If Occurrences.Count = 0 Then
             AsmRefPlanes.Visible = True
-            For Each AsmRefPlane In AsmRefPlanes
-                AsmRefPlane.Visible = False
-                AsmRefPlane.Visible = True
-            Next
+            ' Some files with nothing but sketches fail here
+            Try
+                For Each AsmRefPlane In AsmRefPlanes
+                    AsmRefPlane.Visible = False
+                    AsmRefPlane.Visible = True
+                Next
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Problem processing reference planes.  Please verify results.")
+            End Try
             'Else
             '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
             '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
@@ -1352,6 +1367,7 @@ Public Class AssemblyTasks
         'Configuration("ComboBoxSaveAsAssemblyFileType") format examples
         'IGES (*.igs)
         'Parasolid text (*.x_b)
+        'Copy (*.asm)
         NewExtension = Configuration("ComboBoxSaveAsAssemblyFileType")
         NewExtension = Split(NewExtension, Delimiter:="*")(1)  ' 'Parasolid text (*.x_b)' -> '.x_b)'
         NewExtension = Split(NewExtension, Delimiter:=")")(0)  ' '.x_b)' -> '.x_b'
@@ -1391,43 +1407,33 @@ Public Class AssemblyTasks
                         ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
                     End If
 
-                    'SubDir = ParseSubdirectoryFormula(SEDoc, Formula)
-
-                    'If SubDir = "" Then
-                    '    Proceed = False
-                    '    ExitStatus = 1
-                    '    ErrorMessageList.Add(String.Format("Property not found or other issue with formula '{0}'", Formula))
-                    'Else
-                    '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                    '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                    '        Try
-                    '            FileIO.FileSystem.CreateDirectory(BaseDir)
-                    '        Catch ex As Exception
-                    '            Proceed = False
-                    '            ExitStatus = 1
-                    '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                    '        End Try
-                    '    End If
-                    'End If
-
                 End If
 
                 If Proceed Then
                     NewFilename = BaseDir + "\" + System.IO.Path.ChangeExtension(BaseFilename, NewExtension)
                 End If
 
-                'Dir = Configuration("TextBoxSaveAsAssemblyOutputDirectory")
-                'BaseFilename = System.IO.Path.GetFileNameWithoutExtension(Filename)
-                'NewFilename = Dir + "\" + System.IO.Path.ChangeExtension(BaseFilename, NewExtension)
             Else
                 NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
             End If
 
             If Proceed Then
                 Try
-                    If Not ImageExtensions.Contains(NewExtension) Then
-                        SEDoc.SaveAs(NewFilename)
-                        SEApp.DoIdle()
+                    If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                        If Not Configuration("ComboBoxSaveAsAssemblyFileType").ToLower.Contains("copy") Then
+                            SEDoc.SaveAs(NewFilename)
+                            SEApp.DoIdle()
+                        Else
+                            If Configuration("CheckBoxSaveAsAssemblyOutputDirectory").ToLower = "false" Then
+                                SEDoc.SaveCopyAs(NewFilename)
+                                SEApp.DoIdle()
+                            Else
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+                                Proceed = False
+                            End If
+                        End If
+
                     Else  ' Saving as image
                         Dim Window As SolidEdgeFramework.Window
                         Dim View As SolidEdgeFramework.View
@@ -1507,26 +1513,6 @@ Public Class AssemblyTasks
                             ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
                         End If
 
-
-                        'SubDir = ParseSubdirectoryFormula(SEDoc, Formula)
-
-                        'If SubDir = "" Then
-                        '    Proceed = False
-                        '    ExitStatus = 1
-                        '    ErrorMessageList.Add(String.Format("Property not found or other issue with formula '{0}'", Formula))
-                        'Else
-                        '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                        '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                        '        Try
-                        '            FileIO.FileSystem.CreateDirectory(BaseDir)
-                        '        Catch ex As Exception
-                        '            Proceed = False
-                        '            ExitStatus = 1
-                        '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                        '        End Try
-                        '    End If
-                        'End If
-
                     End If
 
                     If Proceed Then
@@ -1547,8 +1533,22 @@ Public Class AssemblyTasks
                 If Proceed Then
                     Try
                         If Not ImageExtensions.Contains(NewExtension) Then
-                            SEDoc.SaveAs(NewFilename)
-                            SEApp.DoIdle()
+                            If Not Configuration("ComboBoxSaveAsAssemblyFileType").ToLower.Contains("copy") Then
+                                SEDoc.SaveAs(NewFilename)
+                                SEApp.DoIdle()
+                            Else
+                                If Configuration("CheckBoxSaveAsAssemblyOutputDirectory").ToLower = "false" Then
+                                    SEDoc.SaveCopyAs(NewFilename)
+                                    SEApp.DoIdle()
+                                Else
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+                                    Proceed = False
+                                End If
+                            End If
+
+                            'SEDoc.SaveAs(NewFilename)
+                            'SEApp.DoIdle()
                         Else
                             Dim Window As SolidEdgeFramework.Window
                             Dim View As SolidEdgeFramework.View

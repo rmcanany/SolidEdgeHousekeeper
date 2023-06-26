@@ -101,17 +101,6 @@ Partial Class Form1
                                                            CheckBoxDraftAndModelSameName.Checked,
                                                            CheckBoxTLAReportUnrelatedFiles.Checked))
 
-                            'For Each tmpFolder As String In tmpFolders
-
-                            '    'Dim TLAU As New TopLevelAssemblyUtilities(Me)
-
-                            '    'TextBoxStatus.Text = "Finding all linked files.  This may take some time."
-
-                            '    'tmpFoundFiles.AddRange(TLAU.GetLinksBottomUp(tmpFolder,
-                            '    '                           Source.SubItems.Item(1).Text,
-                            '    '                           ActiveFileExtensionsList,
-                            '    '                           CheckBoxDraftAndModelSameName.Checked))
-                            'Next
                         Else
                             Dim TLAU As New TopLevelAssemblyUtilities(Me)
                             tmpFoundFiles.AddRange(TLAU.GetLinksTopDown(tmpFolders,
@@ -236,24 +225,11 @@ Partial Class Form1
 
             Next
 
-            'ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
             ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFiles.EndUpdate()
 
             TextBoxStatus.Text = ""
-
-
-            'ElapsedTime = Now.Subtract(StartTime).TotalMinutes
-            'If ElapsedTime < 60 Then
-            '    ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
-            'Else
-            '    ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
-            'End If
-
-
-            'Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-            'TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
 
         Else
             'TextBoxStatus.Text = "No files found"
@@ -302,11 +278,23 @@ Partial Class Form1
                 End If
             Next
         Else
+            Dim ProcessLast As New List(Of String)  ' Trying to process top level assy last
+
             For i As Integer = 0 To ListViewFiles.Items.Count - 1
                 Filename = ListViewFiles.Items(i).Name
                 If System.IO.Path.GetExtension(Filename) = FileExtension Then
-                    If ListViewFiles.Items(i).Group.Name <> "Excluded" Then FoundFilesList.Add(Filename)
+                    If ListViewFiles.Items(i).Group.Name <> "Excluded" Then
+                        If ListViewFiles.Items(i).Group.Name = "Sources" Then
+                            ProcessLast.Add(Filename)
+                        Else
+                            FoundFilesList.Add(Filename)
+                        End If
+                    End If
                 End If
+            Next
+
+            For Each Filename In ProcessLast
+                FoundFilesList.Add(Filename)
             Next
 
         End If

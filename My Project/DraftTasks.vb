@@ -2673,31 +2673,6 @@ Public Class DraftTasks
                     End Try
                 End If
 
-                'SupplementalErrorMessage = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
-                '' SubDir = ParseSubdirectoryFormula(SEDoc, Configuration, Formula)
-                'SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                'If SupplementalExitStatus = 0 Then
-                '    SubDir = SupplementalErrorMessage(0)(0)
-
-                '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                '        Try
-                '            FileIO.FileSystem.CreateDirectory(BaseDir)
-                '        Catch ex As Exception
-                '            Proceed = False
-                '            ExitStatus = 1
-                '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                '        End Try
-                '    End If
-                'Else
-                '    ExitStatus = 1
-                '    Proceed = False
-                '    For Each msg In SupplementalErrorMessage(SupplementalExitStatus)
-                '        ErrorMessageList.Add(msg)
-                '    Next
-                '    ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
-                'End If
-
             End If
 
             If Proceed Then
@@ -2758,8 +2733,22 @@ Public Class DraftTasks
 
         'Capturing a fault to update ExitStatus
         Try
-            SEDoc.SaveAs(NewFilename)
-            SEApp.DoIdle()
+            If Not Configuration("ComboBoxSaveAsDraftFileType").ToLower.Contains("copy") Then
+                SEDoc.SaveAs(NewFilename)
+                SEApp.DoIdle()
+            Else
+                If Configuration("CheckBoxSaveAsDraftOutputDirectory").ToLower = "false" Then
+                    SEDoc.SaveCopyAs(NewFilename)
+                    SEApp.DoIdle()
+                Else
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+                    Proceed = False
+                End If
+            End If
+
+            'SEDoc.SaveAs(NewFilename)
+            'SEApp.DoIdle()
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Error saving file {0}", CommonTasks.TruncateFullPath(NewFilename, Configuration)))

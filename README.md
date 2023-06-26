@@ -652,7 +652,7 @@ Some rules for interactive editing apply. It is important to leave Solid Edge in
 Also, do not Close the file or do a Save As on it. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an exception. 
 
 #### Save as
-Exports the file to a non-Solid Edge format. 
+Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
 Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
 
@@ -692,8 +692,8 @@ Same as the Assembly command of the same name.
 #### Fit pictorial view
 Same as the Assembly command of the same name.
 
-#### Update insert part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings.
+#### Update part copies
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings.  You can optionally update the parent files recursively.  That option is on the Configuration Tab -- Miscellaneous Group.
 
 #### Broken links
 Same as the Assembly command of the same name.
@@ -713,7 +713,7 @@ Checks if any features of the model are in the Suppressed or Rolledback status.
 #### Underconstrained profiles
 Checks if any profiles are not fully constrained.
 
-#### Insert part copies out of date
+#### Part copies out of date
 If the file has any insert part copies, checks if they are up to date.
 
 #### Material not in material table
@@ -754,7 +754,7 @@ Same as the Assembly command of the same name.
 #### Fit pictorial view
 Same as the Assembly command of the same name.
 
-#### Update insert part copies
+#### Update part copies
 Same as the Part command of the same name.
 
 #### Update design for cost
@@ -780,7 +780,7 @@ Same as the Part command of the same name.
 #### Underconstrained profiles
 Same as the Part command of the same name.
 
-#### Insert part copies out of date
+#### Part copies out of date
 Same as the Part command of the same name.
 
 #### Flat pattern missing or out of date

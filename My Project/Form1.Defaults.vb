@@ -207,23 +207,21 @@ Partial Class Form1
     End Sub
 
     Private Sub PopulateComboBoxes()
-        'Dim FileTypesAssembly As String()
-        'Dim FileTypesPart As String()
-        'Dim FileTypesSheetmetal As String()
-        'Dim FileTypesDraft As String()
         Dim FileTypesString As String
         Dim FileType As String
 
-        ' Assembly
+        ' Common model file types
         FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
         FileTypesString += ":OBJ (*.obj):STL (*.stl)"
-        ' FileTypesString += ":bmp (*.bmp):jpg (*.jpg):tif (*.tif)"
         FileTypesString += ":bmp (*.bmp):jpg (*.jpg):png (*.png):tif (*.tif)"
 
+        ' Assembly
         ComboBoxSaveAsAssemblyFileType.Items.Clear()
         For Each FileType In Split(FileTypesString, Delimiter:=":")
             ComboBoxSaveAsAssemblyFileType.Items.Add(FileType)
         Next
+        ComboBoxSaveAsAssemblyFileType.Items.Add("Copy (*.asm)")
+
         ComboBoxSaveAsAssemblyFileType.Text = CType(ComboBoxSaveAsAssemblyFileType.Items(0), String)
 
         ' Part
@@ -231,6 +229,8 @@ Partial Class Form1
         For Each FileType In Split(FileTypesString, Delimiter:=":")
             ComboBoxSaveAsPartFileType.Items.Add(FileType)
         Next
+        ComboBoxSaveAsPartFileType.Items.Add("Copy (*.par)")
+
         ComboBoxSaveAsPartFileType.Text = CType(ComboBoxSaveAsPartFileType.Items(0), String)
 
         ' Sheetmetal
@@ -240,6 +240,7 @@ Partial Class Form1
         Next
         ComboBoxSaveAsSheetmetalFileType.Items.Add("PDF Drawing (*.pdf)")
         ComboBoxSaveAsSheetmetalFileType.Items.Add("DXF Flat (*.dxf)")
+        ComboBoxSaveAsSheetmetalFileType.Items.Add("Copy (*.psm)")
         ComboBoxSaveAsSheetmetalFileType.Text = CType(ComboBoxSaveAsSheetmetalFileType.Items(0), String)
 
         ' Draft
@@ -249,6 +250,8 @@ Partial Class Form1
         For Each FileType In Split(FileTypesString, Delimiter:=":")
             ComboBoxSaveAsDraftFileType.Items.Add(FileType)
         Next
+        ComboBoxSaveAsDraftFileType.Items.Add("Copy (*.dft)")
+
         ComboBoxSaveAsDraftFileType.Text = CType(ComboBoxSaveAsDraftFileType.Items(0), String)
 
         'ComboBoxPartNumberPropertySet

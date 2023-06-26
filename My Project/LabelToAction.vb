@@ -265,7 +265,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim SaveAs As New L2A
-        HelpString = "Exports the file to a non-Solid Edge format. "
+        HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
         HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
@@ -370,7 +370,7 @@ Public Class LabelToAction
         HelpString += "You can optionally update the parent files recursively.  "
         HelpString += "That option is on the Configuration Tab -- Miscellaneous Group."
         PopulateList(UpdateInsertPartCopies,
-                     "Update insert part copies",
+                     "Update part copies",
                      "UpdateInsertPartCopies",
                      HelpString,
                      RequiresSave:=True)
@@ -421,7 +421,7 @@ Public Class LabelToAction
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = "If the file has any insert part copies, checks if they are up to date."
         PopulateList(InsertPartCopiesOutOfDate,
-                     "Insert part copies out of date",
+                     "Part copies out of date",
                      "InsertPartCopiesOutOfDate",
                      HelpString)
 
@@ -533,7 +533,7 @@ Public Class LabelToAction
         Dim UpdateInsertPartCopies As New L2A
         HelpString = "Same as the Part command of the same name."
         PopulateList(UpdateInsertPartCopies,
-                     "Update insert part copies",
+                     "Update part copies",
                      "UpdateInsertPartCopies",
                      HelpString,
                      RequiresSave:=True)
@@ -597,7 +597,7 @@ Public Class LabelToAction
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = "Same as the Part command of the same name."
         PopulateList(InsertPartCopiesOutOfDate,
-                     "Insert part copies out of date",
+                     "Part copies out of date",
                      "InsertPartCopiesOutOfDate",
                      HelpString)
 

@@ -96,6 +96,12 @@ Fixed an issue where files added by drag-and-drop were
 deleted from the list when running the `Update File List`
 command (Thank you **@HIL**).
 
+### Save As
+
+Added `Save Copy As` for all file types.  In the ComboBox, select
+the `Copy` option.  If you try to save a copy to the original folder,
+you will get an error.
+
 ## V2023.3 Enhancements/Fixes
 
 ### Property Find/Replace

@@ -178,6 +178,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.GroupBoxMiscOptions = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxPartCopiesRecursiveSearch = New System.Windows.Forms.CheckBox()
         Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
         Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
@@ -265,7 +266,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxPartCopiesRecursiveSearch = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2039,6 +2040,16 @@ Partial Class Form1
         Me.GroupBoxMiscOptions.TabStop = False
         Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
         '
+        'CheckBoxPartCopiesRecursiveSearch
+        '
+        Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
+        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(8, 250)
+        Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
+        Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(239, 17)
+        Me.CheckBoxPartCopiesRecursiveSearch.TabIndex = 38
+        Me.CheckBoxPartCopiesRecursiveSearch.Text = "Update insert part copies -- Recursive search"
+        Me.CheckBoxPartCopiesRecursiveSearch.UseVisualStyleBackColor = True
+        '
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
@@ -2253,7 +2264,7 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1075)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1100)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
         Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(475, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
@@ -2406,7 +2417,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1400)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1425)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -2453,6 +2464,7 @@ Partial Class Form1
         '
         'GroupBoxTLAOptions
         '
+        Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAIncludePartCopies)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxDraftAndModelSameName)
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxWarnBareTLA)
@@ -2467,7 +2479,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 260)
+        Me.GroupBoxTLAOptions.Size = New System.Drawing.Size(475, 285)
         Me.GroupBoxTLAOptions.TabIndex = 17
         Me.GroupBoxTLAOptions.TabStop = False
         Me.GroupBoxTLAOptions.Text = "TOP LEVEL ASSEMBLY OPTIONS"
@@ -2486,7 +2498,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(8, 180)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(8, 205)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(292, 17)
         Me.CheckBoxDraftAndModelSameName.TabIndex = 8
@@ -2520,7 +2532,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 224)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(379, 249)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(75, 20)
@@ -2532,7 +2544,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(8, 225)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(8, 250)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(355, 20)
@@ -2541,7 +2553,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(8, 205)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(8, 230)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(143, 13)
@@ -2563,7 +2575,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLATopDown.AutoSize = True
         Me.RadioButtonTLATopDown.Checked = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(8, 131)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(8, 156)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(315, 17)
@@ -2575,7 +2587,7 @@ Partial Class Form1
         'RadioButtonTLABottomUp
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(8, 157)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(8, 182)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(290, 17)
@@ -2916,15 +2928,19 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxPartCopiesRecursiveSearch
+        'CheckBoxTLAIgnoreIncludeInReports
         '
-        Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
-        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(8, 250)
-        Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
-        Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(239, 17)
-        Me.CheckBoxPartCopiesRecursiveSearch.TabIndex = 38
-        Me.CheckBoxPartCopiesRecursiveSearch.Text = "Update insert part copies -- Recursive search"
-        Me.CheckBoxPartCopiesRecursiveSearch.UseVisualStyleBackColor = True
+        Me.CheckBoxTLAIgnoreIncludeInReports.AutoSize = True
+        Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
+        Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
+        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(8, 125)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
+        Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(238, 17)
+        Me.CheckBoxTLAIgnoreIncludeInReports.TabIndex = 10
+        Me.CheckBoxTLAIgnoreIncludeInReports.Text = "Ignore occurrence's IncludeInReports setting"
+        Me.CheckBoxTLAIgnoreIncludeInReports.UseVisualStyleBackColor = True
+        Me.CheckBoxTLAIgnoreIncludeInReports.Visible = False
         '
         'Form1
         '
@@ -3220,4 +3236,5 @@ Partial Class Form1
     Friend WithEvents RadioButtonListSortNone As RadioButton
     Friend WithEvents GroupBoxMiscOptions As GroupBox
     Friend WithEvents CheckBoxPartCopiesRecursiveSearch As CheckBox
+    Friend WithEvents CheckBoxTLAIgnoreIncludeInReports As CheckBox
 End Class

@@ -1538,32 +1538,12 @@ Public Class PartTasks
                     ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
                 End If
 
-                'SubDir = ParseSubdirectoryFormula(SEDoc, Formula)
-
-                'If SubDir = "" Then
-                '    Proceed = False
-                '    ExitStatus = 1
-                '    ErrorMessageList.Add(String.Format("Property not found or other issue with formula '{0}'", Formula))
-                'Else
-                '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                '        Try
-                '            FileIO.FileSystem.CreateDirectory(BaseDir)
-                '        Catch ex As Exception
-                '            Proceed = False
-                '            ExitStatus = 1
-                '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                '        End Try
-                '    End If
-                'End If
-
             End If
 
             If Proceed Then
                 NewFilename = BaseDir + "\" + System.IO.Path.ChangeExtension(PartBaseFilename, NewExtension)
             End If
 
-            ' NewFilename = Configuration("TextBoxSaveAsPartOutputDirectory") + "\" + System.IO.Path.ChangeExtension(PartBaseFilename, NewExtension)
         Else
             NewFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, NewExtension)
         End If
@@ -1572,8 +1552,22 @@ Public Class PartTasks
             'Capturing a fault to update ExitStatus
             Try
                 If Not ImageExtensions.Contains(NewExtension) Then
-                    SEDoc.SaveAs(NewFilename)
-                    SEApp.DoIdle()
+                    If Not Configuration("ComboBoxSaveAsPartFileType").ToLower.Contains("copy") Then
+                        SEDoc.SaveAs(NewFilename)
+                        SEApp.DoIdle()
+                    Else
+                        If Configuration("CheckBoxSaveAsPartOutputDirectory").ToLower = "false" Then
+                            SEDoc.SaveCopyAs(NewFilename)
+                            SEApp.DoIdle()
+                        Else
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+                            Proceed = False
+                        End If
+                    End If
+
+                    'SEDoc.SaveAs(NewFilename)
+                    'SEApp.DoIdle()
                 Else
                     Dim Window As SolidEdgeFramework.Window
                     Dim View As SolidEdgeFramework.View

@@ -572,7 +572,7 @@ Public Class TopLevelAssemblyUtilities
         ValidExtensions.Add(".dft")
 
         Filename = DMDoc.FullName
-        tf = FileIO.FileSystem.FileExists(Filename)
+        'tf = FileIO.FileSystem.FileExists(Filename)
 
         If FileIO.FileSystem.FileExists(Filename) Then
             tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)

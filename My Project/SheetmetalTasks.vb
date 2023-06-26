@@ -1896,24 +1896,6 @@ Public Class SheetmetalTasks
                     ErrorMessageList.Add(String.Format("Could not create subdirectory from formula '{0}'", Formula))
                 End If
 
-
-                'If SubDir = "" Then
-                '    Proceed = False
-                '    ExitStatus = 1
-                '    ErrorMessageList.Add(String.Format("Property not found or other issue with formula '{0}'", Formula))
-                'Else
-                '    BaseDir = String.Format("{0}\{1}", BaseDir, SubDir)
-                '    If Not FileIO.FileSystem.DirectoryExists(BaseDir) Then
-                '        Try
-                '            FileIO.FileSystem.CreateDirectory(BaseDir)
-                '        Catch ex As Exception
-                '            Proceed = False
-                '            ExitStatus = 1
-                '            ErrorMessageList.Add(String.Format("Could not create '{0}'", BaseDir))
-                '        End Try
-                '    End If
-                'End If
-
             End If
 
             If Proceed Then
@@ -1974,8 +1956,22 @@ Public Class SheetmetalTasks
 
                     Else
                         Try
-                            SEDoc.SaveAs(NewFilename)
-                            SEApp.DoIdle()
+                            If Not Configuration("ComboBoxSaveAsSheetmetalFileType").ToLower.Contains("copy") Then
+                                SEDoc.SaveAs(NewFilename)
+                                SEApp.DoIdle()
+                            Else
+                                If Configuration("CheckBoxSaveAsSheetmetalOutputDirectory").ToLower = "false" Then
+                                    SEDoc.SaveCopyAs(NewFilename)
+                                    SEApp.DoIdle()
+                                Else
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+                                    Proceed = False
+                                End If
+                            End If
+
+                            'SEDoc.SaveAs(NewFilename)
+                            'SEApp.DoIdle()
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error saving '{0}'", CommonTasks.TruncateFullPath(NewFilename, Configuration)))

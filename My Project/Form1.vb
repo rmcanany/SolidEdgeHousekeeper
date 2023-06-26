@@ -1020,16 +1020,12 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        '
-
-        'ListViewFilesOutOfDate = False
-
         LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023.4.1"
+        Me.Text = "Solid Edge Housekeeper 2023.4.3"
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
@@ -1038,18 +1034,17 @@ Public Class Form1
 
         If RadioButtonListSortDependency.Checked Then
             CheckBoxListIncludeNoDependencies.Enabled = True
-            'ListViewFiles.Sorting = SortOrder.None
         Else
             CheckBoxListIncludeNoDependencies.Enabled = False
         End If
 
-        If RadioButtonListSortAlphabetical.Checked Then
-            'ListViewFiles.Sorting = SortOrder.Ascending
-        End If
+        'If RadioButtonListSortAlphabetical.Checked Then
+        '    'ListViewFiles.Sorting = SortOrder.Ascending
+        'End If
 
-        If RadioButtonListSortNone.Checked Then
-            'ListViewFiles.Sorting = SortOrder.None
-        End If
+        'If RadioButtonListSortNone.Checked Then
+        '    'ListViewFiles.Sorting = SortOrder.None
+        'End If
 
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
