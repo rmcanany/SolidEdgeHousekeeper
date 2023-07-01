@@ -11,7 +11,7 @@ of yours.  Do not run it on production work without testing on backups first.
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
-## V2023.4 Enhancements/Fixes
+## V2023.5 Enhancements/Fixes
 
 ### Update Draft Styles from Template
 
@@ -58,7 +58,10 @@ another technique to help eliminate gray corners on drawings.
 
 Recursion means
 that if a Part Copy is encountered, the parent file is opened.
-If *that* file has a Part Copy, its parent is opened, etc.
+If *that* file has a Part Copy, its parent is opened in turn.
+The program continues in this fashion until the base file
+(ie one with no Part Copies) is reached.
+It then updates each file in reverse order.
 
 The option is set on the **Configuration Tab -- Miscellaneous Group**.
 

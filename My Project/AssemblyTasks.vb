@@ -1173,8 +1173,6 @@ Public Class AssemblyTasks
         Catch ex As Exception
         End Try
 
-
-
         If Occurrences.Count = 0 Then
             AsmRefPlanes.Visible = True
 
@@ -1197,10 +1195,6 @@ Public Class AssemblyTasks
             SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants))
             SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants))
         End If
-
-        '' SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
-        'SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewTrimetricView, SolidEdgeFramework.SolidEdgeCommandConstants))
-        'SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         If SEDoc.ReadOnly Then
             ExitStatus = 1
@@ -1248,32 +1242,32 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
-        Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
-        Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
+        'Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
+        'Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
+        'Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
         'Dim Occurrence As SolidEdgeAssembly.Occurrence
 
-        If Occurrences.Count = 0 Then
-            AsmRefPlanes.Visible = True
-            ' Some files with nothing but sketches fail here
-            Try
-                For Each AsmRefPlane In AsmRefPlanes
-                    AsmRefPlane.Visible = False
-                    AsmRefPlane.Visible = True
-                Next
-            Catch ex As Exception
-                ExitStatus = 1
-                ErrorMessageList.Add("Problem processing reference planes.  Please verify results.")
-            End Try
-            'Else
-            '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
-            '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
-            '    SEApp.StartCommand(CType(40080, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Sketches
-            '    SEApp.StartCommand(CType(40081, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Reference Axes
-            '    SEApp.StartCommand(CType(40082, SolidEdgeFramework.SolidEdgeCommandConstants))
-            '    SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants))
-            '    SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants))
-        End If
+        'If Occurrences.Count = 0 Then
+        '    AsmRefPlanes.Visible = True
+        '    ' Some files with nothing but sketches fail here
+        '    Try
+        '        For Each AsmRefPlane In AsmRefPlanes
+        '            AsmRefPlane.Visible = False
+        '            AsmRefPlane.Visible = True
+        '        Next
+        '    Catch ex As Exception
+        '        ExitStatus = 1
+        '        ErrorMessageList.Add("Problem processing reference planes.  Please verify results.")
+        '    End Try
+        '    'Else
+        '    '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsShowAll, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    '    SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyAssemblyToolsHideAllReferencePlanes, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    '    SEApp.StartCommand(CType(40080, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Sketches
+        '    '    SEApp.StartCommand(CType(40081, SolidEdgeFramework.SolidEdgeCommandConstants)) 'Hide Reference Axes
+        '    '    SEApp.StartCommand(CType(40082, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    '    SEApp.StartCommand(CType(40083, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    '    SEApp.StartCommand(CType(40084, SolidEdgeFramework.SolidEdgeCommandConstants))
+        'End If
 
         If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
@@ -1284,10 +1278,6 @@ Public Class AssemblyTasks
         If Configuration("RadioButtonPictorialViewTrimetric").ToLower = "true" Then
             SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewTrimetricView, SolidEdgeFramework.SolidEdgeCommandConstants))
         End If
-
-        'RadioButtonPictorialViewDimetric = True
-        'RadioButtonPictorialViewIsometric = False
-        ' SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
 
         SEApp.StartCommand(CType(SolidEdgeConstants.AssemblyCommandConstants.AssemblyViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
 

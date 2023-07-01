@@ -1746,28 +1746,12 @@ Public Class SheetmetalTasks
 
         Models = SEDoc.Models
 
-        If Models.Count > 0 Then
-            'RefPlanes = SEDoc.RefPlanes
-            'For Each RefPlane In RefPlanes
-            '    RefPlane.Visible = False
-            'Next
-        Else
+        If Models.Count = 0 Then
             RefPlanes = SEDoc.RefPlanes
             For Each RefPlane In RefPlanes
                 RefPlane.Visible = True
             Next
         End If
-
-        ''Some imported files crash on this command
-        'Try
-        '    SEDoc.Constructions.Visible = False
-        'Catch ex As Exception
-        'End Try
-
-        'SEDoc.CoordinateSystems.Visible = False
-
-        ' SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
-
 
         If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
             SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewISOView, SolidEdgeFramework.SolidEdgeCommandConstants))
