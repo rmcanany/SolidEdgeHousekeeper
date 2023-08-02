@@ -550,7 +550,6 @@ Public Class TopLevelAssemblyUtilities
                                          IsDriveIndexed As Boolean,
                                          DraftAndModelSameName As Boolean) As List(Of String)
 
-        'Dim DMDoc As DesignManager.Document
         Dim LinkedDocs As DesignManager.LinkedDocuments
         Dim LinkedDoc As DesignManager.Document
         Dim LinkedDocName As String
@@ -572,7 +571,13 @@ Public Class TopLevelAssemblyUtilities
         ValidExtensions.Add(".dft")
 
         Filename = DMDoc.FullName
-        'tf = FileIO.FileSystem.FileExists(Filename)
+
+        ' 20230730
+        ' Deal with FOA files
+        If Filename.Contains("!") Then
+            Filename = Filename.Split("!"c)(0)  ' c:\project\foa.asm!Member1 > c:\project\foa.asm
+        End If
+
 
         If FileIO.FileSystem.FileExists(Filename) Then
             tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)
@@ -583,10 +588,10 @@ Public Class TopLevelAssemblyUtilities
 
                 ' In case of corrupted file or other problem
                 Try
-                    'DMDoc = CType(DMApp.OpenFileInDesignManager(Filename), DesignManager.Document)
 
                     ' Get any draft files containing this file.
-                    WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed, DraftAndModelSameName)
+                    ' WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed, DraftAndModelSameName)
+                    WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, Filename, IsDriveIndexed, DraftAndModelSameName)
                     For Each WhereUsedFile In WhereUsedFiles
                         Extension = IO.Path.GetExtension(WhereUsedFile)
                         If Extension = ".dft" Then
@@ -597,9 +602,11 @@ Public Class TopLevelAssemblyUtilities
                     Next
 
                     If Form1.CheckBoxTLAIncludePartCopies.Checked Then
-                        tf = System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft"
+                        ' tf = System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft"
+                        tf = System.IO.Path.GetExtension(Filename) <> ".dft"
                     Else
-                        tf = System.IO.Path.GetExtension(DMDoc.FullName) = ".asm"
+                        'tf = System.IO.Path.GetExtension(DMDoc.FullName) = ".asm"
+                        tf = System.IO.Path.GetExtension(Filename) = ".asm"
                     End If
 
                     ' Follow links contained by this file, if any.
@@ -616,10 +623,13 @@ Public Class TopLevelAssemblyUtilities
                                 ' Do not include them, or follow their links.
                                 If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
                                     LinkedDocName = LinkedDoc.FullName
+
                                     If LinkedDocName.Contains("!") Then
                                         LinkedDocName = LinkedDocName.Split("!"c)(0)
                                     End If
+
                                     Extension = IO.Path.GetExtension(LinkedDocName)
+
                                     If ValidExtensions.Contains(Extension) Then
                                         'AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
                                         '                                         TopLevelFolder, AllFilenames, IsDriveIndexed)
@@ -632,11 +642,7 @@ Public Class TopLevelAssemblyUtilities
                         End If
 
                     End If
-
-                    'DMDoc.Close()
-                    'System.Threading.Thread.Sleep(100)
                 Catch ex As Exception
-                    ' MsgBox(Filename)
                 End Try
             End If
         End If
