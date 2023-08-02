@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
@@ -885,22 +886,24 @@ Public Class Form1
         End If
 
         Try
-            SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-            SEDoc.Activate()
-            SEApp.DoIdle()
+            If Not CheckBoxBackgroundProcessing.Checked Then
+                SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                SEDoc.Activate()
 
-            ' Maximize the window in the application
-            If Filetype = "Draft" Then
-                ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                ActiveSheetWindow.WindowState = 2
+                ' Maximize the window in the application
+                If Filetype = "Draft" Then
+                    ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                    ActiveSheetWindow.WindowState = 2
+                Else
+                    ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                    ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                End If
             Else
-                ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
-                ActiveWindow.WindowState = 2
-                'ActiveWindow.WindowState = 0  '0 normal, 1 minimized, 2 maximized
-                'Dim h As Integer = ActiveWindow.Height
-                'Dim w As Integer = ActiveWindow.Width
+                SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(
+                            Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
             End If
 
+            SEApp.DoIdle()
 
             If Filetype = "Assembly" Then
                 CheckedListBoxX = CheckedListBoxAssembly

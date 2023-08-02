@@ -17,20 +17,22 @@ Partial Class Form1
 
             ' Set foreground/background processing options
             If RunInBackground Then
-                SEApp.DelayCompute = True
-                SEApp.Interactive = False
-                SEApp.ScreenUpdating = False
-                SEApp.Visible = False
-                'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+                'SEApp.DelayCompute = True
+                'SEApp.Interactive = False
+                'SEApp.ScreenUpdating = False
+                'SEApp.Visible = False
+                ''assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
             Else
                 SEApp.DelayCompute = False
                 SEApp.Interactive = True
                 SEApp.ScreenUpdating = True
                 SEApp.Visible = True
                 SEApp.WindowState = 2  'Maximizes Solid Edge
+
                 'assemblyDocument.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+                'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
             End If
-            'SEApp.DisplayAlerts = True  ' Needed this one time when using a new license
+
         Catch ex As Exception
             Activate()
             MsgBox("Could not start Solid Edge.  Exiting...")
