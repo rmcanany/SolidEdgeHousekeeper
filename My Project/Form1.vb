@@ -886,7 +886,15 @@ Public Class Form1
         End If
 
         Try
-            If Not CheckBoxBackgroundProcessing.Checked Then
+            If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
+                SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+
+                ' Here is the same functionality without using the SolidEdgeCommunity dependency
+                ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
+                ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
+                ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+
+            Else
                 SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
                 SEDoc.Activate()
 
@@ -898,9 +906,6 @@ Public Class Form1
                     ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
                     ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
                 End If
-            Else
-                SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(
-                            Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
             End If
 
             SEApp.DoIdle()
@@ -992,6 +997,138 @@ Public Class Form1
 
         Return ErrorMessagesCombined
     End Function
+
+    'Private Function ProcessFile(ByVal Path As String, ByVal Filetype As String) As Dictionary(Of String, List(Of String))
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    '    Dim ExitStatus As Integer
+    '    'Dim SupplementalErrorMessage As String
+    '    Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
+
+    '    Dim LabelText As String = ""
+    '    Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
+    '    Dim CheckedListBoxX As CheckedListBox
+    '    Dim ModifiedFilename As String = ""
+    '    Dim OriginalFilename As String = ""
+    '    Dim RemnantsFilename As String = ""
+
+    '    Dim ActiveWindow As SolidEdgeFramework.Window
+    '    Dim ActiveSheetWindow As SolidEdgeDraft.SheetWindow
+
+    '    ' Account for infrequent malfunctions on a large number of files.
+    '    TotalAborts -= 0.1
+    '    If TotalAborts < 0 Then
+    '        TotalAborts = 0
+    '    End If
+
+    '    Try
+
+    '        SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+
+    '        'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+    '        'SEDoc.Activate()
+    '        SEApp.DoIdle()
+
+    '        ' Maximize the window in the application
+    '        'If Filetype = "Draft" Then
+    '        '    ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+    '        '    ActiveSheetWindow.WindowState = 2
+    '        'Else
+    '        '    ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+    '        '    ActiveWindow.WindowState = 2
+    '        '    'ActiveWindow.WindowState = 0  '0 normal, 1 minimized, 2 maximized
+    '        '    'Dim h As Integer = ActiveWindow.Height
+    '        '    'Dim w As Integer = ActiveWindow.Width
+    '        'End If
+
+
+    '        If Filetype = "Assembly" Then
+    '            CheckedListBoxX = CheckedListBoxAssembly
+    '        ElseIf Filetype = "Part" Then
+    '            CheckedListBoxX = CheckedListBoxPart
+    '        ElseIf Filetype = "Sheetmetal" Then
+    '            CheckedListBoxX = CheckedListBoxSheetmetal
+    '        ElseIf Filetype = "Draft" Then
+    '            CheckedListBoxX = CheckedListBoxDraft
+    '        Else
+    '            MsgBox("In ProcessFile(), Filetype not recognized: " + Filetype + ".  Exiting...")
+    '            SEApp.Quit()
+    '            End
+    '        End If
+
+    '        For Each LabelText In CheckedListBoxX.CheckedItems
+    '            If Filetype = "Assembly" Then
+    '                ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionAssembly, LabelText)
+    '            ElseIf Filetype = "Part" Then
+    '                ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionPart, LabelText)
+    '            ElseIf Filetype = "Sheetmetal" Then
+    '                ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionSheetmetal, LabelText)
+    '            Else
+    '                ErrorMessage = LaunchTask.Launch(SEDoc, Configuration, SEApp, Filetype, LabelToActionDraft, LabelText)
+    '            End If
+
+    '            ExitStatus = ErrorMessage.Keys(0)
+    '            'SupplementalErrorMessage = ErrorMessage(1)
+
+    '            If ExitStatus <> 0 Then
+    '                ErrorMessagesCombined(LabelText) = ErrorMessage(ErrorMessage.Keys(0))
+
+    '                If ExitStatus = 99 Then
+    '                    StopProcess = True
+    '                End If
+    '                'LogfileAppend(LabelText, TruncateFullPath(Path), SupplementalErrorMessage)
+    '            End If
+    '        Next
+
+    '        'If LabelText = "Update styles from template" Then
+    '        '    OriginalFilename = SEDoc.FullName
+    '        '    ModifiedFilename = String.Format("{0}\{1}-Housekeeper.dft",
+    '        '                                System.IO.Path.GetDirectoryName(SEDoc.FullName),
+    '        '                                System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+    '        '    RemnantsFilename = ModifiedFilename.Replace("Housekeeper", "HousekeeperOld")
+    '        'End If
+
+    '        SEDoc.Close(False)
+    '        SEApp.DoIdle()
+
+    '        'If LabelText = "Update styles from template" Then
+    '        '    If ExitStatus = 0 Then
+    '        '        System.IO.File.Delete(OriginalFilename)
+    '        '        FileSystem.Rename(ModifiedFilename, OriginalFilename)
+    '        '    ElseIf ExitStatus = 1 Then
+    '        '        If System.IO.File.Exists(RemnantsFilename) Then
+    '        '            System.IO.File.Delete(RemnantsFilename)
+    '        '        End If
+    '        '        If System.IO.File.Exists(ModifiedFilename) Then  ' Not created if a task-generated file was processed
+    '        '            FileSystem.Rename(OriginalFilename, RemnantsFilename)
+    '        '            FileSystem.Rename(ModifiedFilename, OriginalFilename)
+    '        '        End If
+    '        '    ElseIf ExitStatus = 2 Then
+    '        '        ' Nothing was saved.  Leave SEDoc unmodified.
+    '        '    End If
+
+    '        'End If
+
+    '    Catch ex As Exception
+    '        Dim AbortList As New List(Of String)
+
+    '        AbortList.Add(ex.ToString)
+
+    '        TotalAborts += 1
+    '        If TotalAborts >= TotalAbortsMaximum Then
+    '            StopProcess = True
+    '            AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
+    '        Else
+    '            SEStop()
+    '            SEStart()
+    '        End If
+    '        ErrorMessagesCombined("Error processing file") = AbortList
+    '    End Try
+
+    '    UpdateTimeRemaining()
+
+    '    Return ErrorMessagesCombined
+    'End Function
+
 
 
     Private Sub Startup()

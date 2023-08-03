@@ -37,6 +37,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
@@ -84,6 +88,10 @@ Public Class AssemblyTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
@@ -166,6 +174,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
@@ -220,6 +232,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
@@ -270,6 +286,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim msg As String = ""
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
         Dim Properties As SolidEdgeFramework.Properties = Nothing
@@ -371,6 +391,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         SEDoc.ActivateAll()
         SEDoc.UpdateAll()
 
@@ -419,6 +443,10 @@ Public Class AssemblyTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim TempErrorMessageList As New List(Of String)
 
@@ -1018,6 +1046,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
 
@@ -1098,6 +1130,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
@@ -1143,6 +1179,10 @@ Public Class AssemblyTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
@@ -1242,6 +1282,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         'Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
         'Dim AsmRefPlanes As SolidEdgeAssembly.AsmRefPlanes = SEDoc.AsmRefPlanes
         'Dim AsmRefPlane As SolidEdgeAssembly.AsmRefPlane
@@ -1326,6 +1370,10 @@ Public Class AssemblyTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim SupplementalExitStatus As Integer = 0
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -2261,6 +2309,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
@@ -2444,6 +2496,10 @@ Public Class AssemblyTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
+
         Dim Variables As SolidEdgeFramework.Variables = Nothing
         Dim VariableList As SolidEdgeFramework.VariableList = Nothing
         Dim Variable As SolidEdgeFramework.variable = Nothing
@@ -2523,6 +2579,10 @@ Public Class AssemblyTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
         Dim DisplayName As String
         Dim ExposeValue As Integer
