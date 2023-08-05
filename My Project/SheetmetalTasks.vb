@@ -445,7 +445,6 @@ Public Class SheetmetalTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim Models As SolidEdgePart.Models = SEDoc.Models
         Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = SEDoc.FlatPatternModels
 
         If FlatpatternModels.Count > 0 Then
