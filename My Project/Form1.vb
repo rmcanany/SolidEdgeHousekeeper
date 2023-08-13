@@ -1177,7 +1177,7 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023.5"
+        Me.Text = "Solid Edge Housekeeper 2023.6"
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False

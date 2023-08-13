@@ -16,6 +16,7 @@
 @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
 @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL
 
+**Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
 *and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
 
@@ -142,7 +143,9 @@ The first time you use the program, some site-specific information is needed.
 This includes the location of your templates, material table, etc. 
 These are populated on the **Configuration Tab**.
 
-To start execution, click the Process button.  The status
+![Status Bar](My%20Project/media/status_bar_ready.png)
+
+To start execution, click the `Process` button.  The status
 bar provides feedback to help you monitor progress. 
 You can also stop execution if desired.
 See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
@@ -313,24 +316,27 @@ To do so, check/uncheck the appropriate File Type
 
 ![File list sorting options](My%20Project/media/file_sort_options.png)
 
-You can choose sorting options of `None`, `Alphabetic`, or 
-`Dependency`.  These options are set on the 
+You can choose sorting options of `Unsorted`, `Alphabetic`, 
+`Dependency`, or `Random sample`.  These options are set on the 
 **Configuration** Tab.
 
-The `None` option is primarily 
-intended to preserve the order on imported lists.
+The `Unsorted` option is primarily 
+intended to preserve the order of imported lists.
 
 The `Dependency` option is useful in conjunction with
 the `Update part copy` commands.  It is intended to help eliminate
 the tedious `model out-of-date` (dark gray corners) on drawings. 
 
-In practice, along with `Update part copies` command,
-you would probably also want to run the `Activate and update all` 
-Assembly command, and the `Update drawing views` Draft command.
-
 The dependency ordering is not fool proof.  It has trouble with
 mutual dependencies, such as Interpart copies.  I've had some luck
 simply running the process two times in a row.
+
+The `Random sample` option randomly selects and shuffles
+ a fraction of the total files found.  The `Sample fraction`
+is a decimal number between `0.0` and `1.0`.
+
+This option is primarily intended for software testing, 
+but can be used for any purpose.
 
 ### Filtering
 

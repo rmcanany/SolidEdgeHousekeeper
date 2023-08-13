@@ -11,6 +11,45 @@ of yours.  Do not run it on production work without testing on backups first.
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
+## V2023.6 Enhancements/Fixes
+
+### Process Tasks in Background -- Increased speed
+
+Contributed by **@Fiorini** 
+(GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
+
+Uses the SolidEdgeCommunity OpenInBackground function 
+(Thank you **@JNewell**!).  Speedup varies -- from 3X to 10X 
+depending on the task.  The option is set on the
+**Configuration Tab**.
+
+Some tasks (`Fit view`, `Interactive edit`, and `Save As`) are 
+incompatible with background processing.  The program checks
+ and notifies the user of a conflict.  
+
+At this time, assemblies still run in the old mode -- 
+graphics hidden, not disabled.  
+
+### Sort Order -- Random sampling
+
+Added an option to randomly select a fraction of the total files 
+found.  The fraction, a decimal number between 0.0 and 1.0, 
+is set on the Configuration Tab.
+
+This option is primarily intended for software testing, 
+but can be used for any purpose.
+
+### Dependency-order Sort
+
+Fixed an issue, in top-level search mode, where the top level 
+assembly itself was not sorted correctly.
+
+### Bottom Up Search 
+
+Fixed an issue where bottom up search was not returning 
+Family of Assemblies links.  
+
+
 ## V2023.5 Enhancements/Fixes
 
 ### Update Draft Styles from Template
