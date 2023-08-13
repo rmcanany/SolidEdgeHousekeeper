@@ -283,10 +283,11 @@ Public Class LabelToAction
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
         PopulateList(SaveAs,
-                     "Save as",
+                     "Save As",
                      "SaveAs",
                      HelpString,
-                     RequiresSaveAsOutputDirectory:=True)
+                     RequiresSaveAsOutputDirectory:=True,
+                     RequiresForegroundProcessing:=True)
 
     End Sub
 
@@ -456,7 +457,8 @@ Public Class LabelToAction
                      "Save As",
                      "SaveAs",
                      HelpString,
-                     RequiresSaveAsOutputDirectory:=True)
+                     RequiresSaveAsOutputDirectory:=True,
+                     RequiresForegroundProcessing:=True)
 
     End Sub
 
@@ -645,7 +647,8 @@ Public Class LabelToAction
                      "Save As",
                      "SaveAs",
                      HelpString,
-                     RequiresSaveAsOutputDirectory:=True)
+                     RequiresSaveAsOutputDirectory:=True,
+                     RequiresForegroundProcessing:=True)
 
     End Sub
 
@@ -805,7 +808,8 @@ Public Class LabelToAction
                      "Save As",
                      "SaveAs",
                      HelpString,
-                     RequiresSaveAsOutputDirectory:=True)
+                     RequiresSaveAsOutputDirectory:=True,
+                     RequiresForegroundProcessing:=True)
 
     End Sub
 

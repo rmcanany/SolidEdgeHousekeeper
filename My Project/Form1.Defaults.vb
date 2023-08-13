@@ -178,6 +178,19 @@ Partial Class Form1
             End If
         End If
 
+        tf = tb.Name.ToLower.Contains("randomsample")
+        If tf Then
+            If Value = "" Then
+                tb.Text = "0.1"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "0.1"
+                End Try
+            End If
+        End If
+
         tf = tb.Name.ToLower.Contains("restartafter")
         If tf Then
             If Value = "" Then

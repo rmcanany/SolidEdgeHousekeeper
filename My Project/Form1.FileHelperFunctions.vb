@@ -195,6 +195,16 @@ Partial Class Form1
                 FoundFiles = SortAlphabetical(FoundFiles)
             End If
 
+            If RadioButtonListSortRandomSample.Checked Then
+                Dim Fraction As Double = 0.1
+                Try
+                    Fraction = CDbl(TextBoxRandomSampleFraction.Text)
+                Catch ex As Exception
+                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", TextBoxRandomSampleFraction.Text))
+                End Try
+                FoundFiles = SortRandomSample(FoundFiles, Fraction)
+            End If
+
             ListViewFiles.BeginUpdate()
 
             For Each FoundFile In FoundFiles
@@ -613,6 +623,40 @@ Partial Class Form1
 
         Return Outlist
 
+    End Function
+
+    Private Function SortRandomSample(FoundFiles As IReadOnlyCollection(Of String), Fraction As Double) As IReadOnlyCollection(Of String)
+        ' https://stackoverflow.com/questions/29358857/shuffling-an-array-of-strings-in-vb-net
+
+        Dim ShuffleList As New List(Of String)
+        Dim OutList As New List(Of String)
+        Dim Foundfile As String
+        Dim temp As String
+        Dim rnd As New Random()
+        Dim j As Int32
+        Dim NumberToReturn As Integer
+
+        For Each Foundfile In FoundFiles
+            ShuffleList.Add(Foundfile)
+        Next
+
+        ' Shuffle all
+        For n As Int32 = ShuffleList.Count - 1 To 0 Step -1
+            j = rnd.Next(0, n + 1)
+            ' Swap them.
+            temp = ShuffleList(n)
+            ShuffleList(n) = ShuffleList(j)
+            ShuffleList(j) = temp
+        Next n
+
+        ' Extract fraction
+        NumberToReturn = CInt(Fraction * ShuffleList.Count)
+
+        For i As Integer = 0 To NumberToReturn - 1
+            OutList.Add(ShuffleList(i))
+        Next
+
+        Return OutList
     End Function
 
     Private Function SortAlphabetical(FoundFiles As IReadOnlyCollection(Of String)) As IReadOnlyCollection(Of String)

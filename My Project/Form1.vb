@@ -777,6 +777,8 @@ Public Class Form1
         Dim ElapsedTime As Double
         Dim RemainingTime As Double
         Dim TotalEstimatedTime As Double
+        Dim ElapsedTimeString As String
+        Dim RemainingTimeString As String
 
         If FilesToProcessCompleted > 2 Then
             ElapsedTime = Now.Subtract(StartTime).TotalMinutes
@@ -784,15 +786,25 @@ Public Class Form1
             TotalEstimatedTime = ElapsedTime * CDbl(FilesToProcessTotal) / CDbl(FilesToProcessCompleted)
             RemainingTime = TotalEstimatedTime - ElapsedTime
 
-            If RemainingTime < 60 Then
-                If RemainingTime < 0.1 Then
-                    LabelTimeRemaining.Text = ""
-                Else
-                    LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} min.", RemainingTime.ToString("0.0"))
-                End If
+            If ElapsedTime < 60 Then
+                ElapsedTimeString = String.Format("{0} min.", ElapsedTime.ToString("0.0"))
             Else
-                LabelTimeRemaining.Text = String.Format("Estimated time remaining: {0} hr.", (RemainingTime / 60).ToString("0.0"))
+                ElapsedTimeString = String.Format("{0} hr.", (ElapsedTime / 60).ToString("0.0"))
             End If
+
+            If RemainingTime < 60 Then
+                RemainingTimeString = String.Format("{0} min.", RemainingTime.ToString("0.0"))
+            Else
+                RemainingTimeString = String.Format("{0} hr.", (RemainingTime / 60).ToString("0.0"))
+            End If
+
+            If RemainingTime < 0.1 Then
+                LabelTimeRemaining.Text = ""
+            Else
+                LabelTimeRemaining.Text = String.Format("Time elapsed: {0}, Time remaining: {1}", ElapsedTimeString, RemainingTimeString)
+            End If
+
+
         End If
     End Sub
 
@@ -1176,6 +1188,12 @@ Public Class Form1
             CheckBoxListIncludeNoDependencies.Enabled = True
         Else
             CheckBoxListIncludeNoDependencies.Enabled = False
+        End If
+
+        If RadioButtonListSortRandomSample.Checked Then
+            TextBoxRandomSampleFraction.Enabled = True
+        Else
+            TextBoxRandomSampleFraction.Enabled = False
         End If
 
         'If RadioButtonListSortAlphabetical.Checked Then
@@ -2865,17 +2883,8 @@ Public Class Form1
 
         If RadioButtonListSortDependency.Checked Then
             CheckBoxListIncludeNoDependencies.Enabled = True
-            ''ListViewFiles.Sorting = SortOrder.None
         Else
             CheckBoxListIncludeNoDependencies.Enabled = False
-        End If
-
-        If RadioButtonListSortNone.Checked Then
-            'ListViewFiles.Sorting = SortOrder.None
-        End If
-
-        If RadioButtonListSortAlphabetical.Checked Then
-            'ListViewFiles.Sorting = SortOrder.Ascending
         End If
     End Sub
 
@@ -2883,24 +2892,46 @@ Public Class Form1
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
-        If RadioButtonListSortNone.Checked Then
-            'ListViewFiles.Sorting = SortOrder.None
-        End If
     End Sub
 
     Private Sub RadioButtonListSortAlphabetical_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortAlphabetical.CheckedChanged
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
-        If RadioButtonListSortAlphabetical.Checked Then
-            'ListViewFiles.Sorting = SortOrder.Ascending
-        End If
     End Sub
 
     Private Sub CheckBoxListIncludeNoDependencies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxListIncludeNoDependencies.CheckedChanged
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
+    End Sub
+
+    Private Sub RadioButtonListSortRandomSample_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortRandomSample.CheckedChanged
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+        If RadioButtonListSortRandomSample.Checked Then
+            TextBoxRandomSampleFraction.Enabled = True
+        Else
+            TextBoxRandomSampleFraction.Enabled = False
+        End If
+    End Sub
+
+    Private Sub TextBoxRandomSampleFraction_LostFocus(sender As Object, e As EventArgs) Handles TextBoxRandomSampleFraction.LostFocus
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+
+        Dim Fraction As Double
+        Try
+            Fraction = CDbl(TextBoxRandomSampleFraction.Text)
+            If Fraction < 0 Or Fraction > 1 Then
+                MsgBox(String.Format("Number '{0}' is not between 0.0 and 1.0", Fraction))
+                TextBoxRandomSampleFraction.Text = "0.1"
+            End If
+        Catch ex As Exception
+            MsgBox(String.Format("Cannot convert '{0}' to a decimal number", TextBoxRandomSampleFraction.Text))
+            TextBoxRandomSampleFraction.Text = "0.1"
+        End Try
     End Sub
 
 
