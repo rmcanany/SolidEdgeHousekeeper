@@ -32,9 +32,11 @@ graphics hidden, not disabled.
 
 ### Sort Order -- Random sampling
 
-Added an option to randomly select a fraction of the total files 
-found.  The fraction, a decimal number between 0.0 and 1.0, 
-is set on the Configuration Tab.
+Added an option to randomly select and shuffle a fraction of the total files 
+found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`.  Sort 
+options are set on the **Configuration Tab**.
+
+![Logo](My%20Project/media/file_sort_options.png)
 
 This option is primarily intended for software testing, 
 but can be used for any purpose.
