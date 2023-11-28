@@ -1727,7 +1727,10 @@ Public Class Form1
         FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
         FormPropertyFilter.GetPropertyFilter()
 
-        'If FormPropertyFilter.DialogResult = DialogResult.OK Then ApplyFilters()
+        If FormPropertyFilter.DialogResult = DialogResult.OK Then
+            ListViewFilesOutOfDate = True
+            BT_Update.BackColor = Color.Orange
+        End If
 
     End Sub
 
