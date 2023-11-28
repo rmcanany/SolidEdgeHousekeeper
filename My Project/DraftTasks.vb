@@ -54,7 +54,7 @@ Public Class DraftTasks
 
             If Not FileIO.FileSystem.FileExists(Filename) Then
                 ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(ModelLink.FileName, Configuration)))
+                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(Filename, Configuration)))
             End If
         Next
 
@@ -444,6 +444,8 @@ Public Class DraftTasks
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
+        Dim Filename As String
+
         Dim UpdatedView As Boolean = False
 
         Dim PartsLists As SolidEdgeDraft.PartsLists
@@ -464,10 +466,17 @@ Public Class DraftTasks
         ModelLinks = SEDoc.ModelLinks
 
         For Each ModelLink In ModelLinks
-            If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(ModelLink.FileName, Configuration)))
+            If ModelLink.IsAssemblyFamilyMember Then
+                Filename = ModelLink.FileName.Split("!"c)(0)
+            Else
+                Filename = ModelLink.FileName
             End If
+
+            If Not FileIO.FileSystem.FileExists(Filename) Then
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(Filename, Configuration)))
+            End If
+
         Next
 
         If Not ExitStatus = 1 Then
