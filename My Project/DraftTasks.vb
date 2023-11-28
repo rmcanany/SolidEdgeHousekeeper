@@ -41,10 +41,18 @@ Public Class DraftTasks
         Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
         Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
+        Dim Filename As String
+
         ModelLinks = SEDoc.ModelLinks
 
         For Each ModelLink In ModelLinks
-            If Not FileIO.FileSystem.FileExists(ModelLink.FileName) Then
+            If ModelLink.IsAssemblyFamilyMember Then
+                Filename = ModelLink.FileName.Split("!"c)(0)
+            Else
+                Filename = ModelLink.FileName
+            End If
+
+            If Not FileIO.FileSystem.FileExists(Filename) Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0} not found", CommonTasks.TruncateFullPath(ModelLink.FileName, Configuration)))
             End If
