@@ -305,98 +305,16 @@ Partial Class Form1
 
     End Sub
 
+    Private Sub CreatePreferencesFolder()
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim PreferencesFolder As String = String.Format("{0}\Preferences", StartupPath)
+        If Not FileIO.FileSystem.DirectoryExists(PreferencesFolder) Then
+            FileIO.FileSystem.CreateDirectory(PreferencesFolder)
+        End If
+    End Sub
+
     Private Sub CreateFilenameCharmap()
-
         Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
-
-        'Dim s As String
-        's = FCD.SubstituteIllegalCharacters("<>:""/\|?*! ")
-        's = FCD.SubstituteIllegalCharacters("L 3 X 6 X 1/4")
-
-        'Dim msg As String = ""
-
-        'Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        'Dim Charmap As String() = Nothing
-        'Dim CharmapList As New List(Of String)
-
-        'Dim CharmapFilename As String = String.Format("{0}\filename_charmap.txt", StartupPath)
-
-        'Try
-        '    Charmap = IO.File.ReadAllLines(CharmapFilename)
-        'Catch ex As Exception
-        '    ' File does not exist.  Create it.
-        '    ' https://www.mtu.edu/umc/services/websites/writing/characters-avoid/
-
-        '    CharmapList.Add("c This file contains a list of common illegal characters")
-        '    CharmapList.Add("c for files and directories.")
-        '    CharmapList.Add("c https://www.mtu.edu/umc/services/websites/writing/characters-avoid/")
-        '    CharmapList.Add("c It covers operating systems such as Windows, Mac and Linux")
-        '    CharmapList.Add("c and devices such as desktops, tablets and smartphones.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c The format is <illegal character><space><replacement value>")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c So, '# my_replacement' means ")
-        '    CharmapList.Add("c If '#' is found, replace it with 'my_replacement'.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c (Note, in the default mapping below, the '.' is just text.")
-        '    CharmapList.Add("c It doesn't have any special meaning or function.)")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c If you're just using Windows, you probably only have to define")
-        '    CharmapList.Add("c replacements for the characters    < > : "" / \ | ? * !")
-        '    CharmapList.Add("c and comment out or delete the rest.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c (Actually Windows doesn't care about !, but Solid Edge does.")
-        '    CharmapList.Add("c It used to identify Assembly Family members.)")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c If you mess up, you can delete this file and Housekeeper will")
-        '    CharmapList.Add("c regenerate it next time you start the program.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c To comment out a line (so Housekeeper ignores it) start the line")
-        '    CharmapList.Add("c with 'c' as done in this header text.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c There is no error checking when the program reads in this file.")
-        '    CharmapList.Add("c So don't do stuff like '* ?' or '   c This is too complicated'.")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c ")
-        '    CharmapList.Add("c Character mapping below")
-        '    CharmapList.Add("")
-
-        '    CharmapList.Add("# .pound.")
-        '    CharmapList.Add("% .percent.")
-        '    CharmapList.Add("& .ampersand.")
-        '    CharmapList.Add("{ .leftcurlybracket.")
-        '    CharmapList.Add("} .rightcurlybracket.")
-        '    CharmapList.Add("\ .backslash.")
-        '    CharmapList.Add("< .leftanglebracket.")
-        '    CharmapList.Add("> .rightanglebracket.")
-        '    CharmapList.Add("* .asterisk.")
-        '    CharmapList.Add("? .questionmark.")
-        '    CharmapList.Add("/ .forwardslash.")
-        '    CharmapList.Add("  .blankspace.")
-        '    CharmapList.Add("$ .dollarsign.")
-        '    CharmapList.Add("! .exclamationpoint.")
-        '    CharmapList.Add("' .singlequote.")
-
-        '    'CharmapList.Add("".doublequote.")
-        '    CharmapList.Add(String.Format("{0} {1}", Chr(34), ".doublequote."))
-
-        '    CharmapList.Add(": .colon.")
-        '    CharmapList.Add("@ .atsign.")
-        '    CharmapList.Add("+ .plussign.")
-        '    CharmapList.Add("` .backtick.")
-        '    CharmapList.Add("| .pipe.")
-        '    CharmapList.Add("= .equalsign.")
-
-        '    IO.File.WriteAllLines(CharmapFilename, CharmapList)
-
-        '    'Dim msg As String = ""
-        '    'For Each s As String In CharmapList
-        '    '    msg = String.Format("{0}{1}{2}", msg, s, vbCrLf)
-        '    'Next
-        '    'MsgBox(msg)
-
-        'End Try
-
     End Sub
 
     Private Sub LoadDefaults()
@@ -412,7 +330,7 @@ Partial Class Form1
         Dim ControlDict As New Dictionary(Of String, Control)
         Dim Ctrl As Control
 
-        DefaultsFilename = StartupPath + "\" + "defaults.txt"
+        DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
 
         CreateFilenameCharmap()
 

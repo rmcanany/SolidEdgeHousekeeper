@@ -1145,6 +1145,7 @@ Public Class Form1
 
     Private Sub Startup()
 
+        CreatePreferencesFolder()
         PopulateCheckedListBoxes()
         LoadDefaults()
         LoadPrinterSettings()
@@ -1195,14 +1196,6 @@ Public Class Form1
         Else
             TextBoxRandomSampleFraction.Enabled = False
         End If
-
-        'If RadioButtonListSortAlphabetical.Checked Then
-        '    'ListViewFiles.Sorting = SortOrder.Ascending
-        'End If
-
-        'If RadioButtonListSortNone.Checked Then
-        '    'ListViewFiles.Sorting = SortOrder.None
-        'End If
 
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")

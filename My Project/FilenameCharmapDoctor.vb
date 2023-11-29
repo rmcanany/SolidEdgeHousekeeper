@@ -28,7 +28,7 @@
         Dim Key As String
         Dim Value As String
 
-        Dim CharmapFilename As String = String.Format("{0}\filename_charmap.txt", StartupPath)
+        Dim CharmapFilename As String = String.Format("{0}\Preferences\filename_charmap.txt", StartupPath)
 
         CreateCharmapFile()
 
@@ -67,7 +67,7 @@
         Dim Charmap As String() = Nothing
         Dim CharmapList As New List(Of String)
 
-        Dim CharmapFilename As String = String.Format("{0}\filename_charmap.txt", StartupPath)
+        Dim CharmapFilename As String = String.Format("{0}\Preferences\filename_charmap.txt", StartupPath)
 
         Try
             Charmap = IO.File.ReadAllLines(CharmapFilename)
@@ -143,12 +143,6 @@
 
 
             IO.File.WriteAllLines(CharmapFilename, CharmapList)
-
-            'Dim msg As String = ""
-            'For Each s As String In CharmapList
-            '    msg = String.Format("{0}{1}{2}", msg, s, vbCrLf)
-            'Next
-            'MsgBox(msg)
 
         End Try
 

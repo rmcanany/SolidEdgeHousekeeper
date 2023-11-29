@@ -36,7 +36,7 @@ Public Class FormPropertyFilter
 		Dim Line As String
 		Dim LineList As New List(Of String)
 
-		PropertyFilterFilename = StartupPath + "\" + "property_filters.txt"
+		PropertyFilterFilename = StartupPath + "\Preferences\" + "property_filters.txt"
 
 		Try
 			PropertyFilter = IO.File.ReadAllLines(PropertyFilterFilename)
@@ -86,7 +86,7 @@ Public Class FormPropertyFilter
 		Dim FilterTerm As String
 		Dim s As String
 
-		PropertyFilterFilename = StartupPath + "\" + "property_filters.txt"
+		PropertyFilterFilename = StartupPath + "\Preferences\" + "property_filters.txt"
 
 		For Each Key In FilterDict.Keys
 			If Not Key = "" Then

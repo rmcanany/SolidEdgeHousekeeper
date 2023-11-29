@@ -3,7 +3,7 @@
     Private Sub LoadPrinterSettings()
         Dim s As String
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim PrintSettingsFilename As String = String.Format("{0}\print_settings.dat", StartupPath)
+        Dim PrintSettingsFilename As String = String.Format("{0}\Preferences\print_settings.dat", StartupPath)
 
         Try
             s = IO.File.ReadAllText(PrintSettingsFilename)
@@ -17,7 +17,7 @@
     Private Sub SavePrinterSettings()
         Dim s As String
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim PrintSettingsFilename As String = String.Format("{0}\print_settings.dat", StartupPath)
+        Dim PrintSettingsFilename As String = String.Format("{0}\Preferences\print_settings.dat", StartupPath)
 
         Try
             s = PrinterSettingsToString(PrintDialog1.PrinterSettings)
