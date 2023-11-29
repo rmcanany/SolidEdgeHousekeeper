@@ -2345,6 +2345,7 @@ Public Class AssemblyTasks
         ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim AutoAddMissingProperty As Boolean = Configuration("CheckBoxAutoAddMissingProperty").ToLower = "true"
 
         'ErrorMessage = InvokeSTAThread(
         '                       Of SolidEdgeAssembly.AssemblyDocument,

@@ -597,7 +597,9 @@ The search *is not* case sensitive, the replacement *is*. For example, say the s
 
 ![Property Formula](My%20Project/media/property_formula.png)
 
-In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with 'System.' or 'Custom.' as above.  
+In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as above.  
+
+If the specified property does not exist in the file, you can optionally have it added automatically.  This option is set on the **Configuration Tab**, Miscellaneous Group.  Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.

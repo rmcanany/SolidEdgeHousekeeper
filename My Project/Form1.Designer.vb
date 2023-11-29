@@ -192,6 +192,9 @@ Partial Class Form1
         Me.LabelPartNumberPropertySet = New System.Windows.Forms.Label()
         Me.LabelRestartAfter = New System.Windows.Forms.Label()
         Me.GroupBoxFileListOptions = New System.Windows.Forms.GroupBox()
+        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
+        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
+        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
         Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
         Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
@@ -267,9 +270,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
-        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
-        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
+        Me.CheckBoxAutoAddMissingProperty = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2023,6 +2024,7 @@ Partial Class Form1
         '
         'GroupBoxMiscOptions
         '
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxAutoAddMissingProperty)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxPartCopiesRecursiveSearch)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
@@ -2038,7 +2040,7 @@ Partial Class Form1
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelRestartAfter)
         Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 272)
         Me.GroupBoxMiscOptions.Name = "GroupBoxMiscOptions"
-        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 275)
+        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 300)
         Me.GroupBoxMiscOptions.TabIndex = 42
         Me.GroupBoxMiscOptions.TabStop = False
         Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
@@ -2188,12 +2190,40 @@ Partial Class Form1
         Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortNone)
         Me.GroupBoxFileListOptions.Controls.Add(Me.LabelFontSize)
         Me.GroupBoxFileListOptions.Controls.Add(Me.TextBoxFontSize)
-        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 575)
+        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 675)
         Me.GroupBoxFileListOptions.Name = "GroupBoxFileListOptions"
         Me.GroupBoxFileListOptions.Size = New System.Drawing.Size(475, 185)
         Me.GroupBoxFileListOptions.TabIndex = 41
         Me.GroupBoxFileListOptions.TabStop = False
         Me.GroupBoxFileListOptions.Text = "FILE LIST OPTIONS"
+        '
+        'TextBoxRandomSampleFraction
+        '
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(223, 146)
+        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
+        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxRandomSampleFraction.TabIndex = 46
+        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        '
+        'LabelRandomSampleFraction
+        '
+        Me.LabelRandomSampleFraction.AutoSize = True
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(136, 148)
+        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
+        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(80, 13)
+        Me.LabelRandomSampleFraction.TabIndex = 45
+        Me.LabelRandomSampleFraction.Text = "Sample fraction"
+        '
+        'RadioButtonListSortRandomSample
+        '
+        Me.RadioButtonListSortRandomSample.AutoSize = True
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(9, 145)
+        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
+        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(101, 17)
+        Me.RadioButtonListSortRandomSample.TabIndex = 44
+        Me.RadioButtonListSortRandomSample.TabStop = True
+        Me.RadioButtonListSortRandomSample.Text = "Random sample"
+        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
         '
         'CheckBoxListIncludeNoDependencies
         '
@@ -2270,7 +2300,7 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1125)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1225)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
         Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(475, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
@@ -2423,7 +2453,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1425)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1525)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -2481,7 +2511,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
-        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 800)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 900)
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
@@ -2948,33 +2978,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'RadioButtonListSortRandomSample
+        'CheckBoxAutoAddMissingProperty
         '
-        Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(9, 145)
-        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
-        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(101, 17)
-        Me.RadioButtonListSortRandomSample.TabIndex = 44
-        Me.RadioButtonListSortRandomSample.TabStop = True
-        Me.RadioButtonListSortRandomSample.Text = "Random sample"
-        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
-        '
-        'LabelRandomSampleFraction
-        '
-        Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(136, 148)
-        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
-        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(80, 13)
-        Me.LabelRandomSampleFraction.TabIndex = 45
-        Me.LabelRandomSampleFraction.Text = "Sample fraction"
-        '
-        'TextBoxRandomSampleFraction
-        '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(223, 146)
-        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
-        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(100, 20)
-        Me.TextBoxRandomSampleFraction.TabIndex = 46
-        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        Me.CheckBoxAutoAddMissingProperty.AutoSize = True
+        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(8, 275)
+        Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
+        Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(266, 17)
+        Me.CheckBoxAutoAddMissingProperty.TabIndex = 39
+        Me.CheckBoxAutoAddMissingProperty.Text = "Property Find/Replace -- Auto add missing property"
+        Me.CheckBoxAutoAddMissingProperty.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -3274,4 +3286,5 @@ Partial Class Form1
     Friend WithEvents RadioButtonListSortRandomSample As RadioButton
     Friend WithEvents TextBoxRandomSampleFraction As TextBox
     Friend WithEvents LabelRandomSampleFraction As Label
+    Friend WithEvents CheckBoxAutoAddMissingProperty As CheckBox
 End Class

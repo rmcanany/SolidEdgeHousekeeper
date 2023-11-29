@@ -125,7 +125,11 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
         HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
         HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
-        HelpString += "except preceeded with 'System.' or 'Custom.' as above.  "
+        HelpString += "except preceeded with `System.` or `Custom.` as above.  "
+        HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
+        HelpString += "you can optionally have it added automatically.  "
+        HelpString += "This option is set on the **Configuration Tab**, Miscellaneous Group.  "
+        HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",

@@ -268,7 +268,7 @@ Public Class CommonTasks
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
                     DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))  ' C:\project\part.par -> part
                 Else
-                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx)
+                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
                     If Not FoundProp Is Nothing Then
                         DocValues.Add(FoundProp.Value)
                     Else
@@ -298,7 +298,8 @@ Public Class CommonTasks
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         PropertySetName As String,
         PropertyName As String,
-        ModelLinkIdx As Integer
+        ModelLinkIdx As Integer,
+        AddProp As Boolean
         ) As SolidEdgeFramework.Property
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
@@ -383,6 +384,21 @@ Public Class CommonTasks
 
         End If
 
+        'If the property was not found, and the PropertySetName is "Custom", add it.
+        tf = (AddProp) And (Not PropertyFound) And (PropertySetName.ToLower = "custom")
+        If tf Then
+            Try
+                Properties = PropertySets.Item("Custom")
+                FoundProp = Properties.Add(PropertyName, "")
+                Properties.Save()
+                PropertySets.Save()
+            Catch ex As Exception
+
+            End Try
+
+        End If
+
+
         Return FoundProp
 
     End Function
@@ -414,9 +430,7 @@ Public Class CommonTasks
         Dim ReplaceSearchType As String = ""
 
         Dim PropertyFound As Boolean = False
-        'Dim tf As Boolean
-        'Dim tf1 As Boolean
-        'Dim tf2 As Boolean
+        Dim AutoAddMissingProperty As Boolean = Configuration("CheckBoxAutoAddMissingProperty").ToLower = "true"
 
         Dim Proceed As Boolean = True
 
@@ -524,16 +538,16 @@ Public Class CommonTasks
 
         If Proceed Then
             Try
-                Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0)
+                Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
                 If Prop Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
-                    ErrorMessageList.Add("Property not found or not recognized.")
+                    ErrorMessageList.Add(String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName))
                 End If
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
-                ErrorMessageList.Add("Property not found or not recognized.")
+                ErrorMessageList.Add(String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName))
             End Try
 
         End If

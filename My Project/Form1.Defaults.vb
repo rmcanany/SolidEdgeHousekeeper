@@ -554,8 +554,8 @@ Partial Class Form1
     End Sub
 
     Private Sub BuildReadmeFile()
-        Dim ReadmeFileName As String = "D:\CAD\scripts\SolidEdgeHousekeeper\README.md"
-        Dim StartupPath As String = "D:\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+        Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
         Dim TaskListHeader As String = "<!-- Start -->"
         Dim Proceed As Boolean = True
         Dim i As Integer
