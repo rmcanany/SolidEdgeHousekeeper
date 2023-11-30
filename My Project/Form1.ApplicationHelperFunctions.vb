@@ -16,6 +16,11 @@ Partial Class Form1
             ' Turn off popups.
             SEApp.DisplayAlerts = False
 
+            ' Disable Most Recently Used list updating if option is set.
+            If CheckBoxNoUpdateMRU.Checked Then
+                SEApp.SuspendMRU()
+            End If
+
             ' Set foreground/background processing options
             If RunInBackground Then
                 SEApp.DelayCompute = True

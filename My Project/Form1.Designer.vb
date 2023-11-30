@@ -178,6 +178,7 @@ Partial Class Form1
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.GroupBoxMiscOptions = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxAutoAddMissingProperty = New System.Windows.Forms.CheckBox()
         Me.CheckBoxPartCopiesRecursiveSearch = New System.Windows.Forms.CheckBox()
         Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
         Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
@@ -270,7 +271,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxAutoAddMissingProperty = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -2024,6 +2025,7 @@ Partial Class Form1
         '
         'GroupBoxMiscOptions
         '
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxNoUpdateMRU)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxAutoAddMissingProperty)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxPartCopiesRecursiveSearch)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
@@ -2040,10 +2042,20 @@ Partial Class Form1
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelRestartAfter)
         Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 272)
         Me.GroupBoxMiscOptions.Name = "GroupBoxMiscOptions"
-        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 300)
+        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 325)
         Me.GroupBoxMiscOptions.TabIndex = 42
         Me.GroupBoxMiscOptions.TabStop = False
         Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
+        '
+        'CheckBoxAutoAddMissingProperty
+        '
+        Me.CheckBoxAutoAddMissingProperty.AutoSize = True
+        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(8, 275)
+        Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
+        Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(266, 17)
+        Me.CheckBoxAutoAddMissingProperty.TabIndex = 39
+        Me.CheckBoxAutoAddMissingProperty.Text = "Property Find/Replace -- Auto add missing property"
+        Me.CheckBoxAutoAddMissingProperty.UseVisualStyleBackColor = True
         '
         'CheckBoxPartCopiesRecursiveSearch
         '
@@ -2978,15 +2990,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxAutoAddMissingProperty
+        'CheckBoxNoUpdateMRU
         '
-        Me.CheckBoxAutoAddMissingProperty.AutoSize = True
-        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(8, 275)
-        Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
-        Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(266, 17)
-        Me.CheckBoxAutoAddMissingProperty.TabIndex = 39
-        Me.CheckBoxAutoAddMissingProperty.Text = "Property Find/Replace -- Auto add missing property"
-        Me.CheckBoxAutoAddMissingProperty.UseVisualStyleBackColor = True
+        Me.CheckBoxNoUpdateMRU.AutoSize = True
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(8, 300)
+        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(284, 17)
+        Me.CheckBoxNoUpdateMRU.TabIndex = 40
+        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
+        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -3287,4 +3299,5 @@ Partial Class Form1
     Friend WithEvents TextBoxRandomSampleFraction As TextBox
     Friend WithEvents LabelRandomSampleFraction As Label
     Friend WithEvents CheckBoxAutoAddMissingProperty As CheckBox
+    Friend WithEvents CheckBoxNoUpdateMRU As CheckBox
 End Class
