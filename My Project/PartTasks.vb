@@ -1461,6 +1461,7 @@ Public Class PartTasks
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
+        Dim NewFileFormat As String = ""
         Dim PartBaseFilename As String
 
         Dim BaseDir As String
@@ -1480,8 +1481,11 @@ Public Class PartTasks
         ' ComboBoxSaveAsPartFiletype
         ' Format: Parasolid (*.xt), IGES (*.igs)
         NewExtension = Configuration("ComboBoxSaveAsPartFileType")
-        NewExtension = Split(NewExtension, Delimiter:="*")(1)
-        NewExtension = Split(NewExtension, Delimiter:=")")(0)
+        NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid (*.xt)" -> ".xt)"
+
+        NewFileFormat = Configuration("ComboBoxSaveAsPartFileType")
+        NewFileFormat = NewFileFormat.Split("("c)(0)  ' "Parasolid (*.xt)" -> "Parasolid "
 
         PartBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 

@@ -815,6 +815,12 @@ Public Class Form1
         Dim msg As String
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
+        Dim DMApp As DesignManager.Application = Nothing
+        If CheckBoxProcessReadOnly.Checked Then
+            DMApp = New DesignManager.Application
+            DMApp.Visible = 0
+        End If
+
         Try
             RestartAfter = CInt(TextBoxRestartAfter.Text)
         Catch ex As Exception
@@ -848,6 +854,9 @@ Public Class Form1
             System.Windows.Forms.Application.DoEvents()
             If StopProcess Then
                 TextBoxStatus.Text = "Processing aborted"
+                If CheckBoxProcessReadOnly.Checked Then
+                    DMApp.Quit()
+                End If
                 Exit Sub
             End If
 
@@ -863,7 +872,7 @@ Public Class Form1
             msg += System.IO.Path.GetFileName(FileToProcess)
             TextBoxStatus.Text = msg
 
-            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
+            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype, DMApp)
 
             If ErrorMessagesCombined.Count > 0 Then
                 LogfileAppend(FileToProcess, ErrorMessagesCombined)
@@ -873,9 +882,19 @@ Public Class Form1
             End If
 
         Next
+
+        If CheckBoxProcessReadOnly.Checked Then
+            DMApp.Quit()
+        End If
+
     End Sub
 
-    Private Function ProcessFile(ByVal Path As String, ByVal Filetype As String) As Dictionary(Of String, List(Of String))
+    Private Function ProcessFile(
+        ByVal Path As String,
+        ByVal Filetype As String,
+        DMApp As DesignManager.Application
+        ) As Dictionary(Of String, List(Of String))
+
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim ExitStatus As Integer
         'Dim SupplementalErrorMessage As String
@@ -895,6 +914,29 @@ Public Class Form1
         TotalAborts -= 0.1
         If TotalAborts < 0 Then
             TotalAborts = 0
+        End If
+
+        Dim OldStatus As SolidEdgeConstants.DocumentStatus
+        Dim StatusChangeSuccessful As Boolean
+        'Dim DMApp As DesignManager.Application = Nothing
+
+        If CheckBoxProcessReadOnly.Checked Then
+            'DMApp = New DesignManager.Application
+            'DMApp.Visible = 1
+
+            OldStatus = CommonTasks.GetStatus(DMApp, Path)
+
+            '' For some reason if OldStatus is igAvailable, OldStatus = Nothing is True
+            'If OldStatus = Nothing Then
+            '    ErrorMessagesCombined("Unable to read document Status") = New List(Of String) From {""}
+            'End If
+
+            StatusChangeSuccessful = CommonTasks.SetStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+            If Not StatusChangeSuccessful Then
+                ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+            End If
+
+            SEApp.DoIdle()
         End If
 
         Try
@@ -970,6 +1012,86 @@ Public Class Form1
 
             SEDoc.Close(False)
             SEApp.DoIdle()
+
+            If CheckBoxProcessReadOnly.Checked Then
+                If RadioButtonReadOnlyRevert.Checked Then
+                    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                        StatusChangeSuccessful = CommonTasks.SetStatus(DMApp, Path, OldStatus)
+                        If Not StatusChangeSuccessful Then
+                            ErrorMessagesCombined(
+                            String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+                            ) = New List(Of String) From {""}
+                        End If
+                    End If
+                End If
+
+                If RadioButtonReadOnlyChange.Checked Then
+                    Dim NewStatus As SolidEdgeConstants.DocumentStatus
+
+                    Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
+                    StatusChangedCheckedRadioButtons = GetStatusChangeRadioButtons(True)
+
+                    Dim FromStatus As String = ""
+                    Dim ToStatus As String = ""
+
+                    ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                        FromStatus = "RadioButtonStatusAto"
+                    End If
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+                        FromStatus = "RadioButtonStatusBto"
+                    End If
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+                        FromStatus = "RadioButtonStatusIRto"
+                    End If
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+                        FromStatus = "RadioButtonStatusIWto"
+                    End If
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+                        FromStatus = "RadioButtonStatusOto"
+                    End If
+                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+                        FromStatus = "RadioButtonStatusRto"
+                    End If
+
+                    For Each RB As RadioButton In StatusChangedCheckedRadioButtons
+                        If RB.Name.Contains(FromStatus) Then
+                            ToStatus = RB.Name.Replace(FromStatus, "")
+                        End If
+                    Next
+
+                    If ToStatus = "A" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                    End If
+                    If ToStatus = "B" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                    End If
+                    If ToStatus = "IR" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
+                    End If
+                    If ToStatus = "IW" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
+                    End If
+                    If ToStatus = "O" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                    End If
+                    If ToStatus = "R" Then
+                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                    End If
+
+                    StatusChangeSuccessful = CommonTasks.SetStatus(DMApp, Path, NewStatus)
+                    If Not StatusChangeSuccessful Then
+                        ErrorMessagesCombined(
+                            String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
+                            ) = New List(Of String) From {""}
+                    End If
+
+                End If
+
+                'DMApp.Quit()
+
+            End If
+
 
             'If LabelText = "Update styles from template" Then
             '    If ExitStatus = 0 Then
@@ -1178,7 +1300,7 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2023.6"
+        Me.Text = "Solid Edge Housekeeper 2024.1"
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
@@ -1257,7 +1379,19 @@ Public Class Form1
         Else
             BT_Update.BackColor = Color.FromName("Control")
         End If
-        'MsgBox("Here")
+
+        If Not CheckBoxProcessReadOnly.Checked Then
+            Dim StatusChangeRadioButtons As New List(Of RadioButton)
+            Dim RB As RadioButton
+
+            StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+
+            RadioButtonReadOnlyRevert.Enabled = False
+            RadioButtonReadOnlyChange.Enabled = False
+            For Each RB In StatusChangeRadioButtons
+                RB.Enabled = False
+            Next
+        End If
 
         ' Enable/Disable option controls based on task selection
 
@@ -2000,7 +2134,7 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnSave.CheckedChanged
+    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs)
         ReconcileFormChanges()
     End Sub
 
@@ -2098,7 +2232,6 @@ Public Class Form1
 
         tf = RadioButtonTLABottomUp.Checked
         If tf Then
-            'CheckBoxTLAReportUnrelatedFiles.Enabled = False
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
@@ -2115,7 +2248,6 @@ Public Class Form1
 
         tf = RadioButtonTLATopDown.Checked
         If tf Then
-            'CheckBoxTLAReportUnrelatedFiles.Enabled = True
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
@@ -2929,6 +3061,107 @@ Public Class Form1
             TextBoxRandomSampleFraction.Text = "0.1"
         End Try
     End Sub
+
+    Private Sub CheckBoxProcessReadOnly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxProcessReadOnly.CheckedChanged
+        Dim StatusChangeRadioButtons As New List(Of RadioButton)
+        Dim RB As RadioButton
+
+        StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+
+        If CheckBoxProcessReadOnly.Checked Then
+            RadioButtonReadOnlyRevert.Enabled = True
+            RadioButtonReadOnlyChange.Enabled = True
+            If RadioButtonReadOnlyChange.Checked Then
+                For Each RB In StatusChangeRadioButtons
+                    RB.Enabled = True
+                Next
+            End If
+        Else
+            RadioButtonReadOnlyRevert.Enabled = False
+            RadioButtonReadOnlyChange.Enabled = False
+            For Each RB In StatusChangeRadioButtons
+                RB.Enabled = False
+            Next
+        End If
+    End Sub
+
+    Private Sub RadioButtonReadOnlyRevert_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonReadOnlyRevert.CheckedChanged
+        Dim StatusChangeRadioButtons As New List(Of RadioButton)
+        Dim RB As RadioButton
+
+        StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+
+        If RadioButtonReadOnlyRevert.Checked Then
+            For Each RB In StatusChangeRadioButtons
+                RB.Enabled = False
+            Next
+        Else
+            For Each RB In StatusChangeRadioButtons
+                RB.Enabled = True
+            Next
+        End If
+    End Sub
+
+    Private Function GetStatusChangeRadioButtons(Optional CheckedOnly As Boolean = False) As List(Of RadioButton)
+        Dim StatusChangeRadioButtons As New List(Of RadioButton)
+        Dim tmpList As New List(Of RadioButton)
+
+        tmpList.Add(RadioButtonStatusAtoA)
+        tmpList.Add(RadioButtonStatusAtoB)
+        tmpList.Add(RadioButtonStatusAtoIR)
+        tmpList.Add(RadioButtonStatusAtoIW)
+        tmpList.Add(RadioButtonStatusAtoO)
+        tmpList.Add(RadioButtonStatusAtoR)
+
+        tmpList.Add(RadioButtonStatusBtoA)
+        tmpList.Add(RadioButtonStatusBtoB)
+        tmpList.Add(RadioButtonStatusBtoIR)
+        tmpList.Add(RadioButtonStatusBtoIW)
+        tmpList.Add(RadioButtonStatusBtoO)
+        tmpList.Add(RadioButtonStatusBtoR)
+
+        tmpList.Add(RadioButtonStatusIRtoA)
+        tmpList.Add(RadioButtonStatusIRtoB)
+        tmpList.Add(RadioButtonStatusIRtoIR)
+        tmpList.Add(RadioButtonStatusIRtoIW)
+        tmpList.Add(RadioButtonStatusIRtoO)
+        tmpList.Add(RadioButtonStatusIRtoR)
+
+        tmpList.Add(RadioButtonStatusIWtoA)
+        tmpList.Add(RadioButtonStatusIWtoB)
+        tmpList.Add(RadioButtonStatusIWtoIR)
+        tmpList.Add(RadioButtonStatusIWtoIW)
+        tmpList.Add(RadioButtonStatusIWtoO)
+        tmpList.Add(RadioButtonStatusIWtoR)
+
+        tmpList.Add(RadioButtonStatusOtoA)
+        tmpList.Add(RadioButtonStatusOtoB)
+        tmpList.Add(RadioButtonStatusOtoIR)
+        tmpList.Add(RadioButtonStatusOtoIW)
+        tmpList.Add(RadioButtonStatusOtoO)
+        tmpList.Add(RadioButtonStatusOtoR)
+
+        tmpList.Add(RadioButtonStatusRtoA)
+        tmpList.Add(RadioButtonStatusRtoB)
+        tmpList.Add(RadioButtonStatusRtoIR)
+        tmpList.Add(RadioButtonStatusRtoIW)
+        tmpList.Add(RadioButtonStatusRtoO)
+        tmpList.Add(RadioButtonStatusRtoR)
+
+        If CheckedOnly Then
+            For Each RB As RadioButton In tmpList
+                If RB.Checked Then
+                    StatusChangeRadioButtons.Add(RB)
+                End If
+            Next
+        Else
+            For Each RB As RadioButton In tmpList
+                StatusChangeRadioButtons.Add(RB)
+            Next
+        End If
+
+        Return StatusChangeRadioButtons
+    End Function
 
 
 

@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports SolidEdgeCommunity
+Imports SolidEdgeConstants
 
 Public Class DraftTasks
     Inherits IsolatedTaskProxy
@@ -2652,6 +2653,7 @@ Public Class DraftTasks
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
+        Dim NewFileFormat As String = ""
         Dim DraftBaseFilename As String
 
         Dim BaseDir As String
@@ -2664,8 +2666,11 @@ Public Class DraftTasks
         ' ComboBoxSaveAsSheetmetalFileType
         ' Format: Parasolid (*.xt), IGES (*.igs)
         NewExtension = Configuration("ComboBoxSaveAsDraftFileType")
-        NewExtension = Split(NewExtension, Delimiter:="*")(1)  ' "Parasolid (*.xt)" -> ".xt)"
-        NewExtension = Split(NewExtension, Delimiter:=")")(0)  ' ".xt)" -> ".xt"
+        NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid (*.xt)" -> ".xt)"
+
+        NewFileFormat = Configuration("ComboBoxSaveAsDraftFileType")
+        NewFileFormat = NewFileFormat.Split("("c)(0)  ' "Parasolid (*.xt)" -> "Parasolid "
 
         DraftBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
@@ -2751,8 +2756,57 @@ Public Class DraftTasks
         'Capturing a fault to update ExitStatus
         Try
             If Not Configuration("ComboBoxSaveAsDraftFileType").ToLower.Contains("copy") Then
-                SEDoc.SaveAs(NewFilename)
-                SEApp.DoIdle()
+                If Not NewFileFormat.Contains("PDF per Sheet") Then
+                    SEDoc.SaveAs(NewFilename)
+                    SEApp.DoIdle()
+
+                Else  ' Save as one pdf file per sheet
+
+                    Dim PreviousSetting As Object = Nothing
+                    Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
+                    Dim Sheet As SolidEdgeDraft.Sheet
+                    Dim SheetName As String
+                    Dim tmpNewFilename As String
+
+                    ' seApplicationGlobalDraftSaveAsPDFSheetOptions (same mapping as SolidEdgeConstants.DraftSaveAsPDFSheetOptionsConstants)
+                    ' 0: Active sheet only
+                    ' 1: All sheets
+                    ' 2: Sheets: (sheet number and/or ranges)
+
+                    SEApp.GetGlobalParameter(
+                        SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalDraftSaveAsPDFSheetOptions,
+                        PreviousSetting)
+                    SEApp.SetGlobalParameter(
+                        SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalDraftSaveAsPDFSheetOptions,
+                        0)
+
+                    SheetList = GetSheets(SEDoc, "Working")
+
+                    tmpNewFilename = NewFilename
+
+                    For Each Sheet In SheetList
+                        Sheet.Activate()
+
+                        SheetName = String.Format("-{0}", Sheet.Name)
+                        SheetName = FCD.SubstituteIllegalCharacters(SheetName)
+                        If Configuration("CheckBoxSaveAsPDFPerSheetSupress").ToLower = "true" Then
+                            If SheetList.Count = 1 Then
+                                SheetName = ""
+                            End If
+                        End If
+
+                        NewFilename = tmpNewFilename.Substring(0, tmpNewFilename.Count - 4)
+                        NewFilename = String.Format("{0}{1}.pdf", NewFilename, SheetName)
+                        SEDoc.SaveAs(NewFilename)
+                        SEApp.DoIdle()
+
+                    Next
+
+                    SEApp.SetGlobalParameter(
+                        SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalDraftSaveAsPDFSheetOptions,
+                        PreviousSetting)
+
+                End If
             Else
                 If Configuration("CheckBoxSaveAsDraftOutputDirectory").ToLower = "false" Then
                     SEDoc.SaveCopyAs(NewFilename)

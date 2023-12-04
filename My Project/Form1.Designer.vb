@@ -177,11 +177,74 @@ Partial Class Form1
         Me.LabelDraftTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
+        Me.GroupBoxFileOpenSaveOptions = New System.Windows.Forms.GroupBox()
+        Me.LabelStatusAfter = New System.Windows.Forms.Label()
+        Me.LabelStatusBefore = New System.Windows.Forms.Label()
+        Me.LabelStatusOutReleased = New System.Windows.Forms.Label()
+        Me.LabelStatusOutObsolete = New System.Windows.Forms.Label()
+        Me.LabelStatusOutIW = New System.Windows.Forms.Label()
+        Me.LabelStatusOutInReview = New System.Windows.Forms.Label()
+        Me.LabelStatusOutBaselined = New System.Windows.Forms.Label()
+        Me.LabelStatusOutAvailable = New System.Windows.Forms.Label()
+        Me.GroupBoxStatusInR = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInO = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusOtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInIW = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusIWtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInIR = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusIRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInB = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusBtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInA = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusAtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusAtoA = New System.Windows.Forms.RadioButton()
+        Me.LabelStatusInReleased = New System.Windows.Forms.Label()
+        Me.LabelStatusInObsolete = New System.Windows.Forms.Label()
+        Me.LabelStatusInInWork = New System.Windows.Forms.Label()
+        Me.LabelStatusInInReview = New System.Windows.Forms.Label()
+        Me.LabelStatusInBaselined = New System.Windows.Forms.Label()
+        Me.LabelStatusInAvailable = New System.Windows.Forms.Label()
+        Me.RadioButtonReadOnlyChange = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonReadOnlyRevert = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxProcessReadOnly = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSaveAsPDFPerSheetSupress = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.GroupBoxMiscOptions = New System.Windows.Forms.GroupBox()
         Me.CheckBoxAutoAddMissingProperty = New System.Windows.Forms.CheckBox()
         Me.CheckBoxPartCopiesRecursiveSearch = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxSaveAsImageCrop = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBackgroundProcessing = New System.Windows.Forms.CheckBox()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
@@ -189,7 +252,6 @@ Partial Class Form1
         Me.LabelPartNumberPropertyName = New System.Windows.Forms.Label()
         Me.TextBoxRestartAfter = New System.Windows.Forms.TextBox()
         Me.ComboBoxPartNumberPropertySet = New System.Windows.Forms.ComboBox()
-        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.LabelPartNumberPropertySet = New System.Windows.Forms.Label()
         Me.LabelRestartAfter = New System.Windows.Forms.Label()
         Me.GroupBoxFileListOptions = New System.Windows.Forms.GroupBox()
@@ -271,7 +333,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPropertyFilterFollowDraftLinks = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -281,6 +343,13 @@ Partial Class Form1
         Me.TabPageSheetmetal.SuspendLayout()
         Me.TabPageDraft.SuspendLayout()
         Me.TabPageConfiguration.SuspendLayout()
+        Me.GroupBoxFileOpenSaveOptions.SuspendLayout()
+        Me.GroupBoxStatusInR.SuspendLayout()
+        Me.GroupBoxStatusInO.SuspendLayout()
+        Me.GroupBoxStatusInIW.SuspendLayout()
+        Me.GroupBoxStatusInIR.SuspendLayout()
+        Me.GroupBoxStatusInB.SuspendLayout()
+        Me.GroupBoxStatusInA.SuspendLayout()
         Me.GroupBoxMiscOptions.SuspendLayout()
         Me.GroupBoxFileListOptions.SuspendLayout()
         Me.GroupBoxPrinterSettings.SuspendLayout()
@@ -1995,6 +2064,7 @@ Partial Class Form1
         Me.TabPageConfiguration.AutoScroll = True
         Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageConfiguration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageConfiguration.Controls.Add(Me.GroupBoxFileOpenSaveOptions)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxMiscOptions)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxFileListOptions)
         Me.TabPageConfiguration.Controls.Add(Me.GroupBoxPrinterSettings)
@@ -2023,13 +2093,709 @@ Partial Class Form1
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
+        'GroupBoxFileOpenSaveOptions
+        '
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusAfter)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusBefore)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutReleased)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutObsolete)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutIW)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutInReview)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutBaselined)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusOutAvailable)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInR)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInO)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInIW)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInIR)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInB)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.GroupBoxStatusInA)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInReleased)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInObsolete)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInInWork)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInInReview)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInBaselined)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.LabelStatusInAvailable)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.RadioButtonReadOnlyChange)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.RadioButtonReadOnlyRevert)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxProcessReadOnly)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxSaveAsPDFPerSheetSupress)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxNoUpdateMRU)
+        Me.GroupBoxFileOpenSaveOptions.Controls.Add(Me.CheckBoxWarnSave)
+        Me.GroupBoxFileOpenSaveOptions.Location = New System.Drawing.Point(8, 1150)
+        Me.GroupBoxFileOpenSaveOptions.Name = "GroupBoxFileOpenSaveOptions"
+        Me.GroupBoxFileOpenSaveOptions.Size = New System.Drawing.Size(475, 650)
+        Me.GroupBoxFileOpenSaveOptions.TabIndex = 43
+        Me.GroupBoxFileOpenSaveOptions.TabStop = False
+        Me.GroupBoxFileOpenSaveOptions.Text = "FILE OPEN/SAVE OPTIONS"
+        '
+        'LabelStatusAfter
+        '
+        Me.LabelStatusAfter.AutoSize = True
+        Me.LabelStatusAfter.Location = New System.Drawing.Point(220, 235)
+        Me.LabelStatusAfter.Name = "LabelStatusAfter"
+        Me.LabelStatusAfter.Size = New System.Drawing.Size(88, 13)
+        Me.LabelStatusAfter.TabIndex = 67
+        Me.LabelStatusAfter.Text = "STATUS AFTER"
+        '
+        'LabelStatusBefore
+        '
+        Me.LabelStatusBefore.AutoSize = True
+        Me.LabelStatusBefore.Location = New System.Drawing.Point(44, 260)
+        Me.LabelStatusBefore.Name = "LabelStatusBefore"
+        Me.LabelStatusBefore.Size = New System.Drawing.Size(96, 13)
+        Me.LabelStatusBefore.TabIndex = 66
+        Me.LabelStatusBefore.Text = "STATUS BEFORE"
+        '
+        'LabelStatusOutReleased
+        '
+        Me.LabelStatusOutReleased.AutoSize = True
+        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(325, 260)
+        Me.LabelStatusOutReleased.Name = "LabelStatusOutReleased"
+        Me.LabelStatusOutReleased.Size = New System.Drawing.Size(15, 13)
+        Me.LabelStatusOutReleased.TabIndex = 65
+        Me.LabelStatusOutReleased.Text = "R"
+        '
+        'LabelStatusOutObsolete
+        '
+        Me.LabelStatusOutObsolete.AutoSize = True
+        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(300, 260)
+        Me.LabelStatusOutObsolete.Name = "LabelStatusOutObsolete"
+        Me.LabelStatusOutObsolete.Size = New System.Drawing.Size(15, 13)
+        Me.LabelStatusOutObsolete.TabIndex = 64
+        Me.LabelStatusOutObsolete.Text = "O"
+        '
+        'LabelStatusOutIW
+        '
+        Me.LabelStatusOutIW.AutoSize = True
+        Me.LabelStatusOutIW.Location = New System.Drawing.Point(274, 260)
+        Me.LabelStatusOutIW.Name = "LabelStatusOutIW"
+        Me.LabelStatusOutIW.Size = New System.Drawing.Size(21, 13)
+        Me.LabelStatusOutIW.TabIndex = 63
+        Me.LabelStatusOutIW.Text = "IW"
+        '
+        'LabelStatusOutInReview
+        '
+        Me.LabelStatusOutInReview.AutoSize = True
+        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(248, 260)
+        Me.LabelStatusOutInReview.Name = "LabelStatusOutInReview"
+        Me.LabelStatusOutInReview.Size = New System.Drawing.Size(18, 13)
+        Me.LabelStatusOutInReview.TabIndex = 62
+        Me.LabelStatusOutInReview.Text = "IR"
+        '
+        'LabelStatusOutBaselined
+        '
+        Me.LabelStatusOutBaselined.AutoSize = True
+        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(225, 260)
+        Me.LabelStatusOutBaselined.Name = "LabelStatusOutBaselined"
+        Me.LabelStatusOutBaselined.Size = New System.Drawing.Size(14, 13)
+        Me.LabelStatusOutBaselined.TabIndex = 61
+        Me.LabelStatusOutBaselined.Text = "B"
+        '
+        'LabelStatusOutAvailable
+        '
+        Me.LabelStatusOutAvailable.AutoSize = True
+        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(200, 260)
+        Me.LabelStatusOutAvailable.Name = "LabelStatusOutAvailable"
+        Me.LabelStatusOutAvailable.Size = New System.Drawing.Size(14, 13)
+        Me.LabelStatusOutAvailable.TabIndex = 60
+        Me.LabelStatusOutAvailable.Text = "A"
+        '
+        'GroupBoxStatusInR
+        '
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoR)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoO)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIW)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIR)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoB)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoA)
+        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(200, 400)
+        Me.GroupBoxStatusInR.Name = "GroupBoxStatusInR"
+        Me.GroupBoxStatusInR.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInR.TabIndex = 59
+        Me.GroupBoxStatusInR.TabStop = False
+        '
+        'RadioButtonStatusRtoR
+        '
+        Me.RadioButtonStatusRtoR.AutoSize = True
+        Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
+        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoR.TabIndex = 5
+        Me.RadioButtonStatusRtoR.TabStop = True
+        Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoO
+        '
+        Me.RadioButtonStatusRtoO.AutoSize = True
+        Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
+        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoO.TabIndex = 4
+        Me.RadioButtonStatusRtoO.TabStop = True
+        Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIW
+        '
+        Me.RadioButtonStatusRtoIW.AutoSize = True
+        Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
+        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIW.TabIndex = 3
+        Me.RadioButtonStatusRtoIW.TabStop = True
+        Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIR
+        '
+        Me.RadioButtonStatusRtoIR.AutoSize = True
+        Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
+        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIR.TabIndex = 2
+        Me.RadioButtonStatusRtoIR.TabStop = True
+        Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoB
+        '
+        Me.RadioButtonStatusRtoB.AutoSize = True
+        Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
+        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoB.TabIndex = 1
+        Me.RadioButtonStatusRtoB.TabStop = True
+        Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoA
+        '
+        Me.RadioButtonStatusRtoA.AutoSize = True
+        Me.RadioButtonStatusRtoA.Checked = True
+        Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
+        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoA.TabIndex = 0
+        Me.RadioButtonStatusRtoA.TabStop = True
+        Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInO
+        '
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoR)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoO)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIW)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIR)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoB)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoA)
+        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(200, 375)
+        Me.GroupBoxStatusInO.Name = "GroupBoxStatusInO"
+        Me.GroupBoxStatusInO.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInO.TabIndex = 58
+        Me.GroupBoxStatusInO.TabStop = False
+        '
+        'RadioButtonStatusOtoR
+        '
+        Me.RadioButtonStatusOtoR.AutoSize = True
+        Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
+        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoR.TabIndex = 5
+        Me.RadioButtonStatusOtoR.TabStop = True
+        Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoO
+        '
+        Me.RadioButtonStatusOtoO.AutoSize = True
+        Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
+        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoO.TabIndex = 4
+        Me.RadioButtonStatusOtoO.TabStop = True
+        Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIW
+        '
+        Me.RadioButtonStatusOtoIW.AutoSize = True
+        Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
+        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIW.TabIndex = 3
+        Me.RadioButtonStatusOtoIW.TabStop = True
+        Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIR
+        '
+        Me.RadioButtonStatusOtoIR.AutoSize = True
+        Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
+        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIR.TabIndex = 2
+        Me.RadioButtonStatusOtoIR.TabStop = True
+        Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoB
+        '
+        Me.RadioButtonStatusOtoB.AutoSize = True
+        Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
+        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoB.TabIndex = 1
+        Me.RadioButtonStatusOtoB.TabStop = True
+        Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoA
+        '
+        Me.RadioButtonStatusOtoA.AutoSize = True
+        Me.RadioButtonStatusOtoA.Checked = True
+        Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
+        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoA.TabIndex = 0
+        Me.RadioButtonStatusOtoA.TabStop = True
+        Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInIW
+        '
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoR)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoO)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIW)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIR)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoB)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoA)
+        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(200, 350)
+        Me.GroupBoxStatusInIW.Name = "GroupBoxStatusInIW"
+        Me.GroupBoxStatusInIW.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInIW.TabIndex = 57
+        Me.GroupBoxStatusInIW.TabStop = False
+        '
+        'RadioButtonStatusIWtoR
+        '
+        Me.RadioButtonStatusIWtoR.AutoSize = True
+        Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
+        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoR.TabIndex = 5
+        Me.RadioButtonStatusIWtoR.TabStop = True
+        Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoO
+        '
+        Me.RadioButtonStatusIWtoO.AutoSize = True
+        Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
+        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoO.TabIndex = 4
+        Me.RadioButtonStatusIWtoO.TabStop = True
+        Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIW
+        '
+        Me.RadioButtonStatusIWtoIW.AutoSize = True
+        Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
+        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIW.TabIndex = 3
+        Me.RadioButtonStatusIWtoIW.TabStop = True
+        Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIR
+        '
+        Me.RadioButtonStatusIWtoIR.AutoSize = True
+        Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
+        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIR.TabIndex = 2
+        Me.RadioButtonStatusIWtoIR.TabStop = True
+        Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoB
+        '
+        Me.RadioButtonStatusIWtoB.AutoSize = True
+        Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
+        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoB.TabIndex = 1
+        Me.RadioButtonStatusIWtoB.TabStop = True
+        Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoA
+        '
+        Me.RadioButtonStatusIWtoA.AutoSize = True
+        Me.RadioButtonStatusIWtoA.Checked = True
+        Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
+        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoA.TabIndex = 0
+        Me.RadioButtonStatusIWtoA.TabStop = True
+        Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInIR
+        '
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoR)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoO)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIW)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIR)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoB)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoA)
+        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(200, 325)
+        Me.GroupBoxStatusInIR.Name = "GroupBoxStatusInIR"
+        Me.GroupBoxStatusInIR.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInIR.TabIndex = 56
+        Me.GroupBoxStatusInIR.TabStop = False
+        '
+        'RadioButtonStatusIRtoR
+        '
+        Me.RadioButtonStatusIRtoR.AutoSize = True
+        Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
+        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoR.TabIndex = 5
+        Me.RadioButtonStatusIRtoR.TabStop = True
+        Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoO
+        '
+        Me.RadioButtonStatusIRtoO.AutoSize = True
+        Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
+        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoO.TabIndex = 4
+        Me.RadioButtonStatusIRtoO.TabStop = True
+        Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIW
+        '
+        Me.RadioButtonStatusIRtoIW.AutoSize = True
+        Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
+        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIW.TabIndex = 3
+        Me.RadioButtonStatusIRtoIW.TabStop = True
+        Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIR
+        '
+        Me.RadioButtonStatusIRtoIR.AutoSize = True
+        Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
+        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIR.TabIndex = 2
+        Me.RadioButtonStatusIRtoIR.TabStop = True
+        Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoB
+        '
+        Me.RadioButtonStatusIRtoB.AutoSize = True
+        Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
+        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoB.TabIndex = 1
+        Me.RadioButtonStatusIRtoB.TabStop = True
+        Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoA
+        '
+        Me.RadioButtonStatusIRtoA.AutoSize = True
+        Me.RadioButtonStatusIRtoA.Checked = True
+        Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
+        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoA.TabIndex = 0
+        Me.RadioButtonStatusIRtoA.TabStop = True
+        Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInB
+        '
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoR)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoO)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIW)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIR)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoB)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoA)
+        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(200, 300)
+        Me.GroupBoxStatusInB.Name = "GroupBoxStatusInB"
+        Me.GroupBoxStatusInB.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInB.TabIndex = 55
+        Me.GroupBoxStatusInB.TabStop = False
+        '
+        'RadioButtonStatusBtoR
+        '
+        Me.RadioButtonStatusBtoR.AutoSize = True
+        Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
+        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoR.TabIndex = 5
+        Me.RadioButtonStatusBtoR.TabStop = True
+        Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoO
+        '
+        Me.RadioButtonStatusBtoO.AutoSize = True
+        Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
+        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoO.TabIndex = 4
+        Me.RadioButtonStatusBtoO.TabStop = True
+        Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoIW
+        '
+        Me.RadioButtonStatusBtoIW.AutoSize = True
+        Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
+        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIW.TabIndex = 3
+        Me.RadioButtonStatusBtoIW.TabStop = True
+        Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoIR
+        '
+        Me.RadioButtonStatusBtoIR.AutoSize = True
+        Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
+        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIR.TabIndex = 2
+        Me.RadioButtonStatusBtoIR.TabStop = True
+        Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoB
+        '
+        Me.RadioButtonStatusBtoB.AutoSize = True
+        Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
+        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoB.TabIndex = 1
+        Me.RadioButtonStatusBtoB.TabStop = True
+        Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoA
+        '
+        Me.RadioButtonStatusBtoA.AutoSize = True
+        Me.RadioButtonStatusBtoA.Checked = True
+        Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
+        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoA.TabIndex = 0
+        Me.RadioButtonStatusBtoA.TabStop = True
+        Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInA
+        '
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoR)
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoO)
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoIW)
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoIR)
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoB)
+        Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoA)
+        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(200, 275)
+        Me.GroupBoxStatusInA.Name = "GroupBoxStatusInA"
+        Me.GroupBoxStatusInA.Size = New System.Drawing.Size(150, 25)
+        Me.GroupBoxStatusInA.TabIndex = 54
+        Me.GroupBoxStatusInA.TabStop = False
+        '
+        'RadioButtonStatusAtoR
+        '
+        Me.RadioButtonStatusAtoR.AutoSize = True
+        Me.RadioButtonStatusAtoR.Location = New System.Drawing.Point(125, 10)
+        Me.RadioButtonStatusAtoR.Name = "RadioButtonStatusAtoR"
+        Me.RadioButtonStatusAtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoR.TabIndex = 5
+        Me.RadioButtonStatusAtoR.TabStop = True
+        Me.RadioButtonStatusAtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoO
+        '
+        Me.RadioButtonStatusAtoO.AutoSize = True
+        Me.RadioButtonStatusAtoO.Location = New System.Drawing.Point(100, 10)
+        Me.RadioButtonStatusAtoO.Name = "RadioButtonStatusAtoO"
+        Me.RadioButtonStatusAtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoO.TabIndex = 4
+        Me.RadioButtonStatusAtoO.TabStop = True
+        Me.RadioButtonStatusAtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoIW
+        '
+        Me.RadioButtonStatusAtoIW.AutoSize = True
+        Me.RadioButtonStatusAtoIW.Location = New System.Drawing.Point(75, 10)
+        Me.RadioButtonStatusAtoIW.Name = "RadioButtonStatusAtoIW"
+        Me.RadioButtonStatusAtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoIW.TabIndex = 3
+        Me.RadioButtonStatusAtoIW.TabStop = True
+        Me.RadioButtonStatusAtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoIR
+        '
+        Me.RadioButtonStatusAtoIR.AutoSize = True
+        Me.RadioButtonStatusAtoIR.Location = New System.Drawing.Point(50, 10)
+        Me.RadioButtonStatusAtoIR.Name = "RadioButtonStatusAtoIR"
+        Me.RadioButtonStatusAtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoIR.TabIndex = 2
+        Me.RadioButtonStatusAtoIR.TabStop = True
+        Me.RadioButtonStatusAtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoB
+        '
+        Me.RadioButtonStatusAtoB.AutoSize = True
+        Me.RadioButtonStatusAtoB.Location = New System.Drawing.Point(25, 10)
+        Me.RadioButtonStatusAtoB.Name = "RadioButtonStatusAtoB"
+        Me.RadioButtonStatusAtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoB.TabIndex = 1
+        Me.RadioButtonStatusAtoB.TabStop = True
+        Me.RadioButtonStatusAtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusAtoA
+        '
+        Me.RadioButtonStatusAtoA.AutoSize = True
+        Me.RadioButtonStatusAtoA.Checked = True
+        Me.RadioButtonStatusAtoA.Location = New System.Drawing.Point(0, 10)
+        Me.RadioButtonStatusAtoA.Name = "RadioButtonStatusAtoA"
+        Me.RadioButtonStatusAtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoA.TabIndex = 0
+        Me.RadioButtonStatusAtoA.TabStop = True
+        Me.RadioButtonStatusAtoA.UseVisualStyleBackColor = True
+        '
+        'LabelStatusInReleased
+        '
+        Me.LabelStatusInReleased.AutoSize = True
+        Me.LabelStatusInReleased.Location = New System.Drawing.Point(118, 409)
+        Me.LabelStatusInReleased.Name = "LabelStatusInReleased"
+        Me.LabelStatusInReleased.Size = New System.Drawing.Size(69, 13)
+        Me.LabelStatusInReleased.TabIndex = 53
+        Me.LabelStatusInReleased.Text = "Released (R)"
+        '
+        'LabelStatusInObsolete
+        '
+        Me.LabelStatusInObsolete.AutoSize = True
+        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(121, 384)
+        Me.LabelStatusInObsolete.Name = "LabelStatusInObsolete"
+        Me.LabelStatusInObsolete.Size = New System.Drawing.Size(66, 13)
+        Me.LabelStatusInObsolete.TabIndex = 52
+        Me.LabelStatusInObsolete.Text = "Obsolete (O)"
+        '
+        'LabelStatusInInWork
+        '
+        Me.LabelStatusInInWork.AutoSize = True
+        Me.LabelStatusInInWork.Location = New System.Drawing.Point(116, 359)
+        Me.LabelStatusInInWork.Name = "LabelStatusInInWork"
+        Me.LabelStatusInInWork.Size = New System.Drawing.Size(71, 13)
+        Me.LabelStatusInInWork.TabIndex = 51
+        Me.LabelStatusInInWork.Text = "In Work  (IW)"
+        '
+        'LabelStatusInInReview
+        '
+        Me.LabelStatusInInReview.AutoSize = True
+        Me.LabelStatusInInReview.Location = New System.Drawing.Point(112, 334)
+        Me.LabelStatusInInReview.Name = "LabelStatusInInReview"
+        Me.LabelStatusInInReview.Size = New System.Drawing.Size(75, 13)
+        Me.LabelStatusInInReview.TabIndex = 50
+        Me.LabelStatusInInReview.Text = "In Review (IR)"
+        '
+        'LabelStatusInBaselined
+        '
+        Me.LabelStatusInBaselined.AutoSize = True
+        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(116, 309)
+        Me.LabelStatusInBaselined.Name = "LabelStatusInBaselined"
+        Me.LabelStatusInBaselined.Size = New System.Drawing.Size(69, 13)
+        Me.LabelStatusInBaselined.TabIndex = 49
+        Me.LabelStatusInBaselined.Text = "Baselined (B)"
+        '
+        'LabelStatusInAvailable
+        '
+        Me.LabelStatusInAvailable.AutoSize = True
+        Me.LabelStatusInAvailable.Location = New System.Drawing.Point(120, 284)
+        Me.LabelStatusInAvailable.Name = "LabelStatusInAvailable"
+        Me.LabelStatusInAvailable.Size = New System.Drawing.Size(66, 13)
+        Me.LabelStatusInAvailable.TabIndex = 48
+        Me.LabelStatusInAvailable.Text = "Available (A)"
+        '
+        'RadioButtonReadOnlyChange
+        '
+        Me.RadioButtonReadOnlyChange.AutoSize = True
+        Me.RadioButtonReadOnlyChange.Location = New System.Drawing.Point(25, 200)
+        Me.RadioButtonReadOnlyChange.Name = "RadioButtonReadOnlyChange"
+        Me.RadioButtonReadOnlyChange.Size = New System.Drawing.Size(171, 17)
+        Me.RadioButtonReadOnlyChange.TabIndex = 47
+        Me.RadioButtonReadOnlyChange.TabStop = True
+        Me.RadioButtonReadOnlyChange.Text = "Change status after processing"
+        Me.RadioButtonReadOnlyChange.UseVisualStyleBackColor = True
+        '
+        'RadioButtonReadOnlyRevert
+        '
+        Me.RadioButtonReadOnlyRevert.AutoSize = True
+        Me.RadioButtonReadOnlyRevert.Checked = True
+        Me.RadioButtonReadOnlyRevert.Location = New System.Drawing.Point(25, 175)
+        Me.RadioButtonReadOnlyRevert.Name = "RadioButtonReadOnlyRevert"
+        Me.RadioButtonReadOnlyRevert.Size = New System.Drawing.Size(221, 17)
+        Me.RadioButtonReadOnlyRevert.TabIndex = 46
+        Me.RadioButtonReadOnlyRevert.TabStop = True
+        Me.RadioButtonReadOnlyRevert.Text = "Revert to previous status after processing"
+        Me.RadioButtonReadOnlyRevert.UseVisualStyleBackColor = True
+        '
+        'CheckBoxProcessReadOnly
+        '
+        Me.CheckBoxProcessReadOnly.AutoSize = True
+        Me.CheckBoxProcessReadOnly.Location = New System.Drawing.Point(8, 150)
+        Me.CheckBoxProcessReadOnly.Name = "CheckBoxProcessReadOnly"
+        Me.CheckBoxProcessReadOnly.Size = New System.Drawing.Size(291, 17)
+        Me.CheckBoxProcessReadOnly.TabIndex = 45
+        Me.CheckBoxProcessReadOnly.Text = "Process files as Available regardless of document Status"
+        Me.CheckBoxProcessReadOnly.UseVisualStyleBackColor = True
+        '
+        'CheckBoxSaveAsPDFPerSheetSupress
+        '
+        Me.CheckBoxSaveAsPDFPerSheetSupress.AutoSize = True
+        Me.CheckBoxSaveAsPDFPerSheetSupress.Location = New System.Drawing.Point(8, 125)
+        Me.CheckBoxSaveAsPDFPerSheetSupress.Name = "CheckBoxSaveAsPDFPerSheetSupress"
+        Me.CheckBoxSaveAsPDFPerSheetSupress.Size = New System.Drawing.Size(348, 17)
+        Me.CheckBoxSaveAsPDFPerSheetSupress.TabIndex = 44
+        Me.CheckBoxSaveAsPDFPerSheetSupress.Text = "Save as PDF per sheet -- Supress sheet suffix on 1 page documents"
+        Me.CheckBoxSaveAsPDFPerSheetSupress.UseVisualStyleBackColor = True
+        '
+        'CheckBoxSaveAsImageCrop
+        '
+        Me.CheckBoxSaveAsImageCrop.AutoSize = True
+        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 100)
+        Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
+        Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(194, 17)
+        Me.CheckBoxSaveAsImageCrop.TabIndex = 43
+        Me.CheckBoxSaveAsImageCrop.Text = "Save as image -- Crop to model size"
+        Me.CheckBoxSaveAsImageCrop.UseVisualStyleBackColor = True
+        '
+        'CheckBoxRunExternalProgramSaveFile
+        '
+        Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
+        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 75)
+        Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
+        Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(222, 17)
+        Me.CheckBoxRunExternalProgramSaveFile.TabIndex = 42
+        Me.CheckBoxRunExternalProgramSaveFile.Text = "Run external program -- Save file after run"
+        Me.CheckBoxRunExternalProgramSaveFile.UseVisualStyleBackColor = True
+        '
+        'CheckBoxNoUpdateMRU
+        '
+        Me.CheckBoxNoUpdateMRU.AutoSize = True
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(8, 50)
+        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(284, 17)
+        Me.CheckBoxNoUpdateMRU.TabIndex = 41
+        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
+        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
+        '
+        'CheckBoxWarnSave
+        '
+        Me.CheckBoxWarnSave.AutoSize = True
+        Me.CheckBoxWarnSave.Checked = True
+        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 25)
+        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(170, 17)
+        Me.CheckBoxWarnSave.TabIndex = 17
+        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
+        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
+        '
         'GroupBoxMiscOptions
         '
-        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxNoUpdateMRU)
+        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxPropertyFilterFollowDraftLinks)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxAutoAddMissingProperty)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxPartCopiesRecursiveSearch)
-        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxSaveAsImageCrop)
-        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRunExternalProgramSaveFile)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxMoveDrawingViewAllowPartialSuccess)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxBackgroundProcessing)
         Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxRememberTasks)
@@ -2037,12 +2803,11 @@ Partial Class Form1
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelPartNumberPropertyName)
         Me.GroupBoxMiscOptions.Controls.Add(Me.TextBoxRestartAfter)
         Me.GroupBoxMiscOptions.Controls.Add(Me.ComboBoxPartNumberPropertySet)
-        Me.GroupBoxMiscOptions.Controls.Add(Me.CheckBoxWarnSave)
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelPartNumberPropertySet)
         Me.GroupBoxMiscOptions.Controls.Add(Me.LabelRestartAfter)
-        Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 272)
+        Me.GroupBoxMiscOptions.Location = New System.Drawing.Point(8, 275)
         Me.GroupBoxMiscOptions.Name = "GroupBoxMiscOptions"
-        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 325)
+        Me.GroupBoxMiscOptions.Size = New System.Drawing.Size(475, 275)
         Me.GroupBoxMiscOptions.TabIndex = 42
         Me.GroupBoxMiscOptions.TabStop = False
         Me.GroupBoxMiscOptions.Text = "MISCELLANEOUS OPTIONS"
@@ -2050,7 +2815,7 @@ Partial Class Form1
         'CheckBoxAutoAddMissingProperty
         '
         Me.CheckBoxAutoAddMissingProperty.AutoSize = True
-        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(8, 275)
+        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(8, 225)
         Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
         Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(266, 17)
         Me.CheckBoxAutoAddMissingProperty.TabIndex = 39
@@ -2060,37 +2825,17 @@ Partial Class Form1
         'CheckBoxPartCopiesRecursiveSearch
         '
         Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
-        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(8, 250)
+        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(8, 200)
         Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
         Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(239, 17)
         Me.CheckBoxPartCopiesRecursiveSearch.TabIndex = 38
         Me.CheckBoxPartCopiesRecursiveSearch.Text = "Update insert part copies -- Recursive search"
         Me.CheckBoxPartCopiesRecursiveSearch.UseVisualStyleBackColor = True
         '
-        'CheckBoxSaveAsImageCrop
-        '
-        Me.CheckBoxSaveAsImageCrop.AutoSize = True
-        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(8, 224)
-        Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
-        Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(194, 17)
-        Me.CheckBoxSaveAsImageCrop.TabIndex = 37
-        Me.CheckBoxSaveAsImageCrop.Text = "Save as image -- Crop to model size"
-        Me.CheckBoxSaveAsImageCrop.UseVisualStyleBackColor = True
-        '
-        'CheckBoxRunExternalProgramSaveFile
-        '
-        Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
-        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(8, 201)
-        Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
-        Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(222, 17)
-        Me.CheckBoxRunExternalProgramSaveFile.TabIndex = 35
-        Me.CheckBoxRunExternalProgramSaveFile.Text = "Run external program -- Save file after run"
-        Me.CheckBoxRunExternalProgramSaveFile.UseVisualStyleBackColor = True
-        '
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 179)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(8, 175)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(266, 17)
@@ -2101,7 +2846,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 157)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(8, 150)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(227, 17)
         Me.CheckBoxBackgroundProcessing.TabIndex = 36
@@ -2113,7 +2858,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 135)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(8, 125)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(235, 17)
@@ -2159,21 +2904,10 @@ Partial Class Form1
         Me.ComboBoxPartNumberPropertySet.Sorted = True
         Me.ComboBoxPartNumberPropertySet.TabIndex = 11
         '
-        'CheckBoxWarnSave
-        '
-        Me.CheckBoxWarnSave.AutoSize = True
-        Me.CheckBoxWarnSave.Checked = True
-        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(8, 111)
-        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(170, 17)
-        Me.CheckBoxWarnSave.TabIndex = 16
-        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
-        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
-        '
         'LabelPartNumberPropertySet
         '
         Me.LabelPartNumberPropertySet.AutoSize = True
+        Me.LabelPartNumberPropertySet.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(8, 30)
         Me.LabelPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertySet.Name = "LabelPartNumberPropertySet"
@@ -2202,7 +2936,7 @@ Partial Class Form1
         Me.GroupBoxFileListOptions.Controls.Add(Me.RadioButtonListSortNone)
         Me.GroupBoxFileListOptions.Controls.Add(Me.LabelFontSize)
         Me.GroupBoxFileListOptions.Controls.Add(Me.TextBoxFontSize)
-        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 675)
+        Me.GroupBoxFileListOptions.Location = New System.Drawing.Point(8, 925)
         Me.GroupBoxFileListOptions.Name = "GroupBoxFileListOptions"
         Me.GroupBoxFileListOptions.Size = New System.Drawing.Size(475, 185)
         Me.GroupBoxFileListOptions.TabIndex = 41
@@ -2312,7 +3046,7 @@ Partial Class Form1
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsWidth)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.CheckBoxPrintOptionsScaleLineWidths)
         Me.GroupBoxPrinterSettings.Controls.Add(Me.LabelPrintOptionsPrinter)
-        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1225)
+        Me.GroupBoxPrinterSettings.Location = New System.Drawing.Point(11, 1825)
         Me.GroupBoxPrinterSettings.Name = "GroupBoxPrinterSettings"
         Me.GroupBoxPrinterSettings.Size = New System.Drawing.Size(475, 281)
         Me.GroupBoxPrinterSettings.TabIndex = 40
@@ -2465,7 +3199,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1525)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(11, 1700)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -2523,7 +3257,7 @@ Partial Class Form1
         Me.GroupBoxTLAOptions.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLATopDown)
         Me.GroupBoxTLAOptions.Controls.Add(Me.RadioButtonTLABottomUp)
-        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 900)
+        Me.GroupBoxTLAOptions.Location = New System.Drawing.Point(8, 600)
         Me.GroupBoxTLAOptions.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxTLAOptions.Name = "GroupBoxTLAOptions"
         Me.GroupBoxTLAOptions.Padding = New System.Windows.Forms.Padding(2)
@@ -2990,15 +3724,17 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxNoUpdateMRU
+        'CheckBoxPropertyFilterFollowDraftLinks
         '
-        Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(8, 300)
-        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
-        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(284, 17)
-        Me.CheckBoxNoUpdateMRU.TabIndex = 40
-        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
-        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
+        Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
+        Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(8, 250)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(311, 17)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.TabIndex = 40
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Text = "Property Filter -- Include Draft file model documents in search"
+        Me.CheckBoxPropertyFilterFollowDraftLinks.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -3031,6 +3767,20 @@ Partial Class Form1
         Me.TabPageDraft.PerformLayout()
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabPageConfiguration.PerformLayout()
+        Me.GroupBoxFileOpenSaveOptions.ResumeLayout(False)
+        Me.GroupBoxFileOpenSaveOptions.PerformLayout()
+        Me.GroupBoxStatusInR.ResumeLayout(False)
+        Me.GroupBoxStatusInR.PerformLayout()
+        Me.GroupBoxStatusInO.ResumeLayout(False)
+        Me.GroupBoxStatusInO.PerformLayout()
+        Me.GroupBoxStatusInIW.ResumeLayout(False)
+        Me.GroupBoxStatusInIW.PerformLayout()
+        Me.GroupBoxStatusInIR.ResumeLayout(False)
+        Me.GroupBoxStatusInIR.PerformLayout()
+        Me.GroupBoxStatusInB.ResumeLayout(False)
+        Me.GroupBoxStatusInB.PerformLayout()
+        Me.GroupBoxStatusInA.ResumeLayout(False)
+        Me.GroupBoxStatusInA.PerformLayout()
         Me.GroupBoxMiscOptions.ResumeLayout(False)
         Me.GroupBoxMiscOptions.PerformLayout()
         Me.GroupBoxFileListOptions.ResumeLayout(False)
@@ -3115,7 +3865,6 @@ Partial Class Form1
     Friend WithEvents CheckBoxTLAReportUnrelatedFiles As CheckBox
     Friend WithEvents RadioButtonTLATopDown As RadioButton
     Friend WithEvents RadioButtonTLABottomUp As RadioButton
-    Friend WithEvents CheckBoxWarnSave As CheckBox
     Friend WithEvents CheckBoxMoveDrawingViewAllowPartialSuccess As CheckBox
     Friend WithEvents CheckBoxRememberTasks As CheckBox
     Friend WithEvents ComboBoxSaveAsAssemblyFileType As ComboBox
@@ -3189,7 +3938,6 @@ Partial Class Form1
     Friend WithEvents RadioButtonPictorialViewTrimetric As RadioButton
     Friend WithEvents RadioButtonPictorialViewDimetric As RadioButton
     Friend WithEvents RadioButtonPictorialViewIsometric As RadioButton
-    Friend WithEvents CheckBoxRunExternalProgramSaveFile As CheckBox
     Friend WithEvents CheckBoxBackgroundProcessing As CheckBox
     Friend WithEvents TextBoxExposeVariablesAssembly As TextBox
     Friend WithEvents LabelExposeVariablesAssembly As Label
@@ -3197,7 +3945,6 @@ Partial Class Form1
     Friend WithEvents LabelExposeVariablesPart As Label
     Friend WithEvents TextBoxExposeVariablesSheetmetal As TextBox
     Friend WithEvents LabelExposeVariablesSheetmetal As Label
-    Friend WithEvents CheckBoxSaveAsImageCrop As CheckBox
     Friend WithEvents TextBoxSaveAsFormulaSheetmetal As TextBox
     Friend WithEvents CheckBoxSaveAsFormulaSheetmetal As CheckBox
     Friend WithEvents TextBoxSaveAsFormulaAssembly As TextBox
@@ -3299,5 +4046,70 @@ Partial Class Form1
     Friend WithEvents TextBoxRandomSampleFraction As TextBox
     Friend WithEvents LabelRandomSampleFraction As Label
     Friend WithEvents CheckBoxAutoAddMissingProperty As CheckBox
+    Friend WithEvents GroupBoxFileOpenSaveOptions As GroupBox
+    Friend WithEvents CheckBoxWarnSave As CheckBox
     Friend WithEvents CheckBoxNoUpdateMRU As CheckBox
+    Friend WithEvents CheckBoxSaveAsImageCrop As CheckBox
+    Friend WithEvents CheckBoxRunExternalProgramSaveFile As CheckBox
+    Friend WithEvents CheckBoxProcessReadOnly As CheckBox
+    Friend WithEvents CheckBoxSaveAsPDFPerSheetSupress As CheckBox
+    Friend WithEvents RadioButtonReadOnlyChange As RadioButton
+    Friend WithEvents RadioButtonReadOnlyRevert As RadioButton
+    Friend WithEvents LabelStatusInReleased As Label
+    Friend WithEvents LabelStatusInObsolete As Label
+    Friend WithEvents LabelStatusInInWork As Label
+    Friend WithEvents LabelStatusInInReview As Label
+    Friend WithEvents LabelStatusInBaselined As Label
+    Friend WithEvents LabelStatusInAvailable As Label
+    Friend WithEvents GroupBoxStatusInA As GroupBox
+    Friend WithEvents RadioButtonStatusAtoIW As RadioButton
+    Friend WithEvents RadioButtonStatusAtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusAtoB As RadioButton
+    Friend WithEvents RadioButtonStatusAtoA As RadioButton
+    Friend WithEvents RadioButtonStatusAtoO As RadioButton
+    Friend WithEvents RadioButtonStatusAtoR As RadioButton
+    Friend WithEvents GroupBoxStatusInB As GroupBox
+    Friend WithEvents RadioButtonStatusBtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusBtoB As RadioButton
+    Friend WithEvents RadioButtonStatusBtoA As RadioButton
+    Friend WithEvents RadioButtonStatusBtoR As RadioButton
+    Friend WithEvents RadioButtonStatusBtoO As RadioButton
+    Friend WithEvents RadioButtonStatusBtoIW As RadioButton
+    Friend WithEvents GroupBoxStatusInIR As GroupBox
+    Friend WithEvents RadioButtonStatusIRtoR As RadioButton
+    Friend WithEvents RadioButtonStatusIRtoO As RadioButton
+    Friend WithEvents RadioButtonStatusIRtoIW As RadioButton
+    Friend WithEvents RadioButtonStatusIRtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusIRtoB As RadioButton
+    Friend WithEvents RadioButtonStatusIRtoA As RadioButton
+    Friend WithEvents GroupBoxStatusInIW As GroupBox
+    Friend WithEvents RadioButtonStatusIWtoR As RadioButton
+    Friend WithEvents RadioButtonStatusIWtoO As RadioButton
+    Friend WithEvents RadioButtonStatusIWtoIW As RadioButton
+    Friend WithEvents RadioButtonStatusIWtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusIWtoB As RadioButton
+    Friend WithEvents RadioButtonStatusIWtoA As RadioButton
+    Friend WithEvents GroupBoxStatusInO As GroupBox
+    Friend WithEvents RadioButtonStatusOtoR As RadioButton
+    Friend WithEvents RadioButtonStatusOtoO As RadioButton
+    Friend WithEvents RadioButtonStatusOtoIW As RadioButton
+    Friend WithEvents RadioButtonStatusOtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusOtoB As RadioButton
+    Friend WithEvents RadioButtonStatusOtoA As RadioButton
+    Friend WithEvents GroupBoxStatusInR As GroupBox
+    Friend WithEvents RadioButtonStatusRtoR As RadioButton
+    Friend WithEvents RadioButtonStatusRtoO As RadioButton
+    Friend WithEvents RadioButtonStatusRtoIW As RadioButton
+    Friend WithEvents RadioButtonStatusRtoIR As RadioButton
+    Friend WithEvents RadioButtonStatusRtoB As RadioButton
+    Friend WithEvents RadioButtonStatusRtoA As RadioButton
+    Friend WithEvents LabelStatusOutReleased As Label
+    Friend WithEvents LabelStatusOutObsolete As Label
+    Friend WithEvents LabelStatusOutIW As Label
+    Friend WithEvents LabelStatusOutInReview As Label
+    Friend WithEvents LabelStatusOutBaselined As Label
+    Friend WithEvents LabelStatusOutAvailable As Label
+    Friend WithEvents LabelStatusAfter As Label
+    Friend WithEvents LabelStatusBefore As Label
+    Friend WithEvents CheckBoxPropertyFilterFollowDraftLinks As CheckBox
 End Class

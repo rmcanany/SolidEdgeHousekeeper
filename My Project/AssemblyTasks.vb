@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Windows.Shell
 Imports SolidEdgeCommunity
 
 Public Class AssemblyTasks
@@ -1380,6 +1381,7 @@ Public Class AssemblyTasks
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
+        Dim NewFileFormat As String = ""
         Dim Filename As String
         Dim BaseFilename As String
         Dim Dir As String
@@ -1407,8 +1409,11 @@ Public Class AssemblyTasks
         'Parasolid text (*.x_b)
         'Copy (*.asm)
         NewExtension = Configuration("ComboBoxSaveAsAssemblyFileType")
-        NewExtension = Split(NewExtension, Delimiter:="*")(1)  ' 'Parasolid text (*.x_b)' -> '.x_b)'
-        NewExtension = Split(NewExtension, Delimiter:=")")(0)  ' '.x_b)' -> '.x_b'
+        NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid (*.xt)" -> ".xt)"
+
+        NewFileFormat = Configuration("ComboBoxSaveAsAssemblyFileType")
+        NewFileFormat = NewFileFormat.Split("("c)(0)  ' "Parasolid (*.xt)" -> "Parasolid "
 
         Filename = SEDoc.FullName
 
@@ -1459,7 +1464,11 @@ Public Class AssemblyTasks
                 Try
                     If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
                         If Not Configuration("ComboBoxSaveAsAssemblyFileType").ToLower.Contains("copy") Then
-                            SEDoc.SaveAs(NewFilename)
+                            If NewExtension = ".jt" Then
+                                SEDoc.SaveAs(NewFilename)
+                            Else
+                                SEDoc.SaveAs(NewFilename)
+                            End If
                             SEApp.DoIdle()
                         Else
                             If Configuration("CheckBoxSaveAsAssemblyOutputDirectory").ToLower = "false" Then
@@ -1572,7 +1581,11 @@ Public Class AssemblyTasks
                     Try
                         If Not ImageExtensions.Contains(NewExtension) Then
                             If Not Configuration("ComboBoxSaveAsAssemblyFileType").ToLower.Contains("copy") Then
-                                SEDoc.SaveAs(NewFilename)
+                                If NewExtension = ".jt" Then
+                                    SEDoc.SaveAsJT(NewFilename)
+                                Else
+                                    SEDoc.SaveAs(NewFilename)
+                                End If
                                 SEApp.DoIdle()
                             Else
                                 If Configuration("CheckBoxSaveAsAssemblyOutputDirectory").ToLower = "false" Then

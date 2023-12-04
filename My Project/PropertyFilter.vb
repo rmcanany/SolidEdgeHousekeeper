@@ -38,6 +38,7 @@ Public Class PropertyFilter
     Private Function ProcessFiles(FoundFiles As List(Of String),
                 PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
                 PropertyFilterFormula As String) As List(Of String)
+
         Dim FoundFile As String
         Dim FilteredFiles As New List(Of String)
         Dim tf As Boolean
@@ -75,35 +76,39 @@ Public Class PropertyFilter
         Dim LinkedDocuments As DesignManager.LinkedDocuments
         Dim LinkedDocument As DesignManager.Document
 
-        Dim ContainsFileProperty As Boolean
-        Dim PropertySet As String
+        'Dim ContainsFileProperty As Boolean
+        'Dim PropertySet As String
 
         System.Windows.Forms.Application.DoEvents()
         If Form1.StopProcess Then
             Return False
         End If
 
-        ContainsFileProperty = False
-        For Each Variable In PropertyFilterDict.Keys
-            PropertySet = ParsePropertyString(PropertyFilterDict(Variable)("PropertyString"), "PropertySet")
-            If (PropertySet.ToLower = "filename") Or (PropertySet.ToLower = "path") Then
-                ContainsFileProperty = True
-            End If
+        'ContainsFileProperty = False
+        'For Each Variable In PropertyFilterDict.Keys
+        '    PropertySet = ParsePropertyString(PropertyFilterDict(Variable)("PropertyString"), "PropertySet")
+        '    If (PropertySet.ToLower = "filename") Or (PropertySet.ToLower = "path") Then
+        '        ContainsFileProperty = True
+        '    End If
 
-        Next
+        'Next
 
         Extension = System.IO.Path.GetExtension(FoundFile)
         If Extension = ".dft" Then
             DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
             LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
-            tf = False
-            If ContainsFileProperty Then  ' Need to check the draft file itself
-                tf = tf Or ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
+            'tf = False
+
+            tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
+
+            'If ContainsFileProperty Then  ' Need to check the draft file itself
+            'End If
+
+            If Form1.CheckBoxPropertyFilterFollowDraftLinks.Checked Then
+                For Each LinkedDocument In LinkedDocuments
+                    tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
+                Next
             End If
-            ' tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
-            For Each LinkedDocument In LinkedDocuments
-                tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
-            Next
         Else
             tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
         End If
@@ -139,27 +144,31 @@ Public Class PropertyFilter
             Comparison = PropertyFilterDict(Variable)("Comparison")
             Value = PropertyFilterDict(Variable)("Value")
 
-            ' TODO Remove PropertySet 'path' and 'filename'
-            If PropertySet.ToLower = "filename" Then
-                DocValue = System.IO.Path.GetFileName(FoundFile)
-            ElseIf PropertySet.ToLower = "path" Then
-                DocValue = FoundFile
-            Else
-                If Extension = ".dft" Then
-                    ' DocValue = Value
-                    ' Continue For
-                    DocValue = "-3.1415962535879"
-                Else
-                    DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
-                End If
-                'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
-            End If
+            DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
+
+            '' TODO Remove PropertySet 'path' and 'filename'
+            'If PropertySet.ToLower = "filename" Then
+            '    DocValue = System.IO.Path.GetFileName(FoundFile)
+            'ElseIf PropertySet.ToLower = "path" Then
+            '    DocValue = FoundFile
+            'Else
+            '    If Extension = ".dft" Then
+            '        ' DocValue = Value
+            '        ' Continue For
+            '        DocValue = "-3.1415962535879"
+            '    Else
+            '        DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
+            '    End If
+            '    'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
+            'End If
 
             tf2 = DoComparison(Comparison, Value, DocValue)
 
             VariableTruthValues.Add(Variable, tf2.ToString)
 
         Next
+
+        'PropertySets.Close()
 
         BooleanExpression = DoSubstitution(PropertyFilterFormula, VariableTruthValues)
 
@@ -308,6 +317,7 @@ Public Class PropertyFilter
             End Try
         Else
             For Each SystemPropertySet In SystemPropertySets
+                ' The property will be in only one of the SystemPropertySets -- hopefully.
                 Try
                     Properties = CType(PropertySets.Item(SystemPropertySet), DesignManager.Properties)
                     Prop = Properties.Item(PropertyName)

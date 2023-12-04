@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports SolidEdgeCommunity
+Imports SolidEdgePart
 
 Public Class SheetmetalTasks
     Inherits IsolatedTaskProxy
@@ -1818,6 +1819,7 @@ Public Class SheetmetalTasks
 
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
+        Dim NewFileFormat As String = ""
         Dim PartBaseFilename As String
 
         Dim BaseDir As String
@@ -1828,6 +1830,11 @@ Public Class SheetmetalTasks
         Dim DraftFilename As String
         Dim SEDraftDoc As SolidEdgeDraft.DraftDocument = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
+        Dim Model As SolidEdgePart.Model = Nothing
+
+        Dim FlatPatternModels As SolidEdgePart.FlatPatternModels
+        Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
+
 
         Dim ExitMessage As String = ""
 
@@ -1841,8 +1848,11 @@ Public Class SheetmetalTasks
         ' ComboBoxSaveAsSheetmetalFiletype
         ' Format: Parasolid (*.xt), IGES (*.igs)
         NewExtension = Configuration("ComboBoxSaveAsSheetmetalFileType")
-        NewExtension = Split(NewExtension, Delimiter:="*")(1)  ' "Parasolid (*.xt)" -> ".xt)"
-        NewExtension = Split(NewExtension, Delimiter:=")")(0)  ' ".xt)" -> ".xt"
+        NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid (*.xt)" -> ".xt)"
+
+        NewFileFormat = Configuration("ComboBoxSaveAsSheetmetalFileType")
+        NewFileFormat = NewFileFormat.Split("("c)(0)  ' "Parasolid (*.xt)" -> "Parasolid "
 
         PartBaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
 
@@ -1910,6 +1920,28 @@ Public Class SheetmetalTasks
                             End Try
                         End If
 
+                    ElseIf (NewExtension = ".stp") And (NewFileFormat.Contains("Step Flat")) Then
+                        SupplementalErrorMessage = FlatPatternMissingOrOutOfDate(CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument), Configuration, SEApp)
+                        If SupplementalErrorMessage.Keys(0) <> 0 Then
+                            ExitStatus = SupplementalErrorMessage.Keys(0)
+                            ErrorMessageList.Add("Flat pattern missing or out of date")
+                        Else
+                            Try
+                                FlatPatternModels = SEDoc.FlatPatternModels
+                                FlatPatternModel = FlatPatternModels.Item(1)
+                                FlatPatternModel.MakeActive()
+                                SEDoc.SaveAs(NewFilename)
+                                SEApp.DoIdle()
+                            Catch ex2 As Exception
+                                MsgBox(ex2)
+                            End Try
+
+                            Models = SEDoc.Models
+                            Model = Models.Item(1)
+                            Model.MakeActive()
+                            SEApp.DoIdle()
+                        End If
+
                     ElseIf NewExtension = ".pdf" Then
                         DraftFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
                         If Not FileIO.FileSystem.FileExists(DraftFilename) Then
@@ -1936,6 +1968,7 @@ Public Class SheetmetalTasks
 
                             End If
                         End If
+
 
                     Else
                         Try

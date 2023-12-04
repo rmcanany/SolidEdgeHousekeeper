@@ -128,7 +128,7 @@ Public Class LabelToAction
         HelpString += "except preceeded with `System.` or `Custom.` as above.  "
         HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
         HelpString += "you can optionally have it added automatically.  "
-        HelpString += "This option is set on the **Configuration Tab**, Miscellaneous Group.  "
+        HelpString += "This option is set on the **Configuration Tab -- Miscellaneous Group**.  "
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
@@ -189,7 +189,7 @@ Public Class LabelToAction
 
         Dim FitPictorialView As New L2A
         HelpString = "Maximizes the window, sets the view orientation, and does a fit. "
-        HelpString += "Select the desired orientation on the **Configuration Tab**."
+        HelpString += "Select the desired orientation on the **Configuration Tab -- Pictorial View Group**."
         PopulateList(FitPictorialView,
                      "Fit pictorial view",
                      "FitPictorialView",
@@ -199,7 +199,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
-        HelpString = "Checks if a file property, that you specify on the **Configuration Tab**, matches the file name."
+        HelpString = "Checks if a file property, that you specify on the **Configuration Tab -- Miscellaneous Group**, matches the file name."
         PopulateList(PartNumberDoesNotMatchFilename,
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
@@ -276,7 +276,7 @@ Public Class LabelToAction
         HelpString += "These controls are on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "Images can be saved with the aspect ratio of the model, rather than the window. "
         HelpString += "The option is called `Save as image -- crop to model size`. "
-        HelpString += "It is located on the **Configuration Tab**. "
+        HelpString += "It is located on the **Configuration Tab -- Miscellaneous Group**. "
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. "
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
@@ -778,7 +778,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim Print As New L2A
-        HelpString = "Print settings are accessed on the **Configuration Tab**."
+        HelpString = "Print settings are accessed on the **Configuration Tab -- Printer Group**."
         HelpString += vbCrLf + vbCrLf + "Note, the presence of the Printer Settings dialog is somewhat misleading. "
         HelpString += "The only settings taken from it are the printer name, page height and width, "
         HelpString += "and the number of copies. "

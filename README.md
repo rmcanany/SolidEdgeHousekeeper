@@ -194,7 +194,8 @@ Note the program always includes subfolders for *where used* files.
 ![Top level assembly options](My%20Project/media/top_level_assy_options.png)
 
 A top level assembly search can optionally report files with no links to the 
-assembly.  Set this option on the **Configuration Tab**.
+assembly.  Set this option on the **Configuration Tab -- Top Level 
+Assembly Group**.
 
 When selecting a top-level assembly, you can 
 automatically include the folder in which it resides.
@@ -318,7 +319,7 @@ To do so, check/uncheck the appropriate File Type
 
 You can choose sorting options of `Unsorted`, `Alphabetic`, 
 `Dependency`, or `Random sample`.  These options are set on the 
-**Configuration** Tab.
+**Configuration Tab -- File List Group**.
 
 The `Unsorted` option is primarily 
 intended to preserve the order of imported lists.
@@ -338,6 +339,26 @@ is a decimal number between `0.0` and `1.0`.
 This option is primarily intended for software testing, 
 but can be used for any purpose.
 
+### Document Status Options
+
+If you use the document Status functionality, you know that some settings
+place the file in read-only mode.  These cannot normally be processed by Housekeeper.
+
+You can get around this by checking
+`Process files as Available regardless of document Status`.
+Set the option on the **Configuration Tab -- File Open/Save Group**
+
+![File open save options](My%20Project/media/file_open_save_options.png)
+
+After processing, you can choose to change the Status back to the old value, or pick a new one.
+In the example, I decided to change everything to Available.
+You can select the new Status by clicking the appropriate button in the table.
+For instance, if you wanted to convert all Baselined files to Released,
+you would click the last button on the second row.
+
+If you want simply to change the Status on a batch of files, 
+choose the `Open/Save` Task for each document type.
+
 ### Filtering
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
@@ -356,8 +377,12 @@ the Property filter checkbox.
 
 The Property Filter checks Draft files, but they
 often don't have properties of their own.
-So for those files, Housekeeper also searches 
+For those files, Housekeeper can also search 
 any models in the drawing for the specified properties. 
+Set the option on the **Configuration Tab -- Miscellaneous Group**.
+One situation where you might want to disable this option
+is when searching for file Status.  
+See **Document Status Options** below.
 
 This is a powerful tool with a lot
 of options. These are detailed below.
@@ -466,6 +491,34 @@ These must be stripped off by the program to make comparisons.
 Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`).
 It`s easy to add more, so please ask on the Forum if you need others.
 
+**Document Status**
+
+You can select files based on Status, but not like this:
+	
+`System.Status contains Available`
+
+There is a number associated with each Status value.
+You have to use that instead of the name.  
+
+Here is the way to get all `Available` files: `System.Status is_exactly 0`
+
+For *everything but* `Available` try: `System.Status > 0`
+
+Here's the list:
+
+- `0 Available`
+- `1 InWork`
+- `2 InReview`
+- `3 Released`
+- `4 Baselined`
+- `5 Obsolete`
+
+As mentioned above, this is a situation where the
+option `Include Draft file model documents in search`
+can yield confusing results.  
+For example, an `InWork` Draft file containing a `Released` part would
+appear in a search for `Released` documents.
+
 **Saved Settings**
 
 The filters are saved in `property_filters.txt` in the same directory as 
@@ -513,13 +566,20 @@ the Cancel button changes to a Stop button.  Just click that to halt
 execution.  It may take several seconds to register the request.  It 
 doesn't hurt to click it a couple of times.
 
+To save some time, you can process files in the background,
+without graphics.  This capability is somewhat experimental; let 
+know if you run into problems.  To save some space on the Most 
+Recently Used list, you can disable adding files that are
+processed by Housekeeper.  Both options are set on the
+**Configuration Tab -- Miscellaneous Group**.
+
 
 ## CAVEATS
 
 Since the program can process a large number of files in a short amount of time, 
 it can be very taxing on Solid Edge. 
 To maintain a clean environment, the program restarts Solid Edge periodically. 
-(Set the frequency on the **Configuration Tab**.)
+(Set the frequency on the **Configuration Tab -- Miscellaneous Group**.)
 This is by design and does not necessarily indicate a problem.
 
 However, problems can arise. 
@@ -599,7 +659,7 @@ The search *is not* case sensitive, the replacement *is*. For example, say the s
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as above.  
 
-If the specified property does not exist in the file, you can optionally have it added automatically.  This option is set on the **Configuration Tab**, Miscellaneous Group.  Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  
+If the specified property does not exist in the file, you can optionally have it added automatically.  This option is set on the **Configuration Tab -- Miscellaneous Group**.  Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.
@@ -627,10 +687,10 @@ Note, the view style must be a named style.  Overrides are ignored. To create a 
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 #### Fit pictorial view
-Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab**.
+Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab -- Pictorial View Group**.
 
 #### Part number does not match file name
-Checks if a file property, that you specify on the **Configuration Tab**, matches the file name.
+Checks if a file property, that you specify on the **Configuration Tab -- Miscellaneous Group**, matches the file name.
 
 #### Missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
@@ -664,7 +724,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
 
-Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab**. 
+Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- Miscellaneous Group**. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. 
 
@@ -859,7 +919,7 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Print
-Print settings are accessed on the **Configuration Tab**.
+Print settings are accessed on the **Configuration Tab -- Printer Group**.
 
 Note, the presence of the Printer Settings dialog is somewhat misleading. The only settings taken from it are the printer name, page height and width, and the number of copies. Any other selections revert back to the Windows defaults when printing. A workaround is to create a new Windows printer with the desired defaults. 
 

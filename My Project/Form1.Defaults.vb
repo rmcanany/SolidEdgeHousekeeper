@@ -225,7 +225,7 @@ Partial Class Form1
 
         ' Common model file types
         FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
-        FileTypesString += ":OBJ (*.obj):STL (*.stl)"
+        FileTypesString += ":OBJ (*.obj):STL (*.stl):JT Document (*.jt)"
         FileTypesString += ":bmp (*.bmp):jpg (*.jpg):png (*.png):tif (*.tif)"
 
         ' Assembly
@@ -253,11 +253,12 @@ Partial Class Form1
         Next
         ComboBoxSaveAsSheetmetalFileType.Items.Add("PDF Drawing (*.pdf)")
         ComboBoxSaveAsSheetmetalFileType.Items.Add("DXF Flat (*.dxf)")
+        'ComboBoxSaveAsSheetmetalFileType.Items.Add("Step Flat (*.stp)")
         ComboBoxSaveAsSheetmetalFileType.Items.Add("Copy (*.psm)")
         ComboBoxSaveAsSheetmetalFileType.Text = CType(ComboBoxSaveAsSheetmetalFileType.Items(0), String)
 
         ' Draft
-        FileTypesString = "PDF (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
+        FileTypesString = "PDF (*.pdf):PDF per Sheet (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
 
         ComboBoxSaveAsDraftFileType.Items.Clear()
         For Each FileType In Split(FileTypesString, Delimiter:=":")

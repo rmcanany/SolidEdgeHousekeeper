@@ -1,8 +1,11 @@
 'Option Strict On
 Imports System.IO
+Imports System.Net.WebRequestMethods
 Imports System.Reflection
 Imports System.Text.RegularExpressions
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports ExcelDataReader
+Imports MS.Internal
 
 Public Class CommonTasks
 
@@ -668,7 +671,7 @@ Public Class CommonTasks
         Dim tmpList As String() = Nothing
         Dim i As Integer = 0
 
-        Using stream = File.Open(FileName, FileMode.Open, FileAccess.Read)
+        Using stream = System.IO.File.Open(FileName, FileMode.Open, FileAccess.Read)
             ' Auto-detect format, supports:
             '  - Binary Excel files (2.0-2003 format; *.xls)
             '  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
@@ -912,5 +915,182 @@ Public Class CommonTasks
         objLinkedDocs = Nothing
 
     End Sub
+
+    Shared Function SetStatus(
+        DMApp As DesignManager.Application,
+        Filename As String,
+        NewStatus As SolidEdgeConstants.DocumentStatus,
+        Optional StatusChangeRadioButtons As List(Of RadioButton) = Nothing
+        ) As Boolean
+        ' https://community.sw.siemens.com/s/question/0D54O000061wzRaSAI/changing-document-status
+
+        Dim Success As Boolean = True
+
+        Try
+            'Dim DMApp As New DesignManager.Application
+            'DMApp.Visible = 0
+
+            If Not StatusChangeRadioButtons Is Nothing Then
+                ' Replace NewStatus with change indicated
+            End If
+
+            Dim PropertySets As DesignManager.PropertySets
+            Dim PropertySet As DesignManager.Properties
+
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, False)
+
+            PropertySet = PropertySets.Item("ExtendedSummaryInformation")
+            PropertySet.Item("Status").Value = NewStatus
+            'PropertySet.Save()
+            PropertySets.Save()
+
+            PropertySet = PropertySets.Item("SummaryInformation")
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmAvailable
+            End If
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmBaselined
+            End If
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmInReview
+            End If
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmInWork
+            End If
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmObsolete
+            End If
+            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+                PropertySet.Item("Security").Value = StatusSecurityMapping.ssmReleased
+            End If
+
+            PropertySets.Save()
+            PropertySets.Close()
+
+            'DMApp.Quit()
+        Catch ex As Exception
+            Success = False
+        End Try
+
+        Return Success
+    End Function
+
+    Public Enum StatusSecurityMapping
+        ssmAvailable = 0
+        ssmInWork = 0
+        ssmInReview = 0
+        ssmReleased = 4
+        ssmBaselined = 4
+        ssmObsolete = 4
+    End Enum
+
+
+    Shared Function GetStatus(DMApp As DesignManager.Application, Filename As String) As SolidEdgeConstants.DocumentStatus
+        Dim Status As SolidEdgeConstants.DocumentStatus = Nothing
+
+        'Dim DMApp As New DesignManager.Application
+        'DMApp.Visible = 0
+
+        Try
+
+            Dim PropertySets As DesignManager.PropertySets
+            Dim PropertySet As DesignManager.Properties
+
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, True)
+
+            PropertySet = PropertySets.Item("ExtendedSummaryInformation")
+
+            Status = PropertySet.Item("Status").Value
+
+            PropertySets.Close()
+
+        Catch ex As Exception
+
+        End Try
+
+        'DMApp.Quit()
+
+        Return Status
+    End Function
+
+
+    'Private Function SetFileStatus(strfile As String, fStatus As SolidEdgeConstants.DocumentStatus) As Boolean
+    '    ' https://community.sw.siemens.com/s/question/0D54O000061wzRaSAI/changing-document-status
+    '    'Ted,
+
+    '    'I had the same problem when I wrote my status changer. Check out the
+    '    '"Security" property in the "SummaryInformation" Properties. This property
+    '    'has one -to-one constants with the status property. Lookup these constants
+
+    '    'ssmAvailable
+    '    'ssmInWork
+    '    'ssmInReview
+    '    'ssmReleased
+    '    'ssmBaselined
+    '    'ssmObsolete
+
+    '    'In my code, when I change the status, I also change the security to match.
+    '    'It fixed my problem. HTH
+
+    '    'Jason Newell
+    '    'Software Engineer
+    '    'The Charles Machine Works, Inc.
+
+
+    '    'Return the file status of the referenced file w/o actually opening it
+
+    '    Dim objPropSet As SolidEdgeFileProperties.Properties
+
+    '    Dim objPropSets As SolidEdgeFileProperties.PropertySets
+
+    '    On Error GoTo SetFileStatus_ErrHandler
+
+    '    SetFileStatus = False 'Default to error
+
+    '    Select Case UCase$(GetFileExtension(strfile))
+
+    '        Case "PAR", "PSM", "DFT", "ASM", "PWD"
+
+    '            'OK
+
+    '        Case Else
+
+    '            'Not a Solid Edge file
+
+    '            Exit Function
+
+    '    End Select
+
+    '    objPropSets = CreateObject("SolidEdge.FileProperties")
+
+    '    objPropSets.Open(strfile, False)
+
+    '    If objPropSets Is Nothing Then Exit Function 'exit w/Error
+
+    '    objPropSet = objPropSets("ExtendedSummaryInformation")
+
+    '    objPropSet("Status").Value = fStatus
+
+    '    objPropSets.Save()
+
+    '    SetFileStatus = True
+
+    '    objPropSet = Nothing
+
+    '    objPropSets = Nothing
+
+    '    Exit Function
+
+    '    'SetFileStatus_ErrHandler:
+
+    '    'Error was encountered
+
+    '    objPropSet = Nothing
+
+    '    objPropSets = Nothing
+
+    'End Function
 
 End Class
