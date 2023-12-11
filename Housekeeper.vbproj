@@ -170,12 +170,19 @@
     <Compile Include="My Project\FormPropertyFilter.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormSheetSelector.Designer.vb">
+      <DependentUpon>FormSheetSelector.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormSheetSelector.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\LabelToAction.vb" />
     <Compile Include="My Project\LaunchTask.vb" />
     <Compile Include="My Project\MaterialDoctorPart.vb" />
     <Compile Include="My Project\MaterialDoctorSheetmetal.vb" />
     <Compile Include="My Project\OccurrenceGetter.vb" />
     <Compile Include="My Project\PartTasks.vb" />
+    <Compile Include="My Project\PrinterDoctor.vb" />
     <Compile Include="My Project\PropertyFilter.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -196,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormSheetSelector.resx">
+      <DependentUpon>FormSheetSelector.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

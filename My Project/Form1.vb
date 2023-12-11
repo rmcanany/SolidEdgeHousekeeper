@@ -44,6 +44,10 @@ Public Class Form1
     Public Shared PropertyFilterFormula As String
     Public Shared PropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
 
+    Private FormSheetSelector As New FormSheetSelector()
+    Public Shared SelectedSheets As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+
+
 
 
 
@@ -735,7 +739,7 @@ Public Class Form1
                 Dim PrinterInstalled As Boolean = False
                 Dim InstalledPrinter As String
                 For Each InstalledPrinter In System.Drawing.Printing.PrinterSettings.InstalledPrinters
-                    If InstalledPrinter = TextBoxPrintOptionsPrinter.Text Then
+                    If InstalledPrinter = ComboBoxPrinter1.Text Then
                         PrinterInstalled = True
                         Exit For
                     End If
@@ -1270,7 +1274,7 @@ Public Class Form1
         CreatePreferencesFolder()
         PopulateCheckedListBoxes()
         LoadDefaults()
-        LoadPrinterSettings()
+        ' LoadPrinterSettings()
         ReconcileFormChanges()
         BuildReadmeFile()
 
@@ -1391,6 +1395,22 @@ Public Class Form1
             For Each RB In StatusChangeRadioButtons
                 RB.Enabled = False
             Next
+        End If
+
+        If Not CheckBoxEnablePrinter2.Checked Then
+            ComboBoxPrinter2.Enabled = False
+            TextBoxPrinter2Copies.Enabled = False
+            CheckBoxPrinter2AutoOrient.Enabled = False
+            CheckBoxPrinter2BestFit.Enabled = False
+            CheckBoxPrinter2PrintAsBlack.Enabled = False
+            CheckBoxPrinter2ScaleLineTypes.Enabled = False
+            CheckBoxPrinter2ScaleLineWidths.Enabled = False
+
+            RadioButtonSheetsAnsiPrinter2.Enabled = False
+            RadioButtonSheetsIsoPrinter2.Enabled = False
+            RadioButtonSheetsAllPrinter2.Enabled = False
+            TextBoxPrinter2SheetSelections.Enabled = False
+            ButtonPrinter2SheetSelections.Enabled = False
         End If
 
         ' Enable/Disable option controls based on task selection
@@ -1820,34 +1840,34 @@ Public Class Form1
     End Sub
 
 
-    Private Sub ButtonPrintOptions_Click(sender As Object, e As EventArgs) Handles ButtonPrintOptions.Click
-        'PrintDialog1.ShowDialog()
-        Dim h, w As Integer
-        Dim long_dim, short_dim As Double
+    'Private Sub ButtonPrintOptions_Click(sender As Object, e As EventArgs)
+    '    'PrintDialog1.ShowDialog()
+    '    Dim h, w As Integer
+    '    Dim long_dim, short_dim As Double
 
-        If PrintDialog1.ShowDialog() = DialogResult.OK Then
-            SavePrinterSettings()
+    '    If PrintDialog1.ShowDialog() = DialogResult.OK Then
+    '        'SavePrinterSettings()
 
-            TextBoxPrintOptionsPrinter.Text = PrintDialog1.PrinterSettings.PrinterName
+    '        TextBoxPrintOptionsPrinter.Text = PrintDialog1.PrinterSettings.PrinterName
 
-            h = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Height
-            w = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Width
-            If w > h Then
-                long_dim = CDbl(w) / 100
-                short_dim = CDbl(h) / 100
-            Else
-                long_dim = CDbl(h) / 100
-                short_dim = CDbl(w) / 100
-            End If
-            TextBoxPrintOptionsWidth.Text = CStr(long_dim)
-            TextBoxPrintOptionsHeight.Text = CStr(short_dim)
+    '        h = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Height
+    '        w = PrintDialog1.PrinterSettings.DefaultPageSettings.PaperSize.Width
+    '        If w > h Then
+    '            long_dim = CDbl(w) / 100
+    '            short_dim = CDbl(h) / 100
+    '        Else
+    '            long_dim = CDbl(h) / 100
+    '            short_dim = CDbl(w) / 100
+    '        End If
+    '        TextBoxPrintOptionsWidth.Text = CStr(long_dim)
+    '        TextBoxPrintOptionsHeight.Text = CStr(short_dim)
 
-            TextBoxPrintOptionsCopies.Text = CStr(PrintDialog1.PrinterSettings.Copies)
+    '        TextBoxPrinter1Copies.Text = CStr(PrintDialog1.PrinterSettings.Copies)
 
-            ReconcileFormChanges()
-        End If
+    '        ReconcileFormChanges()
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
 
@@ -2040,14 +2060,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxLaserOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
-        'If CheckBoxLaserOutputDirectory.Checked Then
-        '    TextBoxLaserOutputDirectory.Enabled = False
-        'Else
-        '    TextBoxLaserOutputDirectory.Enabled = True
-        'End If
-        ReconcileFormChanges()
-    End Sub
 
     Private Sub CheckBoxMoveDrawingViewAllowPartialSuccess_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxMoveDrawingViewAllowPartialSuccess.CheckedChanged
         ReconcileFormChanges()
@@ -2066,7 +2078,7 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxSaveAsDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub CheckBoxSaveAsDraftOutputDirectory_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsDraftOutputDirectory.CheckedChanged
         If CheckBoxSaveAsDraftOutputDirectory.Checked Then
             TextBoxSaveAsDraftOutputDirectory.Enabled = False
         Else
@@ -2075,14 +2087,6 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxSaveAsFlatDXFOutputDirectory_CheckedChanged(sender As Object, e As EventArgs)
-        'If CheckBoxSaveAsFlatDXFOutputDirectory.Checked Then
-        '    TextBoxSaveAsFlatDXFOutputDirectory.Enabled = False
-        'Else
-        '    TextBoxSaveAsFlatDXFOutputDirectory.Enabled = True
-        'End If
-        ReconcileFormChanges()
-    End Sub
 
     Private Sub CheckBoxSaveAsFormulaAssembly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSaveAsFormulaAssembly.CheckedChanged
         ReconcileFormChanges()
@@ -2134,7 +2138,7 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs)
+    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnSave.CheckedChanged
         ReconcileFormChanges()
     End Sub
 
@@ -2268,10 +2272,10 @@ Public Class Form1
         ReconcileFormChanges()
     End Sub
 
-    Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs)
-        ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
-    End Sub
+    'Private Sub TextBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles TextBoxFileSearch.LostFocus
+    '    ListViewFilesOutOfDate = True
+    '    ReconcileFormChanges()
+    'End Sub
 
     Private Sub TextBoxPartNumberPropertyName_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartNumberPropertyName.TextChanged
         ReconcileFormChanges()
@@ -2727,8 +2731,7 @@ Public Class Form1
     End Sub
 
 
-
-    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs)
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
 
         If e.KeyCode = Keys.Enter Then
             Me.ActiveControl = Nothing
@@ -2738,7 +2741,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs)
+    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFontSize.Leave
 
         If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
         If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"
@@ -3163,6 +3166,109 @@ Public Class Form1
         Return StatusChangeRadioButtons
     End Function
 
+    Private Sub CheckBoxEnablePrinter2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePrinter2.CheckedChanged
+        If CheckBoxEnablePrinter2.Checked Then
+            ComboBoxPrinter2.Enabled = True
+            TextBoxPrinter2Copies.Enabled = True
+            CheckBoxPrinter2AutoOrient.Enabled = True
+            CheckBoxPrinter2BestFit.Enabled = True
+            CheckBoxPrinter2PrintAsBlack.Enabled = True
+            CheckBoxPrinter2ScaleLineTypes.Enabled = True
+            CheckBoxPrinter2ScaleLineWidths.Enabled = True
+
+            RadioButtonSheetsAnsiPrinter2.Enabled = True
+            RadioButtonSheetsIsoPrinter2.Enabled = True
+            RadioButtonSheetsAllPrinter2.Enabled = True
+            TextBoxPrinter2SheetSelections.Enabled = True
+            ButtonPrinter2SheetSelections.Enabled = True
+        Else
+            ComboBoxPrinter2.Enabled = False
+            TextBoxPrinter2Copies.Enabled = False
+            CheckBoxPrinter2AutoOrient.Enabled = False
+            CheckBoxPrinter2BestFit.Enabled = False
+            CheckBoxPrinter2PrintAsBlack.Enabled = False
+            CheckBoxPrinter2ScaleLineTypes.Enabled = False
+            CheckBoxPrinter2ScaleLineWidths.Enabled = False
+
+            RadioButtonSheetsAnsiPrinter2.Enabled = False
+            RadioButtonSheetsIsoPrinter2.Enabled = False
+            RadioButtonSheetsAllPrinter2.Enabled = False
+            TextBoxPrinter2SheetSelections.Enabled = False
+            ButtonPrinter2SheetSelections.Enabled = False
+        End If
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub RadioButtonSheetsAnsiPrinter2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSheetsAnsiPrinter2.CheckedChanged
+        'If RadioButtonSheetsAnsiPrinter2.Checked Then
+        '    Dim PD As New PrinterDoctor
+        '    Dim SheetListDict As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        '    SheetListDict = PD.GetSheetSizes("Ansi")
+
+        '    ListBoxSheetsPrinter2.Items.Clear()
+        '    For Each Key As String In SheetListDict.Keys
+        '        ListBoxSheetsPrinter2.Items.Add(Key)
+        '    Next
+        'End If
+    End Sub
+
+    Private Sub RadioButtonSheetsIsoPrinter2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSheetsIsoPrinter2.CheckedChanged
+        'If RadioButtonSheetsIsoPrinter2.Checked Then
+        '    Dim PD As New PrinterDoctor
+        '    Dim SheetListDict As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        '    SheetListDict = PD.GetSheetSizes("Iso")
+
+        '    ListBoxSheetsPrinter2.Items.Clear()
+        '    For Each Key As String In SheetListDict.Keys
+        '        ListBoxSheetsPrinter2.Items.Add(Key)
+        '    Next
+        'End If
+    End Sub
+
+
+    Private Sub RadioButtonSheetsAllPrinter2_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSheetsAllPrinter2.CheckedChanged
+        'If RadioButtonSheetsAllPrinter2.Checked Then
+        '    Dim PD As New PrinterDoctor
+        '    Dim SheetListDict As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        '    SheetListDict = PD.GetSheetSizes("All")
+
+        '    ListBoxSheetsPrinter2.Items.Clear()
+        '    For Each Key As String In SheetListDict.Keys
+        '        ListBoxSheetsPrinter2.Items.Add(Key)
+        '    Next
+        'End If
+    End Sub
+
+    Private Sub ButtonPrinter2SheetSelections_Click(sender As Object, e As EventArgs) Handles ButtonPrinter2SheetSelections.Click
+        Dim Filter As String
+        SelectedSheets = New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+
+        If RadioButtonSheetsAnsiPrinter2.Checked Then
+            Filter = "Ansi"
+        ElseIf RadioButtonSheetsIsoPrinter2.Checked Then
+            Filter = "Iso"
+        ElseIf RadioButtonSheetsAllPrinter2.Checked Then
+            Filter = "All"
+        Else
+            RadioButtonSheetsAnsiPrinter2.Checked = True
+            Filter = "Ansi"
+        End If
+
+        FormSheetSelector.ShowForm2(Filter)
+
+        If FormSheetSelector.DialogResult = DialogResult.OK Then
+            TextBoxPrinter2SheetSelections.Text = ""
+            For Each SheetSize As String In SelectedSheets.Keys
+                If TextBoxPrinter2SheetSelections.Text = "" Then
+                    TextBoxPrinter2SheetSelections.Text = SheetSize
+                Else
+                    TextBoxPrinter2SheetSelections.Text = String.Format("{0}, {1}", TextBoxPrinter2SheetSelections.Text, SheetSize)
+                End If
+            Next
+        End If
+
+    End Sub
+
 
 
 
@@ -3205,6 +3311,9 @@ Public Class Form1
 
     ' Dim Defaults As New List(Of String)
     ' IO.File.WriteAllLines(DefaultsFilename, Defaults)
+
+    ' Iterate through an Enum
+    ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
 
 
 End Class

@@ -3135,8 +3135,8 @@ Public Class DraftTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim h As Double
-        Dim w As Double
+        'Dim h As Double
+        'Dim w As Double
 
         Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
 
@@ -3144,46 +3144,38 @@ Public Class DraftTasks
 
         DraftPrinter.Units = SolidEdgeDraft.DraftPrintUnitsConstants.igDraftPrintInches
 
-        DraftPrinter.Printer = Configuration("TextBoxPrintOptionsPrinter")
+        DraftPrinter.Printer = Configuration("ComboBoxPrinter1")
 
-        w = CDbl(Configuration("TextBoxPrintOptionsWidth"))
-        h = CDbl(Configuration("TextBoxPrintOptionsHeight"))
+        'w = CDbl(Configuration("TextBoxPrintOptionsWidth"))
+        'h = CDbl(Configuration("TextBoxPrintOptionsHeight"))
 
-        ' Weird workaround
-        DraftPrinter.PaperHeight = 3.0
-        DraftPrinter.PaperHeight = h
-        DraftPrinter.PaperHeight = w
+        '' Weird workaround
+        'DraftPrinter.PaperHeight = 3.0
+        'DraftPrinter.PaperHeight = h
+        'DraftPrinter.PaperHeight = w
 
-        DraftPrinter.Copies = CShort(Configuration("TextBoxPrintOptionsCopies"))
+        DraftPrinter.Copies = CShort(Configuration("TextBoxPrinter1Copies"))
 
-        If Configuration("CheckBoxPrintOptionsAutoOrient").ToLower = "true" Then
+        DraftPrinter.AutoOrient = False
+        DraftPrinter.BestFit = False
+        DraftPrinter.PrintAsBlack = False
+        DraftPrinter.ScaleLineTypes = False
+        DraftPrinter.ScaleLineWidths = False
+
+        If Configuration("CheckBoxPrinter1AutoOrient").ToLower = "true" Then
             DraftPrinter.AutoOrient = True
-        Else
-            DraftPrinter.AutoOrient = False
         End If
-
-        If Configuration("CheckBoxPrintOptionsBestFit").ToLower = "true" Then
+        If Configuration("CheckBoxPrinter1BestFit").ToLower = "true" Then
             DraftPrinter.BestFit = True
-        Else
-            DraftPrinter.BestFit = False
         End If
-
-        If Configuration("CheckBoxPrintOptionsPrintAsBlack").ToLower = "true" Then
+        If Configuration("CheckBoxPrinter1PrintAsBlack").ToLower = "true" Then
             DraftPrinter.PrintAsBlack = True
-        Else
-            DraftPrinter.PrintAsBlack = False
         End If
-
-        If Configuration("CheckBoxPrintOptionsScaleLineTypes").ToLower = "true" Then
+        If Configuration("CheckBoxPrinter1ScaleLineTypes").ToLower = "true" Then
             DraftPrinter.ScaleLineTypes = True
-        Else
-            DraftPrinter.ScaleLineTypes = False
         End If
-
-        If Configuration("CheckBoxPrintOptionsScaleLineWidths").ToLower = "true" Then
+        If Configuration("CheckBoxPrinter1ScaleLineWidths").ToLower = "true" Then
             DraftPrinter.ScaleLineWidths = True
-        Else
-            DraftPrinter.ScaleLineWidths = False
         End If
 
         'msg = String.Format("{0}{1}DraftPrinter.Printer={2}", msg, vbCrLf, DraftPrinter.Printer)

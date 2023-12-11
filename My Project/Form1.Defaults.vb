@@ -217,6 +217,17 @@ Partial Class Form1
             tb.Text = Value
         End If
 
+        tf = tb.Name.ToLower.Contains("printer1copies")
+        tf = tf Or tb.Name.ToLower.Contains("printer2copies")
+        If tf Then
+            tb.Text = Value
+        End If
+
+        tf = tb.Name.ToLower.Contains("sheetselections")
+        If tf Then
+            tb.Text = Value
+        End If
+
     End Sub
 
     Private Sub PopulateComboBoxes()
@@ -303,6 +314,16 @@ Partial Class Form1
         Next
         ComboBoxFindReplacePropertySetDraft.Text = CType(ComboBoxFindReplacePropertySetDraft.Items(0), String)
 
+        Dim PD As New PrinterDoctor
+        'ComboBoxPrinter1
+        ComboBoxPrinter1.Items.Clear()
+        ComboBoxPrinter2.Items.Clear()
+        For Each s As String In PD.GetInstalledPrinterNames
+            ComboBoxPrinter1.Items.Add(s)
+            ComboBoxPrinter2.Items.Add(s)
+        Next
+        ComboBoxPrinter1.Text = CStr(ComboBoxPrinter1.Items(0))
+        ComboBoxPrinter2.Text = CStr(ComboBoxPrinter2.Items(0))
 
     End Sub
 
@@ -409,7 +430,7 @@ Partial Class Form1
             Next
 
         Catch ex As Exception
-
+            MsgBox("Some form defaults were not restored.  The program will continue.  Please verify settings.")
         End Try
 
         ReconcileFormChanges()
