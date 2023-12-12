@@ -11,7 +11,6 @@
 
 	Public Sub ShowForm2(Filter As String)
 		Dim PD As New PrinterDoctor
-		' SheetSizeDict = New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
 		SheetSizeDict = PD.GetSheetSizes(Filter)
 
 		CheckedListBox1.Items.Clear()
@@ -24,9 +23,9 @@
 	End Sub
 
 	Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-		Form1.SelectedSheets.Clear()
+		Form1.Printer2SelectedSheets.Clear()
 		For Each Item In CheckedListBox1.CheckedItems
-			Form1.SelectedSheets(Item.ToString) = SheetSizeDict(Item.ToString)
+			Form1.Printer2SelectedSheets(Item.ToString) = SheetSizeDict(Item.ToString)
 		Next
 
 		Me.DialogResult = DialogResult.OK

@@ -3135,73 +3135,119 @@ Public Class DraftTasks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        'Dim h As Double
-        'Dim w As Double
 
-        Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
+        Dim PD As New PrinterDoctor
+        Dim AllSheets As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        AllSheets = PD.GetSheetSizes("All")
 
-        Dim msg As String = ""
+        Dim s As String
 
-        DraftPrinter.Units = SolidEdgeDraft.DraftPrintUnitsConstants.igDraftPrintInches
+        Dim DraftPrinterList As New List(Of SolidEdgeDraft.DraftPrintUtility)
 
-        DraftPrinter.Printer = Configuration("ComboBoxPrinter1")
+        Dim DraftPrinter1 As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
+        DraftPrinterList.Add(DraftPrinter1)
 
-        'w = CDbl(Configuration("TextBoxPrintOptionsWidth"))
-        'h = CDbl(Configuration("TextBoxPrintOptionsHeight"))
+        Dim DraftPrinter2 As SolidEdgeDraft.DraftPrintUtility = Nothing
+        Dim Printer2SelectedSheets As New List(Of SolidEdgeDraft.PaperSizeConstants)
 
-        '' Weird workaround
-        'DraftPrinter.PaperHeight = 3.0
-        'DraftPrinter.PaperHeight = h
-        'DraftPrinter.PaperHeight = w
+        Dim Sheets As New List(Of SolidEdgeDraft.Sheet)
+        Dim Sheet As SolidEdgeDraft.Sheet
+        Dim SheetSetup As SolidEdgeDraft.SheetSetup
+        Dim PaperSizeConstant As SolidEdgeDraft.PaperSizeConstants
 
-        DraftPrinter.Copies = CShort(Configuration("TextBoxPrinter1Copies"))
+        If Configuration("CheckBoxEnablePrinter2").ToLower = "true" Then
+            DraftPrinter2 = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
+            DraftPrinterList.Add(DraftPrinter2)
 
-        DraftPrinter.AutoOrient = False
-        DraftPrinter.BestFit = False
-        DraftPrinter.PrintAsBlack = False
-        DraftPrinter.ScaleLineTypes = False
-        DraftPrinter.ScaleLineWidths = False
-
-        If Configuration("CheckBoxPrinter1AutoOrient").ToLower = "true" Then
-            DraftPrinter.AutoOrient = True
-        End If
-        If Configuration("CheckBoxPrinter1BestFit").ToLower = "true" Then
-            DraftPrinter.BestFit = True
-        End If
-        If Configuration("CheckBoxPrinter1PrintAsBlack").ToLower = "true" Then
-            DraftPrinter.PrintAsBlack = True
-        End If
-        If Configuration("CheckBoxPrinter1ScaleLineTypes").ToLower = "true" Then
-            DraftPrinter.ScaleLineTypes = True
-        End If
-        If Configuration("CheckBoxPrinter1ScaleLineWidths").ToLower = "true" Then
-            DraftPrinter.ScaleLineWidths = True
+            For Each s In Split(Configuration("TextBoxPrinter2SheetSelections"), Delimiter:=",")
+                Printer2SelectedSheets.Add(AllSheets(s.Trim))
+            Next
         End If
 
-        'msg = String.Format("{0}{1}DraftPrinter.Printer={2}", msg, vbCrLf, DraftPrinter.Printer)
-        'msg = String.Format("{0}{1}DraftPrinter.PaperHeight={2}", msg, vbCrLf, DraftPrinter.PaperHeight)
-        'msg = String.Format("{0}{1}DraftPrinter.PaperWidth={2}", msg, vbCrLf, DraftPrinter.PaperWidth)
-        'msg = String.Format("{0}{1}DraftPrinter.Copies={2}", msg, vbCrLf, DraftPrinter.Copies)
-        'msg = String.Format("{0}{1}DraftPrinter.AutoOrient={2}", msg, vbCrLf, DraftPrinter.AutoOrient)
-        'msg = String.Format("{0}{1}DraftPrinter.BestFit={2}", msg, vbCrLf, DraftPrinter.BestFit)
-        'msg = String.Format("{0}{1}DraftPrinter.PrintAsBlack={2}", msg, vbCrLf, DraftPrinter.PrintAsBlack)
-        'msg = String.Format("{0}{1}DraftPrinter.ScaleLineTypes={2}", msg, vbCrLf, DraftPrinter.ScaleLineTypes)
-        'msg = String.Format("{0}{1}DraftPrinter.ScaleLineWidths={2}", msg, vbCrLf, DraftPrinter.ScaleLineWidths)
+        Dim idx As Integer = 0
 
-        'MsgBox(msg)
+        For Each DraftPrinterX As SolidEdgeDraft.DraftPrintUtility In DraftPrinterList
 
-        'Capturing a fault to update ExitStatus
-        Try
-            DraftPrinter.AddDocument(SEDoc)
-            DraftPrinter.PrintOut()
-            SEApp.DoIdle()
-        Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add("Print drawing did not succeed")
-        End Try
+            idx += 1
 
-        DraftPrinter.RemoveAllDocuments()
+            DraftPrinterX.Units = SolidEdgeDraft.DraftPrintUnitsConstants.igDraftPrintInches
+
+            s = "ComboBoxPrinterX".Replace("PrinterX", String.Format("Printer{0}", idx))
+            DraftPrinterX.Printer = Configuration(s)
+
+            s = Configuration("TextBoxPrinterXCopies".Replace("PrinterX", String.Format("Printer{0}", idx)))
+            DraftPrinterX.Copies = CShort(s)
+
+            DraftPrinterX.AutoOrient = False
+            DraftPrinterX.BestFit = False
+            DraftPrinterX.PrintAsBlack = False
+            DraftPrinterX.ScaleLineTypes = False
+            DraftPrinterX.ScaleLineWidths = False
+
+            s = "CheckBoxPrinterXAutoOrient".Replace("PrinterX", String.Format("Printer{0}", idx))
+            If Configuration(s).ToLower = "true" Then
+                DraftPrinterX.AutoOrient = True
+            End If
+
+            s = "CheckBoxPrinterXBestFit".Replace("PrinterX", String.Format("Printer{0}", idx))
+            If Configuration(s).ToLower = "true" Then
+                DraftPrinterX.BestFit = True
+            End If
+
+            s = "CheckBoxPrinterXPrintAsBlack".Replace("PrinterX", String.Format("Printer{0}", idx))
+            If Configuration(s).ToLower = "true" Then
+                DraftPrinterX.PrintAsBlack = True
+            End If
+
+            s = "CheckBoxPrinterXScaleLineTypes".Replace("PrinterX", String.Format("Printer{0}", idx))
+            If Configuration(s).ToLower = "true" Then
+                DraftPrinterX.ScaleLineTypes = True
+            End If
+
+            s = "CheckBoxPrinterXScaleLineWidths".Replace("PrinterX", String.Format("Printer{0}", idx))
+            If Configuration(s).ToLower = "true" Then
+                DraftPrinterX.ScaleLineWidths = True
+            End If
+
+        Next
+
+        If Configuration("CheckBoxEnablePrinter2").ToLower = "true" Then
+            Sheets = GetSheets(SEDoc, "Working")
+            For Each Sheet In Sheets
+                SheetSetup = Sheet.SheetSetup
+                PaperSizeConstant = SheetSetup.SheetSizeOption
+                Try
+                    If Printer2SelectedSheets.Contains(PaperSizeConstant) Then
+                        DraftPrinter2.AddSheet(Sheet)
+                        DraftPrinter2.PrintOut()
+                        SEApp.DoIdle()
+                    Else
+                        DraftPrinter1.AddSheet(Sheet)
+                        DraftPrinter1.PrintOut()
+                        SEApp.DoIdle()
+                    End If
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
+                End Try
+            Next
+        Else
+            Try
+                DraftPrinter1.AddDocument(SEDoc)
+                DraftPrinter1.PrintOut()
+                SEApp.DoIdle()
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Print drawing did not succeed")
+            End Try
+        End If
+
+        DraftPrinter1.RemoveAllDocuments()
         SEApp.DoIdle()
+        If Configuration("CheckBoxEnablePrinter2").ToLower = "true" Then
+            DraftPrinter2.RemoveAllDocuments()
+            SEApp.DoIdle()
+        End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

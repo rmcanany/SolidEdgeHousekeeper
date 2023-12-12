@@ -45,7 +45,7 @@ Public Class Form1
     Public Shared PropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
 
     Private FormSheetSelector As New FormSheetSelector()
-    Public Shared SelectedSheets As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+    Public Shared Printer2SelectedSheets As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
 
 
 
@@ -736,19 +736,60 @@ Public Class Form1
                 End If
             End If
             If LabelToActionDraft(Label).RequiresPrinter Then
+                Dim PD As New PrinterDoctor
+
                 Dim PrinterInstalled As Boolean = False
                 Dim InstalledPrinter As String
-                For Each InstalledPrinter In System.Drawing.Printing.PrinterSettings.InstalledPrinters
+                Dim NumberCopies As Integer
+
+                For Each InstalledPrinter In PD.GetInstalledPrinterNames
                     If InstalledPrinter = ComboBoxPrinter1.Text Then
                         PrinterInstalled = True
                         Exit For
                     End If
                 Next InstalledPrinter
                 If Not PrinterInstalled Then
-                    If Not msg.Contains("Select a valid printer on the Configuration Tab") Then
-                        msg += "    Select a valid printer on the Configuration Tab" + Chr(13)
+                    If Not msg.Contains("Select a valid Printer1") Then
+                        msg += "    Select a valid Printer1" + Chr(13)
                     End If
                 End If
+                Try
+                    NumberCopies = CInt(TextBoxPrinter1Copies.Text)
+                Catch ex As Exception
+                    If Not msg.Contains("Set Printer1 Copies to a number") Then
+                        msg += "    Set Printer1 Copies to a number" + Chr(13)
+                    End If
+                End Try
+
+                If CheckBoxEnablePrinter2.Checked Then
+                    For Each InstalledPrinter In PD.GetInstalledPrinterNames
+                        If InstalledPrinter = ComboBoxPrinter2.Text Then
+                            PrinterInstalled = True
+                            Exit For
+                        End If
+                    Next InstalledPrinter
+                    If Not PrinterInstalled Then
+                        If Not msg.Contains("Select a valid Printer2, or disable it") Then
+                            msg += "    Select a valid Printer2, or disable it" + Chr(13)
+                        End If
+                    End If
+
+                    Try
+                        NumberCopies = CInt(TextBoxPrinter2Copies.Text)
+                    Catch ex As Exception
+                        If Not msg.Contains("Set Printer2 Copies to a number") Then
+                            msg += "    Set Printer2 Copies to a number" + Chr(13)
+                        End If
+                    End Try
+
+                    If TextBoxPrinter2SheetSelections.Text.Trim = "" Then
+                        If Not msg.Contains("Select at least one sheet size for Printer2") Then
+                            msg += "    Select at least one sheet size for Printer2" + Chr(13)
+                        End If
+                    End If
+
+                End If
+
             End If
 
             If LabelToActionDraft(Label).RequiresForegroundProcessing Then
@@ -3241,7 +3282,7 @@ Public Class Form1
 
     Private Sub ButtonPrinter2SheetSelections_Click(sender As Object, e As EventArgs) Handles ButtonPrinter2SheetSelections.Click
         Dim Filter As String
-        SelectedSheets = New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        'Printer2SelectedSheets = New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
 
         If RadioButtonSheetsAnsiPrinter2.Checked Then
             Filter = "Ansi"
@@ -3258,7 +3299,7 @@ Public Class Form1
 
         If FormSheetSelector.DialogResult = DialogResult.OK Then
             TextBoxPrinter2SheetSelections.Text = ""
-            For Each SheetSize As String In SelectedSheets.Keys
+            For Each SheetSize As String In Printer2SelectedSheets.Keys
                 If TextBoxPrinter2SheetSelections.Text = "" Then
                     TextBoxPrinter2SheetSelections.Text = SheetSize
                 Else

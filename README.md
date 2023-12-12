@@ -140,7 +140,8 @@ It will identify each error and the file in which it occurred.
 When processing is complete, the log file is opened in Notepad for review.
 
 The first time you use the program, some site-specific information is needed. 
-This includes the location of your templates, material table, etc. 
+This includes the location of your templates, 
+your preferred printer, etc. 
 These are populated on the **Configuration Tab**.
 
 ![Status Bar](My%20Project/media/status_bar_ready.png)
@@ -194,13 +195,12 @@ Note the program always includes subfolders for *where used* files.
 ![Top level assembly options](My%20Project/media/top_level_assy_options.png)
 
 A top level assembly search can optionally report files with no links to the 
-assembly.  Set this option on the **Configuration Tab -- Top Level 
-Assembly Group**.
+assembly.  Set this and other options on the **Configuration Tab -- Top Level 
+Assy Page**.
 
 When selecting a top-level assembly, you can 
 automatically include the folder in which it resides.
 This `auto include` option in on by default. 
-Set it on the **Configuration Tab**.
 
 If `auto include` is turned off, 
 you do not have to specify any folders. 
@@ -208,11 +208,11 @@ In that case, Housekeeper simply finds
 files directly linked to the specified assembly and subassemblies. 
 Note this means that no draft files will be found.
 For that reason, a warning is displayed.
-Disable the warning on the **Configuration Tab**.
+Disable the warning on the **Configuration Tab -- Top Level Assy Page**.
 
 If you *do* specify one or more folders, there are two options for performing 
-*where used*, **Top Down** or **Bottom Up** (see next).  Make 
-this selection on the **Configuration Tab**.  Guidelines are given below,
+*where used*, **Top Down** or **Bottom Up** (see next). 
+Guidelines are given below,
 however it's not a bad idea to try both methods to see which works best
 for you.
 
@@ -224,12 +224,11 @@ in the folder(s) far exceed the number of files in the assembly.
 The program gets links by recursion, then 
 finds draft files with *where used*. 
 If your draft files have the same name as the model they depict, 
-you can bypass *where used*.  Set this option on the **Configuration Tab**.
+click that option and the program will bypass *where used*. 
 
 A bottom up search requires a valid Fast Search Scope filename, 
 (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), 
 which tells the program if the specified folder is on an indexed drive. 
-Set the Fast Search Scope filename on the **Configuration Tab**.
 
 **Top Down**
 
@@ -319,7 +318,7 @@ To do so, check/uncheck the appropriate File Type
 
 You can choose sorting options of `Unsorted`, `Alphabetic`, 
 `Dependency`, or `Random sample`.  These options are set on the 
-**Configuration Tab -- File List Group**.
+**Configuration Tab -- Sorting Page**.
 
 The `Unsorted` option is primarily 
 intended to preserve the order of imported lists.
@@ -334,19 +333,20 @@ simply running the process two times in a row.
 
 The `Random sample` option randomly selects and shuffles
  a fraction of the total files found.  The `Sample fraction`
-is a decimal number between `0.0` and `1.0`.
-
+is a decimal number between `0.0` and `1.0`. 
 This option is primarily intended for software testing, 
 but can be used for any purpose.
 
 ### Document Status Options
 
-If you use the document Status functionality, you know that some settings
-place the file in read-only mode.  These cannot normally be processed by Housekeeper.
+If you use the document Status functionality, 
+you know that some settings
+place the file in read-only mode. 
+These cannot normally be processed by Housekeeper.
 
 You can get around this by checking
 `Process files as Available regardless of document Status`.
-Set the option on the **Configuration Tab -- File Open/Save Group**
+Set the option on the **Configuration Tab -- Open/Save Page**.
 
 ![File open save options](My%20Project/media/file_open_save_options.png)
 
@@ -379,7 +379,7 @@ The Property Filter checks Draft files, but they
 often don't have properties of their own.
 For those files, Housekeeper can also search 
 any models in the drawing for the specified properties. 
-Set the option on the **Configuration Tab -- Miscellaneous Group**.
+Set the option on the **Configuration Tab -- General Page**.
 One situation where you might want to disable this option
 is when searching for file Status.  
 See **Document Status Options** below.
@@ -571,7 +571,7 @@ without graphics.  This capability is somewhat experimental; let
 know if you run into problems.  To save some space on the Most 
 Recently Used list, you can disable adding files that are
 processed by Housekeeper.  Both options are set on the
-**Configuration Tab -- Miscellaneous Group**.
+**Configuration Tab -- General Page**.
 
 
 ## CAVEATS
@@ -579,7 +579,7 @@ processed by Housekeeper.  Both options are set on the
 Since the program can process a large number of files in a short amount of time, 
 it can be very taxing on Solid Edge. 
 To maintain a clean environment, the program restarts Solid Edge periodically. 
-(Set the frequency on the **Configuration Tab -- Miscellaneous Group**.)
+(Set the frequency on the **Configuration Tab -- General Page**.)
 This is by design and does not necessarily indicate a problem.
 
 However, problems can arise. 
@@ -647,19 +647,19 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
-There are three search modes, `PT`, `WC`, and `RX`.  
+There are three search modes, `PT`, `WC`, and `RX`. 
 
-- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  
-- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  
-- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
+- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
+- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. 
+- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 ![Property Formula](My%20Project/media/property_formula.png)
 
-In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as above.  
+In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as above. 
 
-If the specified property does not exist in the file, you can optionally have it added automatically.  This option is set on the **Configuration Tab -- Miscellaneous Group**.  Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  
+If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
 #### Expose variables missing
 Checks to see if all the variables listed in `Variables to expose` are present in the document.
@@ -679,7 +679,7 @@ Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. Actua
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
 #### Update face and view styles from template
-Updates the file with face and view styles from a file you specify on the **Configuration Tab**. 
+Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. 
 
 Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
@@ -687,10 +687,10 @@ Note, the view style must be a named style.  Overrides are ignored. To create a 
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 #### Fit pictorial view
-Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab -- Pictorial View Group**.
+Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab -- General Page**.
 
 #### Part number does not match file name
-Checks if a file property, that you specify on the **Configuration Tab -- Miscellaneous Group**, matches the file name.
+Checks if a file property, that you specify on the **Configuration Tab -- General Page**, matches the file name.
 
 #### Missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
@@ -724,7 +724,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
 
-Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- Miscellaneous Group**. 
+Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- General Page**. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. 
 
@@ -750,7 +750,7 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Update material from material table
-Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab**. 
+Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab -- Templates Page**. 
 
 If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
 
@@ -761,7 +761,7 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Update part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings.  You can optionally update the parent files recursively.  That option is on the Configuration Tab -- Miscellaneous Group.
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the **Configuration Tab -- General Page**.
 
 #### Broken links
 Same as the Assembly command of the same name.
@@ -785,7 +785,7 @@ Checks if any profiles are not fully constrained.
 If the file has any insert part copies, checks if they are up to date.
 
 #### Material not in material table
-Checks the file's material against the material table. The material table is chosen on the **Configuration Tab**. 
+Checks the file's material against the material table. The material table is chosen on the **Configuration Tab -- Templates Page**. 
 
 #### Run external program
 Same as the Assembly command of the same name.
@@ -882,12 +882,12 @@ Same as the Assembly command of the same name.
 Checks drawing views one by one, and updates them if needed.
 
 #### Update styles from template
-Updates styles and background sheets from a template you specify on the **Configuration Tab**. 
+Updates styles and background sheets from a template you specify on the **Configuration Tab -- Templates Page**. 
 
-These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.  These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles.  The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated.  If you need one or more of those styles updated, please ask on the Forum.  
+These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated. If you need one or more of those styles updated, please ask on the Forum. 
 
 #### Update drawing border from template
-Replaces the background border with that of the Draft template specified on the **Configuration Tab**.
+Replaces the background border with that of the Draft template specified on the **Configuration Tab -- Templates Page**.
 
 In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
 
@@ -919,11 +919,15 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Print
-Print settings are accessed on the **Configuration Tab -- Printer Group**.
+Print settings are accessed on the **Configuration Tab -- Printing Page**.
 
-Note, the presence of the Printer Settings dialog is somewhat misleading. The only settings taken from it are the printer name, page height and width, and the number of copies. Any other selections revert back to the Windows defaults when printing. A workaround is to create a new Windows printer with the desired defaults. 
+![Printer_Setup](My%20Project/media/printer_setup.png)
 
-Another quirk is that, no matter the selection, the page width is always listed as greater than or equal to the page height. In most cases, checking `Auto orient` should provide the desired result. 
+The dropdown should list all installed printers. You can configure up to two of them, Printer1 and Printer2. Printer1 is the default.  It prints everything not assigned to Printer2. 
+
+Printer2 prints any sheet on the drawing whose size is listed in the Sheet selection textbox. Click the `Set` button to select the sheet sizes. Enable/disable Printer2 using the checkbox next to the printer name. 
+
+This command will probably not work with PDF printers. Use the Save As PDF command instead. 
 
 #### Save As
 Same as the Assembly command of the same name, except as follows.
@@ -931,6 +935,8 @@ Same as the Assembly command of the same name, except as follows.
 Optionally includes a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 
 The option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
+
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
 
 
 ## CODE ORGANIZATION

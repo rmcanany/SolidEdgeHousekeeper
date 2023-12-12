@@ -1,4 +1,4 @@
-![Logo](My%20Project/media/logo.png)
+﻿![Logo](My%20Project/media/logo.png)
 # Release Notes
 
 Solid Edge Housekeeper is a utility for finding annoying little errors in 
@@ -10,6 +10,133 @@ of yours.  Do not run it on production work without testing on backups first.
 
 Feel free to report bugs and/or ideas for improvement on the 
 [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+
+## V2024.1 Enhancements/Fixes
+
+### Compare Model and Flat Pattern Model Volumes
+
+Contributed by our very own **o_o ....码**.  Thank you!
+
+A Housekeeper External Program that computes the difference in volume of
+a bent sheetmetal part and its flat pattern.
+
+The program addresses an issue where a flat pattern
+is created in the Synchronous environment.  If Ordered
+features are then added, they are not carried over to the flat pattern.
+Compounding the problem, even though it is
+out-of-date, the flat pattern is not flagged as such.
+
+### Property Find/Replace
+
+(Thank you **@Francesco Arfilli**!)
+
+Added an option to create the property if it doesn't exist.
+
+### Most Recently Used File List (MRU)
+
+(Thank you **@Francesco Arfilli**!)
+
+Added an option to not add files processed by Housekeeper to the MRU.
+
+### Save As
+
+(Thank you **@roger.ribamatic**, **@SatyenB**,
+**@Robin BIoemberg**!)
+
+Added a new file type, `PDF per Sheet` for drawings.  The file name
+is of the format `<Filename>-<Sheetname>.pdf`.
+There is an option to suppress the `Sheetname` suffix
+on drawings with only one sheet.
+
+Added another new file type `*.jt` for model files.
+
+### Draft -- Add Quantity Property
+
+(Thank you **@Pedro0996**!)
+
+A Housekeeper External Program that gets the total quantity 
+of each part and subassembly in a given assembly
+and adds that information to the part (or subassembly) file. 
+In addition to the quantity, the program also records the assembly name 
+from which the quantity was derived. Both are added as custom properties, 
+making them available, for example, in a Callout in Draft. 
+
+There are good reasons not to do this.
+The quantity is a static (non-associative) value, as is the
+source assembly name.  They can go stale without warning.
+However, several people, including me, wanted this, 
+so it got in.
+
+### File List
+
+(Thank you **@Robin BIoemberg**!)
+
+Added the ability to process files regardless of Document Status.
+After processing, the file can be reverted back to
+the old value, or changed to a new one.  These options
+are set on the **Configuration Tab -- Open/Save Page**.
+
+![Open/Save](My%20Project/media/file_open_save_options.png)
+
+Fixed an issue where changing the Property Filter did not
+always set the out-of-date flag correctly.
+
+### Update Drawing Views
+
+Fixed an issue where family of assembly drawings
+could not find the assembly file.  Fixed the same
+issue on the Broken Links Task.
+
+### Housekeeper External Program AddRemoveCustomProperties
+
+Added an option to remove all properties *except* those
+listed in the program settings file.
+
+### Property Filter
+
+Added an option to not check for properties of the models
+contained in Draft files.  Previous behavior was to
+always check.  Set the option on 
+the **Configuration Tab -- General Page**.
+Since Draft files often do not have properties of their own,
+normally this option should be enabled.
+Searching for Document Status is another story.  For example,
+with the option set, an `In Work` drawing of a `Released` part would
+confusingly show up in a search for `Released` files.
+
+Added a section in the README on searching for 
+Document Status.  (Hint, you have to use a number, not a name.)
+See the 
+[**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) 
+section, Document Status topic.
+
+Fixed an issue where properties of Draft files themselves were
+sometimes not searched.
+
+### Configuration Tab
+
+(Thank you **@Francesco Arfilli**!)
+
+Converted to a tab-page layout for easier navigation. 
+
+![Configuration](My%20Project/media/top_level_assy_options.png)
+
+### Draft Print
+
+(Thank you **@n0minus38**!)
+
+Added an optional second printer for selected sheet sizes. 
+
+![Configuration](My%20Project/media/printer_setup.png)
+
+Changed how a printer is selected.  It is now
+from a pre-populated list of installed printers. 
+Previously it was from the Windows Print dialog.  This was 
+confusing because clicking OK implied a document would be
+printed.
+
+Removed some other confusing control options.
+
 
 ## V2023.6 Enhancements/Fixes
 

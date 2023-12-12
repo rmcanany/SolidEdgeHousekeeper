@@ -111,10 +111,10 @@ Public Class LabelToAction
         HelpString += ""
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section above. "
-        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`.  "
-        HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only.  "
-        HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax.  "
-        HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text.  "
+        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`. "
+        HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
+        HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. "
+        HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
@@ -125,11 +125,11 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
         HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
         HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
-        HelpString += "except preceeded with `System.` or `Custom.` as above.  "
+        HelpString += "except preceeded with `System.` or `Custom.` as above. "
         HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
-        HelpString += "you can optionally have it added automatically.  "
-        HelpString += "This option is set on the **Configuration Tab -- Miscellaneous Group**.  "
-        HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed.  "
+        HelpString += "you can optionally have it added automatically. "
+        HelpString += "This option is set on the **Configuration Tab -- General Page**. "
+        HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
@@ -170,7 +170,7 @@ Public Class LabelToAction
                      RequiresSave:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
-        HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab**. "
+        HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. "
         HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
         HelpString += "To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`."
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
@@ -189,7 +189,7 @@ Public Class LabelToAction
 
         Dim FitPictorialView As New L2A
         HelpString = "Maximizes the window, sets the view orientation, and does a fit. "
-        HelpString += "Select the desired orientation on the **Configuration Tab -- Pictorial View Group**."
+        HelpString += "Select the desired orientation on the **Configuration Tab -- General Page**."
         PopulateList(FitPictorialView,
                      "Fit pictorial view",
                      "FitPictorialView",
@@ -199,7 +199,7 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
-        HelpString = "Checks if a file property, that you specify on the **Configuration Tab -- Miscellaneous Group**, matches the file name."
+        HelpString = "Checks if a file property, that you specify on the **Configuration Tab -- General Page**, matches the file name."
         PopulateList(PartNumberDoesNotMatchFilename,
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
@@ -276,7 +276,7 @@ Public Class LabelToAction
         HelpString += "These controls are on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "Images can be saved with the aspect ratio of the model, rather than the window. "
         HelpString += "The option is called `Save as image -- crop to model size`. "
-        HelpString += "It is located on the **Configuration Tab -- Miscellaneous Group**. "
+        HelpString += "It is located on the **Configuration Tab -- General Page**. "
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. "
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
@@ -341,7 +341,7 @@ Public Class LabelToAction
 
         Dim UpdateMaterialFromMaterialTable As New L2A
         HelpString = "Checks to see if the part's material name and properties match any material "
-        HelpString += "in a file you specify on the **Configuration Tab**. "
+        HelpString += "in a file you specify on the **Configuration Tab -- Templates Page**. "
         HelpString += vbCrLf + vbCrLf + "If the names match, "
         HelpString += "but their properties (e.g., face style) do not, the material is updated. "
         HelpString += "If the names do not match, or no material is assigned, it is reported in the log file."
@@ -371,9 +371,9 @@ Public Class LabelToAction
 
         Dim UpdateInsertPartCopies As New L2A
         HelpString = "In conjuction with `Assembly Activate and update all`, "
-        HelpString += "used mainly to eliminate the gray corners on assembly drawings.  "
-        HelpString += "You can optionally update the parent files recursively.  "
-        HelpString += "That option is on the Configuration Tab -- Miscellaneous Group."
+        HelpString += "used mainly to eliminate the gray corners on assembly drawings. "
+        HelpString += "You can optionally update the parent files recursively. "
+        HelpString += "That option is on the **Configuration Tab -- General Page**."
         PopulateList(UpdateInsertPartCopies,
                      "Update part copies",
                      "UpdateInsertPartCopies",
@@ -432,7 +432,7 @@ Public Class LabelToAction
 
         Dim MaterialNotInMaterialTable As New L2A
         HelpString = "Checks the file's material against the material table. "
-        HelpString += "The material table is chosen on the **Configuration Tab**. "
+        HelpString += "The material table is chosen on the **Configuration Tab -- Templates Page**. "
         PopulateList(MaterialNotInMaterialTable,
                      "Material not in material table",
                      "MaterialNotInMaterialTable",
@@ -685,12 +685,12 @@ Public Class LabelToAction
 
 
         Dim UpdateStylesFromTemplate As New L2A
-        HelpString = "Updates styles and background sheets from a template you specify on the **Configuration Tab**. "
+        HelpString = "Updates styles and background sheets from a template you specify on the **Configuration Tab -- Templates Page**. "
         HelpString += vbCrLf + vbCrLf
-        HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.  "
-        HelpString += "These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles.  "
-        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated.  "
-        HelpString += "If you need one or more of those styles updated, please ask on the Forum.  "
+        HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. "
+        HelpString += "These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. "
+        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated. "
+        HelpString += "If you need one or more of those styles updated, please ask on the Forum. "
         PopulateList(UpdateStylesFromTemplate,
                      "Update styles from template",
                      "UpdateStylesFromTemplate",
@@ -699,7 +699,7 @@ Public Class LabelToAction
 
         Dim UpdateDrawingBorderFromTemplate As New L2A
         HelpString = "Replaces the background border with that of the Draft template specified on "
-        HelpString += "the **Configuration Tab**."
+        HelpString += "the **Configuration Tab -- Templates Page**."
         HelpString += vbCrLf + vbCrLf + "In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. "
         HelpString += "It does not attempt to update styles or anything else."
         PopulateList(UpdateDrawingBorderFromTemplate,
@@ -778,16 +778,16 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim Print As New L2A
-        HelpString = "Print settings are accessed on the **Configuration Tab -- Printer Group**."
-        HelpString += vbCrLf + vbCrLf + "Note, the presence of the Printer Settings dialog is somewhat misleading. "
-        HelpString += "The only settings taken from it are the printer name, page height and width, "
-        HelpString += "and the number of copies. "
-        HelpString += "Any other selections "
-        HelpString += "revert back to the Windows defaults when printing. "
-        HelpString += "A workaround is to create a new Windows printer with the desired defaults. "
-        HelpString += vbCrLf + vbCrLf + "Another quirk is that, no matter the selection, the page width "
-        HelpString += "is always listed as greater than or equal to the page height. "
-        HelpString += "In most cases, checking `Auto orient` should provide the desired result. "
+        HelpString = "Print settings are accessed on the **Configuration Tab -- Printing Page**."
+        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/printer_setup.png)"
+        HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
+        HelpString += "You can configure up to two of them, Printer1 and Printer2. "
+        HelpString += "Printer1 is the default.  It prints everything not assigned to Printer2. "
+        HelpString += vbCrLf + vbCrLf + "Printer2 prints any sheet on the drawing whose size is listed in the Sheet selection textbox. "
+        HelpString += "Click the `Set` button to select the sheet sizes. "
+        HelpString += "Enable/disable Printer2 using the checkbox next to the printer name. "
+        HelpString += vbCrLf + vbCrLf + "This command will probably not work with PDF printers. "
+        HelpString += "Use the Save As PDF command instead. "
         PopulateList(Print,
                      "Print",
                      "Print",
@@ -808,6 +808,11 @@ Public Class LabelToAction
         HelpString += "for example, `%{System.Material|R1}`. "
         HelpString += "To refer to properties of the draft file itself, do not specify a designator, "
         HelpString += "for example, `%{Custom.Last Revision Date}`. "
+        HelpString += vbCrLf + vbCrLf + "When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. "
+        HelpString += "The first saves all sheets to one file.  The second saves each sheet to a separate file, "
+        HelpString += "called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix"
+        HelpString += "on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**."
+        HelpString += "To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. "
         PopulateList(SaveAs,
                      "Save As",
                      "SaveAs",
