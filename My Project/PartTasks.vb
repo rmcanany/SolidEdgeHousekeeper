@@ -2328,99 +2328,6 @@ Public Class PartTasks
 
     End Function
 
-    'Private Function PropertyFindReplaceInternal(
-    '    ByVal SEDoc As SolidEdgePart.PartDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-
-    '    Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
-    '    Dim Properties As SolidEdgeFramework.Properties = Nothing
-    '    Dim Prop As SolidEdgeFramework.Property = Nothing
-
-    '    Dim PropertyFound As Boolean = False
-    '    Dim tf As Boolean
-    '    Dim FindString As String = Configuration("TextBoxFindReplaceFindPart")
-    '    Dim ReplaceString As String = Configuration("TextBoxFindReplaceReplacePart")
-    '    Dim ReplaceStringDummy As String = String.Format("{0}_", ReplaceString)
-
-    '    Dim Proceed As Boolean = True
-
-    '    Try
-    '        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-    '    Catch ex As Exception
-    '        Proceed = False
-    '        ExitStatus = 1
-    '        ErrorMessageList.Add("Problem accessing PropertySets.")
-    '    End Try
-
-    '    If Proceed Then
-    '        For Each Properties In PropertySets
-    '            For Each Prop In Properties
-    '                tf = (Configuration("ComboBoxFindReplacePropertySetPart").ToLower = "custom")
-    '                tf = tf And (Properties.Name.ToLower = "custom")
-    '                If tf Then
-    '                    ' Some properties do not have names.
-    '                    Try
-    '                        If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
-    '                            PropertyFound = True
-    '                            ' Only works on text type properties
-    '                            Try
-    '                                Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-    '                                Properties.Save()
-    '                                SEApp.DoIdle()
-    '                            Catch ex As Exception
-    '                                ExitStatus = 1
-    '                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-    '                            End Try
-    '                            Exit For
-    '                        End If
-    '                    Catch ex As Exception
-    '                    End Try
-    '                Else
-    '                    ' Some properties do not have names.
-    '                    Try
-    '                        If Prop.Name = Configuration("TextBoxFindReplacePropertyNamePart") Then
-    '                            PropertyFound = True
-    '                            ' Only works on text type properties
-    '                            Try
-    '                                Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-    '                                Properties.Save()
-    '                                SEApp.DoIdle()
-    '                            Catch ex As Exception
-    '                                ExitStatus = 1
-    '                                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-    '                            End Try
-    '                            Exit For
-    '                        End If
-    '                    Catch ex As Exception
-    '                    End Try
-    '                End If
-    '            Next
-    '            If PropertyFound Then
-    '                Exit For
-    '            End If
-    '        Next
-
-    '        If SEDoc.ReadOnly Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-    '        Else
-    '            SEDoc.Save()
-    '            SEApp.DoIdle()
-    '        End If
-
-    '    End If
-
-
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-    'End Function
 
 
 
@@ -2432,13 +2339,22 @@ Public Class PartTasks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgePart.PartDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf ExposeVariablesInternal,
+        '                           CType(SEDoc, SolidEdgePart.PartDocument),
+        '                           Configuration,
+        '                           SEApp)
         ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.PartDocument,
+                               Of SolidEdgeFramework.SolidEdgeDocument,
                                Dictionary(Of String, String),
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ExposeVariablesInternal,
-                                   CType(SEDoc, SolidEdgePart.PartDocument),
+                                   AddressOf CommonTasks.ExposeVariables,
+                                   SEDoc,
                                    Configuration,
                                    SEApp)
 
@@ -2446,165 +2362,165 @@ Public Class PartTasks
 
     End Function
 
-    Private Function ExposeVariablesInternal(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
+    'Private Function ExposeVariablesInternal(
+    '    ByVal SEDoc As SolidEdgePart.PartDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim DisplayName As String
-        Dim ExposeValue As Integer
+    '    Dim DisplayName As String
+    '    Dim ExposeValue As Integer
 
-        Dim Variables As SolidEdgeFramework.Variables = Nothing
-        Dim VariableList As SolidEdgeFramework.VariableList = Nothing
-        Dim Variable As SolidEdgeFramework.variable = Nothing
-        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
-        Dim VariableListItemTypeName As String
+    '    Dim Variables As SolidEdgeFramework.Variables = Nothing
+    '    Dim VariableList As SolidEdgeFramework.VariableList = Nothing
+    '    Dim Variable As SolidEdgeFramework.variable = Nothing
+    '    Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+    '    Dim VariableListItemTypeName As String
 
-        Dim VariablesToExpose As String
-        Dim VariablesToExposeDict As New Dictionary(Of String, String)
+    '    Dim VariablesToExpose As String
+    '    Dim VariablesToExposeDict As New Dictionary(Of String, String)
 
-        VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
-        VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
+    '    VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
+    '    VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
 
-        Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+    '    Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
 
-        VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
-                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
-                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
-                                  SolidEdgeFramework.VariableList)
+    '    VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
+    '                              NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+    '                              VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+    '                              SolidEdgeFramework.VariableList)
 
-        For Each VariableListItem In VariableList.OfType(Of Object)()
-            VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+    '    For Each VariableListItem In VariableList.OfType(Of Object)()
+    '        VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
 
-            If VariableListItemTypeName.ToLower() = "dimension" Then
-                Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
-                ExposeValue = Dimension.Expose
-                DisplayName = Dimension.DisplayName
-                If VariablesToExposeDict.Keys.Contains(DisplayName) Then
-                    Try
-                        Dimension.Expose = 1
-                        Dimension.ExposeName = VariablesToExposeDict(DisplayName)
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
-                    End Try
-                End If
+    '        If VariableListItemTypeName.ToLower() = "dimension" Then
+    '            Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+    '            ExposeValue = Dimension.Expose
+    '            DisplayName = Dimension.DisplayName
+    '            If VariablesToExposeDict.Keys.Contains(DisplayName) Then
+    '                Try
+    '                    Dimension.Expose = 1
+    '                    Dimension.ExposeName = VariablesToExposeDict(DisplayName)
+    '                Catch ex As Exception
+    '                    ExitStatus = 1
+    '                    ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
+    '                End Try
+    '            End If
 
-            ElseIf VariableListItemTypeName.ToLower() = "variable" Then
-                Variable = CType(VariableListItem, SolidEdgeFramework.variable)
-                ExposeValue = Variable.Expose
-                DisplayName = Variable.DisplayName
-                If VariablesToExposeDict.Keys.Contains(DisplayName) Then
-                    Try
-                        Variable.Expose = 1
-                        Variable.ExposeName = VariablesToExposeDict(DisplayName)
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
-                    End Try
-                End If
-            End If
+    '        ElseIf VariableListItemTypeName.ToLower() = "variable" Then
+    '            Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+    '            ExposeValue = Variable.Expose
+    '            DisplayName = Variable.DisplayName
+    '            If VariablesToExposeDict.Keys.Contains(DisplayName) Then
+    '                Try
+    '                    Variable.Expose = 1
+    '                    Variable.ExposeName = VariablesToExposeDict(DisplayName)
+    '                Catch ex As Exception
+    '                    ExitStatus = 1
+    '                    ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
+    '                End Try
+    '            End If
+    '        End If
 
-        Next
+    '    Next
 
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
-        End If
-
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    '    If SEDoc.ReadOnly Then
+    '        ExitStatus = 1
+    '        ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+    '    Else
+    '        SEDoc.Save()
+    '        SEApp.DoIdle()
+    '    End If
 
 
-
-    Public Function ExposeVariablesMissing(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgePart.PartDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ExposeVariablesMissingInternal,
-                                   CType(SEDoc, SolidEdgePart.PartDocument),
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ExposeVariablesMissingInternal(
-        ByVal SEDoc As SolidEdgePart.PartDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim Variables As SolidEdgeFramework.Variables = Nothing
-        Dim VariableList As SolidEdgeFramework.VariableList = Nothing
-        Dim Variable As SolidEdgeFramework.variable = Nothing
-        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
-        Dim VariableListItemTypeName As String
-
-        Dim VariablesToExpose As String
-        Dim VariablesToExposeDict As New Dictionary(Of String, String)
-
-        Dim VariablesPresentInDocument As New List(Of String)
-
-        VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
-        VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
-
-        Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
-
-        VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
-                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
-                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
-                                  SolidEdgeFramework.VariableList)
-
-        For Each VariableListItem In VariableList.OfType(Of Object)()
-            VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
-
-            If VariableListItemTypeName.ToLower() = "dimension" Then
-                Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
-                VariablesPresentInDocument.Add(Dimension.DisplayName)
-
-            ElseIf VariableListItemTypeName.ToLower() = "variable" Then
-                Variable = CType(VariableListItem, SolidEdgeFramework.variable)
-                VariablesPresentInDocument.Add(Variable.DisplayName)
-            End If
-
-        Next
-
-        For Each Key As String In VariablesToExposeDict.Keys
-            If Not VariablesPresentInDocument.Contains(Key) Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Variable '{0}' not found", Key))
-            End If
-        Next
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+
+    'Public Function ExposeVariablesMissing(
+    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    ErrorMessage = InvokeSTAThread(
+    '                           Of SolidEdgePart.PartDocument,
+    '                           Dictionary(Of String, String),
+    '                           SolidEdgeFramework.Application,
+    '                           Dictionary(Of Integer, List(Of String)))(
+    '                               AddressOf ExposeVariablesMissingInternal,
+    '                               CType(SEDoc, SolidEdgePart.PartDocument),
+    '                               Configuration,
+    '                               SEApp)
+
+    '    Return ErrorMessage
+
+    'End Function
+
+    'Private Function ExposeVariablesMissingInternal(
+    '    ByVal SEDoc As SolidEdgePart.PartDocument,
+    '    ByVal Configuration As Dictionary(Of String, String),
+    '    ByVal SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+
+    '    Dim ErrorMessageList As New List(Of String)
+    '    Dim ExitStatus As Integer = 0
+    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+    '    Dim Variables As SolidEdgeFramework.Variables = Nothing
+    '    Dim VariableList As SolidEdgeFramework.VariableList = Nothing
+    '    Dim Variable As SolidEdgeFramework.variable = Nothing
+    '    Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+    '    Dim VariableListItemTypeName As String
+
+    '    Dim VariablesToExpose As String
+    '    Dim VariablesToExposeDict As New Dictionary(Of String, String)
+
+    '    Dim VariablesPresentInDocument As New List(Of String)
+
+    '    VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
+    '    VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
+
+    '    Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+    '    VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
+    '                              NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+    '                              VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+    '                              SolidEdgeFramework.VariableList)
+
+    '    For Each VariableListItem In VariableList.OfType(Of Object)()
+    '        VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+    '        If VariableListItemTypeName.ToLower() = "dimension" Then
+    '            Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+    '            VariablesPresentInDocument.Add(Dimension.DisplayName)
+
+    '        ElseIf VariableListItemTypeName.ToLower() = "variable" Then
+    '            Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+    '            VariablesPresentInDocument.Add(Variable.DisplayName)
+    '        End If
+
+    '    Next
+
+    '    For Each Key As String In VariablesToExposeDict.Keys
+    '        If Not VariablesPresentInDocument.Contains(Key) Then
+    '            ExitStatus = 1
+    '            ErrorMessageList.Add(String.Format("Variable '{0}' not found", Key))
+    '        End If
+    '    Next
+
+
+    '    ErrorMessage(ExitStatus) = ErrorMessageList
+    '    Return ErrorMessage
+    'End Function
 
 
 

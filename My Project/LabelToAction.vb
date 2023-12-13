@@ -136,13 +136,13 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
-        Dim ExposeVariablesMissing As New L2A
-        HelpString = "Checks to see if all the variables listed in `Variables to expose` are present in the document."
-        PopulateList(ExposeVariablesMissing,
-                     "Expose variables missing",
-                     "ExposeVariablesMissing",
-                     HelpString,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariablesMissing As New L2A
+        'HelpString = "Checks to see if all the variables listed in `Variables to expose` are present in the document."
+        'PopulateList(ExposeVariablesMissing,
+        '             "Expose variables missing",
+        '             "ExposeVariablesMissing",
+        '             HelpString,
+        '             RequiresExposeVariables:=True)
 
         Dim ExposeVariables As New L2A
         HelpString = "Exposes entries from the variable table, making them available as a Custom property. "
@@ -314,13 +314,13 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
-        Dim ExposeVariablesMissing As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(ExposeVariablesMissing,
-                     "Expose variables missing",
-                     "ExposeVariablesMissing",
-                     HelpString,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariablesMissing As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(ExposeVariablesMissing,
+        '             "Expose variables missing",
+        '             "ExposeVariablesMissing",
+        '             HelpString,
+        '             RequiresExposeVariables:=True)
 
         Dim ExposeVariables As New L2A
         HelpString = "Same as the Assembly command of the same name."
@@ -485,13 +485,13 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
-        Dim ExposeVariablesMissing As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(ExposeVariablesMissing,
-                     "Expose variables missing",
-                     "ExposeVariablesMissing",
-                     HelpString,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariablesMissing As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(ExposeVariablesMissing,
+        '             "Expose variables missing",
+        '             "ExposeVariablesMissing",
+        '             HelpString,
+        '             RequiresExposeVariables:=True)
 
         Dim ExposeVariables As New L2A
         HelpString = "Same as the Assembly command of the same name."

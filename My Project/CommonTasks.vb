@@ -1016,81 +1016,219 @@ Public Class CommonTasks
     End Function
 
 
-    'Private Function SetFileStatus(strfile As String, fStatus As SolidEdgeConstants.DocumentStatus) As Boolean
-    '    ' https://community.sw.siemens.com/s/question/0D54O000061wzRaSAI/changing-document-status
-    '    'Ted,
 
-    '    'I had the same problem when I wrote my status changer. Check out the
-    '    '"Security" property in the "SummaryInformation" Properties. This property
-    '    'has one -to-one constants with the status property. Lookup these constants
+    Shared Function ExposeVariables(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '    'ssmAvailable
-    '    'ssmInWork
-    '    'ssmInReview
-    '    'ssmReleased
-    '    'ssmBaselined
-    '    'ssmObsolete
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalExitStatus As Integer = 0
 
-    '    'In my code, when I change the status, I also change the security to match.
-    '    'It fixed my problem. HTH
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
-    '    'Jason Newell
-    '    'Software Engineer
-    '    'The Charles Machine Works, Inc.
+        Dim DisplayName As String
+        Dim ExposeValue As Integer
+
+        Dim Variables As SolidEdgeFramework.Variables = Nothing
+        Dim VariableList As SolidEdgeFramework.VariableList = Nothing
+        Dim Variable As SolidEdgeFramework.variable = Nothing
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+        Dim VariableListItemTypeName As String
+
+        Dim VariablesToExpose As String = ""
+        Dim VariablesToExposeDict As New Dictionary(Of String, String)
+
+        Dim DocType As String
+
+        SupplementalErrorMessage = ExposeVariablesMissing(SEDoc, Configuration, SEApp)
+        SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+        If Not SupplementalExitStatus = 0 Then
+            ExitStatus = SupplementalExitStatus
+            For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                ErrorMessageList.Add(s)
+            Next
+        End If
+
+        DocType = GetDocType(SEDoc)
+        If DocType = "asm" Then VariablesToExpose = Configuration("TextBoxExposeVariablesAssembly")
+        If DocType = "par" Then VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
+        If DocType = "psm" Then VariablesToExpose = Configuration("TextBoxExposeVariablesSheetmetal")
+        If DocType = "dft" Then VariablesToExpose = Configuration("TextBoxExposeVariablesDraft")
+
+        VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
+
+        Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+        VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
+                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+                                  SolidEdgeFramework.VariableList)
+
+        For Each VariableListItem In VariableList.OfType(Of Object)()
+            VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+            If VariableListItemTypeName.ToLower() = "dimension" Then
+                Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+                ExposeValue = Dimension.Expose
+                DisplayName = Dimension.DisplayName
+                If VariablesToExposeDict.Keys.Contains(DisplayName) Then
+                    Try
+                        Dimension.Expose = 1
+                        Dimension.ExposeName = VariablesToExposeDict(DisplayName)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
+                    End Try
+                End If
+
+            ElseIf VariableListItemTypeName.ToLower() = "variable" Then
+                Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+                ExposeValue = Variable.Expose
+                DisplayName = Variable.DisplayName
+                If VariablesToExposeDict.Keys.Contains(DisplayName) Then
+                    Try
+                        Variable.Expose = 1
+                        Variable.ExposeName = VariablesToExposeDict(DisplayName)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to expose '{0}'", DisplayName))
+                    End Try
+                End If
+            End If
+
+        Next
+
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        Else
+            SEDoc.Save()
+            SEApp.DoIdle()
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
 
-    '    'Return the file status of the referenced file w/o actually opening it
+    Shared Function ExposeVariablesMissing(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '    Dim objPropSet As SolidEdgeFileProperties.Properties
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '    Dim objPropSets As SolidEdgeFileProperties.PropertySets
+        'If Configuration("CheckBoxBackgroundProcessing") = "True" Then
+        '    SEDoc.UpdatePathfinder(SolidEdgeAssembly.AssemblyPathfinderUpdateConstants.seSuspend)
+        'End If
 
-    '    On Error GoTo SetFileStatus_ErrHandler
+        Dim Variables As SolidEdgeFramework.Variables = Nothing
+        Dim VariableList As SolidEdgeFramework.VariableList = Nothing
+        Dim Variable As SolidEdgeFramework.variable = Nothing
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+        Dim VariableListItemTypeName As String
 
-    '    SetFileStatus = False 'Default to error
+        Dim VariablesToExpose As String = ""
+        Dim VariablesToExposeDict As New Dictionary(Of String, String)
 
-    '    Select Case UCase$(GetFileExtension(strfile))
+        Dim DocType As String
 
-    '        Case "PAR", "PSM", "DFT", "ASM", "PWD"
+        Dim VariablesPresentInDocument As New List(Of String)
 
-    '            'OK
+        DocType = GetDocType(SEDoc)
+        If DocType = "asm" Then VariablesToExpose = Configuration("TextBoxExposeVariablesAssembly")
+        If DocType = "par" Then VariablesToExpose = Configuration("TextBoxExposeVariablesPart")
+        If DocType = "psm" Then VariablesToExpose = Configuration("TextBoxExposeVariablesSheetmetal")
+        If DocType = "dft" Then VariablesToExpose = Configuration("TextBoxExposeVariablesDraft")
 
-    '        Case Else
+        VariablesToExposeDict = StringToDict(VariablesToExpose, ","c, ":"c)
 
-    '            'Not a Solid Edge file
+        Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
 
-    '            Exit Function
+        VariableList = DirectCast(Variables.Query(pFindCriterium:="*",
+                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+                                  SolidEdgeFramework.VariableList)
 
-    '    End Select
+        For Each VariableListItem In VariableList.OfType(Of Object)()
+            VariableListItemTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
 
-    '    objPropSets = CreateObject("SolidEdge.FileProperties")
+            If VariableListItemTypeName.ToLower() = "dimension" Then
+                Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+                VariablesPresentInDocument.Add(Dimension.DisplayName)
 
-    '    objPropSets.Open(strfile, False)
+            ElseIf VariableListItemTypeName.ToLower() = "variable" Then
+                Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+                VariablesPresentInDocument.Add(Variable.DisplayName)
+            End If
 
-    '    If objPropSets Is Nothing Then Exit Function 'exit w/Error
+        Next
 
-    '    objPropSet = objPropSets("ExtendedSummaryInformation")
+        For Each Key As String In VariablesToExposeDict.Keys
+            If Not VariablesPresentInDocument.Contains(Key) Then
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Variable '{0}' not found", Key))
+            End If
+        Next
 
-    '    objPropSet("Status").Value = fStatus
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
-    '    objPropSets.Save()
 
-    '    SetFileStatus = True
+    Shared Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
+        ' Takes a double-delimited string and returns a dictionary
+        ' delimiter1 separates entries in the dictionary
+        ' delimiter2 separates the Key from the Value in each entry.
 
-    '    objPropSet = Nothing
+        ' Example string: "weight: Weight of Object, length:, width"
+        ' Returns a dictionary like:
 
-    '    objPropSets = Nothing
+        ' {"weight": "Weight of Object",
+        '  "length": "length",
+        '  "width": "width"}
 
-    '    Exit Function
+        ' Notes
+        ' Whitespace before and after each Key and Value is removed.
+        ' To convert a single string, say ",", to a char, do ","c
+        ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
 
-    '    'SetFileStatus_ErrHandler:
+        Dim D As New Dictionary(Of String, String)
+        Dim A() As String
+        Dim K As String
+        Dim V As String
 
-    '    'Error was encountered
+        A = s.Split(delimiter1)
 
-    '    objPropSet = Nothing
+        For i As Integer = 0 To A.Length - 1
+            If A(i).Contains(delimiter2) Then
+                K = A(i).Split(delimiter2)(0).Trim
+                V = A(i).Split(delimiter2)(1).Trim
 
-    '    objPropSets = Nothing
+                If V = "" Then
+                    V = K
+                End If
+            Else
+                K = A(i).Trim
+                V = K
+            End If
 
-    'End Function
+            D.Add(K, V)
+
+        Next
+
+        Return D
+
+    End Function
 
 End Class

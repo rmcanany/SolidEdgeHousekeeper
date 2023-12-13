@@ -1,20 +1,22 @@
 
 ![Logo](My%20Project/media/logo.png)
-<p align=center>Robert McAnany 2023
+<p align=center>Robert McAnany 2024
 
 **Contributors:**
-@farfilli (aka @Fiorini), @daysanduski, @mmtrebuchet
+@farfilli (aka @[Francesco Arfilli]), @daysanduski, @mmtrebuchet, 
+@[o_o ....码]
 
 **Beta Testers:**
 @JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie,
-@HIL
+@HIL, @[Robin BIoemberg]
 
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
-@Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @Fiorini, 
+@Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], 
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
-@KennyG, @Alex_H, @Nosybottle, @Seva, @HIL
+@KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic,
+@[Robin BIoemberg], @Pedro0996
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
@@ -118,9 +120,13 @@ The first time you run it, you may encounter the following dialog.  You can clic
 
 If you are upgrading from a previous release, you should be able to copy 
 the settings files from the old version to the new. 
-The files are `defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. 
+The files are stored in the Preferences folder. They are 
+`defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. 
 If you haven't used Property Filter, `property_filters.txt` won't be there. 
-Versions prior to 0.1.10 won't have `filename_charmap.txt` either.
+Versions prior to 0.1.10 won't have `filename_charmap.txt` either. 
+Older versions had a file `printer_settings.dat`, which is no
+longer used.  You can safely delete it if you want.
+
 
 ## OPERATION
 
@@ -661,9 +667,6 @@ In addition to plain text and pattern matching, you can also use a property form
 
 If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-#### Expose variables missing
-Checks to see if all the variables listed in `Variables to expose` are present in the document.
-
 #### Expose variables
 Exposes entries from the variable table, making them available as a Custom property. Enter the names as a comma-delimited list in the `Variables to expose` textbox. Optionally include a different Expose Name, set off by the colon `:` character. 
 
@@ -740,9 +743,6 @@ Same as the Assembly command of the same name.
 #### Property find replace
 Same as the Assembly command of the same name.
 
-#### Expose variables missing
-Same as the Assembly command of the same name.
-
 #### Expose variables
 Same as the Assembly command of the same name.
 
@@ -802,9 +802,6 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Property find replace
-Same as the Assembly command of the same name.
-
-#### Expose variables missing
 Same as the Assembly command of the same name.
 
 #### Expose variables

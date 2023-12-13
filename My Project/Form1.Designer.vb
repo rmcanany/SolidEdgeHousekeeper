@@ -178,22 +178,6 @@ Partial Class Form1
         Me.CheckedListBoxDraft = New System.Windows.Forms.CheckedListBox()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
-        Me.TabPageTemplates = New System.Windows.Forms.TabPage()
-        Me.ButtonActiveMaterialLibrary = New System.Windows.Forms.Button()
-        Me.TextBoxActiveMaterialLibrary = New System.Windows.Forms.TextBox()
-        Me.LabelActiveMaterialLibrary = New System.Windows.Forms.Label()
-        Me.ButtonTemplateAssembly = New System.Windows.Forms.Button()
-        Me.TextBoxTemplateAssembly = New System.Windows.Forms.TextBox()
-        Me.LabelTemplateAssembly = New System.Windows.Forms.Label()
-        Me.ButtonTemplatePart = New System.Windows.Forms.Button()
-        Me.TextBoxTemplatePart = New System.Windows.Forms.TextBox()
-        Me.LabelTemplatePart = New System.Windows.Forms.Label()
-        Me.ButtonTemplateSheetmetal = New System.Windows.Forms.Button()
-        Me.TextBoxTemplateSheetmetal = New System.Windows.Forms.TextBox()
-        Me.LabelTemplateSheetmetal = New System.Windows.Forms.Label()
-        Me.ButtonTemplateDraft = New System.Windows.Forms.Button()
-        Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
-        Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
         Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
@@ -206,6 +190,14 @@ Partial Class Form1
         Me.CheckBoxTLAReportUnrelatedFiles = New System.Windows.Forms.CheckBox()
         Me.RadioButtonTLATopDown = New System.Windows.Forms.RadioButton()
         Me.RadioButtonTLABottomUp = New System.Windows.Forms.RadioButton()
+        Me.TabPageSorting = New System.Windows.Forms.TabPage()
+        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
+        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
+        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
+        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageOpenSave = New System.Windows.Forms.TabPage()
         Me.LabelStatusAfter = New System.Windows.Forms.Label()
         Me.LabelStatusBefore = New System.Windows.Forms.Label()
@@ -271,14 +263,22 @@ Partial Class Form1
         Me.CheckBoxRunExternalProgramSaveFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
-        Me.TabPageSorting = New System.Windows.Forms.TabPage()
-        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
-        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
-        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
-        Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
-        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
+        Me.TabPageTemplates = New System.Windows.Forms.TabPage()
+        Me.ButtonActiveMaterialLibrary = New System.Windows.Forms.Button()
+        Me.TextBoxActiveMaterialLibrary = New System.Windows.Forms.TextBox()
+        Me.LabelActiveMaterialLibrary = New System.Windows.Forms.Label()
+        Me.ButtonTemplateAssembly = New System.Windows.Forms.Button()
+        Me.TextBoxTemplateAssembly = New System.Windows.Forms.TextBox()
+        Me.LabelTemplateAssembly = New System.Windows.Forms.Label()
+        Me.ButtonTemplatePart = New System.Windows.Forms.Button()
+        Me.TextBoxTemplatePart = New System.Windows.Forms.TextBox()
+        Me.LabelTemplatePart = New System.Windows.Forms.Label()
+        Me.ButtonTemplateSheetmetal = New System.Windows.Forms.Button()
+        Me.TextBoxTemplateSheetmetal = New System.Windows.Forms.TextBox()
+        Me.LabelTemplateSheetmetal = New System.Windows.Forms.Label()
+        Me.ButtonTemplateDraft = New System.Windows.Forms.Button()
+        Me.TextBoxTemplateDraft = New System.Windows.Forms.TextBox()
+        Me.LabelTemplateDraft = New System.Windows.Forms.Label()
         Me.TabPagePrinting = New System.Windows.Forms.TabPage()
         Me.GroupBoxPrinter2 = New System.Windows.Forms.GroupBox()
         Me.ButtonPrinter2SheetSelections = New System.Windows.Forms.Button()
@@ -357,8 +357,8 @@ Partial Class Form1
         Me.TabPageDraft.SuspendLayout()
         Me.TabPageConfiguration.SuspendLayout()
         Me.TabControl2.SuspendLayout()
-        Me.TabPageTemplates.SuspendLayout()
         Me.TabPageTopLevelAssy.SuspendLayout()
+        Me.TabPageSorting.SuspendLayout()
         Me.TabPageOpenSave.SuspendLayout()
         Me.GroupBoxStatusInR.SuspendLayout()
         Me.GroupBoxStatusInO.SuspendLayout()
@@ -366,7 +366,7 @@ Partial Class Form1
         Me.GroupBoxStatusInIR.SuspendLayout()
         Me.GroupBoxStatusInB.SuspendLayout()
         Me.GroupBoxStatusInA.SuspendLayout()
-        Me.TabPageSorting.SuspendLayout()
+        Me.TabPageTemplates.SuspendLayout()
         Me.TabPagePrinting.SuspendLayout()
         Me.GroupBoxPrinter2.SuspendLayout()
         Me.GroupBoxPrinter1.SuspendLayout()
@@ -1122,7 +1122,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxSaveAsFormulaPart.Location = New System.Drawing.Point(8, 396)
         Me.TextBoxSaveAsFormulaPart.Name = "TextBoxSaveAsFormulaPart"
-        Me.TextBoxSaveAsFormulaPart.Size = New System.Drawing.Size(416, 20)
+        Me.TextBoxSaveAsFormulaPart.Size = New System.Drawing.Size(462, 20)
         Me.TextBoxSaveAsFormulaPart.TabIndex = 29
         '
         'CheckBoxSaveAsFormulaPart
@@ -1445,7 +1445,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxSaveAsFormulaSheetmetal.Location = New System.Drawing.Point(8, 396)
         Me.TextBoxSaveAsFormulaSheetmetal.Name = "TextBoxSaveAsFormulaSheetmetal"
-        Me.TextBoxSaveAsFormulaSheetmetal.Size = New System.Drawing.Size(416, 20)
+        Me.TextBoxSaveAsFormulaSheetmetal.Size = New System.Drawing.Size(462, 20)
         Me.TextBoxSaveAsFormulaSheetmetal.TabIndex = 37
         '
         'CheckBoxSaveAsFormulaSheetmetal
@@ -1596,7 +1596,7 @@ Partial Class Form1
         Me.ComboBoxSaveAsSheetmetalFileType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxSaveAsSheetmetalFileType.FormattingEnabled = True
         Me.ComboBoxSaveAsSheetmetalFileType.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxSaveAsSheetmetalFileType.Location = New System.Drawing.Point(150, 323)
+        Me.ComboBoxSaveAsSheetmetalFileType.Location = New System.Drawing.Point(150, 322)
         Me.ComboBoxSaveAsSheetmetalFileType.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxSaveAsSheetmetalFileType.Name = "ComboBoxSaveAsSheetmetalFileType"
         Me.ComboBoxSaveAsSheetmetalFileType.Size = New System.Drawing.Size(132, 21)
@@ -1607,7 +1607,7 @@ Partial Class Form1
         '
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.AutoSize = True
-        Me.CheckBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(319, 327)
+        Me.CheckBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(319, 326)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Name = "CheckBoxSaveAsSheetmetalOutputDirectory"
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Size = New System.Drawing.Size(146, 17)
@@ -2108,180 +2108,6 @@ Partial Class Form1
         Me.TabControl2.Size = New System.Drawing.Size(503, 587)
         Me.TabControl2.TabIndex = 44
         '
-        'TabPageTemplates
-        '
-        Me.TabPageTemplates.Controls.Add(Me.ButtonActiveMaterialLibrary)
-        Me.TabPageTemplates.Controls.Add(Me.TextBoxActiveMaterialLibrary)
-        Me.TabPageTemplates.Controls.Add(Me.LabelActiveMaterialLibrary)
-        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateAssembly)
-        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateAssembly)
-        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateAssembly)
-        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplatePart)
-        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplatePart)
-        Me.TabPageTemplates.Controls.Add(Me.LabelTemplatePart)
-        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateSheetmetal)
-        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateSheetmetal)
-        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateSheetmetal)
-        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateDraft)
-        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateDraft)
-        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateDraft)
-        Me.TabPageTemplates.ImageKey = "se"
-        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 23)
-        Me.TabPageTemplates.Name = "TabPageTemplates"
-        Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(495, 560)
-        Me.TabPageTemplates.TabIndex = 1
-        Me.TabPageTemplates.Text = "Templates"
-        Me.TabPageTemplates.UseVisualStyleBackColor = True
-        '
-        'ButtonActiveMaterialLibrary
-        '
-        Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(414, 218)
-        Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
-        Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonActiveMaterialLibrary.TabIndex = 24
-        Me.ButtonActiveMaterialLibrary.Text = "Browse"
-        Me.ButtonActiveMaterialLibrary.UseVisualStyleBackColor = True
-        '
-        'TextBoxActiveMaterialLibrary
-        '
-        Me.TextBoxActiveMaterialLibrary.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(11, 218)
-        Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(397, 20)
-        Me.TextBoxActiveMaterialLibrary.TabIndex = 23
-        Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
-        '
-        'LabelActiveMaterialLibrary
-        '
-        Me.LabelActiveMaterialLibrary.AutoSize = True
-        Me.LabelActiveMaterialLibrary.Location = New System.Drawing.Point(11, 202)
-        Me.LabelActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelActiveMaterialLibrary.Name = "LabelActiveMaterialLibrary"
-        Me.LabelActiveMaterialLibrary.Size = New System.Drawing.Size(78, 13)
-        Me.LabelActiveMaterialLibrary.TabIndex = 22
-        Me.LabelActiveMaterialLibrary.Text = "Material Library"
-        '
-        'ButtonTemplateAssembly
-        '
-        Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(414, 23)
-        Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
-        Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonTemplateAssembly.TabIndex = 12
-        Me.ButtonTemplateAssembly.Text = "Browse"
-        Me.ButtonTemplateAssembly.UseVisualStyleBackColor = True
-        '
-        'TextBoxTemplateAssembly
-        '
-        Me.TextBoxTemplateAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(11, 23)
-        Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(397, 20)
-        Me.TextBoxTemplateAssembly.TabIndex = 11
-        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
-        '
-        'LabelTemplateAssembly
-        '
-        Me.LabelTemplateAssembly.AutoSize = True
-        Me.LabelTemplateAssembly.Location = New System.Drawing.Point(11, 7)
-        Me.LabelTemplateAssembly.Name = "LabelTemplateAssembly"
-        Me.LabelTemplateAssembly.Size = New System.Drawing.Size(117, 13)
-        Me.LabelTemplateAssembly.TabIndex = 10
-        Me.LabelTemplateAssembly.Text = "Assembly Template File"
-        '
-        'ButtonTemplatePart
-        '
-        Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(414, 72)
-        Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
-        Me.ButtonTemplatePart.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonTemplatePart.TabIndex = 19
-        Me.ButtonTemplatePart.Text = "Browse"
-        Me.ButtonTemplatePart.UseVisualStyleBackColor = True
-        '
-        'TextBoxTemplatePart
-        '
-        Me.TextBoxTemplatePart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplatePart.Location = New System.Drawing.Point(11, 72)
-        Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(397, 20)
-        Me.TextBoxTemplatePart.TabIndex = 16
-        Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
-        '
-        'LabelTemplatePart
-        '
-        Me.LabelTemplatePart.AutoSize = True
-        Me.LabelTemplatePart.Location = New System.Drawing.Point(11, 56)
-        Me.LabelTemplatePart.Name = "LabelTemplatePart"
-        Me.LabelTemplatePart.Size = New System.Drawing.Size(92, 13)
-        Me.LabelTemplatePart.TabIndex = 13
-        Me.LabelTemplatePart.Text = "Part Template File"
-        '
-        'ButtonTemplateSheetmetal
-        '
-        Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(414, 121)
-        Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
-        Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonTemplateSheetmetal.TabIndex = 20
-        Me.ButtonTemplateSheetmetal.Text = "Browse"
-        Me.ButtonTemplateSheetmetal.UseVisualStyleBackColor = True
-        '
-        'TextBoxTemplateSheetmetal
-        '
-        Me.TextBoxTemplateSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(11, 121)
-        Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(397, 20)
-        Me.TextBoxTemplateSheetmetal.TabIndex = 17
-        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
-        '
-        'LabelTemplateSheetmetal
-        '
-        Me.LabelTemplateSheetmetal.AutoSize = True
-        Me.LabelTemplateSheetmetal.Location = New System.Drawing.Point(11, 105)
-        Me.LabelTemplateSheetmetal.Name = "LabelTemplateSheetmetal"
-        Me.LabelTemplateSheetmetal.Size = New System.Drawing.Size(126, 13)
-        Me.LabelTemplateSheetmetal.TabIndex = 14
-        Me.LabelTemplateSheetmetal.Text = "Sheetmetal Template File"
-        '
-        'ButtonTemplateDraft
-        '
-        Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(414, 170)
-        Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
-        Me.ButtonTemplateDraft.Size = New System.Drawing.Size(75, 20)
-        Me.ButtonTemplateDraft.TabIndex = 21
-        Me.ButtonTemplateDraft.Text = "Browse"
-        Me.ButtonTemplateDraft.UseVisualStyleBackColor = True
-        '
-        'TextBoxTemplateDraft
-        '
-        Me.TextBoxTemplateDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(11, 170)
-        Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(397, 20)
-        Me.TextBoxTemplateDraft.TabIndex = 18
-        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
-        '
-        'LabelTemplateDraft
-        '
-        Me.LabelTemplateDraft.AutoSize = True
-        Me.LabelTemplateDraft.Location = New System.Drawing.Point(11, 153)
-        Me.LabelTemplateDraft.Name = "LabelTemplateDraft"
-        Me.LabelTemplateDraft.Size = New System.Drawing.Size(96, 13)
-        Me.LabelTemplateDraft.TabIndex = 15
-        Me.LabelTemplateDraft.Text = "Draft Template File"
-        '
         'TabPageTopLevelAssy
         '
         Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports)
@@ -2428,6 +2254,94 @@ Partial Class Form1
         Me.RadioButtonTLABottomUp.TabStop = True
         Me.RadioButtonTLABottomUp.Text = "Bottom Up Search -- Best for general purpose directories"
         Me.RadioButtonTLABottomUp.UseVisualStyleBackColor = True
+        '
+        'TabPageSorting
+        '
+        Me.TabPageSorting.Controls.Add(Me.TextBoxRandomSampleFraction)
+        Me.TabPageSorting.Controls.Add(Me.LabelRandomSampleFraction)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortRandomSample)
+        Me.TabPageSorting.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortDependency)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
+        Me.TabPageSorting.ImageKey = "list"
+        Me.TabPageSorting.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageSorting.Name = "TabPageSorting"
+        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageSorting.Size = New System.Drawing.Size(495, 560)
+        Me.TabPageSorting.TabIndex = 4
+        Me.TabPageSorting.Text = "Sorting"
+        Me.TabPageSorting.UseVisualStyleBackColor = True
+        '
+        'TextBoxRandomSampleFraction
+        '
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(226, 129)
+        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
+        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxRandomSampleFraction.TabIndex = 55
+        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        '
+        'LabelRandomSampleFraction
+        '
+        Me.LabelRandomSampleFraction.AutoSize = True
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(139, 131)
+        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
+        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(80, 13)
+        Me.LabelRandomSampleFraction.TabIndex = 54
+        Me.LabelRandomSampleFraction.Text = "Sample fraction"
+        '
+        'RadioButtonListSortRandomSample
+        '
+        Me.RadioButtonListSortRandomSample.AutoSize = True
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(12, 128)
+        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
+        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(101, 17)
+        Me.RadioButtonListSortRandomSample.TabIndex = 53
+        Me.RadioButtonListSortRandomSample.TabStop = True
+        Me.RadioButtonListSortRandomSample.Text = "Random sample"
+        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
+        '
+        'CheckBoxListIncludeNoDependencies
+        '
+        Me.CheckBoxListIncludeNoDependencies.AutoSize = True
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(39, 107)
+        Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
+        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(317, 17)
+        Me.CheckBoxListIncludeNoDependencies.TabIndex = 52
+        Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
+        Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortDependency
+        '
+        Me.RadioButtonListSortDependency.AutoSize = True
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(12, 82)
+        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
+        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(156, 17)
+        Me.RadioButtonListSortDependency.TabIndex = 51
+        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
+        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortAlphabetical
+        '
+        Me.RadioButtonListSortAlphabetical.AutoSize = True
+        Me.RadioButtonListSortAlphabetical.Checked = True
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(11, 57)
+        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
+        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(154, 17)
+        Me.RadioButtonListSortAlphabetical.TabIndex = 50
+        Me.RadioButtonListSortAlphabetical.TabStop = True
+        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
+        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortNone
+        '
+        Me.RadioButtonListSortNone.AutoSize = True
+        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(11, 34)
+        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
+        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(68, 17)
+        Me.RadioButtonListSortNone.TabIndex = 49
+        Me.RadioButtonListSortNone.Text = "Unsorted"
+        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
         '
         'TabPageOpenSave
         '
@@ -3129,93 +3043,179 @@ Partial Class Form1
         Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
         Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
-        'TabPageSorting
+        'TabPageTemplates
         '
-        Me.TabPageSorting.Controls.Add(Me.TextBoxRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.LabelRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortRandomSample)
-        Me.TabPageSorting.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortDependency)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
-        Me.TabPageSorting.ImageKey = "list"
-        Me.TabPageSorting.Location = New System.Drawing.Point(4, 23)
-        Me.TabPageSorting.Name = "TabPageSorting"
-        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(495, 560)
-        Me.TabPageSorting.TabIndex = 4
-        Me.TabPageSorting.Text = "Sorting"
-        Me.TabPageSorting.UseVisualStyleBackColor = True
+        Me.TabPageTemplates.Controls.Add(Me.ButtonActiveMaterialLibrary)
+        Me.TabPageTemplates.Controls.Add(Me.TextBoxActiveMaterialLibrary)
+        Me.TabPageTemplates.Controls.Add(Me.LabelActiveMaterialLibrary)
+        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateAssembly)
+        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateAssembly)
+        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateAssembly)
+        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplatePart)
+        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplatePart)
+        Me.TabPageTemplates.Controls.Add(Me.LabelTemplatePart)
+        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateSheetmetal)
+        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateSheetmetal)
+        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateSheetmetal)
+        Me.TabPageTemplates.Controls.Add(Me.ButtonTemplateDraft)
+        Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateDraft)
+        Me.TabPageTemplates.Controls.Add(Me.LabelTemplateDraft)
+        Me.TabPageTemplates.ImageKey = "se"
+        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageTemplates.Name = "TabPageTemplates"
+        Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(495, 560)
+        Me.TabPageTemplates.TabIndex = 1
+        Me.TabPageTemplates.Text = "Templates"
+        Me.TabPageTemplates.UseVisualStyleBackColor = True
         '
-        'TextBoxRandomSampleFraction
+        'ButtonActiveMaterialLibrary
         '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(226, 129)
-        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
-        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(100, 20)
-        Me.TextBoxRandomSampleFraction.TabIndex = 55
-        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(414, 218)
+        Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
+        Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(75, 20)
+        Me.ButtonActiveMaterialLibrary.TabIndex = 24
+        Me.ButtonActiveMaterialLibrary.Text = "Browse"
+        Me.ButtonActiveMaterialLibrary.UseVisualStyleBackColor = True
         '
-        'LabelRandomSampleFraction
+        'TextBoxActiveMaterialLibrary
         '
-        Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(139, 131)
-        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
-        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(80, 13)
-        Me.LabelRandomSampleFraction.TabIndex = 54
-        Me.LabelRandomSampleFraction.Text = "Sample fraction"
+        Me.TextBoxActiveMaterialLibrary.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(11, 218)
+        Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(397, 20)
+        Me.TextBoxActiveMaterialLibrary.TabIndex = 23
+        Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
-        'RadioButtonListSortRandomSample
+        'LabelActiveMaterialLibrary
         '
-        Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(12, 128)
-        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
-        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(101, 17)
-        Me.RadioButtonListSortRandomSample.TabIndex = 53
-        Me.RadioButtonListSortRandomSample.TabStop = True
-        Me.RadioButtonListSortRandomSample.Text = "Random sample"
-        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
+        Me.LabelActiveMaterialLibrary.AutoSize = True
+        Me.LabelActiveMaterialLibrary.Location = New System.Drawing.Point(11, 202)
+        Me.LabelActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelActiveMaterialLibrary.Name = "LabelActiveMaterialLibrary"
+        Me.LabelActiveMaterialLibrary.Size = New System.Drawing.Size(78, 13)
+        Me.LabelActiveMaterialLibrary.TabIndex = 22
+        Me.LabelActiveMaterialLibrary.Text = "Material Library"
         '
-        'CheckBoxListIncludeNoDependencies
+        'ButtonTemplateAssembly
         '
-        Me.CheckBoxListIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(39, 107)
-        Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
-        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(317, 17)
-        Me.CheckBoxListIncludeNoDependencies.TabIndex = 52
-        Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
-        Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
+        Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(414, 23)
+        Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
+        Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(75, 20)
+        Me.ButtonTemplateAssembly.TabIndex = 12
+        Me.ButtonTemplateAssembly.Text = "Browse"
+        Me.ButtonTemplateAssembly.UseVisualStyleBackColor = True
         '
-        'RadioButtonListSortDependency
+        'TextBoxTemplateAssembly
         '
-        Me.RadioButtonListSortDependency.AutoSize = True
-        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(12, 82)
-        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
-        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(156, 17)
-        Me.RadioButtonListSortDependency.TabIndex = 51
-        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
-        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
+        Me.TextBoxTemplateAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(11, 23)
+        Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(397, 20)
+        Me.TextBoxTemplateAssembly.TabIndex = 11
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
-        'RadioButtonListSortAlphabetical
+        'LabelTemplateAssembly
         '
-        Me.RadioButtonListSortAlphabetical.AutoSize = True
-        Me.RadioButtonListSortAlphabetical.Checked = True
-        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(11, 57)
-        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
-        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(154, 17)
-        Me.RadioButtonListSortAlphabetical.TabIndex = 50
-        Me.RadioButtonListSortAlphabetical.TabStop = True
-        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
-        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        Me.LabelTemplateAssembly.AutoSize = True
+        Me.LabelTemplateAssembly.Location = New System.Drawing.Point(11, 7)
+        Me.LabelTemplateAssembly.Name = "LabelTemplateAssembly"
+        Me.LabelTemplateAssembly.Size = New System.Drawing.Size(117, 13)
+        Me.LabelTemplateAssembly.TabIndex = 10
+        Me.LabelTemplateAssembly.Text = "Assembly Template File"
         '
-        'RadioButtonListSortNone
+        'ButtonTemplatePart
         '
-        Me.RadioButtonListSortNone.AutoSize = True
-        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(11, 34)
-        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
-        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(68, 17)
-        Me.RadioButtonListSortNone.TabIndex = 49
-        Me.RadioButtonListSortNone.Text = "Unsorted"
-        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
+        Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(414, 72)
+        Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
+        Me.ButtonTemplatePart.Size = New System.Drawing.Size(75, 20)
+        Me.ButtonTemplatePart.TabIndex = 19
+        Me.ButtonTemplatePart.Text = "Browse"
+        Me.ButtonTemplatePart.UseVisualStyleBackColor = True
+        '
+        'TextBoxTemplatePart
+        '
+        Me.TextBoxTemplatePart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxTemplatePart.Location = New System.Drawing.Point(11, 72)
+        Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(397, 20)
+        Me.TextBoxTemplatePart.TabIndex = 16
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
+        '
+        'LabelTemplatePart
+        '
+        Me.LabelTemplatePart.AutoSize = True
+        Me.LabelTemplatePart.Location = New System.Drawing.Point(11, 56)
+        Me.LabelTemplatePart.Name = "LabelTemplatePart"
+        Me.LabelTemplatePart.Size = New System.Drawing.Size(92, 13)
+        Me.LabelTemplatePart.TabIndex = 13
+        Me.LabelTemplatePart.Text = "Part Template File"
+        '
+        'ButtonTemplateSheetmetal
+        '
+        Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(414, 121)
+        Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
+        Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(75, 20)
+        Me.ButtonTemplateSheetmetal.TabIndex = 20
+        Me.ButtonTemplateSheetmetal.Text = "Browse"
+        Me.ButtonTemplateSheetmetal.UseVisualStyleBackColor = True
+        '
+        'TextBoxTemplateSheetmetal
+        '
+        Me.TextBoxTemplateSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(11, 121)
+        Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(397, 20)
+        Me.TextBoxTemplateSheetmetal.TabIndex = 17
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
+        '
+        'LabelTemplateSheetmetal
+        '
+        Me.LabelTemplateSheetmetal.AutoSize = True
+        Me.LabelTemplateSheetmetal.Location = New System.Drawing.Point(11, 105)
+        Me.LabelTemplateSheetmetal.Name = "LabelTemplateSheetmetal"
+        Me.LabelTemplateSheetmetal.Size = New System.Drawing.Size(126, 13)
+        Me.LabelTemplateSheetmetal.TabIndex = 14
+        Me.LabelTemplateSheetmetal.Text = "Sheetmetal Template File"
+        '
+        'ButtonTemplateDraft
+        '
+        Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(414, 170)
+        Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
+        Me.ButtonTemplateDraft.Size = New System.Drawing.Size(75, 20)
+        Me.ButtonTemplateDraft.TabIndex = 21
+        Me.ButtonTemplateDraft.Text = "Browse"
+        Me.ButtonTemplateDraft.UseVisualStyleBackColor = True
+        '
+        'TextBoxTemplateDraft
+        '
+        Me.TextBoxTemplateDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(11, 170)
+        Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(397, 20)
+        Me.TextBoxTemplateDraft.TabIndex = 18
+        Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
+        '
+        'LabelTemplateDraft
+        '
+        Me.LabelTemplateDraft.AutoSize = True
+        Me.LabelTemplateDraft.Location = New System.Drawing.Point(11, 153)
+        Me.LabelTemplateDraft.Name = "LabelTemplateDraft"
+        Me.LabelTemplateDraft.Size = New System.Drawing.Size(96, 13)
+        Me.LabelTemplateDraft.TabIndex = 15
+        Me.LabelTemplateDraft.Text = "Draft Template File"
         '
         'TabPagePrinting
         '
@@ -3959,10 +3959,10 @@ Partial Class Form1
         Me.TabPageDraft.PerformLayout()
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
-        Me.TabPageTemplates.ResumeLayout(False)
-        Me.TabPageTemplates.PerformLayout()
         Me.TabPageTopLevelAssy.ResumeLayout(False)
         Me.TabPageTopLevelAssy.PerformLayout()
+        Me.TabPageSorting.ResumeLayout(False)
+        Me.TabPageSorting.PerformLayout()
         Me.TabPageOpenSave.ResumeLayout(False)
         Me.TabPageOpenSave.PerformLayout()
         Me.GroupBoxStatusInR.ResumeLayout(False)
@@ -3977,8 +3977,8 @@ Partial Class Form1
         Me.GroupBoxStatusInB.PerformLayout()
         Me.GroupBoxStatusInA.ResumeLayout(False)
         Me.GroupBoxStatusInA.PerformLayout()
-        Me.TabPageSorting.ResumeLayout(False)
-        Me.TabPageSorting.PerformLayout()
+        Me.TabPageTemplates.ResumeLayout(False)
+        Me.TabPageTemplates.PerformLayout()
         Me.TabPagePrinting.ResumeLayout(False)
         Me.GroupBoxPrinter2.ResumeLayout(False)
         Me.GroupBoxPrinter2.PerformLayout()

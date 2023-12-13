@@ -43,7 +43,7 @@ Added an option to not add files processed by Housekeeper to the MRU.
 (Thank you **@roger.ribamatic**, **@SatyenB**,
 **@Robin BIoemberg**!)
 
-Added a new file type, `PDF per Sheet` for drawings.  The file name
+Added a new file type, `PDF per Sheet` for drawings.  The output file name
 is of the format `<Filename>-<Sheetname>.pdf`.
 There is an option to suppress the `Sheetname` suffix
 on drawings with only one sheet.
@@ -136,6 +136,16 @@ confusing because clicking OK implied a document would be
 printed.
 
 Removed some other confusing control options.
+
+### Preferences Folder
+
+Added a new location for user data.  It is now stored
+in Preferences in the Housekeeper root directory.
+Previously it was stored in the same folder as the
+executable and associated files, making it hard to
+identify user-specific files.
+
+
 
 
 ## V2023.6 Enhancements/Fixes
