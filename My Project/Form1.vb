@@ -1813,6 +1813,12 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub Form1_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
+        ReconcileFormChanges()
+        SaveDefaults()
+        End
+    End Sub
+
     Private Sub ButtonExternalProgramAssembly_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramAssembly.Click
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a program file"
@@ -1823,7 +1829,6 @@ Public Class Form1
         End If
         ToolTip1.SetToolTip(TextBoxExternalProgramAssembly, TextBoxExternalProgramAssembly.Text)
         ReconcileFormChanges()
-
     End Sub
 
     Private Sub ButtonExternalProgramPart_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramPart.Click
@@ -1836,7 +1841,6 @@ Public Class Form1
         End If
         ToolTip1.SetToolTip(TextBoxExternalProgramPart, TextBoxExternalProgramPart.Text)
         ReconcileFormChanges()
-
     End Sub
 
     Private Sub ButtonExternalProgramSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramSheetmetal.Click

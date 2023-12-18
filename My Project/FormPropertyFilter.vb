@@ -386,128 +386,129 @@ Public Class FormPropertyFilter
 	End Sub
 
 	Private Sub InitializeReadme()
-		Dim msg As String
-		Dim Paragraphs As New List(Of String)
-		Dim p As String
+		Dim msg As String = "Help now hosted on Github.  See main form Readme for link."
 
-		Paragraphs.Add("Property Filter")
+		'Dim Paragraphs As New List(Of String)
+		'Dim p As String
 
-		msg = "The property filter allows you to select files by their property values.  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Property Filter")
 
-		Paragraphs.Add("Composing a Filter")
+		'msg = "The property filter allows you to select files by their property values.  "
+		'Paragraphs.Add(msg)
 
-		msg = "Compose a filter by defining one or more Conditions, and adding them one-by-one to the list.  "
-		msg += "A Condition consists of a Property, a Comparison, and a Value.  "
-		msg += "For example, 'Material contains Steel', where 'Material' is the Property, "
-		msg += "'contains' is the Comparison, and 'Steel' is the Value."
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Composing a Filter")
 
-		msg = "Up to six Conditions are allowed for a filter.  "
-		msg += "They can be named, saved, modified, and deleted as desired.  "
-		Paragraphs.Add(msg)
+		'msg = "Compose a filter by defining one or more Conditions, and adding them one-by-one to the list.  "
+		'msg += "A Condition consists of a Property, a Comparison, and a Value.  "
+		'msg += "For example, 'Material contains Steel', where 'Material' is the Property, "
+		'msg += "'contains' is the Comparison, and 'Steel' is the Value."
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Property")
+		'msg = "Up to six Conditions are allowed for a filter.  "
+		'msg += "They can be named, saved, modified, and deleted as desired.  "
+		'Paragraphs.Add(msg)
 
-		msg = "Enter the name of the property to be evaluated in the 'Property name' textbox.  "
-		msg += "Select the Property's 'Property set', either System or Custom.  "
-		msg += "The Property sets are described below.  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Property")
 
-		msg = "System properties are in every Solid Edge file.  "
-		msg += "They include Material, Manager, Project, etc.  "
-		msg += "Note, at this time, the System property names must be specified in English.  "
-		Paragraphs.Add(msg)
+		'msg = "Enter the name of the property to be evaluated in the 'Property name' textbox.  "
+		'msg += "Select the Property's 'Property set', either System or Custom.  "
+		'msg += "The Property sets are described below.  "
+		'Paragraphs.Add(msg)
 
-		msg = "Custom properties are ones that you create, probably in a template.  "
-		msg += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
-		Paragraphs.Add(msg)
+		'msg = "System properties are in every Solid Edge file.  "
+		'msg += "They include Material, Manager, Project, etc.  "
+		'msg += "Note, at this time, the System property names must be specified in English.  "
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Comparison")
+		'msg = "Custom properties are ones that you create, probably in a template.  "
+		'msg += "The custom property names can be in any language.  (In theory, at least -- not tested at this time.)"
+		'Paragraphs.Add(msg)
 
-		msg = "Select the Comparison from its dropdown box.  "
-		msg += "The choices are 'contains', 'is_exactly', 'is_not', 'wildcard_match', '>', or '<'.  "
-		msg += "The options 'is_exactly', 'is_not', '>', and '<' are hopefully self explanatory.  "
-		msg += "The two 'contains' options are described below.  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Comparison")
 
-		msg = "With the 'contains' option, "
-		msg += "the Value you specify can appear anywhere in the property.  "
-		msg += "For example, if you specify 'Aluminum' and a part file has 'Aluminum 6061-T6', "
-		msg += "you will get a match.  "
-		msg += "Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison.  "
-		msg += "So 'ALUMINUM', 'Aluminum', and 'aluminum' would all match.  "
-		Paragraphs.Add(msg)
+		'msg = "Select the Comparison from its dropdown box.  "
+		'msg += "The choices are 'contains', 'is_exactly', 'is_not', 'wildcard_match', '>', or '<'.  "
+		'msg += "The options 'is_exactly', 'is_not', '>', and '<' are hopefully self explanatory.  "
+		'msg += "The two 'contains' options are described below.  "
+		'Paragraphs.Add(msg)
 
-		msg = "The 'wildcard_match' uses a wildcard pattern.  "
-		msg += "Internally, it is implemented with the VB 'Like' operator, "
-		msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
-		msg += "For details and examples, see "
-		msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
-		Paragraphs.Add(msg)
+		'msg = "With the 'contains' option, "
+		'msg += "the Value you specify can appear anywhere in the property.  "
+		'msg += "For example, if you specify 'Aluminum' and a part file has 'Aluminum 6061-T6', "
+		'msg += "you will get a match.  "
+		'msg += "Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison.  "
+		'msg += "So 'ALUMINUM', 'Aluminum', and 'aluminum' would all match.  "
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Default Filter Formula")
+		'msg = "The 'wildcard_match' uses a wildcard pattern.  "
+		'msg += "Internally, it is implemented with the VB 'Like' operator, "
+		'msg += "which is similar to the old DOS wildcard search, but with a few more options.  "
+		'msg += "For details and examples, see "
+		'msg += "https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator."
+		'Paragraphs.Add(msg)
 
-		msg = "Each Condition is assigned a variable name, (A, B, ...).  "
-		msg += "The default filter formula is to match all conditions (e.g., A AND B AND C).  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Default Filter Formula")
 
-		Paragraphs.Add("Example")
+		'msg = "Each Condition is assigned a variable name, (A, B, ...).  "
+		'msg += "The default filter formula is to match all conditions (e.g., A AND B AND C).  "
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Say you have the following conditions:")
+		'Paragraphs.Add("Example")
 
-		msg = "    A  System  Material  contains    Aluminum" + vbCrLf
-		msg += "    B  System  Project   is_exactly  7477" + vbCrLf
-		msg += "    C  Custom  Engineer  contains    Fred"
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Say you have the following conditions:")
 
-		msg = "By default you will get all Aluminum parts in project 7477 engineered by Fred.  "
-		Paragraphs.Add(msg)
+		'msg = "    A  System  Material  contains    Aluminum" + vbCrLf
+		'msg += "    B  System  Project   is_exactly  7477" + vbCrLf
+		'msg += "    C  Custom  Engineer  contains    Fred"
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Editing the Formula")
+		'msg = "By default you will get all Aluminum parts in project 7477 engineered by Fred.  "
+		'Paragraphs.Add(msg)
 
-		msg = "You can optionally change the formula.  "
-		msg += "Click the Edit button and type the desired expression.  "
-		msg += "For example, if you wanted all Aluminum parts, either from project 7477, or engineered by Fred, "
-		msg += "you would enter A AND (B OR C)."
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Editing the Formula")
 
-		Paragraphs.Add("Dates and Numbers")
+		'msg = "You can optionally change the formula.  "
+		'msg += "Click the Edit button and type the desired expression.  "
+		'msg += "For example, if you wanted all Aluminum parts, either from project 7477, or engineered by Fred, "
+		'msg += "you would enter A AND (B OR C)."
+		'Paragraphs.Add(msg)
 
-		msg = "Dates and numbers are converted to their native format when possible.  "
-		msg += "This is done to obtain commonsense results for the comparisons '<' and '>'.  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Dates and Numbers")
 
-		msg = "Dates take the form 'YYYYMMDD' when converted.  "
-		msg += "This is the format that must be used in the 'Value' field for comparisons.  "
-		msg += "The conversion is supposed to be locale-aware, however this has not been tested.  "
-		msg += "Please ask on the Solid Edge Forum if it is not working correctly for you.  "
-		Paragraphs.Add(msg)
+		'msg = "Dates and numbers are converted to their native format when possible.  "
+		'msg += "This is done to obtain commonsense results for the comparisons '<' and '>'.  "
+		'Paragraphs.Add(msg)
 
-		msg = "Numbers are converted to floating point values.  "
-		msg += "In Solid Edge many numbers, in particular those from the variable table, "
-		msg += "include units.  "
-		msg += "These must be stripped off by the program to make comparisons.  "
-		msg += "Currently only distance and mass units are checked ('in', 'mm', 'lbm', 'kg').  "
-		msg += "It's easy to add more, so please ask on the Forum if you need others.  "
-		Paragraphs.Add(msg)
+		'msg = "Dates take the form 'YYYYMMDD' when converted.  "
+		'msg += "This is the format that must be used in the 'Value' field for comparisons.  "
+		'msg += "The conversion is supposed to be locale-aware, however this has not been tested.  "
+		'msg += "Please ask on the Solid Edge Forum if it is not working correctly for you.  "
+		'Paragraphs.Add(msg)
 
-		Paragraphs.Add("Saved Settings")
+		'msg = "Numbers are converted to floating point values.  "
+		'msg += "In Solid Edge many numbers, in particular those from the variable table, "
+		'msg += "include units.  "
+		'msg += "These must be stripped off by the program to make comparisons.  "
+		'msg += "Currently only distance and mass units are checked ('in', 'mm', 'lbm', 'kg').  "
+		'msg += "It's easy to add more, so please ask on the Forum if you need others.  "
+		'Paragraphs.Add(msg)
 
-		msg = "The filters are saved in 'property_filters.txt' in the same directory as Housekeeper.exe.  "
-		msg += "If desired, you can create a master copy of the file and share it with others.  "
-		msg += "You can manually edit the file, "
-		msg += "however, note that the field delimiter is the TAB character.  "
-		msg += "This was done so that the property name and value fields could contain space (' ') characters.  "
-		Paragraphs.Add(msg)
+		'Paragraphs.Add("Saved Settings")
 
-		msg = ""
-		msg += ""
+		'msg = "The filters are saved in 'property_filters.txt' in the same directory as Housekeeper.exe.  "
+		'msg += "If desired, you can create a master copy of the file and share it with others.  "
+		'msg += "You can manually edit the file, "
+		'msg += "however, note that the field delimiter is the TAB character.  "
+		'msg += "This was done so that the property name and value fields could contain space (' ') characters.  "
+		'Paragraphs.Add(msg)
 
-		msg = ""
-		For Each p In Paragraphs
-			msg += String.Format("{0}{1}{2}", p, vbCrLf, vbCrLf)
-		Next
+		'msg = ""
+		'msg += ""
+
+		'msg = ""
+		'For Each p In Paragraphs
+		'	msg += String.Format("{0}{1}{2}", p, vbCrLf, vbCrLf)
+		'Next
 
 		TextBoxReadme.Text = msg
 
@@ -517,7 +518,7 @@ Public Class FormPropertyFilter
 
 	Public Sub SetReadmeFontsize(Fontsize As Integer)
 		If Not TextBoxReadme.Font.Size = Fontsize Then
-			TextBoxReadme.Font = New Font("Microsoft Sans Serif", Fontsize, FontStyle.Regular)
+			'TextBoxReadme.Font = New Font("Microsoft Sans Serif", Fontsize, FontStyle.Regular)
 		End If
 	End Sub
 

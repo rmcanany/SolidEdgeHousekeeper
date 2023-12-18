@@ -29,18 +29,18 @@ Partial Class FormSheetSelector
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(12, 267)
+        Me.ButtonOK.Location = New System.Drawing.Point(12, 308)
         Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(94, 23)
+        Me.ButtonOK.Size = New System.Drawing.Size(94, 27)
         Me.ButtonOK.TabIndex = 0
         Me.ButtonOK.Text = "OK"
         Me.ButtonOK.UseVisualStyleBackColor = True
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(122, 267)
+        Me.ButtonCancel.Location = New System.Drawing.Point(122, 308)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(105, 23)
+        Me.ButtonCancel.Size = New System.Drawing.Size(105, 27)
         Me.ButtonCancel.TabIndex = 1
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
@@ -49,19 +49,20 @@ Partial Class FormSheetSelector
         '
         Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Location = New System.Drawing.Point(12, 12)
+        Me.CheckedListBox1.Location = New System.Drawing.Point(12, 14)
         Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(215, 244)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(215, 276)
         Me.CheckedListBox1.TabIndex = 2
         '
         'FormSheetSelector
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(247, 306)
+        Me.ClientSize = New System.Drawing.Size(247, 353)
         Me.Controls.Add(Me.CheckedListBox1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Name = "FormSheetSelector"
         Me.Text = "Sheet Selector"
         Me.ResumeLayout(False)
