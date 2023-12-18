@@ -3141,34 +3141,43 @@ Public Class DraftTasks
         AllSheets = PD.GetSheetSizes("All")
 
         Dim s As String
+        Dim idx As Integer
 
         Dim DraftPrinterList As New List(Of SolidEdgeDraft.DraftPrintUtility)
+        Dim DraftPrinterIdxList As New List(Of Integer)
 
-        Dim DraftPrinter1 As SolidEdgeDraft.DraftPrintUtility = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
-        DraftPrinterList.Add(DraftPrinter1)
+        Dim DraftPrinter1 As SolidEdgeDraft.DraftPrintUtility = Nothing
 
         Dim DraftPrinter2 As SolidEdgeDraft.DraftPrintUtility = Nothing
         Dim Printer2SelectedSheets As New List(Of SolidEdgeDraft.PaperSizeConstants)
+
+        Dim DraftPrinterX As SolidEdgeDraft.DraftPrintUtility = Nothing
 
         Dim Sheets As New List(Of SolidEdgeDraft.Sheet)
         Dim Sheet As SolidEdgeDraft.Sheet
         Dim SheetSetup As SolidEdgeDraft.SheetSetup
         Dim PaperSizeConstant As SolidEdgeDraft.PaperSizeConstants
 
+        If Configuration("CheckBoxEnablePrinter1").ToLower = "true" Then
+            DraftPrinter1 = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
+            DraftPrinterList.Add(DraftPrinter1)
+            DraftPrinterIdxList.Add(1)
+        End If
+
         If Configuration("CheckBoxEnablePrinter2").ToLower = "true" Then
             DraftPrinter2 = CType(SEApp.GetDraftPrintUtility(), SolidEdgeDraft.DraftPrintUtility)
             DraftPrinterList.Add(DraftPrinter2)
+            DraftPrinterIdxList.Add(1)
 
             For Each s In Split(Configuration("TextBoxPrinter2SheetSelections"), Delimiter:=",")
                 Printer2SelectedSheets.Add(AllSheets(s.Trim))
             Next
         End If
 
-        Dim idx As Integer = 0
+        For i As Integer = 0 To DraftPrinterList.Count - 1
 
-        For Each DraftPrinterX As SolidEdgeDraft.DraftPrintUtility In DraftPrinterList
-
-            idx += 1
+            DraftPrinterX = DraftPrinterList(i)
+            idx = DraftPrinterIdxList(i)
 
             DraftPrinterX.Units = SolidEdgeDraft.DraftPrintUnitsConstants.igDraftPrintInches
 
@@ -3222,9 +3231,11 @@ Public Class DraftTasks
                         DraftPrinter2.PrintOut()
                         SEApp.DoIdle()
                     Else
-                        DraftPrinter1.AddSheet(Sheet)
-                        DraftPrinter1.PrintOut()
-                        SEApp.DoIdle()
+                        If Configuration("CheckBoxEnablePrinter1").ToLower = "true" Then
+                            DraftPrinter1.AddSheet(Sheet)
+                            DraftPrinter1.PrintOut()
+                            SEApp.DoIdle()
+                        End If
                     End If
                 Catch ex As Exception
                     ExitStatus = 1
@@ -3242,8 +3253,11 @@ Public Class DraftTasks
             End Try
         End If
 
-        DraftPrinter1.RemoveAllDocuments()
-        SEApp.DoIdle()
+        If Configuration("CheckBoxEnablePrinter1").ToLower = "true" Then
+            DraftPrinter1.RemoveAllDocuments()
+            SEApp.DoIdle()
+        End If
+
         If Configuration("CheckBoxEnablePrinter2").ToLower = "true" Then
             DraftPrinter2.RemoveAllDocuments()
             SEApp.DoIdle()

@@ -69,7 +69,7 @@ so it got in.
 
 ### File List
 
-(Thank you **@Robin BIoemberg**!)
+(Thank you **@jnewell**, **@Robin BIoemberg**!)
 
 Added the ability to process files regardless of Document Status.
 After processing, the file can be reverted back to
@@ -145,7 +145,10 @@ Previously it was stored in the same folder as the
 executable and associated files, making it hard to
 identify user-specific files.
 
+### Expose Variables
 
+Added checking for the presence of a variable and
+removed the task `Expose variables missing`.
 
 
 ## V2023.6 Enhancements/Fixes

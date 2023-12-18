@@ -761,38 +761,44 @@ Public Class Form1
                     End If
                 End Try
 
-                If CheckBoxEnablePrinter2.Checked Then
-                    For Each InstalledPrinter In PD.GetInstalledPrinterNames
-                        If InstalledPrinter = ComboBoxPrinter2.Text Then
-                            PrinterInstalled = True
-                            Exit For
-                        End If
-                    Next InstalledPrinter
-                    If Not PrinterInstalled Then
-                        If Not msg.Contains("Select a valid Printer2, or disable it") Then
-                            msg += "    Select a valid Printer2, or disable it" + Chr(13)
-                        End If
+                If (Not CheckBoxEnablePrinter1.Checked) And (Not CheckBoxEnablePrinter2.Checked) Then
+                    If Not msg.Contains("Enable at least one printer") Then
+                        msg += "    Enable at least one printer" + Chr(13)
                     End If
+                End If
 
-                    Try
-                        NumberCopies = CInt(TextBoxPrinter2Copies.Text)
-                    Catch ex As Exception
-                        If Not msg.Contains("Set Printer2 Copies to a number") Then
-                            msg += "    Set Printer2 Copies to a number" + Chr(13)
+                If CheckBoxEnablePrinter2.Checked Then
+                        For Each InstalledPrinter In PD.GetInstalledPrinterNames
+                            If InstalledPrinter = ComboBoxPrinter2.Text Then
+                                PrinterInstalled = True
+                                Exit For
+                            End If
+                        Next InstalledPrinter
+                        If Not PrinterInstalled Then
+                            If Not msg.Contains("Select a valid Printer2, or disable it") Then
+                                msg += "    Select a valid Printer2, or disable it" + Chr(13)
+                            End If
                         End If
-                    End Try
 
-                    If TextBoxPrinter2SheetSelections.Text.Trim = "" Then
-                        If Not msg.Contains("Select at least one sheet size for Printer2") Then
-                            msg += "    Select at least one sheet size for Printer2" + Chr(13)
+                        Try
+                            NumberCopies = CInt(TextBoxPrinter2Copies.Text)
+                        Catch ex As Exception
+                            If Not msg.Contains("Set Printer2 Copies to a number") Then
+                                msg += "    Set Printer2 Copies to a number" + Chr(13)
+                            End If
+                        End Try
+
+                        If TextBoxPrinter2SheetSelections.Text.Trim = "" Then
+                            If Not msg.Contains("Select at least one sheet size for Printer2") Then
+                                msg += "    Select at least one sheet size for Printer2" + Chr(13)
+                            End If
                         End If
+
                     End If
 
                 End If
 
-            End If
-
-            If LabelToActionDraft(Label).RequiresForegroundProcessing Then
+                If LabelToActionDraft(Label).RequiresForegroundProcessing Then
                 If CheckBoxBackgroundProcessing.Checked Then
                     If Not msg.Contains(Label + " cannot be run in a background process") Then
                         msg += "    " + Label + " cannot be run in a background process" + Chr(13)
@@ -863,7 +869,8 @@ Public Class Form1
         Dim DMApp As DesignManager.Application = Nothing
         If CheckBoxProcessReadOnly.Checked Then
             DMApp = New DesignManager.Application
-            DMApp.Visible = 0
+            DMApp.Visible = 1
+            SEApp.Activate()
         End If
 
         Try
@@ -1436,6 +1443,16 @@ Public Class Form1
             For Each RB In StatusChangeRadioButtons
                 RB.Enabled = False
             Next
+        End If
+
+        If Not CheckBoxEnablePrinter1.Checked Then
+            ComboBoxPrinter1.Enabled = False
+            TextBoxPrinter1Copies.Enabled = False
+            CheckBoxPrinter1AutoOrient.Enabled = False
+            CheckBoxPrinter1BestFit.Enabled = False
+            CheckBoxPrinter1PrintAsBlack.Enabled = False
+            CheckBoxPrinter1ScaleLineTypes.Enabled = False
+            CheckBoxPrinter1ScaleLineWidths.Enabled = False
         End If
 
         If Not CheckBoxEnablePrinter2.Checked Then
@@ -3307,6 +3324,28 @@ Public Class Form1
                 End If
             Next
         End If
+
+    End Sub
+
+    Private Sub CheckBoxEnablePrinter1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePrinter1.CheckedChanged
+        If CheckBoxEnablePrinter1.Checked Then
+            ComboBoxPrinter1.Enabled = True
+            TextBoxPrinter1Copies.Enabled = True
+            CheckBoxPrinter1AutoOrient.Enabled = True
+            CheckBoxPrinter1BestFit.Enabled = True
+            CheckBoxPrinter1PrintAsBlack.Enabled = True
+            CheckBoxPrinter1ScaleLineTypes.Enabled = True
+            CheckBoxPrinter1ScaleLineWidths.Enabled = True
+        Else
+            ComboBoxPrinter1.Enabled = False
+            TextBoxPrinter1Copies.Enabled = False
+            CheckBoxPrinter1AutoOrient.Enabled = False
+            CheckBoxPrinter1BestFit.Enabled = False
+            CheckBoxPrinter1PrintAsBlack.Enabled = False
+            CheckBoxPrinter1ScaleLineTypes.Enabled = False
+            CheckBoxPrinter1ScaleLineWidths.Enabled = False
+        End If
+        ReconcileFormChanges()
 
     End Sub
 

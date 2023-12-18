@@ -16,7 +16,7 @@
 @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
 @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
 @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic,
-@[Robin BIoemberg], @Pedro0996
+@jnewell, @[Robin BIoemberg], @Pedro0996
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
@@ -364,6 +364,13 @@ you would click the last button on the second row.
 
 If you want simply to change the Status on a batch of files, 
 choose the `Open/Save` Task for each document type.
+
+If you don't need to worry about document Status for your current task, 
+it's not a bad idea to disable the 
+`Process files as Available` option. 
+That's because, when enabled, it launches Document Manager.
+It can be a bit confusing to see that program
+pop up while Solid Edge is actively processing files.
 
 ### Filtering
 
