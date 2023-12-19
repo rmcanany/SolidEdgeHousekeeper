@@ -86,6 +86,8 @@ Partial Class Form1
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.ButtonVariableEditPart = New System.Windows.Forms.Button()
+        Me.TextBoxVariableEditPart = New System.Windows.Forms.TextBox()
         Me.CheckBoxFindReplaceReplaceRXPart = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceReplacePTPart = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindRXPart = New System.Windows.Forms.CheckBox()
@@ -735,11 +737,11 @@ Partial Class Form1
         Me.TabPageAssembly.Controls.Add(Me.LabelAssemblyTabNote)
         Me.TabPageAssembly.Controls.Add(Me.CheckedListBoxAssembly)
         Me.TabPageAssembly.ImageKey = "asm"
-        Me.TabPageAssembly.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageAssembly.Location = New System.Drawing.Point(4, 24)
         Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageAssembly.Name = "TabPageAssembly"
         Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageAssembly.Size = New System.Drawing.Size(511, 691)
+        Me.TabPageAssembly.Size = New System.Drawing.Size(511, 690)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
         '
@@ -1031,6 +1033,8 @@ Partial Class Form1
         '
         Me.TabPagePart.BackColor = System.Drawing.SystemColors.Control
         Me.TabPagePart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPagePart.Controls.Add(Me.ButtonVariableEditPart)
+        Me.TabPagePart.Controls.Add(Me.TextBoxVariableEditPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceReplaceRXPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceReplacePTPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceFindRXPart)
@@ -1059,13 +1063,32 @@ Partial Class Form1
         Me.TabPagePart.Controls.Add(Me.LabelPartTabNote)
         Me.TabPagePart.Controls.Add(Me.CheckedListBoxPart)
         Me.TabPagePart.ImageKey = "par"
-        Me.TabPagePart.Location = New System.Drawing.Point(4, 23)
+        Me.TabPagePart.Location = New System.Drawing.Point(4, 24)
         Me.TabPagePart.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPagePart.Name = "TabPagePart"
         Me.TabPagePart.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPagePart.Size = New System.Drawing.Size(511, 691)
+        Me.TabPagePart.Size = New System.Drawing.Size(511, 690)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
+        '
+        'ButtonVariableEditPart
+        '
+        Me.ButtonVariableEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariableEditPart.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariableEditPart.Name = "ButtonVariableEditPart"
+        Me.ButtonVariableEditPart.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariableEditPart.TabIndex = 36
+        Me.ButtonVariableEditPart.Text = "Edit"
+        Me.ButtonVariableEditPart.UseVisualStyleBackColor = True
+        '
+        'TextBoxVariableEditPart
+        '
+        Me.TextBoxVariableEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxVariableEditPart.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariableEditPart.Name = "TextBoxVariableEditPart"
+        Me.TextBoxVariableEditPart.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariableEditPart.TabIndex = 35
         '
         'CheckBoxFindReplaceReplaceRXPart
         '
@@ -1141,7 +1164,7 @@ Partial Class Form1
         '
         Me.TextBoxExposeVariablesPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExposeVariablesPart.Location = New System.Drawing.Point(8, 653)
+        Me.TextBoxExposeVariablesPart.Location = New System.Drawing.Point(8, 675)
         Me.TextBoxExposeVariablesPart.Name = "TextBoxExposeVariablesPart"
         Me.TextBoxExposeVariablesPart.Size = New System.Drawing.Size(467, 22)
         Me.TextBoxExposeVariablesPart.TabIndex = 27
@@ -1382,11 +1405,11 @@ Partial Class Form1
         Me.TabPageSheetmetal.Controls.Add(Me.LabelSheetmetalTabNote)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckedListBoxSheetmetal)
         Me.TabPageSheetmetal.ImageKey = "psm"
-        Me.TabPageSheetmetal.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageSheetmetal.Location = New System.Drawing.Point(4, 24)
         Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageSheetmetal.Name = "TabPageSheetmetal"
         Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageSheetmetal.Size = New System.Drawing.Size(511, 691)
+        Me.TabPageSheetmetal.Size = New System.Drawing.Size(511, 690)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
         '
@@ -1712,11 +1735,11 @@ Partial Class Form1
         Me.TabPageDraft.Controls.Add(Me.LabelDraftTabNote)
         Me.TabPageDraft.Controls.Add(Me.CheckedListBoxDraft)
         Me.TabPageDraft.ImageKey = "dft"
-        Me.TabPageDraft.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageDraft.Location = New System.Drawing.Point(4, 24)
         Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageDraft.Name = "TabPageDraft"
         Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageDraft.Size = New System.Drawing.Size(511, 691)
+        Me.TabPageDraft.Size = New System.Drawing.Size(511, 690)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
         '
@@ -2266,10 +2289,10 @@ Partial Class Form1
         Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
         Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
         Me.TabPageSorting.ImageKey = "list"
-        Me.TabPageSorting.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageSorting.Location = New System.Drawing.Point(4, 24)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(495, 650)
+        Me.TabPageSorting.Size = New System.Drawing.Size(495, 648)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -2375,10 +2398,10 @@ Partial Class Form1
         Me.TabPageOpenSave.Controls.Add(Me.CheckBoxNoUpdateMRU)
         Me.TabPageOpenSave.Controls.Add(Me.CheckBoxWarnSave)
         Me.TabPageOpenSave.ImageKey = "folder"
-        Me.TabPageOpenSave.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageOpenSave.Location = New System.Drawing.Point(4, 24)
         Me.TabPageOpenSave.Name = "TabPageOpenSave"
         Me.TabPageOpenSave.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageOpenSave.Size = New System.Drawing.Size(495, 650)
+        Me.TabPageOpenSave.Size = New System.Drawing.Size(495, 648)
         Me.TabPageOpenSave.TabIndex = 3
         Me.TabPageOpenSave.Text = "Open/Save"
         Me.TabPageOpenSave.UseVisualStyleBackColor = True
@@ -3062,10 +3085,10 @@ Partial Class Form1
         Me.TabPageTemplates.Controls.Add(Me.TextBoxTemplateDraft)
         Me.TabPageTemplates.Controls.Add(Me.LabelTemplateDraft)
         Me.TabPageTemplates.ImageKey = "se"
-        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 23)
+        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(495, 650)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(495, 648)
         Me.TabPageTemplates.TabIndex = 1
         Me.TabPageTemplates.Text = "Templates"
         Me.TabPageTemplates.UseVisualStyleBackColor = True
@@ -3223,10 +3246,10 @@ Partial Class Form1
         Me.TabPagePrinting.Controls.Add(Me.GroupBoxPrinter2)
         Me.TabPagePrinting.Controls.Add(Me.GroupBoxPrinter1)
         Me.TabPagePrinting.ImageKey = "dft"
-        Me.TabPagePrinting.Location = New System.Drawing.Point(4, 23)
+        Me.TabPagePrinting.Location = New System.Drawing.Point(4, 24)
         Me.TabPagePrinting.Name = "TabPagePrinting"
         Me.TabPagePrinting.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPagePrinting.Size = New System.Drawing.Size(495, 650)
+        Me.TabPagePrinting.Size = New System.Drawing.Size(495, 648)
         Me.TabPagePrinting.TabIndex = 5
         Me.TabPagePrinting.Text = "Printing"
         Me.TabPagePrinting.UseVisualStyleBackColor = True
@@ -3789,7 +3812,7 @@ Partial Class Form1
         Me.LinkLabelGitHubReadme.AutoSize = True
         Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(15, 29)
         Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
-        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(189, 15)
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(163, 15)
         Me.LinkLabelGitHubReadme.TabIndex = 1
         Me.LinkLabelGitHubReadme.TabStop = True
         Me.LinkLabelGitHubReadme.Text = "text populated in Form1.Startup()"
@@ -4333,4 +4356,6 @@ Partial Class Form1
     Friend WithEvents TextBoxFontSize As TextBox
     Friend WithEvents LabelFontSize As Label
     Friend WithEvents CheckBoxEnablePrinter1 As CheckBox
+    Friend WithEvents ButtonVariableEditPart As Button
+    Friend WithEvents TextBoxVariableEditPart As TextBox
 End Class

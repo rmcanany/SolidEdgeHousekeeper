@@ -4,6 +4,7 @@ Imports System.Data.Common
 Imports System.Globalization
 Imports System.Net.Http
 Imports Newtonsoft.Json
+'Imports Newtonsoft.Json
 Imports SolidEdgeConstants
 'Imports System.Runtime.Serialization.Json
 
@@ -176,7 +177,7 @@ Public Class FormVariableInputEditor
 
         ControlsDict = GetControlsDict()
 
-        TextBoxResult.Text = Form1.TextBox1.Text
+        TextBoxResult.Text = Form1.TextBoxVariableEditPart.Text
 
         If Not TextBoxResult.Text = "" Then
             ' Possible to have bogus string in Form1.TextBox1

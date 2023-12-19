@@ -228,6 +228,11 @@ Partial Class Form1
             tb.Text = Value
         End If
 
+        tf = tb.Name.ToLower.Contains("variableedit")
+        If tf Then
+            tb.Text = Value
+        End If
+
     End Sub
 
     Private Sub PopulateComboBoxes()

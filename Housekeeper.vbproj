@@ -102,6 +102,9 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="SolidEdge.Community, Version=219.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\SolidEdge.Community.219.0.0\lib\net45\SolidEdge.Community.dll</HintPath>
@@ -176,6 +179,12 @@
     <Compile Include="My Project\FormSheetSelector.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormVariableInputEditor.Designer.vb">
+      <DependentUpon>FormVariableInputEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormVariableInputEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\LabelToAction.vb" />
     <Compile Include="My Project\LaunchTask.vb" />
     <Compile Include="My Project\MaterialDoctorPart.vb" />
@@ -206,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormSheetSelector.resx">
       <DependentUpon>FormSheetSelector.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormVariableInputEditor.resx">
+      <DependentUpon>FormVariableInputEditor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

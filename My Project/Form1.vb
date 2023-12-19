@@ -3,6 +3,7 @@
 Imports System.IO
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports Newtonsoft.Json
 Imports SolidEdgeCommunity
 
 
@@ -768,37 +769,37 @@ Public Class Form1
                 End If
 
                 If CheckBoxEnablePrinter2.Checked Then
-                        For Each InstalledPrinter In PD.GetInstalledPrinterNames
-                            If InstalledPrinter = ComboBoxPrinter2.Text Then
-                                PrinterInstalled = True
-                                Exit For
-                            End If
-                        Next InstalledPrinter
-                        If Not PrinterInstalled Then
-                            If Not msg.Contains("Select a valid Printer2, or disable it") Then
-                                msg += "    Select a valid Printer2, or disable it" + Chr(13)
-                            End If
+                    For Each InstalledPrinter In PD.GetInstalledPrinterNames
+                        If InstalledPrinter = ComboBoxPrinter2.Text Then
+                            PrinterInstalled = True
+                            Exit For
                         End If
-
-                        Try
-                            NumberCopies = CInt(TextBoxPrinter2Copies.Text)
-                        Catch ex As Exception
-                            If Not msg.Contains("Set Printer2 Copies to a number") Then
-                                msg += "    Set Printer2 Copies to a number" + Chr(13)
-                            End If
-                        End Try
-
-                        If TextBoxPrinter2SheetSelections.Text.Trim = "" Then
-                            If Not msg.Contains("Select at least one sheet size for Printer2") Then
-                                msg += "    Select at least one sheet size for Printer2" + Chr(13)
-                            End If
+                    Next InstalledPrinter
+                    If Not PrinterInstalled Then
+                        If Not msg.Contains("Select a valid Printer2, or disable it") Then
+                            msg += "    Select a valid Printer2, or disable it" + Chr(13)
                         End If
+                    End If
 
+                    Try
+                        NumberCopies = CInt(TextBoxPrinter2Copies.Text)
+                    Catch ex As Exception
+                        If Not msg.Contains("Set Printer2 Copies to a number") Then
+                            msg += "    Set Printer2 Copies to a number" + Chr(13)
+                        End If
+                    End Try
+
+                    If TextBoxPrinter2SheetSelections.Text.Trim = "" Then
+                        If Not msg.Contains("Select at least one sheet size for Printer2") Then
+                            msg += "    Select at least one sheet size for Printer2" + Chr(13)
+                        End If
                     End If
 
                 End If
 
-                If LabelToActionDraft(Label).RequiresForegroundProcessing Then
+            End If
+
+            If LabelToActionDraft(Label).RequiresForegroundProcessing Then
                 If CheckBoxBackgroundProcessing.Checked Then
                     If Not msg.Contains(Label + " cannot be run in a background process") Then
                         msg += "    " + Label + " cannot be run in a background process" + Chr(13)
@@ -3351,6 +3352,18 @@ Public Class Form1
         End If
         ReconcileFormChanges()
 
+    End Sub
+
+    Private Sub ButtonVariableEditPart_Click(sender As Object, e As EventArgs) Handles ButtonVariableEditPart.Click
+        Dim VariableInputEditor As New FormVariableInputEditor
+        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        VariableInputEditor.ShowInputEditor("par")
+
+        If VariableInputEditor.DialogResult = DialogResult.OK Then
+            TextBoxVariableEditPart.Text = VariableInputEditor.TextBoxResult.Text
+            TableValuesDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariableInputEditor.TextBoxResult.Text)
+        End If
     End Sub
 
 
