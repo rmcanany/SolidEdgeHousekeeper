@@ -6,6 +6,8 @@ Imports System.Text.RegularExpressions
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports ExcelDataReader
 Imports MS.Internal
+Imports Newtonsoft.Json
+Imports SolidEdgeFrameworkSupport
 
 Public Class CommonTasks
 
@@ -1017,6 +1019,192 @@ Public Class CommonTasks
 
 
 
+    Shared Function VariablesEdit(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalExitStatus As Integer = 0
+
+        Dim VariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim VariableName As String
+
+        Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+        Dim Variables As SolidEdgeFramework.Variables = Nothing
+        Dim VariableListObject As SolidEdgeFramework.VariableList = Nothing
+        Dim Variable As SolidEdgeFramework.variable = Nothing
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+        Dim VariableTypeName As String
+
+        Dim VariablesToEdit As String = ""
+        Dim VariablesToExposeDict As New Dictionary(Of String, String)
+
+        Dim DocType As String
+
+        'Dim Proceed As Boolean = True
+        Dim tf As Boolean
+        'Dim s As String
+
+        DocType = GetDocType(SEDoc)
+        If DocType = "asm" Then VariablesToEdit = Configuration("TextBoxVariablesEditAssembly")
+        If DocType = "par" Then VariablesToEdit = Configuration("TextBoxVariablesEditPart")
+        If DocType = "psm" Then VariablesToEdit = Configuration("TextBoxVariablesEditSheetmetal")
+        If DocType = "dft" Then VariablesToEdit = Configuration("TextBoxVariablesEditDraft")
+
+        If Not VariablesToEdit = "" Then
+            VariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
+            ' Dictionary layout
+            '{
+            '    "v1":
+            '    {
+            '        "Formula":"1",
+            '        "Units":"Distance",
+            '        "Expose":"True",
+            '        "ExposeName":"var1"
+            '    },
+            '    ...
+            '}
+
+        Else
+            ExitStatus = 1
+            ErrorMessageList.Add("No variables provided")
+        End If
+
+        If ExitStatus = 0 Then
+            Try
+                Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+                VariableListObject = DirectCast(Variables.Query(pFindCriterium:="*",
+                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+                                  SolidEdgeFramework.VariableList)
+
+                ' Populate DocDimensionDict and DocVariableDict
+                For Each VariableListItem In VariableListObject.OfType(Of Object)()
+                    VariableTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+                    If VariableTypeName.ToLower() = "dimension" Then
+                        Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+                        DocDimensionDict(Dimension.DisplayName) = Dimension
+                    ElseIf VariableTypeName.ToLower() = "variable" Then
+                        Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+                        DocVariableDict(Variable.DisplayName) = Variable
+                    End If
+                Next
+
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to access variables")
+            End Try
+
+        End If
+
+        If ExitStatus = 0 Then
+            ' Process variables.
+            For Each VariableName In VariablesToEditDict.Keys
+                Dim Formula As String = VariablesToEditDict(VariableName)("Formula").Trim
+                Dim Units As SolidEdgeConstants.UnitTypeConstants = GetUnits(VariablesToEditDict(VariableName)("Units").Trim)
+                Dim Expose As Boolean = VariablesToEditDict(VariableName)("Expose").Trim.ToLower = "true"
+                Dim ExposeName As String = VariablesToEditDict(VariableName)("ExposeName").Trim
+
+                tf = DocDimensionDict.Keys.Contains(VariableName)
+                tf = tf Or DocVariableDict.Keys.Contains(VariableName)
+
+                If Not tf Then  ' Add it.
+                    If Formula = "" Then  ' Can't add a variable without a formula
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
+                        Continue For
+                    End If
+
+                    Try
+                        ' Pretty sure this must be a variable, not a dimension.
+                        Variable = Variables.Add(VariableName, Formula, Units)
+                        If Expose Then
+                            Variable.Expose = CInt(Expose)
+                            If Not ExposeName = "" Then
+                                Variable.ExposeName = ExposeName
+                            End If
+                        End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  Check name and formula.", VariableName))
+
+                    End Try
+
+                Else  ' Edit and/or Expose.
+                    Try
+                        If DocDimensionDict.Keys.Contains(VariableName) Then
+                            Dimension = DocDimensionDict(VariableName)
+                            If Expose Then
+                                Dimension.Expose = CInt(Expose)
+                                If Not ExposeName = "" Then
+                                    Dimension.ExposeName = ExposeName
+                                End If
+                            End If
+                            If Not Formula = "" Then
+                                Dimension.Formula = Formula
+                            End If
+
+                        ElseIf DocVariableDict.Keys.Contains(VariableName) Then
+                            Variable = DocVariableDict(VariableName)
+                            If Expose Then
+                                Variable.Expose = CInt(Expose)
+                                If Not ExposeName = "" Then
+                                    Variable.ExposeName = ExposeName
+                                End If
+                            End If
+                            If Not Formula = "" Then
+                                Variable.Formula = Formula
+                            End If
+
+                        End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to change variable '{0}'", VariableName))
+                    End Try
+
+                End If
+            Next
+
+        End If
+
+        If ExitStatus = 0 Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Shared Function GetUnits(Name As String) As SolidEdgeConstants.UnitTypeConstants
+        Dim UnitType As SolidEdgeConstants.UnitTypeConstants
+
+        UnitType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
+
+        For Each UnitTypeConstant As SolidEdgeConstants.UnitTypeConstants In System.Enum.GetValues(GetType(SolidEdgeConstants.UnitTypeConstants))
+            If Name = UnitTypeConstant.ToString.Replace("igUnit", "") Then
+                UnitType = UnitTypeConstant
+                Exit For
+            End If
+        Next
+
+        Return UnitType
+    End Function
     Shared Function ExposeVariables(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),

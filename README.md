@@ -674,16 +674,8 @@ In addition to plain text and pattern matching, you can also use a property form
 
 If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-#### Expose variables
-Exposes entries from the variable table, making them available as a Custom property. Enter the names as a comma-delimited list in the `Variables to expose` textbox. Optionally include a different Expose Name, set off by the colon `:` character. 
-
-For example `var1, var2, var3`
-
-Or `var1: Length, var2: Width, var3: Height`
-
-Or a combination `var1: Length, var2, var3`
-
-Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. Actually there's nothing stopping you, but it will not do what you want. 
+#### Variables add/edit/expose
+Add, changes, and/or exposes variables.
 
 #### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
@@ -750,7 +742,7 @@ Same as the Assembly command of the same name.
 #### Property find replace
 Same as the Assembly command of the same name.
 
-#### Expose variables
+#### Variables add/edit/expose
 Same as the Assembly command of the same name.
 
 #### Update face and view styles from template
@@ -811,7 +803,7 @@ Same as the Assembly command of the same name.
 #### Property find replace
 Same as the Assembly command of the same name.
 
-#### Expose variables
+#### Variables add/edit/expose
 Same as the Assembly command of the same name.
 
 #### Update face and view styles from template

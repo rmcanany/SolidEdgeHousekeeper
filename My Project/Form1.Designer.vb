@@ -65,8 +65,7 @@ Partial Class Form1
         Me.CheckBoxFindReplaceFindPTAssembly = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaAssembly = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaAssembly = New System.Windows.Forms.CheckBox()
-        Me.TextBoxExposeVariablesAssembly = New System.Windows.Forms.TextBox()
-        Me.LabelExposeVariablesAssembly = New System.Windows.Forms.Label()
+        Me.LabelVariablesEditAssembly = New System.Windows.Forms.Label()
         Me.TextBoxFindReplaceReplaceAssembly = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplaceFindAssembly = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplacePropertyNameAssembly = New System.Windows.Forms.TextBox()
@@ -86,8 +85,8 @@ Partial Class Form1
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
-        Me.ButtonVariableEditPart = New System.Windows.Forms.Button()
-        Me.TextBoxVariableEditPart = New System.Windows.Forms.TextBox()
+        Me.ButtonVariablesEditPart = New System.Windows.Forms.Button()
+        Me.TextBoxVariablesEditPart = New System.Windows.Forms.TextBox()
         Me.CheckBoxFindReplaceReplaceRXPart = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceReplacePTPart = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindRXPart = New System.Windows.Forms.CheckBox()
@@ -95,8 +94,7 @@ Partial Class Form1
         Me.CheckBoxFindReplaceFindPTPart = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaPart = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaPart = New System.Windows.Forms.CheckBox()
-        Me.TextBoxExposeVariablesPart = New System.Windows.Forms.TextBox()
-        Me.LabelExposeVariablesPart = New System.Windows.Forms.Label()
+        Me.LabelVariablesEditPart = New System.Windows.Forms.Label()
         Me.TextBoxFindReplaceReplacePart = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplaceFindPart = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplacePropertyNamePart = New System.Windows.Forms.TextBox()
@@ -123,8 +121,7 @@ Partial Class Form1
         Me.CheckBoxFindReplaceFindPTSheetmetal = New System.Windows.Forms.CheckBox()
         Me.TextBoxSaveAsFormulaSheetmetal = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaSheetmetal = New System.Windows.Forms.CheckBox()
-        Me.TextBoxExposeVariablesSheetmetal = New System.Windows.Forms.TextBox()
-        Me.LabelExposeVariablesSheetmetal = New System.Windows.Forms.Label()
+        Me.LabelVariablesEditSheetmetal = New System.Windows.Forms.Label()
         Me.TextBoxFindReplaceReplaceSheetmetal = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplaceFindSheetmetal = New System.Windows.Forms.TextBox()
         Me.TextBoxFindReplacePropertyNameSheetmetal = New System.Windows.Forms.TextBox()
@@ -350,6 +347,10 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.TextBoxVariablesEditAssembly = New System.Windows.Forms.TextBox()
+        Me.ButtonVariablesEditAssembly = New System.Windows.Forms.Button()
+        Me.TextBoxVariablesEditSheetmetal = New System.Windows.Forms.TextBox()
+        Me.ButtonVariablesEditSheetmetal = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -709,6 +710,8 @@ Partial Class Form1
         '
         Me.TabPageAssembly.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageAssembly.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageAssembly.Controls.Add(Me.ButtonVariablesEditAssembly)
+        Me.TabPageAssembly.Controls.Add(Me.TextBoxVariablesEditAssembly)
         Me.TabPageAssembly.Controls.Add(Me.CheckBoxFindReplaceReplaceRXAssembly)
         Me.TabPageAssembly.Controls.Add(Me.CheckBoxFindReplaceReplacePTAssembly)
         Me.TabPageAssembly.Controls.Add(Me.CheckBoxFindReplaceFindRXAssembly)
@@ -716,8 +719,7 @@ Partial Class Form1
         Me.TabPageAssembly.Controls.Add(Me.CheckBoxFindReplaceFindPTAssembly)
         Me.TabPageAssembly.Controls.Add(Me.TextBoxSaveAsFormulaAssembly)
         Me.TabPageAssembly.Controls.Add(Me.CheckBoxSaveAsFormulaAssembly)
-        Me.TabPageAssembly.Controls.Add(Me.TextBoxExposeVariablesAssembly)
-        Me.TabPageAssembly.Controls.Add(Me.LabelExposeVariablesAssembly)
+        Me.TabPageAssembly.Controls.Add(Me.LabelVariablesEditAssembly)
         Me.TabPageAssembly.Controls.Add(Me.TextBoxFindReplaceReplaceAssembly)
         Me.TabPageAssembly.Controls.Add(Me.TextBoxFindReplaceFindAssembly)
         Me.TabPageAssembly.Controls.Add(Me.TextBoxFindReplacePropertyNameAssembly)
@@ -815,24 +817,15 @@ Partial Class Form1
         Me.CheckBoxSaveAsFormulaAssembly.Text = "Use subdirectory formula"
         Me.CheckBoxSaveAsFormulaAssembly.UseVisualStyleBackColor = True
         '
-        'TextBoxExposeVariablesAssembly
+        'LabelVariablesEditAssembly
         '
-        Me.TextBoxExposeVariablesAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExposeVariablesAssembly.Location = New System.Drawing.Point(8, 653)
-        Me.TextBoxExposeVariablesAssembly.Name = "TextBoxExposeVariablesAssembly"
-        Me.TextBoxExposeVariablesAssembly.Size = New System.Drawing.Size(462, 22)
-        Me.TextBoxExposeVariablesAssembly.TabIndex = 19
-        '
-        'LabelExposeVariablesAssembly
-        '
-        Me.LabelExposeVariablesAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelExposeVariablesAssembly.AutoSize = True
-        Me.LabelExposeVariablesAssembly.Location = New System.Drawing.Point(8, 630)
-        Me.LabelExposeVariablesAssembly.Name = "LabelExposeVariablesAssembly"
-        Me.LabelExposeVariablesAssembly.Size = New System.Drawing.Size(100, 15)
-        Me.LabelExposeVariablesAssembly.TabIndex = 18
-        Me.LabelExposeVariablesAssembly.Text = "Variables to expose"
+        Me.LabelVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelVariablesEditAssembly.AutoSize = True
+        Me.LabelVariablesEditAssembly.Location = New System.Drawing.Point(8, 630)
+        Me.LabelVariablesEditAssembly.Name = "LabelVariablesEditAssembly"
+        Me.LabelVariablesEditAssembly.Size = New System.Drawing.Size(133, 15)
+        Me.LabelVariablesEditAssembly.TabIndex = 18
+        Me.LabelVariablesEditAssembly.Text = "Variables edit/add/expose"
         '
         'TextBoxFindReplaceReplaceAssembly
         '
@@ -1033,8 +1026,8 @@ Partial Class Form1
         '
         Me.TabPagePart.BackColor = System.Drawing.SystemColors.Control
         Me.TabPagePart.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TabPagePart.Controls.Add(Me.ButtonVariableEditPart)
-        Me.TabPagePart.Controls.Add(Me.TextBoxVariableEditPart)
+        Me.TabPagePart.Controls.Add(Me.ButtonVariablesEditPart)
+        Me.TabPagePart.Controls.Add(Me.TextBoxVariablesEditPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceReplaceRXPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceReplacePTPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceFindRXPart)
@@ -1042,8 +1035,7 @@ Partial Class Form1
         Me.TabPagePart.Controls.Add(Me.CheckBoxFindReplaceFindPTPart)
         Me.TabPagePart.Controls.Add(Me.TextBoxSaveAsFormulaPart)
         Me.TabPagePart.Controls.Add(Me.CheckBoxSaveAsFormulaPart)
-        Me.TabPagePart.Controls.Add(Me.TextBoxExposeVariablesPart)
-        Me.TabPagePart.Controls.Add(Me.LabelExposeVariablesPart)
+        Me.TabPagePart.Controls.Add(Me.LabelVariablesEditPart)
         Me.TabPagePart.Controls.Add(Me.TextBoxFindReplaceReplacePart)
         Me.TabPagePart.Controls.Add(Me.TextBoxFindReplaceFindPart)
         Me.TabPagePart.Controls.Add(Me.TextBoxFindReplacePropertyNamePart)
@@ -1071,24 +1063,24 @@ Partial Class Form1
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
         '
-        'ButtonVariableEditPart
+        'ButtonVariablesEditPart
         '
-        Me.ButtonVariableEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariableEditPart.Location = New System.Drawing.Point(400, 650)
-        Me.ButtonVariableEditPart.Name = "ButtonVariableEditPart"
-        Me.ButtonVariableEditPart.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonVariableEditPart.TabIndex = 36
-        Me.ButtonVariableEditPart.Text = "Edit"
-        Me.ButtonVariableEditPart.UseVisualStyleBackColor = True
+        Me.ButtonVariablesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariablesEditPart.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariablesEditPart.Name = "ButtonVariablesEditPart"
+        Me.ButtonVariablesEditPart.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariablesEditPart.TabIndex = 36
+        Me.ButtonVariablesEditPart.Text = "Edit"
+        Me.ButtonVariablesEditPart.UseVisualStyleBackColor = True
         '
-        'TextBoxVariableEditPart
+        'TextBoxVariablesEditPart
         '
-        Me.TextBoxVariableEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TextBoxVariablesEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariableEditPart.Location = New System.Drawing.Point(8, 650)
-        Me.TextBoxVariableEditPart.Name = "TextBoxVariableEditPart"
-        Me.TextBoxVariableEditPart.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxVariableEditPart.TabIndex = 35
+        Me.TextBoxVariablesEditPart.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariablesEditPart.Name = "TextBoxVariablesEditPart"
+        Me.TextBoxVariablesEditPart.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariablesEditPart.TabIndex = 35
         '
         'CheckBoxFindReplaceReplaceRXPart
         '
@@ -1160,24 +1152,15 @@ Partial Class Form1
         Me.CheckBoxSaveAsFormulaPart.Text = "Use subdirectory formula"
         Me.CheckBoxSaveAsFormulaPart.UseVisualStyleBackColor = True
         '
-        'TextBoxExposeVariablesPart
+        'LabelVariablesEditPart
         '
-        Me.TextBoxExposeVariablesPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExposeVariablesPart.Location = New System.Drawing.Point(8, 675)
-        Me.TextBoxExposeVariablesPart.Name = "TextBoxExposeVariablesPart"
-        Me.TextBoxExposeVariablesPart.Size = New System.Drawing.Size(467, 22)
-        Me.TextBoxExposeVariablesPart.TabIndex = 27
-        '
-        'LabelExposeVariablesPart
-        '
-        Me.LabelExposeVariablesPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelExposeVariablesPart.AutoSize = True
-        Me.LabelExposeVariablesPart.Location = New System.Drawing.Point(8, 630)
-        Me.LabelExposeVariablesPart.Name = "LabelExposeVariablesPart"
-        Me.LabelExposeVariablesPart.Size = New System.Drawing.Size(100, 15)
-        Me.LabelExposeVariablesPart.TabIndex = 26
-        Me.LabelExposeVariablesPart.Text = "Variables to expose"
+        Me.LabelVariablesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelVariablesEditPart.AutoSize = True
+        Me.LabelVariablesEditPart.Location = New System.Drawing.Point(8, 630)
+        Me.LabelVariablesEditPart.Name = "LabelVariablesEditPart"
+        Me.LabelVariablesEditPart.Size = New System.Drawing.Size(133, 15)
+        Me.LabelVariablesEditPart.TabIndex = 26
+        Me.LabelVariablesEditPart.Text = "Variables edit/add/expose"
         '
         'TextBoxFindReplaceReplacePart
         '
@@ -1377,6 +1360,8 @@ Partial Class Form1
         '
         Me.TabPageSheetmetal.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageSheetmetal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageSheetmetal.Controls.Add(Me.ButtonVariablesEditSheetmetal)
+        Me.TabPageSheetmetal.Controls.Add(Me.TextBoxVariablesEditSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceReplaceRXSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceReplacePTSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceFindRXSheetmetal)
@@ -1384,8 +1369,7 @@ Partial Class Form1
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxFindReplaceFindPTSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.TextBoxSaveAsFormulaSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.CheckBoxSaveAsFormulaSheetmetal)
-        Me.TabPageSheetmetal.Controls.Add(Me.TextBoxExposeVariablesSheetmetal)
-        Me.TabPageSheetmetal.Controls.Add(Me.LabelExposeVariablesSheetmetal)
+        Me.TabPageSheetmetal.Controls.Add(Me.LabelVariablesEditSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.TextBoxFindReplaceReplaceSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.TextBoxFindReplaceFindSheetmetal)
         Me.TabPageSheetmetal.Controls.Add(Me.TextBoxFindReplacePropertyNameSheetmetal)
@@ -1483,24 +1467,15 @@ Partial Class Form1
         Me.CheckBoxSaveAsFormulaSheetmetal.Text = "Use subdirectory formula"
         Me.CheckBoxSaveAsFormulaSheetmetal.UseVisualStyleBackColor = True
         '
-        'TextBoxExposeVariablesSheetmetal
+        'LabelVariablesEditSheetmetal
         '
-        Me.TextBoxExposeVariablesSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExposeVariablesSheetmetal.Location = New System.Drawing.Point(8, 653)
-        Me.TextBoxExposeVariablesSheetmetal.Name = "TextBoxExposeVariablesSheetmetal"
-        Me.TextBoxExposeVariablesSheetmetal.Size = New System.Drawing.Size(467, 22)
-        Me.TextBoxExposeVariablesSheetmetal.TabIndex = 35
-        '
-        'LabelExposeVariablesSheetmetal
-        '
-        Me.LabelExposeVariablesSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelExposeVariablesSheetmetal.AutoSize = True
-        Me.LabelExposeVariablesSheetmetal.Location = New System.Drawing.Point(8, 630)
-        Me.LabelExposeVariablesSheetmetal.Name = "LabelExposeVariablesSheetmetal"
-        Me.LabelExposeVariablesSheetmetal.Size = New System.Drawing.Size(100, 15)
-        Me.LabelExposeVariablesSheetmetal.TabIndex = 34
-        Me.LabelExposeVariablesSheetmetal.Text = "Variables to expose"
+        Me.LabelVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelVariablesEditSheetmetal.AutoSize = True
+        Me.LabelVariablesEditSheetmetal.Location = New System.Drawing.Point(8, 630)
+        Me.LabelVariablesEditSheetmetal.Name = "LabelVariablesEditSheetmetal"
+        Me.LabelVariablesEditSheetmetal.Size = New System.Drawing.Size(133, 15)
+        Me.LabelVariablesEditSheetmetal.TabIndex = 34
+        Me.LabelVariablesEditSheetmetal.Text = "Variables edit/add/expose"
         '
         'TextBoxFindReplaceReplaceSheetmetal
         '
@@ -3960,6 +3935,44 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'TextBoxVariablesEditAssembly
+        '
+        Me.TextBoxVariablesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxVariablesEditAssembly.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariablesEditAssembly.Name = "TextBoxVariablesEditAssembly"
+        Me.TextBoxVariablesEditAssembly.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariablesEditAssembly.TabIndex = 27
+        '
+        'ButtonVariablesEditAssembly
+        '
+        Me.ButtonVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariablesEditAssembly.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariablesEditAssembly.Name = "ButtonVariablesEditAssembly"
+        Me.ButtonVariablesEditAssembly.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariablesEditAssembly.TabIndex = 28
+        Me.ButtonVariablesEditAssembly.Text = "Edit"
+        Me.ButtonVariablesEditAssembly.UseVisualStyleBackColor = True
+        '
+        'TextBoxVariablesEditSheetmetal
+        '
+        Me.TextBoxVariablesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxVariablesEditSheetmetal.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariablesEditSheetmetal.Name = "TextBoxVariablesEditSheetmetal"
+        Me.TextBoxVariablesEditSheetmetal.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariablesEditSheetmetal.TabIndex = 44
+        '
+        'ButtonVariablesEditSheetmetal
+        '
+        Me.ButtonVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariablesEditSheetmetal.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariablesEditSheetmetal.Name = "ButtonVariablesEditSheetmetal"
+        Me.ButtonVariablesEditSheetmetal.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariablesEditSheetmetal.TabIndex = 45
+        Me.ButtonVariablesEditSheetmetal.Text = "Edit"
+        Me.ButtonVariablesEditSheetmetal.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 15.0!)
@@ -4120,12 +4133,9 @@ Partial Class Form1
     Friend WithEvents CheckBoxWatermark As CheckBox
     Friend WithEvents ButtonWatermark As Button
     Friend WithEvents TextBoxWatermarkFilename As TextBox
-    Friend WithEvents TextBoxExposeVariablesAssembly As TextBox
-    Friend WithEvents LabelExposeVariablesAssembly As Label
-    Friend WithEvents TextBoxExposeVariablesPart As TextBox
-    Friend WithEvents LabelExposeVariablesPart As Label
-    Friend WithEvents TextBoxExposeVariablesSheetmetal As TextBox
-    Friend WithEvents LabelExposeVariablesSheetmetal As Label
+    Friend WithEvents LabelVariablesEditAssembly As Label
+    Friend WithEvents LabelVariablesEditPart As Label
+    Friend WithEvents LabelVariablesEditSheetmetal As Label
     Friend WithEvents TextBoxSaveAsFormulaSheetmetal As TextBox
     Friend WithEvents CheckBoxSaveAsFormulaSheetmetal As CheckBox
     Friend WithEvents TextBoxSaveAsFormulaAssembly As TextBox
@@ -4356,6 +4366,10 @@ Partial Class Form1
     Friend WithEvents TextBoxFontSize As TextBox
     Friend WithEvents LabelFontSize As Label
     Friend WithEvents CheckBoxEnablePrinter1 As CheckBox
-    Friend WithEvents ButtonVariableEditPart As Button
-    Friend WithEvents TextBoxVariableEditPart As TextBox
+    Friend WithEvents ButtonVariablesEditPart As Button
+    Friend WithEvents TextBoxVariablesEditPart As TextBox
+    Friend WithEvents ButtonVariablesEditAssembly As Button
+    Friend WithEvents TextBoxVariablesEditAssembly As TextBox
+    Friend WithEvents ButtonVariablesEditSheetmetal As Button
+    Friend WithEvents TextBoxVariablesEditSheetmetal As TextBox
 End Class

@@ -19,7 +19,7 @@ Public Class LabelToAction
         Public Property RequiresPrinter As Boolean
         Public Property RequiresPictorialView As Boolean
         Public Property RequiresForegroundProcessing As Boolean
-        Public Property RequiresExposeVariables As Boolean
+        Public Property RequiresVariablesToEdit As Boolean
 
 
 
@@ -58,7 +58,7 @@ Public Class LabelToAction
                             Optional RequiresPrinter As Boolean = False,
                             Optional RequiresPictorialView As Boolean = False,
                             Optional RequiresForegroundProcessing As Boolean = False,
-                            Optional RequiresExposeVariables As Boolean = False)
+                            Optional RequiresVariablesToEdit As Boolean = False)
 
         Entry.TaskName = TaskName
         Entry.HelpText = HelpText
@@ -75,7 +75,7 @@ Public Class LabelToAction
         Entry.RequiresPrinter = RequiresPrinter
         Entry.RequiresPictorialView = RequiresPictorialView
         Entry.RequiresForegroundProcessing = RequiresForegroundProcessing
-        Entry.RequiresExposeVariables = RequiresExposeVariables
+        Entry.RequiresVariablesToEdit = RequiresVariablesToEdit
 
         Me(LabelText) = Entry
 
@@ -136,6 +136,14 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
+        Dim VariablesEdit As New L2A
+        HelpString = "Add, changes, and/or exposes variables."
+        PopulateList(VariablesEdit,
+                     "Variables add/edit/expose",
+                     "VariablesEdit",
+                     HelpString,
+                     RequiresVariablesToEdit:=True)
+
         'Dim ExposeVariablesMissing As New L2A
         'HelpString = "Checks to see if all the variables listed in `Variables to expose` are present in the document."
         'PopulateList(ExposeVariablesMissing,
@@ -144,21 +152,21 @@ Public Class LabelToAction
         '             HelpString,
         '             RequiresExposeVariables:=True)
 
-        Dim ExposeVariables As New L2A
-        HelpString = "Exposes entries from the variable table, making them available as a Custom property. "
-        HelpString += "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
-        HelpString += "Optionally include a different Expose Name, set off by the colon `:` character. "
-        HelpString += vbCrLf + vbCrLf + "For example `var1, var2, var3`"
-        HelpString += vbCrLf + vbCrLf + "Or `var1: Length, var2: Width, var3: Height`"
-        HelpString += vbCrLf + vbCrLf + "Or a combination `var1: Length, var2, var3`"
-        HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. "
-        HelpString += "Actually there's nothing stopping you, but it will not do what you want. "
-        PopulateList(ExposeVariables,
-                     "Expose variables",
-                     "ExposeVariables",
-                     HelpString,
-                     RequiresSave:=True,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariables As New L2A
+        'HelpString = "Exposes entries from the variable table, making them available as a Custom property. "
+        'HelpString += "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
+        'HelpString += "Optionally include a different Expose Name, set off by the colon `:` character. "
+        'HelpString += vbCrLf + vbCrLf + "For example `var1, var2, var3`"
+        'HelpString += vbCrLf + vbCrLf + "Or `var1: Length, var2: Width, var3: Height`"
+        'HelpString += vbCrLf + vbCrLf + "Or a combination `var1: Length, var2, var3`"
+        'HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. "
+        'HelpString += "Actually there's nothing stopping you, but it will not do what you want. "
+        'PopulateList(ExposeVariables,
+        '             "Expose variables",
+        '             "ExposeVariables",
+        '             HelpString,
+        '             RequiresSave:=True,
+        '             RequiresVariablesToEdit:=True)
 
         Dim RemoveFaceStyleOverrides As New L2A
         HelpString = "Face style overrides change a part's appearance in the assembly. "
@@ -314,6 +322,14 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
+        Dim VariablesEdit As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(VariablesEdit,
+                     "Variables add/edit/expose",
+                     "VariablesEdit",
+                     HelpString,
+                     RequiresVariablesToEdit:=True)
+
         'Dim ExposeVariablesMissing As New L2A
         'HelpString = "Same as the Assembly command of the same name."
         'PopulateList(ExposeVariablesMissing,
@@ -322,14 +338,14 @@ Public Class LabelToAction
         '             HelpString,
         '             RequiresExposeVariables:=True)
 
-        Dim ExposeVariables As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(ExposeVariables,
-                     "Expose variables",
-                     "ExposeVariables",
-                     HelpString,
-                     RequiresSave:=True,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariables As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(ExposeVariables,
+        '             "Expose variables",
+        '             "ExposeVariables",
+        '             HelpString,
+        '             RequiresSave:=True,
+        '             RequiresVariablesToEdit:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Assembly command of the same name."
@@ -485,6 +501,14 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
+        Dim VariablesEdit As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(VariablesEdit,
+                     "Variables add/edit/expose",
+                     "VariablesEdit",
+                     HelpString,
+                     RequiresVariablesToEdit:=True)
+
         'Dim ExposeVariablesMissing As New L2A
         'HelpString = "Same as the Assembly command of the same name."
         'PopulateList(ExposeVariablesMissing,
@@ -493,14 +517,14 @@ Public Class LabelToAction
         '             HelpString,
         '             RequiresExposeVariables:=True)
 
-        Dim ExposeVariables As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(ExposeVariables,
-                     "Expose variables",
-                     "ExposeVariables",
-                     HelpString,
-                     RequiresSave:=True,
-                     RequiresExposeVariables:=True)
+        'Dim ExposeVariables As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(ExposeVariables,
+        '             "Expose variables",
+        '             "ExposeVariables",
+        '             HelpString,
+        '             RequiresSave:=True,
+        '             RequiresVariablesToEdit:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Part command of the same name."

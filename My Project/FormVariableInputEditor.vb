@@ -14,6 +14,7 @@ Public Class FormVariableInputEditor
     Private ColumnNames As New List(Of String)
     Dim ColumnControlsList As New List(Of String)
     Dim PopulatingControls As Boolean
+    Dim CallingFileType As String
 
     Public Sub New()
 
@@ -122,8 +123,8 @@ Public Class FormVariableInputEditor
 
             VariableNameControl = String.Format("TextBox{0}VariableName", RowIndex)
             TextBox = ControlsDict(VariableNameControl)
-            VariableName = TextBox.Text
-            If Not VariableName.Trim = "" Then
+            VariableName = TextBox.Text.Trim
+            If Not VariableName = "" Then
                 TableValuesDict(VariableName) = New Dictionary(Of String, String)
 
                 For Each s In ColumnNames.Zip(Of String, String)(ColumnControlsList, Function(x, y) x + ":" + y)
@@ -136,13 +137,13 @@ Public Class FormVariableInputEditor
                     If ColumnControlType = "TextBox" Then
                         ControlName = String.Format("TextBox{0}{1}", RowIndex, ColumnName)
                         TextBox = ControlsDict(ControlName)
-                        TableValuesDict(VariableName)(ColumnName) = TextBox.Text
+                        TableValuesDict(VariableName)(ColumnName) = TextBox.Text.Trim
                     End If
 
                     If ColumnControlType = "ComboBox" Then
                         ControlName = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
                         ComboBox = ControlsDict(ControlName)
-                        TableValuesDict(VariableName)(ColumnName) = ComboBox.Text
+                        TableValuesDict(VariableName)(ColumnName) = ComboBox.Text.Trim
                     End If
 
                     If ColumnControlType = "CheckBox" Then
@@ -154,7 +155,11 @@ Public Class FormVariableInputEditor
             End If
         Next
 
-        TextBoxResult.Text = JsonConvert.SerializeObject(TableValuesDict)
+        If ControlsDict.Count > 0 Then
+            TextBoxResult.Text = JsonConvert.SerializeObject(TableValuesDict)
+        Else
+            TextBoxResult.Text = ""
+        End If
 
 
     End Sub
@@ -177,7 +182,9 @@ Public Class FormVariableInputEditor
 
         ControlsDict = GetControlsDict()
 
-        TextBoxResult.Text = Form1.TextBoxVariableEditPart.Text
+        If CallingFileType = "asm" Then TextBoxResult.Text = Form1.TextBoxVariablesEditAssembly.Text
+        If CallingFileType = "par" Then TextBoxResult.Text = Form1.TextBoxVariablesEditPart.Text
+        If CallingFileType = "psm" Then TextBoxResult.Text = Form1.TextBoxVariablesEditSheetmetal.Text
 
         If Not TextBoxResult.Text = "" Then
             ' Possible to have bogus string in Form1.TextBox1
@@ -188,6 +195,10 @@ Public Class FormVariableInputEditor
                 Proceed = False
             End Try
         Else
+            Proceed = False
+        End If
+
+        If TableValuesDict Is Nothing Then
             Proceed = False
         End If
 
@@ -265,10 +276,14 @@ Public Class FormVariableInputEditor
 
 
     Public Sub ShowInputEditor(Filter As String)
+        CallingFileType = Filter
+
         If Filter = "asm" Then CheckBoxCopyToAsm.Enabled = False
         If Filter = "par" Then CheckBoxCopyToPar.Enabled = False
         If Filter = "psm" Then CheckBoxCopyToPsm.Enabled = False
-        If Filter = "dft" Then CheckBoxCopyToDraft.Enabled = False
+        'If Filter = "dft" Then CheckBoxCopyToDraft.Enabled = False
+
+        CheckBoxCopyToDraft.Enabled = False
 
         Me.ShowDialog()
 

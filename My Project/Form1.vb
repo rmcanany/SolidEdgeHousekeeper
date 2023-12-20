@@ -377,9 +377,9 @@ Public Class Form1
                 End If
             End If
 
-            If LabelToActionAssembly(Label).RequiresExposeVariables Then
-                If TextBoxExposeVariablesAssembly.Text = "" Then
-                    msg2 = indent + "Enter as least one Assembly variable to check/expose"
+            If LabelToActionAssembly(Label).RequiresVariablesToEdit Then
+                If TextBoxVariablesEditAssembly.Text = "" Then
+                    msg2 = indent + "Enter as least one Assembly variable to edit/add/expose"
                     If Not msg.Contains(msg2) Then
                         msg += msg2 + Chr(13)
                     End If
@@ -508,9 +508,9 @@ Public Class Form1
                 End If
             End If
 
-            If LabelToActionPart(Label).RequiresExposeVariables Then
-                If TextBoxExposeVariablesPart.Text = "" Then
-                    msg2 = indent + "Enter as least one Part variable to check/expose"
+            If LabelToActionPart(Label).RequiresVariablesToEdit Then
+                If TextBoxVariablesEditPart.Text = "" Then
+                    msg2 = indent + "Enter as least one Part variable to add/edit/expose"
                     If Not msg.Contains(msg2) Then
                         msg += msg2 + Chr(13)
                     End If
@@ -657,9 +657,9 @@ Public Class Form1
                 End If
             End If
 
-            If LabelToActionSheetmetal(Label).RequiresExposeVariables Then
-                If TextBoxExposeVariablesSheetmetal.Text = "" Then
-                    msg2 = indent + "Enter as least one Sheetmetal variable to check/expose"
+            If LabelToActionSheetmetal(Label).RequiresVariablesToEdit Then
+                If TextBoxVariablesEditSheetmetal.Text = "" Then
+                    msg2 = indent + "Enter as least one Sheetmetal variable to edit/add/expose"
                     If Not msg.Contains(msg2) Then
                         msg += msg2 + Chr(13)
                     End If
@@ -1497,7 +1497,8 @@ Public Class Form1
         CheckBoxFindReplaceReplacePTAssembly.Enabled = False
         CheckBoxFindReplaceReplaceRXAssembly.Enabled = False
 
-        TextBoxExposeVariablesAssembly.Enabled = False
+        TextBoxVariablesEditAssembly.Enabled = False
+        ButtonVariablesEditAssembly.Enabled = False
 
         For Each Label As String In CheckedListBoxAssembly.CheckedItems
 
@@ -1537,8 +1538,9 @@ Public Class Form1
 
             End If
 
-            If LabelToActionAssembly(Label).RequiresExposeVariables Then
-                TextBoxExposeVariablesAssembly.Enabled = True
+            If LabelToActionAssembly(Label).RequiresVariablesToEdit Then
+                TextBoxVariablesEditAssembly.Enabled = True
+                ButtonVariablesEditAssembly.Enabled = True
             End If
 
         Next
@@ -1566,7 +1568,8 @@ Public Class Form1
         CheckBoxFindReplaceReplacePTPart.Enabled = False
         CheckBoxFindReplaceReplaceRXPart.Enabled = False
 
-        TextBoxExposeVariablesPart.Enabled = False
+        TextBoxVariablesEditPart.Enabled = False
+        ButtonVariablesEditPart.Enabled = False
 
         For Each Label As String In CheckedListBoxPart.CheckedItems
 
@@ -1605,8 +1608,9 @@ Public Class Form1
                 CheckBoxFindReplaceReplaceRXPart.Enabled = True
             End If
 
-            If LabelToActionPart(Label).RequiresExposeVariables Then
-                TextBoxExposeVariablesPart.Enabled = True
+            If LabelToActionPart(Label).RequiresVariablesToEdit Then
+                TextBoxVariablesEditPart.Enabled = True
+                ButtonVariablesEditPart.Enabled = True
             End If
 
         Next
@@ -1633,7 +1637,10 @@ Public Class Form1
         CheckBoxFindReplaceFindRXSheetmetal.Enabled = False
         CheckBoxFindReplaceReplacePTSheetmetal.Enabled = False
         CheckBoxFindReplaceReplaceRXSheetmetal.Enabled = False
-        TextBoxExposeVariablesSheetmetal.Enabled = False
+
+        TextBoxVariablesEditSheetmetal.Enabled = False
+        ButtonVariablesEditSheetmetal.Enabled = False
+
 
         For Each Label As String In CheckedListBoxSheetmetal.CheckedItems
 
@@ -1673,8 +1680,9 @@ Public Class Form1
                 CheckBoxFindReplaceReplaceRXSheetmetal.Enabled = True
             End If
 
-            If LabelToActionSheetmetal(Label).RequiresExposeVariables Then
-                TextBoxExposeVariablesSheetmetal.Enabled = True
+            If LabelToActionSheetmetal(Label).RequiresVariablesToEdit Then
+                TextBoxVariablesEditSheetmetal.Enabled = True
+                ButtonVariablesEditSheetmetal.Enabled = True
             End If
 
         Next
@@ -3354,15 +3362,57 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ButtonVariableEditPart_Click(sender As Object, e As EventArgs) Handles ButtonVariableEditPart.Click
+    Private Sub ButtonVariableEditPart_Click(sender As Object, e As EventArgs) Handles ButtonVariablesEditPart.Click
         Dim VariableInputEditor As New FormVariableInputEditor
         Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         VariableInputEditor.ShowInputEditor("par")
 
         If VariableInputEditor.DialogResult = DialogResult.OK Then
-            TextBoxVariableEditPart.Text = VariableInputEditor.TextBoxResult.Text
-            TableValuesDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariableInputEditor.TextBoxResult.Text)
+            TextBoxVariablesEditPart.Text = VariableInputEditor.TextBoxResult.Text
+
+            If VariableInputEditor.CheckBoxCopyToAsm.Checked Then
+                TextBoxVariablesEditAssembly.Text = TextBoxVariablesEditPart.Text
+            End If
+            If VariableInputEditor.CheckBoxCopyToPsm.Checked Then
+                TextBoxVariablesEditSheetmetal.Text = TextBoxVariablesEditPart.Text
+            End If
+        End If
+    End Sub
+
+    Private Sub ButtonVariablesEditAssembly_Click(sender As Object, e As EventArgs) Handles ButtonVariablesEditAssembly.Click
+        Dim VariableInputEditor As New FormVariableInputEditor
+        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        VariableInputEditor.ShowInputEditor("asm")
+
+        If VariableInputEditor.DialogResult = DialogResult.OK Then
+            TextBoxVariablesEditAssembly.Text = VariableInputEditor.TextBoxResult.Text
+
+            If VariableInputEditor.CheckBoxCopyToPar.Checked Then
+                TextBoxVariablesEditPart.Text = TextBoxVariablesEditAssembly.Text
+            End If
+            If VariableInputEditor.CheckBoxCopyToPsm.Checked Then
+                TextBoxVariablesEditSheetmetal.Text = TextBoxVariablesEditAssembly.Text
+            End If
+        End If
+    End Sub
+
+    Private Sub ButtonVariablesEditSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonVariablesEditSheetmetal.Click
+        Dim VariableInputEditor As New FormVariableInputEditor
+        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        VariableInputEditor.ShowInputEditor("psm")
+
+        If VariableInputEditor.DialogResult = DialogResult.OK Then
+            TextBoxVariablesEditSheetmetal.Text = VariableInputEditor.TextBoxResult.Text
+
+            If VariableInputEditor.CheckBoxCopyToAsm.Checked Then
+                TextBoxVariablesEditAssembly.Text = TextBoxVariablesEditSheetmetal.Text
+            End If
+            If VariableInputEditor.CheckBoxCopyToPar.Checked Then
+                TextBoxVariablesEditPart.Text = TextBoxVariablesEditSheetmetal.Text
+            End If
         End If
     End Sub
 

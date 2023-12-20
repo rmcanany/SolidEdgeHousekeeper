@@ -228,7 +228,7 @@ Partial Class Form1
             tb.Text = Value
         End If
 
-        tf = tb.Name.ToLower.Contains("variableedit")
+        tf = tb.Name.ToLower.Contains("variablesedit")
         If tf Then
             tb.Text = Value
         End If
