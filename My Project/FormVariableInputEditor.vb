@@ -259,8 +259,8 @@ Public Class FormVariableInputEditor
         ' https://www.codeproject.com/Tips/842418/Designing-the-Layout-of-Windows-Forms-using-a
         ' https://www.vbforums.com/showthread.php?891013-How-to-iterate-rows-and-columns-in-TableLayoutPanel
 
-        ButtonMoveSelectedUp.Text = ChrW(8593)
-        ButtonMoveSelectedDown.Text = ChrW(8595)
+        'ButtonMoveSelectedUp.Text = ChrW(8593)
+        'ButtonMoveSelectedDown.Text = ChrW(8595)
 
         PopulateControls()
         RestoreVariables()

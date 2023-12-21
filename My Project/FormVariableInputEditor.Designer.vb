@@ -23,14 +23,15 @@ Partial Class FormVariableInputEditor
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormVariableInputEditor))
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.TextBoxResult = New System.Windows.Forms.TextBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ButtonClearSelected = New System.Windows.Forms.Button()
-        Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
-        Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
         Me.CheckBoxSelectAll = New System.Windows.Forms.CheckBox()
+        Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
+        Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
+        Me.ButtonClearSelected = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -46,6 +47,7 @@ Partial Class FormVariableInputEditor
         Me.CheckBoxCopyToPsm = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCopyToDraft = New System.Windows.Forms.CheckBox()
         Me.LabelCopyTo = New System.Windows.Forms.Label()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -83,45 +85,6 @@ Partial Class FormVariableInputEditor
         Me.TextBoxResult.Size = New System.Drawing.Size(492, 22)
         Me.TextBoxResult.TabIndex = 3
         '
-        'ButtonClearSelected
-        '
-        Me.ButtonClearSelected.BackColor = System.Drawing.Color.IndianRed
-        Me.ButtonClearSelected.Enabled = False
-        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.White
-        Me.ButtonClearSelected.Location = New System.Drawing.Point(6, 12)
-        Me.ButtonClearSelected.Name = "ButtonClearSelected"
-        Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 29)
-        Me.ButtonClearSelected.TabIndex = 0
-        Me.ButtonClearSelected.Text = "X"
-        Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
-        Me.ButtonClearSelected.UseVisualStyleBackColor = False
-        '
-        'ButtonMoveSelectedUp
-        '
-        Me.ButtonMoveSelectedUp.BackColor = System.Drawing.Color.DeepSkyBlue
-        Me.ButtonMoveSelectedUp.Enabled = False
-        Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(31, 12)
-        Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
-        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 29)
-        Me.ButtonMoveSelectedUp.TabIndex = 1
-        Me.ButtonMoveSelectedUp.Text = "U"
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
-        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
-        '
-        'ButtonMoveSelectedDown
-        '
-        Me.ButtonMoveSelectedDown.BackColor = System.Drawing.Color.DeepSkyBlue
-        Me.ButtonMoveSelectedDown.Enabled = False
-        Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(56, 12)
-        Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
-        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 29)
-        Me.ButtonMoveSelectedDown.TabIndex = 2
-        Me.ButtonMoveSelectedDown.Text = "D"
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
-        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
-        '
         'CheckBoxSelectAll
         '
         Me.CheckBoxSelectAll.Anchor = System.Windows.Forms.AnchorStyles.None
@@ -132,6 +95,46 @@ Partial Class FormVariableInputEditor
         Me.CheckBoxSelectAll.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckBoxSelectAll, "Select all")
         Me.CheckBoxSelectAll.UseVisualStyleBackColor = True
+        '
+        'ButtonMoveSelectedDown
+        '
+        Me.ButtonMoveSelectedDown.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedDown.Enabled = False
+        Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
+        Me.ButtonMoveSelectedDown.Image = Global.Housekeeper.My.Resources.Resources.down
+        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(52, 10)
+        Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
+        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonMoveSelectedDown.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
+        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
+        '
+        'ButtonMoveSelectedUp
+        '
+        Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedUp.Enabled = False
+        Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
+        Me.ButtonMoveSelectedUp.Image = Global.Housekeeper.My.Resources.Resources.up
+        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(31, 10)
+        Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
+        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonMoveSelectedUp.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
+        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
+        '
+        'ButtonClearSelected
+        '
+        Me.ButtonClearSelected.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonClearSelected.Enabled = False
+        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.White
+        Me.ButtonClearSelected.ImageKey = "Delete_16.png"
+        Me.ButtonClearSelected.ImageList = Me.ImageList1
+        Me.ButtonClearSelected.Location = New System.Drawing.Point(10, 10)
+        Me.ButtonClearSelected.Name = "ButtonClearSelected"
+        Me.ButtonClearSelected.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonClearSelected.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
+        Me.ButtonClearSelected.UseVisualStyleBackColor = False
         '
         'TableLayoutPanel1
         '
@@ -150,7 +153,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel1.Controls.Add(Me.Label5, 3, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 4, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 5, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 40)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 30)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 9
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58.0!))
@@ -195,11 +198,10 @@ Partial Class FormVariableInputEditor
         '
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Calibri", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(3, 38)
+        Me.Label4.Location = New System.Drawing.Point(3, 36)
         Me.Label4.Name = "Label4"
         Me.Label4.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.Label4.Size = New System.Drawing.Size(127, 13)
+        Me.Label4.Size = New System.Drawing.Size(133, 15)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Blank OK if only exposing"
         '
@@ -325,6 +327,12 @@ Partial Class FormVariableInputEditor
         Me.LabelCopyTo.TabIndex = 9
         Me.LabelCopyTo.Text = "Copy these settings to another tab"
         '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
+        '
         'FormVariableInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 15.0!)
@@ -380,4 +388,5 @@ Partial Class FormVariableInputEditor
     Friend WithEvents CheckBoxCopyToPsm As CheckBox
     Friend WithEvents CheckBoxCopyToDraft As CheckBox
     Friend WithEvents LabelCopyTo As Label
+    Friend WithEvents ImageList1 As ImageList
 End Class

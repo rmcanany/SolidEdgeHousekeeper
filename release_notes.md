@@ -1,15 +1,11 @@
 ﻿![Logo](My%20Project/media/logo.png)
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in 
-your project.  It is free and open source and you can find it 
-[**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
+Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
-Please note, the program has been tested on many of our files, but none 
-of yours.  Do not run it on production work without testing on backups first.
+Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Feel free to report bugs and/or ideas for improvement on the 
-[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Feel free to report bugs and/or ideas for improvement on the [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
 ## V2024.1 Enhancements/Fixes
 
@@ -17,14 +13,9 @@ Feel free to report bugs and/or ideas for improvement on the
 
 Contributed by our very own **o_o ....码**.  Thank you!
 
-A Housekeeper External Program that computes the difference in volume of
-a bent sheetmetal part and its flat pattern.
+A Housekeeper External Program that computes the difference in volume of a bent sheetmetal part and its flat pattern.
 
-The program addresses an issue where a flat pattern
-is created in the Synchronous environment.  If Ordered
-features are then added, they are not carried over to the flat pattern.
-Compounding the problem, even though it is
-out-of-date, the flat pattern is not flagged as such.
+The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
 
 ### Property Find/Replace
 
@@ -43,10 +34,7 @@ Added an option to not add files processed by Housekeeper to the MRU.
 (Thank you **@roger.ribamatic**, **@SatyenB**,
 **@Robin BIoemberg**!)
 
-Added a new file type, `PDF per Sheet` for drawings.  The output file name
-is of the format `<Filename>-<Sheetname>.pdf`.
-There is an option to suppress the `Sheetname` suffix
-on drawings with only one sheet.
+Added a new file type, `PDF per Sheet` for drawings.  The output file name is of the format `<Filename>-<Sheetname>.pdf`. There is an option to suppress the `Sheetname` suffix on drawings with only one sheet.
 
 Added another new file type `*.jt` for model files.
 
@@ -54,65 +42,37 @@ Added another new file type `*.jt` for model files.
 
 (Thank you **@Pedro0996**!)
 
-A Housekeeper External Program that gets the total quantity 
-of each part and subassembly in a given assembly
-and adds that information to the part (or subassembly) file. 
-In addition to the quantity, the program also records the assembly name 
-from which the quantity was derived. Both are added as custom properties, 
-making them available, for example, in a Callout in Draft. 
+A Housekeeper External Program that gets the total quantity of each part and subassembly in a given assembly and adds that information to the part (or subassembly) file. In addition to the quantity, the program also records the assembly name from which the quantity was derived. Both are added as custom properties, making them available, for example, in a Callout in Draft. 
 
-There are good reasons not to do this.
-The quantity is a static (non-associative) value, as is the
-source assembly name.  They can go stale without warning.
-However, several people, including me, wanted this, 
-so it got in.
+There are good reasons not to do this. The quantity is a static (non-associative) value, as is the source assembly name.  They can go stale without warning. However, several people, including me, wanted this, so it got in.
 
 ### File List
 
 (Thank you **@jnewell**, **@Robin BIoemberg**!)
 
-Added the ability to process files regardless of Document Status.
-After processing, the file can be reverted back to
-the old value, or changed to a new one.  These options
-are set on the **Configuration Tab -- Open/Save Page**.
+Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old value, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
 
 ![Open/Save](My%20Project/media/file_open_save_options.png)
 
-Fixed an issue where changing the Property Filter did not
-always set the out-of-date flag correctly.
+Fixed an issue where changing the Property Filter did not always set the out-of-date flag correctly.
 
 ### Update Drawing Views
 
-Fixed an issue where family of assembly drawings
-could not find the assembly file.  Fixed the same
-issue on the Broken Links Task.
+Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the Broken Links Task.
 
 ### Housekeeper External Program AddRemoveCustomProperties
 
-Added an option to remove all properties *except* those
-listed in the program settings file.
+Added an option to remove all properties *except* those listed in the program settings file.
 
 ### Property Filter
 
-Added an option to not check for properties of the models
-contained in Draft files.  Previous behavior was to
-always check.  Set the option on 
-the **Configuration Tab -- General Page**.
+Added an option to not check for properties of the models contained in Draft files.  Previous behavior was to always check.  Set the option on the **Configuration Tab -- General Page**.
 
-Since Draft files often do not have properties of their own,
-normally this option should be enabled.
-Searching for Document Status is another story.  For example,
-with the option set, an `In Work` drawing of a `Released` part would
-confusingly show up in a search for `Released` files.
+Since Draft files often do not have properties of their own, normally this option should be enabled. Searching for Document Status is another story.  For example, with the option set, an `In Work` drawing of a `Released` part would confusingly show up in a search for `Released` files.
 
-Added a section in the README on searching for 
-Document Status.  (Hint, you have to use a number, not a name.)
-See the 
-[**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) 
-section, Document Status topic.
+Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
 
-Fixed an issue where properties of Draft files themselves were
-sometimes not searched.
+Fixed an issue where properties of Draft files themselves were sometimes not searched.
 
 ### Configuration Tab
 
@@ -130,43 +90,27 @@ Added an optional second printer for selected sheet sizes.
 
 ![Configuration](My%20Project/media/printer_setup.png)
 
-Changed how a printer is selected.  It is now
-from a pre-populated list of installed printers. 
-Previously it was from the Windows Print dialog.  This was 
-confusing because clicking OK implied a document would be
-printed.
+Changed how a printer is selected.  It is now from a pre-populated list of installed printers. Previously it was from the Windows Print dialog.  This was confusing because clicking OK implied a document would be printed.
 
 Removed some other confusing control options.
 
 ### Preferences Folder
 
-Added a new location for user data.  It is now stored
-in Preferences in the Housekeeper root directory.
-Previously it was stored in the same folder as the
-executable and associated files, making it hard to
-identify user-specific files.
+Added a new location for user data.  It is now stored in Preferences in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
 
 ### Variables Edit/Add/Expose
 
 (Thank you **@Bert303**!)
 
-Added the ability to add, change and/or expose variables. 
-Multiple variables can be processed at a time.
-This is an extension of the previous `Expose Variables`
-command, which has now been removed.
+Added the ability to add, change and/or expose variables. Multiple variables can be processed at a time. This is an extension of the previous `Expose Variables` command, which has now been removed.
 
 ![Variable Input Form](My%20Project/media/variable_input_editor.png)
 
-Variables on the list that are not in the file can
-optionally be added automatically.  The option is set
-on the **Configuration Tab -- General Page**. 
+Variables on the list that are not in the file can optionally be added automatically.  The option is set on the **Configuration Tab -- General Page**. 
 
-The variables are processed in the order shown on the form.
-They can be moved up or down, or deleted, using the 
-buttons provided.
+The variables are processed in the order shown on the form. They can be moved up or down, or deleted, using the buttons provided.
 
-The settings from one tab can be copied to others,
-using the `Copy To` CheckBoxes as desired.
+The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
 
 
@@ -177,38 +121,27 @@ using the `Copy To` CheckBoxes as desired.
 Contributed by **@Fiorini** 
 (GitHub: [**@farfilli**](https://github.com/farfilli)).  Thank you!
 
-Uses the SolidEdgeCommunity OpenInBackground function 
-(Thank you **@JNewell**!).  Speedup varies -- from 3X to 10X 
-depending on the task.  The option is set on the
-**Configuration Tab**.
+Uses the SolidEdgeCommunity OpenInBackground function (Thank you **@JNewell**!).  Speedup varies -- from 3X to 10X depending on the task.  The option is set on the **Configuration Tab**.
 
-Some tasks (`Fit view`, `Interactive edit`, and `Save As`) are 
-incompatible with background processing.  The program checks
- and notifies the user of a conflict.  
+Some tasks (`Fit view`, `Interactive edit`, and `Save As`) are incompatible with background processing.  The program checks  and notifies the user of a conflict.  
 
-At this time, assemblies still run in the old mode -- 
-graphics hidden, not disabled.  
+At this time, assemblies still run in the old mode -- graphics hidden, not disabled.  
 
 ### Sort Order -- Random sampling
 
-Added an option to randomly select and shuffle a fraction of the total files 
-found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`.  Sort 
-options are set on the **Configuration Tab**.
+Added an option to randomly select and shuffle a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`.  Sort options are set on the **Configuration Tab**.
 
 ![Logo](My%20Project/media/file_sort_options.png)
 
-This option is primarily intended for software testing, 
-but can be used for any purpose.
+This option is primarily intended for software testing, but can be used for any purpose.
 
 ### Dependency-order Sort
 
-Fixed an issue, in top-level search mode, where the top level 
-assembly itself was not sorted correctly.
+Fixed an issue, in top-level search mode, where the top level assembly itself was not sorted correctly.
 
 ### Bottom Up Search 
 
-Fixed an issue where bottom up search was not returning 
-Family of Assemblies links.  
+Fixed an issue where bottom up search was not returning Family of Assemblies links.  
 
 
 ## V2023.5 Enhancements/Fixes
@@ -219,49 +152,32 @@ Contributed by **@Fiorini** (GitHub: [**@farfilli**](https://github.com/farfilli
 
 Now does an in-place update, rather than creating a new file.  
 
-The new method preserves the file creation date, which was requested by 
-several users.  It also reports styles and background 
-sheets not updated because they were not found in the template.
+The new method preserves the file creation date, which was requested by several users.  It also reports styles and background sheets not updated because they were not found in the template.
 
-These styles are processed: DimensionStyles, DrawingViewStyles, 
-LinearStyles, TableStyles, TextCharStyles, TextStyles.  
+These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles.  
 
-These are not: DashStyles, FillStyles, HatchPatternStyles, 
-SmartFrame2dStyles.  
+These are not: DashStyles, FillStyles, HatchPatternStyles, SmartFrame2dStyles.  
 
-The latter group encountered errors in testing.  However, the cause
-was not thoroughly investigated.  If you need them updated, 
-please ask on the Forum. 
+The latter group encountered errors in testing.  However, the cause was not thoroughly investigated.  If you need them updated, please ask on the Forum. 
 
-Note, the previous method (the one that creates a new file) is not 
-exposed in the user interface, but has not been removed from the 
-code.   If you prefer that version, please ask on the Forum.
+Note, the previous method (the one that creates a new file) is not exposed in the user interface, but has not been removed from the code.   If you prefer that version, please ask on the Forum.
 
 ### File List Sorting
 
-Added sorting options of `None`, `Alphabetic`, and 
-`Dependency` (Thank you **@HIL**). Previously
-the list was always sorted alphabetically.
+Added sorting options of `None`, `Alphabetic`, and `Dependency` (Thank you **@HIL**). Previously the list was always sorted alphabetically.
 
 ![File list sorting options](My%20Project/media/file_sort_options.png)
 
-The `Dependency` order is intended to help eliminate
-the annoying dark gray corners on drawings.  The `None` option is primarily 
-intended to preserve the order on imported lists.
+The `Dependency` order is intended to help eliminate the annoying dark gray corners on drawings.  The `None` option is primarily intended to preserve the order on imported lists.
 
 These options are set on the **Configuration Tab -- File List Group**.
 
 ### Update Part Copies
 
-Added an option to recursively update part copies.  It is yet
-another technique to help eliminate gray corners on drawings.
+Added an option to recursively update part copies.  It is yet another technique to help eliminate gray corners on drawings.
 
 Recursion means
-that if a Part Copy is encountered, the parent file is opened.
-If *that* file has a Part Copy, its parent is opened in turn.
-The program continues in this fashion until the base file
-(ie one with no Part Copies) is reached.
-It then updates each file in reverse order.
+that if a Part Copy is encountered, the parent file is opened. If *that* file has a Part Copy, its parent is opened in turn. The program continues in this fashion until the base file (ie one with no Part Copies) is reached. It then updates each file in reverse order.
 
 The option is set on the **Configuration Tab -- Miscellaneous Group**.
 
@@ -269,41 +185,29 @@ The option is set on the **Configuration Tab -- Miscellaneous Group**.
 
 Added this functionality for Draft files (Thank you **@Seva**).
 
-Includes wildcard search, Regex processing, and Property formula
-substitution.
-For details, see the Help topic under Assembly Tasks: Property
-Find/Replace.
+Includes wildcard search, Regex processing, and Property formula substitution. For details, see the Help topic under Assembly Tasks: Property Find/Replace.
 
 ![Draft Property Find/Replace](My%20Project/media/copy_model_properties_to_draft.png)
 
-The example shown above would populate the Draft file's Title with the
-Title of the model file.
+The example shown above would populate the Draft file's Title with the Title of the model file.
 
 ### Drawing View on Background Sheet
 
-Checks all background sheets of a Draft file for the presence
-of a drawing view.
+Checks all background sheets of a Draft file for the presence of a drawing view.
 
 ### Top Level Assembly Search
 
-Fixed an issue where a top-level search with no top-level folders
-resulted in no files being found (Thank you **@MonkTheOCD_Engie**)
+Fixed an issue where a top-level search with no top-level folders resulted in no files being found (Thank you **@MonkTheOCD_Engie**)
 
-Added the ability to report files unrelated to a top level
-assembly using a Bottom-Up search.  Previously only Top-Down
-search had this option.
+Added the ability to report files unrelated to a top level assembly using a Bottom-Up search.  Previously only Top-Down search had this option.
 
 ### File Drag and Drop
 
-Fixed an issue where files added by drag-and-drop were
-deleted from the list when running the `Update File List`
-command (Thank you **@HIL**).
+Fixed an issue where files added by drag-and-drop were deleted from the list when running the `Update File List` command (Thank you **@HIL**).
 
 ### Save As
 
-Added `Save Copy As` for all file types.  In the ComboBox, select
-the `Copy` option.  If you try to save a copy to the original folder,
-you will get an error.
+Added `Save Copy As` for all file types.  In the ComboBox, select the `Copy` option.  If you try to save a copy to the original folder, you will get an error.
 
 ## V2023.3 Enhancements/Fixes
 

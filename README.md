@@ -3,31 +3,20 @@
 <p align=center>Robert McAnany 2024
 
 **Contributors:**
-@farfilli (aka @[Francesco Arfilli]), @daysanduski, @mmtrebuchet, 
-@[o_o ....码]
+@farfilli (aka @[Francesco Arfilli]), @daysanduski, @mmtrebuchet, @[o_o ....码]
 
 **Beta Testers:**
-@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie,
-@HIL, @[Robin BIoemberg]
+@JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg]
 
 **Helpful feedback and bug reports:**
-@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, 
-@Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], 
-@[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, 
-@JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044,
-@KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic,
-@jnewell, @[Robin BIoemberg], @Pedro0996
+@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996
 
 **Notice:**
-*Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen,*
-*and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
+*Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
 
 ## DESCRIPTION
 
-Solid Edge Housekeeper helps you find annoying little errors in your project. 
-It can identify failed features in 3D models, detached dimensions in drawings, 
-missing parts in assemblies, and more.  It can also update certain individual 
-file settings to match those in a template you specify.
+Solid Edge Housekeeper helps you find annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -35,127 +24,70 @@ file settings to match those in a template you specify.
 
 *Feedback from users*
 
-> *This is the Michael Jordan of macros!  I've tried lots of them.  This is*
-> *on a whole other level.  Thank you!*
+> *This is the Michael Jordan of macros!  I've tried lots of them.  This is on a whole other level.  Thank you!*
 
 > *This is going to save me SO MUCH TIME!  Thank you for sharing!*
 
-> *Thank you for all your time and effort (...) Also thanks a lot for making it*
-> *open source. I constantly reference your code for my own macros, which motivates*
-> *me to make my projects open source as well.*
+> *Thank you for all your time and effort (...) Also thanks a lot for making it open source. I constantly reference your code for my own macros, which motivates me to make my projects open source as well.*
 
-> *Awesome. It looks like you are still overachieving with this app, and I thank*
-> *you for it. If they ever figure out how to automate me running Housekeeper, I*
-> *will be out of a job!*
+> *Awesome. It looks like you are still overachieving with this app, and I thank you for it. If they ever figure out how to automate me running Housekeeper, I will be out of a job!*
 
 > *Rad, this saves a mountain of time for me. Thanks!*
 
-Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
-Google's Bard said:
+Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", Google's Bard said:
 
 > *Why did the Solid Edge Housekeeper get a promotion?*  
 > *She was the only one who could clean up the mess that Solid Edge users make.*
 
 ## GETTING HELP
 
-Start with the Readme.  To quickly navigate, use the Table of Contents
-by clicking
-![Table of Contents](My%20Project/media/table_of_contents_icon.png)
-as shown in the image below.
+Start with the Readme.  To quickly navigate, use the Table of Contents by clicking ![Table of Contents](My%20Project/media/table_of_contents_icon.png) as shown in the image below.
 
 ![Table of Contents](My%20Project/media/table_of_contents.png)
 
-Ask questions, report bugs, or suggest improvements on the 
-[**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Ask questions, report bugs, or suggest improvements on the [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
 
 ## HELPING OUT
 
-If you want to make Housekeeper better, join us as a beta tester! 
-Beta testing is nothing more than conducting your own workflow on your own 
-files and telling me if you run into problems. 
-It isn't meant to be a lot of work. 
-The big idea is to make the program better for you and me and everyone else!
+If you want to make Housekeeper better, join us as a beta tester! Beta testing is nothing more than conducting your own workflow on your own files and telling me if you run into problems. It isn't meant to be a lot of work. The big idea is to make the program better for you and me and everyone else!
 
-To sign up, message me, RobertMcAnany, on the forum. 
-(The `Messages` button is hidden under your profile picture,
-at the very top right of the page). 
-Unsubscribe the same way. 
-To combat bots and spam, I will probably 
-ignore requests from `User16612341234...`. 
-(Change you nickname in `My Profile`,
-also under your profile picture). 
+To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
 
-If you know .NET, or want to learn, there's more
-to do!  To get started on GitHub collaboration, head over to
-[**ToyProject**](https://github.com/rmcanany/ToyProject). 
-There are instructions and links to get you up to speed.
+If you know .NET, or want to learn, there's more to do!  To get started on GitHub collaboration, head over to [**ToyProject**](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.
 
 
 ## INSTALLATION
 
-There is no installation *per se*.  The preferred method is to download or clone 
-the project and compile it yourself.
+There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
 
-The other option is to use the 
-[**Latest Release**](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). 
-It will be the top entry on the page. 
+The other option is to use the [**Latest Release**](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
 
 
 <p align="center">
   <img src="My%20Project/media/release_page.png">
 </p>
 
-Click the 
-file `SolidEdgeHousekeeper-VYYYY.N.zip` 
-(sometimes hidden under the Assets dropdown). 
-It should prompt you to save it. 
-Choose a convenient location on your machine. 
-Extract the zip file (probably by right-clicking and selecting Extract All). 
-Double-click the `.exe` file to run.
+Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (sometimes hidden under the Assets dropdown). It should prompt you to save it. Choose a convenient location on your machine. Extract the zip file (probably by right-clicking and selecting Extract All). Double-click the `.exe` file to run.
 
-The first time you run it, you may encounter the following dialog.  You can click 
-`More Info` followed by `Run Anyway` to launch the program.
-![Run Anyway](My%20Project/media/run_anyway.png)
+The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
 
-If you are upgrading from a previous release, you should be able to copy 
-the settings files from the old version to the new. 
-The files are stored in the Preferences folder. They are 
-`defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. 
-If you haven't used Property Filter, `property_filters.txt` won't be there. 
-Versions prior to 0.1.10 won't have `filename_charmap.txt` either. 
-Older versions had a file `printer_settings.dat`, which is no
-longer used.  You can safely delete it if you want.
+If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in the Preferences folder. They are `defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. If you haven't used Property Filter, `property_filters.txt` won't be there. Versions prior to 0.1.10 won't have `filename_charmap.txt` either. Older versions had a file `printer_settings.dat`, which is no longer used.  You can safely delete it if you want.
 
 
 ## OPERATION
 
 ![Tabs](My%20Project/media/tabs.png)
 
-On each file type's tab, select which tasks to perform. 
-On the Home tab, select which files to process. 
-You can select files by folder, subfolder, top-level assembly,
-top-level folder, list, or drag-and-drop.
-There can be any number of each, in any combination.
-You can refine the search using a property filter, a wildcard filter, or both. 
-See **FILE SELECTION AND FILTERING** below for details. 
+On each file type's tab, select which tasks to perform. On the Home tab, select which files to process. You can select files by folder, subfolder, top-level assembly, top-level folder, list, or drag-and-drop. There can be any number of each, in any combination. You can refine the search using a property filter, a wildcard filter, or both. See **FILE SELECTION AND FILTERING** below for details. 
 
-If any errors are found, a log file will be written 
-to your temp folder. 
-It will identify each error and the file in which it occurred. 
-When processing is complete, the log file is opened in Notepad for review.
+If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look for file names starting with 'Housekeeper' in the `%temp%` folder.
 
-The first time you use the program, some site-specific information is needed. 
-This includes the location of your templates, 
-your preferred printer, etc. 
-These are populated on the **Configuration Tab**.
+The first time you use the program, some site-specific information is needed. This includes the location of your templates, your preferred printer, etc. These are populated on the **Configuration Tab**.
 
 ![Status Bar](My%20Project/media/status_bar_ready.png)
 
-To start execution, click the `Process` button.  The status
-bar provides feedback to help you monitor progress. 
-You can also stop execution if desired.
-See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
+To start execution, click the `Process` button.  The status bar provides feedback to help you monitor progress. You can also stop execution if desired. See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
 
 
@@ -164,13 +96,9 @@ See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
 ### Selection
 
-The **Home Tab** is where you select which files to process.  As mentioned above,
-using the Selection Toolbar, you can select by folder, subfolder, top-level 
-assembly, top-level folder, or list.
-There can be any number of each, in any combination.  
+The **Home Tab** is where you select which files to process.  As mentioned above, using the Selection Toolbar, you can select by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
-Another option is to drag and drop files from Windows File Explorer. 
-You can use drag and drop and the toolbar in combination.
+Another option is to drag and drop files from Windows File Explorer. You can use drag and drop and the toolbar in combination.
 
 An alternative method is to select files with errors from a previous run. 
 
@@ -178,227 +106,117 @@ An alternative method is to select files with errors from a previous run.
 
 #### 1. Select by Folder
 
-Choose this option to select files within a single folder, 
-or a folder and its subfolders. 
-Referring to the diagram, 
-click ![Folder](Resources/icons8_Folder_16.png)
-to select a single folder, 
-click ![Folders](Resources/icons8_folder_tree_16.png)
-for a folder and sub folders.
+Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the diagram, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
 
 #### 2. Select by Top-Level Assembly
 
-Choose this option to select files linked to an assembly.
-Click ![Assembly](Resources/ST9%20-%20asm.png)
-to choose the assembly, 
-click ![Assembly Folders](Resources/icons8_Folders_16.png)
-to choose the search path for *where used* files. 
+Choose this option to select files linked to an assembly. Click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
 
-You would be asking for trouble specifying more than one
-top-level assembly.  However, you can have any number of folders.
-Note the program always includes subfolders for *where used* files.
+You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
 
 ![Top level assembly options](My%20Project/media/top_level_assy_options.png)
 
-A top level assembly search can optionally report files with no links to the 
-assembly.  Set this and other options on the **Configuration Tab -- Top Level 
-Assy Page**.
+A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the **Configuration Tab -- Top Level Assy Page**.
 
-When selecting a top-level assembly, you can 
-automatically include the folder in which it resides.
-This `auto include` option in on by default. 
+When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
 
-If `auto include` is turned off, 
-you do not have to specify any folders. 
-In that case, Housekeeper simply finds
-files directly linked to the specified assembly and subassemblies. 
-Note this means that no draft files will be found.
-For that reason, a warning is displayed.
-Disable the warning on the **Configuration Tab -- Top Level Assy Page**.
+If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed. Disable the warning on the **Configuration Tab -- Top Level Assy Page**.
 
-If you *do* specify one or more folders, there are two options for performing 
-*where used*, **Top Down** or **Bottom Up** (see next). 
-Guidelines are given below,
-however it's not a bad idea to try both methods to see which works best
-for you.
+If you *do* specify one or more folders, there are two options for performing *where used*, **Top Down** or **Bottom Up** (see next). Guidelines are given below, however it's not a bad idea to try both methods to see which works best for you.
 
 **Bottom Up**
 
-Bottom up is meant for general purpose (hopefully indexed) directories 
-(e.g., `\\BIG_SERVER\all_parts\`), where the number of files 
-in the folder(s) far exceed the number of files in the assembly. 
-The program gets links by recursion, then 
-finds draft files with *where used*. 
-If your draft files have the same name as the model they depict, 
-click that option and the program will bypass *where used*. 
+Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\\BIG_SERVER\all_parts\`), where the number of files in the folder(s) far exceed the number of files in the assembly. The program gets links by recursion, then finds draft files with *where used*. If your draft files have the same name as the model they depict, click that option and the program will bypass *where used*. 
 
-A bottom up search requires a valid Fast Search Scope filename, 
-(e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), 
-which tells the program if the specified folder is on an indexed drive. 
+A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), which tells the program if the specified folder is on an indexed drive. 
 
 **Top Down**
 
-Top down is meant for self-contained project directories 
-(e.g., `C:\Projects\Project123\`), where most of the files 
-in the folder(s) are related to the assembly. 
-The program launches Design Manager to open every file within and below the 
-top-level assembly folder(s). 
-As it does, it creates a graph of the links. 
-The graph is subsequently traversed to find related files. 
-I don't know how it works; my son did that part. 
+Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program launches Design Manager to open every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
 
 **Include parents of part copies option**
 
 ![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
 
-This option may be confusing.  Referring to the diagram, 
-note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`,
-while `C.par` is not.
-Enabling the option means that 
-`C.par` would be included in the search results.
+This option may be confusing.  Referring to the diagram, note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`, while `C.par` is not. Enabling the option means that `C.par` would be included in the search results.
 
 #### 3. Select by list
 
-Referring to the diagram, 
-click ![Import List](Resources/icons8_Import_16.png)
-to import a list, 
-click ![Export List](Resources/icons8_Export_16.png)
-to export one.  
+Referring to the diagram, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
 
-If you are importing a list from another source, be aware that the 
-file names must contain the full path.  E.g.,
-`D:\Projects\Project123\Partxyz.par`, not just `Project123\Partxyz.par`.
+If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
 
 #### 4. Tools
 
 **Select files with errors from the previous run**
 
-Click ![Errors](Resources/icons8_Error_16.png)
-to select only files that encountered an error. 
-All other files will be removed from the list.  To reproduce the 
-TODO list functionality from previous versions, you can export the 
-resultant list if desired.
+Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 
 **Remove all**
 
-Click ![Remove All](Resources/icons8_trash_16.png)
-to remove all folders and files from the list.
+Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
 
 **Shortcut menu**
 
-If you select one or more files on the list, you can click the right 
-mouse button for more options.  
+If you select one or more files on the list, you can click the right mouse button for more options.  
 
 ![Shortcut Menu](My%20Project/media/shortcut_menu.png)
 
 - **Open:** Opens the files in Solid Edge.
 - **Open folder:** Opens the files in Windows File Explorer.
-- **Find linked files:** Populates the list with files linked to 
-a top-level assembly.  Similar to **Update** but no other File Sources
-are processed.
-- **Process selected:** Runs selected Tasks on the selected files. 
-Same as clicking **Process** at the bottom of the **Home Tab**.
-- **Remove from list:** Moves the files to the *Excluded files* 
-section of the list.
+- **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
+- **Process selected:** Runs selected Tasks on the selected files. Same as clicking **Process** at the bottom of the **Home Tab**.
+- **Remove from list:** Moves the files to the *Excluded files* section of the list.
 
 #### 5. Update
 
-The update button 
-![Update](Resources/Synch_16.png)
-populates the file list from the File Sources and Filters.
-If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), 
-an update is required.
+The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), an update is required.
 
 #### 6. File Type
 
-You can limit the search to return only selected types of Solid Edge files.
-To do so, check/uncheck the appropriate File Type
-![Assembly](Resources/ST9%20-%20asm.png)
-![Part](Resources/ST9%20-%20par.png)
-![Sheet Metal](Resources/ST9%20-%20psm.png)
-![Draft](Resources/ST9%20-%20dft.png) 
+You can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
 
 ### Sorting
 
 ![File list sorting options](My%20Project/media/file_sort_options.png)
 
-You can choose sorting options of `Unsorted`, `Alphabetic`, 
-`Dependency`, or `Random sample`.  These options are set on the 
-**Configuration Tab -- Sorting Page**.
+You can choose sorting options of `Unsorted`, `Alphabetic`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
 
-The `Unsorted` option is primarily 
-intended to preserve the order of imported lists.
+The `Unsorted` option is primarily intended to preserve the order of imported lists.
 
-The `Dependency` option is useful in conjunction with
-the `Update part copy` commands.  It is intended to help eliminate
-the tedious `model out-of-date` (dark gray corners) on drawings. 
+The `Dependency` option is useful in conjunction with the `Update part copy` commands.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
 
-The dependency ordering is not fool proof.  It has trouble with
-mutual dependencies, such as Interpart copies.  I've had some luck
-simply running the process two times in a row.
+The dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running the process two times in a row.
 
-The `Random sample` option randomly selects and shuffles
- a fraction of the total files found.  The `Sample fraction`
-is a decimal number between `0.0` and `1.0`. 
-This option is primarily intended for software testing, 
-but can be used for any purpose.
+The `Random sample` option randomly selects and shuffles  a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 
 ### Document Status Options
 
-If you use the document Status functionality, 
-you know that some settings
-place the file in read-only mode. 
-These cannot normally be processed by Housekeeper.
+If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
-You can get around this by checking
-`Process files as Available regardless of document Status`.
-Set the option on the **Configuration Tab -- Open/Save Page**.
+You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Open/Save Page**.
 
 ![File open save options](My%20Project/media/file_open_save_options.png)
 
-After processing, you can choose to change the Status back to the old value, or pick a new one.
-In the example, I decided to change everything to Available.
-You can select the new Status by clicking the appropriate button in the table.
-For instance, if you wanted to convert all Baselined files to Released,
-you would click the last button on the second row.
+After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
-If you want simply to change the Status on a batch of files, 
-choose the `Open/Save` Task for each document type.
+If you want simply to change the Status on a batch of files, choose the `Open/Save` Task for each document type.
 
-If you don't need to worry about document Status for your current task, 
-it's not a bad idea to disable the 
-`Process files as Available` option. 
-That's because, when enabled, it launches Document Manager.
-It can be a bit confusing to see that program
-pop up while Solid Edge is actively processing files.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Document Manager. It can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
 
 ### Filtering
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
-Filters are a way to refine the list of files to process.  You can filter 
-on file properties, or filenames (with a wildcard search). 
-They can be used alone or in combination.
+Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
 
 #### 1. Property Filter
 
-The property filter allows you to select files by their property values.
-To configure a property filter, 
-click the tool icon ![Configure](Resources/icons8_Tools_16.png)
-to the right of
-the Property filter checkbox. 
+The property filter allows you to select files by their property values. To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
-The Property Filter checks Draft files, but they
-often don't have properties of their own.
-For those files, Housekeeper can also search 
-any models in the drawing for the specified properties. 
-Set the option on the **Configuration Tab -- General Page**.
-One situation where you might want to disable this option
-is when searching for file Status.  
-See **Document Status Options** below.
+The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models in the drawing for the specified properties. Set the option on the **Configuration Tab -- General Page**. One situation where you might want to disable this option is when searching for file Status. See **Document Status Options** below.
 
-This is a powerful tool with a lot
-of options. These are detailed below.
+This is a powerful tool with a lot of options. These are detailed below.
 
 **Composing a Filter**
 
@@ -406,103 +224,50 @@ of options. These are detailed below.
   <img src="My%20Project/media/property_filter.png">
 </p>
 
-Compose a filter by defining one or more **Conditions**, and adding them 
-one-by-one to the list.
-A **Condition** consists of a **Property**, a **Comparison**, and a **Value**.
-For example, `Material contains Steel`, where `Material` is the **Property**, 
-`contains` is the **Comparison**, and `Steel` is the **Value**.
+Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains Steel`, where `Material` is the **Property**, `contains` is the **Comparison**, and `Steel` is the **Value**.
 
-Up to six Conditions are allowed for a filter.
-The filters can be named, saved, modified, and deleted as desired.
+Up to six Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted as desired.
 
 **Property Set**
 
-In addition to entering the `Property name`, you must also 
-select the `Property set`, either `System` or `Custom`.
+In addition to entering the `Property name`, you must also select the `Property set`, either `System` or `Custom`.
 
-`System` properties are in every Solid Edge file.
-They include `Material`, `Project`, etc.
-Note, at this time, they must be in English.
+`System` properties are in every Solid Edge file. They include `Material`, `Project`, etc. Note, at this time, they must be in English.
 
-`Custom` properties are ones that you create, probably in a template.
-Solid Edge also creates some Custom properties for you.
-These include `Exposed Variables` and output from 
-the `Inspect > Physical Properties` command.
-The custom property names can be in any language. 
-(In theory, at least -- not tested at this time.
-Not sure about the Solid Edge entries either.)
+`Custom` properties are ones that you create, probably in a template. Solid Edge also creates some Custom properties for you. These include `Exposed Variables` and output from the `Inspect > Physical Properties` command. The custom property names can be in any language. (In theory, at least -- not tested at this time. Not sure about the Solid Edge entries either.)
 
 **Comparison**
 
-Select the Comparison from its dropdown box.
-The choices are `contains`, `is_exactly`, `is_not`, 
-`wildcard_match`, `regex_match`, `>`, or `<`.
-The options `is_exactly`, `is_not`, `>`, and `<` are hopefully 
-self explanatory.
+Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self explanatory.
 
-`Contains` means the Value can appear anywhere in the property.
-For example, if you specify `Aluminum` and a part file has 
-`Aluminum 6061-T6`, you will get a match.
-Note, at this time, all Values (except see below for dates and numbers) 
-are converted to lower case text before comparison.
-So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
+`Contains` means the Value can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
-`Wildcard_match` searches for a match with a wildcard pattern.
-For example `[bfj]ake` would match `bake`, `fake`, and `jake`. 
-A more familiar example might be `Aluminum*`,
-which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc.
-Unlike with `contains`, in this example, 
-`Cast Aluminum Jigplate` would *not* match.
+`Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike with `contains`, in this example, `Cast Aluminum Jigplate` would *not* match.
 
-Internally the 
-[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
-is used to make the wildcard comparison.  Visit the link for details and examples.
+Internally the [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) is used to make the wildcard comparison.  Visit the link for details and examples.
 
-`Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document.
-For more information see 
-[**REGEX in .NET**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference)
+`Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [**REGEX in .NET**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
 
 **Default Filter Formula**
 
-Each Condition is assigned a variable name, (`A`, `B`, `...`).
-The default filter formula is to match all conditions (e.g., `A AND B AND C`).
+Each Condition is assigned a variable name, (`A`, `B`, `...`). The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
 ![Property Filter Detail](My%20Project/media/property_filter_detail.png)
 
-In the image above, 
-the default formula means you will get all parts in project 7481 
-made out of Stainless and engineered by Fred,
-i.e., `A AND B AND C`.
+In the image above, sticking with the default formula means you would get all parts in project 7481 made out of Stainless and engineered by Fred, i.e., `A AND B AND C`.
 
 **Editing the Formula**
 
-You can optionally change the formula.
-Click the Edit button and type the desired expression.
-For example, if you wanted all parts from Project 7481, 
-**either** made out of Stainless, 
-**or** engineered by Fred, you would enter the formula shown, 
+You can optionally change the formula. Click the Edit button and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
 **Dates and Numbers**
 
-Dates and numbers are converted to their native format when possible.
-This is done to obtain commonsense results for `<` and `>`.
-Note the conversion is attempted even if the property type is
-`TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
+Dates and numbers are converted to their native format when possible. This is done to obtain commonsense results for `<` and `>`. Note the conversion is attempted even if the property type is `TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
 
-Dates take the form `YYYYMMDD` when converted.
-This is the format that must be used in the `Value` field.
-So if you wanted all files dated before January 1, 2022, your condition would be
-`Custom.Date < 20220101`.
-The conversion is supposed to be locale-aware, however this has not been tested.
-Please ask on the Solid Edge Forum if it is not working correctly for you.
+Dates take the form `YYYYMMDD` when converted. This is the format that must be used in the `Value` field. So if you wanted all files dated before January 1, 2022, your condition would be `Custom.Date < 20220101`. The conversion is supposed to be locale-aware, however this has not been tested. Please ask on the Solid Edge Forum if it is not working correctly for you.
 
-Numbers are converted to floating point decimals.
-In Solid Edge many numbers, in particular those from the variable table, 
-include units.
-These must be stripped off by the program to make comparisons.
-Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`).
-It`s easy to add more, so please ask on the Forum if you need others.
+Numbers are converted to floating point decimals. In Solid Edge many numbers, in particular those from the variable table, include units. These must be stripped off by the program to make comparisons. Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`). It`s easy to add more, so please ask on the Forum if you need others.
 
 **Document Status**
 
@@ -510,8 +275,7 @@ You can select files based on Status, but not like this:
 	
 `System.Status contains Available`
 
-There is a number associated with each Status value.
-You have to use that instead of the name.  
+There is a number associated with each Status value. You have to use that instead of the name.  
 
 Here is the way to get all `Available` files: `System.Status is_exactly 0`
 
@@ -526,84 +290,40 @@ Here's the list:
 - `4 Baselined`
 - `5 Obsolete`
 
-As mentioned above, this is a situation where the
-option `Include Draft file model documents in search`
-can yield confusing results.  
-For example, an `InWork` Draft file containing a `Released` part would
-appear in a search for `Released` documents.
+As mentioned above, this is a situation where the option `Include Draft file model documents in search` can yield confusing results. For example, an `InWork` Draft file containing a `Released` part would appear in a search for `Released` documents.
 
 **Saved Settings**
 
-The filters are saved in `property_filters.txt` in the same directory as 
-`Housekeeper.exe`.
-If desired, you can create a master copy of the file and share it with others.
-You can manually edit the file, 
-however, note that the field delimiter is the TAB character.
-This was done so that the property name and value fields could contain 
-spaces.
+The filters are saved in `property_filters.txt` in the same directory as `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. You can manually edit the file, however, note that the field delimiter is the TAB character. This was done so that the property name and value fields could contain spaces.
 
 #### 2. Wildcard Filter
 
-The wildcard filter operates on file names.
-Simply enter the wildcard pattern in the 
-provided combobox.  Wildcard patterns are automatically saved for 
-future use.  Delete a pattern that is no longer needed by selecting it 
-and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
+The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
 
-As suggested above, see
-[**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator)
-for details and examples.
+As suggested above, see [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) for details and examples.
 
 ## STARTING, STOPPING, AND MONITORING EXECUTION
 
 ![Tabs](My%20Project/media/status_bar_running.png)
 
-Press the Process button to start executing the chosen tasks.
-If one or more files on the list were selected, only those are processed.
-Otherwise, all files are processed.
+Press the Process button to start executing the chosen tasks. If one or more files on the list were selected, only those are processed. Otherwise, all files are processed.
 
-A checkbox
-![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of
-the file name indicates it has yet to be processed. Afterwards, if no errors were
-detected, a checkmark 
-![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. 
-Otherwise, an error indicator 
-![Error](Resources/icons8_Error_16.png) is displayed.
+A checkbox ![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of the file name indicates it has yet to be processed. Afterwards, if no errors were detected, a checkmark ![Error](Resources/icons8_Checked_Checkbox_16.png) is shown. Otherwise, an error indicator ![Error](Resources/icons8_Error_16.png) is displayed.
 
-You can monitor progress on the status bar.  It shows the number of files
-processed, the current file, and an estimate of time remaining.
+You can monitor progress on the status bar.  It shows the number of files processed, the current file, and an estimate of time remaining.
  
-You can also interrupt the program before it finishes. 
-As shown above, while processing, 
-the Cancel button changes to a Stop button.  Just click that to halt 
-execution.  It may take several seconds to register the request.  It 
-doesn't hurt to click it a couple of times.
+You can also interrupt the program before it finishes. As shown above, while processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
-To save some time, you can process files in the background,
-without graphics.  This capability is somewhat experimental; let 
-know if you run into problems.  To save some space on the Most 
-Recently Used list, you can disable adding files that are
-processed by Housekeeper.  Both options are set on the
-**Configuration Tab -- General Page**.
+To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on the Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
 
 
 ## CAVEATS
 
-Since the program can process a large number of files in a short amount of time, 
-it can be very taxing on Solid Edge. 
-To maintain a clean environment, the program restarts Solid Edge periodically. 
-(Set the frequency on the **Configuration Tab -- General Page**.)
-This is by design and does not necessarily indicate a problem.
+Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge. To maintain a clean environment, the program restarts Solid Edge periodically. (Set the frequency on the **Configuration Tab -- General Page**.) This is by design and does not necessarily indicate a problem.
 
-However, problems can arise. 
-Those cases will be reported in the log file with the message 
-`Error processing file`. 
-A stack trace will be included, which may help debugging. 
-If four of these errors are detected in a run, the programs halts with the 
-Status Bar message `Processing aborted`.
+However, problems can arise. Those cases will be reported in the log file with the message `Error processing file`. A stack trace will be included, which may help debugging. If four of these errors are detected in a run, the programs halts with the Status Bar message `Processing aborted`.
 
-Please note this is not a perfect program.  It is not guaranteed not to mess 
-up your work.  Back up any files before using it.
+Please note this is not a perfect program.  It is not guaranteed not to mess up your work.  Back up any files before using it.
 
 ## KNOWN ISSUES
 
@@ -616,23 +336,15 @@ up your work.  Back up any files before using it.
 **Older Solid Edge versions**  
 Some tasks cannot be run on older versions.  
 *Cause*: Probably an API call not available in previous versions.  
-*Possible workaround*: Use the latest version, or avoid use of the
-task causing problems. 
+*Possible workaround*: Use the latest version, or avoid use of the task causing problems. 
 
 **May not support multiple installed Solid Edge versions**  
 *Cause*: Unknown.  
-*Possible workaround*: Use the version that was 'silently' installed. 
-
-**Printer settings**  
-Does not support all printer settings, e.g., duplexing, collating, etc.  
-*Cause*: Not exposed in the `DraftPrintUtility()` API.  
-*Possible workaround*: Create a new Windows printer with the desired settings. 
-Refer to the **Draft Tasks -- Print Topic** below for more details. 
+*Possible workaround*: Use the version that was 'silently' installed.
 
 **Pathfinder sometimes blank during Interactive Edit**  
 *Cause*: Unknown.  
-*Possible workaround*: Refresh the screen by minimizing and maximizing the 
-Solid Edge window. 
+*Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window. 
 
 ## TASK DESCRIPTIONS
 
