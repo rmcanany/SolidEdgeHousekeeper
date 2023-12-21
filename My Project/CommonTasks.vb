@@ -1108,6 +1108,7 @@ Public Class CommonTasks
         End If
 
         If ExitStatus = 0 Then
+
             ' Process variables.
             For Each VariableName In VariablesToEditDict.Keys
                 Dim Formula As String = VariablesToEditDict(VariableName)("Formula").Trim
@@ -1119,26 +1120,29 @@ Public Class CommonTasks
                 tf = tf Or DocVariableDict.Keys.Contains(VariableName)
 
                 If Not tf Then  ' Add it.
-                    If Formula = "" Then  ' Can't add a variable without a formula
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
-                        Continue For
-                    End If
-
-                    Try
-                        ' Pretty sure this must be a variable, not a dimension.
-                        Variable = Variables.Add(VariableName, Formula, Units)
-                        If Expose Then
-                            Variable.Expose = CInt(Expose)
-                            If Not ExposeName = "" Then
-                                Variable.ExposeName = ExposeName
-                            End If
+                    If Configuration("CheckBoxAutoAddMissingVariable").ToLower = "true" Then
+                        If Formula = "" Then  ' Can't add a variable without a formula
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
+                            Continue For
                         End If
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  Check name and formula.", VariableName))
 
-                    End Try
+                        Try
+                            ' Pretty sure this must be a variable, not a dimension.
+                            Variable = Variables.Add(VariableName, Formula, Units)
+                            If Expose Then
+                                Variable.Expose = CInt(Expose)
+                                If Not ExposeName = "" Then
+                                    Variable.ExposeName = ExposeName
+                                End If
+                            End If
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  Check name and formula.", VariableName))
+
+                        End Try
+
+                    End If
 
                 Else  ' Edit and/or Expose.
                     Try

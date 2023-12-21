@@ -58,6 +58,8 @@ Partial Class Form1
         Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.ButtonVariablesEditAssembly = New System.Windows.Forms.Button()
+        Me.TextBoxVariablesEditAssembly = New System.Windows.Forms.TextBox()
         Me.CheckBoxFindReplaceReplaceRXAssembly = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceReplacePTAssembly = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindRXAssembly = New System.Windows.Forms.CheckBox()
@@ -114,6 +116,8 @@ Partial Class Form1
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.ButtonVariablesEditSheetmetal = New System.Windows.Forms.Button()
+        Me.TextBoxVariablesEditSheetmetal = New System.Windows.Forms.TextBox()
         Me.CheckBoxFindReplaceReplaceRXSheetmetal = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceReplacePTSheetmetal = New System.Windows.Forms.CheckBox()
         Me.CheckBoxFindReplaceFindRXSheetmetal = New System.Windows.Forms.CheckBox()
@@ -347,10 +351,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.TextBoxVariablesEditAssembly = New System.Windows.Forms.TextBox()
-        Me.ButtonVariablesEditAssembly = New System.Windows.Forms.Button()
-        Me.TextBoxVariablesEditSheetmetal = New System.Windows.Forms.TextBox()
-        Me.ButtonVariablesEditSheetmetal = New System.Windows.Forms.Button()
+        Me.CheckBoxAutoAddMissingVariable = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -746,6 +747,25 @@ Partial Class Form1
         Me.TabPageAssembly.Size = New System.Drawing.Size(511, 690)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
+        '
+        'ButtonVariablesEditAssembly
+        '
+        Me.ButtonVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariablesEditAssembly.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariablesEditAssembly.Name = "ButtonVariablesEditAssembly"
+        Me.ButtonVariablesEditAssembly.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariablesEditAssembly.TabIndex = 28
+        Me.ButtonVariablesEditAssembly.Text = "Edit"
+        Me.ButtonVariablesEditAssembly.UseVisualStyleBackColor = True
+        '
+        'TextBoxVariablesEditAssembly
+        '
+        Me.TextBoxVariablesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxVariablesEditAssembly.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariablesEditAssembly.Name = "TextBoxVariablesEditAssembly"
+        Me.TextBoxVariablesEditAssembly.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariablesEditAssembly.TabIndex = 27
         '
         'CheckBoxFindReplaceReplaceRXAssembly
         '
@@ -1396,6 +1416,25 @@ Partial Class Form1
         Me.TabPageSheetmetal.Size = New System.Drawing.Size(511, 690)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'ButtonVariablesEditSheetmetal
+        '
+        Me.ButtonVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonVariablesEditSheetmetal.Location = New System.Drawing.Point(400, 650)
+        Me.ButtonVariablesEditSheetmetal.Name = "ButtonVariablesEditSheetmetal"
+        Me.ButtonVariablesEditSheetmetal.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonVariablesEditSheetmetal.TabIndex = 45
+        Me.ButtonVariablesEditSheetmetal.Text = "Edit"
+        Me.ButtonVariablesEditSheetmetal.UseVisualStyleBackColor = True
+        '
+        'TextBoxVariablesEditSheetmetal
+        '
+        Me.TextBoxVariablesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxVariablesEditSheetmetal.Location = New System.Drawing.Point(8, 650)
+        Me.TextBoxVariablesEditSheetmetal.Name = "TextBoxVariablesEditSheetmetal"
+        Me.TextBoxVariablesEditSheetmetal.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxVariablesEditSheetmetal.TabIndex = 44
         '
         'CheckBoxFindReplaceReplaceRXSheetmetal
         '
@@ -3522,6 +3561,7 @@ Partial Class Form1
         '
         'TabPageGeneral
         '
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxAutoAddMissingVariable)
         Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxFontSize)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxPictorialViews)
@@ -3549,7 +3589,7 @@ Partial Class Form1
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(62, 100)
+        Me.LabelFontSize.Location = New System.Drawing.Point(60, 100)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(86, 15)
         Me.LabelFontSize.TabIndex = 55
@@ -3557,7 +3597,7 @@ Partial Class Form1
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(12, 96)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(10, 95)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(38, 22)
         Me.TextBoxFontSize.TabIndex = 54
@@ -3568,7 +3608,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(2, 337)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 365)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -3580,7 +3620,7 @@ Partial Class Form1
         'RadioButtonPictorialViewTrimetric
         '
         Me.RadioButtonPictorialViewTrimetric.AutoSize = True
-        Me.RadioButtonPictorialViewTrimetric.Location = New System.Drawing.Point(8, 70)
+        Me.RadioButtonPictorialViewTrimetric.Location = New System.Drawing.Point(10, 75)
         Me.RadioButtonPictorialViewTrimetric.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonPictorialViewTrimetric.Name = "RadioButtonPictorialViewTrimetric"
         Me.RadioButtonPictorialViewTrimetric.Size = New System.Drawing.Size(69, 19)
@@ -3592,7 +3632,7 @@ Partial Class Form1
         'RadioButtonPictorialViewDimetric
         '
         Me.RadioButtonPictorialViewDimetric.AutoSize = True
-        Me.RadioButtonPictorialViewDimetric.Location = New System.Drawing.Point(8, 47)
+        Me.RadioButtonPictorialViewDimetric.Location = New System.Drawing.Point(10, 50)
         Me.RadioButtonPictorialViewDimetric.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonPictorialViewDimetric.Name = "RadioButtonPictorialViewDimetric"
         Me.RadioButtonPictorialViewDimetric.Size = New System.Drawing.Size(68, 19)
@@ -3604,7 +3644,7 @@ Partial Class Form1
         'RadioButtonPictorialViewIsometric
         '
         Me.RadioButtonPictorialViewIsometric.AutoSize = True
-        Me.RadioButtonPictorialViewIsometric.Location = New System.Drawing.Point(8, 23)
+        Me.RadioButtonPictorialViewIsometric.Location = New System.Drawing.Point(10, 25)
         Me.RadioButtonPictorialViewIsometric.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonPictorialViewIsometric.Name = "RadioButtonPictorialViewIsometric"
         Me.RadioButtonPictorialViewIsometric.Size = New System.Drawing.Size(71, 19)
@@ -3618,7 +3658,7 @@ Partial Class Form1
         Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(12, 286)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(10, 320)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
         Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(328, 19)
         Me.CheckBoxPropertyFilterFollowDraftLinks.TabIndex = 52
@@ -3628,7 +3668,7 @@ Partial Class Form1
         'CheckBoxAutoAddMissingProperty
         '
         Me.CheckBoxAutoAddMissingProperty.AutoSize = True
-        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(12, 257)
+        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(10, 260)
         Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
         Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(276, 19)
         Me.CheckBoxAutoAddMissingProperty.TabIndex = 51
@@ -3638,7 +3678,7 @@ Partial Class Form1
         'CheckBoxPartCopiesRecursiveSearch
         '
         Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
-        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(12, 228)
+        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(10, 230)
         Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
         Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(244, 19)
         Me.CheckBoxPartCopiesRecursiveSearch.TabIndex = 50
@@ -3648,7 +3688,7 @@ Partial Class Form1
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(12, 200)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(10, 200)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(279, 19)
@@ -3659,7 +3699,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(12, 171)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(10, 170)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(227, 19)
         Me.CheckBoxBackgroundProcessing.TabIndex = 49
@@ -3671,7 +3711,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(12, 142)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(10, 140)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(239, 19)
@@ -3681,7 +3721,7 @@ Partial Class Form1
         '
         'TextBoxPartNumberPropertyName
         '
-        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(176, 28)
+        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(175, 30)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
         Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(200, 22)
@@ -3690,7 +3730,7 @@ Partial Class Form1
         'LabelPartNumberPropertyName
         '
         Me.LabelPartNumberPropertyName.AutoSize = True
-        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(176, 9)
+        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(175, 10)
         Me.LabelPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertyName.Name = "LabelPartNumberPropertyName"
         Me.LabelPartNumberPropertyName.Size = New System.Drawing.Size(144, 15)
@@ -3699,7 +3739,7 @@ Partial Class Form1
         '
         'TextBoxRestartAfter
         '
-        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(12, 67)
+        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(10, 65)
         Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(38, 22)
@@ -3710,7 +3750,7 @@ Partial Class Form1
         '
         Me.ComboBoxPartNumberPropertySet.FormattingEnabled = True
         Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(12, 28)
+        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(10, 30)
         Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPartNumberPropertySet.Name = "ComboBoxPartNumberPropertySet"
         Me.ComboBoxPartNumberPropertySet.Size = New System.Drawing.Size(132, 23)
@@ -3720,7 +3760,7 @@ Partial Class Form1
         'LabelPartNumberPropertySet
         '
         Me.LabelPartNumberPropertySet.AutoSize = True
-        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(12, 9)
+        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(10, 10)
         Me.LabelPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertySet.Name = "LabelPartNumberPropertySet"
         Me.LabelPartNumberPropertySet.Size = New System.Drawing.Size(132, 15)
@@ -3730,7 +3770,7 @@ Partial Class Form1
         'LabelRestartAfter
         '
         Me.LabelRestartAfter.AutoSize = True
-        Me.LabelRestartAfter.Location = New System.Drawing.Point(62, 72)
+        Me.LabelRestartAfter.Location = New System.Drawing.Point(60, 70)
         Me.LabelRestartAfter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelRestartAfter.Name = "LabelRestartAfter"
         Me.LabelRestartAfter.Size = New System.Drawing.Size(199, 15)
@@ -3935,43 +3975,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'TextBoxVariablesEditAssembly
+        'CheckBoxAutoAddMissingVariable
         '
-        Me.TextBoxVariablesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariablesEditAssembly.Location = New System.Drawing.Point(8, 650)
-        Me.TextBoxVariablesEditAssembly.Name = "TextBoxVariablesEditAssembly"
-        Me.TextBoxVariablesEditAssembly.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxVariablesEditAssembly.TabIndex = 27
-        '
-        'ButtonVariablesEditAssembly
-        '
-        Me.ButtonVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariablesEditAssembly.Location = New System.Drawing.Point(400, 650)
-        Me.ButtonVariablesEditAssembly.Name = "ButtonVariablesEditAssembly"
-        Me.ButtonVariablesEditAssembly.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonVariablesEditAssembly.TabIndex = 28
-        Me.ButtonVariablesEditAssembly.Text = "Edit"
-        Me.ButtonVariablesEditAssembly.UseVisualStyleBackColor = True
-        '
-        'TextBoxVariablesEditSheetmetal
-        '
-        Me.TextBoxVariablesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariablesEditSheetmetal.Location = New System.Drawing.Point(8, 650)
-        Me.TextBoxVariablesEditSheetmetal.Name = "TextBoxVariablesEditSheetmetal"
-        Me.TextBoxVariablesEditSheetmetal.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxVariablesEditSheetmetal.TabIndex = 44
-        '
-        'ButtonVariablesEditSheetmetal
-        '
-        Me.ButtonVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariablesEditSheetmetal.Location = New System.Drawing.Point(400, 650)
-        Me.ButtonVariablesEditSheetmetal.Name = "ButtonVariablesEditSheetmetal"
-        Me.ButtonVariablesEditSheetmetal.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonVariablesEditSheetmetal.TabIndex = 45
-        Me.ButtonVariablesEditSheetmetal.Text = "Edit"
-        Me.ButtonVariablesEditSheetmetal.UseVisualStyleBackColor = True
+        Me.CheckBoxAutoAddMissingVariable.AutoSize = True
+        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 290)
+        Me.CheckBoxAutoAddMissingVariable.Name = "CheckBoxAutoAddMissingVariable"
+        Me.CheckBoxAutoAddMissingVariable.Size = New System.Drawing.Size(284, 19)
+        Me.CheckBoxAutoAddMissingVariable.TabIndex = 56
+        Me.CheckBoxAutoAddMissingVariable.Text = "Variable Edit/Add/Expose -- Auto add missing variable"
+        Me.CheckBoxAutoAddMissingVariable.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -4372,4 +4384,5 @@ Partial Class Form1
     Friend WithEvents TextBoxVariablesEditAssembly As TextBox
     Friend WithEvents ButtonVariablesEditSheetmetal As Button
     Friend WithEvents TextBoxVariablesEditSheetmetal As TextBox
+    Friend WithEvents CheckBoxAutoAddMissingVariable As CheckBox
 End Class

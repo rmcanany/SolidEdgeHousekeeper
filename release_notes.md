@@ -98,6 +98,7 @@ Added an option to not check for properties of the models
 contained in Draft files.  Previous behavior was to
 always check.  Set the option on 
 the **Configuration Tab -- General Page**.
+
 Since Draft files often do not have properties of their own,
 normally this option should be enabled.
 Searching for Document Status is another story.  For example,
@@ -145,10 +146,28 @@ Previously it was stored in the same folder as the
 executable and associated files, making it hard to
 identify user-specific files.
 
-### Expose Variables
+### Variables Edit/Add/Expose
 
-Added checking for the presence of a variable and
-removed the task `Expose variables missing`.
+(Thank you **@Bert303**!)
+
+Added the ability to add, change and/or expose variables. 
+Multiple variables can be processed at a time.
+This is an extension of the previous `Expose Variables`
+command, which has now been removed.
+
+![Variable Input Form](My%20Project/media/variable_input_editor.png)
+
+Variables on the list that are not in the file can
+optionally be added automatically.  The option is set
+on the **Configuration Tab -- General Page**. 
+
+The variables are processed in the order shown on the form.
+They can be moved up or down, or deleted, using the 
+buttons provided.
+
+The settings from one tab can be copied to others,
+using the `Copy To` CheckBoxes as desired.
+
 
 
 ## V2023.6 Enhancements/Fixes

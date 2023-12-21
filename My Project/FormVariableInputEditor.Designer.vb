@@ -141,7 +141,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel4, 2, 0)
@@ -172,7 +172,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel4.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.Label4, 0, 1)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(217, 4)
+        Me.TableLayoutPanel4.Location = New System.Drawing.Point(202, 4)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 2
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -242,18 +242,18 @@ Partial Class FormVariableInputEditor
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(429, 31)
+        Me.Label5.Location = New System.Drawing.Point(394, 31)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(5, 6, 5, 6)
-        Me.Label5.Size = New System.Drawing.Size(42, 27)
+        Me.Label5.Size = New System.Drawing.Size(62, 27)
         Me.Label5.TabIndex = 6
-        Me.Label5.Text = "Units"
+        Me.Label5.Text = "Unit type"
         '
         'Label6
         '
         Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.Bottom
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(531, 37)
+        Me.Label6.Location = New System.Drawing.Point(546, 37)
         Me.Label6.Name = "Label6"
         Me.Label6.Padding = New System.Windows.Forms.Padding(0, 0, 0, 6)
         Me.Label6.Size = New System.Drawing.Size(40, 21)
@@ -264,7 +264,7 @@ Partial Class FormVariableInputEditor
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(579, 31)
+        Me.Label7.Location = New System.Drawing.Point(594, 31)
         Me.Label7.Name = "Label7"
         Me.Label7.Padding = New System.Windows.Forms.Padding(5, 6, 5, 6)
         Me.Label7.Size = New System.Drawing.Size(79, 27)

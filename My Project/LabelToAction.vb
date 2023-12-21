@@ -137,7 +137,27 @@ Public Class LabelToAction
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
         Dim VariablesEdit As New L2A
-        HelpString = "Add, changes, and/or exposes variables."
+        HelpString = "Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  "
+        HelpString += "Access the form using the 'Variables edit/add/expose' 'Edit' button.  "
+        HelpString += "It is located below the task list on each Task Tab."
+        HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
+        HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on it.  "
+        HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
+        HelpString += "underscore '_' character."
+        HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added automatically.  "
+        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
+        HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
+        HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
+        HelpString += "program will report an error."
+        HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name.  "
+        HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name.  "
+        HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table.  "
+        HelpString += "You can change the order by selecting a row, then use the Up/Down buttons "
+        HelpString += "at the top of the form.  Only one row can be moved at a time.  "
+        HelpString += "The delete button, also at the top of the form, removes selected rows.  "
+        HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs.  "
+        HelpString += "Set the 'Copy To' CheckBoxes as desired."
+
         PopulateList(VariablesEdit,
                      "Variables add/edit/expose",
                      "VariablesEdit",

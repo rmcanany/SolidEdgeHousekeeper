@@ -85,8 +85,8 @@ Public Class FormVariableInputEditor
                 If ColumnControlsList(ColumnIndex) = "ComboBox" Then
                     ComboBox = New ComboBox
                     ComboBox.Name = String.Format("ComboBox{0}{1}", RowIndex, ColumnNames(ColumnIndex))
-                    ComboBox.Anchor = AnchorStyles.None
                     ComboBox.Size = New Size(100, 20)
+                    ComboBox.Anchor = AnchorStyles.Left + AnchorStyles.Right
                     ComboBox.DropDownStyle = ComboBoxStyle.DropDownList
                     ComboBox.TabStop = False
                     For Each UnitTypeConstant As SolidEdgeConstants.UnitTypeConstants In System.Enum.GetValues(GetType(SolidEdgeConstants.UnitTypeConstants))
@@ -252,7 +252,7 @@ Public Class FormVariableInputEditor
 
         End If
         ' TextBoxResult.Text = JsonConvert.SerializeObject(TableValuesDict)
-
+        ReconcileFormControls()
 
     End Sub
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -289,19 +289,32 @@ Public Class FormVariableInputEditor
 
     End Sub
 
-    Private Function GetCheckBoxes() As List(Of CheckBox)
-        Dim CheckBoxList As New List(Of CheckBox)
+    Private Function GetCheckBoxes() As Dictionary(Of String, CheckBox)
+        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
         Dim Control As Control
-        'Dim CheckBox As CheckBox
 
         For Each Control In TableLayoutPanel1.Controls
             If Control.GetType() Is GetType(CheckBox) Then
-                CheckBoxList.Add(DirectCast(Control, CheckBox))
+                CheckBoxDict(Control.Name) = DirectCast(Control, CheckBox)
             End If
         Next
 
-        Return CheckBoxList
+        Return CheckBoxDict
     End Function
+
+    Private Function GetTextBoxes() As Dictionary(Of String, TextBox)
+        Dim TextBoxDict As New Dictionary(Of String, TextBox)
+        Dim Control As Control
+
+        For Each Control In TableLayoutPanel1.Controls
+            If Control.GetType() Is GetType(TextBox) Then
+                TextBoxDict(Control.Name) = DirectCast(Control, TextBox)
+            End If
+        Next
+
+        Return TextBoxDict
+    End Function
+
     Private Sub TextBox_TextChanged(sender As System.Object, e As System.EventArgs)
         'When you modify the contents of any textbox, the name of that textbox
         'and its current contents will be displayed in the title bar
@@ -310,20 +323,55 @@ Public Class FormVariableInputEditor
         'Me.Text = box.Name & ": " & box.Text
     End Sub
 
+    Private Sub ReconcileFormControls()
+        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
+        Dim CheckBoxName As String
+        Dim TextBoxDict As New Dictionary(Of String, TextBox)
+        Dim TextBoxName As String
+        Dim RowIndex As Integer
+        Dim s As String
+        Dim VariableName As String
+
+        CheckBoxDict = GetCheckBoxes()
+        TextBoxDict = GetTextBoxes()
+
+        For Each CheckBoxName In CheckBoxDict.Keys
+            If CheckBoxName.Contains("Expose") Then
+                s = CheckBoxName.Replace("CheckBox", "")(0)
+                RowIndex = CInt(s)
+
+                TextBoxName = String.Format("TextBox{0}ExposeName", RowIndex)
+                VariableName = String.Format("TextBox{0}VariableName", RowIndex)
+
+                If CheckBoxDict(CheckBoxName).Checked Then
+                    TextBoxDict(TextBoxName).Enabled = True
+                    If TextBoxDict(TextBoxName).Text = "" Then
+                        TextBoxDict(TextBoxName).Text = TextBoxDict(VariableName).Text
+                    End If
+                Else
+                    TextBoxDict(TextBoxName).Enabled = False
+                    TextBoxDict(TextBoxName).Text = ""
+                End If
+
+            End If
+        Next
+
+    End Sub
+
     Private Function GetSelectedRowIndices() As List(Of Integer)
         Dim SelectedRowIndices As New List(Of Integer)
-        Dim CheckBoxList As New List(Of CheckBox)
-        Dim CheckBox As CheckBox
+        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
+        Dim CheckBoxName As String
         Dim s As String
 
-        CheckBoxList = GetCheckBoxes()
+        CheckBoxDict = GetCheckBoxes()
 
-        For Each CheckBox In CheckBoxList
-            If CheckBox.Name.Contains("Select") Then
-                If Not CheckBox.Name.Contains("SelectAll") Then
-                    If CheckBox.Checked Then
+        For Each CheckBoxName In CheckBoxDict.Keys
+            If CheckBoxName.Contains("Select") Then
+                If Not CheckBoxName.Contains("SelectAll") Then
+                    If CheckBoxDict(CheckBoxName).Checked Then
                         ' CheckBox.Name = String.Format("CheckBox{0}{1}", RowIndex, ColumnNames(ColumnIndex))
-                        s = CheckBox.Name.Replace("CheckBox", "")(0)
+                        s = CheckBoxName.Replace("CheckBox", "")(0)
                         SelectedRowIndices.Add(CInt(s))
                     End If
                 End If
@@ -356,6 +404,8 @@ Public Class FormVariableInputEditor
             End If
 
             'Me.Text = String.Format("{0}: {1}", CheckBox.Name, CheckBox.Checked.ToString) 'CheckBox.Name
+
+            ReconcileFormControls()
         End If
     End Sub
 
@@ -383,20 +433,20 @@ Public Class FormVariableInputEditor
     End Sub
 
     Private Sub CheckBoxSelectAll_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelectAll.CheckedChanged
-        Dim CheckBoxList As New List(Of CheckBox)
-        Dim CheckBox As CheckBox
+        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
+        Dim CheckBoxName As String
         Dim tf As Boolean
 
-        CheckBoxList = GetCheckBoxes()
+        CheckBoxDict = GetCheckBoxes()
 
-        For Each CheckBox In CheckBoxList
-            If Not CheckBox.Name.Contains("SelectAll") Then
+        For Each CheckBoxName In CheckBoxDict.Keys
+            If Not CheckBoxName.Contains("SelectAll") Then
                 tf = CheckBoxSelectAll.Checked
-                tf = tf And CheckBox.Name.Contains("Select")
+                tf = tf And CheckBoxName.Contains("Select")
                 If tf Then
-                    CheckBox.Checked = True
+                    CheckBoxDict(CheckBoxName).Checked = True
                 Else
-                    CheckBox.Checked = False
+                    CheckBoxDict(CheckBoxName).Checked = False
                 End If
             End If
         Next
@@ -417,6 +467,14 @@ Public Class FormVariableInputEditor
         ' https://stackoverflow.com/questions/199521/vb-net-iterating-through-controls-in-a-container-object
         Dim Control As Control
         Dim tf As Boolean
+
+        Dim TextBoxDict As New Dictionary(Of String, TextBox)
+        TextBoxDict = GetTextBoxes()
+
+        For Each s As String In TextBoxDict.Keys
+            TextBoxDict(s).Enabled = True
+        Next
+
 
         For RowIndex As Integer = 1 To TableLayoutPanel1.RowCount - 1
             For ColumnIndex As Integer = 0 To TableLayoutPanel1.ColumnCount - 1
@@ -440,6 +498,8 @@ Public Class FormVariableInputEditor
         Next
 
         RemoveBlankLines()
+
+        ReconcileFormControls()
 
     End Sub
 
@@ -514,14 +574,14 @@ Public Class FormVariableInputEditor
     End Sub
 
     Private Sub ClearSelectionCheckmarks()
-        Dim CheckBoxList As New List(Of CheckBox)
-        Dim CheckBox As CheckBox
+        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
+        Dim CheckBoxName As String
 
-        CheckBoxList = GetCheckBoxes()
+        CheckBoxDict = GetCheckBoxes()
 
-        For Each CheckBox In CheckBoxList
-            If CheckBox.Name.Contains("Select") Then
-                CheckBox.Checked = False
+        For Each CheckBoxName In CheckBoxDict.Keys
+            If CheckBoxName.Contains("Select") Then
+                CheckBoxDict(CheckBoxName).Checked = False
             End If
         Next
 
@@ -543,6 +603,13 @@ Public Class FormVariableInputEditor
         Dim Index As Integer
         Dim tf As Boolean = False
         'Dim Control As Control
+
+        Dim TextBoxDict As New Dictionary(Of String, TextBox)
+        TextBoxDict = GetTextBoxes()
+
+        For Each s As String In TextBoxDict.Keys
+            TextBoxDict(s).Enabled = True
+        Next
 
         Index = 0
         For Each ColumnName In ColumnNames
@@ -628,6 +695,7 @@ Public Class FormVariableInputEditor
             End If
         End If
 
+        ReconcileFormControls()
     End Sub
 
 
