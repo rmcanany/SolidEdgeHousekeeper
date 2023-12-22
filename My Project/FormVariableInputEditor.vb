@@ -10,7 +10,6 @@ Imports SolidEdgeConstants
 
 
 Public Class FormVariableInputEditor
-    'Private boxes(5) As TextBox
     Private ColumnNames As New List(Of String)
     Dim ColumnControlsList As New List(Of String)
     Dim PopulatingControls As Boolean
@@ -258,9 +257,6 @@ Public Class FormVariableInputEditor
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         ' https://www.codeproject.com/Tips/842418/Designing-the-Layout-of-Windows-Forms-using-a
         ' https://www.vbforums.com/showthread.php?891013-How-to-iterate-rows-and-columns-in-TableLayoutPanel
-
-        'ButtonMoveSelectedUp.Text = ChrW(8593)
-        'ButtonMoveSelectedDown.Text = ChrW(8595)
 
         PopulateControls()
         RestoreVariables()

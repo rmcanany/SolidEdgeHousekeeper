@@ -310,6 +310,7 @@ Partial Class Form1
         Me.CheckBoxPrinter1ScaleLineWidths = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPrinter1 = New System.Windows.Forms.ComboBox()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxAutoAddMissingVariable = New System.Windows.Forms.CheckBox()
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.GroupBoxPictorialViews = New System.Windows.Forms.GroupBox()
@@ -351,7 +352,8 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxAutoAddMissingVariable = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -3561,6 +3563,8 @@ Partial Class Form1
         '
         'TabPageGeneral
         '
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxUpdatePhysicalPropertiesCOGHide)
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxUpdatePhysicalPropertiesCOGShow)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxAutoAddMissingVariable)
         Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxFontSize)
@@ -3586,6 +3590,16 @@ Partial Class Form1
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
+        'CheckBoxAutoAddMissingVariable
+        '
+        Me.CheckBoxAutoAddMissingVariable.AutoSize = True
+        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 290)
+        Me.CheckBoxAutoAddMissingVariable.Name = "CheckBoxAutoAddMissingVariable"
+        Me.CheckBoxAutoAddMissingVariable.Size = New System.Drawing.Size(284, 19)
+        Me.CheckBoxAutoAddMissingVariable.TabIndex = 56
+        Me.CheckBoxAutoAddMissingVariable.Text = "Variable Edit/Add/Expose -- Auto add missing variable"
+        Me.CheckBoxAutoAddMissingVariable.UseVisualStyleBackColor = True
+        '
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
@@ -3608,7 +3622,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 365)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 425)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -3975,15 +3989,25 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxAutoAddMissingVariable
+        'CheckBoxUpdatePhysicalPropertiesCOGShow
         '
-        Me.CheckBoxAutoAddMissingVariable.AutoSize = True
-        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 290)
-        Me.CheckBoxAutoAddMissingVariable.Name = "CheckBoxAutoAddMissingVariable"
-        Me.CheckBoxAutoAddMissingVariable.Size = New System.Drawing.Size(284, 19)
-        Me.CheckBoxAutoAddMissingVariable.TabIndex = 56
-        Me.CheckBoxAutoAddMissingVariable.Text = "Variable Edit/Add/Expose -- Auto add missing variable"
-        Me.CheckBoxAutoAddMissingVariable.UseVisualStyleBackColor = True
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.AutoSize = True
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Location = New System.Drawing.Point(10, 350)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Name = "CheckBoxUpdatePhysicalPropertiesCOGShow"
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Size = New System.Drawing.Size(270, 19)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.TabIndex = 57
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Text = "Update physical properties -- Show center of mass"
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.UseVisualStyleBackColor = True
+        '
+        'CheckBoxUpdatePhysicalPropertiesCOGHide
+        '
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.AutoSize = True
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Location = New System.Drawing.Point(10, 380)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Name = "CheckBoxUpdatePhysicalPropertiesCOGHide"
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Size = New System.Drawing.Size(267, 19)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.TabIndex = 58
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Text = "Update physical properties -- Hide center of mass"
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -4385,4 +4409,6 @@ Partial Class Form1
     Friend WithEvents ButtonVariablesEditSheetmetal As Button
     Friend WithEvents TextBoxVariablesEditSheetmetal As TextBox
     Friend WithEvents CheckBoxAutoAddMissingVariable As CheckBox
+    Friend WithEvents CheckBoxUpdatePhysicalPropertiesCOGHide As CheckBox
+    Friend WithEvents CheckBoxUpdatePhysicalPropertiesCOGShow As CheckBox
 End Class

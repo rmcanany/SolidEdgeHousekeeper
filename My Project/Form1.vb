@@ -3416,6 +3416,19 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub CheckBoxUpdatePhysicalPropertiesCOGShow_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUpdatePhysicalPropertiesCOGShow.CheckedChanged
+        If CheckBoxUpdatePhysicalPropertiesCOGShow.Checked Then
+            CheckBoxUpdatePhysicalPropertiesCOGHide.Checked = False
+        End If
+    End Sub
+
+    Private Sub CheckBoxUpdatePhysicalPropertiesCOGHide_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUpdatePhysicalPropertiesCOGHide.CheckedChanged
+        If CheckBoxUpdatePhysicalPropertiesCOGHide.Checked Then
+            CheckBoxUpdatePhysicalPropertiesCOGShow.Checked = False
+        End If
+
+    End Sub
+
 
 
 

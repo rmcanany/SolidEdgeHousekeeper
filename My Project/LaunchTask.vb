@@ -82,6 +82,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case "VariablesEdit"
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
+                Case "UpdatePhysicalProperties"
+                    ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
                     'Case "ExposeVariables"
                     '    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
                     'Case "ExposeVariablesMissing"
@@ -153,6 +155,8 @@ Public Class LaunchTask
                 '    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
                 Case "VariablesEdit"
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
+                Case "UpdatePhysicalProperties"
+                    ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -226,10 +230,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
                 Case "VariablesEdit"
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
-                    'Case "ExposeVariables"
-                    '    ErrorMessage = task.Proxy.ExposeVariables(SEDoc, Configuration, SEApp)
-                    'Case "ExposeVariablesMissing"
-                    '    ErrorMessage = task.Proxy.ExposeVariablesMissing(SEDoc, Configuration, SEApp)
+                Case "UpdatePhysicalProperties"
+                    ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()

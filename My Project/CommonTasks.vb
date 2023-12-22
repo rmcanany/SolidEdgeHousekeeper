@@ -1209,6 +1209,7 @@ Public Class CommonTasks
 
         Return UnitType
     End Function
+
     Shared Function ExposeVariables(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1375,6 +1376,110 @@ Public Class CommonTasks
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
+    End Function
+
+    Shared Function UpdatePhysicalProperties(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim s As String
+
+        Dim DocType As String = GetDocType(SEDoc)
+
+        If DocType = "asm" Then
+            Try
+                Dim AsmDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+
+                Dim PhysicalProperties As SolidEdgeAssembly.PhysicalProperties = AsmDoc.PhysicalProperties
+
+                Dim ParFileNamesWithoutDensity() As String = {""}
+
+                PhysicalProperties.UpdateV2(ParFileNamesWithoutDensity)
+                SEApp.DoIdle()
+
+                If Not ParFileNamesWithoutDensity Is Nothing Then
+                    If ParFileNamesWithoutDensity.Count > 0 Then
+                        ExitStatus = 1
+                        s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
+                        s = String.Format("{0}  Please verify results.", s)
+                        ErrorMessageList.Add(s)
+                    End If
+
+                End If
+
+                If Configuration("CheckBoxUpdatePhysicalPropertiesCOGHide").ToLower = "true" Then
+                    PhysicalProperties.DisplayCenterOfMass = False
+                End If
+                If Configuration("CheckBoxUpdatePhysicalPropertiesCOGShow").ToLower = "true" Then
+                    PhysicalProperties.DisplayCenterOfMass = True
+                End If
+
+                AsmDoc.Save()
+                SEApp.DoIdle()
+                'If Not PhysicalProperties.IsUpToDate Then
+                'End If
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Error updating physical properties.")
+            End Try
+        Else
+            Dim MaterialTable As SolidEdgeFramework.MatTable = SEApp.GetMaterialTable()
+            Dim PropertyType As SolidEdgeFramework.MatTablePropIndexConstants
+            PropertyType = SolidEdgeFramework.MatTablePropIndexConstants.seDensity
+            Dim PropValue As String = Nothing
+
+            If DocType = "par" Then
+                Try
+                    Dim ParDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    SEApp.DoIdle()
+                    ParDoc.Save()
+                    SEApp.DoIdle()
+
+                    MaterialTable.GetMaterialPropValueFromDoc(ParDoc, PropertyType, PropValue)
+                    If CDbl(PropValue) <= 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
+                    End If
+
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Error updating physical properties.")
+                End Try
+            End If
+
+            If DocType = "psm" Then
+                Try
+                    Dim PsmDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    SEApp.DoIdle()
+                    PsmDoc.Save()
+                    SEApp.DoIdle()
+
+                    MaterialTable.GetMaterialPropValueFromDoc(PsmDoc, PropertyType, PropValue)
+                    If CDbl(PropValue) <= 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
+                    End If
+
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Error updating physical properties.")
+                End Try
+            End If
+        End If
+
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
     End Function
 
 

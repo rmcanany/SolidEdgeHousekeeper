@@ -112,7 +112,11 @@ The variables are processed in the order shown on the form. They can be moved up
 
 The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
+### Update Physical Properties
 
+Added the ability to update mass, volume, etc. for model files. Models with no density are reported in the log file. 
+
+You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
 
 ## V2023.6 Enhancements/Fixes
 

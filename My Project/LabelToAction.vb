@@ -1,4 +1,16 @@
 ﻿Option Strict On
+Imports Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System
+
+
+Imports SolidEdgePart
+
+
+
+
+' The order on the CheckBoxLists is set by the order of creation of the L2A objects.
+
+
+
 
 Public Class LabelToAction
     Inherits Dictionary(Of String, L2A)
@@ -133,12 +145,30 @@ Public Class LabelToAction
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
-                     HelpString,
-                     RequiresFindReplaceFields:=True, RequiresSave:=True)
+HelpString,
+RequiresFindReplaceFields:=True, RequiresSave:=True)
+
+        '        Added the ability To update mass, volume, etc.for model files. Models with no density assigned are reported in the log file. 
+
+        '        It can either be shown, hidden, Or Left() unchanged.  The Option Is Set On the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
+
+        Dim UpdatePhysicalProperties As New L2A
+        HelpString = "Updates mass, volume, etc.  Models with no density are reported in the log file. "
+        HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the center of mass symbol. "
+        HelpString += "It can either be shown, hidden, or left unchanged. "
+        HelpString += "The option is set on the **Configuration Tab -- General Page**. "
+        HelpString += "To leave the symbol's display unchanged, "
+        HelpString += "disable both the `Show` and `Hide` options. "
+        HelpString += "Note, controlling the symbol display only works for assembly files at this time. "
+        PopulateList(UpdatePhysicalProperties,
+                     "Update physical properties",
+                     "UpdatePhysicalProperties",
+                      HelpString,
+                      RequiresSave:=True)
 
         Dim VariablesEdit As New L2A
         HelpString = "Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  "
-        HelpString += "Access the form using the 'Variables edit/add/expose' 'Edit' button.  "
+        HelpString += "Access the form using the `Variables edit/add/expose` `Edit` button.  "
         HelpString += "It is located below the task list on each Task Tab."
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
@@ -342,6 +372,14 @@ Public Class LabelToAction
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
 
+        Dim UpdatePhysicalProperties As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(UpdatePhysicalProperties,
+                     "Update physical properties",
+                     "UpdatePhysicalProperties",
+                      HelpString,
+                      RequiresSave:=True)
+
         Dim VariablesEdit As New L2A
         HelpString = "Same as the Assembly command of the same name."
         PopulateList(VariablesEdit,
@@ -520,6 +558,14 @@ Public Class LabelToAction
                      "PropertyFindReplace",
                      HelpString,
                      RequiresFindReplaceFields:=True, RequiresSave:=True)
+
+        Dim UpdatePhysicalProperties As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(UpdatePhysicalProperties,
+                     "Update physical properties",
+                     "UpdatePhysicalProperties",
+                      HelpString,
+                      RequiresSave:=True)
 
         Dim VariablesEdit As New L2A
         HelpString = "Same as the Assembly command of the same name."

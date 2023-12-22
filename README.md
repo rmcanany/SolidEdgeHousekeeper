@@ -1,4 +1,3 @@
-
 ![Logo](My%20Project/media/logo.png)
 <p align=center>Robert McAnany 2024
 
@@ -386,12 +385,17 @@ In addition to plain text and pattern matching, you can also use a property form
 
 If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
+#### Update physical properties
+Updates mass, volume, etc.  Models with no density are reported in the log file. 
+
+You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
+
 #### Variables add/edit/expose
-Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  Access the form using the 'Variables edit/add/expose' 'Edit' button.  It is located below the task list on each Task Tab.
+Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  Access the form using the `Variables edit/add/expose` `Edit` button.  It is located below the task list on each Task Tab.
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
 
-The Variable name is required.  There are restrictions on it.  It cannot start with a number.  It can only contain letters and numbers and the underscore '_' character.
+The Variable name is required.  There are restrictions on the name.  It cannot start with a number.  It can only contain letters and numbers and the underscore '_' character.
 
 If a variable on the list is not in the file, it can optionally be added automatically.  Set the option on the **Configuration Tab -- General Page**. 
 
@@ -399,7 +403,7 @@ The number/formula is not required if only exposing an existing variable, otherw
 
 If exposing a variable, the Expose name defaults to the variable name.  You can optionally change it.  The Expose name does not have restrictions like the variable name.  
 
-The variables are processed in the order in the table.  You can change the order by selecting a row, then use the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
+The variables are processed in the order in the table.  You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
 
 You can copy the settings on the form to other tabs.  Set the 'Copy To' CheckBoxes as desired.
 
@@ -468,6 +472,9 @@ Same as the Assembly command of the same name.
 #### Property find replace
 Same as the Assembly command of the same name.
 
+#### Update physical properties
+Same as the Assembly command of the same name.
+
 #### Variables add/edit/expose
 Same as the Assembly command of the same name.
 
@@ -527,6 +534,9 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Property find replace
+Same as the Assembly command of the same name.
+
+#### Update physical properties
 Same as the Assembly command of the same name.
 
 #### Variables add/edit/expose
