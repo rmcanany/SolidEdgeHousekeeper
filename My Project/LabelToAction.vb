@@ -145,12 +145,8 @@ Public Class LabelToAction
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
-HelpString,
-RequiresFindReplaceFields:=True, RequiresSave:=True)
-
-        '        Added the ability To update mass, volume, etc.for model files. Models with no density assigned are reported in the log file. 
-
-        '        It can either be shown, hidden, Or Left() unchanged.  The Option Is Set On the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
+                     HelpString,
+                     RequiresFindReplaceFields:=True, RequiresSave:=True)
 
         Dim UpdatePhysicalProperties As New L2A
         HelpString = "Updates mass, volume, etc.  Models with no density are reported in the log file. "
@@ -194,29 +190,6 @@ RequiresFindReplaceFields:=True, RequiresSave:=True)
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
-        'Dim ExposeVariablesMissing As New L2A
-        'HelpString = "Checks to see if all the variables listed in `Variables to expose` are present in the document."
-        'PopulateList(ExposeVariablesMissing,
-        '             "Expose variables missing",
-        '             "ExposeVariablesMissing",
-        '             HelpString,
-        '             RequiresExposeVariables:=True)
-
-        'Dim ExposeVariables As New L2A
-        'HelpString = "Exposes entries from the variable table, making them available as a Custom property. "
-        'HelpString += "Enter the names as a comma-delimited list in the `Variables to expose` textbox. "
-        'HelpString += "Optionally include a different Expose Name, set off by the colon `:` character. "
-        'HelpString += vbCrLf + vbCrLf + "For example `var1, var2, var3`"
-        'HelpString += vbCrLf + vbCrLf + "Or `var1: Length, var2: Width, var3: Height`"
-        'HelpString += vbCrLf + vbCrLf + "Or a combination `var1: Length, var2, var3`"
-        'HelpString += vbCrLf + vbCrLf + "Note: You cannot use either a comma `,` or a colon `:` in the Expose Name. "
-        'HelpString += "Actually there's nothing stopping you, but it will not do what you want. "
-        'PopulateList(ExposeVariables,
-        '             "Expose variables",
-        '             "ExposeVariables",
-        '             HelpString,
-        '             RequiresSave:=True,
-        '             RequiresVariablesToEdit:=True)
 
         Dim RemoveFaceStyleOverrides As New L2A
         HelpString = "Face style overrides change a part's appearance in the assembly. "
@@ -388,23 +361,6 @@ RequiresFindReplaceFields:=True, RequiresSave:=True)
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
-        'Dim ExposeVariablesMissing As New L2A
-        'HelpString = "Same as the Assembly command of the same name."
-        'PopulateList(ExposeVariablesMissing,
-        '             "Expose variables missing",
-        '             "ExposeVariablesMissing",
-        '             HelpString,
-        '             RequiresExposeVariables:=True)
-
-        'Dim ExposeVariables As New L2A
-        'HelpString = "Same as the Assembly command of the same name."
-        'PopulateList(ExposeVariables,
-        '             "Expose variables",
-        '             "ExposeVariables",
-        '             HelpString,
-        '             RequiresSave:=True,
-        '             RequiresVariablesToEdit:=True)
-
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Assembly command of the same name."
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
@@ -574,23 +530,6 @@ RequiresFindReplaceFields:=True, RequiresSave:=True)
                      "VariablesEdit",
                      HelpString,
                      RequiresVariablesToEdit:=True)
-
-        'Dim ExposeVariablesMissing As New L2A
-        'HelpString = "Same as the Assembly command of the same name."
-        'PopulateList(ExposeVariablesMissing,
-        '             "Expose variables missing",
-        '             "ExposeVariablesMissing",
-        '             HelpString,
-        '             RequiresExposeVariables:=True)
-
-        'Dim ExposeVariables As New L2A
-        'HelpString = "Same as the Assembly command of the same name."
-        'PopulateList(ExposeVariables,
-        '             "Expose variables",
-        '             "ExposeVariables",
-        '             HelpString,
-        '             RequiresSave:=True,
-        '             RequiresVariablesToEdit:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Part command of the same name."

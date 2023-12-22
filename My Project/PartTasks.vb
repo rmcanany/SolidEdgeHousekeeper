@@ -1020,192 +1020,6 @@ Public Class PartTasks
     End Function
 
 
-    'Private Function UpdateFaceAndViewStylesFromTemplateInternal_OLD(
-    '    ByVal SEDoc As SolidEdgePart.PartDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    Dim SETemplateDoc As SolidEdgePart.PartDocument
-    '    Dim Windows As SolidEdgeFramework.Windows
-    '    Dim Window As SolidEdgeFramework.Window
-    '    Dim View As SolidEdgeFramework.View
-    '    Dim ViewStyles As SolidEdgeFramework.ViewStyles
-    '    Dim ViewStyle As SolidEdgeFramework.ViewStyle
-    '    Dim FaceStyles As SolidEdgeFramework.FaceStyles
-    '    Dim FaceStyle As SolidEdgeFramework.FaceStyle
-
-    '    Dim TemplateFilename As String = Configuration("TextBoxTemplatePart")
-    '    Dim TemplateActiveStyleName As String = ""
-    '    Dim TempViewStyleName As String = ""
-    '    Dim ViewStyleAlreadyPresent As Boolean
-    '    Dim TemplateSkyboxName(5) As String
-    '    Dim msg As String = ""
-    '    Dim tf As Boolean = False
-
-    '    Dim ConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim ThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim PartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim CurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-
-    '    Dim TemplateConstructionBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim TemplateThreadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim TemplatePartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-    '    Dim TemplateCurveBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
-
-    '    SEDoc.ImportStyles(TemplateFilename, True)  ' FaceStyles, that is.
-
-    '    ' Find the active ViewStyle in the template file.
-    '    SETemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgePart.PartDocument)
-    '    SEApp.DoIdle()
-
-    '    ' Get the template base styles
-    '    SETemplateDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seConstructionBaseStyle, TemplateConstructionBaseStyle)
-    '    SETemplateDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seThreadedCylindersBaseStyle, TemplateThreadBaseStyle)
-    '    SETemplateDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.sePartBaseStyle, TemplatePartBaseStyle)
-    '    SETemplateDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seCurveBaseStyle, TemplateCurveBaseStyle)
-
-
-    '    ' Update base styles in the document
-    '    FaceStyles = CType(SEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-
-    '    ' Need the doc PartBaseStyle below.  If it is not Nothing, don't overwrite it.
-    '    SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.sePartBaseStyle, PartBaseStyle)
-
-    '    For Each FaceStyle In FaceStyles
-    '        If TemplateConstructionBaseStyle IsNot Nothing Then
-    '            If FaceStyle.StyleName = TemplateConstructionBaseStyle.StyleName Then
-    '                SEDoc.SetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seConstructionBaseStyle,
-    '                                   FaceStyle)
-    '            End If
-    '        End If
-
-    '        If TemplateThreadBaseStyle IsNot Nothing Then
-    '            If FaceStyle.StyleName = TemplateThreadBaseStyle.StyleName Then
-    '                SEDoc.SetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seThreadedCylindersBaseStyle,
-    '                                   FaceStyle)
-    '            End If
-    '        End If
-
-    '        If TemplatePartBaseStyle IsNot Nothing Then
-    '            If PartBaseStyle Is Nothing Then
-    '                If FaceStyle.StyleName = TemplatePartBaseStyle.StyleName Then
-    '                    SEDoc.SetBaseStyle(SolidEdgePart.PartBaseStylesConstants.sePartBaseStyle,
-    '                                   FaceStyle)
-    '                End If
-    '            End If
-    '        End If
-
-    '        If TemplateCurveBaseStyle IsNot Nothing Then
-    '            If FaceStyle.StyleName = TemplateCurveBaseStyle.StyleName Then
-    '                SEDoc.SetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seCurveBaseStyle,
-    '                                   FaceStyle)
-    '            End If
-    '        End If
-    '    Next
-
-
-    '    Windows = SETemplateDoc.Windows
-    '    For Each Window In Windows
-    '        View = Window.View
-    '        TemplateActiveStyleName = View.Style.ToString
-    '    Next
-
-    '    ViewStyles = CType(SETemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-
-    '    For Each ViewStyle In ViewStyles
-    '        If ViewStyle.StyleName = TemplateActiveStyleName Then
-    '            For i As Integer = 0 To 5
-    '                TemplateSkyboxName(i) = ViewStyle.GetSkyboxSideFilename(i)
-    '            Next
-    '        End If
-    '    Next
-
-    '    SETemplateDoc.Close(False)
-    '    SEApp.DoIdle()
-
-    '    ' If a style by the same name exists in the target file, delete it.
-    '    ViewStyleAlreadyPresent = False
-    '    ViewStyles = CType(SEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-    '    For Each ViewStyle In ViewStyles
-    '        If ViewStyle.StyleName = TemplateActiveStyleName Then
-    '            ViewStyleAlreadyPresent = True
-    '        Else
-    '            TempViewStyleName = ViewStyle.StyleName
-    '        End If
-    '    Next
-
-    '    SEApp.DoIdle()
-
-    '    Windows = SEDoc.Windows
-
-    '    If ViewStyleAlreadyPresent Then ' Hopefully deactivate the desired ViewStyle so it can be removed
-    '        For Each Window In Windows
-    '            View = Window.View
-    '            View.Style = TempViewStyleName
-    '        Next
-    '        ' ViewStyles can sometimes be flagged 'in use' even if they are not
-    '        Try
-    '            ViewStyles.Remove(TemplateActiveStyleName)
-    '        Catch ex As Exception
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("View style not updated")
-    '        End Try
-    '    End If
-
-    '    If ExitStatus = 0 Then
-    '        ViewStyles.AddFromFile(TemplateFilename, TemplateActiveStyleName)
-
-    '        For Each ViewStyle In ViewStyles
-    '            If ViewStyle.StyleName = TemplateActiveStyleName Then
-    '                ViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
-    '                For i As Integer = 0 To 5
-    '                    ViewStyle.SetSkyboxSideFilename(i, TemplateSkyboxName(i))
-    '                Next
-    '            End If
-    '        Next
-
-    '        For Each Window In Windows
-    '            View = Window.View
-    '            View.Style = TemplateActiveStyleName
-    '        Next
-
-    '        SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seConstructionBaseStyle,
-    '                       ConstructionBaseStyle)
-    '        SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seThreadedCylindersBaseStyle,
-    '                   ThreadBaseStyle)
-    '        SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.sePartBaseStyle,
-    '                   PartBaseStyle)
-    '        SEDoc.GetBaseStyle(SolidEdgePart.PartBaseStylesConstants.seCurveBaseStyle,
-    '                   CurveBaseStyle)
-
-    '        tf = ConstructionBaseStyle Is Nothing
-    '        tf = tf Or (ThreadBaseStyle Is Nothing)
-    '        tf = tf Or (PartBaseStyle Is Nothing)
-    '        tf = tf Or (CurveBaseStyle Is Nothing)
-
-    '        If tf Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Some Color Manager base styles undefined.")
-    '        End If
-
-    '        If SEDoc.ReadOnly Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-    '        Else
-    '            SEDoc.Save()
-    '            SEApp.DoIdle()
-    '        End If
-    '    End If
-
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-    'End Function
-
 
 
     Public Function OpenSave(
@@ -1589,139 +1403,6 @@ Public Class PartTasks
     End Function
 
 
-    'Private Function CropImage(Configuration As Dictionary(Of String, String),
-    '                      SEDoc As SolidEdgePart.PartDocument,
-    '                      NewFilename As String,
-    '                      NewExtension As String,
-    '                      WindowH As Integer,
-    '                      WindowW As Integer
-    '                      ) As String
-
-    '    Dim ModelX As Double
-    '    Dim ModelY As Double
-    '    Dim ModelZ As Double
-    '    'Dim XMin As Double = 1000000
-    '    'Dim YMin As Double = 1000000
-    '    'Dim ZMin As Double = 1000000
-    '    'Dim XMax As Double = -1000000
-    '    'Dim YMax As Double = -1000000
-    '    'Dim ZMax As Double = -1000000
-
-    '    Dim ImageW As Double
-    '    Dim ImageH As Double
-    '    Dim ImageAspectRatio As Double
-
-    '    Dim CropW As Integer
-    '    Dim CropH As Integer
-
-    '    Dim FfmpegCmd As String
-    '    Dim FfmpegArgs As String
-    '    Dim P As New Process
-    '    Dim TempFilename As String
-
-    '    Dim ExitCode As Integer = 0
-    '    Dim ExitMessage As String = ""
-
-    '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-
-    '    Dim WindowAspectRatio As Double = WindowH / WindowW
-
-    '    Dim Models As SolidEdgePart.Models
-    '    Dim Model As SolidEdgePart.Model
-    '    Dim Body As SolidEdgeGeometry.Body
-
-    '    Dim FeatureDoctor As New FeatureDoctor
-    '    Dim PointsList As New List(Of Double)
-    '    Dim PointsListTemp As New List(Of Double)
-    '    Dim Point As Double
-
-    '    Models = SEDoc.Models
-
-    '    If (Models.Count = 0) Then
-    '        ExitMessage = "No models to process.  Cropped image not created."
-    '        Return ExitMessage
-    '    End If
-    '    If (Models.Count = 0) Or (Models.Count > 25) Then
-    '        ExitMessage = "Too many models to process.  Cropped image not created."
-    '        Return ExitMessage
-    '    End If
-
-    '    For Each Model In Models
-    '        Body = CType(Model.Body, SolidEdgeGeometry.Body)
-    '        PointsListTemp = FeatureDoctor.GetBodyRange(Body)
-    '        If PointsList.Count = 0 Then
-    '            For Each Point In PointsListTemp
-    '                PointsList.Add(Point)
-    '            Next
-    '        Else
-    '            For i As Integer = 0 To 2
-    '                If PointsListTemp(i) < PointsList(i) Then
-    '                    PointsList(i) = PointsListTemp(i)
-    '                End If
-    '            Next
-    '            For i As Integer = 3 To 5
-    '                If PointsListTemp(i) > PointsList(i) Then
-    '                    PointsList(i) = PointsListTemp(i)
-    '                End If
-    '            Next
-    '        End If
-    '    Next
-
-    '    ModelX = PointsList(3) - PointsList(0) 'XMax - XMin
-    '    ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
-    '    ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
-
-    '    If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
-    '        ImageW = 0.707 * ModelX + 0.707 * ModelY
-    '        ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
-    '    ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
-    '        ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
-    '        ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
-    '    Else
-    '        ImageW = 0.557 * ModelX + 0.830667 * ModelY
-    '        ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
-    '    End If
-
-    '    ImageAspectRatio = ImageH / ImageW
-
-    '    If WindowAspectRatio > ImageAspectRatio Then
-    '        CropH = CInt(Math.Round(WindowW * ImageAspectRatio))
-    '        CropW = WindowW
-    '    Else
-    '        CropH = WindowH
-    '        CropW = CInt(Math.Round(WindowH / ImageAspectRatio))
-    '    End If
-
-    '    TempFilename = NewFilename.Replace(NewExtension, String.Format("-Housekeeper{0}", NewExtension))
-
-    '    FfmpegCmd = String.Format("{0}\ffmpeg.exe", StartupPath)
-
-    '    FfmpegArgs = String.Format("-y -i {0}{1}{2} ", Chr(34), NewFilename, Chr(34))
-    '    FfmpegArgs = String.Format("{0} -vf crop={1}:{2} ", FfmpegArgs, CropW, CropH)
-    '    FfmpegArgs = String.Format("{0} {1}{2}{3}", FfmpegArgs, Chr(34), TempFilename, Chr(34))
-
-    '    Try
-    '        P = Process.Start(FfmpegCmd, FfmpegArgs)
-    '        P.WaitForExit()
-    '        ExitCode = P.ExitCode
-
-    '        If ExitCode = 0 Then
-    '            System.IO.File.Delete(NewFilename)
-    '            FileSystem.Rename(TempFilename, NewFilename)
-    '        Else
-    '            ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
-    '        End If
-
-    '    Catch ex As Exception
-    '        ExitMessage = String.Format("Unable to save cropped image '{0}'.  ", TempFilename)
-    '        ExitMessage = String.Format("{0}  Verify the following file is present on the system '{1}'.  ", ExitMessage, FfmpegCmd)
-    '    End Try
-
-
-
-    '    Return ExitMessage
-
-    'End Function
 
     Private Function ParseSubdirectoryFormula(SEDoc As SolidEdgePart.PartDocument,
                                               Configuration As Dictionary(Of String, String),
@@ -1949,120 +1630,6 @@ Public Class PartTasks
     End Function
 
 
-    'Private Function ParseSubdirectoryFormula(SEDoc As SolidEdgePart.PartDocument,
-    '                                          SubdirectoryFormula As String
-    '                                          ) As String
-    '    Dim OutString As String = ""
-
-    '    ' Formatting for subdirectory name formula
-    '    ' Example property callout: %{hmk_Part_Number/CP|G}  
-    '    ' Need to know PropertySet, so maybe: %{Custom.hmk_Part_Number}
-    '    ' For Drafts, maybe: %{Custom.hmk_Part_Number|R1}
-
-    '    ' Example 1 Formula: "Material_%{System.Material}_Thickness_%{Custom.Material Thickness}"
-    '    ' Example 2 Formula: "%{System.Material} %{Custom.Material Thickness}"
-
-    '    If Not SubdirectoryFormula.Contains("%") Then
-    '        Return SubdirectoryFormula
-    '    End If
-
-    '    Dim PropertySet As String
-    '    Dim PropertyName As String
-
-    '    Dim DocValues As New List(Of String)
-    '    Dim DocValue As String
-
-    '    Dim StartPositions As New List(Of Integer)
-    '    Dim StartPosition As Integer
-    '    Dim EndPositions As New List(Of Integer)
-    '    Dim EndPosition As Integer
-    '    Dim Length As Integer
-    '    Dim i As Integer
-
-    '    Dim Formulas As New List(Of String)
-    '    Dim Formula As String
-
-    '    For StartPosition = 0 To SubdirectoryFormula.Length - 1
-    '        If SubdirectoryFormula.Substring(StartPosition, 1) = "%" Then
-    '            StartPositions.Add(StartPosition)
-    '        End If
-    '    Next
-
-    '    For EndPosition = 0 To SubdirectoryFormula.Length - 1
-    '        If SubdirectoryFormula.Substring(EndPosition, 1) = "}" Then
-    '            EndPositions.Add(EndPosition)
-    '        End If
-    '    Next
-
-    '    For i = 0 To StartPositions.Count - 1
-    '        Length = EndPositions(i) - StartPositions(i) + 1
-    '        Formulas.Add(SubdirectoryFormula.Substring(StartPositions(i), Length))
-    '    Next
-
-    '    For Each Formula In Formulas
-    '        Formula = Formula.Replace("%{", "")
-    '        Formula = Formula.Replace("}", "")
-    '        i = Formula.IndexOf(".")
-    '        'PropertySet = Formula.Split("."c)(0)
-    '        'PropertyName = Formula.Split("."c)(1)
-    '        PropertySet = Formula.Substring(0, i)
-    '        PropertyName = Formula.Substring(i + 1)
-    '        DocValue = GetPropertyValue(SEDoc, PropertySet, PropertyName).Trim
-    '        If DocValue = "" Then
-    '            Return ""
-    '        End If
-    '        DocValues.Add(DocValue)
-    '    Next
-
-    '    OutString = SubdirectoryFormula
-
-    '    For i = 0 To DocValues.Count - 1
-    '        OutString = OutString.Replace(Formulas(i), DocValues(i))
-    '    Next
-
-    '    Return OutString
-    'End Function
-
-    'Private Function GetPropertyValue(SEDoc As SolidEdgePart.PartDocument,
-    '                                  PropertySet As String,
-    '                                  PropertyName As String
-    '                                  ) As String
-
-    '    Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
-    '    Dim Properties As SolidEdgeFramework.Properties = Nothing
-    '    Dim Prop As SolidEdgeFramework.Property = Nothing
-
-    '    Dim DocValue As String = ""
-    '    Dim PropertyFound As Boolean = False
-    '    Dim tf As Boolean
-
-    '    PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-
-    '    For Each Properties In PropertySets
-    '        For Each Prop In Properties
-    '            tf = (PropertySet.ToLower = "custom")
-    '            tf = tf And (Properties.Name.ToLower = "custom")
-    '            If tf Then
-    '                If Prop.Name.ToLower = PropertyName.ToLower Then
-    '                    PropertyFound = True
-    '                    DocValue = Prop.Value.ToString
-    '                    Exit For
-    '                End If
-    '            Else
-    '                If Prop.Name.ToLower = PropertyName.ToLower Then
-    '                    PropertyFound = True
-    '                    DocValue = Prop.Value.ToString
-    '                    Exit For
-    '                End If
-    '            End If
-    '        Next
-    '        If PropertyFound Then
-    '            Exit For
-    '        End If
-    '    Next
-
-    '    Return DocValue
-    'End Function
 
 
     Public Function InteractiveEdit(
@@ -2087,72 +1654,7 @@ Public Class PartTasks
 
     End Function
 
-    'Public Function InteractiveEdit(
-    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
 
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    ErrorMessage = InvokeSTAThread(
-    '                           Of SolidEdgePart.PartDocument,
-    '                           Dictionary(Of String, String),
-    '                           SolidEdgeFramework.Application,
-    '                           Dictionary(Of Integer, List(Of String)))(
-    '                               AddressOf InteractiveEditInternal,
-    '                               CType(SEDoc, SolidEdgePart.PartDocument),
-    '                               Configuration,
-    '                               SEApp)
-
-    '    Return ErrorMessage
-
-    'End Function
-
-    'Private Function InteractiveEditInternal(
-    '    ByVal SEDoc As SolidEdgePart.PartDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    Dim Result As MsgBoxResult
-    '    Dim msg As String
-    '    Dim indent As String = "    "
-
-    '    SEApp.DisplayAlerts = True
-
-    '    msg = String.Format("When finished, do one of the following:{0}", vbCrLf)
-    '    msg = String.Format("{0}{1}Click Yes to save and close{2}", msg, indent, vbCrLf)
-    '    msg = String.Format("{0}{1}Click No to close without saving{2}", msg, indent, vbCrLf)
-    '    msg = String.Format("{0}{1}Click Cancel to quit{2}", msg, indent, vbCrLf)
-
-    '    Result = MsgBox(msg, MsgBoxStyle.YesNoCancel Or MsgBoxStyle.SystemModal, Title:="Solid Edge Housekeeper")
-
-    '    If Result = vbYes Then
-    '        If SEDoc.ReadOnly Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Cannot save read-only file.")
-    '        Else
-    '            SEDoc.Save()
-    '            SEApp.DoIdle()
-    '        End If
-    '    ElseIf Result = vbNo Then
-    '        'ExitStatus = 1
-    '        'ErrorMessageList.Add("File was not saved.")
-    '    Else  ' Cancel was chosen
-    '        ExitStatus = 99
-    '        ErrorMessageList.Add("Operation was cancelled.")
-    '    End If
-
-    '    SEApp.DisplayAlerts = False
-
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-    'End Function
 
     Public Function RunExternalProgram(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -2180,69 +1682,6 @@ Public Class PartTasks
 
     End Function
 
-
-    'Public Function RunExternalProgram(
-    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    ErrorMessage = InvokeSTAThread(
-    '                           Of SolidEdgePart.PartDocument,
-    '                           Dictionary(Of String, String),
-    '                           SolidEdgeFramework.Application,
-    '                           Dictionary(Of Integer, List(Of String)))(
-    '                               AddressOf RunExternalProgramInternal,
-    '                               CType(SEDoc, SolidEdgePart.PartDocument),
-    '                               Configuration,
-    '                               SEApp)
-
-    '    Return ErrorMessage
-
-    'End Function
-
-    'Private Function RunExternalProgramInternal(
-    '    ByVal SEDoc As SolidEdgePart.PartDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim SupplementalErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-    '    Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-
-    '    Dim ExternalProgram As String = Configuration("TextBoxExternalProgramPart")
-
-    '    SupplementalErrorMessage = CommonTasks.RunExternalProgram(ExternalProgram)
-
-    '    ExitStatus = SupplementalErrorMessage.Keys(0)
-
-    '    SupplementalErrorMessageList = SupplementalErrorMessage(ExitStatus)
-
-    '    If SupplementalErrorMessageList.Count > 0 Then
-    '        For Each s As String In SupplementalErrorMessageList
-    '            ErrorMessageList.Add(s)
-    '        Next
-    '    End If
-
-    '    If Configuration("CheckBoxRunExternalProgramSaveFile").ToLower = "true" Then
-    '        If SEDoc.ReadOnly Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-    '        Else
-    '            SEDoc.Save()
-    '            SEApp.DoIdle()
-    '        End If
-    '    End If
-
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-    'End Function
 
 
 
@@ -2376,50 +1815,50 @@ Public Class PartTasks
     End Function
 
 
-    Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
-        ' Takes a double-delimited string and returns a dictionary
-        ' delimiter1 separates entries in the dictionary
-        ' delimiter2 separates the Key from the Value in each entry.
+    'Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
+    '    ' Takes a double-delimited string and returns a dictionary
+    '    ' delimiter1 separates entries in the dictionary
+    '    ' delimiter2 separates the Key from the Value in each entry.
 
-        ' Example string: "weight: Weight of Object, length:, width"
-        ' Returns a dictionary like:
+    '    ' Example string: "weight: Weight of Object, length:, width"
+    '    ' Returns a dictionary like:
 
-        ' {"weight": "Weight of Object",
-        '  "length": "length",
-        '  "width": "width"}
+    '    ' {"weight": "Weight of Object",
+    '    '  "length": "length",
+    '    '  "width": "width"}
 
-        ' Notes
-        ' Whitespace before and after each Key and Value is removed.
-        ' To convert a single string, say ",", to a char, do ","c
-        ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
+    '    ' Notes
+    '    ' Whitespace before and after each Key and Value is removed.
+    '    ' To convert a single string, say ",", to a char, do ","c
+    '    ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
 
-        Dim D As New Dictionary(Of String, String)
-        Dim A() As String
-        Dim K As String
-        Dim V As String
+    '    Dim D As New Dictionary(Of String, String)
+    '    Dim A() As String
+    '    Dim K As String
+    '    Dim V As String
 
-        A = s.Split(delimiter1)
+    '    A = s.Split(delimiter1)
 
-        For i As Integer = 0 To A.Length - 1
-            If A(i).Contains(delimiter2) Then
-                K = A(i).Split(delimiter2)(0).Trim
-                V = A(i).Split(delimiter2)(1).Trim
+    '    For i As Integer = 0 To A.Length - 1
+    '        If A(i).Contains(delimiter2) Then
+    '            K = A(i).Split(delimiter2)(0).Trim
+    '            V = A(i).Split(delimiter2)(1).Trim
 
-                If V = "" Then
-                    V = K
-                End If
-            Else
-                K = A(i).Trim
-                V = K
-            End If
+    '            If V = "" Then
+    '                V = K
+    '            End If
+    '        Else
+    '            K = A(i).Trim
+    '            V = K
+    '        End If
 
-            D.Add(K, V)
+    '        D.Add(K, V)
 
-        Next
+    '    Next
 
-        Return D
+    '    Return D
 
-    End Function
+    'End Function
 
 
     Public Function Dummy(
