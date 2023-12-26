@@ -116,10 +116,10 @@ Public Class LabelToAction
 
         Dim PropertyFindReplace As New L2A
         HelpString = "Searches for text in a specified property and replaces it if found. "
-        HelpString += "The property, search text, and replacement text are entered on the **Task Tab**, "
-        HelpString += "below the task list. "
+        HelpString += "The property, search text, and replacement text are entered on the Input Editor. "
+        HelpString += "Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. "
         HelpString += ""
-        HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_find_replace.png)"
+        HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_input_editor.png)"
         HelpString += ""
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section above. "
@@ -134,14 +134,20 @@ Public Class LabelToAction
         HelpString += "the replacement is `ALUMINUM`, "
         HelpString += "and the property value is `Aluminum 6061-T6`. "
         HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
-        HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
+        ' HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
         HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
         HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
-        HelpString += "except preceeded with `System.` or `Custom.` as above. "
+        HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
         HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
         HelpString += "you can optionally have it added automatically. "
         HelpString += "This option is set on the **Configuration Tab -- General Page**. "
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
+        HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
+        HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
+        HelpString += "at the top of the form.  Only one row can be moved at a time. "
+        HelpString += "The delete button, also at the top of the form, removes selected rows. "
+        HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs. "
+        HelpString += "Set the 'Copy To' CheckBoxes as desired."
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
@@ -163,9 +169,9 @@ Public Class LabelToAction
                       RequiresSave:=True)
 
         Dim VariablesEdit As New L2A
-        HelpString = "Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  "
-        HelpString += "Access the form using the `Variables edit/add/expose` `Edit` button.  "
-        HelpString += "It is located below the task list on each Task Tab."
+        HelpString = "Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. "
+        HelpString += "Access the form using the `Variables edit/add/expose` `Edit` button. "
+        HelpString += "It is located below the task list on each **Task Tab**."
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
@@ -175,9 +181,9 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
         HelpString += "program will report an error."
-        HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name.  "
-        HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name.  "
-        HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table.  "
+        HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
+        HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
+        HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time.  "
         HelpString += "The delete button, also at the top of the form, removes selected rows.  "

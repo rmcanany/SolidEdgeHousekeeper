@@ -173,6 +173,12 @@
     <Compile Include="My Project\FormPropertyFilter.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormPropertyInputEditor.Designer.vb">
+      <DependentUpon>FormPropertyInputEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormPropertyInputEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormSheetSelector.Designer.vb">
       <DependentUpon>FormSheetSelector.vb</DependentUpon>
     </Compile>
@@ -185,6 +191,7 @@
     <Compile Include="My Project\FormVariableInputEditor.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\InputEditorDoctor.vb" />
     <Compile Include="My Project\LabelToAction.vb" />
     <Compile Include="My Project\LaunchTask.vb" />
     <Compile Include="My Project\MaterialDoctorPart.vb" />
@@ -212,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormPropertyInputEditor.resx">
+      <DependentUpon>FormPropertyInputEditor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormSheetSelector.resx">
       <DependentUpon>FormSheetSelector.vb</DependentUpon>

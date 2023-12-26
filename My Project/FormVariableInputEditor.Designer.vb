@@ -32,6 +32,7 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
         Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
         Me.ButtonClearSelected = New System.Windows.Forms.Button()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -47,7 +48,6 @@ Partial Class FormVariableInputEditor
         Me.CheckBoxCopyToPsm = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCopyToDraft = New System.Windows.Forms.CheckBox()
         Me.LabelCopyTo = New System.Windows.Forms.Label()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -136,6 +136,12 @@ Partial Class FormVariableInputEditor
         Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
         Me.ButtonClearSelected.UseVisualStyleBackColor = False
         '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -170,24 +176,26 @@ Partial Class FormVariableInputEditor
         '
         'TableLayoutPanel4
         '
-        Me.TableLayoutPanel4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel4.ColumnCount = 1
         Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel4.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.Label4, 0, 1)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(202, 4)
+        Me.TableLayoutPanel4.Location = New System.Drawing.Point(202, 3)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 2
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17.0!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(150, 51)
+        Me.TableLayoutPanel4.Size = New System.Drawing.Size(186, 52)
         Me.TableLayoutPanel4.TabIndex = 5
         '
         'Label3
         '
         Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 19)
+        Me.Label3.Location = New System.Drawing.Point(3, 20)
         Me.Label3.Name = "Label3"
         Me.Label3.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.Label3.Size = New System.Drawing.Size(103, 15)
@@ -198,7 +206,7 @@ Partial Class FormVariableInputEditor
         '
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(3, 36)
+        Me.Label4.Location = New System.Drawing.Point(3, 37)
         Me.Label4.Name = "Label4"
         Me.Label4.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.Label4.Size = New System.Drawing.Size(133, 15)
@@ -326,12 +334,6 @@ Partial Class FormVariableInputEditor
         Me.LabelCopyTo.Size = New System.Drawing.Size(176, 15)
         Me.LabelCopyTo.TabIndex = 9
         Me.LabelCopyTo.Text = "Copy these settings to another tab"
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
         '
         'FormVariableInputEditor
         '

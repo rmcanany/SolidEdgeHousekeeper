@@ -365,9 +365,9 @@ Loads all assembly occurrences' geometry into memory and does an update. Used ma
 Can run out of memory for very large assemblies.
 
 #### Property find replace
-Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the **Task Tab**, below the task list. 
+Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. 
 
-![Find_Replace](My%20Project/media/property_find_replace.png)
+![Find_Replace](My%20Project/media/property_input_editor.png)
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
@@ -379,11 +379,13 @@ There are three search modes, `PT`, `WC`, and `RX`.
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
-![Property Formula](My%20Project/media/property_formula.png)
-
-In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as above. 
+In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
 
 If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
+
+The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
+
+You can copy the settings on the form to other tabs. Set the 'Copy To' CheckBoxes as desired.
 
 #### Update physical properties
 Updates mass, volume, etc.  Models with no density are reported in the log file. 
@@ -391,7 +393,7 @@ Updates mass, volume, etc.  Models with no density are reported in the log file.
 You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
 
 #### Variables add/edit/expose
-Adds, changes, and/or exposes variables.  The information is entered in the form as shown below.  Access the form using the `Variables edit/add/expose` `Edit` button.  It is located below the task list on each Task Tab.
+Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
 
@@ -401,9 +403,9 @@ If a variable on the list is not in the file, it can optionally be added automat
 
 The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
-If exposing a variable, the Expose name defaults to the variable name.  You can optionally change it.  The Expose name does not have restrictions like the variable name.  
+If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
-The variables are processed in the order in the table.  You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
+The variables are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
 
 You can copy the settings on the form to other tabs.  Set the 'Copy To' CheckBoxes as desired.
 

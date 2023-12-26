@@ -438,171 +438,153 @@ Public Class CommonTasks
         Dim AutoAddMissingProperty As Boolean = Configuration("CheckBoxAutoAddMissingProperty").ToLower = "true"
 
         Dim Proceed As Boolean = True
+        Dim s As String
+
+        Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim PropertiesToEdit As String = ""
 
         Dim DocType As String = GetDocType(SEDoc)
+        If DocType = "asm" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditAssembly")
+        If DocType = "par" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditPart")
+        If DocType = "psm" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditSheetmetal")
+        If DocType = "dft" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditDraft")
 
-        If DocType = "asm" Then
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetAssembly")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNameAssembly")
-            FindString = Configuration("TextBoxFindReplaceFindAssembly")
-            ReplaceString = Configuration("TextBoxFindReplaceReplaceAssembly")
+        If Not PropertiesToEdit = "" Then
+            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
 
-            If Configuration("CheckBoxFindReplaceFindPTAssembly") = "True" Then
-                FindSearchType = "PT"
-            ElseIf Configuration("CheckBoxFindReplaceFindWCAssembly") = "True" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
+            'PropertiesToEditDict format
+            '{"Material":{
+            '    "PropertySet":"System",
+            '    "PropertyName":"Material",
+            '    "Find_PT":"True",
+            '    "Find_WC":"False",
+            '    "Find_RX":"False",
+            '    "FindString":"Aluminum",
+            '    "Replace_PT":"True",
+            '    "Replace_RX":"False",
+            '    "ReplaceString":"Aluminum 6061-T6"},
+            ' ...
+            '}
 
-            If Configuration("CheckBoxFindReplaceReplacePTAssembly") = "True" Then
-                ReplaceSearchType = "PT"
-            Else
-                ReplaceSearchType = "RX"
-            End If
-
-        ElseIf DocType = "par" Then
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetPart")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNamePart")
-            FindString = Configuration("TextBoxFindReplaceFindPart")
-            ReplaceString = Configuration("TextBoxFindReplaceReplacePart")
-
-            If Configuration("CheckBoxFindReplaceFindPTPart") = "True" Then
-                FindSearchType = "PT"
-            ElseIf Configuration("CheckBoxFindReplaceFindWCPart") = "True" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
-
-            If Configuration("CheckBoxFindReplaceReplacePTPart") = "True" Then
-                ReplaceSearchType = "PT"
-            Else
-                ReplaceSearchType = "RX"
-            End If
-
-        ElseIf DocType = "psm" Then
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetSheetmetal")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNameSheetmetal")
-            FindString = Configuration("TextBoxFindReplaceFindSheetmetal")
-            ReplaceString = Configuration("TextBoxFindReplaceReplaceSheetmetal")
-
-            If Configuration("CheckBoxFindReplaceFindPTSheetmetal") = "True" Then
-                FindSearchType = "PT"
-            ElseIf Configuration("CheckBoxFindReplaceFindWCSheetmetal") = "True" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
-
-            If Configuration("CheckBoxFindReplaceReplacePTSheetmetal") = "True" Then
-                ReplaceSearchType = "PT"
-            Else
-                ReplaceSearchType = "RX"
-            End If
-
-        Else  ' Must be a Draft file.  Hopefully.
-            PropertySetName = Configuration("ComboBoxFindReplacePropertySetDraft")
-            PropertyName = Configuration("TextBoxFindReplacePropertyNameDraft")
-            FindString = Configuration("TextBoxFindReplaceFindDraft")
-            ReplaceString = Configuration("TextBoxFindReplaceReplaceDraft")
-
-            If Configuration("CheckBoxFindReplaceFindPTDraft") = "True" Then
-                FindSearchType = "PT"
-            ElseIf Configuration("CheckBoxFindReplaceFindWCDraft") = "True" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
-
-            If Configuration("CheckBoxFindReplaceReplacePTDraft") = "True" Then
-                ReplaceSearchType = "PT"
-            Else
-                ReplaceSearchType = "RX"
-            End If
-
+        Else
+            ExitStatus = 1
+            ErrorMessageList.Add("No properties provided")
         End If
 
-        If Proceed Then
-            Try
-                FindString = SubstitutePropertyFormula(SEDoc, FindString)
-            Catch ex As Exception
-                Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add("Find text not recognized.")
-            End Try
+        For Each PropertyName In PropertiesToEditDict.Keys
 
-            Try
-                ReplaceString = SubstitutePropertyFormula(SEDoc, ReplaceString)
-            Catch ex As Exception
-                Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add("Replace text not recognized.")
-            End Try
-        End If
+            Proceed = True
 
-        If Proceed Then
-            Try
-                Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
-                If Prop Is Nothing Then
+            PropertySetName = PropertiesToEditDict(PropertyName)("PropertySet")
+            FindString = PropertiesToEditDict(PropertyName)("FindString")
+            ReplaceString = PropertiesToEditDict(PropertyName)("ReplaceString")
+
+            If PropertiesToEditDict(PropertyName)("Find_PT").ToLower = "true" Then
+                FindSearchType = "PT"
+            ElseIf PropertiesToEditDict(PropertyName)("Find_WC").ToLower = "true" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If PropertiesToEditDict(PropertyName)("Replace_PT").ToLower = "true" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
+
+            If Proceed Then
+                Try
+                    FindString = SubstitutePropertyFormula(SEDoc, FindString)
+                Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName))
-                End If
-            Catch ex As Exception
-                Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName))
-            End Try
+                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString)
+                    ErrorMessageList.Add(s)
+                End Try
 
-        End If
-
-        If Proceed Then
-            Try
-                If FindSearchType = "PT" Then
-                    Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                Else
-                    If FindSearchType = "WC" Then
-                        FindString = CommonTasks.GlobToRegex(FindString)
-                    End If
-                    If ReplaceSearchType = "PT" Then
-                        ' ReplaceString = Regex.Escape(ReplaceString)
-                    End If
-
-                    Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-
-                End If
-                ' Properties.Save()
-            Catch ex As Exception
-                Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to replace property value.  This command only works on text type properties.")
-            End Try
-
-        End If
-
-        If Proceed Then
-            Try
-                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-                For Each Properties In PropertySets
-                    Properties.Save()
-                    SEApp.DoIdle()
-                Next
-                If SEDoc.ReadOnly Then
+                Try
+                    ReplaceString = SubstitutePropertyFormula(SEDoc, ReplaceString)
+                Catch ex As Exception
+                    Proceed = False
                     ExitStatus = 1
-                    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-                Else
-                    SEDoc.Save()
-                    SEApp.DoIdle()
-                End If
+                    s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                    ErrorMessageList.Add(s)
+                End Try
+            End If
 
-            Catch ex As Exception
-                Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add("Problem accessing or saving Property.")
-            End Try
-        End If
+            If Proceed Then
+                Try
+                    Prop = GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
+                    If Prop Is Nothing Then
+                        Proceed = False
+                        ExitStatus = 1
+                        s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                        ErrorMessageList.Add(s)
+                    End If
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    ErrorMessageList.Add(s)
+                End Try
 
+            End If
+
+            If Proceed Then
+                Try
+                    If FindSearchType = "PT" Then
+                        Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                    Else
+                        If FindSearchType = "WC" Then
+                            FindString = CommonTasks.GlobToRegex(FindString)
+                        End If
+                        If ReplaceSearchType = "PT" Then
+                            ' ReplaceString = Regex.Escape(ReplaceString)
+                        End If
+
+                        Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                    End If
+                    ' Properties.Save()
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                    ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+                Try
+                    PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+                    For Each Properties In PropertySets
+                        Properties.Save()
+                        SEApp.DoIdle()
+                    Next
+                    If SEDoc.ReadOnly Then
+                        ExitStatus = 1
+                        s = "Cannot save document marked 'Read Only'"
+                        If Not ErrorMessageList.Contains(s) Then
+                            ErrorMessageList.Add(s)
+                        End If
+                    Else
+                        SEDoc.Save()
+                        SEApp.DoIdle()
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = "Problem accessing or saving Property."
+                    If Not ErrorMessageList.Contains(s) Then
+                        ErrorMessageList.Add(s)
+                    End If
+                End Try
+            End If
+
+        Next
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

@@ -17,12 +17,6 @@ A Housekeeper External Program that computes the difference in volume of a bent 
 
 The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
 
-### Property Find/Replace
-
-(Thank you **@Francesco Arfilli**!)
-
-Added an option to create the property if it doesn't exist.
-
 ### Most Recently Used File List (MRU)
 
 (Thank you **@Francesco Arfilli**!)
@@ -112,11 +106,25 @@ The variables are processed in the order shown on the form. They can be moved up
 
 The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
+### Property Find/Replace
+
+Add the ability to change multiple properties at a time. A dialog similar to the new Variable Input Editor is provided.
+
+![Logo](My%20Project/media/property_input_editor.png)
+
+Added an option on the **Configuration Tab -- General Page** to create a property if it doesn't exist in the file. (Thank you **@Francesco Arfilli**!)
+
+
+
 ### Update Physical Properties
 
 Added the ability to update mass, volume, etc. for model files. Models with no density are reported in the log file. 
 
-You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
+Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
+
+### Saved Settings
+
+Fixed an issue where a setting containing the "=" character was being truncated when read from the `defaults.txt` file.
 
 ## V2023.6 Enhancements/Fixes
 

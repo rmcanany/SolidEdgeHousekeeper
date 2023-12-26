@@ -229,6 +229,7 @@ Partial Class Form1
         End If
 
         tf = tb.Name.ToLower.Contains("variablesedit")
+        tf = tf Or tb.Name.ToLower.Contains("propertiesedit")
         If tf Then
             tb.Text = Value
         End If
@@ -292,32 +293,32 @@ Partial Class Form1
         ComboBoxPartNumberPropertySet.Text = CType(ComboBoxPartNumberPropertySet.Items(0), String)
 
         'ComboBoxFindReplacePropertySetAssembly
-        ComboBoxFindReplacePropertySetAssembly.Items.Clear()
-        For Each s As String In Split("System Custom")
-            ComboBoxFindReplacePropertySetAssembly.Items.Add(s)
-        Next
-        ComboBoxFindReplacePropertySetAssembly.Text = CType(ComboBoxFindReplacePropertySetAssembly.Items(0), String)
+        'ComboBoxFindReplacePropertySetAssembly.Items.Clear()
+        'For Each s As String In Split("System Custom")
+        '    ComboBoxFindReplacePropertySetAssembly.Items.Add(s)
+        'Next
+        'ComboBoxFindReplacePropertySetAssembly.Text = CType(ComboBoxFindReplacePropertySetAssembly.Items(0), String)
 
-        'ComboBoxFindReplacePropertySetPart
-        ComboBoxFindReplacePropertySetPart.Items.Clear()
-        For Each s As String In Split("System Custom")
-            ComboBoxFindReplacePropertySetPart.Items.Add(s)
-        Next
-        ComboBoxFindReplacePropertySetPart.Text = CType(ComboBoxFindReplacePropertySetPart.Items(0), String)
+        ''ComboBoxFindReplacePropertySetPart
+        'ComboBoxFindReplacePropertySetPart.Items.Clear()
+        'For Each s As String In Split("System Custom")
+        '    ComboBoxFindReplacePropertySetPart.Items.Add(s)
+        'Next
+        'ComboBoxFindReplacePropertySetPart.Text = CType(ComboBoxFindReplacePropertySetPart.Items(0), String)
 
-        'ComboBoxFindReplacePropertySetSheetmetal
-        ComboBoxFindReplacePropertySetSheetmetal.Items.Clear()
-        For Each s As String In Split("System Custom")
-            ComboBoxFindReplacePropertySetSheetmetal.Items.Add(s)
-        Next
-        ComboBoxFindReplacePropertySetSheetmetal.Text = CType(ComboBoxFindReplacePropertySetSheetmetal.Items(0), String)
+        ''ComboBoxFindReplacePropertySetSheetmetal
+        'ComboBoxFindReplacePropertySetSheetmetal.Items.Clear()
+        'For Each s As String In Split("System Custom")
+        '    ComboBoxFindReplacePropertySetSheetmetal.Items.Add(s)
+        'Next
+        'ComboBoxFindReplacePropertySetSheetmetal.Text = CType(ComboBoxFindReplacePropertySetSheetmetal.Items(0), String)
 
-        'ComboBoxFindReplacePropertySetDraft
-        ComboBoxFindReplacePropertySetDraft.Items.Clear()
-        For Each s As String In Split("System Custom")
-            ComboBoxFindReplacePropertySetDraft.Items.Add(s)
-        Next
-        ComboBoxFindReplacePropertySetDraft.Text = CType(ComboBoxFindReplacePropertySetDraft.Items(0), String)
+        ''ComboBoxFindReplacePropertySetDraft
+        'ComboBoxFindReplacePropertySetDraft.Items.Clear()
+        'For Each s As String In Split("System Custom")
+        '    ComboBoxFindReplacePropertySetDraft.Items.Add(s)
+        'Next
+        'ComboBoxFindReplacePropertySetDraft.Text = CType(ComboBoxFindReplacePropertySetDraft.Items(0), String)
 
         Dim PD As New PrinterDoctor
         'ComboBoxPrinter1
@@ -357,6 +358,8 @@ Partial Class Form1
         Dim ControlDict As New Dictionary(Of String, Control)
         Dim Ctrl As Control
 
+        Dim KVPairList As New List(Of String)
+
         DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
 
         CreateFilenameCharmap()
@@ -373,8 +376,26 @@ Partial Class Form1
                     Continue For
                 End If
 
-                Key = KVPair.Split("="c)(0)
-                Value = KVPair.Split("="c)(1)
+                KVPairList = KVPair.Split("="c).ToList
+
+                Key = KVPairList(0)
+
+                ' Deal with multiple "=" characters in the input.
+                Value = ""
+
+                If KVPairList.Count = 2 Then
+                    Value = KVPairList(1)
+                End If
+                If KVPairList.Count > 2 Then
+                    For i As Integer = 1 To KVPairList.Count - 1
+                        If i = 1 Then
+                            Value = KVPairList(i)
+                        Else
+                            Value = String.Format("{0}={1}", Value, KVPairList(i))
+                        End If
+                    Next
+                End If
+
 
                 If Key = "new_ComboBoxFileSearch" Then
                     'Example format
