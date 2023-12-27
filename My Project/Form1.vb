@@ -3419,7 +3419,7 @@ Public Class Form1
         VariableInputEditor.ShowInputEditor("par")
 
         If VariableInputEditor.DialogResult = DialogResult.OK Then
-            TextBoxVariablesEditPart.Text = VariableInputEditor.TextBoxResult.Text
+            TextBoxVariablesEditPart.Text = VariableInputEditor.TextBoxJSON.Text
 
             If VariableInputEditor.CheckBoxCopyToAsm.Checked Then
                 TextBoxVariablesEditAssembly.Text = TextBoxVariablesEditPart.Text
@@ -3437,7 +3437,7 @@ Public Class Form1
         VariableInputEditor.ShowInputEditor("asm")
 
         If VariableInputEditor.DialogResult = DialogResult.OK Then
-            TextBoxVariablesEditAssembly.Text = VariableInputEditor.TextBoxResult.Text
+            TextBoxVariablesEditAssembly.Text = VariableInputEditor.TextBoxJSON.Text
 
             If VariableInputEditor.CheckBoxCopyToPar.Checked Then
                 TextBoxVariablesEditPart.Text = TextBoxVariablesEditAssembly.Text
@@ -3469,7 +3469,7 @@ Public Class Form1
         VariableInputEditor.ShowInputEditor("psm")
 
         If VariableInputEditor.DialogResult = DialogResult.OK Then
-            TextBoxVariablesEditSheetmetal.Text = VariableInputEditor.TextBoxResult.Text
+            TextBoxVariablesEditSheetmetal.Text = VariableInputEditor.TextBoxJSON.Text
 
             If VariableInputEditor.CheckBoxCopyToAsm.Checked Then
                 TextBoxVariablesEditAssembly.Text = TextBoxVariablesEditSheetmetal.Text

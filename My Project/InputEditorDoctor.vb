@@ -96,6 +96,20 @@ Public Class InputEditorDoctor
         Return CheckBoxDict
     End Function
 
+    Public Function GetTextBoxes(TableLayoutPanel As TableLayoutPanel) As Dictionary(Of String, TextBox)
+        Dim TextBoxDict As New Dictionary(Of String, TextBox)
+        Dim Control As Control
+        'Dim TextBox As TextBox
+
+        For Each Control In TableLayoutPanel.Controls
+            If Control.GetType() Is GetType(TextBox) Then
+                TextBoxDict(Control.Name) = (DirectCast(Control, TextBox))
+            End If
+        Next
+
+        Return TextBoxDict
+    End Function
+
     Public Function GetComboBoxes(TableLayoutPanel As TableLayoutPanel) As Dictionary(Of String, ComboBox)
         Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
         Dim Control As Control
@@ -125,9 +139,13 @@ Public Class InputEditorDoctor
         For RowIndex = 0 To LastRowIndex
             For ColumnIndex = 0 To TableLayoutPanel.ColumnCount - 1
                 Control = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex)
-                Control.BackColor = HeaderColor
-                If Control.GetType = GetType(TableLayoutPanel) Then
-                    SetHeaderRowColor(CType(Control, TableLayoutPanel), ProcessAllRows:=True)
+                If Not Control Is Nothing Then
+                    If Not Control.GetType = GetType(Button) Then
+                        Control.BackColor = Me.HeaderColor
+                        If Control.GetType = GetType(TableLayoutPanel) Then
+                            SetHeaderRowColor(CType(Control, TableLayoutPanel), ProcessAllRows:=True)
+                        End If
+                    End If
                 End If
             Next
         Next

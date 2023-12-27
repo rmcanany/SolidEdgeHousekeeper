@@ -724,7 +724,7 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf
         HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. "
         HelpString += "These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. "
-        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated. "
+        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated. "
         HelpString += "If you need one or more of those styles updated, please ask on the Forum. "
         PopulateList(UpdateStylesFromTemplate,
                      "Update styles from template",
