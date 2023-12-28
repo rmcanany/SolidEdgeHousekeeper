@@ -108,6 +108,7 @@ Partial Class Form1
 
     Private Sub PopulateTextBox(tb As TextBox, Value As String, StartupPath As String)
         Dim tf As Boolean
+        Dim AlreadyProcessed As Boolean = False
 
         tf = tb.Name.ToLower.Contains("directory")
         If tf Then
@@ -116,11 +117,7 @@ Partial Class Form1
             Else
                 tb.Text = StartupPath
             End If
-        End If
-
-        tf = tb.Name.ToLower.Contains("formula")
-        If tf Then
-            tb.Text = Value
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("template")
@@ -135,6 +132,7 @@ Partial Class Form1
             Else
                 tb.Text = ""
             End If
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("watermarkscale")
@@ -150,6 +148,7 @@ Partial Class Form1
                     tb.Text = "0.5"
                 End Try
             End If
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("columnwidth")
@@ -163,6 +162,7 @@ Partial Class Form1
                     tb.Text = "5.5"
                 End Try
             End If
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("fontsize")
@@ -176,6 +176,7 @@ Partial Class Form1
                     tb.Text = "8"
                 End Try
             End If
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("randomsample")
@@ -189,6 +190,7 @@ Partial Class Form1
                     tb.Text = "0.1"
                 End Try
             End If
+            AlreadyProcessed = True
         End If
 
         tf = tb.Name.ToLower.Contains("restartafter")
@@ -202,37 +204,44 @@ Partial Class Form1
                     tb.Text = "250"
                 End Try
             End If
+            AlreadyProcessed = True
         End If
 
-        tf = tb.Name.ToLower.Contains("propertyname")
-        tf = tf Or tb.Name.ToLower.Contains("findreplace")
-        tf = tf Or tb.Name.ToLower.Contains("filesearch")
-        tf = tf Or tb.Name.ToLower.Contains("printoptions")
+        tf = tb.Name.ToLower.Contains("interference")
         If tf Then
-            tb.Text = Value
+            If Value = "" Then
+                tb.Text = "1000"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "1000"
+                End Try
+            End If
+            AlreadyProcessed = True
         End If
 
-        tf = tb.Name.ToLower.Contains("exposevariables")
-        If tf Then
-            tb.Text = Value
-        End If
-
+        'TextBoxPrinter2Copies
         tf = tb.Name.ToLower.Contains("printer1copies")
         tf = tf Or tb.Name.ToLower.Contains("printer2copies")
         If tf Then
+            If Value = "" Then
+                tb.Text = "1"
+            Else
+                Try
+                    tb.Text = CStr(Value)
+                Catch ex As Exception
+                    tb.Text = "1"
+                End Try
+            End If
+            AlreadyProcessed = True
+        End If
+
+
+        If Not AlreadyProcessed Then
             tb.Text = Value
         End If
 
-        tf = tb.Name.ToLower.Contains("sheetselections")
-        If tf Then
-            tb.Text = Value
-        End If
-
-        tf = tb.Name.ToLower.Contains("variablesedit")
-        tf = tf Or tb.Name.ToLower.Contains("propertiesedit")
-        If tf Then
-            tb.Text = Value
-        End If
 
     End Sub
 

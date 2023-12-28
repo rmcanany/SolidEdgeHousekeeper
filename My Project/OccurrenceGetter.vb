@@ -27,7 +27,7 @@ Public Class OccurrenceGetter
             AllOccurrenceNames.Add(Occurrence.Name)
             AllOccurrences.Add(Occurrence)
 
-            If Occurrence.Subassembly Then
+            If Occurrence.Subassembly And IncludeSubOccurrences Then
                 SubOccurrences = Occurrence.SubOccurrences
                 If Not SubOccurrences Is Nothing Then
                     For Each SubOccurrence In SubOccurrences

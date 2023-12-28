@@ -441,6 +441,9 @@ Checks if any assembly occurrences have conflicting or otherwise broken relation
 #### Underconstrained relationships
 Checks if any assembly occurrences have missing relationships.
 
+#### Check interference
+Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
+
 #### Run external program
 Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
@@ -618,7 +621,7 @@ Checks drawing views one by one, and updates them if needed.
 #### Update styles from template
 Updates styles and background sheets from a template you specify on the **Configuration Tab -- Templates Page**. 
 
-These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. The latter group encountered errors with the current implementation.  The errors were not thoroughtly investigated. If you need one or more of those styles updated, please ask on the Forum. 
+These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated. If you need one or more of those styles updated, please ask on the Forum. 
 
 #### Update drawing border from template
 Replaces the background border with that of the Draft template specified on the **Configuration Tab -- Templates Page**.

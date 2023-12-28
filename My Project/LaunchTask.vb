@@ -87,6 +87,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
                 Case "UpdatePhysicalProperties"
                     ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
+                Case "CheckInterference"
+                    ErrorMessage = task.Proxy.CheckInterference(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()

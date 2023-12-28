@@ -114,8 +114,6 @@ Add the ability to change multiple properties at a time. A dialog similar to the
 
 Added an option on the **Configuration Tab -- General Page** to create a property if it doesn't exist in the file. (Thank you **@Francesco Arfilli**!)
 
-
-
 ### Update Physical Properties
 
 Added the ability to update mass, volume, etc. for model files. Models with no density are reported in the log file. 
@@ -125,6 +123,11 @@ Provided optional control of the display of the center of mass symbol. It can ei
 ### Saved Settings
 
 Fixed an issue where a setting containing the "=" character was being truncated when read from the `defaults.txt` file.
+
+### Check interference
+
+Added the ability to perform an interference check on assemblies.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
+
 
 ## V2023.6 Enhancements/Fixes
 

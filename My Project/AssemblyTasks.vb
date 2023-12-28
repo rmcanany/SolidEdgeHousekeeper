@@ -2,6 +2,7 @@
 
 Imports System.Windows.Shell
 Imports SolidEdgeCommunity
+Imports SolidEdgeConstants
 
 Public Class AssemblyTasks
     Inherits IsolatedTaskProxy
@@ -1792,52 +1793,97 @@ Public Class AssemblyTasks
 
     End Function
 
+    Public Function CheckInterference(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    'Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
-    '    ' Takes a double-delimited string and returns a dictionary
-    '    ' delimiter1 separates entries in the dictionary
-    '    ' delimiter2 separates the Key from the Value in each entry.
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf CheckInterferenceInternal,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+                                   Configuration,
+                                   SEApp)
 
-    '    ' Example string: "weight: Weight of Object, length:, width"
-    '    ' Returns a dictionary like:
+        Return ErrorMessage
 
-    '    ' {"weight": "Weight of Object",
-    '    '  "length": "length",
-    '    '  "width": "width"}
+    End Function
 
-    '    ' Notes
-    '    ' Whitespace before and after each Key and Value is removed.
-    '    ' To convert a single string, say ",", to a char, do ","c
-    '    ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
+    Private Function CheckInterferenceInternal(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '    Dim D As New Dictionary(Of String, String)
-    '    Dim A() As String
-    '    Dim K As String
-    '    Dim V As String
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '    A = s.Split(delimiter1)
+        Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself
+        Dim Status As SolidEdgeAssembly.InterferenceStatusConstants
+        Dim Occurrences As SolidEdgeAssembly.Occurrences = Nothing
+        Dim Occurrence As SolidEdgeAssembly.Occurrence = Nothing
+        Dim i As Integer
+        Dim NumInterferences As Object = Nothing
+        Occurrences = SEDoc.Occurrences
+        Dim IgnoreT As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
+        Dim IgnoreD As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
+        Dim NumOccurrences As Integer
+        Dim NumOccurrencesLimit As Integer
 
-    '    For i As Integer = 0 To A.Length - 1
-    '        If A(i).Contains(delimiter2) Then
-    '            K = A(i).Split(delimiter2)(0).Trim
-    '            V = A(i).Split(delimiter2)(1).Trim
+        Dim SetList As New List(Of Object)
 
-    '            If V = "" Then
-    '                V = K
-    '            End If
-    '        Else
-    '            K = A(i).Trim
-    '            V = K
-    '        End If
+        For i = 1 To Occurrences.Count
+            SetList.Add(Occurrences.Item(i))
+        Next
+        Dim OG As New OccurrenceGetter(SEDoc, False)
 
-    '        D.Add(K, V)
+        NumOccurrences = OG.AllOccurrences.Count + OG.AllSubOccurrences.Count
 
-    '    Next
+        NumOccurrencesLimit = CInt(Configuration("TextBoxCheckInterferenceMaxOccurrences"))
 
-    '    Return D
+        If NumOccurrences > NumOccurrencesLimit Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format(
+                "Not performing interference check.  Number of occurrences {0} exceeds limit {1}.",
+                NumOccurrences,
+                NumOccurrencesLimit))
+        End If
 
-    'End Function
+        If (ExitStatus = 0) And (NumOccurrences > 1) Then
+            Try
+                SEDoc.CheckInterference2(
+                NumElementsSet1:=SetList.Count,
+                Set1:=SetList.ToArray,
+                Status:=Status,
+                ComparisonMethod:=ComparisonMethod,
+                AddInterferenceAsOccurrence:=False,
+                NumInterferences:=NumInterferences,
+                IgnoreSameNominalDiaConstant:=IgnoreD,
+                IgnoreNonThreadVsThreadConstant:=IgnoreT)
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add("Error running interference check")
+            End Try
+        End If
+
+        If (ExitStatus = 0) And (NumOccurrences > 1) Then
+            If Not Status = SolidEdgeAssembly.InterferenceStatusConstants.seInterferenceStatusNoInterference Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Interference detected")
+            End If
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
 
 
     Public Function Dummy(

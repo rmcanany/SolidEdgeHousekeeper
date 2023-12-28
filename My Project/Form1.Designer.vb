@@ -58,6 +58,8 @@ Partial Class Form1
         Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.TabPageAssembly = New System.Windows.Forms.TabPage()
+        Me.ButtonPropertiesEditAssembly = New System.Windows.Forms.Button()
+        Me.TextBoxPropertiesEditAssembly = New System.Windows.Forms.TextBox()
         Me.ButtonVariablesEditAssembly = New System.Windows.Forms.Button()
         Me.TextBoxVariablesEditAssembly = New System.Windows.Forms.TextBox()
         Me.TextBoxSaveAsFormulaAssembly = New System.Windows.Forms.TextBox()
@@ -75,6 +77,8 @@ Partial Class Form1
         Me.LabelAssemblyTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxAssembly = New System.Windows.Forms.CheckedListBox()
         Me.TabPagePart = New System.Windows.Forms.TabPage()
+        Me.ButtonPropertiesEditPart = New System.Windows.Forms.Button()
+        Me.TextBoxPropertiesEditPart = New System.Windows.Forms.TextBox()
         Me.ButtonVariablesEditPart = New System.Windows.Forms.Button()
         Me.TextBoxVariablesEditPart = New System.Windows.Forms.TextBox()
         Me.TextBoxSaveAsFormulaPart = New System.Windows.Forms.TextBox()
@@ -92,6 +96,8 @@ Partial Class Form1
         Me.LabelPartTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxPart = New System.Windows.Forms.CheckedListBox()
         Me.TabPageSheetmetal = New System.Windows.Forms.TabPage()
+        Me.ButtonPropertiesEditSheetmetal = New System.Windows.Forms.Button()
+        Me.TextBoxPropertiesEditSheetmetal = New System.Windows.Forms.TextBox()
         Me.ButtonVariablesEditSheetmetal = New System.Windows.Forms.Button()
         Me.TextBoxVariablesEditSheetmetal = New System.Windows.Forms.TextBox()
         Me.TextBoxSaveAsFormulaSheetmetal = New System.Windows.Forms.TextBox()
@@ -109,6 +115,8 @@ Partial Class Form1
         Me.LabelSheetmetalTabNote = New System.Windows.Forms.Label()
         Me.CheckedListBoxSheetmetal = New System.Windows.Forms.CheckedListBox()
         Me.TabPageDraft = New System.Windows.Forms.TabPage()
+        Me.ButtonPropertiesEditDraft = New System.Windows.Forms.Button()
+        Me.TextBoxPropertiesEditDraft = New System.Windows.Forms.TextBox()
         Me.LabelFindReplacePropertySetDraft = New System.Windows.Forms.Label()
         Me.TextBoxSaveAsFormulaDraft = New System.Windows.Forms.TextBox()
         Me.CheckBoxSaveAsFormulaDraft = New System.Windows.Forms.CheckBox()
@@ -306,14 +314,8 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.TextBoxPropertiesEditAssembly = New System.Windows.Forms.TextBox()
-        Me.ButtonPropertiesEditAssembly = New System.Windows.Forms.Button()
-        Me.TextBoxPropertiesEditPart = New System.Windows.Forms.TextBox()
-        Me.ButtonPropertiesEditPart = New System.Windows.Forms.Button()
-        Me.TextBoxPropertiesEditSheetmetal = New System.Windows.Forms.TextBox()
-        Me.ButtonPropertiesEditSheetmetal = New System.Windows.Forms.Button()
-        Me.TextBoxPropertiesEditDraft = New System.Windows.Forms.TextBox()
-        Me.ButtonPropertiesEditDraft = New System.Windows.Forms.Button()
+        Me.TextBoxCheckInterferenceMaxOccurrences = New System.Windows.Forms.TextBox()
+        Me.LabelCheckInterferenceMaxOccurrences = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -700,6 +702,25 @@ Partial Class Form1
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
         '
+        'ButtonPropertiesEditAssembly
+        '
+        Me.ButtonPropertiesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPropertiesEditAssembly.Location = New System.Drawing.Point(400, 580)
+        Me.ButtonPropertiesEditAssembly.Name = "ButtonPropertiesEditAssembly"
+        Me.ButtonPropertiesEditAssembly.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertiesEditAssembly.TabIndex = 30
+        Me.ButtonPropertiesEditAssembly.Text = "Edit"
+        Me.ButtonPropertiesEditAssembly.UseVisualStyleBackColor = True
+        '
+        'TextBoxPropertiesEditAssembly
+        '
+        Me.TextBoxPropertiesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPropertiesEditAssembly.Location = New System.Drawing.Point(10, 580)
+        Me.TextBoxPropertiesEditAssembly.Name = "TextBoxPropertiesEditAssembly"
+        Me.TextBoxPropertiesEditAssembly.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxPropertiesEditAssembly.TabIndex = 29
+        '
         'ButtonVariablesEditAssembly
         '
         Me.ButtonVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -904,6 +925,25 @@ Partial Class Form1
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
         '
+        'ButtonPropertiesEditPart
+        '
+        Me.ButtonPropertiesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPropertiesEditPart.Location = New System.Drawing.Point(400, 580)
+        Me.ButtonPropertiesEditPart.Name = "ButtonPropertiesEditPart"
+        Me.ButtonPropertiesEditPart.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertiesEditPart.TabIndex = 38
+        Me.ButtonPropertiesEditPart.Text = "Edit"
+        Me.ButtonPropertiesEditPart.UseVisualStyleBackColor = True
+        '
+        'TextBoxPropertiesEditPart
+        '
+        Me.TextBoxPropertiesEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPropertiesEditPart.Location = New System.Drawing.Point(10, 580)
+        Me.TextBoxPropertiesEditPart.Name = "TextBoxPropertiesEditPart"
+        Me.TextBoxPropertiesEditPart.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxPropertiesEditPart.TabIndex = 37
+        '
         'ButtonVariablesEditPart
         '
         Me.ButtonVariablesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -1107,6 +1147,25 @@ Partial Class Form1
         Me.TabPageSheetmetal.Size = New System.Drawing.Size(511, 690)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
+        '
+        'ButtonPropertiesEditSheetmetal
+        '
+        Me.ButtonPropertiesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPropertiesEditSheetmetal.Location = New System.Drawing.Point(400, 580)
+        Me.ButtonPropertiesEditSheetmetal.Name = "ButtonPropertiesEditSheetmetal"
+        Me.ButtonPropertiesEditSheetmetal.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertiesEditSheetmetal.TabIndex = 47
+        Me.ButtonPropertiesEditSheetmetal.Text = "Edit"
+        Me.ButtonPropertiesEditSheetmetal.UseVisualStyleBackColor = True
+        '
+        'TextBoxPropertiesEditSheetmetal
+        '
+        Me.TextBoxPropertiesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPropertiesEditSheetmetal.Location = New System.Drawing.Point(10, 580)
+        Me.TextBoxPropertiesEditSheetmetal.Name = "TextBoxPropertiesEditSheetmetal"
+        Me.TextBoxPropertiesEditSheetmetal.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxPropertiesEditSheetmetal.TabIndex = 46
         '
         'ButtonVariablesEditSheetmetal
         '
@@ -1317,6 +1376,25 @@ Partial Class Form1
         Me.TabPageDraft.Size = New System.Drawing.Size(511, 690)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
+        '
+        'ButtonPropertiesEditDraft
+        '
+        Me.ButtonPropertiesEditDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonPropertiesEditDraft.Location = New System.Drawing.Point(400, 640)
+        Me.ButtonPropertiesEditDraft.Name = "ButtonPropertiesEditDraft"
+        Me.ButtonPropertiesEditDraft.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonPropertiesEditDraft.TabIndex = 46
+        Me.ButtonPropertiesEditDraft.Text = "Edit"
+        Me.ButtonPropertiesEditDraft.UseVisualStyleBackColor = True
+        '
+        'TextBoxPropertiesEditDraft
+        '
+        Me.TextBoxPropertiesEditDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxPropertiesEditDraft.Location = New System.Drawing.Point(10, 640)
+        Me.TextBoxPropertiesEditDraft.Name = "TextBoxPropertiesEditDraft"
+        Me.TextBoxPropertiesEditDraft.Size = New System.Drawing.Size(385, 22)
+        Me.TextBoxPropertiesEditDraft.TabIndex = 45
         '
         'LabelFindReplacePropertySetDraft
         '
@@ -3002,6 +3080,8 @@ Partial Class Form1
         '
         'TabPageGeneral
         '
+        Me.TabPageGeneral.Controls.Add(Me.LabelCheckInterferenceMaxOccurrences)
+        Me.TabPageGeneral.Controls.Add(Me.TextBoxCheckInterferenceMaxOccurrences)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxUpdatePhysicalPropertiesCOGHide)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxUpdatePhysicalPropertiesCOGShow)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxAutoAddMissingVariable)
@@ -3081,7 +3161,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 425)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 455)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -3448,81 +3528,22 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'TextBoxPropertiesEditAssembly
+        'TextBoxCheckInterferenceMaxOccurrences
         '
-        Me.TextBoxPropertiesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditAssembly.Location = New System.Drawing.Point(10, 580)
-        Me.TextBoxPropertiesEditAssembly.Name = "TextBoxPropertiesEditAssembly"
-        Me.TextBoxPropertiesEditAssembly.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxPropertiesEditAssembly.TabIndex = 29
+        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(10, 410)
+        Me.TextBoxCheckInterferenceMaxOccurrences.Name = "TextBoxCheckInterferenceMaxOccurrences"
+        Me.TextBoxCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(38, 22)
+        Me.TextBoxCheckInterferenceMaxOccurrences.TabIndex = 59
+        Me.TextBoxCheckInterferenceMaxOccurrences.Text = "1000"
         '
-        'ButtonPropertiesEditAssembly
+        'LabelCheckInterferenceMaxOccurrences
         '
-        Me.ButtonPropertiesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditAssembly.Location = New System.Drawing.Point(400, 580)
-        Me.ButtonPropertiesEditAssembly.Name = "ButtonPropertiesEditAssembly"
-        Me.ButtonPropertiesEditAssembly.Size = New System.Drawing.Size(75, 22)
-        Me.ButtonPropertiesEditAssembly.TabIndex = 30
-        Me.ButtonPropertiesEditAssembly.Text = "Edit"
-        Me.ButtonPropertiesEditAssembly.UseVisualStyleBackColor = True
-        '
-        'TextBoxPropertiesEditPart
-        '
-        Me.TextBoxPropertiesEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditPart.Location = New System.Drawing.Point(10, 580)
-        Me.TextBoxPropertiesEditPart.Name = "TextBoxPropertiesEditPart"
-        Me.TextBoxPropertiesEditPart.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxPropertiesEditPart.TabIndex = 37
-        '
-        'ButtonPropertiesEditPart
-        '
-        Me.ButtonPropertiesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditPart.Location = New System.Drawing.Point(400, 580)
-        Me.ButtonPropertiesEditPart.Name = "ButtonPropertiesEditPart"
-        Me.ButtonPropertiesEditPart.Size = New System.Drawing.Size(75, 22)
-        Me.ButtonPropertiesEditPart.TabIndex = 38
-        Me.ButtonPropertiesEditPart.Text = "Edit"
-        Me.ButtonPropertiesEditPart.UseVisualStyleBackColor = True
-        '
-        'TextBoxPropertiesEditSheetmetal
-        '
-        Me.TextBoxPropertiesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditSheetmetal.Location = New System.Drawing.Point(10, 580)
-        Me.TextBoxPropertiesEditSheetmetal.Name = "TextBoxPropertiesEditSheetmetal"
-        Me.TextBoxPropertiesEditSheetmetal.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxPropertiesEditSheetmetal.TabIndex = 46
-        '
-        'ButtonPropertiesEditSheetmetal
-        '
-        Me.ButtonPropertiesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditSheetmetal.Location = New System.Drawing.Point(400, 580)
-        Me.ButtonPropertiesEditSheetmetal.Name = "ButtonPropertiesEditSheetmetal"
-        Me.ButtonPropertiesEditSheetmetal.Size = New System.Drawing.Size(75, 22)
-        Me.ButtonPropertiesEditSheetmetal.TabIndex = 47
-        Me.ButtonPropertiesEditSheetmetal.Text = "Edit"
-        Me.ButtonPropertiesEditSheetmetal.UseVisualStyleBackColor = True
-        '
-        'TextBoxPropertiesEditDraft
-        '
-        Me.TextBoxPropertiesEditDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditDraft.Location = New System.Drawing.Point(10, 640)
-        Me.TextBoxPropertiesEditDraft.Name = "TextBoxPropertiesEditDraft"
-        Me.TextBoxPropertiesEditDraft.Size = New System.Drawing.Size(385, 22)
-        Me.TextBoxPropertiesEditDraft.TabIndex = 45
-        '
-        'ButtonPropertiesEditDraft
-        '
-        Me.ButtonPropertiesEditDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditDraft.Location = New System.Drawing.Point(400, 640)
-        Me.ButtonPropertiesEditDraft.Name = "ButtonPropertiesEditDraft"
-        Me.ButtonPropertiesEditDraft.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonPropertiesEditDraft.TabIndex = 46
-        Me.ButtonPropertiesEditDraft.Text = "Edit"
-        Me.ButtonPropertiesEditDraft.UseVisualStyleBackColor = True
+        Me.LabelCheckInterferenceMaxOccurrences.AutoSize = True
+        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(60, 415)
+        Me.LabelCheckInterferenceMaxOccurrences.Name = "LabelCheckInterferenceMaxOccurrences"
+        Me.LabelCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(331, 15)
+        Me.LabelCheckInterferenceMaxOccurrences.TabIndex = 60
+        Me.LabelCheckInterferenceMaxOccurrences.Text = "Check interference -- maximum number of occurrences to process"
         '
         'Form1
         '
@@ -3886,4 +3907,6 @@ Partial Class Form1
     Friend WithEvents TextBoxPropertiesEditSheetmetal As TextBox
     Friend WithEvents ButtonPropertiesEditDraft As Button
     Friend WithEvents TextBoxPropertiesEditDraft As TextBox
+    Friend WithEvents TextBoxCheckInterferenceMaxOccurrences As TextBox
+    Friend WithEvents LabelCheckInterferenceMaxOccurrences As Label
 End Class

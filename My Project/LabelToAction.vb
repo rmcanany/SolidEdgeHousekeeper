@@ -278,6 +278,16 @@ Public Class LabelToAction
                      "UnderconstrainedRelationships",
                      HelpString)
 
+        Dim CheckInterference As New L2A
+        HelpString = "Runs an interference check.  All parts are checked against all others. "
+        HelpString += "This can take a long time on large assemblies, "
+        HelpString += "so there is a limit to the number of parts to check. "
+        HelpString += "Set it on the **Configuration Tab -- General Page**."
+        PopulateList(CheckInterference,
+                     "Check interference",
+                     "CheckInterference",
+                     HelpString)
+
         Dim RunExternalProgram As New L2A
         HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the **Task Tab** below the task list. "
