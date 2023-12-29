@@ -393,6 +393,39 @@ Public Class Form1
                 End If
             End If
 
+            If LabelToActionAssembly(Label).RequiresOverallSizeVariables Then
+                tf = CheckBoxStockSizeXYZ.Checked
+                tf = tf Or CheckBoxStockSizeMinMidMax.Checked
+                If Not tf Then
+                    msg2 = indent + "Select at least one overall variable type"
+                    If Not msg.Contains(msg2) Then
+                        msg += msg2 + Chr(13)
+                    End If
+                End If
+                If CheckBoxStockSizeXYZ.Checked Then
+                    tf = TextBoxStockSizeX.Text = ""
+                    tf = tf Or TextBoxStockSizeY.Text = ""
+                    tf = tf Or TextBoxStockSizeZ.Text = ""
+                    If tf Then
+                        msg2 = indent + "Enter a name for each XYZ variable"
+                        If Not msg.Contains(msg2) Then
+                            msg += msg2 + Chr(13)
+                        End If
+                    End If
+                End If
+                If CheckBoxStockSizeMinMidMax.Checked Then
+                    tf = TextBoxStockSizeMin.Text = ""
+                    tf = tf Or TextBoxStockSizeMid.Text = ""
+                    tf = tf Or TextBoxStockSizeMax.Text = ""
+                    If tf Then
+                        msg2 = indent + "Enter a name for each MinMidMax variable"
+                        If Not msg.Contains(msg2) Then
+                            msg += msg2 + Chr(13)
+                        End If
+                    End If
+                End If
+            End If
+
         Next
 
         ' Part Tasks
@@ -1500,6 +1533,39 @@ Public Class Form1
             ButtonPrinter2SheetSelections.Enabled = False
         End If
 
+        If CheckBoxStockSizeXYZ.Checked Then
+            LabelStockSizeXYZ.Enabled = True
+            LabelStockSizeX.Enabled = True
+            LabelStockSizeY.Enabled = True
+            LabelStockSizeZ.Enabled = True
+            TextBoxStockSizeX.Enabled = True
+            TextBoxStockSizeY.Enabled = True
+            TextBoxStockSizeZ.Enabled = True
+        Else
+            LabelStockSizeXYZ.Enabled = False
+            LabelStockSizeX.Enabled = False
+            LabelStockSizeY.Enabled = False
+            LabelStockSizeZ.Enabled = False
+            TextBoxStockSizeX.Enabled = False
+            TextBoxStockSizeY.Enabled = False
+            TextBoxStockSizeZ.Enabled = False
+        End If
+
+        If CheckBoxStockSizeMinMidMax.Checked Then
+            LabelStockSizeMin.Enabled = True
+            LabelStockSizeMid.Enabled = True
+            LabelStockSizeMax.Enabled = True
+            TextBoxStockSizeMin.Enabled = True
+            TextBoxStockSizeMid.Enabled = True
+            TextBoxStockSizeMax.Enabled = True
+        Else
+            LabelStockSizeMin.Enabled = False
+            LabelStockSizeMid.Enabled = False
+            LabelStockSizeMax.Enabled = False
+            TextBoxStockSizeMin.Enabled = False
+            TextBoxStockSizeMid.Enabled = False
+            TextBoxStockSizeMax.Enabled = False
+        End If
         ' Enable/Disable option controls based on task selection
 
         ' ASSEMBLY
@@ -3520,6 +3586,14 @@ Public Class Form1
 
         End If
 
+    End Sub
+
+    Private Sub CheckBoxStockSizeXYZ_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStockSizeXYZ.CheckedChanged
+        ReconcileFormChanges()
+    End Sub
+
+    Private Sub CheckBoxStockSizeMinMidMax_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStockSizeMinMidMax.CheckedChanged
+        ReconcileFormChanges()
     End Sub
 
 

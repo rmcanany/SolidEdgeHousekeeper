@@ -32,6 +32,7 @@ Public Class LabelToAction
         Public Property RequiresPictorialView As Boolean
         Public Property RequiresForegroundProcessing As Boolean
         Public Property RequiresVariablesToEdit As Boolean
+        Public Property RequiresOverallSizeVariables As Boolean
 
 
 
@@ -70,7 +71,8 @@ Public Class LabelToAction
                             Optional RequiresPrinter As Boolean = False,
                             Optional RequiresPictorialView As Boolean = False,
                             Optional RequiresForegroundProcessing As Boolean = False,
-                            Optional RequiresVariablesToEdit As Boolean = False)
+                            Optional RequiresVariablesToEdit As Boolean = False,
+                            Optional RequiresOverallSizeVariables As Boolean = False)
 
         Entry.TaskName = TaskName
         Entry.HelpText = HelpText
@@ -88,6 +90,7 @@ Public Class LabelToAction
         Entry.RequiresPictorialView = RequiresPictorialView
         Entry.RequiresForegroundProcessing = RequiresForegroundProcessing
         Entry.RequiresVariablesToEdit = RequiresVariablesToEdit
+        Entry.RequiresOverallSizeVariables = RequiresOverallSizeVariables
 
         Me(LabelText) = Entry
 
@@ -196,6 +199,28 @@ Public Class LabelToAction
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
+        Dim CopyOverallSizeToVariableTable As New L2A
+        HelpString = "Copies the overall model size to the variable table. "
+        HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
+        HelpString += vbCrLf + vbCrLf + "The size is determined using the built-in Solid Edge `RangeBox`. "
+        HelpString += "The range box is oriented along the XYZ axes. "
+        HelpString += "Misleading values will result for parts with an off axis orientation, such as a 3D tube. "
+        HelpString += vbCrLf + vbCrLf + "![Overall Size Options](My%20Project/media/overall_size_options.png)"
+        HelpString += vbCrLf + vbCrLf + "The size can be reported in `XYZ`, or `MinMidMax` coordinates, or both. "
+        HelpString += "`MinMidMax` has the advantage of being independent of the part's principal orientation. "
+        HelpString += "Set this option on the **Configuration Tab -- General Page**. "
+        HelpString += "Set the desired variable names there, too. "
+        HelpString += vbCrLf + vbCrLf + "Note that the variable values are a non-associative copy. "
+        HelpString += "Any change to the model will require rerunning this command to update the variable table. "
+        HelpString += vbCrLf + vbCrLf + "The command reports sheet metal size in the bent state. "
+        HelpString += "For a flat pattern, instead of this using this command, "
+        HelpString += "use the variables the flat pattern command automatically exports to the variable table. "
+        HelpString += "They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`."
+        PopulateList(CopyOverallSizeToVariableTable,
+                     "Copy overall size to variable table",
+                     "CopyOverallSizeToVariableTable",
+                     HelpString,
+                     RequiresOverallSizeVariables:=True)
 
         Dim RemoveFaceStyleOverrides As New L2A
         HelpString = "Face style overrides change a part's appearance in the assembly. "
@@ -288,6 +313,13 @@ Public Class LabelToAction
                      "CheckInterference",
                      HelpString)
 
+        'Dim ConfigurationsOutOfDate As New L2A
+        'HelpString = ""
+        'PopulateList(ConfigurationsOutOfDate,
+        '             "Configurations out of date",
+        '             "ConfigurationsOutOfDate",
+        '             HelpString)
+
         Dim RunExternalProgram As New L2A
         HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the **Task Tab** below the task list. "
@@ -329,7 +361,7 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section above. "
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
-        HelpString += "If that happens, a replacement is read from filename_charmap.txt in the same directory as Housekeeper.exe. "
+        HelpString += "If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. "
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
@@ -376,6 +408,15 @@ Public Class LabelToAction
                      "VariablesEdit",
                      HelpString,
                      RequiresVariablesToEdit:=True)
+
+        ' 
+        Dim CopyOverallSizeToVariableTable As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(CopyOverallSizeToVariableTable,
+                     "Copy overall size to variable table",
+                     "CopyOverallSizeToVariableTable",
+                     HelpString,
+                     RequiresOverallSizeVariables:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Assembly command of the same name."
@@ -546,6 +587,14 @@ Public Class LabelToAction
                      "VariablesEdit",
                      HelpString,
                      RequiresVariablesToEdit:=True)
+
+        Dim CopyOverallSizeToVariableTable As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(CopyOverallSizeToVariableTable,
+                     "Copy overall size to variable table",
+                     "CopyOverallSizeToVariableTable",
+                     HelpString,
+                     RequiresOverallSizeVariables:=True)
 
         Dim UpdateFaceAndViewStylesFromTemplate As New L2A
         HelpString = "Same as the Part command of the same name."
@@ -826,11 +875,13 @@ Public Class LabelToAction
         HelpString = "Print settings are accessed on the **Configuration Tab -- Printing Page**."
         HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/printer_setup.png)"
         HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
-        HelpString += "You can configure up to two of them, Printer1 and Printer2. "
-        HelpString += "Printer1 is the default.  It prints everything not assigned to Printer2. "
-        HelpString += vbCrLf + vbCrLf + "Printer2 prints any sheet on the drawing whose size is listed in the Sheet selection textbox. "
+        HelpString += "You can configure up to two of them, `Printer1` and `Printer2`. "
+        HelpString += "`Printer1` is the default.  It prints everything not assigned to `Printer2`. "
+        HelpString += vbCrLf + vbCrLf + "`Printer2` prints any sheet on the drawing whose size is listed in the Sheet selection textbox. "
         HelpString += "Click the `Set` button to select the sheet sizes. "
-        HelpString += "Enable/disable Printer2 using the checkbox next to the printer name. "
+        HelpString += vbCrLf + vbCrLf + "Enable/disable a printer using the checkbox next to its name. "
+        HelpString += "If you need to print only certain sizes of drawings, you can disable `Printer1` "
+        HelpString += "and enable `Printer2` with the desired sheet sizes set. "
         HelpString += vbCrLf + vbCrLf + "This command will probably not work with PDF printers. "
         HelpString += "Use the Save As PDF command instead. "
         PopulateList(Print,

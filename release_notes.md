@@ -9,38 +9,7 @@ Feel free to report bugs and/or ideas for improvement on the [**Solid Edge Forum
 
 ## V2024.1 Enhancements/Fixes
 
-### Compare Model and Flat Pattern Model Volumes
-
-Contributed by our very own **o_o ....码**.  Thank you!
-
-A Housekeeper External Program that computes the difference in volume of a bent sheetmetal part and its flat pattern.
-
-The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
-
-### Most Recently Used File List (MRU)
-
-(Thank you **@Francesco Arfilli**!)
-
-Added an option to not add files processed by Housekeeper to the MRU.
-
-### Save As
-
-(Thank you **@roger.ribamatic**, **@SatyenB**,
-**@Robin BIoemberg**!)
-
-Added a new file type, `PDF per Sheet` for drawings.  The output file name is of the format `<Filename>-<Sheetname>.pdf`. There is an option to suppress the `Sheetname` suffix on drawings with only one sheet.
-
-Added another new file type `*.jt` for model files.
-
-### Draft -- Add Quantity Property
-
-(Thank you **@Pedro0996**!)
-
-A Housekeeper External Program that gets the total quantity of each part and subassembly in a given assembly and adds that information to the part (or subassembly) file. In addition to the quantity, the program also records the assembly name from which the quantity was derived. Both are added as custom properties, making them available, for example, in a Callout in Draft. 
-
-There are good reasons not to do this. The quantity is a static (non-associative) value, as is the source assembly name.  They can go stale without warning. However, several people, including me, wanted this, so it got in.
-
-### File List
+### Process files with any Document Status
 
 (Thank you **@jnewell**, **@Robin BIoemberg**!)
 
@@ -48,25 +17,31 @@ Added the ability to process files regardless of Document Status. After processi
 
 ![Open/Save](My%20Project/media/file_open_save_options.png)
 
-Fixed an issue where changing the Property Filter did not always set the out-of-date flag correctly.
 
-### Update Drawing Views
 
-Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the Broken Links Task.
+### Copy overall size to variable table
 
-### Housekeeper External Program AddRemoveCustomProperties
+(Thank you **@Imre Szucs**, **@64Pacific**!)
 
-Added an option to remove all properties *except* those listed in the program settings file.
+Added the ability to copy the overall model size to the variable table. The variables are exposed so they can be used in a callout, parts list, or the like. 
 
-### Property Filter
+The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
-Added an option to not check for properties of the models contained in Draft files.  Previous behavior was to always check.  Set the option on the **Configuration Tab -- General Page**.
+![Overall Size Options](My%20Project/media/overall_size_options.png)
 
-Since Draft files often do not have properties of their own, normally this option should be enabled. Searching for Document Status is another story.  For example, with the option set, an `In Work` drawing of a `Released` part would confusingly show up in a search for `Released` files.
+The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
 
-Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
+Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
 
-Fixed an issue where properties of Draft files themselves were sometimes not searched.
+The command reports sheet metal size in the bent state. For a flat pattern, instead of using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeX`, and `Sheet Metal Gage`.
+
+### Save As
+
+(Thank you **@roger.ribamatic**, **@SatyenB**, **@Robin BIoemberg**!)
+
+Added a new file type, `PDF per Sheet` for drawings.  The output file name is of the format `<Filename>-<Sheetname>.pdf`. There is an option to suppress the `Sheetname` suffix on drawings with only one sheet.
+
+Added new file type `*.jt` for model files.
 
 ### Configuration Tab
 
@@ -80,17 +55,13 @@ Converted to a tab-page layout for easier navigation.
 
 (Thank you **@n0minus38**!)
 
-Added an optional second printer for selected sheet sizes. 
+Added an optional second printer for selected sheet sizes. By disabling the default `Printer1`, you can print selected sizes *only* .
 
 ![Configuration](My%20Project/media/printer_setup.png)
 
 Changed how a printer is selected.  It is now from a pre-populated list of installed printers. Previously it was from the Windows Print dialog.  This was confusing because clicking OK implied a document would be printed.
 
 Removed some other confusing control options.
-
-### Preferences Folder
-
-Added a new location for user data.  It is now stored in Preferences in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
 
 ### Variables Edit/Add/Expose
 
@@ -106,6 +77,14 @@ The variables are processed in the order shown on the form. They can be moved up
 
 The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
+### Compare Model and Flat Pattern Model Volumes
+
+Contributed by our very own **o_o ....码**.  Thank you!
+
+A Housekeeper External Program that computes the difference in volume of a bent sheetmetal part and its flat pattern.
+
+The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
+
 ### Property Find/Replace
 
 Add the ability to change multiple properties at a time. A dialog similar to the new Variable Input Editor is provided.
@@ -120,13 +99,51 @@ Added the ability to update mass, volume, etc. for model files. Models with no d
 
 Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
 
-### Saved Settings
-
-Fixed an issue where a setting containing the "=" character was being truncated when read from the `defaults.txt` file.
-
 ### Check interference
 
 Added the ability to perform an interference check on assemblies.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
+
+### Most Recently Used File List (MRU)
+
+(Thank you **@Francesco Arfilli**!)
+
+Added an option to not add files processed by Housekeeper to the MRU.
+
+### Property Filter
+
+Added an option to not check for properties of the models contained in Draft files.  Previous behavior was to always check.  Set the option on the **Configuration Tab -- General Page**.
+
+Since Draft files often do not have properties of their own, normally this option should be enabled. Searching for Document Status is another story.  For example, with the option set, an `In Work` drawing of a `Released` part would confusingly show up in a search for `Released` files.
+
+Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
+
+Fixed an issue where properties of Draft files themselves were sometimes not searched.
+
+Fixed an issue where changing the Property Filter did not always set the File List out-of-date flag correctly.
+
+### Draft -- Add Quantity Property
+
+(Thank you **@Pedro0996**!)
+
+A Housekeeper External Program that gets the total quantity of each part and subassembly in a given assembly and adds that information to the part (or subassembly) file. In addition to the quantity, the program also records the assembly name from which the quantity was derived. Both are added as custom properties, making them available, for example, in a Callout in Draft. 
+
+Note the quantity and source assembly name are non-associative copies. If the source assembly changes, this command must be re-run to update the values.
+
+### Update Drawing Views
+
+Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the Broken Links Task.
+
+### Housekeeper External Program AddRemoveCustomProperties
+
+Added an option to remove all properties *except* those listed in the program settings file.
+
+### Preferences Folder
+
+Added a new location for user data.  It is now stored in Preferences in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
+
+### Saved Settings
+
+Fixed an issue where a setting containing the "=" character was being truncated when read from the `defaults.txt` file.
 
 
 ## V2023.6 Enhancements/Fixes

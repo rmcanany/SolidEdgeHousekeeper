@@ -1384,7 +1384,7 @@ Public Class SheetmetalTasks
         ' Format: Parasolid (*.xt), IGES (*.igs)
         NewExtension = Configuration("ComboBoxSaveAsSheetmetalFileType")
         NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid (*.xt)" -> ".xt)"
-        NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid (*.xt)" -> ".xt)"
+        NewExtension = NewExtension.Split(")"c)(0)  ' ".xt)" -> ".xt"
 
         NewFileFormat = Configuration("ComboBoxSaveAsSheetmetalFileType")
         NewFileFormat = NewFileFormat.Split("("c)(0)  ' "Parasolid (*.xt)" -> "Parasolid "
@@ -1465,6 +1465,7 @@ Public Class SheetmetalTasks
                                 FlatPatternModels = SEDoc.FlatPatternModels
                                 FlatPatternModel = FlatPatternModels.Item(1)
                                 FlatPatternModel.MakeActive()
+                                SEApp.DoIdle()
                                 SEDoc.SaveAs(NewFilename)
                                 SEApp.DoIdle()
                             Catch ex2 As Exception
@@ -1972,53 +1973,6 @@ Public Class SheetmetalTasks
 
 
 
-
-
-    'Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
-    '    ' Takes a double-delimited string and returns a dictionary
-    '    ' delimiter1 separates entries in the dictionary
-    '    ' delimiter2 separates the Key from the Value in each entry.
-
-    '    ' Example string: "weight: Weight of Object, length:, width"
-    '    ' Returns a dictionary like:
-
-    '    ' {"weight": "Weight of Object",
-    '    '  "length": "length",
-    '    '  "width": "width"}
-
-    '    ' Notes
-    '    ' Whitespace before and after each Key and Value is removed.
-    '    ' To convert a single string, say ",", to a char, do ","c
-    '    ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
-
-    '    Dim D As New Dictionary(Of String, String)
-    '    Dim A() As String
-    '    Dim K As String
-    '    Dim V As String
-
-    '    A = s.Split(delimiter1)
-
-    '    For i As Integer = 0 To A.Length - 1
-    '        If A(i).Contains(delimiter2) Then
-    '            K = A(i).Split(delimiter2)(0).Trim
-    '            V = A(i).Split(delimiter2)(1).Trim
-
-    '            If V = "" Then
-    '                V = K
-    '            End If
-    '        Else
-    '            K = A(i).Trim
-    '            V = K
-    '        End If
-
-    '        D.Add(K, V)
-
-    '    Next
-
-    '    Return D
-
-    'End Function
-
     Public Function UpdatePhysicalProperties(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -2033,6 +1987,28 @@ Public Class SheetmetalTasks
                                SolidEdgeFramework.Application,
                                Dictionary(Of Integer, List(Of String)))(
                                    AddressOf CommonTasks.UpdatePhysicalProperties,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Function CopyOverallSizeToVariableTable(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeFramework.SolidEdgeDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf CommonTasks.CopyOverallSizeToVariableTable,
                                    SEDoc,
                                    Configuration,
                                    SEApp)

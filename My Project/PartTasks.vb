@@ -1815,51 +1815,50 @@ Public Class PartTasks
     End Function
 
 
-    'Private Function StringToDict(s As String, delimiter1 As Char, delimiter2 As Char) As Dictionary(Of String, String)
-    '    ' Takes a double-delimited string and returns a dictionary
-    '    ' delimiter1 separates entries in the dictionary
-    '    ' delimiter2 separates the Key from the Value in each entry.
+    Public Function CopyOverallSizeToVariableTable(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '    ' Example string: "weight: Weight of Object, length:, width"
-    '    ' Returns a dictionary like:
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '    ' {"weight": "Weight of Object",
-    '    '  "length": "length",
-    '    '  "width": "width"}
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeFramework.SolidEdgeDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf CommonTasks.CopyOverallSizeToVariableTable,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
 
-    '    ' Notes
-    '    ' Whitespace before and after each Key and Value is removed.
-    '    ' To convert a single string, say ",", to a char, do ","c
-    '    ' If delimiter2 is not present in an entry, or there is nothing after delimiter2, the Key and Value are the same.
+        Return ErrorMessage
 
-    '    Dim D As New Dictionary(Of String, String)
-    '    Dim A() As String
-    '    Dim K As String
-    '    Dim V As String
+    End Function
 
-    '    A = s.Split(delimiter1)
 
-    '    For i As Integer = 0 To A.Length - 1
-    '        If A(i).Contains(delimiter2) Then
-    '            K = A(i).Split(delimiter2)(0).Trim
-    '            V = A(i).Split(delimiter2)(1).Trim
+    Public Function DummyCommonTasks(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '            If V = "" Then
-    '                V = K
-    '            End If
-    '        Else
-    '            K = A(i).Trim
-    '            V = K
-    '        End If
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '        D.Add(K, V)
+        'ErrorMessage = InvokeSTAThread(
+        '                       Of SolidEdgeFramework.SolidEdgeDocument,
+        '                       Dictionary(Of String, String),
+        '                       SolidEdgeFramework.Application,
+        '                       Dictionary(Of Integer, List(Of String)))(
+        '                           AddressOf CommonTasks.DummyCommonTasks,
+        '                           SEDoc,
+        '                           Configuration,
+        '                           SEApp)
 
-    '    Next
+        Return ErrorMessage
 
-    '    Return D
-
-    'End Function
-
+    End Function
 
     Public Function Dummy(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,

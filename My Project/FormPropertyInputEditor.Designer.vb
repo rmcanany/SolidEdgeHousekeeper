@@ -31,6 +31,12 @@ Partial Class FormPropertyInputEditor
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
+        Me.ButtonClearSelected = New System.Windows.Forms.Button()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
+        Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
+        Me.CheckBoxSelectAll = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -38,12 +44,6 @@ Partial Class FormPropertyInputEditor
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
-        Me.ButtonClearSelected = New System.Windows.Forms.Button()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
-        Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
-        Me.CheckBoxSelectAll = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCopyToAsm = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCopyToPar = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCopyToPsm = New System.Windows.Forms.CheckBox()
@@ -56,8 +56,8 @@ Partial Class FormPropertyInputEditor
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -126,6 +126,9 @@ Partial Class FormPropertyInputEditor
         '
         'TableLayoutPanel3
         '
+        Me.TableLayoutPanel3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel3.BackColor = System.Drawing.SystemColors.Control
         Me.TableLayoutPanel3.ColumnCount = 2
         Me.TableLayoutPanel1.SetColumnSpan(Me.TableLayoutPanel3, 2)
@@ -140,7 +143,7 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(74, 32)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(74, 52)
         Me.TableLayoutPanel3.TabIndex = 8
         '
         'Label4
@@ -148,7 +151,7 @@ Partial Class FormPropertyInputEditor
         Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label4.AutoSize = True
         Me.TableLayoutPanel3.SetColumnSpan(Me.Label4, 2)
-        Me.Label4.Location = New System.Drawing.Point(9, 0)
+        Me.Label4.Location = New System.Drawing.Point(9, 5)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(56, 16)
@@ -159,7 +162,7 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(8, 16)
+        Me.Label10.Location = New System.Drawing.Point(8, 31)
         Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(20, 16)
@@ -171,13 +174,91 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(45, 16)
+        Me.Label11.Location = New System.Drawing.Point(45, 31)
         Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(21, 16)
         Me.Label11.TabIndex = 2
         Me.Label11.Text = "RX"
         Me.ToolTip1.SetToolTip(Me.Label11, "Replace with a Regular Expression")
+        '
+        'TableLayoutPanel4
+        '
+        Me.TableLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.TableLayoutPanel4.BackColor = System.Drawing.SystemColors.Control
+        Me.TableLayoutPanel4.ColumnCount = 3
+        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel4.Controls.Add(Me.ButtonClearSelected, 0, 0)
+        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedUp, 1, 0)
+        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedDown, 2, 0)
+        Me.TableLayoutPanel4.Controls.Add(Me.CheckBoxSelectAll, 1, 1)
+        Me.TableLayoutPanel4.Location = New System.Drawing.Point(5, 5)
+        Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
+        Me.TableLayoutPanel4.RowCount = 2
+        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
+        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
+        Me.TableLayoutPanel4.Size = New System.Drawing.Size(100, 50)
+        Me.TableLayoutPanel4.TabIndex = 9
+        '
+        'ButtonClearSelected
+        '
+        Me.ButtonClearSelected.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.White
+        Me.ButtonClearSelected.ImageKey = "Delete_16.png"
+        Me.ButtonClearSelected.ImageList = Me.ImageList1
+        Me.ButtonClearSelected.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonClearSelected.Name = "ButtonClearSelected"
+        Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonClearSelected.TabIndex = 10
+        Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
+        Me.ButtonClearSelected.UseVisualStyleBackColor = False
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
+        Me.ImageList1.Images.SetKeyName(1, "down.png")
+        Me.ImageList1.Images.SetKeyName(2, "up.png")
+        '
+        'ButtonMoveSelectedUp
+        '
+        Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
+        Me.ButtonMoveSelectedUp.ImageKey = "up.png"
+        Me.ButtonMoveSelectedUp.ImageList = Me.ImageList1
+        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(36, 3)
+        Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
+        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonMoveSelectedUp.TabIndex = 11
+        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
+        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
+        '
+        'ButtonMoveSelectedDown
+        '
+        Me.ButtonMoveSelectedDown.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
+        Me.ButtonMoveSelectedDown.ImageKey = "down.png"
+        Me.ButtonMoveSelectedDown.ImageList = Me.ImageList1
+        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(69, 3)
+        Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
+        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonMoveSelectedDown.TabIndex = 12
+        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
+        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
+        '
+        'CheckBoxSelectAll
+        '
+        Me.CheckBoxSelectAll.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.CheckBoxSelectAll.AutoSize = True
+        Me.CheckBoxSelectAll.BackColor = System.Drawing.SystemColors.Control
+        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(42, 33)
+        Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
+        Me.CheckBoxSelectAll.Size = New System.Drawing.Size(15, 14)
+        Me.CheckBoxSelectAll.TabIndex = 1
+        Me.CheckBoxSelectAll.UseVisualStyleBackColor = False
         '
         'TableLayoutPanel2
         '
@@ -276,84 +357,6 @@ Partial Class FormPropertyInputEditor
         Me.Label1.Size = New System.Drawing.Size(70, 21)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Property set"
-        '
-        'TableLayoutPanel4
-        '
-        Me.TableLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TableLayoutPanel4.BackColor = System.Drawing.SystemColors.Control
-        Me.TableLayoutPanel4.ColumnCount = 3
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonClearSelected, 0, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedUp, 1, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedDown, 2, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.CheckBoxSelectAll, 1, 1)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(5, 5)
-        Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
-        Me.TableLayoutPanel4.RowCount = 2
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(100, 50)
-        Me.TableLayoutPanel4.TabIndex = 9
-        '
-        'ButtonClearSelected
-        '
-        Me.ButtonClearSelected.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.White
-        Me.ButtonClearSelected.ImageKey = "Delete_16.png"
-        Me.ButtonClearSelected.ImageList = Me.ImageList1
-        Me.ButtonClearSelected.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonClearSelected.Name = "ButtonClearSelected"
-        Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
-        Me.ButtonClearSelected.TabIndex = 10
-        Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
-        Me.ButtonClearSelected.UseVisualStyleBackColor = False
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
-        Me.ImageList1.Images.SetKeyName(1, "down.png")
-        Me.ImageList1.Images.SetKeyName(2, "up.png")
-        '
-        'ButtonMoveSelectedUp
-        '
-        Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedUp.ImageKey = "up.png"
-        Me.ButtonMoveSelectedUp.ImageList = Me.ImageList1
-        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(36, 3)
-        Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
-        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 24)
-        Me.ButtonMoveSelectedUp.TabIndex = 11
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
-        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
-        '
-        'ButtonMoveSelectedDown
-        '
-        Me.ButtonMoveSelectedDown.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedDown.ImageKey = "down.png"
-        Me.ButtonMoveSelectedDown.ImageList = Me.ImageList1
-        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(69, 3)
-        Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
-        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 24)
-        Me.ButtonMoveSelectedDown.TabIndex = 12
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
-        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
-        '
-        'CheckBoxSelectAll
-        '
-        Me.CheckBoxSelectAll.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.CheckBoxSelectAll.AutoSize = True
-        Me.CheckBoxSelectAll.BackColor = System.Drawing.SystemColors.Control
-        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(42, 33)
-        Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
-        Me.CheckBoxSelectAll.Size = New System.Drawing.Size(15, 14)
-        Me.CheckBoxSelectAll.TabIndex = 1
-        Me.CheckBoxSelectAll.UseVisualStyleBackColor = False
         '
         'CheckBoxCopyToAsm
         '
@@ -471,10 +474,10 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel1.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

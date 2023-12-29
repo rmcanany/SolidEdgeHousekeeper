@@ -409,6 +409,19 @@ The variables are processed in the order in the table. You can change the order 
 
 You can copy the settings on the form to other tabs.  Set the 'Copy To' CheckBoxes as desired.
 
+#### Copy overall size to variable table
+Copies the overall model size to the variable table. Exposes the variables so they can be used in a callout, parts list, or the like. 
+
+The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
+
+![Overall Size Options](My%20Project/media/overall_size_options.png)
+
+The size can be reported in `XYZ`, or `MinMidMax` coordinates, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+
+Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
+
+The command reports sheet metal size in the bent state. For a flat pattern, instead of this using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`.
+
 #### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
@@ -467,7 +480,7 @@ You can optionally create subdirectories using a formula similar to the Property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
 
-It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the same directory as Housekeeper.exe. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
+It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 
 ### Part
 
@@ -481,6 +494,9 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Variables add/edit/expose
+Same as the Assembly command of the same name.
+
+#### Copy overall size to variable table
 Same as the Assembly command of the same name.
 
 #### Update face and view styles from template
@@ -545,6 +561,9 @@ Same as the Assembly command of the same name.
 Same as the Assembly command of the same name.
 
 #### Variables add/edit/expose
+Same as the Assembly command of the same name.
+
+#### Copy overall size to variable table
 Same as the Assembly command of the same name.
 
 #### Update face and view styles from template
@@ -660,9 +679,11 @@ Print settings are accessed on the **Configuration Tab -- Printing Page**.
 
 ![Printer_Setup](My%20Project/media/printer_setup.png)
 
-The dropdown should list all installed printers. You can configure up to two of them, Printer1 and Printer2. Printer1 is the default.  It prints everything not assigned to Printer2. 
+The dropdown should list all installed printers. You can configure up to two of them, `Printer1` and `Printer2`. `Printer1` is the default.  It prints everything not assigned to `Printer2`. 
 
-Printer2 prints any sheet on the drawing whose size is listed in the Sheet selection textbox. Click the `Set` button to select the sheet sizes. Enable/disable Printer2 using the checkbox next to the printer name. 
+`Printer2` prints any sheet on the drawing whose size is listed in the Sheet selection textbox. Click the `Set` button to select the sheet sizes. 
+
+Enable/disable a printer using the checkbox next to its name. If you need to print only certain sizes of drawings, you can disable `Printer1` and enable `Printer2` with the desired sheet sizes set. 
 
 This command will probably not work with PDF printers. Use the Save As PDF command instead. 
 

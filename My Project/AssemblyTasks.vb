@@ -1884,6 +1884,78 @@ Public Class AssemblyTasks
         Return ErrorMessage
     End Function
 
+    Public Function ConfigurationsOutOfDate(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeAssembly.AssemblyDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf ConfigurationsOutOfDateInternal,
+                                   CType(SEDoc, SolidEdgeAssembly.AssemblyDocument),
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function ConfigurationsOutOfDateInternal(
+        ByVal SEDoc As SolidEdgeAssembly.AssemblyDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'Dim Configs As SolidEdgeAssembly.Configurations
+        'Dim Config As SolidEdgeAssembly.Configuration
+        ''Dim ItemList As New List(Of String)
+        ''Dim ItemArray() As String = Nothing
+
+        'Configs = SEDoc.Configurations
+
+        'For Each Config In Configs
+
+        '    ' The following command is not available in the SE 2022 API
+        '    ' Configs.GetConfigComponentList(Config.Name, ItemArray)
+
+        'Next
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
+    Public Function CopyOverallSizeToVariableTable(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeFramework.SolidEdgeDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf CommonTasks.CopyOverallSizeToVariableTable,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
 
 
     Public Function Dummy(

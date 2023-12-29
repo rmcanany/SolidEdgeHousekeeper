@@ -7,6 +7,8 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports ExcelDataReader
 Imports MS.Internal
 Imports Newtonsoft.Json
+Imports SolidEdgeConstants
+Imports SolidEdgeFramework
 Imports SolidEdgeFrameworkSupport
 
 Public Class CommonTasks
@@ -723,6 +725,210 @@ Public Class CommonTasks
         Return DocType
     End Function
 
+    Shared Function GetDocRange(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As List(Of Double)
+        ' Returns range in a list.  The order is X, Y, Z
+        Dim Range As New List(Of Double)
+        Dim ModelX As Double
+        Dim ModelY As Double
+        Dim ModelZ As Double
+        Dim XMin As Double
+        Dim YMin As Double
+        Dim ZMin As Double
+        Dim XMax As Double
+        Dim YMax As Double
+        Dim ZMax As Double
+
+        Dim Models As SolidEdgePart.Models = Nothing
+
+        Dim DocType As String = GetDocType(SEDoc)
+
+        Select Case DocType
+            Case Is = "asm"
+                Dim tmpAsm As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                tmpAsm.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
+                ModelX = XMax - XMin
+                ModelY = YMax - YMin
+                ModelZ = ZMax - ZMin
+
+            Case Is = "par"
+                Dim tmpPar As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                Models = tmpPar.Models
+
+            Case Is = "psm"
+                Dim tmpPsm As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                Models = tmpPsm.Models
+
+        End Select
+
+        If (DocType = "par") Or (DocType = "psm") Then
+
+            Dim Model As SolidEdgePart.Model
+            Dim Body As SolidEdgeGeometry.Body
+
+            Dim FeatureDoctor As New FeatureDoctor
+            Dim PointsList As New List(Of Double)
+            Dim tmpPointsList As New List(Of Double)
+            Dim Point As Double
+
+            If (Models.Count = 0) Then
+                ModelX = 0
+                ModelY = 0
+                ModelZ = 0
+            Else
+                For Each Model In Models
+                    Body = CType(Model.Body, SolidEdgeGeometry.Body)
+                    tmpPointsList = FeatureDoctor.GetBodyRange(Body)
+                    If PointsList.Count = 0 Then
+                        For Each Point In tmpPointsList
+                            PointsList.Add(Point)
+                        Next
+                    Else
+                        For i As Integer = 0 To 2
+                            If tmpPointsList(i) < PointsList(i) Then
+                                PointsList(i) = tmpPointsList(i)
+                            End If
+                        Next
+                        For i As Integer = 3 To 5
+                            If tmpPointsList(i) > PointsList(i) Then
+                                PointsList(i) = tmpPointsList(i)
+                            End If
+                        Next
+                    End If
+                Next
+
+                ModelX = PointsList(3) - PointsList(0) ' XMax - XMin
+                ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
+                ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
+
+            End If
+
+        End If
+
+        Range.Add(ModelX)
+        Range.Add(ModelY)
+        Range.Add(ModelZ)
+
+        Return Range
+    End Function
+
+    Shared Function CopyOverallSizeToVariableTable(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        Configuration As Dictionary(Of String, String),
+        SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Range As New List(Of Double)
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+        Dim Variables As SolidEdgeFramework.Variables
+        Dim Variable As SolidEdgeFramework.variable
+        Dim VariableNames As New List(Of String)
+        Dim VariableName As String
+        Dim Formula As String
+        Dim i As Integer
+
+        ' Generates an exception on some Model Bodies
+        Try
+            Range = GetDocRange(SEDoc)
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add("Unable to obtain stock size")
+        End Try
+
+        If ExitStatus = 0 Then
+            DocVariableDict = GetDocVariables(SEDoc)
+
+            Variables = CType(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+
+            If Configuration("CheckBoxStockSizeXYZ").ToLower = "true" Then
+                VariableNames.Add(Configuration("TextBoxStockSizeX"))
+                VariableNames.Add(Configuration("TextBoxStockSizeY"))
+                VariableNames.Add(Configuration("TextBoxStockSizeZ"))
+
+                i = 0
+                For Each VariableName In VariableNames
+                    Formula = String.Format("{0} m", Range(i))
+                    If Not DocVariableDict.Keys.Contains(VariableName) Then
+                        ' Add it
+                        Try
+                            ' Pretty sure this must be a variable, not a dimension.
+                            Variable = CType(Variables.Add(VariableName, Formula), variable)
+                            Variable.Expose = CInt(True)
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Unable to add variable '{0}'.  Check name.", VariableName))
+                        End Try
+                    Else
+                        ' Update it
+                        Try
+                            Variable = DocVariableDict(VariableName)
+                            Variable.Formula = Formula
+                            Variable.Expose = CInt(True)
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Error changing or exposing variable '{0}' value.  Please verify results.", VariableName))
+                        End Try
+                    End If
+                    i += 1
+                Next
+            End If
+
+            If Configuration("CheckBoxStockSizeMinMidMax").ToLower = "true" Then
+                If VariableNames.Count > 0 Then VariableNames.Clear()
+                VariableNames.Add(Configuration("TextBoxStockSizeMin"))
+                VariableNames.Add(Configuration("TextBoxStockSizeMid"))
+                VariableNames.Add(Configuration("TextBoxStockSizeMax"))
+
+                Range.Sort()
+
+                i = 0
+                For Each VariableName In VariableNames
+                    Formula = String.Format("{0} m", Range(i))
+                    If Not DocVariableDict.Keys.Contains(VariableName) Then
+                        ' Add it
+                        Try
+                            ' Pretty sure this must be a variable, not a dimension.
+                            Variable = CType(Variables.Add(VariableName, Formula), variable)
+                            Variable.Expose = CInt(True)
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  Check name.", VariableName))
+                        End Try
+                    Else
+                        ' Update it
+                        Try
+                            Variable = DocVariableDict(VariableName)
+                            Variable.Formula = Formula
+                            Variable.Expose = CInt(True)
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Error changing or exposing variable '{0}' value.  Please verify results.", VariableName))
+                        End Try
+                    End If
+                    i += 1
+                Next
+            End If
+
+
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
     Shared Function CropImage(Configuration As Dictionary(Of String, String),
                           SEDoc As SolidEdgeFramework.SolidEdgeDocument,
                           NewFilename As String,
@@ -734,12 +940,6 @@ Public Class CommonTasks
         Dim ModelX As Double
         Dim ModelY As Double
         Dim ModelZ As Double
-        Dim XMin As Double
-        Dim YMin As Double
-        Dim ZMin As Double
-        Dim XMax As Double
-        Dim YMax As Double
-        Dim ZMax As Double
 
         Dim ImageW As Double
         Dim ImageH As Double
@@ -754,69 +954,12 @@ Public Class CommonTasks
 
         Dim WindowAspectRatio As Double = WindowH / WindowW
 
-        Select Case SEDoc.Type
-            Case Is = 3, 7, 10 'asm
-                Dim tmpAsm As SolidEdgeAssembly.AssemblyDocument = SEDoc
-                tmpAsm.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
-                ModelX = XMax - XMin
-                ModelY = YMax - YMin
-                ModelZ = ZMax - ZMin
+        Dim Range As New List(Of Double)
 
-            Case Is = 1, 8 'par
-                Dim tmpPar As SolidEdgePart.PartDocument = SEDoc
-                tmpPar.Range(XMin, YMin, ZMin, XMax, YMax, ZMax)
-                ModelX = XMax - XMin
-                ModelY = YMax - YMin
-                ModelZ = ZMax - ZMin
-
-            Case Is = 4, 9 'psm
-                Dim tmpPsm As SolidEdgePart.SheetMetalDocument = SEDoc
-                Dim Models As SolidEdgePart.Models
-                Dim Model As SolidEdgePart.Model
-                Dim Body As SolidEdgeGeometry.Body
-
-                Dim FeatureDoctor As New FeatureDoctor
-                Dim PointsList As New List(Of Double)
-                Dim PointsListTemp As New List(Of Double)
-                Dim Point As Double
-
-                Models = tmpPsm.Models
-
-                If (Models.Count = 0) Then
-                    ExitMessage = "No models to process.  Cropped image not created."
-                    Return ExitMessage
-                End If
-                If (Models.Count = 0) Or (Models.Count > 25) Then
-                    ExitMessage = "Too many models to process.  Cropped image not created."
-                    Return ExitMessage
-                End If
-
-                For Each Model In Models
-                    Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                    PointsListTemp = FeatureDoctor.GetBodyRange(Body)
-                    If PointsList.Count = 0 Then
-                        For Each Point In PointsListTemp
-                            PointsList.Add(Point)
-                        Next
-                    Else
-                        For i As Integer = 0 To 2
-                            If PointsListTemp(i) < PointsList(i) Then
-                                PointsList(i) = PointsListTemp(i)
-                            End If
-                        Next
-                        For i As Integer = 3 To 5
-                            If PointsListTemp(i) > PointsList(i) Then
-                                PointsList(i) = PointsListTemp(i)
-                            End If
-                        Next
-                    End If
-                Next
-
-                ModelX = PointsList(3) - PointsList(0) 'XMax - XMin
-                ModelY = PointsList(4) - PointsList(1) ' YMax - YMin
-                ModelZ = PointsList(5) - PointsList(2) ' ZMax - ZMin
-
-        End Select
+        Range = GetDocRange(SEDoc)
+        ModelX = Range(0)
+        ModelY = Range(1)
+        ModelZ = Range(2)
 
         If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
             ImageW = 0.707 * ModelX + 0.707 * ModelY
@@ -999,8 +1142,77 @@ Public Class CommonTasks
         Return Status
     End Function
 
+    Shared Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
+        Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
 
+        Dim Variables As SolidEdgeFramework.Variables = Nothing
+        Dim VariableListObject As SolidEdgeFramework.VariableList = Nothing
+        Dim Variable As SolidEdgeFramework.variable = Nothing
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+        Dim VariableTypeName As String
 
+        Try
+            Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+            VariableListObject = DirectCast(Variables.Query(pFindCriterium:="*",
+                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+                                  SolidEdgeFramework.VariableList)
+
+            ' Populate dictionary
+            For Each VariableListItem In VariableListObject.OfType(Of Object)()
+                VariableTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+                If VariableTypeName.ToLower() = "dimension" Then
+                    Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+                    DocDimensionDict(Dimension.DisplayName) = Dimension
+                End If
+            Next
+
+        Catch ex As Exception
+            'ExitStatus = 1
+            'ErrorMessageList.Add("Unable to access variables")
+        End Try
+
+        Return DocDimensionDict
+    End Function
+
+    Shared Function GetDocVariables(SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        ) As Dictionary(Of String, SolidEdgeFramework.variable)
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+        Dim Variables As SolidEdgeFramework.Variables = Nothing
+        Dim VariableListObject As SolidEdgeFramework.VariableList = Nothing
+        Dim Variable As SolidEdgeFramework.variable = Nothing
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
+        Dim VariableTypeName As String
+
+        Try
+            Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+            VariableListObject = DirectCast(Variables.Query(pFindCriterium:="*",
+                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+                                  SolidEdgeFramework.VariableList)
+
+            ' Populate dictionary
+            For Each VariableListItem In VariableListObject.OfType(Of Object)()
+                VariableTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+                If VariableTypeName.ToLower() = "variable" Then
+                    Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+                    DocVariableDict(Variable.DisplayName) = Variable
+                End If
+            Next
+
+        Catch ex As Exception
+            'ExitStatus = 1
+            'ErrorMessageList.Add("Unable to access variables")
+        End Try
+
+        Return DocVariableDict
+    End Function
     Shared Function VariablesEdit(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
