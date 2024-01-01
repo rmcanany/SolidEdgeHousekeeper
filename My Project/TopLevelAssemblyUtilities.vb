@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+
 Public Class TopLevelAssemblyUtilities
     Private _mainInstance As Form1
     ' Private IndexedDrives As New List(Of String)
@@ -768,12 +769,19 @@ Public Class TopLevelAssemblyUtilities
         Dim CommentString As String = "\\ "
         Dim Line As String
         Dim IndexedDrives As New List(Of String)
-        Dim msg As String
+        Dim msg As String = ""
+
+        'CSearchManager csm = New CSearchManager();
+        'CSearchCrawlScopeManager manager = csm.GetCatalog("SystemIndex").GetCrawlScopeManager();
+        'If (manager.IncludedInCrawlScope(indexingPath) == 0) Then
+
+        'Dim CSM As New Microsoft.Search.Interop.csearchmanager()
+
 
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
-            msg = String.Format("Fast search scope file '{0}' (on Configuration Tab) not found.", SearchScopeFilename)
+            msg = String.Format("Fast search scope file '{0}' (on Configuration Tab) not found.{1}", SearchScopeFilename, vbCrLf)
             MsgBox(msg)
             'Exit Function
         End Try
@@ -786,6 +794,8 @@ Public Class TopLevelAssemblyUtilities
                 End If
             Next
         End If
+
+        MsgBox(msg)
 
         Return IndexedDrives
     End Function

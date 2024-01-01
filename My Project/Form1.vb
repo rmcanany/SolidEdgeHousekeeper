@@ -1946,7 +1946,7 @@ Public Class Form1
     Private Sub ButtonExternalProgramAssembly_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramAssembly.Click
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a program file"
-        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1"
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             TextBoxExternalProgramAssembly.Text = tmpFileDialog.FileName
@@ -1958,7 +1958,7 @@ Public Class Form1
     Private Sub ButtonExternalProgramPart_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramPart.Click
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a program file"
-        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1"
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             TextBoxExternalProgramPart.Text = tmpFileDialog.FileName
@@ -1970,7 +1970,7 @@ Public Class Form1
     Private Sub ButtonExternalProgramSheetmetal_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramSheetmetal.Click
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a program file"
-        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1"
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             TextBoxExternalProgramSheetmetal.Text = tmpFileDialog.FileName
@@ -1983,7 +1983,7 @@ Public Class Form1
     Private Sub ButtonExternalProgramDraft_Click(sender As Object, e As EventArgs) Handles ButtonExternalProgramDraft.Click
         Dim tmpFileDialog As New OpenFileDialog
         tmpFileDialog.Title = "Select a program file"
-        tmpFileDialog.Filter = "Programs|*.exe;*.vbs"
+        tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1"
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             TextBoxExternalProgramDraft.Text = tmpFileDialog.FileName

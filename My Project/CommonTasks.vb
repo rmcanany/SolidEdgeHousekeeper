@@ -79,11 +79,22 @@ Public Class CommonTasks
         Dim ExitCode As Integer
         Dim ErrorMessageFilename As String
         Dim ErrorMessages As String()
+        Dim Extension As String
 
+        Extension = IO.Path.GetExtension(ExternalProgram)
 
-        P = Process.Start(ExternalProgram)
+        If Extension = ".ps1" Then
+            P.StartInfo.FileName = "powershell.exe"
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", ExternalProgram, Chr(34))
+            'P.StartInfo.RedirectStandardOutput = True
+            'P.StartInfo.UseShellExecute = False
+            P.Start()
+        Else
+            P = Process.Start(ExternalProgram)
+        End If
+
         P.WaitForExit()
-        ExitCode = P.ExitCode  ' If the program doesn't supply one, what value can it take?  Null?
+        ExitCode = P.ExitCode
 
         ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
 

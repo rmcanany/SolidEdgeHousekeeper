@@ -151,6 +151,9 @@ Public Class LabelToAction
         HelpString += "The delete button, also at the top of the form, removes selected rows. "
         HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs. "
         HelpString += "Set the 'Copy To' CheckBoxes as desired."
+        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
+        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "You can edit it if you want, but the form is probably easier to use. "
         PopulateList(PropertyFindReplace,
                      "Property find replace",
                      "PropertyFindReplace",
@@ -192,7 +195,9 @@ Public Class LabelToAction
         HelpString += "The delete button, also at the top of the form, removes selected rows.  "
         HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs.  "
         HelpString += "Set the 'Copy To' CheckBoxes as desired."
-
+        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
+        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "You can edit it if you want, but the form is probably easier to use. "
         PopulateList(VariablesEdit,
                      "Variables add/edit/expose",
                      "VariablesEdit",
@@ -201,6 +206,8 @@ Public Class LabelToAction
 
         Dim CopyOverallSizeToVariableTable As New L2A
         HelpString = "Copies the overall model size to the variable table. "
+        HelpString += "It is primarily intended for standard cross-section material "
+        HelpString += "(aluminum extrusion, barstock, etc.), but can be used for any purpose. "
         HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
         HelpString += vbCrLf + vbCrLf + "The size is determined using the built-in Solid Edge `RangeBox`. "
         HelpString += "The range box is oriented along the XYZ axes. "

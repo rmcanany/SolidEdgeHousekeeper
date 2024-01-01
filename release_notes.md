@@ -1,67 +1,13 @@
 ﻿![Logo](My%20Project/media/logo.png)
 # Release Notes
 
-Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [**Here**](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
+Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
 Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Feel free to report bugs and/or ideas for improvement on the [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
 ## V2024.1 Enhancements/Fixes
-
-### Process files with any Document Status
-
-(Thank you **@jnewell**, **@Robin BIoemberg**!)
-
-Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old value, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
-
-![Open/Save](My%20Project/media/file_open_save_options.png)
-
-
-
-### Copy overall size to variable table
-
-(Thank you **@Imre Szucs**, **@64Pacific**!)
-
-Added the ability to copy the overall model size to the variable table. The variables are exposed so they can be used in a callout, parts list, or the like. 
-
-The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
-
-![Overall Size Options](My%20Project/media/overall_size_options.png)
-
-The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
-
-Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
-
-The command reports sheet metal size in the bent state. For a flat pattern, instead of using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeX`, and `Sheet Metal Gage`.
-
-### Save As
-
-(Thank you **@roger.ribamatic**, **@SatyenB**, **@Robin BIoemberg**!)
-
-Added a new file type, `PDF per Sheet` for drawings.  The output file name is of the format `<Filename>-<Sheetname>.pdf`. There is an option to suppress the `Sheetname` suffix on drawings with only one sheet.
-
-Added new file type `*.jt` for model files.
-
-### Configuration Tab
-
-(Thank you **@Francesco Arfilli**!)
-
-Converted to a tab-page layout for easier navigation. 
-
-![Configuration](My%20Project/media/top_level_assy_options.png)
-
-### Draft Print
-
-(Thank you **@n0minus38**!)
-
-Added an optional second printer for selected sheet sizes. By disabling the default `Printer1`, you can print selected sizes *only* .
-
-![Configuration](My%20Project/media/printer_setup.png)
-
-Changed how a printer is selected.  It is now from a pre-populated list of installed printers. Previously it was from the Windows Print dialog.  This was confusing because clicking OK implied a document would be printed.
-
-Removed some other confusing control options.
 
 ### Variables Edit/Add/Expose
 
@@ -77,13 +23,69 @@ The variables are processed in the order shown on the form. They can be moved up
 
 The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
+### Copy Overall Model Size to the Variable Table
+
+(Thank you **@Imre Szucs**, **@64Pacific**!)
+
+Added the ability to copy the overall model size to the variable table. It is primarily intended for standard cross-section material (aluminum extrusion, barstock, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
+
+The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
+
+![Overall Size Options](My%20Project/media/overall_size_options.png)
+
+The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+
+Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
+
+The command reports sheet metal size in the bent state. For a flat pattern, instead of using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeX`, and `Sheet Metal Gage`.
+
+### Process files with any Document Status
+
+(Thank you **@jnewell**, **@Robin BIoemberg**!)
+
+Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old value, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
+
+![Open/Save](My%20Project/media/file_open_save_options.png)
+
+
+
+### Save As
+
+(Thank you **@roger.ribamatic**, **@SatyenB**, **@Robin BIoemberg**!)
+
+Added a new file type, `PDF per Sheet` for drawings.  The output file name is of the format `<Filename>-<Sheetname>.pdf`. There is an option to suppress the `Sheetname` suffix on drawings with only one sheet. The option is on the **Configuration Tab -- Open/Save Page**.
+
+Added new file type `*.jt` for model files.
+
+### Draft Print
+
+(Thank you **@n0minus38**!)
+
+Added an optional second printer for selected sheet sizes. By disabling the default `Printer1`, you can print selected sizes *only* .
+
+![Configuration](My%20Project/media/printer_setup.png)
+
+Changed how a printer is selected.  It is now from a pre-populated list of installed printers. Previously it was from the Windows Print dialog.  This was confusing because clicking OK implied a document would be printed.
+
+Removed some other confusing control options.
+
+### Configuration Tab
+
+(Thank you **@Francesco Arfilli**!)
+
+Converted to a tab-page layout for easier navigation. 
+
+![Configuration](My%20Project/media/top_level_assy_options.png)
+
 ### Compare Model and Flat Pattern Model Volumes
 
 Contributed by our very own **o_o ....码**.  Thank you!
 
 A Housekeeper External Program that computes the difference in volume of a bent sheetmetal part and its flat pattern.
 
-The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
+The program addresses an issue where a flat pattern is created in the Synchronous environment.  If Ordered features are then added, they are not always carried over to the flat pattern. Compounding the problem, even though it is out-of-date, the flat pattern is not flagged as such.
+
+Please visit the [<ins>**Readme**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/CompareFlatAndModelVolumes#readme)  page for more details.
 
 ### Property Find/Replace
 
@@ -129,17 +131,36 @@ A Housekeeper External Program that gets the total quantity of each part and sub
 
 Note the quantity and source assembly name are non-associative copies. If the source assembly changes, this command must be re-run to update the values.
 
+### Draft -- Convert Drawing Views to 2D
+
+Sample program illustrating the use of PowerShell for the Solid Edge Housekeeper `Run External Program` task.  
+
+The program converts drawing views to stand-alone 2D views, disconnected from the 3D model. This is irreversible, so you know, think about it. 
+
+In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
+
+![Title Block](My%20Project/media/title_block.png)
+
+Luckily, Solid Edge has the ability to take care of that. That's in the program, too, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, you'll have to add code to deal with those. 
+
+Speaking of code, the sample uses PowerShell, but just barely. It is really only a thin wrapper on a Visual Basic script. If you have a better example, I would be glad to host it on GitHub. Naturally I would credit you as the contributor. That's not worth any money, but it does up your 'cred' on GitHub.
 ### Update Drawing Views
 
-Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the Broken Links Task.
+Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the `Broken Links` Task.
 
 ### Housekeeper External Program AddRemoveCustomProperties
 
 Added an option to remove all properties *except* those listed in the program settings file.
 
+### Form Font
+
+(Thank you **@Francesco Arfilli**!)
+
+Improved legibility by changing from the Win95 standard Microsoft SanSerif to the Win11 standard Segoe UI Variable Display.
+
 ### Preferences Folder
 
-Added a new location for user data.  It is now stored in Preferences in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
+Added a new location for user data.  It is now stored in the Preferences folder in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
 
 ### Saved Settings
 
