@@ -10,14 +10,10 @@ Imports SolidEdgeConstants
 
 
 Public Class FormVariableInputEditor
-    Private ColumnsDict As New Dictionary(Of String, Dictionary(Of String, String))
+    Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
     Private InputEditorDoctor As New InputEditorDoctor
     Private ProcessCheckBoxEvents As Boolean
     Private FileType As String
-
-    'Private ColumnNames As New List(Of String)
-    'Dim ColumnControlsList As New List(Of String)
-    'Dim PopulatingControls As Boolean
 
     Public Sub ShowInputEditor(FileType As String)
         Me.FileType = FileType
@@ -81,7 +77,7 @@ Public Class FormVariableInputEditor
         'If Me.FileType = "dft" Then TextBoxJSON.Text = Form1.TextBoxVariablesEditDraft.Text
 
         ProcessCheckBoxEvents = False
-        InputEditorDoctor.RestoreTableValues(TableLayoutPanel1, ColumnsDict, "VariableName", TextBoxJSON.Text)
+        InputEditorDoctor.RestoreTableValues(TableLayoutPanel1, ColumnsDict, TextBoxJSON.Text)
         ProcessCheckBoxEvents = True
 
         ReconcileFormControls()
@@ -89,48 +85,70 @@ Public Class FormVariableInputEditor
     End Sub
 
     Private Sub BuildColumnsDict()
-        '{ColumnName: {
+
+        '{ColumnIndex: {
         '    ColumnControl: "CheckBox" | "TextBox" | "ComboBox",
-        '    ColumnIndex: Integer
+        '    ColumnName: String,
+        '    ...
         '    }
         '}
-        Dim ColumnName As String
-        Dim ColumnIndex As Integer = 0
 
+        Dim ColumnName As String
+        Dim ColumnIndex As Integer
+
+        ColumnIndex = 0
         ColumnName = "Select"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(True)
 
         ColumnIndex += 1
         ColumnName = "VariableName"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "TextBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
+        ColumnsDict(ColumnIndex)("DefaultValue") = ""
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
         ColumnName = "Formula"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "TextBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+        ColumnsDict(ColumnIndex)("DefaultValue") = ""
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
         ColumnName = "UnitType"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "ComboBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
+        ColumnsDict(ColumnIndex)("DefaultValue") = ""
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
         ColumnName = "Expose"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
+        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
         ColumnName = "ExposeName"
-        ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnName)("ColumnControl") = "TextBox"
-        ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+        ColumnsDict(ColumnIndex)("DefaultValue") = ""
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
     End Sub
 
@@ -143,33 +161,6 @@ Public Class FormVariableInputEditor
 
     End Sub
 
-
-
-    'Private Function GetCheckBoxes() As Dictionary(Of String, CheckBox)
-    '    Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
-    '    Dim Control As Control
-
-    '    For Each Control In TableLayoutPanel1.Controls
-    '        If Control.GetType() Is GetType(CheckBox) Then
-    '            CheckBoxDict(Control.Name) = DirectCast(Control, CheckBox)
-    '        End If
-    '    Next
-
-    '    Return CheckBoxDict
-    'End Function
-
-    'Private Function GetTextBoxes() As Dictionary(Of String, TextBox)
-    '    Dim TextBoxDict As New Dictionary(Of String, TextBox)
-    '    Dim Control As Control
-
-    '    For Each Control In TableLayoutPanel1.Controls
-    '        If Control.GetType() Is GetType(TextBox) Then
-    '            TextBoxDict(Control.Name) = DirectCast(Control, TextBox)
-    '        End If
-    '    Next
-
-    '    Return TextBoxDict
-    'End Function
 
     Private Sub TextBox_TextChanged(sender As System.Object, e As System.EventArgs)
         'When you modify the contents of any textbox, the name of that textbox
@@ -238,9 +229,9 @@ Public Class FormVariableInputEditor
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         ' https://stackoverflow.com/questions/20551203/how-to-get-values-from-a-dialog-form-in-vb-net
 
-        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim TableValuesDict As New Dictionary(Of Integer, Dictionary(Of String, String))
 
-        TableValuesDict = InputEditorDoctor.GetTableValues(TableLayoutPanel1, ColumnsDict, "VariableName")
+        TableValuesDict = InputEditorDoctor.GetTableValues(TableLayoutPanel1, ColumnsDict)
         TextBoxJSON.Text = JsonConvert.SerializeObject(TableValuesDict)
 
         Me.DialogResult = DialogResult.OK

@@ -270,6 +270,22 @@ Partial Class Form1
         Me.CheckBoxPrinter1ScaleLineWidths = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPrinter1 = New System.Windows.Forms.ComboBox()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.GroupBoxStockSize = New System.Windows.Forms.GroupBox()
+        Me.TextBoxStockSizeMax = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeMax = New System.Windows.Forms.Label()
+        Me.TextBoxStockSizeMid = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeMid = New System.Windows.Forms.Label()
+        Me.TextBoxStockSizeMin = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeMin = New System.Windows.Forms.Label()
+        Me.CheckBoxStockSizeMinMidMax = New System.Windows.Forms.CheckBox()
+        Me.TextBoxStockSizeZ = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeZ = New System.Windows.Forms.Label()
+        Me.TextBoxStockSizeY = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeY = New System.Windows.Forms.Label()
+        Me.TextBoxStockSizeX = New System.Windows.Forms.TextBox()
+        Me.LabelStockSizeX = New System.Windows.Forms.Label()
+        Me.LabelStockSizeXYZ = New System.Windows.Forms.Label()
+        Me.CheckBoxStockSizeXYZ = New System.Windows.Forms.CheckBox()
         Me.LabelCheckInterferenceMaxOccurrences = New System.Windows.Forms.Label()
         Me.TextBoxCheckInterferenceMaxOccurrences = New System.Windows.Forms.TextBox()
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide = New System.Windows.Forms.CheckBox()
@@ -316,22 +332,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.GroupBoxStockSize = New System.Windows.Forms.GroupBox()
-        Me.CheckBoxStockSizeXYZ = New System.Windows.Forms.CheckBox()
-        Me.LabelStockSizeXYZ = New System.Windows.Forms.Label()
-        Me.LabelStockSizeX = New System.Windows.Forms.Label()
-        Me.TextBoxStockSizeX = New System.Windows.Forms.TextBox()
-        Me.TextBoxStockSizeY = New System.Windows.Forms.TextBox()
-        Me.LabelStockSizeY = New System.Windows.Forms.Label()
-        Me.TextBoxStockSizeZ = New System.Windows.Forms.TextBox()
-        Me.LabelStockSizeZ = New System.Windows.Forms.Label()
-        Me.TextBoxStockSizeMax = New System.Windows.Forms.TextBox()
-        Me.LabelStockSizeMax = New System.Windows.Forms.Label()
-        Me.TextBoxStockSizeMid = New System.Windows.Forms.TextBox()
-        Me.LabelStockSizeMid = New System.Windows.Forms.Label()
-        Me.TextBoxStockSizeMin = New System.Windows.Forms.TextBox()
-        Me.LabelStockSizeMin = New System.Windows.Forms.Label()
-        Me.CheckBoxStockSizeMinMidMax = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxAutoUpdateMaterialProperties = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -356,12 +357,12 @@ Partial Class Form1
         Me.GroupBoxPrinter2.SuspendLayout()
         Me.GroupBoxPrinter1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
+        Me.GroupBoxStockSize.SuspendLayout()
         Me.GroupBoxPictorialViews.SuspendLayout()
         Me.TabPageHelp.SuspendLayout()
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
-        Me.GroupBoxStockSize.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -3098,6 +3099,7 @@ Partial Class Form1
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxAutoUpdateMaterialProperties)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxStockSize)
         Me.TabPageGeneral.Controls.Add(Me.LabelCheckInterferenceMaxOccurrences)
         Me.TabPageGeneral.Controls.Add(Me.TextBoxCheckInterferenceMaxOccurrences)
@@ -3128,10 +3130,159 @@ Partial Class Form1
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
+        'GroupBoxStockSize
+        '
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMax)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMax)
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMid)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMid)
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMin)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMin)
+        Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeMinMidMax)
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeZ)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeZ)
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeY)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeY)
+        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeX)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeX)
+        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeXYZ)
+        Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeXYZ)
+        Me.GroupBoxStockSize.Location = New System.Drawing.Point(0, 619)
+        Me.GroupBoxStockSize.Name = "GroupBoxStockSize"
+        Me.GroupBoxStockSize.Size = New System.Drawing.Size(475, 189)
+        Me.GroupBoxStockSize.TabIndex = 61
+        Me.GroupBoxStockSize.TabStop = False
+        Me.GroupBoxStockSize.Text = "OVERALL SIZE OPTIONS"
+        '
+        'TextBoxStockSizeMax
+        '
+        Me.TextBoxStockSizeMax.Location = New System.Drawing.Point(310, 140)
+        Me.TextBoxStockSizeMax.Name = "TextBoxStockSizeMax"
+        Me.TextBoxStockSizeMax.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeMax.TabIndex = 15
+        '
+        'LabelStockSizeMax
+        '
+        Me.LabelStockSizeMax.AutoSize = True
+        Me.LabelStockSizeMax.Location = New System.Drawing.Point(315, 123)
+        Me.LabelStockSizeMax.Name = "LabelStockSizeMax"
+        Me.LabelStockSizeMax.Size = New System.Drawing.Size(27, 15)
+        Me.LabelStockSizeMax.TabIndex = 14
+        Me.LabelStockSizeMax.Text = "Max"
+        '
+        'TextBoxStockSizeMid
+        '
+        Me.TextBoxStockSizeMid.Location = New System.Drawing.Point(160, 140)
+        Me.TextBoxStockSizeMid.Name = "TextBoxStockSizeMid"
+        Me.TextBoxStockSizeMid.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeMid.TabIndex = 13
+        '
+        'LabelStockSizeMid
+        '
+        Me.LabelStockSizeMid.AutoSize = True
+        Me.LabelStockSizeMid.Location = New System.Drawing.Point(165, 123)
+        Me.LabelStockSizeMid.Name = "LabelStockSizeMid"
+        Me.LabelStockSizeMid.Size = New System.Drawing.Size(26, 15)
+        Me.LabelStockSizeMid.TabIndex = 12
+        Me.LabelStockSizeMid.Text = "Mid"
+        '
+        'TextBoxStockSizeMin
+        '
+        Me.TextBoxStockSizeMin.Location = New System.Drawing.Point(10, 140)
+        Me.TextBoxStockSizeMin.Name = "TextBoxStockSizeMin"
+        Me.TextBoxStockSizeMin.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeMin.TabIndex = 11
+        '
+        'LabelStockSizeMin
+        '
+        Me.LabelStockSizeMin.AutoSize = True
+        Me.LabelStockSizeMin.Location = New System.Drawing.Point(15, 123)
+        Me.LabelStockSizeMin.Name = "LabelStockSizeMin"
+        Me.LabelStockSizeMin.Size = New System.Drawing.Size(26, 15)
+        Me.LabelStockSizeMin.TabIndex = 10
+        Me.LabelStockSizeMin.Text = "Min"
+        '
+        'CheckBoxStockSizeMinMidMax
+        '
+        Me.CheckBoxStockSizeMinMidMax.AutoSize = True
+        Me.CheckBoxStockSizeMinMidMax.Location = New System.Drawing.Point(10, 100)
+        Me.CheckBoxStockSizeMinMidMax.Name = "CheckBoxStockSizeMinMidMax"
+        Me.CheckBoxStockSizeMinMidMax.Size = New System.Drawing.Size(90, 19)
+        Me.CheckBoxStockSizeMinMidMax.TabIndex = 8
+        Me.CheckBoxStockSizeMinMidMax.Text = "Min Mid Max"
+        Me.CheckBoxStockSizeMinMidMax.UseVisualStyleBackColor = True
+        '
+        'TextBoxStockSizeZ
+        '
+        Me.TextBoxStockSizeZ.Location = New System.Drawing.Point(310, 65)
+        Me.TextBoxStockSizeZ.Name = "TextBoxStockSizeZ"
+        Me.TextBoxStockSizeZ.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeZ.TabIndex = 7
+        '
+        'LabelStockSizeZ
+        '
+        Me.LabelStockSizeZ.AutoSize = True
+        Me.LabelStockSizeZ.Location = New System.Drawing.Point(315, 48)
+        Me.LabelStockSizeZ.Name = "LabelStockSizeZ"
+        Me.LabelStockSizeZ.Size = New System.Drawing.Size(13, 15)
+        Me.LabelStockSizeZ.TabIndex = 6
+        Me.LabelStockSizeZ.Text = "Z"
+        '
+        'TextBoxStockSizeY
+        '
+        Me.TextBoxStockSizeY.Location = New System.Drawing.Point(160, 65)
+        Me.TextBoxStockSizeY.Name = "TextBoxStockSizeY"
+        Me.TextBoxStockSizeY.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeY.TabIndex = 5
+        '
+        'LabelStockSizeY
+        '
+        Me.LabelStockSizeY.AutoSize = True
+        Me.LabelStockSizeY.Location = New System.Drawing.Point(165, 48)
+        Me.LabelStockSizeY.Name = "LabelStockSizeY"
+        Me.LabelStockSizeY.Size = New System.Drawing.Size(13, 15)
+        Me.LabelStockSizeY.TabIndex = 4
+        Me.LabelStockSizeY.Text = "Y"
+        '
+        'TextBoxStockSizeX
+        '
+        Me.TextBoxStockSizeX.Location = New System.Drawing.Point(10, 65)
+        Me.TextBoxStockSizeX.Name = "TextBoxStockSizeX"
+        Me.TextBoxStockSizeX.Size = New System.Drawing.Size(125, 22)
+        Me.TextBoxStockSizeX.TabIndex = 3
+        '
+        'LabelStockSizeX
+        '
+        Me.LabelStockSizeX.AutoSize = True
+        Me.LabelStockSizeX.Location = New System.Drawing.Point(15, 48)
+        Me.LabelStockSizeX.Name = "LabelStockSizeX"
+        Me.LabelStockSizeX.Size = New System.Drawing.Size(13, 15)
+        Me.LabelStockSizeX.TabIndex = 2
+        Me.LabelStockSizeX.Text = "X"
+        '
+        'LabelStockSizeXYZ
+        '
+        Me.LabelStockSizeXYZ.AutoSize = True
+        Me.LabelStockSizeXYZ.Location = New System.Drawing.Point(183, 25)
+        Me.LabelStockSizeXYZ.Name = "LabelStockSizeXYZ"
+        Me.LabelStockSizeXYZ.Size = New System.Drawing.Size(79, 15)
+        Me.LabelStockSizeXYZ.TabIndex = 1
+        Me.LabelStockSizeXYZ.Text = "Variable names"
+        '
+        'CheckBoxStockSizeXYZ
+        '
+        Me.CheckBoxStockSizeXYZ.AutoSize = True
+        Me.CheckBoxStockSizeXYZ.Location = New System.Drawing.Point(10, 25)
+        Me.CheckBoxStockSizeXYZ.Name = "CheckBoxStockSizeXYZ"
+        Me.CheckBoxStockSizeXYZ.Size = New System.Drawing.Size(50, 19)
+        Me.CheckBoxStockSizeXYZ.TabIndex = 0
+        Me.CheckBoxStockSizeXYZ.Text = "X Y Z"
+        Me.CheckBoxStockSizeXYZ.UseVisualStyleBackColor = True
+        '
         'LabelCheckInterferenceMaxOccurrences
         '
         Me.LabelCheckInterferenceMaxOccurrences.AutoSize = True
-        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(60, 415)
+        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(60, 444)
         Me.LabelCheckInterferenceMaxOccurrences.Name = "LabelCheckInterferenceMaxOccurrences"
         Me.LabelCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(331, 15)
         Me.LabelCheckInterferenceMaxOccurrences.TabIndex = 60
@@ -3139,7 +3290,7 @@ Partial Class Form1
         '
         'TextBoxCheckInterferenceMaxOccurrences
         '
-        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(10, 410)
+        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(10, 439)
         Me.TextBoxCheckInterferenceMaxOccurrences.Name = "TextBoxCheckInterferenceMaxOccurrences"
         Me.TextBoxCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(38, 22)
         Me.TextBoxCheckInterferenceMaxOccurrences.TabIndex = 59
@@ -3148,7 +3299,7 @@ Partial Class Form1
         'CheckBoxUpdatePhysicalPropertiesCOGHide
         '
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.AutoSize = True
-        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Location = New System.Drawing.Point(10, 380)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Location = New System.Drawing.Point(10, 409)
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Name = "CheckBoxUpdatePhysicalPropertiesCOGHide"
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Size = New System.Drawing.Size(267, 19)
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.TabIndex = 58
@@ -3158,7 +3309,7 @@ Partial Class Form1
         'CheckBoxUpdatePhysicalPropertiesCOGShow
         '
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.AutoSize = True
-        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Location = New System.Drawing.Point(10, 350)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Location = New System.Drawing.Point(10, 379)
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Name = "CheckBoxUpdatePhysicalPropertiesCOGShow"
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Size = New System.Drawing.Size(270, 19)
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.TabIndex = 57
@@ -3168,7 +3319,7 @@ Partial Class Form1
         'CheckBoxAutoAddMissingVariable
         '
         Me.CheckBoxAutoAddMissingVariable.AutoSize = True
-        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 290)
+        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 319)
         Me.CheckBoxAutoAddMissingVariable.Name = "CheckBoxAutoAddMissingVariable"
         Me.CheckBoxAutoAddMissingVariable.Size = New System.Drawing.Size(284, 19)
         Me.CheckBoxAutoAddMissingVariable.TabIndex = 56
@@ -3197,7 +3348,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 455)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 484)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -3247,7 +3398,7 @@ Partial Class Form1
         Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(10, 320)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(10, 349)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
         Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(328, 19)
         Me.CheckBoxPropertyFilterFollowDraftLinks.TabIndex = 52
@@ -3564,154 +3715,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'GroupBoxStockSize
+        'CheckBoxAutoUpdateMaterialProperties
         '
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMax)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMax)
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMid)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMid)
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeMin)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeMin)
-        Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeMinMidMax)
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeZ)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeZ)
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeY)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeY)
-        Me.GroupBoxStockSize.Controls.Add(Me.TextBoxStockSizeX)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeX)
-        Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeXYZ)
-        Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeXYZ)
-        Me.GroupBoxStockSize.Location = New System.Drawing.Point(0, 590)
-        Me.GroupBoxStockSize.Name = "GroupBoxStockSize"
-        Me.GroupBoxStockSize.Size = New System.Drawing.Size(475, 189)
-        Me.GroupBoxStockSize.TabIndex = 61
-        Me.GroupBoxStockSize.TabStop = False
-        Me.GroupBoxStockSize.Text = "OVERALL SIZE OPTIONS"
-        '
-        'CheckBoxStockSizeXYZ
-        '
-        Me.CheckBoxStockSizeXYZ.AutoSize = True
-        Me.CheckBoxStockSizeXYZ.Location = New System.Drawing.Point(10, 25)
-        Me.CheckBoxStockSizeXYZ.Name = "CheckBoxStockSizeXYZ"
-        Me.CheckBoxStockSizeXYZ.Size = New System.Drawing.Size(50, 19)
-        Me.CheckBoxStockSizeXYZ.TabIndex = 0
-        Me.CheckBoxStockSizeXYZ.Text = "X Y Z"
-        Me.CheckBoxStockSizeXYZ.UseVisualStyleBackColor = True
-        '
-        'LabelStockSizeXYZ
-        '
-        Me.LabelStockSizeXYZ.AutoSize = True
-        Me.LabelStockSizeXYZ.Location = New System.Drawing.Point(183, 25)
-        Me.LabelStockSizeXYZ.Name = "LabelStockSizeXYZ"
-        Me.LabelStockSizeXYZ.Size = New System.Drawing.Size(79, 15)
-        Me.LabelStockSizeXYZ.TabIndex = 1
-        Me.LabelStockSizeXYZ.Text = "Variable names"
-        '
-        'LabelStockSizeX
-        '
-        Me.LabelStockSizeX.AutoSize = True
-        Me.LabelStockSizeX.Location = New System.Drawing.Point(15, 48)
-        Me.LabelStockSizeX.Name = "LabelStockSizeX"
-        Me.LabelStockSizeX.Size = New System.Drawing.Size(13, 15)
-        Me.LabelStockSizeX.TabIndex = 2
-        Me.LabelStockSizeX.Text = "X"
-        '
-        'TextBoxStockSizeX
-        '
-        Me.TextBoxStockSizeX.Location = New System.Drawing.Point(10, 65)
-        Me.TextBoxStockSizeX.Name = "TextBoxStockSizeX"
-        Me.TextBoxStockSizeX.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeX.TabIndex = 3
-        '
-        'TextBoxStockSizeY
-        '
-        Me.TextBoxStockSizeY.Location = New System.Drawing.Point(160, 65)
-        Me.TextBoxStockSizeY.Name = "TextBoxStockSizeY"
-        Me.TextBoxStockSizeY.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeY.TabIndex = 5
-        '
-        'LabelStockSizeY
-        '
-        Me.LabelStockSizeY.AutoSize = True
-        Me.LabelStockSizeY.Location = New System.Drawing.Point(165, 48)
-        Me.LabelStockSizeY.Name = "LabelStockSizeY"
-        Me.LabelStockSizeY.Size = New System.Drawing.Size(13, 15)
-        Me.LabelStockSizeY.TabIndex = 4
-        Me.LabelStockSizeY.Text = "Y"
-        '
-        'TextBoxStockSizeZ
-        '
-        Me.TextBoxStockSizeZ.Location = New System.Drawing.Point(310, 65)
-        Me.TextBoxStockSizeZ.Name = "TextBoxStockSizeZ"
-        Me.TextBoxStockSizeZ.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeZ.TabIndex = 7
-        '
-        'LabelStockSizeZ
-        '
-        Me.LabelStockSizeZ.AutoSize = True
-        Me.LabelStockSizeZ.Location = New System.Drawing.Point(315, 48)
-        Me.LabelStockSizeZ.Name = "LabelStockSizeZ"
-        Me.LabelStockSizeZ.Size = New System.Drawing.Size(13, 15)
-        Me.LabelStockSizeZ.TabIndex = 6
-        Me.LabelStockSizeZ.Text = "Z"
-        '
-        'TextBoxStockSizeMax
-        '
-        Me.TextBoxStockSizeMax.Location = New System.Drawing.Point(310, 140)
-        Me.TextBoxStockSizeMax.Name = "TextBoxStockSizeMax"
-        Me.TextBoxStockSizeMax.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeMax.TabIndex = 15
-        '
-        'LabelStockSizeMax
-        '
-        Me.LabelStockSizeMax.AutoSize = True
-        Me.LabelStockSizeMax.Location = New System.Drawing.Point(315, 123)
-        Me.LabelStockSizeMax.Name = "LabelStockSizeMax"
-        Me.LabelStockSizeMax.Size = New System.Drawing.Size(27, 15)
-        Me.LabelStockSizeMax.TabIndex = 14
-        Me.LabelStockSizeMax.Text = "Max"
-        '
-        'TextBoxStockSizeMid
-        '
-        Me.TextBoxStockSizeMid.Location = New System.Drawing.Point(160, 140)
-        Me.TextBoxStockSizeMid.Name = "TextBoxStockSizeMid"
-        Me.TextBoxStockSizeMid.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeMid.TabIndex = 13
-        '
-        'LabelStockSizeMid
-        '
-        Me.LabelStockSizeMid.AutoSize = True
-        Me.LabelStockSizeMid.Location = New System.Drawing.Point(165, 123)
-        Me.LabelStockSizeMid.Name = "LabelStockSizeMid"
-        Me.LabelStockSizeMid.Size = New System.Drawing.Size(26, 15)
-        Me.LabelStockSizeMid.TabIndex = 12
-        Me.LabelStockSizeMid.Text = "Mid"
-        '
-        'TextBoxStockSizeMin
-        '
-        Me.TextBoxStockSizeMin.Location = New System.Drawing.Point(10, 140)
-        Me.TextBoxStockSizeMin.Name = "TextBoxStockSizeMin"
-        Me.TextBoxStockSizeMin.Size = New System.Drawing.Size(125, 22)
-        Me.TextBoxStockSizeMin.TabIndex = 11
-        '
-        'LabelStockSizeMin
-        '
-        Me.LabelStockSizeMin.AutoSize = True
-        Me.LabelStockSizeMin.Location = New System.Drawing.Point(15, 123)
-        Me.LabelStockSizeMin.Name = "LabelStockSizeMin"
-        Me.LabelStockSizeMin.Size = New System.Drawing.Size(26, 15)
-        Me.LabelStockSizeMin.TabIndex = 10
-        Me.LabelStockSizeMin.Text = "Min"
-        '
-        'CheckBoxStockSizeMinMidMax
-        '
-        Me.CheckBoxStockSizeMinMidMax.AutoSize = True
-        Me.CheckBoxStockSizeMinMidMax.Location = New System.Drawing.Point(10, 100)
-        Me.CheckBoxStockSizeMinMidMax.Name = "CheckBoxStockSizeMinMidMax"
-        Me.CheckBoxStockSizeMinMidMax.Size = New System.Drawing.Size(90, 19)
-        Me.CheckBoxStockSizeMinMidMax.TabIndex = 8
-        Me.CheckBoxStockSizeMinMidMax.Text = "Min Mid Max"
-        Me.CheckBoxStockSizeMinMidMax.UseVisualStyleBackColor = True
+        Me.CheckBoxAutoUpdateMaterialProperties.AutoSize = True
+        Me.CheckBoxAutoUpdateMaterialProperties.Location = New System.Drawing.Point(10, 290)
+        Me.CheckBoxAutoUpdateMaterialProperties.Name = "CheckBoxAutoUpdateMaterialProperties"
+        Me.CheckBoxAutoUpdateMaterialProperties.Size = New System.Drawing.Size(341, 19)
+        Me.CheckBoxAutoUpdateMaterialProperties.TabIndex = 62
+        Me.CheckBoxAutoUpdateMaterialProperties.Text = "Property Find/Replace -- Auto update System.Material properties"
+        Me.CheckBoxAutoUpdateMaterialProperties.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -3772,6 +3784,8 @@ Partial Class Form1
         Me.GroupBoxPrinter1.PerformLayout()
         Me.TabPageGeneral.ResumeLayout(False)
         Me.TabPageGeneral.PerformLayout()
+        Me.GroupBoxStockSize.ResumeLayout(False)
+        Me.GroupBoxStockSize.PerformLayout()
         Me.GroupBoxPictorialViews.ResumeLayout(False)
         Me.GroupBoxPictorialViews.PerformLayout()
         Me.TabPageHelp.ResumeLayout(False)
@@ -3780,8 +3794,6 @@ Partial Class Form1
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
-        Me.GroupBoxStockSize.ResumeLayout(False)
-        Me.GroupBoxStockSize.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -4095,4 +4107,5 @@ Partial Class Form1
     Friend WithEvents TextBoxStockSizeMin As TextBox
     Friend WithEvents LabelStockSizeMin As Label
     Friend WithEvents CheckBoxStockSizeMinMidMax As CheckBox
+    Friend WithEvents CheckBoxAutoUpdateMaterialProperties As CheckBox
 End Class

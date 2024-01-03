@@ -24,7 +24,7 @@ Public Class InputEditorDoctor
 
     Public Sub PopulateControls(
         TableLayoutPanel As TableLayoutPanel,
-        ColumnsDict As Dictionary(Of String, Dictionary(Of String, String))
+        ColumnsDict As Dictionary(Of Integer, Dictionary(Of String, String))
         )
 
         Dim CheckBox As CheckBox
@@ -35,30 +35,55 @@ Public Class InputEditorDoctor
         Dim ColumnName As String
         Dim ControlType As String
 
+        If Not ColumnsDict.Keys.Count = TableLayoutPanel.ColumnCount Then
+            MsgBox("Not ColumnsDict.Keys.Count = TableLayoutPanel.ColumnCount", vbOKOnly)
+            Exit Sub
+        End If
+
         For RowIndex = 1 To TableLayoutPanel.RowCount - 1
-            For Each ColumnName In ColumnsDict.Keys
-                ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                ControlType = ColumnsDict(ColumnName)("ColumnControl")
+
+            For ColumnIndex = 0 To ColumnsDict.Count - 1
+
+                'ColumnsDict format
+                'ColumnIndex = 0
+                'ColumnName = "Select"
+                'ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+                'ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
+                'ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+                'ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+                'ColumnsDict(ColumnIndex)("DefaultValue") = CStr(True)
+                'ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(True)
+
+
+                ColumnName = ColumnsDict(ColumnIndex)("ColumnName")
+                ControlType = ColumnsDict(ColumnIndex)("ColumnControl")
 
                 If ControlType = "CheckBox" Then
                     CheckBox = New CheckBox
                     CheckBox.Name = String.Format("CheckBox{0}{1}", RowIndex, ColumnName)
-                    If ColumnName.Contains("_PT") Then
-                        CheckBox.Checked = True
+                    If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
+                        CheckBox.Checked = CBool(ColumnsDict(ColumnIndex)("DefaultValue"))
                     End If
+                    'If ColumnName.Contains("_PT") Then
+                    '    CheckBox.Checked = True
+                    'End If
                     CheckBox.Text = ""
                     CheckBox.Size = New Size(15, 15)
                     CheckBox.Anchor = AnchorStyles.None
                     CheckBox.TabStop = False
                     'AddHandler CheckBox.CheckedChanged, AddressOf CheckBox_CheckedChanged
+
                     TableLayoutPanel.Controls.Add(CheckBox, ColumnIndex, RowIndex)
 
                 ElseIf ControlType = "TextBox" Then
                     TextBox = New TextBox
                     TextBox.Name = String.Format("TextBox{0}{1}", RowIndex, ColumnName)
-                    'TextBox.Text = TextBox.Name
+                    If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
+                        TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
+                    End If
                     TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
                     'AddHandler TextBox.TextChanged, AddressOf TextBox_TextChanged
+
                     TableLayoutPanel.Controls.Add(TextBox, ColumnIndex, RowIndex)
 
                 ElseIf ControlType = "ComboBox" Then
@@ -68,9 +93,6 @@ Public Class InputEditorDoctor
                     'ComboBox.Size = New Size(100, 20)
                     ComboBox.DropDownStyle = ComboBoxStyle.DropDownList
                     ComboBox.TabStop = False
-                    'ComboBox.Items.Add("System")
-                    'ComboBox.Items.Add("Custom")
-                    'ComboBox.Text = ComboBox.Items(0).ToString
 
                     TableLayoutPanel.Controls.Add(ComboBox, ColumnIndex, RowIndex)
 
@@ -276,7 +298,7 @@ Public Class InputEditorDoctor
 
     Public Sub MoveSelected(
         TableLayoutPanel As TableLayoutPanel,
-        ColumnsDict As Dictionary(Of String, Dictionary(Of String, String)),
+        ColumnsDict As Dictionary(Of Integer, Dictionary(Of String, String)),
         Direction As String)
 
         Dim TargetTextBox As TextBox
@@ -287,35 +309,57 @@ Public Class InputEditorDoctor
         Dim SourceComboBox As ComboBox
 
         Dim ColumnName As String
-        Dim ColumnIndexToNameDict As New Dictionary(Of Integer, String)
+        'Dim ColumnIndexToNameDict As New Dictionary(Of Integer, String)
         Dim tf As Boolean = False
+        Dim ColumnIndex As Integer
 
-        Dim OldTargetRow As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim OldTargetRow As New Dictionary(Of Integer, Dictionary(Of String, String))
 
-        For Each ColumnName In ColumnsDict.Keys
+        For ColumnIndex = 0 To ColumnsDict.Keys.Count - 1
 
-            If ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
-                OldTargetRow(ColumnName) = New Dictionary(Of String, String)
-                OldTargetRow(ColumnName)("ControlType") = "CheckBox"
-                OldTargetRow(ColumnName)("ControlState") = ""
+            If ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
+                OldTargetRow(ColumnIndex) = New Dictionary(Of String, String)
+                OldTargetRow(ColumnIndex)("ControlType") = "CheckBox"
+                OldTargetRow(ColumnIndex)("ControlState") = ""
 
-            ElseIf ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
-                OldTargetRow(ColumnName) = New Dictionary(Of String, String)
-                OldTargetRow(ColumnName)("ControlType") = "TextBox"
-                OldTargetRow(ColumnName)("ControlState") = ""
+            ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox" Then
+                OldTargetRow(ColumnIndex) = New Dictionary(Of String, String)
+                OldTargetRow(ColumnIndex)("ControlType") = "TextBox"
+                OldTargetRow(ColumnIndex)("ControlState") = ""
 
-            ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
-                OldTargetRow(ColumnName) = New Dictionary(Of String, String)
-                OldTargetRow(ColumnName)("ControlType") = "ComboBox"
-                OldTargetRow(ColumnName)("ControlState") = ""
+            ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
+                OldTargetRow(ColumnIndex) = New Dictionary(Of String, String)
+                OldTargetRow(ColumnIndex)("ControlType") = "ComboBox"
+                OldTargetRow(ColumnIndex)("ControlState") = ""
 
             End If
+
         Next
+
+        'For Each ColumnName In ColumnsDict.Keys
+
+        '    'If ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
+        '    '    OldTargetRow(ColumnName) = New Dictionary(Of String, String)
+        '    '    OldTargetRow(ColumnName)("ControlType") = "CheckBox"
+        '    '    OldTargetRow(ColumnName)("ControlState") = ""
+
+        '    'ElseIf ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
+        '    '    OldTargetRow(ColumnName) = New Dictionary(Of String, String)
+        '    '    OldTargetRow(ColumnName)("ControlType") = "TextBox"
+        '    '    OldTargetRow(ColumnName)("ControlState") = ""
+
+        '    'ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
+        '    '    OldTargetRow(ColumnName) = New Dictionary(Of String, String)
+        '    '    OldTargetRow(ColumnName)("ControlType") = "ComboBox"
+        '    '    OldTargetRow(ColumnName)("ControlState") = ""
+
+        '    'End If
+        'Next
 
         Dim SelectedRowIndices As New List(Of Integer)
         Dim SourceRowIndex As Integer
         Dim TargetRowIndex As Integer
-        Dim ColumnIndex As Integer
+        'Dim ColumnIndex As Integer
 
         SelectedRowIndices = GetSelectedRowIndices(TableLayoutPanel)
 
@@ -334,52 +378,95 @@ Public Class InputEditorDoctor
             End If
 
             If tf Then
-                For Each ColumnName In ColumnsDict.Keys
-                    'ColumnIndex += 1
-                    'ColumnName = "PropertySet"
-                    'ColumnsDict(ColumnName) = New Dictionary(Of String, String)
-                    'ColumnsDict(ColumnName)("ColumnControl") = "ComboBox"
-                    'ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
 
-                    If ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
-                        ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                For ColumnIndex = 0 To ColumnsDict.Keys.Count - 1
+
+                    If ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
+                        'ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
                         TargetCheckBox = New CheckBox
                         TargetCheckBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), CheckBox)
-                        OldTargetRow(ColumnName)("ControlState") = TargetCheckBox.Checked.ToString
+                        OldTargetRow(ColumnIndex)("ControlState") = TargetCheckBox.Checked.ToString
 
                         SourceCheckBox = New CheckBox
                         SourceCheckBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), CheckBox)
                         TargetCheckBox.Checked = SourceCheckBox.Checked
-                        If OldTargetRow(ColumnName)("ControlState").ToLower = "true" Then
+                        If OldTargetRow(ColumnIndex)("ControlState").ToLower = "true" Then
                             SourceCheckBox.Checked = True
                         Else
                             SourceCheckBox.Checked = False
                         End If
 
-                    ElseIf ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
-                        ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                    ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox" Then
+                        'ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
                         TargetTextBox = New TextBox
                         TargetTextBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), TextBox)
-                        OldTargetRow(ColumnName)("ControlState") = TargetTextBox.Text
+                        OldTargetRow(ColumnIndex)("ControlState") = TargetTextBox.Text
 
                         SourceTextBox = New TextBox
                         SourceTextBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), TextBox)
                         TargetTextBox.Text = SourceTextBox.Text
-                        SourceTextBox.Text = OldTargetRow(ColumnName)("ControlState")
+                        SourceTextBox.Text = OldTargetRow(ColumnIndex)("ControlState")
 
-                    ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
-                        ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                    ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
+                        'ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
                         TargetComboBox = New ComboBox
                         TargetComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), ComboBox)
-                        OldTargetRow(ColumnName)("ControlState") = TargetComboBox.Text
+                        OldTargetRow(ColumnIndex)("ControlState") = TargetComboBox.Text
 
                         SourceComboBox = New ComboBox
                         SourceComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), ComboBox)
                         TargetComboBox.Text = SourceComboBox.Text
-                        SourceComboBox.Text = OldTargetRow(ColumnName)("ControlState")
+                        SourceComboBox.Text = OldTargetRow(ColumnIndex)("ControlState")
 
                     End If
+
                 Next
+                'For Each ColumnName In ColumnsDict.Keys
+                '    'ColumnIndex += 1
+                '    'ColumnName = "PropertySet"
+                '    'ColumnsDict(ColumnName) = New Dictionary(Of String, String)
+                '    'ColumnsDict(ColumnName)("ColumnControl") = "ComboBox"
+                '    'ColumnsDict(ColumnName)("ColumnIndex") = CStr(ColumnIndex)
+
+                '    'If ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
+                '    '    ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                '    '    TargetCheckBox = New CheckBox
+                '    '    TargetCheckBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), CheckBox)
+                '    '    OldTargetRow(ColumnName)("ControlState") = TargetCheckBox.Checked.ToString
+
+                '    '    SourceCheckBox = New CheckBox
+                '    '    SourceCheckBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), CheckBox)
+                '    '    TargetCheckBox.Checked = SourceCheckBox.Checked
+                '    '    If OldTargetRow(ColumnName)("ControlState").ToLower = "true" Then
+                '    '        SourceCheckBox.Checked = True
+                '    '    Else
+                '    '        SourceCheckBox.Checked = False
+                '    '    End If
+
+                '    'ElseIf ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
+                '    '    ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                '    '    TargetTextBox = New TextBox
+                '    '    TargetTextBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), TextBox)
+                '    '    OldTargetRow(ColumnName)("ControlState") = TargetTextBox.Text
+
+                '    '    SourceTextBox = New TextBox
+                '    '    SourceTextBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), TextBox)
+                '    '    TargetTextBox.Text = SourceTextBox.Text
+                '    '    SourceTextBox.Text = OldTargetRow(ColumnName)("ControlState")
+
+                '    'ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
+                '    '    ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
+                '    '    TargetComboBox = New ComboBox
+                '    '    TargetComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, TargetRowIndex), ComboBox)
+                '    '    OldTargetRow(ColumnName)("ControlState") = TargetComboBox.Text
+
+                '    '    SourceComboBox = New ComboBox
+                '    '    SourceComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), ComboBox)
+                '    '    TargetComboBox.Text = SourceComboBox.Text
+                '    '    SourceComboBox.Text = OldTargetRow(ColumnName)("ControlState")
+
+                '    'End If
+                'Next
 
             End If
         End If
@@ -433,17 +520,13 @@ Public Class InputEditorDoctor
 
     Public Function GetTableValues(
         TableLayoutPanel As TableLayoutPanel,
-        ColumnsDict As Dictionary(Of String, Dictionary(Of String, String)),
-        KeyVariableColumnName As String
-        ) As Dictionary(Of String, Dictionary(Of String, String))
+        ColumnsDict As Dictionary(Of Integer, Dictionary(Of String, String))
+        ) As Dictionary(Of Integer, Dictionary(Of String, String))
 
-        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim TableValuesDict As New Dictionary(Of Integer, Dictionary(Of String, String))
         Dim ControlsDict As New Dictionary(Of String, Control)
         Dim ColumnName As String
         Dim ControlName As String
-
-        Dim KeyName As String
-        Dim KeyNameType As String
         Dim ColumnIndex As Integer
 
         Dim TextBox As New TextBox
@@ -451,6 +534,7 @@ Public Class InputEditorDoctor
         Dim CheckBox As New CheckBox
 
         ControlsDict = GetControlsDict(TableLayoutPanel)
+
         ' ControlsDict format
         ' { "CheckBox1Find_PT": CheckBox,
         '   "TextBox1ReplaceString": TextBox,
@@ -458,62 +542,52 @@ Public Class InputEditorDoctor
         ' }
 
         For RowIndex = 1 To TableLayoutPanel.RowCount - 1
-            'ColumnsDict format
-            '{"ColumnName": {
-            '    "ColumnControl": "CheckBox" | "TextBox" | "ComboBox",
-            '    "ColumnIndex": Integer
-            '    },
-            ' ...   
-            '}
 
-            KeyNameType = ColumnsDict(KeyVariableColumnName)("ColumnControl")
-            If KeyNameType = "TextBox" Then
-                ColumnIndex = CInt(ColumnsDict(KeyVariableColumnName)("ColumnIndex"))
-                KeyName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Text
-                If Not KeyName.Trim = "" Then
-                    If Not TableValuesDict.Keys.Contains(KeyName) Then
-                        TableValuesDict(KeyName) = New Dictionary(Of String, String)
-                    Else
-                        MsgBox(String.Format("Cannot have duplicate {0} names", KeyName))
-                        'Exit Function
+            TableValuesDict(RowIndex) = New Dictionary(Of String, String)
+
+            For ColumnIndex = 0 To ColumnsDict.Keys.Count - 1
+
+                ColumnName = ColumnsDict(ColumnIndex)("ColumnName")
+
+                If ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox" Then
+                    ControlName = String.Format("TextBox{0}{1}", RowIndex, ColumnName)
+                    'ColumnIndex = CInt(ColumnsDict(ColumnIndex)("ColumnIndex"))
+                    ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                    TextBox = CType(ControlsDict(ControlName), TextBox)
+                    TableValuesDict(RowIndex)(ColumnName) = TextBox.Text
+                    If Not CBool(ColumnsDict(ColumnIndex)("AllowBlank")) Then
+                        If TableValuesDict(RowIndex)(ColumnName) = "" Then
+                            TableValuesDict.Remove(RowIndex)
+                            Exit For
+                        End If
                     End If
 
-                    For Each ColumnName In ColumnsDict.Keys
-                        If (ColumnName = KeyName) Or (ColumnName = "Select") Then
-                            Continue For
+                ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
+                    ControlName = String.Format("CheckBox{0}{1}", RowIndex, ColumnName)
+                    'ColumnIndex = CInt(ColumnsDict(ColumnIndex)("ColumnIndex"))
+                    ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                    CheckBox = CType(ControlsDict(ControlName), CheckBox)
+                    TableValuesDict(RowIndex)(ColumnName) = CStr(CheckBox.Checked)
+
+                ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
+                    ControlName = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
+                    'ColumnIndex = CInt(ColumnsDict(ColumnIndex)("ColumnIndex"))
+                    ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                    ComboBox = CType(ControlsDict(ControlName), ComboBox)
+                    TableValuesDict(RowIndex)(ColumnName) = ComboBox.Text
+                    If Not CBool(ColumnsDict(ColumnIndex)("AllowBlank")) Then
+                        If TableValuesDict(RowIndex)(ColumnName) = "" Then
+                            TableValuesDict.Remove(RowIndex)
+                            Exit For
                         End If
+                    End If
 
-                        If ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
-                            ControlName = String.Format("TextBox{0}{1}", RowIndex, ColumnName)
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            TextBox = CType(ControlsDict(ControlName), TextBox)
-                            TableValuesDict(KeyName)(ColumnName) = TextBox.Text
-
-                        ElseIf ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
-                            ControlName = String.Format("CheckBox{0}{1}", RowIndex, ColumnName)
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            CheckBox = CType(ControlsDict(ControlName), CheckBox)
-                            TableValuesDict(KeyName)(ColumnName) = CStr(CheckBox.Checked)
-
-                        ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
-                            ControlName = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            ComboBox = CType(ControlsDict(ControlName), ComboBox)
-                            TableValuesDict(KeyName)(ColumnName) = ComboBox.Text
-
-                        Else
-                            MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnName)("ColumnControl")))
-                            'Exit Function
-                        End If
-                    Next
+                Else
+                    MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnIndex)("ColumnControl")))
+                    'Exit Function
                 End If
-            Else
-                MsgBox(String.Format("KeyNameType must be a TextBox, not '{0}'", KeyNameType))
-                'Exit Function
-            End If
+
+            Next
         Next
 
         Return TableValuesDict
@@ -522,32 +596,47 @@ Public Class InputEditorDoctor
 
     Public Sub RestoreTableValues(
         TableLayoutPanel As TableLayoutPanel,
-        ColumnsDict As Dictionary(Of String, Dictionary(Of String, String)),
-        KeyVariableColumnName As String,
+        ColumnsDict As Dictionary(Of Integer, Dictionary(Of String, String)),
         JSONString As String)
 
-        Dim TableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
-        Dim KeyName As String
+        Dim TableValuesDict As New Dictionary(Of Integer, Dictionary(Of String, String))
+        Dim tmpTableValuesDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim ControlsDict As New Dictionary(Of String, Control)
         Dim ColumnName As String
-        Dim KeyVariableControlName As String
         Dim Proceed As Boolean = True
-        Dim tf As Boolean
+        'Dim tf As Boolean
 
         Dim ControlName As String
         Dim ColumnIndex As Integer
+        Dim ColumnIndexString As String
+        Dim Key As String
 
         Dim TextBox As New TextBox
         Dim ComboBox As New ComboBox
         Dim CheckBox As New CheckBox
+
+        If Not ColumnsDict.Keys.Count = TableLayoutPanel.ColumnCount Then
+            MsgBox("Not ColumnsDict.Keys.Count = TableLayoutPanel.ColumnCount", vbOKOnly)
+            Exit Sub
+        End If
 
         ControlsDict = GetControlsDict(TableLayoutPanel)
 
         If Not JSONString = "" Then
             ' Possible to have bogus JSONString
             Try
-                TableValuesDict = JsonConvert.DeserializeObject(
+                tmpTableValuesDict = JsonConvert.DeserializeObject(
                 Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
+
+                For Each ColumnIndexString In tmpTableValuesDict.Keys
+                    ColumnIndex = CInt(ColumnIndexString)
+                    TableValuesDict(ColumnIndex) = New Dictionary(Of String, String)
+
+                    For Each Key In tmpTableValuesDict(ColumnIndexString).Keys
+                        TableValuesDict(ColumnIndex)(Key) = tmpTableValuesDict(ColumnIndexString)(Key)
+                    Next
+
+                Next
             Catch ex As Exception
                 Proceed = False
             End Try
@@ -557,88 +646,50 @@ Public Class InputEditorDoctor
 
         If Proceed Then
 
-            For RowIndex = 1 To TableLayoutPanel.RowCount - 1
+            For RowIndex = 1 To TableValuesDict.Keys.Count
 
-                KeyVariableControlName = String.Format("TextBox{0}{1}", RowIndex, KeyVariableColumnName)
-                TextBox = CType(ControlsDict(KeyVariableControlName), TextBox)
+                For ColumnIndex = 0 To ColumnsDict.Count - 1
 
-                ' VariableName = TextBox.Text
-                KeyName = TableValuesDict.Keys(RowIndex - 1)
+                    ColumnName = ColumnsDict(ColumnIndex)("ColumnName")
 
-                tf = Not KeyName Is Nothing
-                tf = tf And Not KeyName = ""
+                    If ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox" Then
+                        ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                        TextBox = CType(ControlsDict(ControlName), TextBox)
 
-                If tf Then
-                    TextBox.Text = KeyName
-
-                    For Each ColumnName In ColumnsDict.Keys
-                        If (ColumnName = KeyVariableColumnName) Or (ColumnName = "Select") Then
-                            Continue For
-                        End If
-
-                        If ColumnsDict(ColumnName)("ColumnControl") = "TextBox" Then
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            TextBox = CType(ControlsDict(ControlName), TextBox)
-                            TextBox.Text = TableValuesDict(KeyName)(ColumnName)
-
-                        ElseIf ColumnsDict(ColumnName)("ColumnControl") = "CheckBox" Then
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            CheckBox = CType(ControlsDict(ControlName), CheckBox)
-                            If TableValuesDict(KeyName)(ColumnName).ToLower = "true" Then
-                                CheckBox.Checked = True
-                            Else
-                                CheckBox.Checked = False
-                            End If
-
-                        ElseIf ColumnsDict(ColumnName)("ColumnControl") = "ComboBox" Then
-                            ColumnIndex = CInt(ColumnsDict(ColumnName)("ColumnIndex"))
-                            ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
-                            ComboBox = CType(ControlsDict(ControlName), ComboBox)
-                            ComboBox.Text = TableValuesDict(KeyName)(ColumnName)
-
+                        If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
+                            TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                         Else
-                            MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnName)("ColumnControl")))
-                            'Exit Function
+                            TextBox.Text = TableValuesDict(RowIndex)(ColumnName)
                         End If
-                    Next
 
-                    'For Each s In ColumnNames.Zip(Of String, String)(ColumnControlsList, Function(x, y) x + ":" + y)
-                    '    ' https://stackoverflow.com/questions/43906647/using-zip-in-vb-net-to-send-items-in-pairs-from-two-lists-to-a-console-writeline
-                    '    ColumnName = s.Split(":"c)(0)
-                    '    ColumnControlType = s.Split(":"c)(1)
+                    ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
+                        ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                        CheckBox = CType(ControlsDict(ControlName), CheckBox)
 
-                    '    If (ColumnName = "Select") Or (ColumnName = "VariableName") Then Continue For
+                        If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
+                            CheckBox.Checked = CBool(ColumnsDict(ColumnIndex)("DefaultValue"))
+                        Else
+                            CheckBox.Checked = CBool(TableValuesDict(RowIndex)(ColumnName))
+                        End If
 
-                    '    If ColumnControlType = "TextBox" Then
-                    '        ControlName = String.Format("TextBox{0}{1}", RowIndex, ColumnName)
-                    '        TextBox = ControlsDict(ControlName)
-                    '        TextBox.Text = TableValuesDict(VariableName)(ColumnName)
-                    '    End If
+                    ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
+                        ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
+                        ComboBox = CType(ControlsDict(ControlName), ComboBox)
+                        ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
 
-                    '    If ColumnControlType = "ComboBox" Then
-                    '        ControlName = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
-                    '        ComboBox = ControlsDict(ControlName)
-                    '        ComboBox.Text = TableValuesDict(VariableName)(ColumnName)
-                    '    End If
+                        If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
+                            ComboBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
+                        Else
+                            ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                        End If
+                    Else
+                        MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnIndex)("ColumnControl")))
+                        'Exit Function
+                    End If
 
-                    '    If ColumnControlType = "CheckBox" Then
-                    '        ControlName = String.Format("CheckBox{0}{1}", RowIndex, ColumnName)
-                    '        CheckBox = ControlsDict(ControlName)
-                    '        If TableValuesDict(VariableName)(ColumnName).ToLower = "true" Then
-                    '            CheckBox.Checked = True
-                    '        Else
-                    '            CheckBox.Checked = False
-                    '        End If
-                    '    End If
-                    'Next
-                End If
+                Next
             Next
-
         End If
-        ' TextBoxResult.Text = JsonConvert.SerializeObject(TableValuesDict)
-
 
     End Sub
 

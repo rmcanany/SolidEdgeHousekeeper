@@ -142,11 +142,11 @@ Public Class MaterialDoctorSheetmetal
                         ' Names match, check if their properties do.
                         s = MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)
                         If s.Count > 0 Then
-                            ' Properties do not match.  Update the document's material to match the library version.
+                            '' Properties do not match.  Update the document's material to match the library version.
                             MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                            ExitStatus = 1
-                            'ErrorMessageList.Add(String.Format("'{0}' updated: {1}", CurrentMaterialName, s))
-                            ErrorMessageList.Add(String.Format("'{0}' updated properties: {1}", MatTableMaterial.ToString, s))
+                            'ExitStatus = 1
+                            ''ErrorMessageList.Add(String.Format("'{0}' updated: {1}", CurrentMaterialName, s))
+                            'ErrorMessageList.Add(String.Format("'{0}' updated properties: {1}", MatTableMaterial.ToString, s))
                         End If
 
                         ' Face styles are not always updated, especially on imported files.

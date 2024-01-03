@@ -145,6 +145,9 @@ Public Class LabelToAction
         HelpString += "you can optionally have it added automatically. "
         HelpString += "This option is set on the **Configuration Tab -- General Page**. "
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
+        HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, there is an option "
+        HelpString += "to automatically update the part's material properties (density, face styles, etc.). "
+        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time. "
@@ -168,6 +171,11 @@ Public Class LabelToAction
         HelpString += "To leave the symbol's display unchanged, "
         HelpString += "disable both the `Show` and `Hide` options. "
         HelpString += "Note, controlling the symbol display only works for assembly files at this time. "
+        HelpString += vbCrLf + vbCrLf + "Occasionally, the physical properties are updated correctly, "
+        HelpString += "but the results are not shown in the Variable Table. "
+        HelpString += "The error is reported in the log file. The easiest fix I've found "
+        HelpString += "is to open the file in SE, change the material, then change it right back. "
+        HelpString += "You can verify if it worked by checking for `Mass` in the Variable Table. "
         PopulateList(UpdatePhysicalProperties,
                      "Update physical properties",
                      "UpdatePhysicalProperties",
@@ -206,7 +214,7 @@ Public Class LabelToAction
 
         Dim CopyOverallSizeToVariableTable As New L2A
         HelpString = "Copies the overall model size to the variable table. "
-        HelpString += "It is primarily intended for standard cross-section material "
+        HelpString += "This is primarily intended for standard cross-section material "
         HelpString += "(aluminum extrusion, barstock, etc.), but can be used for any purpose. "
         HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
         HelpString += vbCrLf + vbCrLf + "The size is determined using the built-in Solid Edge `RangeBox`. "

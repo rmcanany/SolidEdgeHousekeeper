@@ -27,7 +27,7 @@ The settings from one tab can be copied to others, using the `Copy To` CheckBoxe
 
 (Thank you **@Imre Szucs**, **@64Pacific**!)
 
-Added the ability to copy the overall model size to the variable table. It is primarily intended for standard cross-section material (aluminum extrusion, barstock, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
+Added the ability to copy the overall model size to the variable table. This is primarily intended for standard cross-section material (aluminum extrusion, barstock, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
 
 The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
@@ -43,7 +43,7 @@ The command reports sheet metal size in the bent state. For a flat pattern, inst
 
 (Thank you **@jnewell**, **@Robin BIoemberg**!)
 
-Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old value, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
+Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old Status, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
 
 ![Open/Save](My%20Project/media/file_open_save_options.png)
 
@@ -61,7 +61,7 @@ Added new file type `*.jt` for model files.
 
 (Thank you **@n0minus38**!)
 
-Added an optional second printer for selected sheet sizes. By disabling the default `Printer1`, you can print selected sizes *only* .
+Added an optional second printer for selected sheet sizes. (By disabling the default `Printer1`, you can print selected sizes *only*.)
 
 ![Configuration](My%20Project/media/printer_setup.png)
 
@@ -91,15 +91,19 @@ Please visit the [<ins>**Readme**</ins>](https://github.com/rmcanany/Housekeeper
 
 Add the ability to change multiple properties at a time. A dialog similar to the new Variable Input Editor is provided.
 
-![Logo](My%20Project/media/property_input_editor.png)
+![Property Input Editor](My%20Project/media/property_input_editor.png)
 
 Added an option on the **Configuration Tab -- General Page** to create a property if it doesn't exist in the file. (Thank you **@Francesco Arfilli**!)
+
+Added an option, when the property is System.Material specifically, to automatically update the material properties (density, face styles, etc.) from the Material Table.  Set the option on the **Configuration Tab -- General Page**.
 
 ### Update Physical Properties
 
 Added the ability to update mass, volume, etc. for model files. Models with no density are reported in the log file. 
 
 Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
+
+Occasionally in testing, the physical properties were updated correctly, but the results were not carried over to the Variable Table. The error is reported in the log file. The easiest fix I found was to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. "
 
 ### Check interference
 
@@ -133,7 +137,7 @@ Note the quantity and source assembly name are non-associative copies. If the so
 
 ### Draft -- Convert Drawing Views to 2D
 
-Sample program illustrating the use of PowerShell for the Solid Edge Housekeeper `Run External Program` task.  
+A Housekeeper External Program sample illustrating the use of PowerShell for the Solid Edge Housekeeper `Run External Program` task.  
 
 The program converts drawing views to stand-alone 2D views, disconnected from the 3D model. This is irreversible, so you know, think about it. 
 

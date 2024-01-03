@@ -436,6 +436,9 @@ Public Class CommonTasks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Dim SupplementalExitStatus As Integer
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
         Dim Properties As SolidEdgeFramework.Properties = Nothing
         Dim Prop As SolidEdgeFramework.Property = Nothing
@@ -455,6 +458,7 @@ Public Class CommonTasks
 
         Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim PropertiesToEdit As String = ""
+        Dim RowIndexString As String
 
         Dim DocType As String = GetDocType(SEDoc)
         If DocType = "asm" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditAssembly")
@@ -466,7 +470,7 @@ Public Class CommonTasks
             PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
 
             'PropertiesToEditDict format
-            '{"Material":{
+            '{"1":{
             '    "PropertySet":"System",
             '    "PropertyName":"Material",
             '    "Find_PT":"True",
@@ -484,23 +488,24 @@ Public Class CommonTasks
             ErrorMessageList.Add("No properties provided")
         End If
 
-        For Each PropertyName In PropertiesToEditDict.Keys
+        For Each RowIndexString In PropertiesToEditDict.Keys
 
             Proceed = True
 
-            PropertySetName = PropertiesToEditDict(PropertyName)("PropertySet")
-            FindString = PropertiesToEditDict(PropertyName)("FindString")
-            ReplaceString = PropertiesToEditDict(PropertyName)("ReplaceString")
+            PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+            PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-            If PropertiesToEditDict(PropertyName)("Find_PT").ToLower = "true" Then
+            If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
                 FindSearchType = "PT"
-            ElseIf PropertiesToEditDict(PropertyName)("Find_WC").ToLower = "true" Then
+            ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
                 FindSearchType = "WC"
             Else
                 FindSearchType = "RX"
             End If
 
-            If PropertiesToEditDict(PropertyName)("Replace_PT").ToLower = "true" Then
+            If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
                 ReplaceSearchType = "PT"
             Else
                 ReplaceSearchType = "RX"
@@ -512,7 +517,7 @@ Public Class CommonTasks
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString)
+                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
                     ErrorMessageList.Add(s)
                 End Try
 
@@ -595,6 +600,51 @@ Public Class CommonTasks
                         ErrorMessageList.Add(s)
                     End If
                 End Try
+            End If
+
+            ' If the changed property was System.Material, need to update properties from the material table.
+            If Proceed Then
+                PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+                PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+
+                If (PropertyName.ToLower = "material") And (PropertySetName.ToLower = "system") Then
+
+                    If CBool(Configuration("CheckBoxAutoUpdateMaterialProperties")) Then
+
+                        If DocType = "par" Then
+                            Dim MaterialDoctorPart As New MaterialDoctorPart()
+
+                            SupplementalErrorMessage = MaterialDoctorPart.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
+                            SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            If ExitStatus = 0 Then
+                                ExitStatus = SupplementalExitStatus
+                                If Not ExitStatus = 0 Then
+                                    ErrorMessageList.Add("Problem updating material properties")
+                                    For Each s In SupplementalErrorMessage(SupplementalErrorMessage.Keys(0))
+                                        ErrorMessageList.Add(s)
+                                    Next
+                                End If
+                            End If
+                        End If
+
+                        If DocType = "psm" Then
+                            Dim MaterialDoctorSheetmetal As New MaterialDoctorSheetmetal()
+
+                            SupplementalErrorMessage = MaterialDoctorSheetmetal.UpdateMaterialFromMaterialTable(SEDoc, Configuration, SEApp)
+                            SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                            If ExitStatus = 0 Then
+                                ExitStatus = SupplementalExitStatus
+                                If Not ExitStatus = 0 Then
+                                    ErrorMessageList.Add("Problem updating material properties")
+                                    For Each s In SupplementalErrorMessage(SupplementalErrorMessage.Keys(0))
+                                        ErrorMessageList.Add(s)
+                                    Next
+                                End If
+                            End If
+                        End If
+
+                    End If
+                End If
             End If
 
         Next
@@ -1236,9 +1286,13 @@ Public Class CommonTasks
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim SupplementalExitStatus As Integer = 0
 
-        Dim VariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim tmpVariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim VariablesToEditDict As New Dictionary(Of Integer, Dictionary(Of String, String))
+        Dim ColumnIndexString As String
+        Dim ColumnIndex As Integer
+        Dim RowIndex As Integer
 
-        Dim VariableName As String
+        'Dim VariableName As String
 
         Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
@@ -1265,18 +1319,30 @@ Public Class CommonTasks
         If DocType = "dft" Then VariablesToEdit = Configuration("TextBoxVariablesEditDraft")
 
         If Not VariablesToEdit = "" Then
-            VariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
-            ' Dictionary layout
+            tmpVariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
+            ' Dictionary format
             '{
-            '    "v1":
+            '    "1":
             '    {
+            '        "VariableName":"v1"
             '        "Formula":"1",
-            '        "Units":"Distance",
+            '        "UnitType":"Distance",
             '        "Expose":"True",
             '        "ExposeName":"var1"
             '    },
+            '    "2":
             '    ...
             '}
+
+            For Each ColumnIndexString In tmpVariablesToEditDict.Keys
+                ColumnIndex = CInt(ColumnIndexString)
+                VariablesToEditDict(ColumnIndex) = New Dictionary(Of String, String)
+
+                For Each Key In tmpVariablesToEditDict(ColumnIndexString).Keys
+                    VariablesToEditDict(ColumnIndex)(Key) = tmpVariablesToEditDict(ColumnIndexString)(Key)
+                Next
+
+            Next
 
         Else
             ExitStatus = 1
@@ -1284,42 +1350,58 @@ Public Class CommonTasks
         End If
 
         If ExitStatus = 0 Then
-            Try
-                Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+            Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
 
-                VariableListObject = DirectCast(Variables.Query(pFindCriterium:="*",
-                                  NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
-                                  VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
-                                  SolidEdgeFramework.VariableList)
+            DocDimensionDict = GetDocDimensions(SEDoc)
+            If DocDimensionDict Is Nothing Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to access dimensions")
+            End If
 
-                ' Populate DocDimensionDict and DocVariableDict
-                For Each VariableListItem In VariableListObject.OfType(Of Object)()
-                    VariableTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
-
-                    If VariableTypeName.ToLower() = "dimension" Then
-                        Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
-                        DocDimensionDict(Dimension.DisplayName) = Dimension
-                    ElseIf VariableTypeName.ToLower() = "variable" Then
-                        Variable = CType(VariableListItem, SolidEdgeFramework.variable)
-                        DocVariableDict(Variable.DisplayName) = Variable
-                    End If
-                Next
-
-            Catch ex As Exception
+            DocVariableDict = GetDocVariables(SEDoc)
+            If DocVariableDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access variables")
-            End Try
+            End If
+
+            'Try
+            '    Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
+
+            '    VariableListObject = DirectCast(Variables.Query(pFindCriterium:="*",
+            '                      NamedBy:=SolidEdgeConstants.VariableNameBy.seVariableNameByBoth,
+            '                      VarType:=SolidEdgeConstants.VariableVarType.SeVariableVarTypeBoth),
+            '                      SolidEdgeFramework.VariableList)
+
+            '    ' Populate DocDimensionDict and DocVariableDict
+            '    For Each VariableListItem In VariableListObject.OfType(Of Object)()
+            '        VariableTypeName = Microsoft.VisualBasic.Information.TypeName(VariableListItem)
+
+            '        If VariableTypeName.ToLower() = "dimension" Then
+            '            Dimension = CType(VariableListItem, SolidEdgeFrameworkSupport.Dimension)
+            '            DocDimensionDict(Dimension.DisplayName) = Dimension
+            '        ElseIf VariableTypeName.ToLower() = "variable" Then
+            '            Variable = CType(VariableListItem, SolidEdgeFramework.variable)
+            '            DocVariableDict(Variable.DisplayName) = Variable
+            '        End If
+            '    Next
+
+            'Catch ex As Exception
+            '    ExitStatus = 1
+            '    ErrorMessageList.Add("Unable to access variables")
+            'End Try
 
         End If
 
         If ExitStatus = 0 Then
 
             ' Process variables.
-            For Each VariableName In VariablesToEditDict.Keys
-                Dim Formula As String = VariablesToEditDict(VariableName)("Formula").Trim
-                Dim Units As SolidEdgeConstants.UnitTypeConstants = GetUnits(VariablesToEditDict(VariableName)("Units").Trim)
-                Dim Expose As Boolean = VariablesToEditDict(VariableName)("Expose").Trim.ToLower = "true"
-                Dim ExposeName As String = VariablesToEditDict(VariableName)("ExposeName").Trim
+
+            For Each RowIndex In VariablesToEditDict.Keys
+                Dim VariableName As String = VariablesToEditDict(RowIndex)("VariableName").Trim
+                Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
+                Dim UnitType As SolidEdgeConstants.UnitTypeConstants = GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
+                Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"
+                Dim ExposeName As String = VariablesToEditDict(RowIndex)("ExposeName").Trim
 
                 tf = DocDimensionDict.Keys.Contains(VariableName)
                 tf = tf Or DocVariableDict.Keys.Contains(VariableName)
@@ -1334,7 +1416,7 @@ Public Class CommonTasks
 
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
-                            Variable = Variables.Add(VariableName, Formula, Units)
+                            Variable = Variables.Add(VariableName, Formula, UnitType)
                             If Expose Then
                                 Variable.Expose = CInt(Expose)
                                 If Not ExposeName = "" Then
@@ -1400,7 +1482,7 @@ Public Class CommonTasks
         Return ErrorMessage
     End Function
 
-    Shared Function GetUnits(Name As String) As SolidEdgeConstants.UnitTypeConstants
+    Shared Function GetUnitType(Name As String) As SolidEdgeConstants.UnitTypeConstants
         Dim UnitType As SolidEdgeConstants.UnitTypeConstants
 
         UnitType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
@@ -1417,7 +1499,6 @@ Public Class CommonTasks
 
 
 
-
     Shared Function UpdatePhysicalProperties(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -1430,6 +1511,9 @@ Public Class CommonTasks
 
         Dim s As String
 
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+        Dim VariableFound As Boolean
+
         Dim DocType As String = GetDocType(SEDoc)
 
         If DocType = "asm" Then
@@ -1439,6 +1523,14 @@ Public Class CommonTasks
                 Dim PhysicalProperties As SolidEdgeAssembly.PhysicalProperties = AsmDoc.PhysicalProperties
 
                 Dim ParFileNamesWithoutDensity() As String = {""}
+
+                Dim Occurrences As SolidEdgeAssembly.Occurrences
+                Occurrences = AsmDoc.Occurrences
+
+                If Occurrences.Count = 0 Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("No models found")
+                End If
 
                 PhysicalProperties.UpdateV2(ParFileNamesWithoutDensity)
                 SEApp.DoIdle()
@@ -1450,7 +1542,6 @@ Public Class CommonTasks
                         s = String.Format("{0}  Please verify results.", s)
                         ErrorMessageList.Add(s)
                     End If
-
                 End If
 
                 If Configuration("CheckBoxUpdatePhysicalPropertiesCOGHide").ToLower = "true" Then
@@ -1473,14 +1564,22 @@ Public Class CommonTasks
             Dim PropertyType As SolidEdgeFramework.MatTablePropIndexConstants
             PropertyType = SolidEdgeFramework.MatTablePropIndexConstants.seDensity
             Dim PropValue As String = Nothing
+            Dim Models As SolidEdgePart.Models
 
             If DocType = "par" Then
                 Try
                     Dim ParDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
-                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties,
+                                       SolidEdgeFramework.SolidEdgeCommandConstants))
                     SEApp.DoIdle()
                     ParDoc.Save()
                     SEApp.DoIdle()
+
+                    Models = ParDoc.Models
+                    If Models.Count = 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("No design bodies found")
+                    End If
 
                     MaterialTable.GetMaterialPropValueFromDoc(ParDoc, PropertyType, PropValue)
                     If CDbl(PropValue) <= 0 Then
@@ -1497,10 +1596,18 @@ Public Class CommonTasks
             If DocType = "psm" Then
                 Try
                     Dim PsmDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartToolsPhysicalProperties,
+                                       SolidEdgeFramework.SolidEdgeCommandConstants))
                     SEApp.DoIdle()
                     PsmDoc.Save()
                     SEApp.DoIdle()
+
+                    Models = PsmDoc.Models
+                    If Models.Count = 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("No design bodies found")
+                    End If
+
 
                     MaterialTable.GetMaterialPropValueFromDoc(PsmDoc, PropertyType, PropValue)
                     If CDbl(PropValue) <= 0 Then
@@ -1513,9 +1620,22 @@ Public Class CommonTasks
                     ErrorMessageList.Add("Error updating physical properties.")
                 End Try
             End If
+
+            DocVariableDict = GetDocVariables(SEDoc)
+            VariableFound = False
+
+            For Each Key As String In DocVariableDict.Keys
+                If Key.ToLower = "mass" Then
+                    VariableFound = True
+                    Exit For
+                End If
+            Next
+
+            If Not VariableFound Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
+            End If
         End If
-
-
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

@@ -325,43 +325,6 @@ Public Class Form1
                         msg += "    Enter one or more assembly properties to change" + Chr(13)
                     End If
                 End If
-
-                'If TextBoxFindReplacePropertyNameAssembly.Text = "" Then
-                '    If Not msg.Contains("Enter a valid assembly property name") Then
-                '        msg += "    Enter a valid assembly property name" + Chr(13)
-                '    End If
-                'End If
-
-                'If TextBoxFindReplaceFindAssembly.Text = "" Then
-                '    If Not msg.Contains("Enter a valid assembly search string") Then
-                '        msg += "    Enter a valid assembly search string" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceFindPTAssembly.Checked
-                'tf = tf Or CheckBoxFindReplaceFindWCAssembly.Checked
-                'tf = tf Or CheckBoxFindReplaceFindRXAssembly.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Find' text") Then
-                '        msg += "    Select a search type for the 'Find' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplacePTAssembly.Checked
-                'tf = tf Or CheckBoxFindReplaceReplaceRXAssembly.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Replace' text") Then
-                '        msg += "    Select a search type for the 'Replace' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplaceRXAssembly.Checked
-                'tf = tf And Not CheckBoxFindReplaceFindRXAssembly.Checked
-                'If tf Then
-                '    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
-                '        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
-                '    End If
-                'End If
             End If
 
             If LabelToActionAssembly(Label).RequiresPictorialView Then
@@ -495,43 +458,6 @@ Public Class Form1
                         msg += "    Enter one or more part properties to change" + Chr(13)
                     End If
                 End If
-
-                'If TextBoxFindReplacePropertyNamePart.Text = "" Then
-                '    If Not msg.Contains("Enter a valid part property name") Then
-                '        msg += "    Enter a valid part property name" + Chr(13)
-                '    End If
-                'End If
-                'If TextBoxFindReplaceFindPart.Text = "" Then
-                '    If Not msg.Contains("Enter a valid part search string") Then
-                '        msg += "    Enter a valid part search string" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceFindPTPart.Checked
-                'tf = tf Or CheckBoxFindReplaceFindWCPart.Checked
-                'tf = tf Or CheckBoxFindReplaceFindRXPart.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Find' text") Then
-                '        msg += "    Select a search type for the 'Find' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplacePTPart.Checked
-                'tf = tf Or CheckBoxFindReplaceReplaceRXPart.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Replace' text") Then
-                '        msg += "    Select a search type for the 'Replace' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplaceRXPart.Checked
-                'tf = tf And Not CheckBoxFindReplaceFindRXPart.Checked
-                'If tf Then
-                '    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
-                '        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
-                '    End If
-                'End If
-
             End If
 
             If LabelToActionPart(Label).RequiresPictorialView Then
@@ -650,43 +576,6 @@ Public Class Form1
                         msg += "    Enter one or more sheetmetal properties to change" + Chr(13)
                     End If
                 End If
-
-                'If TextBoxFindReplacePropertyNameSheetmetal.Text = "" Then
-                '    If Not msg.Contains("Enter a valid sheetmetal property name") Then
-                '        msg += "    Enter a valid sheetmetal property name" + Chr(13)
-                '    End If
-                'End If
-                'If TextBoxFindReplaceFindSheetmetal.Text = "" Then
-                '    If Not msg.Contains("Enter a valid sheetmetal search string") Then
-                '        msg += "    Enter a valid sheetmetal search string" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceFindPTSheetmetal.Checked
-                'tf = tf Or CheckBoxFindReplaceFindWCSheetmetal.Checked
-                'tf = tf Or CheckBoxFindReplaceFindRXSheetmetal.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Find' text") Then
-                '        msg += "    Select a search type for the 'Find' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplacePTSheetmetal.Checked
-                'tf = tf Or CheckBoxFindReplaceReplaceRXSheetmetal.Checked
-                'If Not tf Then
-                '    If Not msg.Contains("Select a search type for the 'Replace' text") Then
-                '        msg += "    Select a search type for the 'Replace' text" + Chr(13)
-                '    End If
-                'End If
-
-                'tf = CheckBoxFindReplaceReplaceRXSheetmetal.Checked
-                'tf = tf And Not CheckBoxFindReplaceFindRXSheetmetal.Checked
-                'If tf Then
-                '    If Not msg.Contains("Replacement search type 'RX' requires Find search type 'RX'") Then
-                '        msg += "    Replacement search type 'RX' requires Find search type 'RX'" + Chr(13)
-                '    End If
-                'End If
-
             End If
 
             If LabelToActionSheetmetal(Label).RequiresPictorialView Then
@@ -877,7 +766,7 @@ Public Class Form1
         If (Len(SaveMsg) <> 0) And CheckBoxWarnSave.Checked Then
             Dim s As String = "The following options require the original file to be saved." + Chr(13)
             s += "Please verify you have a backup before continuing."
-            SaveMsg += Chr(13) + "Disable this warning on the Configuration tab."
+            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- Open/Save Page."
             SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
         Else
             SaveMsg = ""
@@ -3595,6 +3484,7 @@ Public Class Form1
     Private Sub CheckBoxStockSizeMinMidMax_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxStockSizeMinMidMax.CheckedChanged
         ReconcileFormChanges()
     End Sub
+
 
 
 
