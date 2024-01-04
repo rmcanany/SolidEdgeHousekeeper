@@ -40,7 +40,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", 
 
 ## GETTING HELP
 
-Start with the Readme.  To quickly navigate, use the Table of Contents by clicking ![Table of Contents](My%20Project/media/table_of_contents_icon.png) as shown in the image below.
+Start with the Readme.  To quickly navigate, use the Table of Contents by clicking ![Table of Contents](My%20Project/media/table_of_contents_icon.png) as shown in the image below. 
 
 ![Table of Contents](My%20Project/media/table_of_contents.png)
 
@@ -241,7 +241,7 @@ Select the Comparison from its dropdown box. The choices are `contains`, `is_exa
 
 `Contains` means the Value can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
-`Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike with `contains`, in this example, `Cast Aluminum Jigplate` would *not* match.
+`Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike with `contains`, in this example, `Cast Aluminum Jigplate` would *not* match because it doesn't start with `Aluminum`. (`*Aluminum*` *would* match, by the way.)
 
 Internally the [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) is used to make the wildcard comparison.  Visit the link for details and examples.
 
@@ -387,7 +387,7 @@ If you are changing `System.Material` specifically, there is an option to automa
 
 The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
 
-You can copy the settings on the form to other tabs. Set the 'Copy To' CheckBoxes as desired.
+You can copy the settings on the form to other tabs. Set the `Copy To` CheckBoxes as desired.
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
@@ -396,7 +396,7 @@ Updates mass, volume, etc.  Models with no density are reported in the log file.
 
 You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
 
-Occasionally, the physical properties are updated correctly, but the results are not shown in the Variable Table. The error is reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
+Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
 
 #### Variables add/edit/expose
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
@@ -413,7 +413,7 @@ If exposing a variable, the Expose name defaults to the variable name. You can o
 
 The variables are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
 
-You can copy the settings on the form to other tabs.  Set the 'Copy To' CheckBoxes as desired.
+You can copy the settings on the form to other tabs.  Set the `Copy To` CheckBoxes as desired.
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
@@ -438,6 +438,8 @@ Updates the file with face and view styles from a file you specify on the **Conf
 
 Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
+![View Override Dialog](My%20Project/media/view_override_dialog.png)
+
 #### Hide constructions
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
@@ -445,7 +447,9 @@ Hides all non-model elements such as reference planes, PMI dimensions, etc.
 Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab -- General Page**.
 
 #### Part number does not match file name
-Checks if a file property, that you specify on the **Configuration Tab -- General Page**, matches the file name.
+Checks if the file name contains the part number. The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
+
+![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)
 
 #### Missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
@@ -466,7 +470,7 @@ Checks if any assembly occurrences have missing relationships.
 Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
 
 #### Run external program
-Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
+Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
 If you are writing your own program, be aware several interoperability rules apply. See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 

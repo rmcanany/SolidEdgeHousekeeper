@@ -153,7 +153,7 @@ Public Class LabelToAction
         HelpString += "at the top of the form.  Only one row can be moved at a time. "
         HelpString += "The delete button, also at the top of the form, removes selected rows. "
         HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs. "
-        HelpString += "Set the 'Copy To' CheckBoxes as desired."
+        HelpString += "Set the `Copy To` CheckBoxes as desired."
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
         HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
@@ -172,8 +172,8 @@ Public Class LabelToAction
         HelpString += "disable both the `Show` and `Hide` options. "
         HelpString += "Note, controlling the symbol display only works for assembly files at this time. "
         HelpString += vbCrLf + vbCrLf + "Occasionally, the physical properties are updated correctly, "
-        HelpString += "but the results are not shown in the Variable Table. "
-        HelpString += "The error is reported in the log file. The easiest fix I've found "
+        HelpString += "but the results are not carried over to the Variable Table. "
+        HelpString += "The error is detected and reported in the log file. The easiest fix I've found "
         HelpString += "is to open the file in SE, change the material, then change it right back. "
         HelpString += "You can verify if it worked by checking for `Mass` in the Variable Table. "
         PopulateList(UpdatePhysicalProperties,
@@ -202,7 +202,7 @@ Public Class LabelToAction
         HelpString += "at the top of the form.  Only one row can be moved at a time.  "
         HelpString += "The delete button, also at the top of the form, removes selected rows.  "
         HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs.  "
-        HelpString += "Set the 'Copy To' CheckBoxes as desired."
+        HelpString += "Set the `Copy To` CheckBoxes as desired."
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
         HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
@@ -250,6 +250,7 @@ Public Class LabelToAction
         HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. "
         HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
         HelpString += "To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`."
+        HelpString += vbCrLf + vbCrLf + "![View Override Dialog](My%20Project/media/view_override_dialog.png)"
         PopulateList(UpdateFaceAndViewStylesFromTemplate,
                      "Update face and view styles from template",
                      "UpdateFaceAndViewStylesFromTemplate",
@@ -276,7 +277,12 @@ Public Class LabelToAction
                      RequiresForegroundProcessing:=True)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
-        HelpString = "Checks if a file property, that you specify on the **Configuration Tab -- General Page**, matches the file name."
+        HelpString = "Checks if the file name contains the part number. "
+        HelpString += "The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. "
+        HelpString += "It only checks that the part number appears somewhere in the file name. "
+        HelpString += "If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, "
+        HelpString += "you will get a match. "
+        HelpString += vbCrLf + vbCrLf + "![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)"
         PopulateList(PartNumberDoesNotMatchFilename,
                      "Part number does not match file name",
                      "PartNumberDoesNotMatchFilename",
@@ -336,7 +342,7 @@ Public Class LabelToAction
         '             HelpString)
 
         Dim RunExternalProgram As New L2A
-        HelpString = "Runs an `\*.exe` or `\*.vbs` file.  Select the program with the `Browse` button. "
+        HelpString = "Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
         HelpString += "See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "

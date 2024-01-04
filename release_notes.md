@@ -103,7 +103,7 @@ Added the ability to update mass, volume, etc. for model files. Models with no d
 
 Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
 
-Occasionally in testing, the physical properties were updated correctly, but the results were not carried over to the Variable Table. The error is reported in the log file. The easiest fix I found was to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. "
+Occasionally in testing, the physical properties were updated correctly, but the results were not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I found was to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. "
 
 ### Check interference
 
@@ -160,7 +160,7 @@ Added an option to remove all properties *except* those listed in the program se
 
 (Thank you **@Francesco Arfilli**!)
 
-Improved legibility by changing from the Win95 standard Microsoft SanSerif to the Win11 standard Segoe UI Variable Display.
+Improved legibility by changing from the Win95 standard `Microsoft SanSerif` to the Win11 standard `Segoe UI Variable Display`.
 
 ### Preferences Folder
 

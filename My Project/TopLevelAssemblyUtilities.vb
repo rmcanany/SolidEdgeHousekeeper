@@ -771,13 +771,6 @@ Public Class TopLevelAssemblyUtilities
         Dim IndexedDrives As New List(Of String)
         Dim msg As String = ""
 
-        'CSearchManager csm = New CSearchManager();
-        'CSearchCrawlScopeManager manager = csm.GetCatalog("SystemIndex").GetCrawlScopeManager();
-        'If (manager.IncludedInCrawlScope(indexingPath) == 0) Then
-
-        'Dim CSM As New Microsoft.Search.Interop.csearchmanager()
-
-
         Try
             SearchScope = IO.File.ReadAllLines(SearchScopeFilename)
         Catch ex As Exception
@@ -794,8 +787,6 @@ Public Class TopLevelAssemblyUtilities
                 End If
             Next
         End If
-
-        MsgBox(msg)
 
         Return IndexedDrives
     End Function
