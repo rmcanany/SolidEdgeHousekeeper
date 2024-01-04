@@ -8,7 +8,7 @@
 @JayJay101, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg]
 
 **Helpful feedback and bug reports:**
-@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @Jason1607436093479, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303
+@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @Jason1697638698040, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -44,7 +44,7 @@ Start with the Readme.  To quickly navigate, use the Table of Contents by clicki
 
 ![Table of Contents](My%20Project/media/table_of_contents.png)
 
-Ask questions, report bugs, or suggest improvements on the [**Solid Edge Forum**](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
 
 
 ## HELPING OUT
@@ -53,14 +53,14 @@ If you want to make Housekeeper better, join us as a beta tester! Beta testing i
 
 To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
 
-If you know .NET, or want to learn, there's more to do!  To get started on GitHub collaboration, head over to [**ToyProject**](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.
+If you know .NET, or want to learn, there's more to do!  To get started on GitHub collaboration, head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.
 
 
 ## INSTALLATION
 
 There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
 
-The other option is to use the [**Latest Release**](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
+The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
 
 
 <p align="center">
@@ -243,9 +243,9 @@ Select the Comparison from its dropdown box. The choices are `contains`, `is_exa
 
 `Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike with `contains`, in this example, `Cast Aluminum Jigplate` would *not* match because it doesn't start with `Aluminum`. (`*Aluminum*` *would* match, by the way.)
 
-Internally the [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) is used to make the wildcard comparison.  Visit the link for details and examples.
+Internally the [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) is used to make the wildcard comparison.  Visit the link for details and examples.
 
-`Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [**REGEX in .NET**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
+`Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
 
 **Default Filter Formula**
 
@@ -299,7 +299,7 @@ The filters are saved in `property_filters.txt` in the same directory as `Housek
 
 The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
 
-As suggested above, see [**VB Like Operator**](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) for details and examples.
+As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) for details and examples.
 
 ## STARTING, STOPPING, AND MONITORING EXECUTION
 
@@ -375,7 +375,7 @@ There are three search modes, `PT`, `WC`, and `RX`.
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. 
-- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
+- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
@@ -418,17 +418,17 @@ You can copy the settings on the form to other tabs.  Set the `Copy To` CheckBox
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
 #### Copy overall size to variable table
-Copies the overall model size to the variable table. This is primarily intended for standard cross-section material (aluminum extrusion, barstock, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
+Copies the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
 
 The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
 ![Overall Size Options](My%20Project/media/overall_size_options.png)
 
-The size can be reported in `XYZ`, or `MinMidMax` coordinates, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
 
-Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
+Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
 
-The command reports sheet metal size in the bent state. For a flat pattern, instead of this using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`.
+The command reports sheet metal size in the formed state. For a flat pattern, instead of this using this command, you can use the variables from the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
 
 #### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
@@ -472,7 +472,7 @@ Runs an interference check.  All parts are checked against all others. This can 
 #### Run external program
 Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
-If you are writing your own program, be aware several interoperability rules apply. See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
+If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
 #### Interactive edit
 Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. 
@@ -697,7 +697,7 @@ The dropdown should list all installed printers. You can configure up to two of 
 
 Enable/disable a printer using the checkbox next to its name. If you need to print only certain sizes of drawings, you can disable `Printer1` and enable `Printer2` with the desired sheet sizes set. 
 
-This command will probably not work with PDF printers. Use the Save As PDF command instead. 
+This command may not work with PDF printers. Try the Save As PDF command instead. 
 
 #### Save As
 Same as the Assembly command of the same name, except as follows.

@@ -130,7 +130,7 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
-        HelpString += "Check the [**.NET Regex Guide**](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
+        HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
@@ -213,24 +213,24 @@ Public Class LabelToAction
                      RequiresVariablesToEdit:=True)
 
         Dim CopyOverallSizeToVariableTable As New L2A
-        HelpString = "Copies the overall model size to the variable table. "
+        HelpString = "Copies the model size to the variable table. "
         HelpString += "This is primarily intended for standard cross-section material "
-        HelpString += "(aluminum extrusion, barstock, etc.), but can be used for any purpose. "
+        HelpString += "(barstock, channel, etc.), but can be used for any purpose. "
         HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
         HelpString += vbCrLf + vbCrLf + "The size is determined using the built-in Solid Edge `RangeBox`. "
         HelpString += "The range box is oriented along the XYZ axes. "
         HelpString += "Misleading values will result for parts with an off axis orientation, such as a 3D tube. "
         HelpString += vbCrLf + vbCrLf + "![Overall Size Options](My%20Project/media/overall_size_options.png)"
-        HelpString += vbCrLf + vbCrLf + "The size can be reported in `XYZ`, or `MinMidMax` coordinates, or both. "
-        HelpString += "`MinMidMax` has the advantage of being independent of the part's principal orientation. "
-        HelpString += "Set this option on the **Configuration Tab -- General Page**. "
+        HelpString += vbCrLf + vbCrLf + "The size can be reported as `XYZ`, or `MinMidMax`, or both. "
+        HelpString += "`MinMidMax` is independent of the part's orientation in the file. "
+        HelpString += "Set your preference on the **Configuration Tab -- General Page**. "
         HelpString += "Set the desired variable names there, too. "
-        HelpString += vbCrLf + vbCrLf + "Note that the variable values are a non-associative copy. "
+        HelpString += vbCrLf + vbCrLf + "Note that the values are non-associative copies. "
         HelpString += "Any change to the model will require rerunning this command to update the variable table. "
-        HelpString += vbCrLf + vbCrLf + "The command reports sheet metal size in the bent state. "
+        HelpString += vbCrLf + vbCrLf + "The command reports sheet metal size in the formed state. "
         HelpString += "For a flat pattern, instead of this using this command, "
-        HelpString += "use the variables the flat pattern command automatically exports to the variable table. "
-        HelpString += "They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`."
+        HelpString += "you can use the variables from the flat pattern command -- "
+        HelpString += "`Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. "
         PopulateList(CopyOverallSizeToVariableTable,
                      "Copy overall size to variable table",
                      "CopyOverallSizeToVariableTable",
@@ -345,7 +345,7 @@ Public Class LabelToAction
         HelpString = "Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. "
         HelpString += "It is located on the **Task Tab** below the task list. "
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
-        HelpString += "See [**HousekeeperExternalPrograms**](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
+        HelpString += "See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
         PopulateList(RunExternalProgram,
                      "Run external program",
                      "RunExternalProgram",
@@ -903,8 +903,8 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "Enable/disable a printer using the checkbox next to its name. "
         HelpString += "If you need to print only certain sizes of drawings, you can disable `Printer1` "
         HelpString += "and enable `Printer2` with the desired sheet sizes set. "
-        HelpString += vbCrLf + vbCrLf + "This command will probably not work with PDF printers. "
-        HelpString += "Use the Save As PDF command instead. "
+        HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
+        HelpString += "Try the Save As PDF command instead. "
         PopulateList(Print,
                      "Print",
                      "Print",

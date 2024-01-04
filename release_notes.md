@@ -13,31 +13,29 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 (Thank you **@Bert303**!)
 
-Added the ability to add, change and/or expose variables. Multiple variables can be processed at a time. This is an extension of the previous `Expose Variables` command, which has now been removed.
+Added the ability to change and/or expose variables. Variables can optionally be added. The option is set on the **Configuration Tab -- General Page**. Multiple variables can be processed at a time. This is an extension of the previous `Expose Variables` command, which has now been removed.
 
 ![Variable Input Form](My%20Project/media/variable_input_editor.png)
-
-Variables on the list that are not in the file can optionally be added automatically.  The option is set on the **Configuration Tab -- General Page**. 
 
 The variables are processed in the order shown on the form. They can be moved up or down, or deleted, using the buttons provided.
 
 The settings from one tab can be copied to others, using the `Copy To` CheckBoxes as desired.
 
-### Copy Overall Model Size to the Variable Table
+### Copy Model Size to the Variable Table
 
 (Thank you **@Imre Szucs**, **@64Pacific**!)
 
-Added the ability to copy the overall model size to the variable table. This is primarily intended for standard cross-section material (aluminum extrusion, barstock, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
+Added the ability to copy the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
 
 The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
 ![Overall Size Options](My%20Project/media/overall_size_options.png)
 
-The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's principal orientation. Set this option on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
 
-Note that the variable values are a non-associative copy. Any change to the model will require rerunning this command to update the variable table. 
+Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
 
-The command reports sheet metal size in the bent state. For a flat pattern, instead of using this command, use the variables the flat pattern command automatically exports to the variable table. They are `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeX`, and `Sheet Metal Gage`.
+The command reports sheet metal size in the formed state. For a flat pattern, instead of using this command, you  can use the variables from the flat pattern command --  `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`.
 
 ### Process files with any Document Status
 
@@ -46,8 +44,6 @@ The command reports sheet metal size in the bent state. For a flat pattern, inst
 Added the ability to process files regardless of Document Status. After processing, the file can be reverted back to the old Status, or changed to a new one.  These options are set on the **Configuration Tab -- Open/Save Page**.
 
 ![Open/Save](My%20Project/media/file_open_save_options.png)
-
-
 
 ### Save As
 
@@ -61,7 +57,7 @@ Added new file type `*.jt` for model files.
 
 (Thank you **@n0minus38**!)
 
-Added an optional second printer for selected sheet sizes. (By disabling the default `Printer1`, you can print selected sizes *only*.)
+Added an optional second printer for selected sheet sizes. (By disabling the default `Printer1`, you can print *only* selected sizes.)
 
 ![Configuration](My%20Project/media/printer_setup.png)
 
@@ -95,11 +91,11 @@ Add the ability to change multiple properties at a time. A dialog similar to the
 
 Added an option on the **Configuration Tab -- General Page** to create a property if it doesn't exist in the file. (Thank you **@Francesco Arfilli**!)
 
-Added an option, when the property is System.Material specifically, to automatically update the material properties (density, face styles, etc.) from the Material Table.  Set the option on the **Configuration Tab -- General Page**.
+Added an option, when the property is `System.Material` specifically, to automatically update the material properties (`density`, `face style`, etc.) from the Material Table.  Set the option on the **Configuration Tab -- General Page**.
 
 ### Update Physical Properties
 
-Added the ability to update mass, volume, etc. for model files. Models with no density are reported in the log file. 
+Added the ability to update `mass`, `volume`, etc. for model files. Models with `density = 0` are reported in the log file. 
 
 Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
 
@@ -121,7 +117,7 @@ Added an option to not check for properties of the models contained in Draft fil
 
 Since Draft files often do not have properties of their own, normally this option should be enabled. Searching for Document Status is another story.  For example, with the option set, an `In Work` drawing of a `Released` part would confusingly show up in a search for `Released` files.
 
-Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [**Property Filter**](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
+Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [<ins>**Property Filter**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
 
 Fixed an issue where properties of Draft files themselves were sometimes not searched.
 
@@ -137,7 +133,7 @@ Note the quantity and source assembly name are non-associative copies. If the so
 
 ### Draft -- Convert Drawing Views to 2D
 
-A Housekeeper External Program sample illustrating the use of PowerShell for the Solid Edge Housekeeper `Run External Program` task.  
+A Housekeeper External Program sample illustrating the use of PowerShell (Thank you **Jason1697638698040**!) for the Solid Edge Housekeeper `Run External Program` task.  
 
 The program converts drawing views to stand-alone 2D views, disconnected from the 3D model. This is irreversible, so you know, think about it. 
 
@@ -148,23 +144,24 @@ In testing it quickly became apparent that this operation also converts Property
 Luckily, Solid Edge has the ability to take care of that. That's in the program, too, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, you'll have to add code to deal with those. 
 
 Speaking of code, the sample uses PowerShell, but just barely. It is really only a thin wrapper on a Visual Basic script. If you have a better example, I would be glad to host it on GitHub. Naturally I would credit you as the contributor. That's not worth any money, but it does up your 'cred' on GitHub.
+
 ### Update Drawing Views
 
-Fixed an issue where family of assembly drawings could not find the assembly file.  Fixed the same issue on the `Broken Links` Task.
+Fixed an issue where family of assembly files were not being found. Fixed the same issue on the `Broken Links` Task.
 
 ### Housekeeper External Program AddRemoveCustomProperties
 
 Added an option to remove all properties *except* those listed in the program settings file.
 
-### Form Font
+### GUI Font
 
 (Thank you **@Francesco Arfilli**!)
 
-Improved legibility by changing from the Win95 standard `Microsoft SanSerif` to the Win11 standard `Segoe UI Variable Display`.
+Changed from `Microsoft SanSerif` (circa 1995) to the Win11 standard `Segoe UI Variable Display`. 
 
 ### Preferences Folder
 
-Added a new location for user data.  It is now stored in the Preferences folder in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
+Added a new location for user data.  It is now stored in the `Preferences` folder in the Housekeeper root directory. Previously it was stored in the same folder as the executable and associated files, making it hard to identify user-specific files.
 
 ### Saved Settings
 
