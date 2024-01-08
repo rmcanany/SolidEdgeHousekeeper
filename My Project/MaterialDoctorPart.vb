@@ -148,10 +148,17 @@ Public Class MaterialDoctorPart
                             'ErrorMessageList.Add(String.Format("'{0}' updated properties: {1}", MatTableMaterial.ToString, s))
                         End If
 
+                        'If Not CBool(Configuration("CheckBoxRemoveFaceStyleOverrides")) Then
+
+                        'End If
                         ' Face styles are not always updated, especially on imported files.
                         ' Some imported files have trouble with face updates.
                         Try
-                            If Not UpdateFaces(SEApp, SEDoc, CurrentMaterialFaceStyle(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)) Then
+                            Dim RemoveFaceStyleOverrides As Boolean = CBool(Configuration("CheckBoxRemoveFaceStyleOverrides"))
+                            If Not UpdateFaces(SEApp,
+                                               SEDoc,
+                                               CurrentMaterialFaceStyle(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary),
+                                               RemoveFaceStyleOverrides) Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
                             End If
@@ -298,7 +305,8 @@ Public Class MaterialDoctorPart
     Private Function UpdateFaces(
         SEApp As SolidEdgeFramework.Application,
         SEDoc As SolidEdgePart.PartDocument,
-        CurrentMaterialFaceStyle As SolidEdgeFramework.FaceStyle) As Boolean
+        CurrentMaterialFaceStyle As SolidEdgeFramework.FaceStyle,
+        RemoveFaceStyleOverrides As Boolean) As Boolean
 
         Dim UpdatesComplete As Boolean = True
 
@@ -401,15 +409,18 @@ Public Class MaterialDoctorPart
 
                         Dim Count As Integer = 0
 
-                        For Each Face In Faces
-                            If FaceOverrides.Keys.Contains(Face.ID) Then
-                                Face.Style = FaceOverrides(Face.ID)
-                                Count += 1
-                                If Count Mod 100 = 0 Then
-                                    SEApp.DoIdle()
+                        If Not RemoveFaceStyleOverrides Then
+                            For Each Face In Faces
+                                If FaceOverrides.Keys.Contains(Face.ID) Then
+                                    Face.Style = FaceOverrides(Face.ID)
+                                    Count += 1
+                                    If Count Mod 100 = 0 Then
+                                        SEApp.DoIdle()
+                                    End If
                                 End If
-                            End If
-                        Next
+                            Next
+
+                        End If
                         FaceOverrides.Clear()
 
                     ElseIf FaceOverrides.Count > MaxFacesToProcess Then

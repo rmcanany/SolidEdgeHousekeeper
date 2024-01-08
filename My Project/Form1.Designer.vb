@@ -329,6 +329,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.CheckBoxRemoveFaceStyleOverrides = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -3192,6 +3193,7 @@ Partial Class Form1
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxRemoveFaceStyleOverrides)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxAutoUpdateMaterialProperties)
         Me.TabPageGeneral.Controls.Add(Me.GroupBoxStockSize)
         Me.TabPageGeneral.Controls.Add(Me.LabelCheckInterferenceMaxOccurrences)
@@ -3252,7 +3254,7 @@ Partial Class Form1
         Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeX)
         Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeXYZ)
         Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeXYZ)
-        Me.GroupBoxStockSize.Location = New System.Drawing.Point(0, 660)
+        Me.GroupBoxStockSize.Location = New System.Drawing.Point(0, 690)
         Me.GroupBoxStockSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStockSize.Name = "GroupBoxStockSize"
         Me.GroupBoxStockSize.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -3404,7 +3406,7 @@ Partial Class Form1
         'LabelCheckInterferenceMaxOccurrences
         '
         Me.LabelCheckInterferenceMaxOccurrences.AutoSize = True
-        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(70, 474)
+        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(70, 504)
         Me.LabelCheckInterferenceMaxOccurrences.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelCheckInterferenceMaxOccurrences.Name = "LabelCheckInterferenceMaxOccurrences"
         Me.LabelCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(355, 16)
@@ -3413,7 +3415,7 @@ Partial Class Form1
         '
         'TextBoxCheckInterferenceMaxOccurrences
         '
-        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(12, 468)
+        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(12, 498)
         Me.TextBoxCheckInterferenceMaxOccurrences.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxCheckInterferenceMaxOccurrences.Name = "TextBoxCheckInterferenceMaxOccurrences"
         Me.TextBoxCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(44, 23)
@@ -3477,7 +3479,7 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 516)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 546)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
@@ -3852,6 +3854,16 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'CheckBoxRemoveFaceStyleOverrides
+        '
+        Me.CheckBoxRemoveFaceStyleOverrides.AutoSize = True
+        Me.CheckBoxRemoveFaceStyleOverrides.Location = New System.Drawing.Point(12, 468)
+        Me.CheckBoxRemoveFaceStyleOverrides.Name = "CheckBoxRemoveFaceStyleOverrides"
+        Me.CheckBoxRemoveFaceStyleOverrides.Size = New System.Drawing.Size(372, 20)
+        Me.CheckBoxRemoveFaceStyleOverrides.TabIndex = 63
+        Me.CheckBoxRemoveFaceStyleOverrides.Text = "Update material from material table -- Remove face style overrides"
+        Me.CheckBoxRemoveFaceStyleOverrides.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -4232,4 +4244,5 @@ Partial Class Form1
     Friend WithEvents LabelStockSizeMin As Label
     Friend WithEvents CheckBoxStockSizeMinMidMax As CheckBox
     Friend WithEvents CheckBoxAutoUpdateMaterialProperties As CheckBox
+    Friend WithEvents CheckBoxRemoveFaceStyleOverrides As CheckBox
 End Class

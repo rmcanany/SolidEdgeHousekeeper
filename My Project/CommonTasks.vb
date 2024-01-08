@@ -1510,6 +1510,7 @@ Public Class CommonTasks
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim s As String
+        Dim Proceed As Boolean
 
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
         Dim VariableFound As Boolean
@@ -1528,33 +1529,36 @@ Public Class CommonTasks
                 Occurrences = AsmDoc.Occurrences
 
                 If Occurrences.Count = 0 Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add("No models found")
+                    Proceed = False
+                    'ExitStatus = 1
+                    'ErrorMessageList.Add("No models found")
                 End If
 
-                PhysicalProperties.UpdateV2(ParFileNamesWithoutDensity)
-                SEApp.DoIdle()
+                If Proceed Then
+                    PhysicalProperties.UpdateV2(ParFileNamesWithoutDensity)
+                    SEApp.DoIdle()
 
-                If Not ParFileNamesWithoutDensity Is Nothing Then
-                    If ParFileNamesWithoutDensity.Count > 0 Then
-                        ExitStatus = 1
-                        s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
-                        s = String.Format("{0}  Please verify results.", s)
-                        ErrorMessageList.Add(s)
+                    If Not ParFileNamesWithoutDensity Is Nothing Then
+                        If ParFileNamesWithoutDensity.Count > 0 Then
+                            ExitStatus = 1
+                            s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
+                            s = String.Format("{0}  Please verify results.", s)
+                            ErrorMessageList.Add(s)
+                        End If
                     End If
-                End If
 
-                If Configuration("CheckBoxUpdatePhysicalPropertiesCOGHide").ToLower = "true" Then
-                    PhysicalProperties.DisplayCenterOfMass = False
-                End If
-                If Configuration("CheckBoxUpdatePhysicalPropertiesCOGShow").ToLower = "true" Then
-                    PhysicalProperties.DisplayCenterOfMass = True
-                End If
+                    If Configuration("CheckBoxUpdatePhysicalPropertiesCOGHide").ToLower = "true" Then
+                        PhysicalProperties.DisplayCenterOfMass = False
+                    End If
+                    If Configuration("CheckBoxUpdatePhysicalPropertiesCOGShow").ToLower = "true" Then
+                        PhysicalProperties.DisplayCenterOfMass = True
+                    End If
 
-                AsmDoc.Save()
-                SEApp.DoIdle()
-                'If Not PhysicalProperties.IsUpToDate Then
-                'End If
+                    AsmDoc.Save()
+                    SEApp.DoIdle()
+                    'If Not PhysicalProperties.IsUpToDate Then
+                    'End If
+                End If
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add("Error updating physical properties.")
@@ -1577,14 +1581,18 @@ Public Class CommonTasks
 
                     Models = ParDoc.Models
                     If Models.Count = 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("No design bodies found")
+                        Proceed = False
+                        'ExitStatus = 1
+                        'ErrorMessageList.Add("No design bodies found")
                     End If
 
-                    MaterialTable.GetMaterialPropValueFromDoc(ParDoc, PropertyType, PropValue)
-                    If CDbl(PropValue) <= 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
+                    If Proceed Then
+                        MaterialTable.GetMaterialPropValueFromDoc(ParDoc, PropertyType, PropValue)
+                        If CDbl(PropValue) <= 0 Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
+                        End If
+
                     End If
 
                 Catch ex As Exception
@@ -1604,15 +1612,18 @@ Public Class CommonTasks
 
                     Models = PsmDoc.Models
                     If Models.Count = 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("No design bodies found")
+                        Proceed = False
+                        'ExitStatus = 1
+                        'ErrorMessageList.Add("No design bodies found")
                     End If
 
+                    If Proceed Then
+                        MaterialTable.GetMaterialPropValueFromDoc(PsmDoc, PropertyType, PropValue)
+                        If CDbl(PropValue) <= 0 Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
+                        End If
 
-                    MaterialTable.GetMaterialPropValueFromDoc(PsmDoc, PropertyType, PropValue)
-                    If CDbl(PropValue) <= 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Density set to {0}.", CDbl(PropValue)))
                     End If
 
                 Catch ex As Exception
@@ -1621,19 +1632,22 @@ Public Class CommonTasks
                 End Try
             End If
 
-            DocVariableDict = GetDocVariables(SEDoc)
-            VariableFound = False
+            If Proceed Then
+                DocVariableDict = GetDocVariables(SEDoc)
+                VariableFound = False
 
-            For Each Key As String In DocVariableDict.Keys
-                If Key.ToLower = "mass" Then
-                    VariableFound = True
-                    Exit For
+                For Each Key As String In DocVariableDict.Keys
+                    If Key.ToLower = "mass" Then
+                        VariableFound = True
+                        Exit For
+                    End If
+                Next
+
+                If Not VariableFound Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
                 End If
-            Next
 
-            If Not VariableFound Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
             End If
         End If
 
