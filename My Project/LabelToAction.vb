@@ -453,6 +453,8 @@ Public Class LabelToAction
         HelpString += vbCrLf + vbCrLf + "If the names match, "
         HelpString += "but their properties (e.g., face style) do not, the material is updated. "
         HelpString += "If the names do not match, or no material is assigned, it is reported in the log file."
+        HelpString += vbCrLf + vbCrLf + "You can optionally remove any face style overrides. "
+        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
         PopulateList(UpdateMaterialFromMaterialTable,
                      "Update material from material table",
                      "UpdateMaterialFromMaterialTable",

@@ -519,6 +519,8 @@ Checks to see if the part's material name and properties match any material in a
 
 If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
 
+You can optionally remove any face style overrides. Set the option on the **Configuration Tab -- General Page**. 
+
 #### Hide constructions
 Same as the Assembly command of the same name.
 

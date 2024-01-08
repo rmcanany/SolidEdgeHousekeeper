@@ -266,6 +266,7 @@ Partial Class Form1
         Me.CheckBoxPrinter1ScaleLineWidths = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPrinter1 = New System.Windows.Forms.ComboBox()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxRemoveFaceStyleOverrides = New System.Windows.Forms.CheckBox()
         Me.CheckBoxAutoUpdateMaterialProperties = New System.Windows.Forms.CheckBox()
         Me.GroupBoxStockSize = New System.Windows.Forms.GroupBox()
         Me.TextBoxStockSizeMax = New System.Windows.Forms.TextBox()
@@ -329,7 +330,6 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxRemoveFaceStyleOverrides = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -377,7 +377,7 @@ Partial Class Form1
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(606, 766)
+        Me.TabControl1.Size = New System.Drawing.Size(559, 766)
         Me.TabControl1.TabIndex = 0
         '
         'TabPageHome
@@ -713,14 +713,14 @@ Partial Class Form1
         Me.TabPageAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageAssembly.Name = "TabPageAssembly"
         Me.TabPageAssembly.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageAssembly.Size = New System.Drawing.Size(598, 737)
+        Me.TabPageAssembly.Size = New System.Drawing.Size(551, 737)
         Me.TabPageAssembly.TabIndex = 1
         Me.TabPageAssembly.Text = "Assembly"
         '
         'ButtonPropertiesEditAssembly
         '
         Me.ButtonPropertiesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditAssembly.Location = New System.Drawing.Point(467, 618)
+        Me.ButtonPropertiesEditAssembly.Location = New System.Drawing.Point(450, 618)
         Me.ButtonPropertiesEditAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonPropertiesEditAssembly.Name = "ButtonPropertiesEditAssembly"
         Me.ButtonPropertiesEditAssembly.Size = New System.Drawing.Size(88, 23)
@@ -732,16 +732,16 @@ Partial Class Form1
         '
         Me.TextBoxPropertiesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditAssembly.Location = New System.Drawing.Point(12, 618)
+        Me.TextBoxPropertiesEditAssembly.Location = New System.Drawing.Point(10, 618)
         Me.TextBoxPropertiesEditAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxPropertiesEditAssembly.Name = "TextBoxPropertiesEditAssembly"
-        Me.TextBoxPropertiesEditAssembly.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxPropertiesEditAssembly.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxPropertiesEditAssembly.TabIndex = 29
         '
         'ButtonVariablesEditAssembly
         '
         Me.ButtonVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariablesEditAssembly.Location = New System.Drawing.Point(467, 682)
+        Me.ButtonVariablesEditAssembly.Location = New System.Drawing.Point(450, 682)
         Me.ButtonVariablesEditAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonVariablesEditAssembly.Name = "ButtonVariablesEditAssembly"
         Me.ButtonVariablesEditAssembly.Size = New System.Drawing.Size(88, 25)
@@ -753,27 +753,27 @@ Partial Class Form1
         '
         Me.TextBoxVariablesEditAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariablesEditAssembly.Location = New System.Drawing.Point(12, 682)
+        Me.TextBoxVariablesEditAssembly.Location = New System.Drawing.Point(10, 682)
         Me.TextBoxVariablesEditAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxVariablesEditAssembly.Name = "TextBoxVariablesEditAssembly"
-        Me.TextBoxVariablesEditAssembly.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxVariablesEditAssembly.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxVariablesEditAssembly.TabIndex = 27
         '
         'TextBoxSaveAsFormulaAssembly
         '
         Me.TextBoxSaveAsFormulaAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsFormulaAssembly.Location = New System.Drawing.Point(12, 490)
+        Me.TextBoxSaveAsFormulaAssembly.Location = New System.Drawing.Point(10, 490)
         Me.TextBoxSaveAsFormulaAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxSaveAsFormulaAssembly.Name = "TextBoxSaveAsFormulaAssembly"
-        Me.TextBoxSaveAsFormulaAssembly.Size = New System.Drawing.Size(538, 23)
+        Me.TextBoxSaveAsFormulaAssembly.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxSaveAsFormulaAssembly.TabIndex = 21
         '
         'CheckBoxSaveAsFormulaAssembly
         '
         Me.CheckBoxSaveAsFormulaAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsFormulaAssembly.AutoSize = True
-        Me.CheckBoxSaveAsFormulaAssembly.Location = New System.Drawing.Point(12, 463)
+        Me.CheckBoxSaveAsFormulaAssembly.Location = New System.Drawing.Point(10, 463)
         Me.CheckBoxSaveAsFormulaAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsFormulaAssembly.Name = "CheckBoxSaveAsFormulaAssembly"
         Me.CheckBoxSaveAsFormulaAssembly.Size = New System.Drawing.Size(158, 20)
@@ -785,7 +785,7 @@ Partial Class Form1
         '
         Me.LabelVariablesEditAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelVariablesEditAssembly.AutoSize = True
-        Me.LabelVariablesEditAssembly.Location = New System.Drawing.Point(12, 655)
+        Me.LabelVariablesEditAssembly.Location = New System.Drawing.Point(10, 655)
         Me.LabelVariablesEditAssembly.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelVariablesEditAssembly.Name = "LabelVariablesEditAssembly"
         Me.LabelVariablesEditAssembly.Size = New System.Drawing.Size(142, 16)
@@ -796,7 +796,7 @@ Partial Class Form1
         '
         Me.LabelFindReplacePropertySetAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplacePropertySetAssembly.AutoSize = True
-        Me.LabelFindReplacePropertySetAssembly.Location = New System.Drawing.Point(12, 591)
+        Me.LabelFindReplacePropertySetAssembly.Location = New System.Drawing.Point(10, 591)
         Me.LabelFindReplacePropertySetAssembly.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplacePropertySetAssembly.Name = "LabelFindReplacePropertySetAssembly"
         Me.LabelFindReplacePropertySetAssembly.Size = New System.Drawing.Size(119, 16)
@@ -806,7 +806,7 @@ Partial Class Form1
         'ButtonExternalProgramAssembly
         '
         Me.ButtonExternalProgramAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonExternalProgramAssembly.Location = New System.Drawing.Point(467, 554)
+        Me.ButtonExternalProgramAssembly.Location = New System.Drawing.Point(450, 554)
         Me.ButtonExternalProgramAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonExternalProgramAssembly.Name = "ButtonExternalProgramAssembly"
         Me.ButtonExternalProgramAssembly.Size = New System.Drawing.Size(88, 23)
@@ -818,17 +818,17 @@ Partial Class Form1
         '
         Me.TextBoxExternalProgramAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExternalProgramAssembly.Location = New System.Drawing.Point(12, 554)
+        Me.TextBoxExternalProgramAssembly.Location = New System.Drawing.Point(10, 554)
         Me.TextBoxExternalProgramAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxExternalProgramAssembly.Name = "TextBoxExternalProgramAssembly"
-        Me.TextBoxExternalProgramAssembly.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxExternalProgramAssembly.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxExternalProgramAssembly.TabIndex = 8
         '
         'LabelExternalProgramAssembly
         '
         Me.LabelExternalProgramAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelExternalProgramAssembly.AutoSize = True
-        Me.LabelExternalProgramAssembly.Location = New System.Drawing.Point(12, 527)
+        Me.LabelExternalProgramAssembly.Location = New System.Drawing.Point(10, 527)
         Me.LabelExternalProgramAssembly.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelExternalProgramAssembly.Name = "LabelExternalProgramAssembly"
         Me.LabelExternalProgramAssembly.Size = New System.Drawing.Size(96, 16)
@@ -840,7 +840,7 @@ Partial Class Form1
         Me.ComboBoxSaveAsAssemblyFileType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxSaveAsAssemblyFileType.FormattingEnabled = True
         Me.ComboBoxSaveAsAssemblyFileType.Items.AddRange(New Object() {"fake_choice_1", "fake_choice_2"})
-        Me.ComboBoxSaveAsAssemblyFileType.Location = New System.Drawing.Point(175, 395)
+        Me.ComboBoxSaveAsAssemblyFileType.Location = New System.Drawing.Point(173, 395)
         Me.ComboBoxSaveAsAssemblyFileType.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxSaveAsAssemblyFileType.Name = "ComboBoxSaveAsAssemblyFileType"
         Me.ComboBoxSaveAsAssemblyFileType.Size = New System.Drawing.Size(153, 24)
@@ -851,7 +851,7 @@ Partial Class Form1
         '
         Me.CheckBoxSaveAsAssemblyOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsAssemblyOutputDirectory.AutoSize = True
-        Me.CheckBoxSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(372, 400)
+        Me.CheckBoxSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(370, 400)
         Me.CheckBoxSaveAsAssemblyOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxSaveAsAssemblyOutputDirectory.Name = "CheckBoxSaveAsAssemblyOutputDirectory"
         Me.CheckBoxSaveAsAssemblyOutputDirectory.Size = New System.Drawing.Size(162, 20)
@@ -862,7 +862,7 @@ Partial Class Form1
         'ButtonSaveAsAssemblyOutputDirectory
         '
         Me.ButtonSaveAsAssemblyOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(467, 426)
+        Me.ButtonSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(450, 426)
         Me.ButtonSaveAsAssemblyOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonSaveAsAssemblyOutputDirectory.Name = "ButtonSaveAsAssemblyOutputDirectory"
         Me.ButtonSaveAsAssemblyOutputDirectory.Size = New System.Drawing.Size(88, 25)
@@ -874,17 +874,17 @@ Partial Class Form1
         '
         Me.TextBoxSaveAsAssemblyOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(12, 426)
+        Me.TextBoxSaveAsAssemblyOutputDirectory.Location = New System.Drawing.Point(10, 426)
         Me.TextBoxSaveAsAssemblyOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxSaveAsAssemblyOutputDirectory.Name = "TextBoxSaveAsAssemblyOutputDirectory"
-        Me.TextBoxSaveAsAssemblyOutputDirectory.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxSaveAsAssemblyOutputDirectory.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxSaveAsAssemblyOutputDirectory.TabIndex = 3
         '
         'LabelSaveAsAssembly
         '
         Me.LabelSaveAsAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelSaveAsAssembly.AutoSize = True
-        Me.LabelSaveAsAssembly.Location = New System.Drawing.Point(12, 399)
+        Me.LabelSaveAsAssembly.Location = New System.Drawing.Point(10, 399)
         Me.LabelSaveAsAssembly.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelSaveAsAssembly.Name = "LabelSaveAsAssembly"
         Me.LabelSaveAsAssembly.Size = New System.Drawing.Size(137, 16)
@@ -893,16 +893,17 @@ Partial Class Form1
         '
         'CheckedListBoxAssembly
         '
-        Me.CheckedListBoxAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBoxAssembly.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBoxAssembly.BackColor = System.Drawing.SystemColors.Control
         Me.CheckedListBoxAssembly.CheckOnClick = True
         Me.CheckedListBoxAssembly.FormattingEnabled = True
         Me.CheckedListBoxAssembly.Items.AddRange(New Object() {"Fake name 1.  Real checkboxes populated at run time.", "Fake name 2", "Fake name 3"})
-        Me.CheckedListBoxAssembly.Location = New System.Drawing.Point(22, 10)
+        Me.CheckedListBoxAssembly.Location = New System.Drawing.Point(10, 10)
         Me.CheckedListBoxAssembly.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxAssembly.Name = "CheckedListBoxAssembly"
-        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(526, 364)
+        Me.CheckedListBoxAssembly.Size = New System.Drawing.Size(525, 364)
         Me.CheckedListBoxAssembly.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxAssembly, "Double-click to check/uncheck all")
         '
@@ -932,14 +933,14 @@ Partial Class Form1
         Me.TabPagePart.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPagePart.Name = "TabPagePart"
         Me.TabPagePart.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPagePart.Size = New System.Drawing.Size(598, 737)
+        Me.TabPagePart.Size = New System.Drawing.Size(551, 737)
         Me.TabPagePart.TabIndex = 2
         Me.TabPagePart.Text = "Part"
         '
         'ButtonPropertiesEditPart
         '
         Me.ButtonPropertiesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditPart.Location = New System.Drawing.Point(467, 618)
+        Me.ButtonPropertiesEditPart.Location = New System.Drawing.Point(451, 618)
         Me.ButtonPropertiesEditPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonPropertiesEditPart.Name = "ButtonPropertiesEditPart"
         Me.ButtonPropertiesEditPart.Size = New System.Drawing.Size(88, 23)
@@ -951,16 +952,16 @@ Partial Class Form1
         '
         Me.TextBoxPropertiesEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditPart.Location = New System.Drawing.Point(12, 618)
+        Me.TextBoxPropertiesEditPart.Location = New System.Drawing.Point(10, 618)
         Me.TextBoxPropertiesEditPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxPropertiesEditPart.Name = "TextBoxPropertiesEditPart"
-        Me.TextBoxPropertiesEditPart.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxPropertiesEditPart.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxPropertiesEditPart.TabIndex = 37
         '
         'ButtonVariablesEditPart
         '
         Me.ButtonVariablesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariablesEditPart.Location = New System.Drawing.Point(467, 682)
+        Me.ButtonVariablesEditPart.Location = New System.Drawing.Point(451, 682)
         Me.ButtonVariablesEditPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonVariablesEditPart.Name = "ButtonVariablesEditPart"
         Me.ButtonVariablesEditPart.Size = New System.Drawing.Size(88, 25)
@@ -972,27 +973,27 @@ Partial Class Form1
         '
         Me.TextBoxVariablesEditPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariablesEditPart.Location = New System.Drawing.Point(12, 682)
+        Me.TextBoxVariablesEditPart.Location = New System.Drawing.Point(10, 682)
         Me.TextBoxVariablesEditPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxVariablesEditPart.Name = "TextBoxVariablesEditPart"
-        Me.TextBoxVariablesEditPart.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxVariablesEditPart.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxVariablesEditPart.TabIndex = 35
         '
         'TextBoxSaveAsFormulaPart
         '
         Me.TextBoxSaveAsFormulaPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsFormulaPart.Location = New System.Drawing.Point(12, 490)
+        Me.TextBoxSaveAsFormulaPart.Location = New System.Drawing.Point(10, 490)
         Me.TextBoxSaveAsFormulaPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxSaveAsFormulaPart.Name = "TextBoxSaveAsFormulaPart"
-        Me.TextBoxSaveAsFormulaPart.Size = New System.Drawing.Size(538, 23)
+        Me.TextBoxSaveAsFormulaPart.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxSaveAsFormulaPart.TabIndex = 29
         '
         'CheckBoxSaveAsFormulaPart
         '
         Me.CheckBoxSaveAsFormulaPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsFormulaPart.AutoSize = True
-        Me.CheckBoxSaveAsFormulaPart.Location = New System.Drawing.Point(12, 463)
+        Me.CheckBoxSaveAsFormulaPart.Location = New System.Drawing.Point(10, 463)
         Me.CheckBoxSaveAsFormulaPart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsFormulaPart.Name = "CheckBoxSaveAsFormulaPart"
         Me.CheckBoxSaveAsFormulaPart.Size = New System.Drawing.Size(158, 20)
@@ -1004,7 +1005,7 @@ Partial Class Form1
         '
         Me.LabelVariablesEditPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelVariablesEditPart.AutoSize = True
-        Me.LabelVariablesEditPart.Location = New System.Drawing.Point(12, 655)
+        Me.LabelVariablesEditPart.Location = New System.Drawing.Point(10, 655)
         Me.LabelVariablesEditPart.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelVariablesEditPart.Name = "LabelVariablesEditPart"
         Me.LabelVariablesEditPart.Size = New System.Drawing.Size(142, 16)
@@ -1015,7 +1016,7 @@ Partial Class Form1
         '
         Me.LabelFindReplacePropertySetPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplacePropertySetPart.AutoSize = True
-        Me.LabelFindReplacePropertySetPart.Location = New System.Drawing.Point(12, 591)
+        Me.LabelFindReplacePropertySetPart.Location = New System.Drawing.Point(10, 591)
         Me.LabelFindReplacePropertySetPart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplacePropertySetPart.Name = "LabelFindReplacePropertySetPart"
         Me.LabelFindReplacePropertySetPart.Size = New System.Drawing.Size(119, 16)
@@ -1025,7 +1026,7 @@ Partial Class Form1
         'ButtonExternalProgramPart
         '
         Me.ButtonExternalProgramPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonExternalProgramPart.Location = New System.Drawing.Point(467, 554)
+        Me.ButtonExternalProgramPart.Location = New System.Drawing.Point(451, 554)
         Me.ButtonExternalProgramPart.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonExternalProgramPart.Name = "ButtonExternalProgramPart"
         Me.ButtonExternalProgramPart.Size = New System.Drawing.Size(88, 23)
@@ -1037,17 +1038,17 @@ Partial Class Form1
         '
         Me.TextBoxExternalProgramPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExternalProgramPart.Location = New System.Drawing.Point(12, 554)
+        Me.TextBoxExternalProgramPart.Location = New System.Drawing.Point(10, 554)
         Me.TextBoxExternalProgramPart.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxExternalProgramPart.Name = "TextBoxExternalProgramPart"
-        Me.TextBoxExternalProgramPart.Size = New System.Drawing.Size(447, 23)
+        Me.TextBoxExternalProgramPart.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxExternalProgramPart.TabIndex = 9
         '
         'LabelExternalProgramPart
         '
         Me.LabelExternalProgramPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelExternalProgramPart.AutoSize = True
-        Me.LabelExternalProgramPart.Location = New System.Drawing.Point(12, 527)
+        Me.LabelExternalProgramPart.Location = New System.Drawing.Point(10, 527)
         Me.LabelExternalProgramPart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelExternalProgramPart.Name = "LabelExternalProgramPart"
         Me.LabelExternalProgramPart.Size = New System.Drawing.Size(96, 16)
@@ -1059,7 +1060,7 @@ Partial Class Form1
         Me.ComboBoxSaveAsPartFileType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxSaveAsPartFileType.FormattingEnabled = True
         Me.ComboBoxSaveAsPartFileType.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxSaveAsPartFileType.Location = New System.Drawing.Point(175, 395)
+        Me.ComboBoxSaveAsPartFileType.Location = New System.Drawing.Point(173, 395)
         Me.ComboBoxSaveAsPartFileType.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxSaveAsPartFileType.Name = "ComboBoxSaveAsPartFileType"
         Me.ComboBoxSaveAsPartFileType.Size = New System.Drawing.Size(153, 24)
@@ -1070,7 +1071,7 @@ Partial Class Form1
         '
         Me.CheckBoxSaveAsPartOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsPartOutputDirectory.AutoSize = True
-        Me.CheckBoxSaveAsPartOutputDirectory.Location = New System.Drawing.Point(372, 400)
+        Me.CheckBoxSaveAsPartOutputDirectory.Location = New System.Drawing.Point(370, 400)
         Me.CheckBoxSaveAsPartOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxSaveAsPartOutputDirectory.Name = "CheckBoxSaveAsPartOutputDirectory"
         Me.CheckBoxSaveAsPartOutputDirectory.Size = New System.Drawing.Size(162, 20)
@@ -1081,7 +1082,7 @@ Partial Class Form1
         'ButtonSaveAsPartOutputDirectory
         '
         Me.ButtonSaveAsPartOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonSaveAsPartOutputDirectory.Location = New System.Drawing.Point(467, 426)
+        Me.ButtonSaveAsPartOutputDirectory.Location = New System.Drawing.Point(451, 426)
         Me.ButtonSaveAsPartOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonSaveAsPartOutputDirectory.Name = "ButtonSaveAsPartOutputDirectory"
         Me.ButtonSaveAsPartOutputDirectory.Size = New System.Drawing.Size(88, 25)
@@ -1093,17 +1094,17 @@ Partial Class Form1
         '
         Me.TextBoxSaveAsPartOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsPartOutputDirectory.Location = New System.Drawing.Point(12, 426)
+        Me.TextBoxSaveAsPartOutputDirectory.Location = New System.Drawing.Point(10, 426)
         Me.TextBoxSaveAsPartOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxSaveAsPartOutputDirectory.Name = "TextBoxSaveAsPartOutputDirectory"
-        Me.TextBoxSaveAsPartOutputDirectory.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxSaveAsPartOutputDirectory.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxSaveAsPartOutputDirectory.TabIndex = 4
         '
         'LabelSaveAsPart
         '
         Me.LabelSaveAsPart.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelSaveAsPart.AutoSize = True
-        Me.LabelSaveAsPart.Location = New System.Drawing.Point(12, 399)
+        Me.LabelSaveAsPart.Location = New System.Drawing.Point(10, 399)
         Me.LabelSaveAsPart.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelSaveAsPart.Name = "LabelSaveAsPart"
         Me.LabelSaveAsPart.Size = New System.Drawing.Size(137, 16)
@@ -1112,16 +1113,17 @@ Partial Class Form1
         '
         'CheckedListBoxPart
         '
-        Me.CheckedListBoxPart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBoxPart.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBoxPart.BackColor = System.Drawing.SystemColors.Control
         Me.CheckedListBoxPart.CheckOnClick = True
         Me.CheckedListBoxPart.FormattingEnabled = True
         Me.CheckedListBoxPart.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
-        Me.CheckedListBoxPart.Location = New System.Drawing.Point(22, 10)
+        Me.CheckedListBoxPart.Location = New System.Drawing.Point(10, 10)
         Me.CheckedListBoxPart.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxPart.Name = "CheckedListBoxPart"
-        Me.CheckedListBoxPart.Size = New System.Drawing.Size(526, 364)
+        Me.CheckedListBoxPart.Size = New System.Drawing.Size(525, 364)
         Me.CheckedListBoxPart.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxPart, "Double-click to check/uncheck all")
         '
@@ -1151,14 +1153,14 @@ Partial Class Form1
         Me.TabPageSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageSheetmetal.Name = "TabPageSheetmetal"
         Me.TabPageSheetmetal.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageSheetmetal.Size = New System.Drawing.Size(598, 737)
+        Me.TabPageSheetmetal.Size = New System.Drawing.Size(551, 737)
         Me.TabPageSheetmetal.TabIndex = 3
         Me.TabPageSheetmetal.Text = "Sheetmetal"
         '
         'ButtonPropertiesEditSheetmetal
         '
         Me.ButtonPropertiesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditSheetmetal.Location = New System.Drawing.Point(467, 618)
+        Me.ButtonPropertiesEditSheetmetal.Location = New System.Drawing.Point(452, 618)
         Me.ButtonPropertiesEditSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonPropertiesEditSheetmetal.Name = "ButtonPropertiesEditSheetmetal"
         Me.ButtonPropertiesEditSheetmetal.Size = New System.Drawing.Size(88, 23)
@@ -1170,16 +1172,16 @@ Partial Class Form1
         '
         Me.TextBoxPropertiesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditSheetmetal.Location = New System.Drawing.Point(12, 618)
+        Me.TextBoxPropertiesEditSheetmetal.Location = New System.Drawing.Point(10, 618)
         Me.TextBoxPropertiesEditSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxPropertiesEditSheetmetal.Name = "TextBoxPropertiesEditSheetmetal"
-        Me.TextBoxPropertiesEditSheetmetal.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxPropertiesEditSheetmetal.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxPropertiesEditSheetmetal.TabIndex = 46
         '
         'ButtonVariablesEditSheetmetal
         '
         Me.ButtonVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVariablesEditSheetmetal.Location = New System.Drawing.Point(467, 682)
+        Me.ButtonVariablesEditSheetmetal.Location = New System.Drawing.Point(452, 682)
         Me.ButtonVariablesEditSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonVariablesEditSheetmetal.Name = "ButtonVariablesEditSheetmetal"
         Me.ButtonVariablesEditSheetmetal.Size = New System.Drawing.Size(88, 25)
@@ -1191,27 +1193,27 @@ Partial Class Form1
         '
         Me.TextBoxVariablesEditSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxVariablesEditSheetmetal.Location = New System.Drawing.Point(12, 682)
+        Me.TextBoxVariablesEditSheetmetal.Location = New System.Drawing.Point(10, 682)
         Me.TextBoxVariablesEditSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxVariablesEditSheetmetal.Name = "TextBoxVariablesEditSheetmetal"
-        Me.TextBoxVariablesEditSheetmetal.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxVariablesEditSheetmetal.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxVariablesEditSheetmetal.TabIndex = 44
         '
         'TextBoxSaveAsFormulaSheetmetal
         '
         Me.TextBoxSaveAsFormulaSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsFormulaSheetmetal.Location = New System.Drawing.Point(12, 490)
+        Me.TextBoxSaveAsFormulaSheetmetal.Location = New System.Drawing.Point(10, 490)
         Me.TextBoxSaveAsFormulaSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxSaveAsFormulaSheetmetal.Name = "TextBoxSaveAsFormulaSheetmetal"
-        Me.TextBoxSaveAsFormulaSheetmetal.Size = New System.Drawing.Size(538, 23)
+        Me.TextBoxSaveAsFormulaSheetmetal.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxSaveAsFormulaSheetmetal.TabIndex = 37
         '
         'CheckBoxSaveAsFormulaSheetmetal
         '
         Me.CheckBoxSaveAsFormulaSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsFormulaSheetmetal.AutoSize = True
-        Me.CheckBoxSaveAsFormulaSheetmetal.Location = New System.Drawing.Point(12, 463)
+        Me.CheckBoxSaveAsFormulaSheetmetal.Location = New System.Drawing.Point(10, 463)
         Me.CheckBoxSaveAsFormulaSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsFormulaSheetmetal.Name = "CheckBoxSaveAsFormulaSheetmetal"
         Me.CheckBoxSaveAsFormulaSheetmetal.Size = New System.Drawing.Size(158, 20)
@@ -1223,7 +1225,7 @@ Partial Class Form1
         '
         Me.LabelVariablesEditSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelVariablesEditSheetmetal.AutoSize = True
-        Me.LabelVariablesEditSheetmetal.Location = New System.Drawing.Point(12, 655)
+        Me.LabelVariablesEditSheetmetal.Location = New System.Drawing.Point(10, 655)
         Me.LabelVariablesEditSheetmetal.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelVariablesEditSheetmetal.Name = "LabelVariablesEditSheetmetal"
         Me.LabelVariablesEditSheetmetal.Size = New System.Drawing.Size(142, 16)
@@ -1234,7 +1236,7 @@ Partial Class Form1
         '
         Me.LabelFindReplacePropertySetSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplacePropertySetSheetmetal.AutoSize = True
-        Me.LabelFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(12, 591)
+        Me.LabelFindReplacePropertySetSheetmetal.Location = New System.Drawing.Point(10, 591)
         Me.LabelFindReplacePropertySetSheetmetal.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplacePropertySetSheetmetal.Name = "LabelFindReplacePropertySetSheetmetal"
         Me.LabelFindReplacePropertySetSheetmetal.Size = New System.Drawing.Size(119, 16)
@@ -1244,7 +1246,7 @@ Partial Class Form1
         'ButtonExternalProgramSheetmetal
         '
         Me.ButtonExternalProgramSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonExternalProgramSheetmetal.Location = New System.Drawing.Point(467, 554)
+        Me.ButtonExternalProgramSheetmetal.Location = New System.Drawing.Point(452, 554)
         Me.ButtonExternalProgramSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonExternalProgramSheetmetal.Name = "ButtonExternalProgramSheetmetal"
         Me.ButtonExternalProgramSheetmetal.Size = New System.Drawing.Size(88, 23)
@@ -1256,17 +1258,17 @@ Partial Class Form1
         '
         Me.TextBoxExternalProgramSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExternalProgramSheetmetal.Location = New System.Drawing.Point(12, 554)
+        Me.TextBoxExternalProgramSheetmetal.Location = New System.Drawing.Point(10, 554)
         Me.TextBoxExternalProgramSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxExternalProgramSheetmetal.Name = "TextBoxExternalProgramSheetmetal"
-        Me.TextBoxExternalProgramSheetmetal.Size = New System.Drawing.Size(447, 23)
+        Me.TextBoxExternalProgramSheetmetal.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxExternalProgramSheetmetal.TabIndex = 14
         '
         'LabelExternalProgramSheetmetal
         '
         Me.LabelExternalProgramSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelExternalProgramSheetmetal.AutoSize = True
-        Me.LabelExternalProgramSheetmetal.Location = New System.Drawing.Point(12, 527)
+        Me.LabelExternalProgramSheetmetal.Location = New System.Drawing.Point(10, 527)
         Me.LabelExternalProgramSheetmetal.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelExternalProgramSheetmetal.Name = "LabelExternalProgramSheetmetal"
         Me.LabelExternalProgramSheetmetal.Size = New System.Drawing.Size(96, 16)
@@ -1278,7 +1280,7 @@ Partial Class Form1
         Me.ComboBoxSaveAsSheetmetalFileType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxSaveAsSheetmetalFileType.FormattingEnabled = True
         Me.ComboBoxSaveAsSheetmetalFileType.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxSaveAsSheetmetalFileType.Location = New System.Drawing.Point(175, 395)
+        Me.ComboBoxSaveAsSheetmetalFileType.Location = New System.Drawing.Point(173, 395)
         Me.ComboBoxSaveAsSheetmetalFileType.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxSaveAsSheetmetalFileType.Name = "ComboBoxSaveAsSheetmetalFileType"
         Me.ComboBoxSaveAsSheetmetalFileType.Size = New System.Drawing.Size(153, 24)
@@ -1289,7 +1291,7 @@ Partial Class Form1
         '
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.AutoSize = True
-        Me.CheckBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(372, 400)
+        Me.CheckBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(370, 400)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Name = "CheckBoxSaveAsSheetmetalOutputDirectory"
         Me.CheckBoxSaveAsSheetmetalOutputDirectory.Size = New System.Drawing.Size(162, 20)
@@ -1300,7 +1302,7 @@ Partial Class Form1
         'ButtonSaveAsSheetmetalOutputDirectory
         '
         Me.ButtonSaveAsSheetmetalOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(467, 426)
+        Me.ButtonSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(452, 426)
         Me.ButtonSaveAsSheetmetalOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonSaveAsSheetmetalOutputDirectory.Name = "ButtonSaveAsSheetmetalOutputDirectory"
         Me.ButtonSaveAsSheetmetalOutputDirectory.Size = New System.Drawing.Size(88, 25)
@@ -1312,17 +1314,17 @@ Partial Class Form1
         '
         Me.TextBoxSaveAsSheetmetalOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(12, 426)
+        Me.TextBoxSaveAsSheetmetalOutputDirectory.Location = New System.Drawing.Point(10, 426)
         Me.TextBoxSaveAsSheetmetalOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxSaveAsSheetmetalOutputDirectory.Name = "TextBoxSaveAsSheetmetalOutputDirectory"
-        Me.TextBoxSaveAsSheetmetalOutputDirectory.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxSaveAsSheetmetalOutputDirectory.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxSaveAsSheetmetalOutputDirectory.TabIndex = 8
         '
         'LabelSaveAsSheetmetal
         '
         Me.LabelSaveAsSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelSaveAsSheetmetal.AutoSize = True
-        Me.LabelSaveAsSheetmetal.Location = New System.Drawing.Point(12, 399)
+        Me.LabelSaveAsSheetmetal.Location = New System.Drawing.Point(10, 399)
         Me.LabelSaveAsSheetmetal.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelSaveAsSheetmetal.Name = "LabelSaveAsSheetmetal"
         Me.LabelSaveAsSheetmetal.Size = New System.Drawing.Size(137, 16)
@@ -1331,16 +1333,17 @@ Partial Class Form1
         '
         'CheckedListBoxSheetmetal
         '
-        Me.CheckedListBoxSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBoxSheetmetal.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBoxSheetmetal.BackColor = System.Drawing.SystemColors.Control
         Me.CheckedListBoxSheetmetal.CheckOnClick = True
         Me.CheckedListBoxSheetmetal.FormattingEnabled = True
         Me.CheckedListBoxSheetmetal.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
-        Me.CheckedListBoxSheetmetal.Location = New System.Drawing.Point(22, 10)
+        Me.CheckedListBoxSheetmetal.Location = New System.Drawing.Point(10, 10)
         Me.CheckedListBoxSheetmetal.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxSheetmetal.Name = "CheckedListBoxSheetmetal"
-        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(526, 364)
+        Me.CheckedListBoxSheetmetal.Size = New System.Drawing.Size(525, 364)
         Me.CheckedListBoxSheetmetal.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxSheetmetal, "Double-click to check/uncheck all")
         '
@@ -1376,14 +1379,14 @@ Partial Class Form1
         Me.TabPageDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageDraft.Name = "TabPageDraft"
         Me.TabPageDraft.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageDraft.Size = New System.Drawing.Size(598, 737)
+        Me.TabPageDraft.Size = New System.Drawing.Size(551, 737)
         Me.TabPageDraft.TabIndex = 4
         Me.TabPageDraft.Text = "Draft"
         '
         'ButtonPropertiesEditDraft
         '
         Me.ButtonPropertiesEditDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPropertiesEditDraft.Location = New System.Drawing.Point(467, 682)
+        Me.ButtonPropertiesEditDraft.Location = New System.Drawing.Point(451, 682)
         Me.ButtonPropertiesEditDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonPropertiesEditDraft.Name = "ButtonPropertiesEditDraft"
         Me.ButtonPropertiesEditDraft.Size = New System.Drawing.Size(88, 25)
@@ -1395,17 +1398,17 @@ Partial Class Form1
         '
         Me.TextBoxPropertiesEditDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxPropertiesEditDraft.Location = New System.Drawing.Point(12, 682)
+        Me.TextBoxPropertiesEditDraft.Location = New System.Drawing.Point(10, 682)
         Me.TextBoxPropertiesEditDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxPropertiesEditDraft.Name = "TextBoxPropertiesEditDraft"
-        Me.TextBoxPropertiesEditDraft.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxPropertiesEditDraft.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxPropertiesEditDraft.TabIndex = 45
         '
         'LabelFindReplacePropertySetDraft
         '
         Me.LabelFindReplacePropertySetDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelFindReplacePropertySetDraft.AutoSize = True
-        Me.LabelFindReplacePropertySetDraft.Location = New System.Drawing.Point(12, 655)
+        Me.LabelFindReplacePropertySetDraft.Location = New System.Drawing.Point(10, 655)
         Me.LabelFindReplacePropertySetDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFindReplacePropertySetDraft.Name = "LabelFindReplacePropertySetDraft"
         Me.LabelFindReplacePropertySetDraft.Size = New System.Drawing.Size(119, 16)
@@ -1416,17 +1419,17 @@ Partial Class Form1
         '
         Me.TextBoxSaveAsFormulaDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsFormulaDraft.Location = New System.Drawing.Point(12, 490)
+        Me.TextBoxSaveAsFormulaDraft.Location = New System.Drawing.Point(10, 490)
         Me.TextBoxSaveAsFormulaDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxSaveAsFormulaDraft.Name = "TextBoxSaveAsFormulaDraft"
-        Me.TextBoxSaveAsFormulaDraft.Size = New System.Drawing.Size(544, 23)
+        Me.TextBoxSaveAsFormulaDraft.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxSaveAsFormulaDraft.TabIndex = 26
         '
         'CheckBoxSaveAsFormulaDraft
         '
         Me.CheckBoxSaveAsFormulaDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsFormulaDraft.AutoSize = True
-        Me.CheckBoxSaveAsFormulaDraft.Location = New System.Drawing.Point(12, 463)
+        Me.CheckBoxSaveAsFormulaDraft.Location = New System.Drawing.Point(10, 463)
         Me.CheckBoxSaveAsFormulaDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsFormulaDraft.Name = "CheckBoxSaveAsFormulaDraft"
         Me.CheckBoxSaveAsFormulaDraft.Size = New System.Drawing.Size(158, 20)
@@ -1437,7 +1440,7 @@ Partial Class Form1
         'ButtonWatermark
         '
         Me.ButtonWatermark.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonWatermark.Location = New System.Drawing.Point(467, 554)
+        Me.ButtonWatermark.Location = New System.Drawing.Point(451, 554)
         Me.ButtonWatermark.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonWatermark.Name = "ButtonWatermark"
         Me.ButtonWatermark.Size = New System.Drawing.Size(88, 25)
@@ -1449,16 +1452,16 @@ Partial Class Form1
         '
         Me.TextBoxWatermarkFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxWatermarkFilename.Location = New System.Drawing.Point(12, 554)
+        Me.TextBoxWatermarkFilename.Location = New System.Drawing.Point(10, 554)
         Me.TextBoxWatermarkFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxWatermarkFilename.Name = "TextBoxWatermarkFilename"
-        Me.TextBoxWatermarkFilename.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxWatermarkFilename.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxWatermarkFilename.TabIndex = 23
         '
         'TextBoxWatermarkScale
         '
         Me.TextBoxWatermarkScale.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxWatermarkScale.Location = New System.Drawing.Point(349, 526)
+        Me.TextBoxWatermarkScale.Location = New System.Drawing.Point(347, 526)
         Me.TextBoxWatermarkScale.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxWatermarkScale.Name = "TextBoxWatermarkScale"
         Me.TextBoxWatermarkScale.Size = New System.Drawing.Size(44, 23)
@@ -1468,7 +1471,7 @@ Partial Class Form1
         '
         Me.LabelWatermarkScale.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelWatermarkScale.AutoSize = True
-        Me.LabelWatermarkScale.Location = New System.Drawing.Point(300, 525)
+        Me.LabelWatermarkScale.Location = New System.Drawing.Point(298, 525)
         Me.LabelWatermarkScale.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelWatermarkScale.Name = "LabelWatermarkScale"
         Me.LabelWatermarkScale.Size = New System.Drawing.Size(35, 16)
@@ -1478,7 +1481,7 @@ Partial Class Form1
         'TextBoxWatermarkY
         '
         Me.TextBoxWatermarkY.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxWatermarkY.Location = New System.Drawing.Point(238, 526)
+        Me.TextBoxWatermarkY.Location = New System.Drawing.Point(236, 526)
         Me.TextBoxWatermarkY.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxWatermarkY.Name = "TextBoxWatermarkY"
         Me.TextBoxWatermarkY.Size = New System.Drawing.Size(44, 23)
@@ -1488,7 +1491,7 @@ Partial Class Form1
         '
         Me.LabelWatermarkY.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelWatermarkY.AutoSize = True
-        Me.LabelWatermarkY.Location = New System.Drawing.Point(203, 525)
+        Me.LabelWatermarkY.Location = New System.Drawing.Point(201, 525)
         Me.LabelWatermarkY.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelWatermarkY.Name = "LabelWatermarkY"
         Me.LabelWatermarkY.Size = New System.Drawing.Size(27, 16)
@@ -1498,7 +1501,7 @@ Partial Class Form1
         'TextBoxWatermarkX
         '
         Me.TextBoxWatermarkX.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxWatermarkX.Location = New System.Drawing.Point(142, 526)
+        Me.TextBoxWatermarkX.Location = New System.Drawing.Point(140, 526)
         Me.TextBoxWatermarkX.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxWatermarkX.Name = "TextBoxWatermarkX"
         Me.TextBoxWatermarkX.Size = New System.Drawing.Size(44, 23)
@@ -1508,7 +1511,7 @@ Partial Class Form1
         '
         Me.LabelWatermarkX.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelWatermarkX.AutoSize = True
-        Me.LabelWatermarkX.Location = New System.Drawing.Point(107, 525)
+        Me.LabelWatermarkX.Location = New System.Drawing.Point(105, 525)
         Me.LabelWatermarkX.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelWatermarkX.Name = "LabelWatermarkX"
         Me.LabelWatermarkX.Size = New System.Drawing.Size(30, 16)
@@ -1519,7 +1522,7 @@ Partial Class Form1
         '
         Me.CheckBoxWatermark.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxWatermark.AutoSize = True
-        Me.CheckBoxWatermark.Location = New System.Drawing.Point(12, 527)
+        Me.CheckBoxWatermark.Location = New System.Drawing.Point(10, 527)
         Me.CheckBoxWatermark.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxWatermark.Name = "CheckBoxWatermark"
         Me.CheckBoxWatermark.Size = New System.Drawing.Size(83, 20)
@@ -1530,7 +1533,7 @@ Partial Class Form1
         'ButtonExternalProgramDraft
         '
         Me.ButtonExternalProgramDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonExternalProgramDraft.Location = New System.Drawing.Point(469, 617)
+        Me.ButtonExternalProgramDraft.Location = New System.Drawing.Point(453, 617)
         Me.ButtonExternalProgramDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonExternalProgramDraft.Name = "ButtonExternalProgramDraft"
         Me.ButtonExternalProgramDraft.Size = New System.Drawing.Size(88, 23)
@@ -1542,17 +1545,17 @@ Partial Class Form1
         '
         Me.TextBoxExternalProgramDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxExternalProgramDraft.Location = New System.Drawing.Point(12, 618)
+        Me.TextBoxExternalProgramDraft.Location = New System.Drawing.Point(10, 618)
         Me.TextBoxExternalProgramDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxExternalProgramDraft.Name = "TextBoxExternalProgramDraft"
-        Me.TextBoxExternalProgramDraft.Size = New System.Drawing.Size(447, 23)
+        Me.TextBoxExternalProgramDraft.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxExternalProgramDraft.TabIndex = 14
         '
         'LabelExternalProgramDraft
         '
         Me.LabelExternalProgramDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelExternalProgramDraft.AutoSize = True
-        Me.LabelExternalProgramDraft.Location = New System.Drawing.Point(12, 591)
+        Me.LabelExternalProgramDraft.Location = New System.Drawing.Point(10, 591)
         Me.LabelExternalProgramDraft.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelExternalProgramDraft.Name = "LabelExternalProgramDraft"
         Me.LabelExternalProgramDraft.Size = New System.Drawing.Size(96, 16)
@@ -1564,7 +1567,7 @@ Partial Class Form1
         Me.ComboBoxSaveAsDraftFileType.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ComboBoxSaveAsDraftFileType.FormattingEnabled = True
         Me.ComboBoxSaveAsDraftFileType.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxSaveAsDraftFileType.Location = New System.Drawing.Point(175, 395)
+        Me.ComboBoxSaveAsDraftFileType.Location = New System.Drawing.Point(173, 395)
         Me.ComboBoxSaveAsDraftFileType.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxSaveAsDraftFileType.Name = "ComboBoxSaveAsDraftFileType"
         Me.ComboBoxSaveAsDraftFileType.Size = New System.Drawing.Size(153, 24)
@@ -1575,7 +1578,7 @@ Partial Class Form1
         '
         Me.CheckBoxSaveAsDraftOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSaveAsDraftOutputDirectory.AutoSize = True
-        Me.CheckBoxSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(372, 400)
+        Me.CheckBoxSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(370, 400)
         Me.CheckBoxSaveAsDraftOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxSaveAsDraftOutputDirectory.Name = "CheckBoxSaveAsDraftOutputDirectory"
         Me.CheckBoxSaveAsDraftOutputDirectory.Size = New System.Drawing.Size(162, 20)
@@ -1586,7 +1589,7 @@ Partial Class Form1
         'ButtonSaveAsDraftOutputDirectory
         '
         Me.ButtonSaveAsDraftOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(467, 426)
+        Me.ButtonSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(451, 426)
         Me.ButtonSaveAsDraftOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonSaveAsDraftOutputDirectory.Name = "ButtonSaveAsDraftOutputDirectory"
         Me.ButtonSaveAsDraftOutputDirectory.Size = New System.Drawing.Size(88, 25)
@@ -1598,17 +1601,17 @@ Partial Class Form1
         '
         Me.TextBoxSaveAsDraftOutputDirectory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(12, 426)
+        Me.TextBoxSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(10, 426)
         Me.TextBoxSaveAsDraftOutputDirectory.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxSaveAsDraftOutputDirectory.Name = "TextBoxSaveAsDraftOutputDirectory"
-        Me.TextBoxSaveAsDraftOutputDirectory.Size = New System.Drawing.Size(448, 23)
+        Me.TextBoxSaveAsDraftOutputDirectory.Size = New System.Drawing.Size(433, 23)
         Me.TextBoxSaveAsDraftOutputDirectory.TabIndex = 6
         '
         'LabelSaveAsDraftOutputDirectory
         '
         Me.LabelSaveAsDraftOutputDirectory.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelSaveAsDraftOutputDirectory.AutoSize = True
-        Me.LabelSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(12, 399)
+        Me.LabelSaveAsDraftOutputDirectory.Location = New System.Drawing.Point(10, 399)
         Me.LabelSaveAsDraftOutputDirectory.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelSaveAsDraftOutputDirectory.Name = "LabelSaveAsDraftOutputDirectory"
         Me.LabelSaveAsDraftOutputDirectory.Size = New System.Drawing.Size(137, 16)
@@ -1617,16 +1620,17 @@ Partial Class Form1
         '
         'CheckedListBoxDraft
         '
-        Me.CheckedListBoxDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBoxDraft.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBoxDraft.BackColor = System.Drawing.SystemColors.Control
         Me.CheckedListBoxDraft.CheckOnClick = True
         Me.CheckedListBoxDraft.FormattingEnabled = True
         Me.CheckedListBoxDraft.Items.AddRange(New Object() {"Fake name 1", "Fake name 2"})
-        Me.CheckedListBoxDraft.Location = New System.Drawing.Point(22, 10)
+        Me.CheckedListBoxDraft.Location = New System.Drawing.Point(10, 10)
         Me.CheckedListBoxDraft.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckedListBoxDraft.Name = "CheckedListBoxDraft"
-        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(526, 364)
+        Me.CheckedListBoxDraft.Size = New System.Drawing.Size(525, 364)
         Me.CheckedListBoxDraft.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.CheckedListBoxDraft, "Double-click to check/uncheck all")
         '
@@ -1641,7 +1645,7 @@ Partial Class Form1
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(598, 737)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 737)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
@@ -1661,7 +1665,7 @@ Partial Class Form1
         Me.TabControl2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(587, 720)
+        Me.TabControl2.Size = New System.Drawing.Size(540, 720)
         Me.TabControl2.TabIndex = 44
         '
         'TabPageTopLevelAssy
@@ -1682,7 +1686,7 @@ Partial Class Form1
         Me.TabPageTopLevelAssy.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageTopLevelAssy.Name = "TabPageTopLevelAssy"
         Me.TabPageTopLevelAssy.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(579, 691)
+        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(532, 691)
         Me.TabPageTopLevelAssy.TabIndex = 2
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
@@ -1693,7 +1697,7 @@ Partial Class Form1
         Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
         Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
-        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(16, 127)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 127)
         Me.CheckBoxTLAIgnoreIncludeInReports.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
         Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(261, 20)
@@ -1705,7 +1709,7 @@ Partial Class Form1
         'CheckBoxTLAIncludePartCopies
         '
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(16, 69)
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(10, 69)
         Me.CheckBoxTLAIncludePartCopies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
         Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(496, 20)
@@ -1717,7 +1721,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(16, 225)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(10, 225)
         Me.CheckBoxDraftAndModelSameName.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(320, 20)
@@ -1730,7 +1734,7 @@ Partial Class Form1
         Me.CheckBoxWarnBareTLA.AutoSize = True
         Me.CheckBoxWarnBareTLA.Checked = True
         Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(16, 39)
+        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(10, 39)
         Me.CheckBoxWarnBareTLA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
         Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(413, 20)
@@ -1743,7 +1747,7 @@ Partial Class Form1
         Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
         Me.CheckBoxTLAAutoIncludeTLF.Checked = True
         Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(16, 10)
+        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(10, 10)
         Me.CheckBoxTLAAutoIncludeTLF.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
         Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(367, 20)
@@ -1754,7 +1758,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(489, 279)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(436, 279)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(88, 25)
@@ -1766,16 +1770,16 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(16, 281)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(10, 281)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(453, 23)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(406, 23)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 15
         '
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(16, 256)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(10, 256)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(153, 16)
@@ -1785,7 +1789,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(16, 96)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(10, 96)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(251, 20)
@@ -1796,7 +1800,7 @@ Partial Class Form1
         'RadioButtonTLATopDown
         '
         Me.RadioButtonTLATopDown.AutoSize = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(16, 165)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(10, 165)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(350, 20)
@@ -1808,7 +1812,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
         Me.RadioButtonTLABottomUp.Checked = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(16, 197)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(10, 197)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(323, 20)
@@ -1831,14 +1835,14 @@ Partial Class Form1
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(579, 691)
+        Me.TabPageSorting.Size = New System.Drawing.Size(532, 691)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
         '
         'TextBoxRandomSampleFraction
         '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(264, 127)
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(261, 127)
         Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
         Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(116, 23)
@@ -1848,7 +1852,7 @@ Partial Class Form1
         'LabelRandomSampleFraction
         '
         Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(162, 129)
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(159, 129)
         Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
         Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
@@ -1858,7 +1862,7 @@ Partial Class Form1
         'RadioButtonListSortRandomSample
         '
         Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(14, 126)
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(11, 126)
         Me.RadioButtonListSortRandomSample.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
         Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(109, 20)
@@ -1870,7 +1874,7 @@ Partial Class Form1
         'CheckBoxListIncludeNoDependencies
         '
         Me.CheckBoxListIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(46, 99)
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(43, 99)
         Me.CheckBoxListIncludeNoDependencies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
         Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(350, 20)
@@ -1881,7 +1885,7 @@ Partial Class Form1
         'RadioButtonListSortDependency
         '
         Me.RadioButtonListSortDependency.AutoSize = True
-        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(14, 69)
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(11, 69)
         Me.RadioButtonListSortDependency.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
         Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(172, 20)
@@ -1893,7 +1897,7 @@ Partial Class Form1
         '
         Me.RadioButtonListSortAlphabetical.AutoSize = True
         Me.RadioButtonListSortAlphabetical.Checked = True
-        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(13, 38)
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 38)
         Me.RadioButtonListSortAlphabetical.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
         Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(171, 20)
@@ -1905,7 +1909,7 @@ Partial Class Form1
         'RadioButtonListSortNone
         '
         Me.RadioButtonListSortNone.AutoSize = True
-        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(13, 10)
+        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(10, 10)
         Me.RadioButtonListSortNone.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
         Me.RadioButtonListSortNone.Size = New System.Drawing.Size(73, 20)
@@ -1948,7 +1952,7 @@ Partial Class Form1
         Me.TabPageOpenSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageOpenSave.Name = "TabPageOpenSave"
         Me.TabPageOpenSave.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageOpenSave.Size = New System.Drawing.Size(579, 691)
+        Me.TabPageOpenSave.Size = New System.Drawing.Size(532, 691)
         Me.TabPageOpenSave.TabIndex = 3
         Me.TabPageOpenSave.Text = "Open/Save"
         Me.TabPageOpenSave.UseVisualStyleBackColor = True
@@ -1956,7 +1960,7 @@ Partial Class Form1
         'LabelStatusAfter
         '
         Me.LabelStatusAfter.AutoSize = True
-        Me.LabelStatusAfter.Location = New System.Drawing.Point(257, 269)
+        Me.LabelStatusAfter.Location = New System.Drawing.Point(258, 269)
         Me.LabelStatusAfter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusAfter.Name = "LabelStatusAfter"
         Me.LabelStatusAfter.Size = New System.Drawing.Size(83, 16)
@@ -1966,7 +1970,7 @@ Partial Class Form1
         'LabelStatusBefore
         '
         Me.LabelStatusBefore.AutoSize = True
-        Me.LabelStatusBefore.Location = New System.Drawing.Point(51, 299)
+        Me.LabelStatusBefore.Location = New System.Drawing.Point(52, 299)
         Me.LabelStatusBefore.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusBefore.Name = "LabelStatusBefore"
         Me.LabelStatusBefore.Size = New System.Drawing.Size(91, 16)
@@ -1976,7 +1980,7 @@ Partial Class Form1
         'LabelStatusOutReleased
         '
         Me.LabelStatusOutReleased.AutoSize = True
-        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(379, 299)
+        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(380, 299)
         Me.LabelStatusOutReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutReleased.Name = "LabelStatusOutReleased"
         Me.LabelStatusOutReleased.Size = New System.Drawing.Size(14, 16)
@@ -1986,7 +1990,7 @@ Partial Class Form1
         'LabelStatusOutObsolete
         '
         Me.LabelStatusOutObsolete.AutoSize = True
-        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(350, 299)
+        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(351, 299)
         Me.LabelStatusOutObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutObsolete.Name = "LabelStatusOutObsolete"
         Me.LabelStatusOutObsolete.Size = New System.Drawing.Size(16, 16)
@@ -1996,7 +2000,7 @@ Partial Class Form1
         'LabelStatusOutIW
         '
         Me.LabelStatusOutIW.AutoSize = True
-        Me.LabelStatusOutIW.Location = New System.Drawing.Point(320, 299)
+        Me.LabelStatusOutIW.Location = New System.Drawing.Point(321, 299)
         Me.LabelStatusOutIW.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutIW.Name = "LabelStatusOutIW"
         Me.LabelStatusOutIW.Size = New System.Drawing.Size(21, 16)
@@ -2006,7 +2010,7 @@ Partial Class Form1
         'LabelStatusOutInReview
         '
         Me.LabelStatusOutInReview.AutoSize = True
-        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(289, 299)
+        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(290, 299)
         Me.LabelStatusOutInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutInReview.Name = "LabelStatusOutInReview"
         Me.LabelStatusOutInReview.Size = New System.Drawing.Size(17, 16)
@@ -2016,7 +2020,7 @@ Partial Class Form1
         'LabelStatusOutBaselined
         '
         Me.LabelStatusOutBaselined.AutoSize = True
-        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(262, 299)
+        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(263, 299)
         Me.LabelStatusOutBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutBaselined.Name = "LabelStatusOutBaselined"
         Me.LabelStatusOutBaselined.Size = New System.Drawing.Size(14, 16)
@@ -2026,7 +2030,7 @@ Partial Class Form1
         'LabelStatusOutAvailable
         '
         Me.LabelStatusOutAvailable.AutoSize = True
-        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(233, 299)
+        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(234, 299)
         Me.LabelStatusOutAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutAvailable.Name = "LabelStatusOutAvailable"
         Me.LabelStatusOutAvailable.Size = New System.Drawing.Size(15, 16)
@@ -2041,7 +2045,7 @@ Partial Class Form1
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIR)
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoB)
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoA)
-        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(233, 471)
+        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(234, 471)
         Me.GroupBoxStatusInR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInR.Name = "GroupBoxStatusInR"
         Me.GroupBoxStatusInR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2124,7 +2128,7 @@ Partial Class Form1
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIR)
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoB)
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoA)
-        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(233, 441)
+        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(234, 441)
         Me.GroupBoxStatusInO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInO.Name = "GroupBoxStatusInO"
         Me.GroupBoxStatusInO.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2207,7 +2211,7 @@ Partial Class Form1
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIR)
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoB)
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoA)
-        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(233, 410)
+        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(234, 410)
         Me.GroupBoxStatusInIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInIW.Name = "GroupBoxStatusInIW"
         Me.GroupBoxStatusInIW.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2290,7 +2294,7 @@ Partial Class Form1
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIR)
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoB)
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoA)
-        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(233, 379)
+        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(234, 379)
         Me.GroupBoxStatusInIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInIR.Name = "GroupBoxStatusInIR"
         Me.GroupBoxStatusInIR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2373,7 +2377,7 @@ Partial Class Form1
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIR)
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoB)
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoA)
-        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(233, 349)
+        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(234, 349)
         Me.GroupBoxStatusInB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInB.Name = "GroupBoxStatusInB"
         Me.GroupBoxStatusInB.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2456,7 +2460,7 @@ Partial Class Form1
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoIR)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoB)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoA)
-        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(233, 318)
+        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(234, 318)
         Me.GroupBoxStatusInA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInA.Name = "GroupBoxStatusInA"
         Me.GroupBoxStatusInA.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -2534,7 +2538,7 @@ Partial Class Form1
         'LabelStatusInReleased
         '
         Me.LabelStatusInReleased.AutoSize = True
-        Me.LabelStatusInReleased.Location = New System.Drawing.Point(138, 482)
+        Me.LabelStatusInReleased.Location = New System.Drawing.Point(139, 482)
         Me.LabelStatusInReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInReleased.Name = "LabelStatusInReleased"
         Me.LabelStatusInReleased.Size = New System.Drawing.Size(71, 16)
@@ -2544,7 +2548,7 @@ Partial Class Form1
         'LabelStatusInObsolete
         '
         Me.LabelStatusInObsolete.AutoSize = True
-        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(141, 451)
+        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(142, 451)
         Me.LabelStatusInObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInObsolete.Name = "LabelStatusInObsolete"
         Me.LabelStatusInObsolete.Size = New System.Drawing.Size(74, 16)
@@ -2554,7 +2558,7 @@ Partial Class Form1
         'LabelStatusInInWork
         '
         Me.LabelStatusInInWork.AutoSize = True
-        Me.LabelStatusInInWork.Location = New System.Drawing.Point(135, 421)
+        Me.LabelStatusInInWork.Location = New System.Drawing.Point(136, 421)
         Me.LabelStatusInInWork.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInInWork.Name = "LabelStatusInInWork"
         Me.LabelStatusInInWork.Size = New System.Drawing.Size(76, 16)
@@ -2564,7 +2568,7 @@ Partial Class Form1
         'LabelStatusInInReview
         '
         Me.LabelStatusInInReview.AutoSize = True
-        Me.LabelStatusInInReview.Location = New System.Drawing.Point(131, 390)
+        Me.LabelStatusInInReview.Location = New System.Drawing.Point(132, 390)
         Me.LabelStatusInInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInInReview.Name = "LabelStatusInInReview"
         Me.LabelStatusInInReview.Size = New System.Drawing.Size(78, 16)
@@ -2574,7 +2578,7 @@ Partial Class Form1
         'LabelStatusInBaselined
         '
         Me.LabelStatusInBaselined.AutoSize = True
-        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(135, 359)
+        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(136, 359)
         Me.LabelStatusInBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInBaselined.Name = "LabelStatusInBaselined"
         Me.LabelStatusInBaselined.Size = New System.Drawing.Size(75, 16)
@@ -2584,7 +2588,7 @@ Partial Class Form1
         'LabelStatusInAvailable
         '
         Me.LabelStatusInAvailable.AutoSize = True
-        Me.LabelStatusInAvailable.Location = New System.Drawing.Point(140, 329)
+        Me.LabelStatusInAvailable.Location = New System.Drawing.Point(141, 329)
         Me.LabelStatusInAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInAvailable.Name = "LabelStatusInAvailable"
         Me.LabelStatusInAvailable.Size = New System.Drawing.Size(74, 16)
@@ -2594,7 +2598,7 @@ Partial Class Form1
         'RadioButtonReadOnlyChange
         '
         Me.RadioButtonReadOnlyChange.AutoSize = True
-        Me.RadioButtonReadOnlyChange.Location = New System.Drawing.Point(29, 225)
+        Me.RadioButtonReadOnlyChange.Location = New System.Drawing.Point(30, 225)
         Me.RadioButtonReadOnlyChange.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonReadOnlyChange.Name = "RadioButtonReadOnlyChange"
         Me.RadioButtonReadOnlyChange.Size = New System.Drawing.Size(187, 20)
@@ -2607,7 +2611,7 @@ Partial Class Form1
         '
         Me.RadioButtonReadOnlyRevert.AutoSize = True
         Me.RadioButtonReadOnlyRevert.Checked = True
-        Me.RadioButtonReadOnlyRevert.Location = New System.Drawing.Point(29, 194)
+        Me.RadioButtonReadOnlyRevert.Location = New System.Drawing.Point(30, 194)
         Me.RadioButtonReadOnlyRevert.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonReadOnlyRevert.Name = "RadioButtonReadOnlyRevert"
         Me.RadioButtonReadOnlyRevert.Size = New System.Drawing.Size(241, 20)
@@ -2619,7 +2623,7 @@ Partial Class Form1
         'CheckBoxProcessReadOnly
         '
         Me.CheckBoxProcessReadOnly.AutoSize = True
-        Me.CheckBoxProcessReadOnly.Location = New System.Drawing.Point(9, 163)
+        Me.CheckBoxProcessReadOnly.Location = New System.Drawing.Point(10, 163)
         Me.CheckBoxProcessReadOnly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxProcessReadOnly.Name = "CheckBoxProcessReadOnly"
         Me.CheckBoxProcessReadOnly.Size = New System.Drawing.Size(318, 20)
@@ -2630,7 +2634,7 @@ Partial Class Form1
         'CheckBoxSaveAsPDFPerSheetSupress
         '
         Me.CheckBoxSaveAsPDFPerSheetSupress.AutoSize = True
-        Me.CheckBoxSaveAsPDFPerSheetSupress.Location = New System.Drawing.Point(9, 133)
+        Me.CheckBoxSaveAsPDFPerSheetSupress.Location = New System.Drawing.Point(10, 133)
         Me.CheckBoxSaveAsPDFPerSheetSupress.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsPDFPerSheetSupress.Name = "CheckBoxSaveAsPDFPerSheetSupress"
         Me.CheckBoxSaveAsPDFPerSheetSupress.Size = New System.Drawing.Size(374, 20)
@@ -2641,7 +2645,7 @@ Partial Class Form1
         'CheckBoxSaveAsImageCrop
         '
         Me.CheckBoxSaveAsImageCrop.AutoSize = True
-        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(9, 102)
+        Me.CheckBoxSaveAsImageCrop.Location = New System.Drawing.Point(10, 102)
         Me.CheckBoxSaveAsImageCrop.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSaveAsImageCrop.Name = "CheckBoxSaveAsImageCrop"
         Me.CheckBoxSaveAsImageCrop.Size = New System.Drawing.Size(214, 20)
@@ -2652,7 +2656,7 @@ Partial Class Form1
         'CheckBoxRunExternalProgramSaveFile
         '
         Me.CheckBoxRunExternalProgramSaveFile.AutoSize = True
-        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(9, 71)
+        Me.CheckBoxRunExternalProgramSaveFile.Location = New System.Drawing.Point(10, 71)
         Me.CheckBoxRunExternalProgramSaveFile.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxRunExternalProgramSaveFile.Name = "CheckBoxRunExternalProgramSaveFile"
         Me.CheckBoxRunExternalProgramSaveFile.Size = New System.Drawing.Size(247, 20)
@@ -2663,7 +2667,7 @@ Partial Class Form1
         'CheckBoxNoUpdateMRU
         '
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(9, 41)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(10, 41)
         Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(311, 20)
@@ -2676,7 +2680,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(9, 10)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(10, 10)
         Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(186, 20)
@@ -2706,7 +2710,7 @@ Partial Class Form1
         Me.TabPageTemplates.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(579, 691)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(532, 691)
         Me.TabPageTemplates.TabIndex = 1
         Me.TabPageTemplates.Text = "Templates"
         Me.TabPageTemplates.UseVisualStyleBackColor = True
@@ -2714,7 +2718,7 @@ Partial Class Form1
         'ButtonActiveMaterialLibrary
         '
         Me.ButtonActiveMaterialLibrary.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(483, 269)
+        Me.ButtonActiveMaterialLibrary.Location = New System.Drawing.Point(433, 269)
         Me.ButtonActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonActiveMaterialLibrary.Name = "ButtonActiveMaterialLibrary"
         Me.ButtonActiveMaterialLibrary.Size = New System.Drawing.Size(88, 25)
@@ -2726,17 +2730,17 @@ Partial Class Form1
         '
         Me.TextBoxActiveMaterialLibrary.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(13, 269)
+        Me.TextBoxActiveMaterialLibrary.Location = New System.Drawing.Point(10, 269)
         Me.TextBoxActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxActiveMaterialLibrary.Name = "TextBoxActiveMaterialLibrary"
-        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(462, 23)
+        Me.TextBoxActiveMaterialLibrary.Size = New System.Drawing.Size(415, 23)
         Me.TextBoxActiveMaterialLibrary.TabIndex = 23
         Me.ToolTip1.SetToolTip(Me.TextBoxActiveMaterialLibrary, "Material Library")
         '
         'LabelActiveMaterialLibrary
         '
         Me.LabelActiveMaterialLibrary.AutoSize = True
-        Me.LabelActiveMaterialLibrary.Location = New System.Drawing.Point(13, 249)
+        Me.LabelActiveMaterialLibrary.Location = New System.Drawing.Point(10, 249)
         Me.LabelActiveMaterialLibrary.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelActiveMaterialLibrary.Name = "LabelActiveMaterialLibrary"
         Me.LabelActiveMaterialLibrary.Size = New System.Drawing.Size(89, 16)
@@ -2746,7 +2750,7 @@ Partial Class Form1
         'ButtonTemplateAssembly
         '
         Me.ButtonTemplateAssembly.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(483, 29)
+        Me.ButtonTemplateAssembly.Location = New System.Drawing.Point(433, 29)
         Me.ButtonTemplateAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonTemplateAssembly.Name = "ButtonTemplateAssembly"
         Me.ButtonTemplateAssembly.Size = New System.Drawing.Size(88, 25)
@@ -2758,17 +2762,17 @@ Partial Class Form1
         '
         Me.TextBoxTemplateAssembly.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(13, 29)
+        Me.TextBoxTemplateAssembly.Location = New System.Drawing.Point(10, 29)
         Me.TextBoxTemplateAssembly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxTemplateAssembly.Name = "TextBoxTemplateAssembly"
-        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(462, 23)
+        Me.TextBoxTemplateAssembly.Size = New System.Drawing.Size(415, 23)
         Me.TextBoxTemplateAssembly.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateAssembly, "Assembly Template")
         '
         'LabelTemplateAssembly
         '
         Me.LabelTemplateAssembly.AutoSize = True
-        Me.LabelTemplateAssembly.Location = New System.Drawing.Point(13, 9)
+        Me.LabelTemplateAssembly.Location = New System.Drawing.Point(10, 9)
         Me.LabelTemplateAssembly.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelTemplateAssembly.Name = "LabelTemplateAssembly"
         Me.LabelTemplateAssembly.Size = New System.Drawing.Size(128, 16)
@@ -2778,7 +2782,7 @@ Partial Class Form1
         'ButtonTemplatePart
         '
         Me.ButtonTemplatePart.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplatePart.Location = New System.Drawing.Point(483, 89)
+        Me.ButtonTemplatePart.Location = New System.Drawing.Point(433, 89)
         Me.ButtonTemplatePart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonTemplatePart.Name = "ButtonTemplatePart"
         Me.ButtonTemplatePart.Size = New System.Drawing.Size(88, 25)
@@ -2790,17 +2794,17 @@ Partial Class Form1
         '
         Me.TextBoxTemplatePart.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplatePart.Location = New System.Drawing.Point(13, 89)
+        Me.TextBoxTemplatePart.Location = New System.Drawing.Point(10, 89)
         Me.TextBoxTemplatePart.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxTemplatePart.Name = "TextBoxTemplatePart"
-        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(462, 23)
+        Me.TextBoxTemplatePart.Size = New System.Drawing.Size(415, 23)
         Me.TextBoxTemplatePart.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplatePart, "Part Template")
         '
         'LabelTemplatePart
         '
         Me.LabelTemplatePart.AutoSize = True
-        Me.LabelTemplatePart.Location = New System.Drawing.Point(13, 69)
+        Me.LabelTemplatePart.Location = New System.Drawing.Point(10, 69)
         Me.LabelTemplatePart.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelTemplatePart.Name = "LabelTemplatePart"
         Me.LabelTemplatePart.Size = New System.Drawing.Size(99, 16)
@@ -2810,7 +2814,7 @@ Partial Class Form1
         'ButtonTemplateSheetmetal
         '
         Me.ButtonTemplateSheetmetal.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(483, 149)
+        Me.ButtonTemplateSheetmetal.Location = New System.Drawing.Point(433, 149)
         Me.ButtonTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonTemplateSheetmetal.Name = "ButtonTemplateSheetmetal"
         Me.ButtonTemplateSheetmetal.Size = New System.Drawing.Size(88, 25)
@@ -2822,17 +2826,17 @@ Partial Class Form1
         '
         Me.TextBoxTemplateSheetmetal.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(13, 149)
+        Me.TextBoxTemplateSheetmetal.Location = New System.Drawing.Point(10, 149)
         Me.TextBoxTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxTemplateSheetmetal.Name = "TextBoxTemplateSheetmetal"
-        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(462, 23)
+        Me.TextBoxTemplateSheetmetal.Size = New System.Drawing.Size(415, 23)
         Me.TextBoxTemplateSheetmetal.TabIndex = 17
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateSheetmetal, "Sheetmetal Template")
         '
         'LabelTemplateSheetmetal
         '
         Me.LabelTemplateSheetmetal.AutoSize = True
-        Me.LabelTemplateSheetmetal.Location = New System.Drawing.Point(13, 129)
+        Me.LabelTemplateSheetmetal.Location = New System.Drawing.Point(10, 129)
         Me.LabelTemplateSheetmetal.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelTemplateSheetmetal.Name = "LabelTemplateSheetmetal"
         Me.LabelTemplateSheetmetal.Size = New System.Drawing.Size(137, 16)
@@ -2842,7 +2846,7 @@ Partial Class Form1
         'ButtonTemplateDraft
         '
         Me.ButtonTemplateDraft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(483, 209)
+        Me.ButtonTemplateDraft.Location = New System.Drawing.Point(433, 209)
         Me.ButtonTemplateDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonTemplateDraft.Name = "ButtonTemplateDraft"
         Me.ButtonTemplateDraft.Size = New System.Drawing.Size(88, 25)
@@ -2854,17 +2858,17 @@ Partial Class Form1
         '
         Me.TextBoxTemplateDraft.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(13, 209)
+        Me.TextBoxTemplateDraft.Location = New System.Drawing.Point(10, 209)
         Me.TextBoxTemplateDraft.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxTemplateDraft.Name = "TextBoxTemplateDraft"
-        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(462, 23)
+        Me.TextBoxTemplateDraft.Size = New System.Drawing.Size(415, 23)
         Me.TextBoxTemplateDraft.TabIndex = 18
         Me.ToolTip1.SetToolTip(Me.TextBoxTemplateDraft, "Draft Template")
         '
         'LabelTemplateDraft
         '
         Me.LabelTemplateDraft.AutoSize = True
-        Me.LabelTemplateDraft.Location = New System.Drawing.Point(13, 189)
+        Me.LabelTemplateDraft.Location = New System.Drawing.Point(10, 189)
         Me.LabelTemplateDraft.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelTemplateDraft.Name = "LabelTemplateDraft"
         Me.LabelTemplateDraft.Size = New System.Drawing.Size(104, 16)
@@ -2880,7 +2884,7 @@ Partial Class Form1
         Me.TabPagePrinting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPagePrinting.Name = "TabPagePrinting"
         Me.TabPagePrinting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPagePrinting.Size = New System.Drawing.Size(579, 691)
+        Me.TabPagePrinting.Size = New System.Drawing.Size(532, 691)
         Me.TabPagePrinting.TabIndex = 5
         Me.TabPagePrinting.Text = "Printing"
         Me.TabPagePrinting.UseVisualStyleBackColor = True
@@ -2904,11 +2908,11 @@ Partial Class Form1
         Me.GroupBoxPrinter2.Controls.Add(Me.CheckBoxPrinter2ScaleLineTypes)
         Me.GroupBoxPrinter2.Controls.Add(Me.CheckBoxPrinter2ScaleLineWidths)
         Me.GroupBoxPrinter2.Controls.Add(Me.ComboBoxPrinter2)
-        Me.GroupBoxPrinter2.Location = New System.Drawing.Point(12, 189)
+        Me.GroupBoxPrinter2.Location = New System.Drawing.Point(10, 186)
         Me.GroupBoxPrinter2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxPrinter2.Name = "GroupBoxPrinter2"
         Me.GroupBoxPrinter2.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxPrinter2.Size = New System.Drawing.Size(554, 243)
+        Me.GroupBoxPrinter2.Size = New System.Drawing.Size(515, 243)
         Me.GroupBoxPrinter2.TabIndex = 37
         Me.GroupBoxPrinter2.TabStop = False
         Me.GroupBoxPrinter2.Text = "PRINTER 2"
@@ -2916,7 +2920,7 @@ Partial Class Form1
         'ButtonPrinter2SheetSelections
         '
         Me.ButtonPrinter2SheetSelections.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonPrinter2SheetSelections.Location = New System.Drawing.Point(458, 190)
+        Me.ButtonPrinter2SheetSelections.Location = New System.Drawing.Point(419, 190)
         Me.ButtonPrinter2SheetSelections.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonPrinter2SheetSelections.Name = "ButtonPrinter2SheetSelections"
         Me.ButtonPrinter2SheetSelections.Size = New System.Drawing.Size(88, 25)
@@ -2931,7 +2935,7 @@ Partial Class Form1
         Me.TextBoxPrinter2SheetSelections.Location = New System.Drawing.Point(5, 190)
         Me.TextBoxPrinter2SheetSelections.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxPrinter2SheetSelections.Name = "TextBoxPrinter2SheetSelections"
-        Me.TextBoxPrinter2SheetSelections.Size = New System.Drawing.Size(446, 23)
+        Me.TextBoxPrinter2SheetSelections.Size = New System.Drawing.Size(407, 23)
         Me.TextBoxPrinter2SheetSelections.TabIndex = 57
         '
         'LabelPrinter2SheetSelections
@@ -3044,7 +3048,7 @@ Partial Class Form1
         'CheckBoxPrinter2ScaleLineTypes
         '
         Me.CheckBoxPrinter2ScaleLineTypes.AutoSize = True
-        Me.CheckBoxPrinter2ScaleLineTypes.Location = New System.Drawing.Point(288, 98)
+        Me.CheckBoxPrinter2ScaleLineTypes.Location = New System.Drawing.Point(283, 98)
         Me.CheckBoxPrinter2ScaleLineTypes.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrinter2ScaleLineTypes.Name = "CheckBoxPrinter2ScaleLineTypes"
         Me.CheckBoxPrinter2ScaleLineTypes.Size = New System.Drawing.Size(107, 20)
@@ -3055,7 +3059,7 @@ Partial Class Form1
         'CheckBoxPrinter2ScaleLineWidths
         '
         Me.CheckBoxPrinter2ScaleLineWidths.AutoSize = True
-        Me.CheckBoxPrinter2ScaleLineWidths.Location = New System.Drawing.Point(419, 98)
+        Me.CheckBoxPrinter2ScaleLineWidths.Location = New System.Drawing.Point(399, 98)
         Me.CheckBoxPrinter2ScaleLineWidths.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrinter2ScaleLineWidths.Name = "CheckBoxPrinter2ScaleLineWidths"
         Me.CheckBoxPrinter2ScaleLineWidths.Size = New System.Drawing.Size(114, 20)
@@ -3071,7 +3075,7 @@ Partial Class Form1
         Me.ComboBoxPrinter2.Location = New System.Drawing.Point(41, 25)
         Me.ComboBoxPrinter2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ComboBoxPrinter2.Name = "ComboBoxPrinter2"
-        Me.ComboBoxPrinter2.Size = New System.Drawing.Size(497, 24)
+        Me.ComboBoxPrinter2.Size = New System.Drawing.Size(458, 24)
         Me.ComboBoxPrinter2.TabIndex = 42
         '
         'GroupBoxPrinter1
@@ -3087,11 +3091,11 @@ Partial Class Form1
         Me.GroupBoxPrinter1.Controls.Add(Me.CheckBoxPrinter1ScaleLineTypes)
         Me.GroupBoxPrinter1.Controls.Add(Me.CheckBoxPrinter1ScaleLineWidths)
         Me.GroupBoxPrinter1.Controls.Add(Me.ComboBoxPrinter1)
-        Me.GroupBoxPrinter1.Location = New System.Drawing.Point(12, 13)
+        Me.GroupBoxPrinter1.Location = New System.Drawing.Point(10, 10)
         Me.GroupBoxPrinter1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxPrinter1.Name = "GroupBoxPrinter1"
         Me.GroupBoxPrinter1.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxPrinter1.Size = New System.Drawing.Size(554, 154)
+        Me.GroupBoxPrinter1.Size = New System.Drawing.Size(515, 154)
         Me.GroupBoxPrinter1.TabIndex = 36
         Me.GroupBoxPrinter1.TabStop = False
         Me.GroupBoxPrinter1.Text = "PRINTER 1"
@@ -3160,7 +3164,7 @@ Partial Class Form1
         'CheckBoxPrinter1ScaleLineTypes
         '
         Me.CheckBoxPrinter1ScaleLineTypes.AutoSize = True
-        Me.CheckBoxPrinter1ScaleLineTypes.Location = New System.Drawing.Point(288, 98)
+        Me.CheckBoxPrinter1ScaleLineTypes.Location = New System.Drawing.Point(283, 98)
         Me.CheckBoxPrinter1ScaleLineTypes.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrinter1ScaleLineTypes.Name = "CheckBoxPrinter1ScaleLineTypes"
         Me.CheckBoxPrinter1ScaleLineTypes.Size = New System.Drawing.Size(107, 20)
@@ -3171,7 +3175,7 @@ Partial Class Form1
         'CheckBoxPrinter1ScaleLineWidths
         '
         Me.CheckBoxPrinter1ScaleLineWidths.AutoSize = True
-        Me.CheckBoxPrinter1ScaleLineWidths.Location = New System.Drawing.Point(419, 98)
+        Me.CheckBoxPrinter1ScaleLineWidths.Location = New System.Drawing.Point(399, 98)
         Me.CheckBoxPrinter1ScaleLineWidths.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxPrinter1ScaleLineWidths.Name = "CheckBoxPrinter1ScaleLineWidths"
         Me.CheckBoxPrinter1ScaleLineWidths.Size = New System.Drawing.Size(114, 20)
@@ -3187,7 +3191,7 @@ Partial Class Form1
         Me.ComboBoxPrinter1.Location = New System.Drawing.Point(41, 25)
         Me.ComboBoxPrinter1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ComboBoxPrinter1.Name = "ComboBoxPrinter1"
-        Me.ComboBoxPrinter1.Size = New System.Drawing.Size(497, 24)
+        Me.ComboBoxPrinter1.Size = New System.Drawing.Size(458, 24)
         Me.ComboBoxPrinter1.TabIndex = 0
         '
         'TabPageGeneral
@@ -3221,15 +3225,25 @@ Partial Class Form1
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(579, 691)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 691)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
+        'CheckBoxRemoveFaceStyleOverrides
+        '
+        Me.CheckBoxRemoveFaceStyleOverrides.AutoSize = True
+        Me.CheckBoxRemoveFaceStyleOverrides.Location = New System.Drawing.Point(10, 468)
+        Me.CheckBoxRemoveFaceStyleOverrides.Name = "CheckBoxRemoveFaceStyleOverrides"
+        Me.CheckBoxRemoveFaceStyleOverrides.Size = New System.Drawing.Size(372, 20)
+        Me.CheckBoxRemoveFaceStyleOverrides.TabIndex = 63
+        Me.CheckBoxRemoveFaceStyleOverrides.Text = "Update material from material table -- Remove face style overrides"
+        Me.CheckBoxRemoveFaceStyleOverrides.UseVisualStyleBackColor = True
+        '
         'CheckBoxAutoUpdateMaterialProperties
         '
         Me.CheckBoxAutoUpdateMaterialProperties.AutoSize = True
-        Me.CheckBoxAutoUpdateMaterialProperties.Location = New System.Drawing.Point(12, 309)
+        Me.CheckBoxAutoUpdateMaterialProperties.Location = New System.Drawing.Point(10, 309)
         Me.CheckBoxAutoUpdateMaterialProperties.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxAutoUpdateMaterialProperties.Name = "CheckBoxAutoUpdateMaterialProperties"
         Me.CheckBoxAutoUpdateMaterialProperties.Size = New System.Drawing.Size(368, 20)
@@ -3254,18 +3268,18 @@ Partial Class Form1
         Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeX)
         Me.GroupBoxStockSize.Controls.Add(Me.LabelStockSizeXYZ)
         Me.GroupBoxStockSize.Controls.Add(Me.CheckBoxStockSizeXYZ)
-        Me.GroupBoxStockSize.Location = New System.Drawing.Point(0, 690)
+        Me.GroupBoxStockSize.Location = New System.Drawing.Point(5, 690)
         Me.GroupBoxStockSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStockSize.Name = "GroupBoxStockSize"
         Me.GroupBoxStockSize.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStockSize.Size = New System.Drawing.Size(554, 202)
+        Me.GroupBoxStockSize.Size = New System.Drawing.Size(507, 202)
         Me.GroupBoxStockSize.TabIndex = 61
         Me.GroupBoxStockSize.TabStop = False
         Me.GroupBoxStockSize.Text = "OVERALL SIZE OPTIONS"
         '
         'TextBoxStockSizeMax
         '
-        Me.TextBoxStockSizeMax.Location = New System.Drawing.Point(362, 149)
+        Me.TextBoxStockSizeMax.Location = New System.Drawing.Point(352, 149)
         Me.TextBoxStockSizeMax.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxStockSizeMax.Name = "TextBoxStockSizeMax"
         Me.TextBoxStockSizeMax.Size = New System.Drawing.Size(145, 23)
@@ -3274,7 +3288,7 @@ Partial Class Form1
         'LabelStockSizeMax
         '
         Me.LabelStockSizeMax.AutoSize = True
-        Me.LabelStockSizeMax.Location = New System.Drawing.Point(368, 131)
+        Me.LabelStockSizeMax.Location = New System.Drawing.Point(358, 131)
         Me.LabelStockSizeMax.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStockSizeMax.Name = "LabelStockSizeMax"
         Me.LabelStockSizeMax.Size = New System.Drawing.Size(29, 16)
@@ -3283,7 +3297,7 @@ Partial Class Form1
         '
         'TextBoxStockSizeMid
         '
-        Me.TextBoxStockSizeMid.Location = New System.Drawing.Point(187, 149)
+        Me.TextBoxStockSizeMid.Location = New System.Drawing.Point(182, 149)
         Me.TextBoxStockSizeMid.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxStockSizeMid.Name = "TextBoxStockSizeMid"
         Me.TextBoxStockSizeMid.Size = New System.Drawing.Size(145, 23)
@@ -3292,7 +3306,7 @@ Partial Class Form1
         'LabelStockSizeMid
         '
         Me.LabelStockSizeMid.AutoSize = True
-        Me.LabelStockSizeMid.Location = New System.Drawing.Point(192, 131)
+        Me.LabelStockSizeMid.Location = New System.Drawing.Point(187, 131)
         Me.LabelStockSizeMid.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStockSizeMid.Name = "LabelStockSizeMid"
         Me.LabelStockSizeMid.Size = New System.Drawing.Size(28, 16)
@@ -3330,7 +3344,7 @@ Partial Class Form1
         '
         'TextBoxStockSizeZ
         '
-        Me.TextBoxStockSizeZ.Location = New System.Drawing.Point(362, 69)
+        Me.TextBoxStockSizeZ.Location = New System.Drawing.Point(352, 69)
         Me.TextBoxStockSizeZ.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxStockSizeZ.Name = "TextBoxStockSizeZ"
         Me.TextBoxStockSizeZ.Size = New System.Drawing.Size(145, 23)
@@ -3339,7 +3353,7 @@ Partial Class Form1
         'LabelStockSizeZ
         '
         Me.LabelStockSizeZ.AutoSize = True
-        Me.LabelStockSizeZ.Location = New System.Drawing.Point(368, 51)
+        Me.LabelStockSizeZ.Location = New System.Drawing.Point(358, 51)
         Me.LabelStockSizeZ.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStockSizeZ.Name = "LabelStockSizeZ"
         Me.LabelStockSizeZ.Size = New System.Drawing.Size(14, 16)
@@ -3348,7 +3362,7 @@ Partial Class Form1
         '
         'TextBoxStockSizeY
         '
-        Me.TextBoxStockSizeY.Location = New System.Drawing.Point(187, 69)
+        Me.TextBoxStockSizeY.Location = New System.Drawing.Point(182, 69)
         Me.TextBoxStockSizeY.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxStockSizeY.Name = "TextBoxStockSizeY"
         Me.TextBoxStockSizeY.Size = New System.Drawing.Size(145, 23)
@@ -3357,7 +3371,7 @@ Partial Class Form1
         'LabelStockSizeY
         '
         Me.LabelStockSizeY.AutoSize = True
-        Me.LabelStockSizeY.Location = New System.Drawing.Point(192, 51)
+        Me.LabelStockSizeY.Location = New System.Drawing.Point(187, 51)
         Me.LabelStockSizeY.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStockSizeY.Name = "LabelStockSizeY"
         Me.LabelStockSizeY.Size = New System.Drawing.Size(14, 16)
@@ -3406,7 +3420,7 @@ Partial Class Form1
         'LabelCheckInterferenceMaxOccurrences
         '
         Me.LabelCheckInterferenceMaxOccurrences.AutoSize = True
-        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(70, 504)
+        Me.LabelCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(68, 504)
         Me.LabelCheckInterferenceMaxOccurrences.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelCheckInterferenceMaxOccurrences.Name = "LabelCheckInterferenceMaxOccurrences"
         Me.LabelCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(355, 16)
@@ -3415,7 +3429,7 @@ Partial Class Form1
         '
         'TextBoxCheckInterferenceMaxOccurrences
         '
-        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(12, 498)
+        Me.TextBoxCheckInterferenceMaxOccurrences.Location = New System.Drawing.Point(10, 498)
         Me.TextBoxCheckInterferenceMaxOccurrences.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxCheckInterferenceMaxOccurrences.Name = "TextBoxCheckInterferenceMaxOccurrences"
         Me.TextBoxCheckInterferenceMaxOccurrences.Size = New System.Drawing.Size(44, 23)
@@ -3425,7 +3439,7 @@ Partial Class Form1
         'CheckBoxUpdatePhysicalPropertiesCOGHide
         '
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.AutoSize = True
-        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Location = New System.Drawing.Point(12, 436)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Location = New System.Drawing.Point(10, 436)
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Name = "CheckBoxUpdatePhysicalPropertiesCOGHide"
         Me.CheckBoxUpdatePhysicalPropertiesCOGHide.Size = New System.Drawing.Size(285, 20)
@@ -3436,7 +3450,7 @@ Partial Class Form1
         'CheckBoxUpdatePhysicalPropertiesCOGShow
         '
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.AutoSize = True
-        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Location = New System.Drawing.Point(12, 404)
+        Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Location = New System.Drawing.Point(10, 404)
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Name = "CheckBoxUpdatePhysicalPropertiesCOGShow"
         Me.CheckBoxUpdatePhysicalPropertiesCOGShow.Size = New System.Drawing.Size(291, 20)
@@ -3447,7 +3461,7 @@ Partial Class Form1
         'CheckBoxAutoAddMissingVariable
         '
         Me.CheckBoxAutoAddMissingVariable.AutoSize = True
-        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(12, 340)
+        Me.CheckBoxAutoAddMissingVariable.Location = New System.Drawing.Point(10, 340)
         Me.CheckBoxAutoAddMissingVariable.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxAutoAddMissingVariable.Name = "CheckBoxAutoAddMissingVariable"
         Me.CheckBoxAutoAddMissingVariable.Size = New System.Drawing.Size(310, 20)
@@ -3458,7 +3472,7 @@ Partial Class Form1
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(70, 107)
+        Me.LabelFontSize.Location = New System.Drawing.Point(68, 107)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(90, 16)
@@ -3467,7 +3481,7 @@ Partial Class Form1
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(12, 101)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(10, 101)
         Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(44, 23)
@@ -3479,11 +3493,11 @@ Partial Class Form1
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewTrimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewDimetric)
         Me.GroupBoxPictorialViews.Controls.Add(Me.RadioButtonPictorialViewIsometric)
-        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(0, 546)
+        Me.GroupBoxPictorialViews.Location = New System.Drawing.Point(5, 546)
         Me.GroupBoxPictorialViews.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBoxPictorialViews.Name = "GroupBoxPictorialViews"
         Me.GroupBoxPictorialViews.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBoxPictorialViews.Size = New System.Drawing.Size(554, 123)
+        Me.GroupBoxPictorialViews.Size = New System.Drawing.Size(507, 123)
         Me.GroupBoxPictorialViews.TabIndex = 53
         Me.GroupBoxPictorialViews.TabStop = False
         Me.GroupBoxPictorialViews.Text = "PICTORIAL VIEW OPTIONS"
@@ -3529,7 +3543,7 @@ Partial Class Form1
         Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(12, 372)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(10, 372)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
         Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(351, 20)
@@ -3540,7 +3554,7 @@ Partial Class Form1
         'CheckBoxAutoAddMissingProperty
         '
         Me.CheckBoxAutoAddMissingProperty.AutoSize = True
-        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(12, 277)
+        Me.CheckBoxAutoAddMissingProperty.Location = New System.Drawing.Point(10, 277)
         Me.CheckBoxAutoAddMissingProperty.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxAutoAddMissingProperty.Name = "CheckBoxAutoAddMissingProperty"
         Me.CheckBoxAutoAddMissingProperty.Size = New System.Drawing.Size(299, 20)
@@ -3551,7 +3565,7 @@ Partial Class Form1
         'CheckBoxPartCopiesRecursiveSearch
         '
         Me.CheckBoxPartCopiesRecursiveSearch.AutoSize = True
-        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(12, 245)
+        Me.CheckBoxPartCopiesRecursiveSearch.Location = New System.Drawing.Point(10, 245)
         Me.CheckBoxPartCopiesRecursiveSearch.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxPartCopiesRecursiveSearch.Name = "CheckBoxPartCopiesRecursiveSearch"
         Me.CheckBoxPartCopiesRecursiveSearch.Size = New System.Drawing.Size(260, 20)
@@ -3562,7 +3576,7 @@ Partial Class Form1
         'CheckBoxMoveDrawingViewAllowPartialSuccess
         '
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.AutoSize = True
-        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(12, 213)
+        Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Location = New System.Drawing.Point(10, 213)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Name = "CheckBoxMoveDrawingViewAllowPartialSuccess"
         Me.CheckBoxMoveDrawingViewAllowPartialSuccess.Size = New System.Drawing.Size(298, 20)
@@ -3573,7 +3587,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(12, 181)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(10, 181)
         Me.CheckBoxBackgroundProcessing.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(248, 20)
@@ -3586,7 +3600,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(12, 149)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(10, 149)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(251, 20)
@@ -3596,7 +3610,7 @@ Partial Class Form1
         '
         'TextBoxPartNumberPropertyName
         '
-        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(204, 32)
+        Me.TextBoxPartNumberPropertyName.Location = New System.Drawing.Point(202, 32)
         Me.TextBoxPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPartNumberPropertyName.Name = "TextBoxPartNumberPropertyName"
         Me.TextBoxPartNumberPropertyName.Size = New System.Drawing.Size(233, 23)
@@ -3605,7 +3619,7 @@ Partial Class Form1
         'LabelPartNumberPropertyName
         '
         Me.LabelPartNumberPropertyName.AutoSize = True
-        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(204, 11)
+        Me.LabelPartNumberPropertyName.Location = New System.Drawing.Point(202, 11)
         Me.LabelPartNumberPropertyName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertyName.Name = "LabelPartNumberPropertyName"
         Me.LabelPartNumberPropertyName.Size = New System.Drawing.Size(156, 16)
@@ -3614,7 +3628,7 @@ Partial Class Form1
         '
         'TextBoxRestartAfter
         '
-        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(12, 69)
+        Me.TextBoxRestartAfter.Location = New System.Drawing.Point(10, 69)
         Me.TextBoxRestartAfter.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxRestartAfter.Name = "TextBoxRestartAfter"
         Me.TextBoxRestartAfter.Size = New System.Drawing.Size(44, 23)
@@ -3625,7 +3639,7 @@ Partial Class Form1
         '
         Me.ComboBoxPartNumberPropertySet.FormattingEnabled = True
         Me.ComboBoxPartNumberPropertySet.Items.AddRange(New Object() {"fake_item_1"})
-        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(12, 32)
+        Me.ComboBoxPartNumberPropertySet.Location = New System.Drawing.Point(10, 32)
         Me.ComboBoxPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPartNumberPropertySet.Name = "ComboBoxPartNumberPropertySet"
         Me.ComboBoxPartNumberPropertySet.Size = New System.Drawing.Size(153, 24)
@@ -3635,7 +3649,7 @@ Partial Class Form1
         'LabelPartNumberPropertySet
         '
         Me.LabelPartNumberPropertySet.AutoSize = True
-        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(12, 11)
+        Me.LabelPartNumberPropertySet.Location = New System.Drawing.Point(10, 11)
         Me.LabelPartNumberPropertySet.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPartNumberPropertySet.Name = "LabelPartNumberPropertySet"
         Me.LabelPartNumberPropertySet.Size = New System.Drawing.Size(142, 16)
@@ -3645,7 +3659,7 @@ Partial Class Form1
         'LabelRestartAfter
         '
         Me.LabelRestartAfter.AutoSize = True
-        Me.LabelRestartAfter.Location = New System.Drawing.Point(70, 75)
+        Me.LabelRestartAfter.Location = New System.Drawing.Point(68, 75)
         Me.LabelRestartAfter.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelRestartAfter.Name = "LabelRestartAfter"
         Me.LabelRestartAfter.Size = New System.Drawing.Size(211, 16)
@@ -3720,7 +3734,7 @@ Partial Class Form1
         Me.TextBoxStatus.Location = New System.Drawing.Point(2, 5)
         Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxStatus.Name = "TextBoxStatus"
-        Me.TextBoxStatus.Size = New System.Drawing.Size(602, 23)
+        Me.TextBoxStatus.Size = New System.Drawing.Size(555, 23)
         Me.TextBoxStatus.TabIndex = 1
         Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
     ""
@@ -3764,7 +3778,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(606, 67)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(559, 67)
         Me.TableLayoutPanel1.TabIndex = 5
         '
         'ButtonProcess
@@ -3772,7 +3786,7 @@ Partial Class Form1
         Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonProcess.Image = Global.Housekeeper.My.Resources.Resources.Play
         Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonProcess.Location = New System.Drawing.Point(374, 32)
+        Me.ButtonProcess.Location = New System.Drawing.Point(327, 32)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonProcess.Name = "ButtonProcess"
         Me.ButtonProcess.Size = New System.Drawing.Size(113, 33)
@@ -3786,7 +3800,7 @@ Partial Class Form1
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ButtonCancel.Image = Global.Housekeeper.My.Resources.Resources.Close
         Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonCancel.Location = New System.Drawing.Point(491, 32)
+        Me.ButtonCancel.Location = New System.Drawing.Point(444, 32)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(113, 33)
@@ -3855,21 +3869,11 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxRemoveFaceStyleOverrides
-        '
-        Me.CheckBoxRemoveFaceStyleOverrides.AutoSize = True
-        Me.CheckBoxRemoveFaceStyleOverrides.Location = New System.Drawing.Point(12, 468)
-        Me.CheckBoxRemoveFaceStyleOverrides.Name = "CheckBoxRemoveFaceStyleOverrides"
-        Me.CheckBoxRemoveFaceStyleOverrides.Size = New System.Drawing.Size(372, 20)
-        Me.CheckBoxRemoveFaceStyleOverrides.TabIndex = 63
-        Me.CheckBoxRemoveFaceStyleOverrides.Text = "Update material from material table -- Remove face style overrides"
-        Me.CheckBoxRemoveFaceStyleOverrides.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(606, 833)
+        Me.ClientSize = New System.Drawing.Size(559, 833)
         Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -3877,7 +3881,7 @@ Partial Class Form1
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(400, 200)
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MinimumSize = New System.Drawing.Size(622, 871)
+        Me.MinimumSize = New System.Drawing.Size(575, 871)
         Me.Name = "Form1"
         Me.Text = "Solid Edge Housekeeper"
         Me.TabControl1.ResumeLayout(False)

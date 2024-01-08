@@ -145,6 +145,10 @@ Luckily, Solid Edge has the ability to take care of that. That's in the program,
 
 Speaking of code, the sample uses PowerShell, but just barely. It is really only a thin wrapper on a Visual Basic script. If you have a better example, I would be glad to host it on GitHub. Naturally I would credit you as the contributor. That's not worth any money, but it does up your 'cred' on GitHub.
 
+### Update Material from Material Table
+
+Added an option to remove face style overrides.  Set the option on the **Configuration Tab -- General Page**.
+
 ### Update Drawing Views
 
 Fixed an issue where family of assembly files were not being found. Fixed the same issue on the `Broken Links` Task.
