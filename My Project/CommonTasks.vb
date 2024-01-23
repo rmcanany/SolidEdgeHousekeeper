@@ -1528,6 +1528,8 @@ Public Class CommonTasks
                 Dim Occurrences As SolidEdgeAssembly.Occurrences
                 Occurrences = AsmDoc.Occurrences
 
+                Proceed = True
+
                 If Occurrences.Count = 0 Then
                     Proceed = False
                     'ExitStatus = 1
