@@ -1,19 +1,14 @@
 ﻿Option Explicit On
 
-Imports System.Data.Common
-Imports System.Globalization
-Imports System.Net.Http
 Imports Newtonsoft.Json
-'Imports Newtonsoft.Json
-Imports SolidEdgeConstants
-'Imports System.Runtime.Serialization.Json
-
 
 Public Class FormVariableInputEditor
     Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
     Private InputEditorDoctor As New InputEditorDoctor
     Private ProcessCheckBoxEvents As Boolean
     Private FileType As String
+    Public Property JSONDict As String
+    Public Property UseNewTaskTab As Boolean
 
     Public Sub ShowInputEditor(FileType As String)
         Me.FileType = FileType
@@ -71,10 +66,7 @@ Public Class FormVariableInputEditor
             ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
         Next
 
-        If Me.FileType = "asm" Then TextBoxJSON.Text = Form1.TextBoxVariablesEditAssembly.Text
-        If Me.FileType = "par" Then TextBoxJSON.Text = Form1.TextBoxVariablesEditPart.Text
-        If Me.FileType = "psm" Then TextBoxJSON.Text = Form1.TextBoxVariablesEditSheetmetal.Text
-        'If Me.FileType = "dft" Then TextBoxJSON.Text = Form1.TextBoxVariablesEditDraft.Text
+        TextBoxJSON.Text = Me.JSONDict
 
         ProcessCheckBoxEvents = False
         InputEditorDoctor.RestoreTableValues(TableLayoutPanel1, ColumnsDict, TextBoxJSON.Text)
@@ -288,6 +280,10 @@ Public Class FormVariableInputEditor
         If e.Row = 0 Then
             e.Graphics.FillRectangle(InputEditorDoctor.BrushColor, e.CellBounds)
         End If
+    End Sub
+
+    Private Sub TextBoxJSON_TextChanged(sender As Object, e As EventArgs) Handles TextBoxJSON.TextChanged
+        Me.JSONDict = TextBoxJSON.Text
     End Sub
 
 End Class

@@ -308,7 +308,7 @@ Public Class InputEditorDoctor
         Dim SourceCheckBox As CheckBox
         Dim SourceComboBox As ComboBox
 
-        Dim ColumnName As String
+        'Dim ColumnName As String
         'Dim ColumnIndexToNameDict As New Dictionary(Of Integer, String)
         Dim tf As Boolean = False
         Dim ColumnIndex As Integer

@@ -51,14 +51,6 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
-                Case "BrokenLinks"
-                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
-                Case "LinksOutsideInputDirectory"
-                    ErrorMessage = task.Proxy.LinksOutsideInputDirectory(SEDoc, Configuration, SEApp)
-                Case "FailedRelationships"
-                    ErrorMessage = task.Proxy.FailedRelationships(SEDoc, Configuration, SEApp)
-                Case "UnderconstrainedRelationships"
-                    ErrorMessage = task.Proxy.UnderconstrainedRelationships(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "ActivateAndUpdateAll"
@@ -71,8 +63,6 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.HideConstructions(SEDoc, Configuration, SEApp)
                 Case "FitPictorialView"
                     ErrorMessage = task.Proxy.FitPictorialView(SEDoc, Configuration, SEApp)
-                'Case "SaveAsSTEP"
-                '    ErrorMessage = task.Proxy.SaveAsSTEP(SEDoc, Configuration, SEApp)
                 Case "SaveAs"
                     ErrorMessage = task.Proxy.SaveAs(SEDoc, Configuration, SEApp)
                 Case "InteractiveEdit"
@@ -91,8 +81,12 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.CheckInterference(SEDoc, Configuration, SEApp)
                     'Case "ConfigurationsOutOfDate"
                     '    ErrorMessage = task.Proxy.ConfigurationsOutOfDate(SEDoc, Configuration, SEApp)
-                Case "CopyOverallSizeToVariableTable"
-                    ErrorMessage = task.Proxy.CopyOverallSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "ModelSizeToVariableTable"
+                    ErrorMessage = task.Proxy.ModelSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "CheckRelationships"
+                    ErrorMessage = task.Proxy.CheckRelationships(SEDoc, Configuration, SEApp)
+                Case "CheckLinks"
+                    ErrorMessage = task.Proxy.CheckLinks(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -120,16 +114,18 @@ Public Class LaunchTask
             Select Case LabelToActionX(LabelText).TaskName
                 Case "OpenSave"
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
-                Case "FailedOrWarnedFeatures"
-                    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
-                Case "SuppressedOrRolledBackFeatures"
-                    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
-                Case "UnderconstrainedProfiles"
-                    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
+                'Case "FailedOrWarnedFeatures"
+                '    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
+                'Case "SuppressedOrRolledBackFeatures"
+                '    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
+                'Case "UnderconstrainedProfiles"
+                '    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
                     ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
-                Case "BrokenLinks"
-                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "BrokenLinks"
+                '    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "LinksOutsideInputDirectory"
+                '    ErrorMessage = task.Proxy.LinksOutsideInputDirectory(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
@@ -162,8 +158,12 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
                 Case "UpdatePhysicalProperties"
                     ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
-                Case "CopyOverallSizeToVariableTable"
-                    ErrorMessage = task.Proxy.CopyOverallSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "ModelSizeToVariableTable"
+                    ErrorMessage = task.Proxy.ModelSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "CheckRelationships"
+                    ErrorMessage = task.Proxy.CheckRelationships(SEDoc, Configuration, SEApp)
+                Case "CheckLinks"
+                    ErrorMessage = task.Proxy.CheckLinks(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -193,18 +193,20 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "UpdateDesignForCost"
                     ErrorMessage = task.Proxy.UpdateDesignForCost(SEDoc, Configuration, SEApp)
-                Case "FailedOrWarnedFeatures"
-                    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
-                Case "SuppressedOrRolledBackFeatures"
-                    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
-                Case "UnderconstrainedProfiles"
-                    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
+                'Case "FailedOrWarnedFeatures"
+                '    ErrorMessage = task.Proxy.FailedOrWarnedFeatures(SEDoc, Configuration, SEApp)
+                'Case "SuppressedOrRolledBackFeatures"
+                '    ErrorMessage = task.Proxy.SuppressedOrRolledBackFeatures(SEDoc, Configuration, SEApp)
+                'Case "UnderconstrainedProfiles"
+                '    ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "FlatPatternMissingOrOutOfDate"
                     ErrorMessage = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
                     ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
-                Case "BrokenLinks"
-                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "BrokenLinks"
+                '    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "LinksOutsideInputDirectory"
+                '    ErrorMessage = task.Proxy.LinksOutsideInputDirectory(SEDoc, Configuration, SEApp)
                 Case "MaterialNotInMaterialTable"
                     ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
@@ -239,8 +241,12 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.VariablesEdit(SEDoc, Configuration, SEApp)
                 Case "UpdatePhysicalProperties"
                     ErrorMessage = task.Proxy.UpdatePhysicalProperties(SEDoc, Configuration, SEApp)
-                Case "CopyOverallSizeToVariableTable"
-                    ErrorMessage = task.Proxy.CopyOverallSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "ModelSizeToVariableTable"
+                    ErrorMessage = task.Proxy.ModelSizeToVariableTable(SEDoc, Configuration, SEApp)
+                Case "CheckRelationships"
+                    ErrorMessage = task.Proxy.CheckRelationships(SEDoc, Configuration, SEApp)
+                Case "CheckLinks"
+                    ErrorMessage = task.Proxy.CheckLinks(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()
@@ -270,16 +276,18 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.OpenSave(SEDoc, Configuration, SEApp)
                 Case "PropertyFindReplace"
                     ErrorMessage = task.Proxy.PropertyFindReplace(SEDoc, Configuration, SEApp)
-                Case "BrokenLinks"
-                    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "BrokenLinks"
+                '    ErrorMessage = task.Proxy.BrokenLinks(SEDoc, Configuration, SEApp)
+                'Case "LinksOutsideInputDirectory"
+                '    ErrorMessage = task.Proxy.LinksOutsideInputDirectory(SEDoc, Configuration, SEApp)
                 Case "DrawingViewsOutOfDate"
                     ErrorMessage = task.Proxy.DrawingViewsOutOfDate(SEDoc, Configuration, SEApp)
                 Case "DetachedDimensionsOrAnnotations"
                     ErrorMessage = task.Proxy.DetachedDimensionsOrAnnotations(SEDoc, Configuration, SEApp)
                 Case "PartsListMissingOrOutOfDate"
                     ErrorMessage = task.Proxy.PartsListMissingOrOutOfDate(SEDoc, Configuration, SEApp)
-                Case "FileNameDoesNotMatchModelFilename"
-                    ErrorMessage = task.Proxy.FileNameDoesNotMatchModelFilename(SEDoc, Configuration, SEApp)
+                Case "PartNumberDoesNotMatchFilename"
+                    ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
                 Case "DrawingViewOnBackgroundSheet"
                     ErrorMessage = task.Proxy.DrawingViewOnBackgroundSheet(SEDoc, Configuration, SEApp)
                 Case "UpdateDrawingViews"
@@ -306,6 +314,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.InteractiveEdit(SEDoc, Configuration, SEApp)
                 Case "RunExternalProgram"
                     ErrorMessage = task.Proxy.RunExternalProgram(SEDoc, Configuration, SEApp)
+                Case "CheckLinks"
+                    ErrorMessage = task.Proxy.CheckLinks(SEDoc, Configuration, SEApp)
                 Case Else
                     MsgBox("LaunchTask: Method not recognized: " + LabelToActionX(LabelText).TaskName + ".  Exiting...")
                     SEApp.Quit()

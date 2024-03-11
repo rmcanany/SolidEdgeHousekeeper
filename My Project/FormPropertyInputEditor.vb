@@ -8,6 +8,8 @@ Public Class FormPropertyInputEditor
     Private InputEditorDoctor As New InputEditorDoctor
     Private ProcessCheckBoxEvents As Boolean
     Private FileType As String
+    Public Property JSONDict As String
+    'Public Property UseNewTaskTab As Boolean
 
     'TableValuesDict format
     '{"Material":{
@@ -73,10 +75,7 @@ Public Class FormPropertyInputEditor
             ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
         Next
 
-        If Me.FileType = "asm" Then TextBoxJSON.Text = Form1.TextBoxPropertiesEditAssembly.Text
-        If Me.FileType = "par" Then TextBoxJSON.Text = Form1.TextBoxPropertiesEditPart.Text
-        If Me.FileType = "psm" Then TextBoxJSON.Text = Form1.TextBoxPropertiesEditSheetmetal.Text
-        If Me.FileType = "dft" Then TextBoxJSON.Text = Form1.TextBoxPropertiesEditDraft.Text
+        TextBoxJSON.Text = Me.JSONDict
 
         ProcessCheckBoxEvents = False
         InputEditorDoctor.RestoreTableValues(TableLayoutPanel1, ColumnsDict, TextBoxJSON.Text)
@@ -157,7 +156,7 @@ Public Class FormPropertyInputEditor
         ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
         ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
         ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
         ColumnsDict(ColumnIndex)("DefaultValue") = ""
         ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
@@ -367,5 +366,9 @@ Public Class FormPropertyInputEditor
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub TextBoxJSON_TextChanged(sender As Object, e As EventArgs) Handles TextBoxJSON.TextChanged
+        Me.JSONDict = TextBoxJSON.Text
     End Sub
 End Class

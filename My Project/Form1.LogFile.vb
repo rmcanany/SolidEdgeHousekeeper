@@ -11,7 +11,7 @@ Partial Class Form1
 
         Try
             Using writer As New IO.StreamWriter(MissingFilesFileName, True)
-                writer.WriteLine(CommonTasks.TruncateFullPath(Filename, Nothing))
+                writer.WriteLine(Filename)
                 For Each Key In ErrorMessagesCombined.Keys
                     writer.WriteLine(String.Format("    {0}", Key))
                     If ErrorMessagesCombined(Key).Count > 0 Then

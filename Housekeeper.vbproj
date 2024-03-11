@@ -41,7 +41,9 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>Housekeeper.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,7 +53,9 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>Housekeeper.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -136,14 +140,15 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileListUtilities.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="My Project\AssemblyTasks.vb" />
-    <Compile Include="My Project\CommonTasks.vb" />
-    <Compile Include="My Project\DraftTasks.vb" />
+    <Compile Include="My Project\ExTableLayoutPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="My Project\FeatureDoctor.vb" />
     <Compile Include="My Project\FilenameCharmapDoctor.vb" />
     <Compile Include="My Project\Form1.ApplicationHelperFunctions.vb">
@@ -165,6 +170,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\FormEditTaskList.Designer.vb">
+      <DependentUpon>FormEditTaskList.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormEditTaskList.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\FormPropertyFilter.Designer.vb">
@@ -192,12 +203,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\InputEditorDoctor.vb" />
-    <Compile Include="My Project\LabelToAction.vb" />
-    <Compile Include="My Project\LaunchTask.vb" />
-    <Compile Include="My Project\MaterialDoctorPart.vb" />
-    <Compile Include="My Project\MaterialDoctorSheetmetal.vb" />
+    <Compile Include="My Project\InterfaceUtilities.vb" />
+    <Compile Include="My Project\IsolatedTask.vb" />
+    <Compile Include="My Project\IsolatedTaskProxy.vb" />
+    <Compile Include="My Project\MaterialDoctor.vb" />
     <Compile Include="My Project\OccurrenceGetter.vb" />
-    <Compile Include="My Project\PartTasks.vb" />
+    <Compile Include="My Project\PreferencesUtilities.vb" />
     <Compile Include="My Project\PrinterDoctor.vb" />
     <Compile Include="My Project\PropertyFilter.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -210,12 +221,48 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="My Project\SheetmetalTasks.vb" />
+    <Compile Include="My Project\Task.vb" />
+    <Compile Include="My Project\TaskActivateAndUpdateAll.vb" />
+    <Compile Include="My Project\TaskCheckDrawingPartsList.vb" />
+    <Compile Include="My Project\TaskCheckDrawings.vb" />
+    <Compile Include="My Project\TaskCheckFlatPattern.vb" />
+    <Compile Include="My Project\TaskCheckInterference.vb" />
+    <Compile Include="My Project\TaskCheckLinks.vb" />
+    <Compile Include="My Project\TaskCheckMaterialNotInMaterialTable.vb" />
+    <Compile Include="My Project\TaskCheckMissingDrawing.vb" />
+    <Compile Include="My Project\TaskCheckPartCopies.vb" />
+    <Compile Include="My Project\TaskCheckPartNumberDoesNotMatchFilename.vb" />
+    <Compile Include="My Project\TaskCheckRelationships.Aux.vb" />
+    <Compile Include="My Project\TaskCheckRelationships.vb" />
+    <Compile Include="My Project\TaskEditInteractively.vb" />
+    <Compile Include="My Project\TaskEditProperties.vb" />
+    <Compile Include="My Project\TaskEditVariables.vb" />
+    <Compile Include="My Project\TaskFitView.vb" />
+    <Compile Include="My Project\TaskHideConstructions.vb" />
+    <Compile Include="My Project\TaskOpenSave.vb" />
+    <Compile Include="My Project\TaskPrint.vb" />
+    <Compile Include="My Project\TaskRemoveFaceStyleOverrides.vb" />
+    <Compile Include="My Project\TaskRunExternalProgram.vb" />
+    <Compile Include="My Project\TaskSaveDrawingAs.vb" />
+    <Compile Include="My Project\TaskSaveModelAs.vb" />
+    <Compile Include="My Project\TaskUpdateDesignForCost.vb" />
+    <Compile Include="My Project\TaskUpdateDrawingStylesFromTemplate.vb" />
+    <Compile Include="My Project\TaskUpdateDrawingViews.vb" />
+    <Compile Include="My Project\TaskUpdateMaterialFromMaterialTable.vb" />
+    <Compile Include="My Project\TaskUpdateModelSizeInVariableTable.vb" />
+    <Compile Include="My Project\TaskUpdateModelStylesFromTemplate.vb" />
+    <Compile Include="My Project\TaskUpdatePartCopies.vb" />
+    <Compile Include="My Project\TaskUpdatePhysicalProperties.vb" />
+    <Compile Include="My Project\Task_Common.vb" />
+    <Compile Include="My Project\Task_EventHandler.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormEditTaskList.resx">
+      <DependentUpon>FormEditTaskList.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
@@ -275,6 +322,39 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\unchecked_disabled.png" />
+    <None Include="Resources\expand-disabled.png" />
+    <None Include="Resources\TaskCheckDrawingPartsList.png" />
+    <None Include="Resources\TaskUpdatePhysicalProperties.png" />
+    <None Include="Resources\TaskUpdatePartCopies.png" />
+    <None Include="Resources\TaskUpdateModelStylesFromTemplate.png" />
+    <None Include="Resources\TaskUpdateModelSizeInVariableTable.png" />
+    <None Include="Resources\TaskUpdateMaterialFromMaterialTable.png" />
+    <None Include="Resources\TaskUpdateDrawingViews.png" />
+    <None Include="Resources\TaskUpdateDrawingStylesFromTemplate.png" />
+    <None Include="Resources\TaskUpdateDesignForCost.png" />
+    <None Include="Resources\TaskSaveAs.png" />
+    <None Include="Resources\TaskRunExternalProgram.png" />
+    <None Include="Resources\TaskRemoveFaceStyleOverrides.png" />
+    <None Include="Resources\TaskPrint.png" />
+    <None Include="Resources\TaskOpenSave.png" />
+    <None Include="Resources\TaskHideConstructions.png" />
+    <None Include="Resources\TaskFitView.png" />
+    <None Include="Resources\TaskEditVariables.png" />
+    <None Include="Resources\TaskEditProperties.png" />
+    <None Include="Resources\TaskEditInteractively.png" />
+    <None Include="Resources\TaskCheckRelationships.png" />
+    <None Include="Resources\TaskCheckPartNumberDoesNotMatchFilename.png" />
+    <None Include="Resources\TaskCheckPartCopies.png" />
+    <None Include="Resources\TaskCheckMissingDrawing.png" />
+    <None Include="Resources\TaskCheckMaterialNotInMaterialTable.png" />
+    <None Include="Resources\TaskCheckLinks.png" />
+    <None Include="Resources\TaskCheckInterference.png" />
+    <None Include="Resources\TaskCheckFlatPattern.png" />
+    <None Include="Resources\TaskCheckDrawings.png" />
+    <None Include="Resources\TaskActivateAndUpdateAll.png" />
+    <None Include="Resources\collapse.png" />
+    <None Include="Resources\expand.png" />
     <None Include="Resources\down.png" />
     <None Include="Resources\up.png" />
     <None Include="My Project\media\table_of_contents.png" />

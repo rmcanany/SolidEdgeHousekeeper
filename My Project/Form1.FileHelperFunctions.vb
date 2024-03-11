@@ -13,10 +13,7 @@ Partial Class Form1
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
-        'Dim ElapsedTime As Double
-        'Dim ElapsedTimeText As String
-
-        'StartTime = Now
+        Dim TC As New Task_Common
 
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
@@ -61,7 +58,7 @@ Partial Class Form1
 
                 Case = "excel"
                     If FileIO.FileSystem.FileExists(Source.Name) Then
-                        FoundFiles = CommonTasks.ReadExcel(Source.Name)
+                        FoundFiles = TC.ReadExcel(Source.Name)
                     End If
 
                 Case = "DragDrop"
@@ -150,7 +147,7 @@ Partial Class Form1
         If Not FoundFiles Is Nothing Then
             Dim tmpFoundFiles As New List(Of String)
             For Each item In FoundFiles
-                tf = CommonTasks.FilenameIsOK(item)
+                tf = TC.FilenameIsOK(item)
                 tf = tf And IO.File.Exists(item)
                 tf = tf And Not tmpFoundFiles.Contains(item)
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
@@ -212,7 +209,7 @@ Partial Class Form1
                 TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
                 System.Windows.Forms.Application.DoEvents()
 
-                If CommonTasks.FilenameIsOK(FoundFile) Then
+                If TC.FilenameIsOK(FoundFile) Then
 
                     If IO.File.Exists(FoundFile) Then
 
@@ -315,18 +312,22 @@ Partial Class Form1
     Private Function GetTotalFilesToProcess() As Integer
         Dim Count As Integer = 0
 
-        If CheckedListBoxAssembly.CheckedItems.Count > 0 Then
-            Count += GetFileNames("*.asm").Count
-        End If
-        If CheckedListBoxPart.CheckedItems.Count > 0 Then
-            Count += GetFileNames("*.par").Count
-        End If
-        If CheckedListBoxSheetmetal.CheckedItems.Count > 0 Then
-            Count += GetFileNames("*.psm").Count
-        End If
-        If CheckedListBoxDraft.CheckedItems.Count > 0 Then
-            Count += GetFileNames("*.dft").Count
-        End If
+        Dim PartCount As Integer = 0
+        Dim SheetmetalCount As Integer = 0
+        Dim AssemblyCount As Integer = 0
+        Dim DraftCount As Integer = 0
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedPart Then PartCount += 1
+            If Task.IsSelectedSheetmetal Then SheetmetalCount += 1
+            If Task.IsSelectedAssembly Then AssemblyCount += 1
+            If Task.IsSelectedDraft Then DraftCount += 1
+        Next
+
+        If PartCount > 0 Then Count += GetFileNames("*.par").Count
+        If SheetmetalCount > 0 Then Count += GetFileNames("*.psm").Count
+        If AssemblyCount > 0 Then Count += GetFileNames("*.asm").Count
+        If DraftCount > 0 Then Count += GetFileNames("*.dft").Count
 
         Return Count
     End Function
@@ -347,7 +348,7 @@ Partial Class Form1
 
         For Each Filename In Foundfiles
 
-            TextBoxStatus.Text = String.Format("Dependency Sort opening {0}.  This can take some time.", IO.Path.GetFileName(Filename))
+            TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
 
             DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 

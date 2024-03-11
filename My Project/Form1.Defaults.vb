@@ -246,113 +246,9 @@ Partial Class Form1
     End Sub
 
     Private Sub PopulateComboBoxes()
-        Dim FileTypesString As String
-        Dim FileType As String
-
-        ' Common model file types
-        FileTypesString = "Step (*.stp):IGES (*.igs):Parasolid Text (*.x_t):Parasolid Binary (*.x_b)"
-        FileTypesString += ":OBJ (*.obj):STL (*.stl):JT Document (*.jt)"
-        FileTypesString += ":bmp (*.bmp):jpg (*.jpg):png (*.png):tif (*.tif)"
-
-        ' Assembly
-        ComboBoxSaveAsAssemblyFileType.Items.Clear()
-        For Each FileType In Split(FileTypesString, Delimiter:=":")
-            ComboBoxSaveAsAssemblyFileType.Items.Add(FileType)
-        Next
-        ComboBoxSaveAsAssemblyFileType.Items.Add("Copy (*.asm)")
-
-        ComboBoxSaveAsAssemblyFileType.Text = CType(ComboBoxSaveAsAssemblyFileType.Items(0), String)
-
-        ' Part
-        ComboBoxSaveAsPartFileType.Items.Clear()
-        For Each FileType In Split(FileTypesString, Delimiter:=":")
-            ComboBoxSaveAsPartFileType.Items.Add(FileType)
-        Next
-        ComboBoxSaveAsPartFileType.Items.Add("Copy (*.par)")
-
-        ComboBoxSaveAsPartFileType.Text = CType(ComboBoxSaveAsPartFileType.Items(0), String)
-
-        ' Sheetmetal
-        ComboBoxSaveAsSheetmetalFileType.Items.Clear()
-        For Each FileType In Split(FileTypesString, Delimiter:=":")
-            ComboBoxSaveAsSheetmetalFileType.Items.Add(FileType)
-        Next
-        ComboBoxSaveAsSheetmetalFileType.Items.Add("PDF Drawing (*.pdf)")
-        ComboBoxSaveAsSheetmetalFileType.Items.Add("DXF Flat (*.dxf)")
-        'ComboBoxSaveAsSheetmetalFileType.Items.Add("Step Flat (*.stp)")
-        ComboBoxSaveAsSheetmetalFileType.Items.Add("Copy (*.psm)")
-        ComboBoxSaveAsSheetmetalFileType.Text = CType(ComboBoxSaveAsSheetmetalFileType.Items(0), String)
-
-        ' Draft
-        FileTypesString = "PDF (*.pdf):PDF per Sheet (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
-
-        ComboBoxSaveAsDraftFileType.Items.Clear()
-        For Each FileType In Split(FileTypesString, Delimiter:=":")
-            ComboBoxSaveAsDraftFileType.Items.Add(FileType)
-        Next
-        ComboBoxSaveAsDraftFileType.Items.Add("Copy (*.dft)")
-
-        ComboBoxSaveAsDraftFileType.Text = CType(ComboBoxSaveAsDraftFileType.Items(0), String)
-
-        'ComboBoxPartNumberPropertySet
-        ComboBoxPartNumberPropertySet.Items.Clear()
-        For Each s As String In Split("System Custom")
-            ComboBoxPartNumberPropertySet.Items.Add(s)
-        Next
-        ComboBoxPartNumberPropertySet.Text = CType(ComboBoxPartNumberPropertySet.Items(0), String)
-
-        'ComboBoxFindReplacePropertySetAssembly
-        'ComboBoxFindReplacePropertySetAssembly.Items.Clear()
-        'For Each s As String In Split("System Custom")
-        '    ComboBoxFindReplacePropertySetAssembly.Items.Add(s)
-        'Next
-        'ComboBoxFindReplacePropertySetAssembly.Text = CType(ComboBoxFindReplacePropertySetAssembly.Items(0), String)
-
-        ''ComboBoxFindReplacePropertySetPart
-        'ComboBoxFindReplacePropertySetPart.Items.Clear()
-        'For Each s As String In Split("System Custom")
-        '    ComboBoxFindReplacePropertySetPart.Items.Add(s)
-        'Next
-        'ComboBoxFindReplacePropertySetPart.Text = CType(ComboBoxFindReplacePropertySetPart.Items(0), String)
-
-        ''ComboBoxFindReplacePropertySetSheetmetal
-        'ComboBoxFindReplacePropertySetSheetmetal.Items.Clear()
-        'For Each s As String In Split("System Custom")
-        '    ComboBoxFindReplacePropertySetSheetmetal.Items.Add(s)
-        'Next
-        'ComboBoxFindReplacePropertySetSheetmetal.Text = CType(ComboBoxFindReplacePropertySetSheetmetal.Items(0), String)
-
-        ''ComboBoxFindReplacePropertySetDraft
-        'ComboBoxFindReplacePropertySetDraft.Items.Clear()
-        'For Each s As String In Split("System Custom")
-        '    ComboBoxFindReplacePropertySetDraft.Items.Add(s)
-        'Next
-        'ComboBoxFindReplacePropertySetDraft.Text = CType(ComboBoxFindReplacePropertySetDraft.Items(0), String)
-
-        Dim PD As New PrinterDoctor
-        'ComboBoxPrinter1
-        ComboBoxPrinter1.Items.Clear()
-        ComboBoxPrinter2.Items.Clear()
-        For Each s As String In PD.GetInstalledPrinterNames
-            ComboBoxPrinter1.Items.Add(s)
-            ComboBoxPrinter2.Items.Add(s)
-        Next
-        ComboBoxPrinter1.Text = CStr(ComboBoxPrinter1.Items(0))
-        ComboBoxPrinter2.Text = CStr(ComboBoxPrinter2.Items(0))
 
     End Sub
 
-    Private Sub CreatePreferencesFolder()
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim PreferencesFolder As String = String.Format("{0}\Preferences", StartupPath)
-        If Not FileIO.FileSystem.DirectoryExists(PreferencesFolder) Then
-            FileIO.FileSystem.CreateDirectory(PreferencesFolder)
-        End If
-    End Sub
-
-    Private Sub CreateFilenameCharmap()
-        Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
-    End Sub
 
     Private Sub LoadDefaults()
         'See format example in SaveDefaults()
@@ -371,7 +267,7 @@ Partial Class Form1
 
         DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
 
-        CreateFilenameCharmap()
+        'CreateFilenameCharmap()
 
         PopulateComboBoxes()
 
@@ -486,7 +382,6 @@ Partial Class Form1
         'Assembly.Failed relationships=Unchecked
 
         Dim Defaults As New List(Of String)
-        Dim msg As String
         Dim ControlDict As New Dictionary(Of String, Control)
         Dim Key As String
         Dim Ctrl As Control
@@ -534,26 +429,6 @@ Partial Class Form1
             Next
         End If
 
-        For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
-            msg = "Assembly." + CheckedListBoxAssembly.Items(idx).ToString + "="
-            msg += CheckedListBoxAssembly.GetItemCheckState(idx).ToString()
-            Defaults.Add(msg)
-        Next
-        For idx = 0 To CheckedListBoxPart.Items.Count - 1
-            msg = "Part." + CheckedListBoxPart.Items(idx).ToString + "="
-            msg += CheckedListBoxPart.GetItemCheckState(idx).ToString()
-            Defaults.Add(msg)
-        Next
-        For idx = 0 To CheckedListBoxSheetmetal.Items.Count - 1
-            msg = "Sheetmetal." + CheckedListBoxSheetmetal.Items(idx).ToString + "="
-            msg += CheckedListBoxSheetmetal.GetItemCheckState(idx).ToString()
-            Defaults.Add(msg)
-        Next
-        For idx = 0 To CheckedListBoxDraft.Items.Count - 1
-            msg = "Draft." + CheckedListBoxDraft.Items(idx).ToString + "="
-            msg += CheckedListBoxDraft.GetItemCheckState(idx).ToString()
-            Defaults.Add(msg)
-        Next
 
         IO.File.WriteAllLines(DefaultsFilename, Defaults)
 
@@ -567,7 +442,6 @@ Partial Class Form1
         Dim Value As String
         Dim CheckBoxName As String
         Dim ValueAsBoolean As Boolean
-        Dim idx As Integer
 
         KeyAndName = KVPair.Split(("=").ToCharArray(0, 1))(0)
         Key = KeyAndName.Split((".").ToCharArray(0, 1))(0)
@@ -580,34 +454,6 @@ Partial Class Form1
             ValueAsBoolean = False
         End If
 
-        If Key = "Assembly" Then
-            For idx = 0 To CheckedListBoxAssembly.Items.Count - 1
-                If CheckedListBoxAssembly.Items(idx).ToString = CheckBoxName Then
-                    CheckedListBoxAssembly.SetItemChecked(idx, ValueAsBoolean)
-                End If
-            Next
-        End If
-        If Key = "Part" Then
-            For idx = 0 To CheckedListBoxPart.Items.Count - 1
-                If CheckedListBoxPart.Items(idx).ToString = CheckBoxName Then
-                    CheckedListBoxPart.SetItemChecked(idx, ValueAsBoolean)
-                End If
-            Next
-        End If
-        If Key = "Sheetmetal" Then
-            For idx = 0 To CheckedListBoxSheetmetal.Items.Count - 1
-                If CheckedListBoxSheetmetal.Items(idx).ToString = CheckBoxName Then
-                    CheckedListBoxSheetmetal.SetItemChecked(idx, ValueAsBoolean)
-                End If
-            Next
-        End If
-        If Key = "Draft" Then
-            For idx = 0 To CheckedListBoxDraft.Items.Count - 1
-                If CheckedListBoxDraft.Items(idx).ToString = CheckBoxName Then
-                    CheckedListBoxDraft.SetItemChecked(idx, ValueAsBoolean)
-                End If
-            Next
-        End If
     End Sub
 
     Private Sub BuildReadmeFile()
@@ -620,20 +466,6 @@ Partial Class Form1
 
         Dim ReadmeIn As String() = Nothing
         Dim ReadmeOut As New List(Of String)
-
-        Dim L2AList As New List(Of LabelToAction)
-        Dim L2AX As LabelToAction
-        Dim Names As New List(Of String)
-
-        L2AList.Add(LabelToActionAssembly)
-        L2AList.Add(LabelToActionPart)
-        L2AList.Add(LabelToActionSheetmetal)
-        L2AList.Add(LabelToActionDraft)
-
-        Names.Add("### Assembly")
-        Names.Add("### Part")
-        Names.Add("### Sheetmetal")
-        Names.Add("### Draft")
 
 
         ' The readme file is not needed on the user's machine.  
@@ -661,23 +493,14 @@ Partial Class Form1
             ReadmeOut.Add(TaskListHeader)
             ReadmeOut.Add("")
 
-            i = 0
+            Dim PU As New PreferencesUtilities
+            Dim tmpTaskList = PU.BuildTaskListFromScratch
 
-            For Each L2AX In L2AList
-                ReadmeOut.Add(Names(i))
+            For Each Task As Task In tmpTaskList
+                ReadmeOut.Add(String.Format("### {0}", Task.Description))
+                ReadmeOut.Add(Task.HelpText)
                 ReadmeOut.Add("")
-
-                For Each Key In L2AX.Keys
-                    ReadmeOut.Add(String.Format("#### {0}", Key))
-                    If L2AX(Key).HelpText <> "" Then
-                        ReadmeOut.Add(L2AX(Key).HelpText)
-                    End If
-                    ReadmeOut.Add("")
-                Next
-
-                i += 1
             Next
-
 
             msg = ""
             ReadmeOut.Add("")

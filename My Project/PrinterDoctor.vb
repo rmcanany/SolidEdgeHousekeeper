@@ -7,13 +7,36 @@ Public Class PrinterDoctor
         Dim InstalledPrinter As String
         For Each InstalledPrinter In System.Drawing.Printing.PrinterSettings.InstalledPrinters
             PrinterList.Add(InstalledPrinter)
-            'If InstalledPrinter = TextBoxPrintOptionsPrinter.Text Then
-            '    PrinterInstalled = True
-            '    Exit For
-            'End If
         Next InstalledPrinter
 
         Return PrinterList
+    End Function
+
+    Public Function GetSheetSizesFromNames(Names As List(Of String)) As Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        Dim SheetSizeDict As New Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
+        Dim PaperSizeConstant As SolidEdgeDraft.PaperSizeConstants
+        Dim Name As String
+        Dim tmpName As String
+
+        For Each Name In Names
+            For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+                tmpName = PaperSizeConstant.ToString
+                tmpName = tmpName.Replace("ig", "")
+                tmpName = tmpName.Replace("Eng", "Eng ")
+                tmpName = tmpName.Replace("Ansi", "Ansi ")
+                tmpName = tmpName.Replace("Iso", "Iso ")
+                tmpName = tmpName.Replace("Tall", " Tall")
+                tmpName = tmpName.Replace("Wide", " Wide")
+
+                If Name = tmpName Then
+                    SheetSizeDict(Name) = PaperSizeConstant
+                    Exit For
+                End If
+            Next
+
+        Next
+
+        Return SheetSizeDict
     End Function
 
     Public Function GetSheetSizes(Filter As String) As Dictionary(Of String, SolidEdgeDraft.PaperSizeConstants)
@@ -44,12 +67,6 @@ Public Class PrinterDoctor
                     SheetSizeDict(Name) = PaperSizeConstant
                 End If
             End If
-
-            'If Filter.ToLower = "ansi_and_iso" Then
-            '    If (Name.ToLower.Contains("ansi")) Or (Name.ToLower.Contains("iso")) Then
-            '        SheetSizeDict(Name) = PaperSizeConstant
-            '    End If
-            'End If
 
             If Filter.ToLower = "all" Then
                 If Not Name.ToLower.Contains("custom") Then

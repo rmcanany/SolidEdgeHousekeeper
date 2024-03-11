@@ -5,7 +5,7 @@
 @farfilli (aka @[Francesco Arfilli]), @daysanduski, @mmtrebuchet, @[o_o ....码]
 
 **Beta Testers:**
-@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg]
+@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347 
 
 **Helpful feedback and bug reports:**
 @Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303
@@ -354,17 +354,53 @@ Some tasks cannot be run on older versions.
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
-### Assembly
-
-#### Open/Save
+### Open save
 Open a document and save in the current version.
 
-#### Activate and update all
+### Activate and update all
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
 
 Can run out of memory for very large assemblies.
 
-#### Property find replace
+### Update material from material table
+Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab -- Templates Page**. 
+
+If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
+
+You can optionally remove any face style overrides. Set the option on the **Configuration Tab -- General Page**. 
+
+### Update part copies
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the **Configuration Tab -- General Page**.
+
+### Update physical properties
+Updates mass, volume, etc.  Models with no density are reported in the log file. 
+
+You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
+
+Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
+
+### Update model size in variable table
+Copies the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
+
+The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
+
+![Overall Size Options](My%20Project/media/overall_size_options.png)
+
+The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+
+Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
+
+The command reports sheet metal size in the formed state. For a flat pattern, instead of this using this command, you can use the variables from the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
+
+### Update design for cost
+Updates DesignForCost and saves the document.
+
+An annoyance of this command is that it opens the DesignForCost Edgebar pane, but is not able to close it. The user must manually close the pane in an interactive Sheetmetal session. The state of the pane is system-wide, not per-document, so closing it is a one-time action. 
+
+### Update drawing views
+Checks drawing views one by one, and updates them if needed.
+
+### Edit properties
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. 
 
 ![Find_Replace](My%20Project/media/property_input_editor.png)
@@ -391,14 +427,7 @@ You can copy the settings on the form to other tabs. Set the `Copy To` CheckBoxe
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-#### Update physical properties
-Updates mass, volume, etc.  Models with no density are reported in the log file. 
-
-You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
-
-Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
-
-#### Variables add/edit/expose
+### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
@@ -417,278 +446,93 @@ You can copy the settings on the form to other tabs.  Set the `Copy To` CheckBox
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-#### Copy overall size to variable table
-Copies the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
-
-The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
-
-![Overall Size Options](My%20Project/media/overall_size_options.png)
-
-The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
-
-Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
-
-The command reports sheet metal size in the formed state. For a flat pattern, instead of this using this command, you can use the variables from the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
-
-#### Remove face style overrides
-Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
-
-#### Update face and view styles from template
-Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. 
-
-Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
-
-![View Override Dialog](My%20Project/media/view_override_dialog.png)
-
-#### Hide constructions
-Hides all non-model elements such as reference planes, PMI dimensions, etc.
-
-#### Fit pictorial view
-Maximizes the window, sets the view orientation, and does a fit. Select the desired orientation on the **Configuration Tab -- General Page**.
-
-#### Part number does not match file name
-Checks if the file name contains the part number. The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
-
-![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)
-
-#### Missing drawing
-Assumes drawing has the same name as the model, and is in the same directory
-
-#### Broken links
-Checks to see if any assembly occurrence is pointing to a file not found on disk.
-
-#### Links outside input directory
-Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. 
-
-#### Failed relationships
-Checks if any assembly occurrences have conflicting or otherwise broken relationships.
-
-#### Underconstrained relationships
-Checks if any assembly occurrences have missing relationships.
-
-#### Check interference
-Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
-
-#### Run external program
-Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
-
-If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
-
-#### Interactive edit
+### Edit interactively
 Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. 
 
 Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. 
 
 Also, do not Close the file or do a Save As on it. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an exception. 
 
-#### Save As
-Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
+### Update model styles from template
+Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. 
 
-Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
+Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
-Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- General Page**. 
+![View Override Dialog](My%20Project/media/view_override_dialog.png)
 
-You can optionally create subdirectories using a formula similar to the Property Text Callout. For example `Material %{System.Material} Thickness %{Custom.Material Thickness}`. 
-
-A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
-
-It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
-
-### Part
-
-#### Open/Save
-Same as the Assembly command of the same name.
-
-#### Property find replace
-Same as the Assembly command of the same name.
-
-#### Update physical properties
-Same as the Assembly command of the same name.
-
-#### Variables add/edit/expose
-Same as the Assembly command of the same name.
-
-#### Copy overall size to variable table
-Same as the Assembly command of the same name.
-
-#### Update face and view styles from template
-Same as the Assembly command of the same name.
-
-#### Update material from material table
-Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab -- Templates Page**. 
-
-If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
-
-You can optionally remove any face style overrides. Set the option on the **Configuration Tab -- General Page**. 
-
-#### Hide constructions
-Same as the Assembly command of the same name.
-
-#### Fit pictorial view
-Same as the Assembly command of the same name.
-
-#### Update part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the **Configuration Tab -- General Page**.
-
-#### Broken links
-Same as the Assembly command of the same name.
-
-#### Part number does not match file name
-Same as the Assembly command of the same name.
-
-#### Missing drawing
-Same as the Assembly command of the same name.
-
-#### Failed or warned features
-Checks if any features of the model are in the Failed or Warned status.
-
-#### Suppressed or rolled back features
-Checks if any features of the model are in the Suppressed or Rolledback status.
-
-#### Underconstrained profiles
-Checks if any profiles are not fully constrained.
-
-#### Part copies out of date
-If the file has any insert part copies, checks if they are up to date.
-
-#### Material not in material table
-Checks the file's material against the material table. The material table is chosen on the **Configuration Tab -- Templates Page**. 
-
-#### Run external program
-Same as the Assembly command of the same name.
-
-#### Interactive edit
-Same as the Assembly command of the same name.
-
-#### Save As
-Same as the Assembly command of the same name.
-
-### Sheetmetal
-
-#### Open/Save
-Same as the Assembly command of the same name.
-
-#### Property find replace
-Same as the Assembly command of the same name.
-
-#### Update physical properties
-Same as the Assembly command of the same name.
-
-#### Variables add/edit/expose
-Same as the Assembly command of the same name.
-
-#### Copy overall size to variable table
-Same as the Assembly command of the same name.
-
-#### Update face and view styles from template
-Same as the Part command of the same name.
-
-#### Update material from material table
-Same as the Part command of the same name.
-
-#### Hide constructions
-Same as the Assembly command of the same name.
-
-#### Fit pictorial view
-Same as the Assembly command of the same name.
-
-#### Update part copies
-Same as the Part command of the same name.
-
-#### Update design for cost
-Updates DesignForCost and saves the document.
-
-An annoyance of this command is that it opens the DesignForCost Edgebar pane, but is not able to close it. The user must manually close the pane in an interactive Sheetmetal session. The state of the pane is system-wide, not per-document, so closing it is a one-time action. 
-
-#### Broken links
-Same as the Assembly command of the same name.
-
-#### Part number does not match file name
-Same as the Part command of the same name.
-
-#### Missing drawing
-Same as the Assembly command of the same name.
-
-#### Failed or warned features
-Same as the Part command of the same name.
-
-#### Suppressed or rolled back features
-Same as the Part command of the same name.
-
-#### Underconstrained profiles
-Same as the Part command of the same name.
-
-#### Part copies out of date
-Same as the Part command of the same name.
-
-#### Flat pattern missing or out of date
-Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
-
-#### Material not in material table
-Same as the Part command of the same name.
-
-#### Run external program
-Same as the Assembly command of the same name.
-
-#### Interactive edit
-Same as the Assembly command of the same name.
-
-#### Save As
-Same as the Assembly command of the same name, except two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. 
-
-The `DXF Flat` option saves the flat pattern of the sheet metal file. 
-
-The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use the Draft `Save As`, using a `Property Filter` if needed. 
-
-### Draft
-
-#### Open/Save
-Same as the Assembly command of the same name.
-
-#### Property find replace
-Same as the Assembly command of the same name.
-
-#### Update drawing views
-Checks drawing views one by one, and updates them if needed.
-
-#### Update styles from template
-Updates styles and background sheets from a template you specify on the **Configuration Tab -- Templates Page**. 
+### Update drawing styles from template
+Updates styles and/or background sheets from a template you specify on the **Configuration Tab -- Templates Page**. 
 
 These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated. If you need one or more of those styles updated, please ask on the Forum. 
 
-#### Update drawing border from template
-Replaces the background border with that of the Draft template specified on the **Configuration Tab -- Templates Page**.
+### Remove face style overrides
+Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
-In contrast to `UpdateStylesFromTemplate`, this command only replaces the border. It does not attempt to update styles or anything else.
+### Hide constructions
+Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
-#### Drawing view on background sheet
-Checks background sheets for the presence of drawing views.
+### Fit view
+Maximizes the window, sets the view orientation for model files, and does a fit. Select the desired orientation on the **Configuration Tab -- General Page**.
 
-#### Fit view
-Same as the Assembly command of the same name.
+### Check interference
+Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
 
-#### File name does not match model file name
-Same as the Assembly command of the same name.
+### Check links
+Checks linked files.  `Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  Only links directly contained in the file are checked.  Links to links are not.
 
-#### Broken links
-Same as the Assembly command of the same name.
+### Check relationships
+Checks if the file has any conflicting, underconstrained, or suppressed relationships.
 
-#### Drawing views out of date
-Checks if drawing views are not up to date.
+### Check flat pattern
+Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
-#### Detached dimensions or annotations
-Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing.
+### Check material not in material table
+Checks the file's material against the material table. The material table is chosen on the **Configuration Tab -- Templates Page**. 
 
-#### Parts list missing or out of date
+### Check missing drawing
+Assumes drawing has the same name as the model, and is in the same directory
+
+### Check part number does not match filename
+Checks if the file name contains the part number. The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
+
+![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)
+
+### Check part copies
+If the file has any insert part copies, checks if they are up to date.
+
+### Check drawing parts list
 Checks is there are any parts list in the drawing and if they are all up to date.
 
-#### Run external program
-Same as the Assembly command of the same name.
+### Check drawings
+Checks draft files for various problems.  The options are: 
+`Drawing views out of date`: Checks if any drawing views are not up to date. 
+`Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
+`Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 
-#### Interactive edit
-Same as the Assembly command of the same name.
+### Run external program
+Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
 
-#### Print
+If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
+
+### Save model as
+
+
+For Draft files you can optionally include a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
+
+Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
+
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
+
+### Save drawing as
+
+
+For Draft files you can optionally include a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
+
+Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
+
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
+
+### Print
 Print settings are accessed on the **Configuration Tab -- Printing Page**.
 
 ![Printer_Setup](My%20Project/media/printer_setup.png)
@@ -700,15 +544,6 @@ The dropdown should list all installed printers. You can configure up to two of 
 Enable/disable a printer using the checkbox next to its name. If you need to print only certain sizes of drawings, you can disable `Printer1` and enable `Printer2` with the desired sheet sizes set. 
 
 This command may not work with PDF printers. Try the Save As PDF command instead. 
-
-#### Save As
-Same as the Assembly command of the same name, except as follows.
-
-Optionally includes a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
-
-The option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
-
-When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
 
 
 ## CODE ORGANIZATION

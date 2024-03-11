@@ -208,4 +208,103 @@
   <data name="up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\up.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="expand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\expand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="collapse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\collapse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskActivateAndUpdateAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskActivateAndUpdateAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckDrawings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckDrawings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckFlatPattern" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckFlatPattern.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckInterference" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckInterference.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckLinks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckLinks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckMaterialNotInMaterialTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckMaterialNotInMaterialTable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckMissingDrawing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckMissingDrawing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckPartCopies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckPartCopies.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckPartNumberDoesNotMatchFilename" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckPartNumberDoesNotMatchFilename.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckRelationships" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckRelationships.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskEditInteractively" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskEditInteractively.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskEditProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskEditProperties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskEditVariables" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskEditVariables.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskFitView" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskFitView.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskHideConstructions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskHideConstructions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskOpenSave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskOpenSave.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskPrint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskPrint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskRemoveFaceStyleOverrides" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskRemoveFaceStyleOverrides.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskRunExternalProgram" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskRunExternalProgram.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskSaveAs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskSaveAs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateDesignForCost" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateDesignForCost.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateDrawingStylesFromTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateDrawingStylesFromTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateDrawingViews" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateDrawingViews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateMaterialFromMaterialTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateMaterialFromMaterialTable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateModelSizeInVariableTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateModelSizeInVariableTable.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdateModelStylesFromTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdateModelStylesFromTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdatePartCopies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdatePartCopies.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskUpdatePhysicalProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskUpdatePhysicalProperties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskCheckDrawingPartsList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskCheckDrawingPartsList.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="expand_disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\expand-disabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="unchecked_disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\unchecked_disabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

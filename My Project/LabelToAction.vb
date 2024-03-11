@@ -6,7 +6,6 @@ Imports SolidEdgePart
 
 
 
-
 ' The order on the CheckBoxLists is set by the order of creation of the L2A objects.
 
 
@@ -212,7 +211,7 @@ Public Class LabelToAction
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
-        Dim CopyOverallSizeToVariableTable As New L2A
+        Dim ModelSizeToVariableTable As New L2A
         HelpString = "Copies the model size to the variable table. "
         HelpString += "This is primarily intended for standard cross-section material "
         HelpString += "(barstock, channel, etc.), but can be used for any purpose. "
@@ -231,9 +230,9 @@ Public Class LabelToAction
         HelpString += "For a flat pattern, instead of this using this command, "
         HelpString += "you can use the variables from the flat pattern command -- "
         HelpString += "`Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. "
-        PopulateList(CopyOverallSizeToVariableTable,
-                     "Copy overall size to variable table",
-                     "CopyOverallSizeToVariableTable",
+        PopulateList(ModelSizeToVariableTable,
+                     "Model size to variable table",
+                     "ModelSizeToVariableTable",
                      HelpString,
                      RequiresOverallSizeVariables:=True)
 
@@ -296,33 +295,48 @@ Public Class LabelToAction
                      "MissingDrawing",
                      HelpString)
 
-        Dim BrokenLinks As New L2A
-        HelpString = "Checks to see if any assembly occurrence is pointing to a file not found on disk."
-        PopulateList(BrokenLinks,
-                     "Broken links",
-                     "BrokenLinks",
+        Dim CheckLinks As New L2A
+        HelpString = "Checks to see if any linked file is either not found on disk, "
+        HelpString += "or located outside any directory in the **Home Tab** file list."
+        PopulateList(CheckLinks,
+                     "Check links",
+                     "CheckLinks",
                      HelpString)
 
-        Dim LinksOutsideInputDirectory As New L2A
-        HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
-        PopulateList(LinksOutsideInputDirectory,
-                     "Links outside input directory",
-                     "LinksOutsideInputDirectory",
+        'Dim BrokenLinks As New L2A
+        'HelpString = "Checks to see if any assembly occurrence is pointing to a file not found on disk."
+        'PopulateList(BrokenLinks,
+        '             "Broken links",
+        '             "BrokenLinks",
+        '             HelpString)
+
+        'Dim LinksOutsideInputDirectory As New L2A
+        'HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
+        'PopulateList(LinksOutsideInputDirectory,
+        '             "Links outside input directory",
+        '             "LinksOutsideInputDirectory",
+        '             HelpString)
+
+        Dim CheckRelationships As New L2A
+        HelpString = "Checks for failed, underconstrained, or suppressed relationships."
+        PopulateList(CheckRelationships,
+                     "Check relationships",
+                     "CheckRelationships",
                      HelpString)
 
-        Dim FailedRelationships As New L2A
-        HelpString = "Checks if any assembly occurrences have conflicting or otherwise broken relationships."
-        PopulateList(FailedRelationships,
-                     "Failed relationships",
-                     "FailedRelationships",
-                     HelpString)
+        'Dim FailedRelationships As New L2A
+        'HelpString = "Checks if any assembly occurrences have conflicting or otherwise broken relationships."
+        'PopulateList(FailedRelationships,
+        '             "Failed relationships",
+        '             "FailedRelationships",
+        '             HelpString)
 
-        Dim UnderconstrainedRelationships As New L2A
-        HelpString = "Checks if any assembly occurrences have missing relationships."
-        PopulateList(UnderconstrainedRelationships,
-                     "Underconstrained relationships",
-                     "UnderconstrainedRelationships",
-                     HelpString)
+        'Dim UnderconstrainedRelationships As New L2A
+        'HelpString = "Checks if any assembly occurrences have missing relationships."
+        'PopulateList(UnderconstrainedRelationships,
+        '             "Underconstrained relationships",
+        '             "UnderconstrainedRelationships",
+        '             HelpString)
 
         Dim CheckInterference As New L2A
         HelpString = "Runs an interference check.  All parts are checked against all others. "
@@ -430,12 +444,11 @@ Public Class LabelToAction
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
-        ' 
-        Dim CopyOverallSizeToVariableTable As New L2A
+        Dim ModelSizeToVariableTable As New L2A
         HelpString = "Same as the Assembly command of the same name."
-        PopulateList(CopyOverallSizeToVariableTable,
-                     "Copy overall size to variable table",
-                     "CopyOverallSizeToVariableTable",
+        PopulateList(ModelSizeToVariableTable,
+                     "Model size to variable table",
+                     "ModelSizeToVariableTable",
                      HelpString,
                      RequiresOverallSizeVariables:=True)
 
@@ -490,12 +503,19 @@ Public Class LabelToAction
                      HelpString,
                      RequiresSave:=True)
 
-        Dim BrokenLinks As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(BrokenLinks,
-                     "Broken links",
-                     "BrokenLinks",
-                     HelpString)
+        'Dim BrokenLinks As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(BrokenLinks,
+        '             "Broken links",
+        '             "BrokenLinks",
+        '             HelpString)
+
+        'Dim LinksOutsideInputDirectory As New L2A
+        'HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
+        'PopulateList(LinksOutsideInputDirectory,
+        '             "Links outside input directory",
+        '             "LinksOutsideInputDirectory",
+        '             HelpString)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "Same as the Assembly command of the same name."
@@ -512,26 +532,40 @@ Public Class LabelToAction
                      "MissingDrawing",
                      HelpString)
 
-        Dim FailedOrWarnedFeatures As New L2A
-        HelpString = "Checks if any features of the model are in the Failed or Warned status."
-        PopulateList(FailedOrWarnedFeatures,
-                     "Failed or warned features",
-                     "FailedOrWarnedFeatures",
+        Dim CheckLinks As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(CheckLinks,
+                     "Check links",
+                     "CheckLinks",
                      HelpString)
 
-        Dim SuppressedOrRolledBackFeatures As New L2A
-        HelpString = "Checks if any features of the model are in the Suppressed or Rolledback status."
-        PopulateList(SuppressedOrRolledBackFeatures,
-                     "Suppressed or rolled back features",
-                     "SuppressedOrRolledBackFeatures",
+        Dim CheckRelationships As New L2A
+        HelpString = "Checks for failed, underconstrained, or suppressed relationships."
+        PopulateList(CheckRelationships,
+                     "Check relationships",
+                     "CheckRelationships",
                      HelpString)
 
-        Dim UnderconstrainedProfiles As New L2A
-        HelpString = "Checks if any profiles are not fully constrained."
-        PopulateList(UnderconstrainedProfiles,
-                     "Underconstrained profiles",
-                     "UnderconstrainedProfiles",
-                     HelpString)
+        'Dim FailedOrWarnedFeatures As New L2A
+        'HelpString = "Checks if any features of the model are in the Failed or Warned status."
+        'PopulateList(FailedOrWarnedFeatures,
+        '             "Failed or warned features",
+        '             "FailedOrWarnedFeatures",
+        '             HelpString)
+
+        'Dim SuppressedOrRolledBackFeatures As New L2A
+        'HelpString = "Checks if any features of the model are in the Suppressed or Rolledback status."
+        'PopulateList(SuppressedOrRolledBackFeatures,
+        '             "Suppressed or rolled back features",
+        '             "SuppressedOrRolledBackFeatures",
+        '             HelpString)
+
+        'Dim UnderconstrainedProfiles As New L2A
+        'HelpString = "Checks if any profiles are not fully constrained."
+        'PopulateList(UnderconstrainedProfiles,
+        '             "Underconstrained profiles",
+        '             "UnderconstrainedProfiles",
+        '             HelpString)
 
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = "If the file has any insert part copies, checks if they are up to date."
@@ -611,11 +645,11 @@ Public Class LabelToAction
                      HelpString,
                      RequiresVariablesToEdit:=True)
 
-        Dim CopyOverallSizeToVariableTable As New L2A
+        Dim ModelSizeToVariableTable As New L2A
         HelpString = "Same as the Assembly command of the same name."
-        PopulateList(CopyOverallSizeToVariableTable,
-                     "Copy overall size to variable table",
-                     "CopyOverallSizeToVariableTable",
+        PopulateList(ModelSizeToVariableTable,
+                     "Model size to variable table",
+                     "ModelSizeToVariableTable",
                      HelpString,
                      RequiresOverallSizeVariables:=True)
 
@@ -674,12 +708,19 @@ Public Class LabelToAction
                      HelpString,
                      RequiresSave:=True)
 
-        Dim BrokenLinks As New L2A
-        HelpString = "Same as the Assembly command of the same name."
-        PopulateList(BrokenLinks,
-                     "Broken links",
-                     "BrokenLinks",
-                     HelpString)
+        'Dim BrokenLinks As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(BrokenLinks,
+        '             "Broken links",
+        '             "BrokenLinks",
+        '             HelpString)
+
+        'Dim LinksOutsideInputDirectory As New L2A
+        'HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
+        'PopulateList(LinksOutsideInputDirectory,
+        '             "Links outside input directory",
+        '             "LinksOutsideInputDirectory",
+        '             HelpString)
 
         Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "Same as the Part command of the same name."
@@ -696,26 +737,40 @@ Public Class LabelToAction
                      "MissingDrawing",
                      HelpString)
 
-        Dim FailedOrWarnedFeatures As New L2A
-        HelpString = "Same as the Part command of the same name."
-        PopulateList(FailedOrWarnedFeatures,
-                     "Failed or warned features",
-                     "FailedOrWarnedFeatures",
+        Dim CheckLinks As New L2A
+        HelpString = "Same as the Assembly command of the same name."
+        PopulateList(CheckLinks,
+                     "Check links",
+                     "CheckLinks",
                      HelpString)
 
-        Dim SuppressedOrRolledBackFeatures As New L2A
-        HelpString = "Same as the Part command of the same name."
-        PopulateList(SuppressedOrRolledBackFeatures,
-                     "Suppressed or rolled back features",
-                     "SuppressedOrRolledBackFeatures",
+        Dim CheckRelationships As New L2A
+        HelpString = "Checks for failed, underconstrained, or suppressed relationships."
+        PopulateList(CheckRelationships,
+                     "Check relationships",
+                     "CheckRelationships",
                      HelpString)
 
-        Dim UnderconstrainedProfiles As New L2A
-        HelpString = "Same as the Part command of the same name."
-        PopulateList(UnderconstrainedProfiles,
-                     "Underconstrained profiles",
-                     "UnderconstrainedProfiles",
-                     HelpString)
+        'Dim FailedOrWarnedFeatures As New L2A
+        'HelpString = "Same as the Part command of the same name."
+        'PopulateList(FailedOrWarnedFeatures,
+        '             "Failed or warned features",
+        '             "FailedOrWarnedFeatures",
+        '             HelpString)
+
+        'Dim SuppressedOrRolledBackFeatures As New L2A
+        'HelpString = "Same as the Part command of the same name."
+        'PopulateList(SuppressedOrRolledBackFeatures,
+        '             "Suppressed or rolled back features",
+        '             "SuppressedOrRolledBackFeatures",
+        '             HelpString)
+
+        'Dim UnderconstrainedProfiles As New L2A
+        'HelpString = "Same as the Part command of the same name."
+        'PopulateList(UnderconstrainedProfiles,
+        '             "Underconstrained profiles",
+        '             "UnderconstrainedProfiles",
+        '             HelpString)
 
         Dim InsertPartCopiesOutOfDate As New L2A
         HelpString = "Same as the Part command of the same name."
@@ -842,19 +897,33 @@ Public Class LabelToAction
                      RequiresSave:=True,
                      RequiresForegroundProcessing:=True)
 
-        Dim FileNameDoesNotMatchModelFilename As New L2A
+        Dim PartNumberDoesNotMatchFilename As New L2A
         HelpString = "Same as the Assembly command of the same name."
-        PopulateList(FileNameDoesNotMatchModelFilename,
-                     "File name does not match model file name",
-                     "FileNameDoesNotMatchModelFilename",
+        PopulateList(PartNumberDoesNotMatchFilename,
+                     "Part number does not match file name",
+                     "PartNumberDoesNotMatchFilename",
                      HelpString)
 
-        Dim BrokenLinks As New L2A
+        Dim CheckLinks As New L2A
         HelpString = "Same as the Assembly command of the same name."
-        PopulateList(BrokenLinks,
-                     "Broken links",
-                     "BrokenLinks",
+        PopulateList(CheckLinks,
+                     "Check links",
+                     "CheckLinks",
                      HelpString)
+
+        'Dim BrokenLinks As New L2A
+        'HelpString = "Same as the Assembly command of the same name."
+        'PopulateList(BrokenLinks,
+        '             "Broken links",
+        '             "BrokenLinks",
+        '             HelpString)
+
+        'Dim LinksOutsideInputDirectory As New L2A
+        'HelpString = "Checks to see if any assembly occurrence resides outside the top level directories specified on the **Home Tab**. "
+        'PopulateList(LinksOutsideInputDirectory,
+        '             "Links outside input directory",
+        '             "LinksOutsideInputDirectory",
+        '             HelpString)
 
         Dim DrawingViewsOutOfDate As New L2A
         HelpString = "Checks if drawing views are not up to date."

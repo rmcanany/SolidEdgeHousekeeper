@@ -27,15 +27,9 @@ The settings from one tab can be copied to others, using the `Copy To` CheckBoxe
 
 Added the ability to copy the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. The variables are exposed so they can be used in a callout, parts list, or the like. 
 
-The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
-
 ![Overall Size Options](My%20Project/media/overall_size_options.png)
 
-The size can be reported as `XYZ` or `MinMidMax`, or both. `MinMidMax` has the advantage of being independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
-
-Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
-
-The command reports sheet metal size in the formed state. For a flat pattern, instead of using this command, you  can use the variables from the flat pattern command --  `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `MaterialThickness` ( or `Sheet Metal Gage` if set on the Material Table Gage tab).
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#copy-overall-size-to-variable-table) for details.
 
 ### Process files with any Document Status
 
@@ -89,17 +83,13 @@ Add the ability to change multiple properties at a time. A dialog similar to the
 
 ![Property Input Editor](My%20Project/media/property_input_editor.png)
 
-Added an option on the **Configuration Tab -- General Page** to create a property if it doesn't exist in the file. (Thank you **@Francesco Arfilli**!)
-
-Added an option, when the property is `System.Material` to automatically update the material's density, face style, etc. from the Material Table.  Set the option on the **Configuration Tab -- General Page**.
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#property-find-replace) for details.
 
 ### Update Physical Properties
 
 Added the ability to update `mass`, `volume`, etc. for model files. Models with `density = 0` are reported in the log file. 
 
-Provided optional control of the display of the center of mass symbol. It can either be shown, hidden, or left unchanged.  The option is set on the **Configuration Tab -- General Page**. Note, controlling the symbol display only works for assembly files at this time. 
-
-Occasionally in testing, the physical properties were updated correctly, but the results were not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I found was to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. "
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#update-physical-properties) for details.
 
 ### Check interference
 
@@ -117,7 +107,7 @@ Added an option to not check for properties of the models contained in Draft fil
 
 Since Draft files often do not have properties of their own, normally this option should be enabled. Searching for Document Status is another story.  For example, with the option set, an `In Work` drawing of a `Released` part would confusingly show up in a search for `Released` files.
 
-Added a section in the README on searching for Document Status.  (Hint, you have to use a number, not a name.) See the [<ins>**Property Filter**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic.
+See the [<ins>**Property Filter**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#1-property-filter) section, Document Status topic for details.
 
 Fixed an issue where properties of Draft files themselves were sometimes not searched.
 
@@ -127,25 +117,11 @@ Fixed an issue where changing the Property Filter did not always set the File Li
 
 (Thank you **@Pedro0996**!)
 
-A Housekeeper External Program that gets the total quantity of each part and subassembly in a given assembly and adds that information to the part (or subassembly) file. In addition to the quantity, the program also records the assembly name from which the quantity was derived. Both are added as custom properties, making them available, for example, in a Callout in Draft. 
+A Housekeeper External Program that gets the total quantity of each part and subassembly in a given assembly and adds that information to the part (or subassembly) file. 
 
-The program checks the `IncludeInBOM` flag and does not process files set to `NO`.  It also checks `User-Definied Quantity` and proceeds accordingly.
+In addition to the quantity, the program also records the assembly name from which the quantity was derived. Both are added as custom properties, making them available, for example, in a Callout in Draft. 
 
-You can specify the custom property names. They are stored in `program_settings.txt` in the program's root directory. 
-
-The settings file has two other variables, `QuantityMultiplier` and `IncludeWeldmentParts`.
-
-`QuantityMultiplier`, as you might guess, multiplies the part (or subassembly) quantity by this value. It is for the case when you need to make multiples of the given assembly.
-
-`IncludeWeldmentParts` is a flag for subassemblies marked `Weldment` in Solid Edge. Normally in reports, such assemblies are counted, but not the parts they contain. This is your chance to change that. 
-
-The program can be run from Solid Edge Housekeeper or stand-alone.  In stand-alone mode, the assembly file must be open in Solid Edge before starting the command.  
-
-Running from Housekeeper, note that you should, in most cases, only process the top-level assembly. If you run this external program on multiple assemblies, the quantity and source information will be overwritten on parts they have in common.
-
-Note the quantity and source assembly name are non-associative copies. If the source assembly changes, this command must be re-run to update the values.
-
-Fixed an issue where the program was closing the assembly, causing a lost reference when called from Housekeeper.
+Please visit the [<ins>**Readme**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/QtyFromAssy#readme) for details.
 
 ### Draft -- Convert Drawing Views to 2D
 
@@ -153,13 +129,7 @@ A Housekeeper External Program sample illustrating the use of PowerShell (Thank 
 
 The program converts drawing views to stand-alone 2D views, disconnected from the 3D model. This is irreversible, so you know, think about it. 
 
-In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
-
-![Title Block](My%20Project/media/title_block.png)
-
-Luckily, Solid Edge has the ability to take care of that. That's in the program, too, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, you'll have to add code to deal with those. 
-
-Speaking of code, the sample uses PowerShell, but just barely. It is really only a thin wrapper on a Visual Basic script. If you have a better example, I would be glad to host it on GitHub. Naturally I would credit you as the contributor. That's not worth any money, but it does up your 'cred' on GitHub.
+Please visit the [<ins>**Readme**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ConvertDraftTo2D#readme) for details.
 
 ### Update Material from Material Table
 
