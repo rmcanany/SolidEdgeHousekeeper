@@ -55,6 +55,10 @@ Public Class Task_EventHandler
                     Next
 
                     'Form1.SuspendLayout()
+                    'Form1.TabPageTasks.SuspendLayout()
+                    'Form1.TabPageTasks.Hide() '####### It works good for collapsing all controls; doensn't speed up for expanding; perhaps
+
+                    Form1.Cursor = Cursors.WaitCursor
 
                     For Each Task In Form1.TaskList
                         If Task.HasOptions Then
@@ -79,6 +83,10 @@ Public Class Task_EventHandler
                         End If
                     Next
 
+                    Form1.Cursor = Cursors.Default
+
+                    'Form1.TabPageTasks.ResumeLayout()
+                    'Form1.TabPageTasks.Show()
                     'Form1.ResumeLayout()
 
                 Case Task.BaseControlNames.SelectTask.ToString
