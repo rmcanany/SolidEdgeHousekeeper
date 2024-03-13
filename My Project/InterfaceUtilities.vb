@@ -404,7 +404,9 @@ Public Class InterfaceUtilities
         CheckBox.Appearance = Appearance.Button
         CheckBox.FlatStyle = FlatStyle.Flat
         CheckBox.FlatAppearance.BorderSize = 0
-        CheckBox.FlatAppearance.CheckedBackColor = SystemColors.Control
+        CheckBox.FlatAppearance.CheckedBackColor = Color.Transparent
+        CheckBox.FlatAppearance.MouseOverBackColor = Color.Transparent 'SystemColors.Control
+        CheckBox.FlatAppearance.MouseDownBackColor = Color.Transparent
 
         CheckBox.Image = Image
 
