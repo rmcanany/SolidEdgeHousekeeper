@@ -72,14 +72,6 @@ Partial Class Form1
         Me.CheckBoxTLAReportUnrelatedFiles = New System.Windows.Forms.CheckBox()
         Me.RadioButtonTLATopDown = New System.Windows.Forms.RadioButton()
         Me.RadioButtonTLABottomUp = New System.Windows.Forms.RadioButton()
-        Me.TabPageSorting = New System.Windows.Forms.TabPage()
-        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
-        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
-        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
-        Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
-        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageStatus = New System.Windows.Forms.TabPage()
         Me.LabelStatusAfter = New System.Windows.Forms.Label()
         Me.LabelStatusBefore = New System.Windows.Forms.Label()
@@ -140,7 +132,17 @@ Partial Class Form1
         Me.RadioButtonReadOnlyChange = New System.Windows.Forms.RadioButton()
         Me.RadioButtonReadOnlyRevert = New System.Windows.Forms.RadioButton()
         Me.CheckBoxProcessReadOnly = New System.Windows.Forms.CheckBox()
+        Me.TabPageSorting = New System.Windows.Forms.TabPage()
+        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
+        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
+        Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
+        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.CheckBoxPropertyFilterFollowDraftLinks = New System.Windows.Forms.CheckBox()
@@ -169,8 +171,7 @@ Partial Class Form1
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
+        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -178,7 +179,6 @@ Partial Class Form1
         Me.TabPageConfiguration.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPageTopLevelAssy.SuspendLayout()
-        Me.TabPageSorting.SuspendLayout()
         Me.TabPageStatus.SuspendLayout()
         Me.GroupBoxStatusInR.SuspendLayout()
         Me.GroupBoxStatusInO.SuspendLayout()
@@ -186,6 +186,7 @@ Partial Class Form1
         Me.GroupBoxStatusInIR.SuspendLayout()
         Me.GroupBoxStatusInB.SuspendLayout()
         Me.GroupBoxStatusInA.SuspendLayout()
+        Me.TabPageSorting.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.TabPageHelp.SuspendLayout()
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -711,102 +712,6 @@ Partial Class Form1
         Me.RadioButtonTLABottomUp.TabStop = True
         Me.RadioButtonTLABottomUp.Text = "Bottom Up Search -- Best for general purpose directories"
         Me.RadioButtonTLABottomUp.UseVisualStyleBackColor = True
-        '
-        'TabPageSorting
-        '
-        Me.TabPageSorting.Controls.Add(Me.TextBoxRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.LabelRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortRandomSample)
-        Me.TabPageSorting.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortDependency)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
-        Me.TabPageSorting.ImageKey = "list"
-        Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Name = "TabPageSorting"
-        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(532, 691)
-        Me.TabPageSorting.TabIndex = 4
-        Me.TabPageSorting.Text = "Sorting"
-        Me.TabPageSorting.UseVisualStyleBackColor = True
-        '
-        'TextBoxRandomSampleFraction
-        '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(261, 127)
-        Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
-        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(116, 23)
-        Me.TextBoxRandomSampleFraction.TabIndex = 55
-        Me.TextBoxRandomSampleFraction.Text = "0.1"
-        '
-        'LabelRandomSampleFraction
-        '
-        Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(159, 129)
-        Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
-        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
-        Me.LabelRandomSampleFraction.TabIndex = 54
-        Me.LabelRandomSampleFraction.Text = "Sample fraction"
-        '
-        'RadioButtonListSortRandomSample
-        '
-        Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(11, 126)
-        Me.RadioButtonListSortRandomSample.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
-        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(109, 20)
-        Me.RadioButtonListSortRandomSample.TabIndex = 53
-        Me.RadioButtonListSortRandomSample.TabStop = True
-        Me.RadioButtonListSortRandomSample.Text = "Random sample"
-        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
-        '
-        'CheckBoxListIncludeNoDependencies
-        '
-        Me.CheckBoxListIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(43, 99)
-        Me.CheckBoxListIncludeNoDependencies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
-        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(350, 20)
-        Me.CheckBoxListIncludeNoDependencies.TabIndex = 52
-        Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
-        Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
-        '
-        'RadioButtonListSortDependency
-        '
-        Me.RadioButtonListSortDependency.AutoSize = True
-        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(11, 69)
-        Me.RadioButtonListSortDependency.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
-        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(172, 20)
-        Me.RadioButtonListSortDependency.TabIndex = 51
-        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
-        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
-        '
-        'RadioButtonListSortAlphabetical
-        '
-        Me.RadioButtonListSortAlphabetical.AutoSize = True
-        Me.RadioButtonListSortAlphabetical.Checked = True
-        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 38)
-        Me.RadioButtonListSortAlphabetical.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
-        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(171, 20)
-        Me.RadioButtonListSortAlphabetical.TabIndex = 50
-        Me.RadioButtonListSortAlphabetical.TabStop = True
-        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
-        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
-        '
-        'RadioButtonListSortNone
-        '
-        Me.RadioButtonListSortNone.AutoSize = True
-        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(10, 10)
-        Me.RadioButtonListSortNone.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
-        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(73, 20)
-        Me.RadioButtonListSortNone.TabIndex = 49
-        Me.RadioButtonListSortNone.Text = "Unsorted"
-        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
         '
         'TabPageStatus
         '
@@ -1517,6 +1422,102 @@ Partial Class Form1
         Me.CheckBoxProcessReadOnly.Text = "Process files as Available regardless of document Status"
         Me.CheckBoxProcessReadOnly.UseVisualStyleBackColor = True
         '
+        'TabPageSorting
+        '
+        Me.TabPageSorting.Controls.Add(Me.TextBoxRandomSampleFraction)
+        Me.TabPageSorting.Controls.Add(Me.LabelRandomSampleFraction)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortRandomSample)
+        Me.TabPageSorting.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortDependency)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
+        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
+        Me.TabPageSorting.ImageKey = "list"
+        Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageSorting.Name = "TabPageSorting"
+        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageSorting.Size = New System.Drawing.Size(532, 691)
+        Me.TabPageSorting.TabIndex = 4
+        Me.TabPageSorting.Text = "Sorting"
+        Me.TabPageSorting.UseVisualStyleBackColor = True
+        '
+        'TextBoxRandomSampleFraction
+        '
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(261, 127)
+        Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
+        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(116, 23)
+        Me.TextBoxRandomSampleFraction.TabIndex = 55
+        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        '
+        'LabelRandomSampleFraction
+        '
+        Me.LabelRandomSampleFraction.AutoSize = True
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(159, 129)
+        Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
+        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
+        Me.LabelRandomSampleFraction.TabIndex = 54
+        Me.LabelRandomSampleFraction.Text = "Sample fraction"
+        '
+        'RadioButtonListSortRandomSample
+        '
+        Me.RadioButtonListSortRandomSample.AutoSize = True
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(11, 126)
+        Me.RadioButtonListSortRandomSample.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
+        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(109, 20)
+        Me.RadioButtonListSortRandomSample.TabIndex = 53
+        Me.RadioButtonListSortRandomSample.TabStop = True
+        Me.RadioButtonListSortRandomSample.Text = "Random sample"
+        Me.RadioButtonListSortRandomSample.UseVisualStyleBackColor = True
+        '
+        'CheckBoxListIncludeNoDependencies
+        '
+        Me.CheckBoxListIncludeNoDependencies.AutoSize = True
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(43, 99)
+        Me.CheckBoxListIncludeNoDependencies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
+        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(350, 20)
+        Me.CheckBoxListIncludeNoDependencies.TabIndex = 52
+        Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
+        Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortDependency
+        '
+        Me.RadioButtonListSortDependency.AutoSize = True
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(11, 69)
+        Me.RadioButtonListSortDependency.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
+        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(172, 20)
+        Me.RadioButtonListSortDependency.TabIndex = 51
+        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
+        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortAlphabetical
+        '
+        Me.RadioButtonListSortAlphabetical.AutoSize = True
+        Me.RadioButtonListSortAlphabetical.Checked = True
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 38)
+        Me.RadioButtonListSortAlphabetical.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
+        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(171, 20)
+        Me.RadioButtonListSortAlphabetical.TabIndex = 50
+        Me.RadioButtonListSortAlphabetical.TabStop = True
+        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
+        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortNone
+        '
+        Me.RadioButtonListSortNone.AutoSize = True
+        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(10, 10)
+        Me.RadioButtonListSortNone.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
+        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(73, 20)
+        Me.RadioButtonListSortNone.TabIndex = 49
+        Me.RadioButtonListSortNone.Text = "Unsorted"
+        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
+        '
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
@@ -1536,6 +1537,30 @@ Partial Class Form1
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
+        '
+        'CheckBoxNoUpdateMRU
+        '
+        Me.CheckBoxNoUpdateMRU.AutoSize = True
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(11, 46)
+        Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(311, 20)
+        Me.CheckBoxNoUpdateMRU.TabIndex = 71
+        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
+        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
+        '
+        'CheckBoxWarnSave
+        '
+        Me.CheckBoxWarnSave.AutoSize = True
+        Me.CheckBoxWarnSave.Checked = True
+        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(11, 15)
+        Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(186, 20)
+        Me.CheckBoxWarnSave.TabIndex = 70
+        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
+        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
         'LabelFontSize
         '
@@ -1796,30 +1821,6 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxNoUpdateMRU
-        '
-        Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(11, 46)
-        Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
-        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(311, 20)
-        Me.CheckBoxNoUpdateMRU.TabIndex = 71
-        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
-        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
-        '
-        'CheckBoxWarnSave
-        '
-        Me.CheckBoxWarnSave.AutoSize = True
-        Me.CheckBoxWarnSave.Checked = True
-        Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(11, 15)
-        Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(186, 20)
-        Me.CheckBoxWarnSave.TabIndex = 70
-        Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
-        Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
@@ -1846,8 +1847,6 @@ Partial Class Form1
         Me.TabControl2.ResumeLayout(False)
         Me.TabPageTopLevelAssy.ResumeLayout(False)
         Me.TabPageTopLevelAssy.PerformLayout()
-        Me.TabPageSorting.ResumeLayout(False)
-        Me.TabPageSorting.PerformLayout()
         Me.TabPageStatus.ResumeLayout(False)
         Me.TabPageStatus.PerformLayout()
         Me.GroupBoxStatusInR.ResumeLayout(False)
@@ -1862,6 +1861,8 @@ Partial Class Form1
         Me.GroupBoxStatusInB.PerformLayout()
         Me.GroupBoxStatusInA.ResumeLayout(False)
         Me.GroupBoxStatusInA.PerformLayout()
+        Me.TabPageSorting.ResumeLayout(False)
+        Me.TabPageSorting.PerformLayout()
         Me.TabPageGeneral.ResumeLayout(False)
         Me.TabPageGeneral.PerformLayout()
         Me.TabPageHelp.ResumeLayout(False)
@@ -2022,4 +2023,5 @@ Partial Class Form1
     Friend WithEvents TabPageTasks As TabPage
     Friend WithEvents CheckBoxNoUpdateMRU As CheckBox
     Friend WithEvents CheckBoxWarnSave As CheckBox
+    Friend WithEvents ColorDialog1 As ColorDialog
 End Class

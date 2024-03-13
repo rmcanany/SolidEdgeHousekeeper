@@ -319,7 +319,6 @@ Public Class Form1
     Private Sub ProcessFiles(ByVal Filetype As String)
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
-        Dim RestartAfter As Integer
         Dim msg As String
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
@@ -365,13 +364,7 @@ Public Class Form1
 
             FilesToProcessCompleted += 1
 
-            If FilesToProcessCompleted Mod RestartAfter = 0 Then
-                SEStop()
-                SEStart()
-            End If
-
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            'msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
             msg += System.IO.Path.GetFileName(FileToProcess)
             TextBoxStatus.Text = msg
 
@@ -627,7 +620,7 @@ Public Class Form1
 
         PopulateCheckedListBoxes()
         LoadDefaults()
-        ' LoadPrinterSettings()
+
         ReconcileFormChanges()
         BuildReadmeFile()
 
