@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.IO
 Imports SolidEdgeCommunity
 Imports SolidEdgePart
 
@@ -459,8 +460,48 @@ Public Class SheetmetalTasks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+    
+    Public Function FileExtTypeMismatch(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        ErrorMessage = InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            Dictionary(Of String, String),
+            SolidEdgeFramework.Application,
+            Dictionary(Of Integer, List(Of String)))(
+                AddressOf FileExtTypeMismatchInternal,
+                CType(SEDoc, SolidEdgeFramework.SolidEdgeDocument),
+                Configuration,
+                SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function FileExtTypeMismatchInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim docType = SEDoc.Type
+        if docType <> SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
+            ExitStatus = 1
+            ErrorMessageList.Add("Part type does not match file extension: " + docType.ToString())
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
     Public Function MaterialNotInMaterialTable(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,

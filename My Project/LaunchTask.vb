@@ -134,6 +134,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.MaterialNotInMaterialTable(SEDoc, Configuration, SEApp)
                 Case "PartNumberDoesNotMatchFilename"
                     ErrorMessage = task.Proxy.PartNumberDoesNotMatchFilename(SEDoc, Configuration, SEApp)
+                Case "FileExtTypeMismatch"
+                    ErrorMessage = task.Proxy.FileExtTypeMismatch(SEDoc, Configuration, SEApp)
                 Case "UpdateInsertPartCopies"
                     ErrorMessage = task.Proxy.UpdateInsertPartCopies(SEDoc, Configuration, SEApp)
                 Case "UpdateMaterialFromMaterialTable"
@@ -201,6 +203,8 @@ Public Class LaunchTask
                     ErrorMessage = task.Proxy.UnderconstrainedProfiles(SEDoc, Configuration, SEApp)
                 Case "FlatPatternMissingOrOutOfDate"
                     ErrorMessage = task.Proxy.FlatPatternMissingOrOutOfDate(SEDoc, Configuration, SEApp)
+                Case "FileExtTypeMismatch"
+                    ErrorMessage = task.Proxy.FileExtTypeMismatch(SEDoc, Configuration, SEApp)
                 Case "InsertPartCopiesOutOfDate"
                     ErrorMessage = task.Proxy.InsertPartCopiesOutOfDate(SEDoc, Configuration, SEApp)
                 Case "BrokenLinks"

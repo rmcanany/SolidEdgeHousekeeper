@@ -504,6 +504,13 @@ Public Class LabelToAction
                      "PartNumberDoesNotMatchFilename",
                      HelpString,
                      RequiresPartNumberFields:=True)
+        
+        Dim FileExtTypeMismatch As New L2A
+        HelpString = "Checks for mismatch between document type and file extension. "
+        PopulateList(FileExtTypeMismatch,
+                     "File extension type mismatch",
+                     "FileExtTypeMismatch",
+                     HelpString)
 
         Dim MissingDrawing As New L2A
         HelpString = "Same as the Assembly command of the same name."
@@ -688,6 +695,13 @@ Public Class LabelToAction
                      "PartNumberDoesNotMatchFilename",
                      HelpString,
                      RequiresPartNumberFields:=True)
+        
+        Dim FileExtTypeMismatch As New L2A
+        HelpString = "Checks for mismatch between document type and file extension. "
+        PopulateList(FileExtTypeMismatch,
+                     "File extension type mismatch",
+                     "FileExtTypeMismatch",
+                     HelpString)
 
         Dim MissingDrawing As New L2A
         HelpString = "Same as the Assembly command of the same name."
