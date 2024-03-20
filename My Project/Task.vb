@@ -36,6 +36,15 @@ Public MustInherit Class Task
     Shared Property BaseControlsDict As New Dictionary(Of String, Control)
     Public Property ManuallySelectFileTypes As Boolean
     Public Property Task_EventHandler As Task_EventHandler
+    Public Property ColorHue As String
+    Public Property ColorSaturation As Double
+    Public Property ColorBrightness As Double
+
+    Public Property AssemblyTemplate As String
+    Public Property PartTemplate As String
+    Public Property SheetmetalTemplate As String
+    Public Property DraftTemplate As String
+    Public Property MaterialTable As String
 
 
 

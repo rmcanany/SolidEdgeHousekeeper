@@ -218,17 +218,17 @@ Public Class Task_EventHandler
                     System.Diagnostics.Process.Start(tmpHelpURL)
 
                 Case Task.BaseControlNames.EditTaskList.ToString
-                    'Dim EditTaskList As New FormEditTaskList
-                    'EditTaskList.ManuallySelectFileTypes = Form1.TaskList(0).ManuallySelectFileTypes
-                    'EditTaskList.ShowDialog()
+                    Dim EditTaskList As New FormEditTaskList
+                    EditTaskList.ManuallySelectFileTypes = Form1.TaskList(0).ManuallySelectFileTypes
+                    EditTaskList.ShowDialog()
 
-                    'If EditTaskList.DialogResult = DialogResult.OK Then
-                    '    For Each tmpTask As Task In Form1.TaskList
-                    '        tmpTask.ManuallySelectFileTypes = EditTaskList.ManuallySelectFileTypes
-                    '    Next
-                    'End If
+                    If EditTaskList.DialogResult = DialogResult.OK Then
+                        For Each tmpTask As Task In Form1.TaskList
+                            tmpTask.ManuallySelectFileTypes = EditTaskList.ManuallySelectFileTypes
+                        Next
+                    End If
 
-                    MsgBox("Not implemented", vbOKOnly)
+                    'MsgBox("Not implemented", vbOKOnly)
 
                 Case Else
                     MsgBox(String.Format("{0} No handler for Button '{1}'", "Task_EventHandler", Button.Name))

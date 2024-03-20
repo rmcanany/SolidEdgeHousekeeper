@@ -140,7 +140,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileListUtilities.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -150,6 +149,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="My Project\FeatureDoctor.vb" />
+    <Compile Include="My Project\FileListUtilities.vb" />
     <Compile Include="My Project\FilenameCharmapDoctor.vb" />
     <Compile Include="My Project\Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
@@ -289,6 +289,7 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\Form1.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>

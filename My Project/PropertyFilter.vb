@@ -266,23 +266,6 @@ Public Class PropertyFilter
 
     End Function
 
-    'Private Function IsNumber(Value As String) As Boolean
-    '    Dim tf As Boolean = True
-    '    Dim result As Double
-
-    '    Dim Units As New List(Of String)
-    '    Units.Add("in")
-    '    Units.Add("mm")
-
-    '    Try
-    '        result = CDbl(Value)
-    '    Catch ex As Exception
-    '        tf = False
-    '    End Try
-
-    '    Return tf
-    'End Function
-
     Shared Function SearchProperties(PropertySets As DesignManager.PropertySets,
                                       PropertySet As String,
                                       PropertyName As String) As String
