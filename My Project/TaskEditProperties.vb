@@ -208,6 +208,7 @@ Public Class TaskEditProperties
             End If
 
             If Proceed Then
+
                 Try
                     If FindSearchType = "PT" Then
                         Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
@@ -227,6 +228,21 @@ Public Class TaskEditProperties
                     Proceed = False
                     ExitStatus = 1
                     s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+
+                Try
+                    If ReplaceString = "%{DeleteProperty}" Then
+                        Prop.Delete()
+                    End If
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to delete property value '{0}'.  This command only works on custom properties.", PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 

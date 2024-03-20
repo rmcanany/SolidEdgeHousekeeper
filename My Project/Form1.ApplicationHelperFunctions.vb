@@ -12,7 +12,18 @@ Partial Class Form1
         Dim RunInBackground As Boolean = CheckBoxBackgroundProcessing.Checked
 
         Try
-            SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+
+            If CheckBoxUseCurrentSession.Checked Then
+                Try
+                    SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+                Catch ex As Exception
+                    SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+                End Try
+            Else
+                SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            End If
+
+
             ' Turn off popups.
             SEApp.DisplayAlerts = False
 
@@ -48,22 +59,28 @@ Partial Class Form1
     End Sub
 
     Private Sub SEStop()
-        TextBoxStatus.Text = "Closing Solid Edge..."
-        If (Not (SEApp Is Nothing)) Then
-            Try
-                SEApp.Quit()
-            Catch ex As Exception
-                SEKillProcess("edge")
-            End Try
-        End If
-        SEGarbageCollect(SEApp)
-        System.Threading.Thread.Sleep(100)
 
-        If Not SEApp Is Nothing Then
-            SEApp = Nothing
+        If Not CheckBoxUseCurrentSession.Checked Then
+
+            TextBoxStatus.Text = "Closing Solid Edge..."
+            If (Not (SEApp Is Nothing)) Then
+                Try
+                    SEApp.Quit()
+                Catch ex As Exception
+                    SEKillProcess("edge")
+                End Try
+            End If
+            SEGarbageCollect(SEApp)
+            System.Threading.Thread.Sleep(100)
+
+            If Not SEApp Is Nothing Then
+                SEApp = Nothing
+            End If
+
+            System.Threading.Thread.Sleep(3000)
+
         End If
 
-        System.Threading.Thread.Sleep(3000)
     End Sub
 
     Private Sub SEGarbageCollect(ByVal obj As Object)
