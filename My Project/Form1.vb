@@ -141,7 +141,7 @@ Public Class Form1
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        SEStop()
+        If Not CheckBoxUseCurrentSession.Checked Then SEStop()
 
         OleMessageFilter.Unregister()
 
@@ -186,7 +186,7 @@ Public Class Form1
 
         ReconcileFormChanges()
 
-        If SEIsRunning() Then
+        If SEIsRunning() And Not CheckBoxUseCurrentSession.Checked Then
             msg += "    Close Solid Edge" + Chr(13)
         End If
 
@@ -365,9 +365,11 @@ Public Class Form1
 
             FilesToProcessCompleted += 1
 
-            If FilesToProcessCompleted Mod RestartAfter = 0 Then
-                SEStop()
-                SEStart()
+            If Not RestartAfter = 0 Then
+                If FilesToProcessCompleted Mod RestartAfter = 0 Then
+                    SEStop()
+                    SEStart()
+                End If
             End If
 
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
@@ -606,8 +608,10 @@ Public Class Form1
                 StopProcess = True
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
+                'If Not CheckBoxUseCurrentSession.Checked Then
                 SEStop()
                 SEStart()
+                'End If
             End If
             ErrorMessagesCombined("Error processing file") = AbortList
         End Try
