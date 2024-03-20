@@ -186,8 +186,10 @@ Public Class Form1
 
         ReconcileFormChanges()
 
-        If SEIsRunning() Then
-            msg += "    Close Solid Edge" + Chr(13)
+        If Not CheckBoxUseCurrentSession.Checked Then
+            If SEIsRunning() Then
+                msg += "    Close Solid Edge" + Chr(13)
+            End If
         End If
 
         If DMIsRunning() Then
