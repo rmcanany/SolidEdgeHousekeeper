@@ -1,13 +1,7 @@
-﻿'Imports Housekeeper.Task
-
-Imports Housekeeper.Task
+﻿Imports Housekeeper.Task
 
 Public Class Task_EventHandler
-    Public Property Task As Task = Form1.TaskList(0)
-
-    'Public Sub New(Task As Task)
-    '    Me.Task = Task
-    'End Sub
+    'Public Property Task As Task = Form1.TaskList(0)
 
     Shared Sub Button_Click(sender As System.Object, e As System.EventArgs)
 
@@ -18,6 +12,7 @@ Public Class Task_EventHandler
         Dim Task = Parent.Task
 
         ' If a Header or EditTaskList button is pressed, Task will be Nothing
+
         If Task IsNot Nothing Then
             Select Case Button.Name
                 Case Task.BaseControlNames.Expand.ToString

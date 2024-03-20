@@ -141,7 +141,7 @@ Public Class Form1
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        If Not CheckBoxUseCurrentSession.Checked Then SEStop()
+        SEStop()
 
         OleMessageFilter.Unregister()
 
@@ -186,7 +186,7 @@ Public Class Form1
 
         ReconcileFormChanges()
 
-        If SEIsRunning() And Not CheckBoxUseCurrentSession.Checked Then
+        If SEIsRunning() Then
             msg += "    Close Solid Edge" + Chr(13)
         End If
 
@@ -319,7 +319,6 @@ Public Class Form1
     Private Sub ProcessFiles(ByVal Filetype As String)
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
-        Dim RestartAfter As Integer
         Dim msg As String
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
@@ -365,15 +364,7 @@ Public Class Form1
 
             FilesToProcessCompleted += 1
 
-            If Not RestartAfter = 0 Then
-                If FilesToProcessCompleted Mod RestartAfter = 0 Then
-                    SEStop()
-                    SEStart()
-                End If
-            End If
-
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            'msg += CommonTasks.TruncateFullPath(FileToProcess, Nothing)
             msg += System.IO.Path.GetFileName(FileToProcess)
             TextBoxStatus.Text = msg
 
@@ -608,10 +599,8 @@ Public Class Form1
                 StopProcess = True
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
-                'If Not CheckBoxUseCurrentSession.Checked Then
                 SEStop()
                 SEStart()
-                'End If
             End If
             ErrorMessagesCombined("Error processing file") = AbortList
         End Try
@@ -631,7 +620,7 @@ Public Class Form1
 
         PopulateCheckedListBoxes()
         LoadDefaults()
-        ' LoadPrinterSettings()
+
         ReconcileFormChanges()
         BuildReadmeFile()
 
