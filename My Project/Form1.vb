@@ -1722,6 +1722,10 @@ Public Class Form1
         Return StatusChangeRadioButtons
     End Function
 
+    Private Sub LabelRandomSampleFraction_Click(sender As Object, e As EventArgs) Handles LabelRandomSampleFraction.Click
+
+    End Sub
+
 
 
 
