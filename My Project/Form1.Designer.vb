@@ -141,6 +141,7 @@ Partial Class Form1
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
         Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.LabelFontSize = New System.Windows.Forms.Label()
@@ -172,7 +173,7 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1522,6 +1523,7 @@ Partial Class Form1
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxPropertyFilterCheckDraftFile)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxUseCurrentSession)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxNoUpdateMRU)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
@@ -1539,6 +1541,16 @@ Partial Class Form1
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
+        '
+        'CheckBoxUseCurrentSession
+        '
+        Me.CheckBoxUseCurrentSession.AutoSize = True
+        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(7, 6)
+        Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
+        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(236, 19)
+        Me.CheckBoxUseCurrentSession.TabIndex = 72
+        Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
+        Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
         '
         'CheckBoxNoUpdateMRU
         '
@@ -1823,15 +1835,15 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'CheckBoxUseCurrentSession
+        'CheckBoxPropertyFilterCheckDraftFile
         '
-        Me.CheckBoxUseCurrentSession.AutoSize = True
-        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(7, 6)
-        Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
-        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(236, 19)
-        Me.CheckBoxUseCurrentSession.TabIndex = 72
-        Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
-        Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
+        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
+        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(6, 263)
+        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
+        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(245, 19)
+        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 73
+        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Check the Draft file itself"
+        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -2037,4 +2049,5 @@ Partial Class Form1
     Friend WithEvents CheckBoxWarnSave As CheckBox
     Friend WithEvents ColorDialog1 As ColorDialog
     Friend WithEvents CheckBoxUseCurrentSession As CheckBox
+    Friend WithEvents CheckBoxPropertyFilterCheckDraftFile As CheckBox
 End Class

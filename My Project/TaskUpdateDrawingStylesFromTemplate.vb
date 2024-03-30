@@ -6,7 +6,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Inherits Task
 
-    Public Property DraftTemplate As String
+    'Public Property DraftTemplate As String
     Public Property UpdateBorder As Boolean
     Public Property UpdateStyles As Boolean
 
