@@ -132,6 +132,15 @@ Public Class TaskUpdatePhysicalProperties
                         PhysicalProperties.UpdateV2(ParFileNamesWithoutDensityArray)
                         SEApp.DoIdle()
 
+                        ' Try again for assemblies whose parts have also been updated
+                        If Not TC.IsVariablePresent(SEDoc, "Mass") Then
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                            ParFileNamesWithoutDensityArray = {""}
+                            PhysicalProperties.UpdateV2(ParFileNamesWithoutDensityArray)
+                            SEApp.DoIdle()
+                        End If
+
                         ParFileNamesWithoutDensity = CType(ParFileNamesWithoutDensityArray, String())
 
                         If Not ParFileNamesWithoutDensity Is Nothing Then
@@ -240,17 +249,7 @@ Public Class TaskUpdatePhysicalProperties
         End If
 
         If Proceed Then
-            DocVariableDict = TC.GetDocVariables(SEDoc)
-            VariableFound = False
-
-            For Each Key As String In DocVariableDict.Keys
-                If Key.ToLower = "mass" Then
-                    VariableFound = True
-                    Exit For
-                End If
-            Next
-
-            If Not VariableFound Then
+            If Not TC.IsVariablePresent(SEDoc, "Mass") Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
             End If

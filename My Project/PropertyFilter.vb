@@ -70,39 +70,30 @@ Public Class PropertyFilter
     Shared Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
                 PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
                 PropertyFilterFormula As String) As Boolean
+
+        ' Returns True if a match is found
+
         Dim tf As Boolean
         Dim DMDoc As DesignManager.Document
         Dim Extension As String
         Dim LinkedDocuments As DesignManager.LinkedDocuments
         Dim LinkedDocument As DesignManager.Document
 
-        'Dim ContainsFileProperty As Boolean
-        'Dim PropertySet As String
-
         System.Windows.Forms.Application.DoEvents()
         If Form1.StopProcess Then
             Return False
         End If
 
-        'ContainsFileProperty = False
-        'For Each Variable In PropertyFilterDict.Keys
-        '    PropertySet = ParsePropertyString(PropertyFilterDict(Variable)("PropertyString"), "PropertySet")
-        '    If (PropertySet.ToLower = "filename") Or (PropertySet.ToLower = "path") Then
-        '        ContainsFileProperty = True
-        '    End If
-
-        'Next
-
         Extension = System.IO.Path.GetExtension(FoundFile)
         If Extension = ".dft" Then
             DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
             LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
-            'tf = False
 
-            tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
-
-            'If ContainsFileProperty Then  ' Need to check the draft file itself
-            'End If
+            If Form1.CheckBoxPropertyFilterCheckDraftFile.Checked Then
+                tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
+            Else
+                tf = False
+            End If
 
             If Form1.CheckBoxPropertyFilterFollowDraftLinks.Checked Then
                 For Each LinkedDocument In LinkedDocuments

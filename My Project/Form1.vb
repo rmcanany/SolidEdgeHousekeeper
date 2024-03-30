@@ -468,20 +468,6 @@ Public Class Form1
 
             SEApp.DoIdle()
 
-            'If Filetype = "Assembly" Then
-            '    CheckedListBoxX = CheckedListBoxAssembly
-            'ElseIf Filetype = "Part" Then
-            '    CheckedListBoxX = CheckedListBoxPart
-            'ElseIf Filetype = "Sheetmetal" Then
-            '    CheckedListBoxX = CheckedListBoxSheetmetal
-            'ElseIf Filetype = "Draft" Then
-            '    CheckedListBoxX = CheckedListBoxDraft
-            'Else
-            '    MsgBox("In ProcessFile(), Filetype not recognized: " + Filetype + ".  Exiting...")
-            '    SEApp.Quit()
-            '    End
-            'End If
-
             For Each Task As Task In Me.TaskList
                 If Task.IsSelectedTask Then
                     tf = (Filetype = "Assembly") And (Task.IsSelectedAssembly)

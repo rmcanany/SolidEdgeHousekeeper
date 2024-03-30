@@ -293,7 +293,7 @@ Public Class Task_Common
 
                     ' Some properties do not have names.
                     Try
-                        If Prop.Name = PropertyName Then
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
                             FoundProp = Prop
                             PropertyFound = True
                             Exit For
@@ -399,6 +399,40 @@ Public Class Task_Common
         End Try
 
         Return DocVariableDict
+    End Function
+
+    Public Function IsVariablePresent(SEDoc As SolidEdgeFramework.SolidEdgeDocument, VariableName As String) As Boolean
+        Dim VariableFound As Boolean = False
+        Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
+
+        DocVariableDict = GetDocVariables(SEDoc)
+        VariableFound = False
+
+        For Each Key As String In DocVariableDict.Keys
+            If Key.ToLower = VariableName.ToLower Then
+                VariableFound = True
+                Exit For
+            End If
+        Next
+
+        Return VariableFound
+    End Function
+
+    Public Function IsDimensionPresent(SEDoc As SolidEdgeFramework.SolidEdgeDocument, DimensionName As String) As Boolean
+        Dim DimensionFound As Boolean = False
+        Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
+
+        DocDimensionDict = GetDocDimensions(SEDoc)
+        DimensionFound = False
+
+        For Each Key As String In DocDimensionDict.Keys
+            If Key.ToLower = DimensionName.ToLower Then
+                DimensionFound = True
+                Exit For
+            End If
+        Next
+
+        Return DimensionFound
     End Function
 
     Public Function GetSheets(

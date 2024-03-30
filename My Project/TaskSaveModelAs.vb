@@ -902,6 +902,14 @@ Public Class TaskSaveModelAs
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
+            If Me.NewFileTypeName = "" Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Output file type not detected", Indent))
+            End If
+
             If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)

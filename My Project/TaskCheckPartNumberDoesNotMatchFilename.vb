@@ -76,9 +76,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Dim Prop As SolidEdgeFramework.Property = Nothing
 
-        'Dim PropertySetName As String = Configuration("ComboBoxPartNumberPropertySet").Trim
-        'Dim PropertyName As String = Configuration("TextBoxPartNumberPropertyName").Trim
-
         Dim PartNumber As String = ""
         Dim PartNumberFound As Boolean
         Dim Filename As String
