@@ -61,7 +61,6 @@ Partial Class Form1
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
-        Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
         Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
@@ -142,7 +141,6 @@ Partial Class Form1
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
-        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
         Me.LabelFontSize = New System.Windows.Forms.Label()
@@ -174,6 +172,7 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -564,7 +563,6 @@ Partial Class Form1
         '
         'TabPageTopLevelAssy
         '
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxUseCurrentSession)
         Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports)
         Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAIncludePartCopies)
         Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxDraftAndModelSameName)
@@ -586,23 +584,13 @@ Partial Class Form1
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
         '
-        'CheckBoxUseCurrentSession
-        '
-        Me.CheckBoxUseCurrentSession.AutoSize = True
-        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(10, 6)
-        Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
-        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(236, 19)
-        Me.CheckBoxUseCurrentSession.TabIndex = 22
-        Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
-        Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
-        '
         'CheckBoxTLAIgnoreIncludeInReports
         '
         Me.CheckBoxTLAIgnoreIncludeInReports.AutoSize = True
         Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
         Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
-        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 129)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 104)
         Me.CheckBoxTLAIgnoreIncludeInReports.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
         Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(269, 19)
@@ -614,7 +602,7 @@ Partial Class Form1
         'CheckBoxTLAIncludePartCopies
         '
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(10, 81)
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(10, 56)
         Me.CheckBoxTLAIncludePartCopies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
         Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(509, 19)
@@ -626,7 +614,7 @@ Partial Class Form1
         'CheckBoxDraftAndModelSameName
         '
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(10, 200)
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(10, 175)
         Me.CheckBoxDraftAndModelSameName.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(338, 19)
@@ -639,7 +627,7 @@ Partial Class Form1
         Me.CheckBoxWarnBareTLA.AutoSize = True
         Me.CheckBoxWarnBareTLA.Checked = True
         Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(10, 56)
+        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(10, 31)
         Me.CheckBoxWarnBareTLA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
         Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(423, 19)
@@ -652,7 +640,7 @@ Partial Class Form1
         Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
         Me.CheckBoxTLAAutoIncludeTLF.Checked = True
         Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(10, 31)
+        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(10, 6)
         Me.CheckBoxTLAAutoIncludeTLF.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
         Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(373, 19)
@@ -694,7 +682,7 @@ Partial Class Form1
         'CheckBoxTLAReportUnrelatedFiles
         '
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(10, 105)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(10, 80)
         Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
         Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(259, 19)
@@ -705,7 +693,7 @@ Partial Class Form1
         'RadioButtonTLATopDown
         '
         Me.RadioButtonTLATopDown.AutoSize = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(10, 153)
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(10, 128)
         Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(358, 19)
@@ -717,7 +705,7 @@ Partial Class Form1
         '
         Me.RadioButtonTLABottomUp.AutoSize = True
         Me.RadioButtonTLABottomUp.Checked = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(10, 176)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(10, 151)
         Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(333, 19)
@@ -774,7 +762,7 @@ Partial Class Form1
         'LabelStatusBefore
         '
         Me.LabelStatusBefore.AutoSize = True
-        Me.LabelStatusBefore.Location = New System.Drawing.Point(52, 148)
+        Me.LabelStatusBefore.Location = New System.Drawing.Point(110, 148)
         Me.LabelStatusBefore.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusBefore.Name = "LabelStatusBefore"
         Me.LabelStatusBefore.Size = New System.Drawing.Size(105, 15)
@@ -1342,7 +1330,7 @@ Partial Class Form1
         'LabelStatusInReleased
         '
         Me.LabelStatusInReleased.AutoSize = True
-        Me.LabelStatusInReleased.Location = New System.Drawing.Point(139, 331)
+        Me.LabelStatusInReleased.Location = New System.Drawing.Point(135, 331)
         Me.LabelStatusInReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInReleased.Name = "LabelStatusInReleased"
         Me.LabelStatusInReleased.Size = New System.Drawing.Size(80, 15)
@@ -1352,7 +1340,7 @@ Partial Class Form1
         'LabelStatusInObsolete
         '
         Me.LabelStatusInObsolete.AutoSize = True
-        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(142, 300)
+        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(139, 300)
         Me.LabelStatusInObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInObsolete.Name = "LabelStatusInObsolete"
         Me.LabelStatusInObsolete.Size = New System.Drawing.Size(76, 15)
@@ -1362,7 +1350,7 @@ Partial Class Form1
         'LabelStatusInInWork
         '
         Me.LabelStatusInInWork.AutoSize = True
-        Me.LabelStatusInInWork.Location = New System.Drawing.Point(136, 270)
+        Me.LabelStatusInInWork.Location = New System.Drawing.Point(139, 270)
         Me.LabelStatusInInWork.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInInWork.Name = "LabelStatusInInWork"
         Me.LabelStatusInInWork.Size = New System.Drawing.Size(76, 15)
@@ -1382,7 +1370,7 @@ Partial Class Form1
         'LabelStatusInBaselined
         '
         Me.LabelStatusInBaselined.AutoSize = True
-        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(136, 208)
+        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(134, 208)
         Me.LabelStatusInBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusInBaselined.Name = "LabelStatusInBaselined"
         Me.LabelStatusInBaselined.Size = New System.Drawing.Size(81, 15)
@@ -1456,7 +1444,7 @@ Partial Class Form1
         '
         'TextBoxRandomSampleFraction
         '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(261, 127)
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(236, 125)
         Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
         Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(116, 21)
@@ -1466,7 +1454,7 @@ Partial Class Form1
         'LabelRandomSampleFraction
         '
         Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(159, 129)
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(135, 128)
         Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
         Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(93, 15)
@@ -1476,7 +1464,7 @@ Partial Class Form1
         'RadioButtonListSortRandomSample
         '
         Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(11, 126)
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(10, 126)
         Me.RadioButtonListSortRandomSample.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
         Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(117, 19)
@@ -1488,7 +1476,7 @@ Partial Class Form1
         'CheckBoxListIncludeNoDependencies
         '
         Me.CheckBoxListIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(43, 99)
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(10, 97)
         Me.CheckBoxListIncludeNoDependencies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
         Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(361, 19)
@@ -1499,7 +1487,7 @@ Partial Class Form1
         'RadioButtonListSortDependency
         '
         Me.RadioButtonListSortDependency.AutoSize = True
-        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(11, 69)
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(10, 68)
         Me.RadioButtonListSortDependency.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
         Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(176, 19)
@@ -1511,7 +1499,7 @@ Partial Class Form1
         '
         Me.RadioButtonListSortAlphabetical.AutoSize = True
         Me.RadioButtonListSortAlphabetical.Checked = True
-        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 38)
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 39)
         Me.RadioButtonListSortAlphabetical.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
         Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(176, 19)
@@ -1534,7 +1522,7 @@ Partial Class Form1
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxPropertyFilterCheckDraftFile)
+        Me.TabPageGeneral.Controls.Add(Me.CheckBoxUseCurrentSession)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxNoUpdateMRU)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
         Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
@@ -1552,20 +1540,10 @@ Partial Class Form1
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
-        'CheckBoxPropertyFilterCheckDraftFile
-        '
-        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
-        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(10, 234)
-        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
-        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(284, 19)
-        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 72
-        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Include Draft file itself in search"
-        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
-        '
         'CheckBoxNoUpdateMRU
         '
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(11, 46)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(7, 78)
         Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(322, 19)
@@ -1578,7 +1556,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(11, 15)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(7, 42)
         Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(193, 19)
@@ -1589,7 +1567,7 @@ Partial Class Form1
         'LabelFontSize
         '
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(68, 85)
+        Me.LabelFontSize.Location = New System.Drawing.Point(59, 117)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(93, 15)
@@ -1598,7 +1576,7 @@ Partial Class Form1
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(10, 79)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(7, 114)
         Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(44, 21)
@@ -1610,7 +1588,7 @@ Partial Class Form1
         Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(10, 198)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(7, 224)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
         Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(358, 19)
@@ -1621,7 +1599,7 @@ Partial Class Form1
         'CheckBoxBackgroundProcessing
         '
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(10, 159)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(7, 188)
         Me.CheckBoxBackgroundProcessing.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(257, 19)
@@ -1634,7 +1612,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(10, 127)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(7, 152)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(270, 19)
@@ -1845,6 +1823,16 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'CheckBoxUseCurrentSession
+        '
+        Me.CheckBoxUseCurrentSession.AutoSize = True
+        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(7, 6)
+        Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
+        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(236, 19)
+        Me.CheckBoxUseCurrentSession.TabIndex = 72
+        Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
+        Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -2049,5 +2037,4 @@ Partial Class Form1
     Friend WithEvents CheckBoxWarnSave As CheckBox
     Friend WithEvents ColorDialog1 As ColorDialog
     Friend WithEvents CheckBoxUseCurrentSession As CheckBox
-    Friend WithEvents CheckBoxPropertyFilterCheckDraftFile As CheckBox
 End Class
