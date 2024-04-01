@@ -28,6 +28,9 @@ Public Class TaskRunExternalProgram
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskRunExternalProgram
+        Me.Category = "Output"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.ExternalProgram = ""

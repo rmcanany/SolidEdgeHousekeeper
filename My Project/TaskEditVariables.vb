@@ -27,6 +27,9 @@ Public Class TaskEditVariables
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
+        Me.Category = "Edit"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.JSONDict = ""

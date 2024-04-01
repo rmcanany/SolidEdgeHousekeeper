@@ -30,6 +30,9 @@ Public Class TaskCheckLinks
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckLinks
         Me.RequiresSourceDirectories = True
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.CheckMissingLinks = False

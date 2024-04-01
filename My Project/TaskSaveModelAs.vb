@@ -49,6 +49,9 @@ Public Class TaskSaveModelAs
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
+        Me.Category = "Output"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.NewFileTypeName = ""

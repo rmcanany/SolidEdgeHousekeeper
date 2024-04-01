@@ -68,7 +68,7 @@ Public Class PreferencesUtilities
                 TaskJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
 
-                Task = BuildTaskFromCustom(TaskName, TaskDescription, JSONString)
+                Task = GetNewTaskInstance(TaskName, TaskDescription)
                 If Task IsNot Nothing Then
                     TaskList.Add(Task)
                 End If
@@ -82,10 +82,9 @@ Public Class PreferencesUtilities
 
 
 
-    Private Function BuildTaskFromCustom(
+    Public Function GetNewTaskInstance(
         TaskName As String,
-        TaskDescription As String,
-        JSONString As String
+        TaskDescription As String
         ) As Task
 
         Dim Task As Task = Nothing
@@ -94,7 +93,6 @@ Public Class PreferencesUtilities
 
         For Each Task In tmpTaskList
             If Task.Name = TaskName Then
-                'Task.SetFormState(JSONString)
                 Task.Description = TaskDescription
                 Exit For
             End If

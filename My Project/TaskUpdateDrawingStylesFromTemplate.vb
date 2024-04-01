@@ -30,6 +30,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateDrawingStylesFromTemplate
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.DraftTemplate = ""

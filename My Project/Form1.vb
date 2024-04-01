@@ -909,6 +909,7 @@ Public Class Form1
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
+            CheckBoxTLAIgnoreIncludeInReports.Enabled = True
         End If
 
         ListViewFilesOutOfDate = True
@@ -925,6 +926,7 @@ Public Class Form1
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
+            CheckBoxTLAIgnoreIncludeInReports.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True

@@ -16,6 +16,9 @@ Public Class TaskCheckDrawingPartsList
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckDrawingPartsList
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

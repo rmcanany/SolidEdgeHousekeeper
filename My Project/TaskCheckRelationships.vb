@@ -28,6 +28,9 @@ Public Class TaskCheckRelationships
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckRelationships
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
 

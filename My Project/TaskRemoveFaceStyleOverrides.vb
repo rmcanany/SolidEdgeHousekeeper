@@ -16,6 +16,9 @@ Public Class TaskRemoveFaceStyleOverrides
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskRemoveFaceStyleOverrides
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

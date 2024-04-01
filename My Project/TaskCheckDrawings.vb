@@ -31,6 +31,9 @@ Public Class TaskCheckDrawings
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckDrawings
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.DrawingViewsOutOfDate = False

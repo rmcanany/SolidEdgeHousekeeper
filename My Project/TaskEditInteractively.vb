@@ -16,6 +16,9 @@ Public Class TaskEditInteractively
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditInteractively
+        Me.Category = "Edit"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

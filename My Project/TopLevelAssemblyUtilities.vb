@@ -532,7 +532,8 @@ Public Class TopLevelAssemblyUtilities
                                          TopLevelFolder As String,
                                          AllFilenames As Dictionary(Of String, String),
                                          IsDriveIndexed As Boolean,
-                                         DraftAndModelSameName As Boolean) As List(Of String)
+                                         DraftAndModelSameName As Boolean
+                                         ) As List(Of String)
 
         Dim LinkedDocs As DesignManager.LinkedDocuments
         Dim LinkedDoc As DesignManager.Document

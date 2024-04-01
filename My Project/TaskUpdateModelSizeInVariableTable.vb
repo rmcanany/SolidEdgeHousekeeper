@@ -47,6 +47,9 @@ Public Class TaskUpdateModelSizeInVariableTable
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateModelSizeInVariableTable
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.ReportXYZ = False

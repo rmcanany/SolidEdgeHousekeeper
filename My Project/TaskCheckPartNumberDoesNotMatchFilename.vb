@@ -29,6 +29,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.PropertySet = ""

@@ -26,6 +26,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateMaterialFromMaterialTable
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.ActiveMaterialLibrary = ""

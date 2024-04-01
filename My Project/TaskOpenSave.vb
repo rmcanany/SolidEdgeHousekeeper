@@ -15,6 +15,9 @@ Public Class TaskOpenSave
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskOpenSave
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
 

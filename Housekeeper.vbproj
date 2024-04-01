@@ -178,6 +178,12 @@
     <Compile Include="My Project\FormEditTaskList.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormEditTaskListChangeColor.Designer.vb">
+      <DependentUpon>FormEditTaskListChangeColor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormEditTaskListChangeColor.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormPropertyFilter.Designer.vb">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
     </Compile>
@@ -260,21 +266,30 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormEditTaskList.resx">
       <DependentUpon>FormEditTaskList.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormEditTaskListChangeColor.resx">
+      <DependentUpon>FormEditTaskListChangeColor.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyInputEditor.resx">
       <DependentUpon>FormPropertyInputEditor.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormSheetSelector.resx">
       <DependentUpon>FormSheetSelector.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormVariableInputEditor.resx">
       <DependentUpon>FormVariableInputEditor.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

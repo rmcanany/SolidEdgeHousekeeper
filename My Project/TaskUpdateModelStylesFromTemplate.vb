@@ -33,6 +33,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateModelStylesFromTemplate
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.AssemblyTemplate = ""

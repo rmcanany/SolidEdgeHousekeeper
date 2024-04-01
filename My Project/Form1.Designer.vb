@@ -141,6 +141,7 @@ Partial Class Form1
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
         Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
@@ -173,7 +174,6 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -591,7 +591,7 @@ Partial Class Form1
         Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
         Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
-        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 104)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 250)
         Me.CheckBoxTLAIgnoreIncludeInReports.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
         Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(269, 19)
@@ -652,7 +652,7 @@ Partial Class Form1
         'ButtonFastSearchScopeFilename
         '
         Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(431, 237)
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(431, 215)
         Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
         Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(88, 25)
@@ -664,7 +664,7 @@ Partial Class Form1
         '
         Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(10, 239)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(10, 217)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(406, 21)
@@ -673,7 +673,7 @@ Partial Class Form1
         'LabelFastSearchScopeFilename
         '
         Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(7, 222)
+        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(7, 200)
         Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
         Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(165, 15)
@@ -1542,6 +1542,16 @@ Partial Class Form1
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
+        'CheckBoxPropertyFilterCheckDraftFile
+        '
+        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
+        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(6, 263)
+        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
+        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(304, 19)
+        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 73
+        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Include the Draft file itself in search"
+        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
+        '
         'CheckBoxUseCurrentSession
         '
         Me.CheckBoxUseCurrentSession.AutoSize = True
@@ -1834,16 +1844,6 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'CheckBoxPropertyFilterCheckDraftFile
-        '
-        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
-        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(6, 263)
-        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
-        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(245, 19)
-        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 73
-        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Check the Draft file itself"
-        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
         '
         'Form1
         '

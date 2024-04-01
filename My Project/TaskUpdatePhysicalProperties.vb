@@ -26,6 +26,9 @@ Public Class TaskUpdatePhysicalProperties
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdatePhysicalProperties
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.HideSymbols = False

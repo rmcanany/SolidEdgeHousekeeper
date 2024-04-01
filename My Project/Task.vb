@@ -39,12 +39,17 @@ Public MustInherit Class Task
     Public Property ColorHue As String
     Public Property ColorSaturation As Double
     Public Property ColorBrightness As Double
+    Public Property ColorR As Integer
+    Public Property ColorG As Integer
+    Public Property ColorB As Integer
 
     Public Property AssemblyTemplate As String
     Public Property PartTemplate As String
     Public Property SheetmetalTemplate As String
     Public Property DraftTemplate As String
     Public Property MaterialTable As String
+    Public Property Category As String
+
 
 
 
@@ -666,6 +671,74 @@ Public MustInherit Class Task
 
     'UTILITIES
 
+    Public Sub SetColorFromCategory(Task As Task)
+
+        Task.ColorSaturation = 0.2
+        Task.ColorBrightness = 1
+
+        Select Case Task.Category.ToLower
+            Case "update"
+                Task.ColorHue = "Green"
+            Case "edit"
+                Task.ColorHue = "Magenta"
+            Case "restyle"
+                Task.ColorHue = "Cyan"
+            Case "check"
+                Task.ColorHue = "Yellow"
+            Case "output"
+                Task.ColorHue = "Red"
+            Case Else
+                MsgBox(String.Format("Task '{0}' category '{1}' not recognized", Task.Name, Task.Category.ToLower))
+        End Select
+
+        SetRBGFromHSB(Task)
+    End Sub
+
+    Public Sub SetRBGFromHSB(Task As Task)
+        Dim R As Integer = 0
+        Dim G As Integer = 0
+        Dim B As Integer = 0
+
+        Select Case Task.ColorHue
+            Case "Red"
+                R = 255
+                G = CInt(255 * (1 - Task.ColorSaturation))
+                B = CInt(255 * (1 - Task.ColorSaturation))
+            Case "Green"
+                R = CInt(255 * (1 - Task.ColorSaturation))
+                G = 255
+                B = CInt(255 * (1 - Task.ColorSaturation))
+            Case "Blue"
+                R = CInt(255 * (1 - Task.ColorSaturation))
+                G = CInt(255 * (1 - Task.ColorSaturation))
+                B = 255
+            Case "Cyan"
+                R = CInt(255 * (1 - Task.ColorSaturation))
+                G = 255
+                B = 255
+            Case "Magenta"
+                R = 255
+                G = CInt(255 * (1 - Task.ColorSaturation))
+                B = 255
+            Case "Yellow"
+                R = 255
+                G = 255
+                B = CInt(255 * (1 - Task.ColorSaturation))
+            Case "White"
+                R = 255
+                G = 255
+                B = 255
+        End Select
+
+        R = CInt(R * Task.ColorBrightness)
+        G = CInt(G * Task.ColorBrightness)
+        B = CInt(B * Task.ColorBrightness)
+
+        Task.ColorR = R
+        Task.ColorG = G
+        Task.ColorB = B
+
+    End Sub
 
     Public Sub AddSupplementalErrorMessage(
         ByRef ExitStatus As Integer,

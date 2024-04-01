@@ -18,6 +18,9 @@ Public Class TaskUpdateDesignForCost
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateDesignForCost
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

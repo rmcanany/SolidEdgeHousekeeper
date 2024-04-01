@@ -4,6 +4,7 @@ Public Class FormEditTaskList
 
     Public Property ManuallySelectFileTypes As Boolean
     Public Property TaskList As List(Of Task)
+    Public Property SourceTaskList As List(Of Task)
 
     Public Sub New()
 
@@ -16,17 +17,20 @@ Public Class FormEditTaskList
             If Task.ColorHue = "" Then Task.ColorHue = "Green"
             If Task.ColorSaturation = 0 Then Task.ColorSaturation = 0.2
             If Task.ColorBrightness = 0 Then Task.ColorBrightness = 1
+            If Task.ColorR = 0 Then Task.ColorR = 240
+            If Task.ColorG = 0 Then Task.ColorG = 255
+            If Task.ColorB = 0 Then Task.ColorB = 240
 
             Me.TaskList.Add(Task)
         Next
+
+        Dim PU As New PreferencesUtilities()
+        Me.SourceTaskList = New List(Of Task)
+        SourceTaskList = PU.BuildTaskListFromScratch()
+
+
     End Sub
 
-
-
-    Private Sub CheckBoxAutoSelectFiletypes_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxManuallySelectFiletypes.CheckedChanged
-        Dim CheckBox = CType(sender, CheckBox)
-        Me.ManuallySelectFileTypes = CheckBox.Checked
-    End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         Me.DialogResult = DialogResult.OK
@@ -38,19 +42,29 @@ Public Class FormEditTaskList
 
     Private Sub FormEditTaskList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        CheckBoxManuallySelectFiletypes.Checked = Me.ManuallySelectFileTypes
-
         BuildColumns()
+
+        For Each SourceTask As Task In Me.SourceTaskList
+            DataGridViewSource.Rows.Add({SourceTask.Description})
+        Next
+
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 60
 
         UpdateDataGridView()
 
     End Sub
 
+    Private Sub FormEditTaskList_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 60
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 60
+
+    End Sub
+
     Private Sub BuildColumns()
 
-        Dim ColumnNames As List(Of String) = "Task Tint Saturation Brightness".Split(CChar(" ")).ToList
+        Dim ColumnNames As List(Of String) = "Task".Split(CChar(" ")).ToList
         Dim ColumnName As String
-        Dim ColumnTypes As List(Of String) = "TextBox ComboBox TextBox TextBox".Split(CChar(" ")).ToList
+        Dim ColumnTypes As List(Of String) = "TextBox".Split(CChar(" ")).ToList
         Dim ColumnType As String
 
         For i = 0 To ColumnNames.Count - 1
@@ -62,24 +76,31 @@ Public Class FormEditTaskList
                 Case "TextBox"
                     Dim Col As New DataGridViewTextBoxColumn
                     Col.Name = ColumnName
-                    Col.HeaderText = ColumnName
+                    Col.HeaderText = "AVAILABLE TASKS"
 
-                    DataGridView1.Columns.Add(Col)
+                    DataGridViewSource.Columns.Add(Col)
 
-                Case "ComboBox"
-                    Dim Col As New DataGridViewComboBoxColumn
-                    Col.Name = ColumnName
-                    Col.HeaderText = ColumnName
 
-                    Col.Items.Add("Red")
-                    Col.Items.Add("Green")
-                    Col.Items.Add("Blue")
-                    Col.Items.Add("Cyan")
-                    Col.Items.Add("Magenta")
-                    Col.Items.Add("Yellow")
-                    Col.Items.Add("White")
+                    Dim Col2 As New DataGridViewTextBoxColumn
+                    Col2.Name = ColumnName
+                    Col2.HeaderText = "TASK LIST"
 
-                    DataGridView1.Columns.Add(Col)
+                    DataGridViewTarget.Columns.Add(Col2)
+
+                    'Case "ComboBox"
+                    '    Dim Col As New DataGridViewComboBoxColumn
+                    '    Col.Name = ColumnName
+                    '    Col.HeaderText = ColumnName
+
+                    '    Col.Items.Add("Red")
+                    '    Col.Items.Add("Green")
+                    '    Col.Items.Add("Blue")
+                    '    Col.Items.Add("Cyan")
+                    '    Col.Items.Add("Magenta")
+                    '    Col.Items.Add("Yellow")
+                    '    Col.Items.Add("White")
+
+                    '    DataGridView1.Columns.Add(Col)
 
                 Case Else
                     MsgBox(String.Format("Column type '{0}' not recognized", ColumnType), vbOKOnly)
@@ -89,85 +110,85 @@ Public Class FormEditTaskList
     End Sub
 
     Private Sub UpdateDataGridView()
+        Dim i As Integer
 
-        DataGridView1.Rows.Clear()
+        DataGridViewTarget.Rows.Clear()
+
+        i = 0
 
         For Each Task As Task In Me.TaskList
-            DataGridView1.Rows.Add({Task.Description, Task.ColorHue, Task.ColorSaturation, Task.ColorBrightness})
+            DataGridViewTarget.Rows.Add({Task.Description})
+            DataGridViewTarget.Rows(i).DefaultCellStyle.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
+            i += 1
         Next
 
-        DataGridView1.AutoResizeColumns()
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 60
 
     End Sub
 
     Private Sub UpdateDataGridView(SelectedRowIndex As Integer)
+
         UpdateDataGridView()
 
-        DataGridView1.CurrentCell = DataGridView1.Rows(SelectedRowIndex).Cells(0)
-        DataGridView1.Rows(SelectedRowIndex).Selected = True
+        DataGridViewTarget.CurrentCell = DataGridViewTarget.Rows(SelectedRowIndex).Cells(0)
+        DataGridViewTarget.Rows(SelectedRowIndex).Selected = True
+        If (SelectedRowIndex >= 0) And (SelectedRowIndex < DataGridViewTarget.RowCount - 1) Then
+        End If
 
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+    'Private Sub DataGridViewTarget_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewTarget.CellContentClick
 
-    End Sub
-
-    'Private Sub DataGridView1_EditingControlShowing(
-    '    sender As Object,
-    '    e As DataGridViewEditingControlShowingEventArgs
-    '    ) Handles DataGridView1.EditingControlShowing
-
-    '    MsgBox("something")
     'End Sub
 
-    Private Sub DataGridView1_CurrentCellDirtyStateChanged(
+    Private Sub DataGridViewTarget_CurrentCellDirtyStateChanged(
         ByVal sender As Object,
         ByVal e As EventArgs
-        ) Handles DataGridView1.CurrentCellDirtyStateChanged
+        ) Handles DataGridViewTarget.CurrentCellDirtyStateChanged
 
-        If DataGridView1.IsCurrentCellDirty Then
-            DataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit)
+        If DataGridViewTarget.IsCurrentCellDirty Then
+            DataGridViewTarget.CommitEdit(DataGridViewDataErrorContexts.Commit)
         End If
     End Sub
 
-    Private Sub DataGridView1_CellValueChanged(
+    Private Sub DataGridViewTarget_CellValueChanged(
         ByVal sender As Object,
         ByVal e As DataGridViewCellEventArgs
-        ) Handles DataGridView1.CellValueChanged
+        ) Handles DataGridViewTarget.CellValueChanged
 
         Select Case e.ColumnIndex
             Case 0 ' Description
-                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
+                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
                 Me.TaskList(e.RowIndex).Description = CStr(TextBox.Value)
 
-                DataGridView1.Invalidate()
+                DataGridViewTarget.Invalidate()
 
-            Case 1 ' Tint
-                Dim ComboBox As DataGridViewComboBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
+                'Case 1 ' Tint
+                '    Dim ComboBox As DataGridViewComboBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
 
-                If ComboBox.Value IsNot Nothing Then
-                    Me.TaskList(e.RowIndex).ColorHue = CStr(ComboBox.Value)
+                '    If ComboBox.Value IsNot Nothing Then
+                '        Me.TaskList(e.RowIndex).ColorHue = CStr(ComboBox.Value)
 
-                    DataGridView1.Invalidate()
-                End If
+                '        DataGridView1.Invalidate()
+                '    End If
 
-            Case 2 ' Saturation
-                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-                Try
-                    Me.TaskList(e.RowIndex).ColorSaturation = CDbl(TextBox.Value)
-                Catch ex As Exception
-                End Try
+                'Case 2 ' Saturation
+                '    Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
+                '    Try
+                '        Me.TaskList(e.RowIndex).ColorSaturation = CDbl(TextBox.Value)
+                '    Catch ex As Exception
+                '    End Try
 
-                DataGridView1.Invalidate()
+                '    DataGridView1.Invalidate()
 
-            Case 3 ' Brightness
-                Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-                Try
-                    Me.TaskList(e.RowIndex).ColorBrightness = CDbl(TextBox.Value)
-                Catch ex As Exception
-                End Try
+                'Case 3 ' Brightness
+                '    Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
+                '    Try
+                '        Me.TaskList(e.RowIndex).ColorBrightness = CDbl(TextBox.Value)
+                '    Catch ex As Exception
+                '    End Try
 
-                DataGridView1.Invalidate()
+                '    DataGridView1.Invalidate()
 
             Case Else
                 MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
@@ -180,21 +201,21 @@ Public Class FormEditTaskList
         Dim tmpTaskList As New List(Of Task)
         Dim tf As Boolean
 
-        If Not DataGridView1.SelectedRows.Count = 1 Then
+        If Not DataGridViewTarget.SelectedRows.Count = 1 Then
             MsgBox("Select a single row to move", vbOKOnly)
         Else
 
-            SelectedRowIndex = DataGridView1.SelectedRows(0).Index
+            SelectedRowIndex = DataGridViewTarget.SelectedRows(0).Index
 
             'Can't move up from the top
             tf = (SelectedRowIndex = 0) And (Direction = "up")
 
             'Can't move down from the bottom
-            tf = tf Or ((SelectedRowIndex = DataGridView1.Rows.Count - 1) And (Direction = "down"))
+            tf = tf Or ((SelectedRowIndex = DataGridViewTarget.Rows.Count - 1) And (Direction = "down"))
 
             If Not tf Then
 
-                SelectedRowIndex = DataGridView1.SelectedRows(0).Index
+                'SelectedRowIndex = DataGridViewTarget.SelectedRows(0).Index
 
                 For i As Integer = 0 To Form1.TaskList.Count - 1
 
@@ -237,11 +258,139 @@ Public Class FormEditTaskList
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles ButtonMoveUp.Click
+    Private Sub ButtonMoveUp_Click(sender As Object, e As EventArgs) Handles ButtonMoveUp.Click
         MoveRow("up")
     End Sub
 
     Private Sub ButtonMoveDown_Click(sender As Object, e As EventArgs) Handles ButtonMoveDown.Click
         MoveRow("down")
     End Sub
+
+    Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
+        Dim ChangeColor As New FormEditTaskListChangeColor
+        Dim s As String = ""
+        Dim i As Integer
+
+        If DataGridViewTarget.SelectedRows.Count = 0 Then
+            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
+            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            MsgBox(s)
+            Exit Sub
+        End If
+
+        i = DataGridViewTarget.SelectedRows(0).Index
+        ChangeColor.ColorHue = Me.TaskList(i).ColorHue
+        ChangeColor.ColorSaturation = Me.TaskList(i).ColorSaturation
+        ChangeColor.ColorBrightness = Me.TaskList(i).ColorBrightness
+
+        ChangeColor.ShowDialog()
+
+        If ChangeColor.DialogResult = DialogResult.OK Then
+            For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
+                i = SelectedRow.Index
+                Me.TaskList(i).ColorHue = ChangeColor.ColorHue
+                Me.TaskList(i).ColorSaturation = ChangeColor.ColorSaturation
+                Me.TaskList(i).ColorBrightness = ChangeColor.ColorBrightness
+                Me.TaskList(i).ColorR = ChangeColor.ColorR
+                Me.TaskList(i).ColorG = ChangeColor.ColorG
+                Me.TaskList(i).ColorB = ChangeColor.ColorB
+            Next
+            UpdateDataGridView()
+            'MsgBox("OK")
+        End If
+    End Sub
+
+    Private Sub ButtonRemove_Click(sender As Object, e As EventArgs) Handles ButtonRemove.Click
+        Dim SelectedRowIndices As New List(Of Integer)
+        Dim s As String = ""
+        Dim tmpTaskList As New List(Of Task)
+        Dim i As Integer
+
+        If DataGridViewTarget.SelectedRows.Count = 0 Then
+            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
+            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            MsgBox(s)
+            Exit Sub
+        End If
+
+        For Each SelectedRow As DataGridViewRow In DataGridViewTarget.SelectedRows
+            SelectedRowIndices.Add(SelectedRow.Index)
+        Next
+
+        i = 0
+        For Each Task As Task In Me.TaskList
+            If Not SelectedRowIndices.Contains(i) Then
+                tmpTaskList.Add(Task)
+            End If
+            i += 1
+        Next
+
+        Me.TaskList = tmpTaskList
+
+        UpdateDataGridView()
+
+    End Sub
+
+    Private Sub ButtonAdd_Click(sender As Object, e As EventArgs) Handles ButtonAdd.Click
+        Dim SelectedRowIndices As New List(Of Integer)
+        Dim s As String = ""
+        Dim tmpTaskList As New List(Of Task)
+        Dim i As Integer
+        Dim TaskDescription As String
+
+        Dim PU As New PreferencesUtilities
+
+        If DataGridViewSource.SelectedRows.Count = 0 Then
+            s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
+            s = String.Format("{0}{1}{2}", s, "of the task description to select a row.", vbCrLf)
+            MsgBox(s)
+            Exit Sub
+        End If
+
+        For Each SelectedRow As DataGridViewRow In DataGridViewSource.SelectedRows
+            SelectedRowIndices.Add(SelectedRow.Index)
+        Next
+
+        i = 0
+        For Each Task As Task In Me.TaskList
+            tmpTaskList.Add(Task)
+            i += 1
+        Next
+
+        i = 0
+        For Each Task As Task In Me.SourceTaskList
+            If SelectedRowIndices.Contains(i) Then
+                TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
+                tmpTaskList.Add(PU.GetNewTaskInstance(Task.Name, TaskDescription))
+            End If
+            i += 1
+        Next
+
+        Me.TaskList = tmpTaskList
+
+        UpdateDataGridView()
+
+    End Sub
+
+    Private Function GetUniqueTaskDescription(
+        tmpTaskList As List(Of Task),
+        ProposedDescription As String
+        ) As String
+
+        Dim DescriptionList As New List(Of String)
+        Dim Description As String = ProposedDescription
+        Dim i As Integer
+
+        For Each Task As Task In tmpTaskList
+            DescriptionList.Add(Task.Description)
+        Next
+
+        i = 2
+        While DescriptionList.Contains(Description)
+            Description = String.Format("{0} [{1}]", ProposedDescription, CStr(i))
+            i += 1
+        End While
+
+        Return Description
+    End Function
 End Class
