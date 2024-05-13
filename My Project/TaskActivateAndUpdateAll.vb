@@ -17,6 +17,9 @@ Public Class TaskActivateAndUpdateAll
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskActivateAndUpdateAll
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
     End Sub
 
     Public Sub New(Task As TaskActivateAndUpdateAll)

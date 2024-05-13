@@ -29,6 +29,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.PropertySet = ""
@@ -75,9 +78,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Prop As SolidEdgeFramework.Property = Nothing
-
-        'Dim PropertySetName As String = Configuration("ComboBoxPartNumberPropertySet").Trim
-        'Dim PropertyName As String = Configuration("TextBoxPartNumberPropertyName").Trim
 
         Dim PartNumber As String = ""
         Dim PartNumberFound As Boolean

@@ -45,6 +45,9 @@ Public Class TaskPrint
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskPrint
+        Me.Category = "Output"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.PrinterName = ""

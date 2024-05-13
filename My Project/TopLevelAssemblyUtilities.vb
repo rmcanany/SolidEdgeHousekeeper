@@ -9,23 +9,6 @@ Public Class TopLevelAssemblyUtilities
         _mainInstance = mainInstance
     End Sub
 
-    'Public Function GetLinks(SearchType As String,
-    '                         TopLevelFolder As String,
-    '                         TopLevelAssembly As String,
-    '                         ActiveFileExtensionsList As List(Of String),
-    '                         Optional Report As Boolean = False) As List(Of String)
-    '    Dim Foundfiles As New List(Of String)
-
-    '    If SearchType.ToLower = "topdown" Then
-    '        MsgBox("For top down search, call GetLinksTopDown directly", vbOKOnly)
-    '        Return Foundfiles
-    '        'Foundfiles = GetLinksTopDown(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList, Report)
-    '    Else
-    '        Foundfiles = GetLinksBottomUp(TopLevelFolder, TopLevelAssembly, ActiveFileExtensionsList)
-    '    End If
-    '    Return Foundfiles
-    'End Function
-
     Public Function GetLinksTopDown(TopLevelFolders As List(Of String),
                                     TopLevelAssembly As String,
                                     ActiveFileExtensionsList As List(Of String),
@@ -549,7 +532,8 @@ Public Class TopLevelAssemblyUtilities
                                          TopLevelFolder As String,
                                          AllFilenames As Dictionary(Of String, String),
                                          IsDriveIndexed As Boolean,
-                                         DraftAndModelSameName As Boolean) As List(Of String)
+                                         DraftAndModelSameName As Boolean
+                                         ) As List(Of String)
 
         Dim LinkedDocs As DesignManager.LinkedDocuments
         Dim LinkedDoc As DesignManager.Document

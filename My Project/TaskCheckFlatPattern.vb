@@ -17,6 +17,9 @@ Public Class TaskCheckFlatPattern
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckFlatPattern
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
         ' Options
     End Sub
 

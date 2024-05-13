@@ -186,8 +186,10 @@ Public Class Form1
 
         ReconcileFormChanges()
 
-        If SEIsRunning() Then
-            msg += "    Close Solid Edge" + Chr(13)
+        If Not CheckBoxUseCurrentSession.Checked Then
+            If SEIsRunning() Then
+                msg += "    Close Solid Edge" + Chr(13)
+            End If
         End If
 
         If DMIsRunning() Then
@@ -465,20 +467,6 @@ Public Class Form1
             End If
 
             SEApp.DoIdle()
-
-            'If Filetype = "Assembly" Then
-            '    CheckedListBoxX = CheckedListBoxAssembly
-            'ElseIf Filetype = "Part" Then
-            '    CheckedListBoxX = CheckedListBoxPart
-            'ElseIf Filetype = "Sheetmetal" Then
-            '    CheckedListBoxX = CheckedListBoxSheetmetal
-            'ElseIf Filetype = "Draft" Then
-            '    CheckedListBoxX = CheckedListBoxDraft
-            'Else
-            '    MsgBox("In ProcessFile(), Filetype not recognized: " + Filetype + ".  Exiting...")
-            '    SEApp.Quit()
-            '    End
-            'End If
 
             For Each Task As Task In Me.TaskList
                 If Task.IsSelectedTask Then
@@ -921,6 +909,7 @@ Public Class Form1
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
+            CheckBoxTLAIgnoreIncludeInReports.Enabled = True
         End If
 
         ListViewFilesOutOfDate = True
@@ -937,6 +926,7 @@ Public Class Form1
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
+            CheckBoxTLAIgnoreIncludeInReports.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True
@@ -1719,6 +1709,10 @@ Public Class Form1
 
         Return StatusChangeRadioButtons
     End Function
+
+    Private Sub LabelRandomSampleFraction_Click(sender As Object, e As EventArgs) Handles LabelRandomSampleFraction.Click
+
+    End Sub
 
 
 

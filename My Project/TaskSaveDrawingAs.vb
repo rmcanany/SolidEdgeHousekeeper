@@ -52,6 +52,9 @@ Public Class TaskSaveDrawingAs
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
+        Me.Category = "Output"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.NewFileTypeName = ""
@@ -391,100 +394,6 @@ Public Class TaskSaveDrawingAs
         Return ErrorMessage
     End Function
 
-    'Private Function SaveAsFlatDXF(
-    '    SEDoc As SolidEdgePart.SheetMetalDocument,
-    '    NewFilename As String,
-    '    SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    Dim Models As SolidEdgePart.Models
-
-    '    Models = SEDoc.Models
-    '    Try
-    '        Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
-    '        SEApp.DoIdle()
-    '    Catch ex As Exception
-    '        ExitStatus = 1
-    '        ErrorMessageList.Add(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
-    '    End Try
-
-    '    Return ErrorMessage
-    'End Function
-
-    'Private Function SaveAsModel(
-    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    NewFilename As String,
-    '    SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
-    '        SEDoc.SaveAs(NewFilename)
-    '        SEApp.DoIdle()
-    '    Else
-    '        If Me.SaveInOriginalDirectory Then
-    '            SEDoc.SaveCopyAs(NewFilename)
-    '            SEApp.DoIdle()
-    '        Else
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
-    '        End If
-    '    End If
-
-    '    Return ErrorMessage
-    'End Function
-
-    'Private Function SaveAsImage(
-    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    NewFilename As String,
-    '    SEApp As SolidEdgeFramework.Application,
-    '    Configuration As Dictionary(Of String, String),
-    '    NewExtension As String
-    '    ) As Dictionary(Of Integer, List(Of String))
-
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-    '    Dim ExitMessage As String
-
-    '    Dim Window As SolidEdgeFramework.Window
-    '    Dim View As SolidEdgeFramework.View
-
-    '    Dim TC As New Task_Common
-
-    '    Window = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
-    '    View = Window.View
-
-    '    If Not NewExtension = ".png" Then
-    '        View.SaveAsImage(NewFilename)
-    '    Else
-    '        ExitMessage = TC.SaveAsPNG(View, NewFilename)
-    '        If Not ExitMessage = "" Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add(ExitMessage)
-    '        End If
-    '    End If
-
-    '    If Me.CropImage Then
-    '        ExitMessage = TC.CropImage(Configuration, SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
-    '        If Not ExitMessage = "" Then
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add(ExitMessage)
-    '        End If
-    '    End If
-
-    '    Return ErrorMessage
-    'End Function
 
     Private Function GetNewFileTypeNames() As List(Of String)
         Dim NewFileTypeNames As New List(Of String)
@@ -502,29 +411,6 @@ Public Class TaskSaveDrawingAs
         Return NewFileTypeNames
     End Function
 
-    'Public Sub FormatTLPOptionsEx(
-    '    TLP As TableLayoutPanel,
-    '    Name As String,
-    '    NumRows As Integer)
-
-    '    TLP.Name = Name
-    '    TLP.RowCount = NumRows
-    '    For i As Integer = 0 To TLP.RowCount - 1
-    '        TLP.RowStyles.Add(New RowStyle(SizeType.AutoSize))
-    '    Next
-
-    '    TLP.ColumnCount = 3
-
-    '    TLP.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, 75))
-    '    TLP.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, 75))
-    '    TLP.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100.0F))
-
-    '    TLP.Dock = DockStyle.Fill
-
-    '    TLP.AutoSize = True
-    '    TLP.Visible = False
-
-    'End Sub
 
 
 
@@ -793,6 +679,14 @@ Public Class TaskSaveDrawingAs
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+            End If
+
+            If Me.NewFileTypeName = "" Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Output file type not detected", Indent))
             End If
 
             If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) Then

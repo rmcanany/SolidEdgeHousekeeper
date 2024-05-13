@@ -16,6 +16,9 @@ Public Class TaskCheckMissingDrawing
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMissingDrawing
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
 

@@ -252,7 +252,7 @@ Partial Class Form1
         ByVal FoundFiles As IReadOnlyCollection(Of String),
         ByVal WildcardString As String) As IReadOnlyCollection(Of String)
 
-        Dim LocalFoundFiles As New List(Of String)
+        Dim tmpFoundFiles As New List(Of String)
         Dim FilePath As String
         Dim Filename As String
 
@@ -260,11 +260,11 @@ Partial Class Form1
             Filename = System.IO.Path.GetFileName(FilePath)
             TextBoxStatus.Text = String.Format("Wildcard Search {0}", Filename)
             If Filename Like WildcardString Then
-                LocalFoundFiles.Add(FilePath)
+                tmpFoundFiles.Add(FilePath)
             End If
         Next
 
-        Return LocalFoundFiles
+        Return tmpFoundFiles
     End Function
 
     Private Function GetFileNames(ByVal FileWildcard As String) As List(Of String)

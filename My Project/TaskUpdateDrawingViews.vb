@@ -16,6 +16,9 @@ Public Class TaskUpdateDrawingViews
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateDrawingViews
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

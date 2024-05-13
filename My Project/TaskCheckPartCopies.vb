@@ -16,6 +16,9 @@ Public Class TaskCheckPartCopies
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartCopies
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

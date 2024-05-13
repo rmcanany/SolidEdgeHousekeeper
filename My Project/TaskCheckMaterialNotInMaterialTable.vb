@@ -26,6 +26,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
     End Sub

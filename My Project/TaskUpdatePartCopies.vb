@@ -23,6 +23,9 @@ Public Class TaskUpdatePartCopies
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdatePartCopies
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.UpdateParents = False

@@ -29,6 +29,9 @@ Public Class TaskFitView
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskFitView
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.Isometric = False

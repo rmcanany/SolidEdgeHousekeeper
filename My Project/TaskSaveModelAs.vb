@@ -49,6 +49,9 @@ Public Class TaskSaveModelAs
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
+        Me.Category = "Output"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.NewFileTypeName = ""
@@ -900,6 +903,14 @@ Public Class TaskSaveModelAs
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+            End If
+
+            If Me.NewFileTypeName = "" Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Output file type not detected", Indent))
             End If
 
             If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) Then

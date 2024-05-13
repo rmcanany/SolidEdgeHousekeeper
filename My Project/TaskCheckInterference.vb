@@ -27,6 +27,9 @@ Public Class TaskCheckInterference
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckInterference
+        Me.Category = "Check"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.NumOccurrencesLimit = 1000

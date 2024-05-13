@@ -7,9 +7,9 @@
 Public Class TaskUpdateModelStylesFromTemplate
     Inherits Task
 
-    Public Property AssemblyTemplate As String
-    Public Property PartTemplate As String
-    Public Property SheetmetalTemplate As String
+    'Public Property AssemblyTemplate As String
+    'Public Property PartTemplate As String
+    'Public Property SheetmetalTemplate As String
 
     Enum ControlNames
         BrowseAssembly
@@ -33,6 +33,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateModelStylesFromTemplate
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.AssemblyTemplate = ""

@@ -327,7 +327,7 @@ Public Class FormPropertyFilter
 		End If
 
 		tf = TextBoxPropertyFilterPropertyName.Text <> ""
-		tf = tf And TextBoxPropertyFilterValue.Text <> ""
+		'tf = tf And TextBoxPropertyFilterValue.Text <> ""
 		If tf Then
 			ButtonPropertyFilterAdd.Enabled = True
 		Else

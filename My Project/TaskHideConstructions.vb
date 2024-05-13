@@ -16,6 +16,9 @@ Public Class TaskHideConstructions
         Me.HasOptions = False
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskHideConstructions
+        Me.Category = "Restyle"
+
+        SetColorFromCategory(Me)
 
         ' Options
 

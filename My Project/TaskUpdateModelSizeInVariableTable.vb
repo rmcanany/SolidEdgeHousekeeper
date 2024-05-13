@@ -47,6 +47,9 @@ Public Class TaskUpdateModelSizeInVariableTable
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateModelSizeInVariableTable
+        Me.Category = "Update"
+
+        SetColorFromCategory(Me)
 
         ' Options
         Me.ReportXYZ = False
@@ -127,7 +130,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         End Try
 
         If ExitStatus = 0 Then
-            DocVariableDict = TC.GetDocVariables(SEDoc)
+            'DocVariableDict = TC.GetDocVariables(SEDoc)
 
             Variables = CType(SEDoc.Variables, SolidEdgeFramework.Variables)
 
@@ -140,7 +143,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 i = 0
                 For Each VariableName In VariableNames
                     Formula = String.Format("{0} m", Range(i))
-                    If Not DocVariableDict.Keys.Contains(VariableName) Then
+                    If Not TC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
@@ -176,7 +179,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 i = 0
                 For Each VariableName In VariableNames
                     Formula = String.Format("{0} m", Range(i))
-                    If Not DocVariableDict.Keys.Contains(VariableName) Then
+                    If Not TC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
