@@ -67,7 +67,7 @@ Public Class TaskRegenerateFlatModel
         Dim DocType = TC.GetDocType(SEDoc)
         
         ' Get FlatpatternModels collection to check if flat patterns exist
-        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels
+        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Select Case DocType
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
