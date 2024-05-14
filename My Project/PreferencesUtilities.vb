@@ -140,6 +140,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskEditProperties)
         TaskList.Add(New TaskEditVariables)
         TaskList.Add(New TaskEditInteractively)
+        TaskList.Add(New TaskBreakPartCopyLinks)
 
         ' Appearance
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)

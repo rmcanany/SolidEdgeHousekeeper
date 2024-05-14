@@ -229,6 +229,7 @@
     </Compile>
     <Compile Include="My Project\Task.vb" />
     <Compile Include="My Project\TaskActivateAndUpdateAll.vb" />
+    <Compile Include="My Project\TaskBreakPartCopyLinks.vb" />
     <Compile Include="My Project\TaskCheckDrawingPartsList.vb" />
     <Compile Include="My Project\TaskCheckDrawings.vb" />
     <Compile Include="My Project\TaskCheckFlatPattern.vb" />
