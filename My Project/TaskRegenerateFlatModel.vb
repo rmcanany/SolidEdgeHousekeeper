@@ -65,17 +65,24 @@ Public Class TaskRegenerateFlatModel
 
         Dim TC As New Task_Common
         
-        SEDoc.Activate
-        SEApp.DoIdle()
-        SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalToolsSelectTool)
-        SEApp.DoIdle()
-        SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalModelFlatPattern)
-        SEApp.DoIdle()
+        If Not SEApp.Visible Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot regenerate flat model in background mode")
+        Else
+            SEDoc.Activate
+            SEApp.DoIdle()
+            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalToolsSelectTool)
+            SEApp.DoIdle()
+            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalModelFlatPattern)
+            SEApp.DoIdle()
+        End If
         
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
+        End If
+        
+        If ExitStatus = 0 Then
             SEDoc.Save()
             SEApp.DoIdle()
         End If
@@ -122,7 +129,6 @@ Public Class TaskRegenerateFlatModel
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
-
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
