@@ -134,6 +134,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskUpdateModelSizeInVariableTable)
         TaskList.Add(New TaskUpdateDesignForCost)
         TaskList.Add(New TaskUpdateDrawingViews)
+        TaskList.Add(New TaskRegenerateFlatModel)
 
         ' Edit
         TaskList.Add(New TaskEditProperties)
