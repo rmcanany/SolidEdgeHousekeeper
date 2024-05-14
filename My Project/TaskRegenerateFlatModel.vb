@@ -64,17 +64,26 @@ Public Class TaskRegenerateFlatModel
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim TC As New Task_Common
+        Dim DocType = TC.GetDocType(SEDoc)
+        
+        ' Get FlatpatternModels collection to check if flat patterns exist
+        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels
+        Select Case DocType
+            Case = "par"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                FlatpatternModels = tmpSEDoc.FlatPatternModels
+
+            Case = "psm"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                FlatpatternModels = tmpSEDoc.FlatPatternModels
+
+            Case Else
+                MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
+        End Select
         
         If Not SEApp.Visible Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot regenerate flat model in background mode")
-        Else
-            SEDoc.Activate
-            SEApp.DoIdle()
-            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalToolsSelectTool)
-            SEApp.DoIdle()
-            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalModelFlatPattern)
-            SEApp.DoIdle()
         End If
         
         If SEDoc.ReadOnly Then
@@ -82,7 +91,14 @@ Public Class TaskRegenerateFlatModel
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         End If
         
-        If ExitStatus = 0 Then
+        ' Active flat environment to regenerate flat model then save part if no errors
+        If ExitStatus = 0 And FlatpatternModels.Count > 0 Then
+            SEDoc.Activate
+            SEApp.DoIdle()
+            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalToolsSelectTool)
+            SEApp.DoIdle()
+            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalModelFlatPattern)
+            SEApp.DoIdle()
             SEDoc.Save()
             SEApp.DoIdle()
         End If
