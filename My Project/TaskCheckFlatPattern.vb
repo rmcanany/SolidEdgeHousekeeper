@@ -64,7 +64,7 @@ Public Class TaskCheckFlatPattern
         Dim TC As New Task_Common
         Dim DocType = TC.GetDocType(SEDoc)
         
-        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels
+        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Dim FlatpatternModel As SolidEdgePart.FlatPatternModel
         
         Select Case DocType
