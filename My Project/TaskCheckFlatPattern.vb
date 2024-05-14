@@ -63,13 +63,24 @@ Public Class TaskCheckFlatPattern
 
         Dim TC As New Task_Common
         Dim DocType = TC.GetDocType(SEDoc)
+        
+        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels
+        Dim FlatpatternModel As SolidEdgePart.FlatPatternModel
+        
+        Select Case DocType
+            Case = "par"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                FlatpatternModels = tmpSEDoc.FlatPatternModels
 
-        If DocType = "psm" Then
-            Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+            Case = "psm"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                FlatpatternModels = tmpSEDoc.FlatPatternModels
 
-            Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = tmpSEDoc.FlatPatternModels
-            Dim FlatpatternModel As SolidEdgePart.FlatPatternModel
-
+            Case Else
+                MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
+        End Select
+        
+        If Not FlatpatternModels Is Nothing
             If FlatpatternModels.Count > 0 Then
                 For Each FlatpatternModel In FlatpatternModels
                     If Not FlatpatternModel.IsUpToDate Then
@@ -81,10 +92,7 @@ Public Class TaskCheckFlatPattern
                 ExitStatus = 1
                 ErrorMessageList.Add("Flat pattern is missing")
             End If
-
-
         End If
-
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
