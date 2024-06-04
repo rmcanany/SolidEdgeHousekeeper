@@ -51,7 +51,13 @@ Public Class TaskCheckMissingDrawing
         Return ErrorMessage
 
     End Function
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),

@@ -36,7 +36,7 @@ Public Class Form1
     Public Property TaskList As List(Of Task)
     Public Property RememberTaskSelections As Boolean
 
-
+    Public Property SolidEdgeRequired As Integer
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -120,7 +120,7 @@ Public Class Form1
 
         TotalAborts = 0
 
-        SEStart()
+        If SolidEdgeRequired > 0 Then SEStart()
 
         StartTime = Now
 
@@ -141,7 +141,7 @@ Public Class Form1
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        SEStop()
+        If SolidEdgeRequired > 0 Then SEStop()
 
         OleMessageFilter.Unregister()
 
@@ -244,6 +244,8 @@ Public Class Form1
         Dim ExitStatus As Integer = 0
         Dim NoTaskSelected As Boolean = True
 
+        SolidEdgeRequired = 0
+
         For Each Task As Task In Me.TaskList
             If Task.IsSelectedTask Then
                 'MsgBox("Update task with info from the form")
@@ -252,9 +254,20 @@ Public Class Form1
                     Dim FLU As New FileListUtilities(Me.ListViewFiles)
                     Task.SourceDirectories = FLU.GetSourceDirectories()
                 End If
+
+                SolidEdgeRequired += CType(Task.SolidEdgeRequired, Integer)
+
                 ErrorMessage = Task.CheckStartConditions(ErrorMessage)
             End If
         Next
+
+        If SolidEdgeRequired <> 0 Then
+            If Me.TaskList.Count <> SolidEdgeRequired Then
+                msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
+                ExitStatus += 1
+            End If
+        End If
+
 
         If NoTaskSelected Then
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
@@ -425,7 +438,7 @@ Public Class Form1
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
-        If CheckBoxProcessReadOnly.Checked Then
+        If CheckBoxProcessReadOnly.Checked And SolidEdgeRequired > 0 Then
 
             OldStatus = TC.GetStatus(DMApp, Path)
 
@@ -447,29 +460,32 @@ Public Class Form1
         '############### A new option should be inserted to prevent this situation
 
         Try
-            If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
-                SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+            If SolidEdgeRequired > 0 Then
+                If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
+                    SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
-                ' Here is the same functionality without using the SolidEdgeCommunity dependency
-                ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
-                ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
-                ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+                    ' Here is the same functionality without using the SolidEdgeCommunity dependency
+                    ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
+                    ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
+                    ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
 
-            Else
-                SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                SEDoc.Activate()
-
-                ' Maximize the window in the application
-                If Filetype = "Draft" Then
-                    ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                    ActiveSheetWindow.WindowState = 2
                 Else
-                    ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
-                    ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    SEDoc.Activate()
+
+                    ' Maximize the window in the application
+                    If Filetype = "Draft" Then
+                        ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                        ActiveSheetWindow.WindowState = 2
+                    Else
+                        ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                        ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                    End If
                 End If
+
+                SEApp.DoIdle()
             End If
 
-            SEApp.DoIdle()
 
             For Each Task As Task In Me.TaskList
                 If Task.IsSelectedTask Then
@@ -480,7 +496,11 @@ Public Class Form1
 
                     If tf Then
 
-                        ErrorMessage = Task.Process(SEDoc, Configuration, SEApp)
+                        If SolidEdgeRequired > 0 Then
+                            ErrorMessage = Task.Process(SEDoc, Configuration, SEApp)
+                        Else
+                            ErrorMessage = Task.Process(Path)
+                        End If
 
                         ExitStatus = ErrorMessage.Keys(0)
 
@@ -496,87 +516,89 @@ Public Class Form1
                 End If
             Next
 
-            SEDoc.Close(False)
-            SEApp.DoIdle()
+            If SolidEdgeRequired > 0 Then
+                SEDoc.Close(False)
+                SEApp.DoIdle()
 
+                ' Deal with Document Status
+                If CheckBoxProcessReadOnly.Checked Then
+                    If RadioButtonReadOnlyRevert.Checked Then
+                        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                            StatusChangeSuccessful = TC.SetStatus(DMApp, Path, OldStatus)
+                            If Not StatusChangeSuccessful Then
+                                ErrorMessagesCombined(
+                                String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+                                ) = New List(Of String) From {""}
+                            End If
+                        End If
+                    End If
 
-            ' Deal with Document Status
-            If CheckBoxProcessReadOnly.Checked Then
-                If RadioButtonReadOnlyRevert.Checked Then
-                    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                        StatusChangeSuccessful = TC.SetStatus(DMApp, Path, OldStatus)
+                    If RadioButtonReadOnlyChange.Checked Then
+                        Dim NewStatus As SolidEdgeConstants.DocumentStatus
+
+                        Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
+                        StatusChangedCheckedRadioButtons = GetStatusChangeRadioButtons(True)
+
+                        Dim FromStatus As String = ""
+                        Dim ToStatus As String = ""
+
+                        ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                            FromStatus = "RadioButtonStatusAto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+                            FromStatus = "RadioButtonStatusBto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+                            FromStatus = "RadioButtonStatusIRto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+                            FromStatus = "RadioButtonStatusIWto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+                            FromStatus = "RadioButtonStatusOto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+                            FromStatus = "RadioButtonStatusRto"
+                        End If
+
+                        For Each RB As RadioButton In StatusChangedCheckedRadioButtons
+                            If RB.Name.Contains(FromStatus) Then
+                                ToStatus = RB.Name.Replace(FromStatus, "")
+                            End If
+                        Next
+
+                        If ToStatus = "A" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                        End If
+                        If ToStatus = "B" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                        End If
+                        If ToStatus = "IR" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
+                        End If
+                        If ToStatus = "IW" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
+                        End If
+                        If ToStatus = "O" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                        End If
+                        If ToStatus = "R" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                        End If
+
+                        StatusChangeSuccessful = TC.SetStatus(DMApp, Path, NewStatus)
                         If Not StatusChangeSuccessful Then
                             ErrorMessagesCombined(
-                            String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
-                            ) = New List(Of String) From {""}
+                                String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
+                                ) = New List(Of String) From {""}
                         End If
-                    End If
-                End If
 
-                If RadioButtonReadOnlyChange.Checked Then
-                    Dim NewStatus As SolidEdgeConstants.DocumentStatus
-
-                    Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
-                    StatusChangedCheckedRadioButtons = GetStatusChangeRadioButtons(True)
-
-                    Dim FromStatus As String = ""
-                    Dim ToStatus As String = ""
-
-                    ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                        FromStatus = "RadioButtonStatusAto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-                        FromStatus = "RadioButtonStatusBto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-                        FromStatus = "RadioButtonStatusIRto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-                        FromStatus = "RadioButtonStatusIWto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-                        FromStatus = "RadioButtonStatusOto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-                        FromStatus = "RadioButtonStatusRto"
                     End If
 
-                    For Each RB As RadioButton In StatusChangedCheckedRadioButtons
-                        If RB.Name.Contains(FromStatus) Then
-                            ToStatus = RB.Name.Replace(FromStatus, "")
-                        End If
-                    Next
-
-                    If ToStatus = "A" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-                    End If
-                    If ToStatus = "B" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-                    End If
-                    If ToStatus = "IR" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
-                    End If
-                    If ToStatus = "IW" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
-                    End If
-                    If ToStatus = "O" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-                    End If
-                    If ToStatus = "R" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
-                    End If
-
-                    StatusChangeSuccessful = TC.SetStatus(DMApp, Path, NewStatus)
-                    If Not StatusChangeSuccessful Then
-                        ErrorMessagesCombined(
-                            String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
-                            ) = New List(Of String) From {""}
-                    End If
+                    'DMApp.Quit()
 
                 End If
-
-                'DMApp.Quit()
 
             End If
 
@@ -590,10 +612,12 @@ Public Class Form1
                 StopProcess = True
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
-                SEStop()
-                SEStart()
+                If SolidEdgeRequired > 0 Then
+                    SEStop()
+                    SEStart()
+                End If
             End If
-            ErrorMessagesCombined("Error processing file") = AbortList
+                ErrorMessagesCombined("Error processing file") = AbortList
         End Try
 
         UpdateTimeRemaining()
