@@ -1,6 +1,10 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
+Imports OpenMcdf
+Imports OpenMcdf.Extensions
+Imports OpenMcdf.Extensions.OLEProperties
+Imports System.IO
 Imports System.Text.RegularExpressions
 
 Public Class TaskEditProperties
@@ -11,7 +15,7 @@ Public Class TaskEditProperties
     Public Property AutoUpdateMaterial As Boolean
     Public Property ActiveMaterialLibrary As String
     Public Property RemoveFaceStyleOverrides As Boolean
-
+    Public Property StructuredStorageEdit As Boolean
 
     Enum ControlNames
         Edit
@@ -21,6 +25,7 @@ Public Class TaskEditProperties
         Browse
         ActiveMaterialLibrary
         RemoveFaceStyleOverrides
+        StructuredStorageEdit
         HideOptions
     End Enum
 
@@ -36,7 +41,7 @@ Public Class TaskEditProperties
         Me.AppliesToDraft = True
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
-        Me.Image = My.Resources.TaskEditProperties
+        Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
 
         SetColorFromCategory(Me)
@@ -47,6 +52,8 @@ Public Class TaskEditProperties
         Me.AutoUpdateMaterial = False
         Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
+        Me.StructuredStorageEdit = False
+
     End Sub
 
     Public Sub New(Task As TaskEditProperties)
@@ -55,6 +62,8 @@ Public Class TaskEditProperties
         Me.JSONDict = Task.JSONDict
         Me.AutoAddMissingProperty = Task.AutoAddMissingProperty
         Me.AutoUpdateMaterial = Task.AutoUpdateMaterial
+        Me.StructuredStorageEdit = Task.StructuredStorageEdit
+
     End Sub
 
     Public Overrides Function Process(
@@ -149,6 +158,36 @@ Public Class TaskEditProperties
             ErrorMessageList.Add("No properties provided")
         End If
 
+        Dim cfg As CFSConfiguration
+        Dim fs As FileStream
+        Dim cf As CompoundFile = Nothing
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+
+        Dim dsiStream2 As CFStream = Nothing
+        Dim co2 As OLEPropertiesContainer = Nothing
+
+        Dim OLEProp As OLEProperty = Nothing
+
+        If StructuredStorageEdit Then
+
+            Dim FullName As String = SEDoc.FullName
+            SEDoc.Close() '<-------- Can't save if the file is opened in Solid Edge
+
+            cfg = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+            fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+            cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            dsiStream2 = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            co2 = dsiStream2.AsOLEPropertiesContainer
+
+        End If
+
+
         For Each RowIndexString In PropertiesToEditDict.Keys
 
             Proceed = True
@@ -193,14 +232,40 @@ Public Class TaskEditProperties
             End If
 
             If Proceed Then
+
                 Try
-                    Prop = TC.GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
-                    If Prop Is Nothing Then
-                        Proceed = False
-                        ExitStatus = 1
-                        s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not StructuredStorageEdit Then
+
+                        Prop = TC.GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
+                        If Prop Is Nothing Then
+                            Proceed = False
+                            ExitStatus = 1
+                            s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                        End If
+
+                    Else
+
+                        '######## get the property here
+                        If PropertySetName = "System" Then OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+
+                        If PropertySetName = "Custom" Then
+                            OLEProp = co2.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                            If IsNothing(OLEProp) Then
+
+                                Dim userProperties = co2.UserDefinedProperties
+                                Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                                userProperties.PropertyNames(newPropertyId) = PropertyName
+                                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                                OLEProp.Value = " "
+                                userProperties.AddProperty(OLEProp)
+
+                            End If
+                        End If
+
                     End If
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -213,20 +278,41 @@ Public Class TaskEditProperties
             If Proceed Then
 
                 Try
-                    If FindSearchType = "PT" Then
-                        Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                    Else
-                        If FindSearchType = "WC" Then
-                            FindString = TC.GlobToRegex(FindString)
-                        End If
-                        If ReplaceSearchType = "PT" Then
-                            ' ReplaceString = Regex.Escape(ReplaceString)
-                        End If
 
-                        Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+                    If Not StructuredStorageEdit Then
+                        If FindSearchType = "PT" Then
+                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                        Else
+                            If FindSearchType = "WC" Then
+                                FindString = TC.GlobToRegex(FindString)
+                            End If
+                            If ReplaceSearchType = "PT" Then
+                                ' ReplaceString = Regex.Escape(ReplaceString)
+                            End If
+
+                            Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                        End If
+                        ' Properties.Save()
+                    Else
+
+                        '####### set the property here
+                        If FindSearchType = "PT" Then
+                            OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                        Else
+                            If FindSearchType = "WC" Then
+                                FindString = TC.GlobToRegex(FindString)
+                            End If
+                            If ReplaceSearchType = "PT" Then
+                                ' ReplaceString = Regex.Escape(ReplaceString)
+                            End If
+
+                            OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                        End If
 
                     End If
-                    ' Properties.Save()
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -239,9 +325,22 @@ Public Class TaskEditProperties
             If Proceed Then
 
                 Try
-                    If ReplaceString = "%{DeleteProperty}" Then
-                        Prop.Delete()
+
+                    If Not StructuredStorageEdit Then
+
+                        If ReplaceString = "%{DeleteProperty}" Then
+                            Prop.Delete()
+                        End If
+
+                    Else
+
+                        '############ delete the property here
+                        If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+                            co2.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                        End If
+
                     End If
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -253,18 +352,33 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-                    For Each Properties In PropertySets
-                        Properties.Save()
-                        SEApp.DoIdle()
-                    Next
-                    If SEDoc.ReadOnly Then
-                        ExitStatus = 1
-                        s = "Cannot save document marked 'Read Only'"
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not StructuredStorageEdit Then
+
+                        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+                        For Each Properties In PropertySets
+                            Properties.Save()
+                            SEApp.DoIdle()
+                        Next
+                        If SEDoc.ReadOnly Then
+                            ExitStatus = 1
+                            s = "Cannot save document marked 'Read Only'"
+                            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                        Else
+                            SEDoc.Save()
+                            SEApp.DoIdle()
+                        End If
+
                     Else
-                        SEDoc.Save()
-                        SEApp.DoIdle()
+
+                        '############ save the properties here (!)
+                        If PropertySetName = "System" Then
+                            co.Save(dsiStream)
+                        End If
+                        If PropertySetName = "Custom" Then
+                            co2.Save(dsiStream2)
+                        End If
+
                     End If
 
                 Catch ex As Exception
@@ -275,40 +389,61 @@ Public Class TaskEditProperties
                 End Try
             End If
 
-            ' If the changed property was System.Material, need to update properties from the material table.
-            If Proceed Then
-                PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
-                PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            If Not StructuredStorageEdit Then
 
-                If (PropertyName.ToLower = "material") And (PropertySetName.ToLower = "system") Then
+                ' If the changed property was System.Material, need to update properties from the material table.
+                If Proceed Then
+                    PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+                    PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
 
-                    If Me.AutoUpdateMaterial Then
+                    If (PropertyName.ToLower = "material") And (PropertySetName.ToLower = "system") Then
 
-                        Select Case DocType
-                            Case "par", "psm"
-                                Dim MaterialDoctor As New MaterialDoctor
-                                SupplementalErrorMessage = MaterialDoctor.UpdateMaterialFromMaterialTable(
-                                    SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
+                        If Me.AutoUpdateMaterial Then
 
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                            Select Case DocType
+                                Case "par", "psm"
+                                    Dim MaterialDoctor As New MaterialDoctor
+                                    SupplementalErrorMessage = MaterialDoctor.UpdateMaterialFromMaterialTable(
+                                        SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
 
-                            Case Else
-                                ' Not an error
+                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
-                        End Select
+                                Case Else
+                                    ' Not an error
 
+                            End Select
+
+                        End If
                     End If
                 End If
+
+            Else
+
+                '############# Investigate if anythingelse need to be done here in case of material change
+                '############# Set material should have its own task in my opinion (Francesco)
+
             End If
 
         Next
 
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        If Not StructuredStorageEdit Then
+
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+
+                SEDoc.Save()
+                SEApp.DoIdle()
+
+            End If
+
         Else
-            SEDoc.Save()
-            SEApp.DoIdle()
+
+            '############ save the properties here (!)
+            cf.Commit()
+            cf.Close()
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -380,6 +515,14 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
+        CheckBox = IU.FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Direct edit properties without opening the file in Sold Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
@@ -427,6 +570,9 @@ Public Class TaskEditProperties
 
         CheckBox = CType(ControlsDict(ControlNames.AutoUpdateMaterial.ToString), CheckBox)
         Me.AutoUpdateMaterial = CheckBox.Checked
+
+        CheckBox = CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox)
+        Me.StructuredStorageEdit = CheckBox.Checked
 
         CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
@@ -556,6 +702,10 @@ Public Class TaskEditProperties
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                Me.RequiresSave = Not Checkbox.Checked
+
             Case ControlNames.HideOptions.ToString '"HideOptions"
                 HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
 
@@ -625,6 +775,7 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
         HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
+        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit uses the structured storage for fast execution. "
 
         Return HelpString
     End Function
