@@ -53,6 +53,7 @@ Public Class TaskEditProperties
         Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
         Me.StructuredStorageEdit = False
+        Me.SolidEdgeRequired = False
 
     End Sub
 
@@ -88,7 +89,17 @@ Public Class TaskEditProperties
 
     End Function
 
-    Private Function ProcessInternal(
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = ProcessInternal(FileName)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -450,6 +461,210 @@ Public Class TaskEditProperties
         Return ErrorMessage
     End Function
 
+    Private Overloads Function ProcessInternal(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        ' Convert glob to regex 
+        ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
+        ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
+        ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim PropertySetName As String = ""
+        Dim PropertyName As String = ""
+        Dim FindString As String = ""
+        Dim ReplaceString As String = ""
+        Dim FindSearchType As String = ""
+        Dim ReplaceSearchType As String = ""
+
+        Dim PropertyFound As Boolean = False
+
+        Dim Proceed As Boolean = True
+        Dim s As String
+
+        Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim PropertiesToEdit As String = ""
+        Dim RowIndexString As String
+
+        Dim TC As New Task_Common
+
+        PropertiesToEdit = Me.JSONDict
+
+        If Not PropertiesToEdit = "" Then
+            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+        Else
+            ExitStatus = 1
+            ErrorMessageList.Add("No properties provided")
+        End If
+
+
+        Dim FullName As String = FileName
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim dsiStream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+        Dim co As OLEPropertiesContainer = dsiStream.AsOLEPropertiesContainer
+
+        Dim dsiStream2 As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+        Dim co2 As OLEPropertiesContainer = dsiStream2.AsOLEPropertiesContainer
+
+        Dim OLEProp As OLEProperty = Nothing
+
+        For Each RowIndexString In PropertiesToEditDict.Keys
+
+            Proceed = True
+
+            PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+            PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
+
+            If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
+                FindSearchType = "PT"
+            ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
+                ReplaceSearchType = "PT"
+            Else
+                ReplaceSearchType = "RX"
+            End If
+
+            '######### TBD: Create an Overloads of TC.SubstitutePropertyFormula that uses the OLEProperties object
+            'If Proceed Then
+            '    Try
+            '        FindString = TC.SubstitutePropertyFormula(SEDoc, FindString, ValidFilenameRequired:=False)
+            '    Catch ex As Exception
+            '        Proceed = False
+            '        ExitStatus = 1
+            '        s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '    End Try
+
+            '    Try
+            '        ReplaceString = TC.SubstitutePropertyFormula(SEDoc, ReplaceString, ValidFilenameRequired:=False)
+            '    Catch ex As Exception
+            '        Proceed = False
+            '        ExitStatus = 1
+            '        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '    End Try
+            'End If
+
+            If Proceed Then
+
+                Try
+
+                    '######## get the property here
+                    If PropertySetName = "System" Then OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+
+                    If PropertySetName = "Custom" Then
+                        OLEProp = co2.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                        If IsNothing(OLEProp) Then
+
+                            Dim userProperties = co2.UserDefinedProperties
+                            Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                            userProperties.PropertyNames(newPropertyId) = PropertyName
+                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                            OLEProp.Value = " "
+                            userProperties.AddProperty(OLEProp)
+
+                        End If
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+
+                Try
+
+                    '####### set the property here
+                    If FindSearchType = "PT" Then
+                        OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                    Else
+                        If FindSearchType = "WC" Then
+                            FindString = TC.GlobToRegex(FindString)
+                        End If
+                        If ReplaceSearchType = "PT" Then
+                            ' ReplaceString = Regex.Escape(ReplaceString)
+                        End If
+
+                        OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+
+                Try
+
+                    '############ delete the property here
+                    If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+                        co2.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to delete property value '{0}'.  This command only works on custom properties.", PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+                Try
+
+                    '############ save the properties here (!)
+                    If PropertySetName = "System" Then
+                        co.Save(dsiStream)
+                    End If
+                    If PropertySetName = "Custom" Then
+                        co2.Save(dsiStream2)
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = "Problem accessing or saving Property."
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+            End If
+
+        Next
+
+        '############ save the properties here (!)
+        cf.Commit()
+        cf.Close()
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+    End Function
+
 
     Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
         ControlsDict = New Dictionary(Of String, Control)
@@ -515,7 +730,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Direct edit properties without opening the file in Sold Edge")
+        CheckBox = IU.FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Direct edit properties without opening the file in Solid Edge")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -705,6 +920,7 @@ Public Class TaskEditProperties
             Case ControlNames.StructuredStorageEdit.ToString
                 Me.StructuredStorageEdit = Checkbox.Checked
                 Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString '"HideOptions"
                 HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)

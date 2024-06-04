@@ -183,35 +183,37 @@ Public Class Task_Common
         ' If the type is not recognized, the empty string is returned.
         Dim DocType As String = ""
 
-        Select Case SEDoc.Type
+        If Not IsNothing(SEDoc) Then
+            Select Case SEDoc.Type
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igWeldmentAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igWeldmentAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igPartDocument
-                DocType = "par"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igPartDocument
+                    DocType = "par"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncPartDocument
-                DocType = "par"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncPartDocument
+                    DocType = "par"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
-                DocType = "psm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
+                    DocType = "psm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncSheetMetalDocument
-                DocType = "psm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncSheetMetalDocument
+                    DocType = "psm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igDraftDocument
-                DocType = "dft"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igDraftDocument
+                    DocType = "dft"
 
-            Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
-        End Select
+                Case Else
+                    MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
+            End Select
+        End If
 
         Return DocType
     End Function

@@ -49,6 +49,7 @@ Public MustInherit Class Task
     Public Property DraftTemplate As String
     Public Property MaterialTable As String
     Public Property Category As String
+    Public Property SolidEdgeRequired As Boolean = True
 
 
 
@@ -70,6 +71,8 @@ Public MustInherit Class Task
         Configuration As Dictionary(Of String, String),
         SEApp As SolidEdgeFramework.Application
         ) As Dictionary(Of Integer, List(Of String))
+
+    Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
 
     Public MustOverride Function GetTLPTask(
         TLPParent As ExTableLayoutPanel
