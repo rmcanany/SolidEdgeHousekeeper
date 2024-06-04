@@ -442,6 +442,9 @@ Public Class Form1
             SEApp.DoIdle()
         End If
 
+        '############### Here its assumed that a task always need the file opened in Solid Edge
+        '############### This prevent the ability to process file with tasks that don't need Solid Edge
+        '############### A new option should be inserted to prevent this situation
 
         Try
             If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then

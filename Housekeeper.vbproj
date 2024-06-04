@@ -109,6 +109,14 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OpenMcdf, Version=2.2.1.12, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>My Project\OpenMcdf.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenMcdf.Extensions, Version=2.3.2.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>My Project\OpenMcdf.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="SolidEdge.Community, Version=219.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\SolidEdge.Community.219.0.0\lib\net45\SolidEdge.Community.dll</HintPath>
@@ -340,6 +348,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\icons8_Pencil_Drawing_16.png" />
     <None Include="Resources\unchecked_disabled.png" />
     <None Include="Resources\expand-disabled.png" />
     <None Include="Resources\TaskCheckDrawingPartsList.png" />
