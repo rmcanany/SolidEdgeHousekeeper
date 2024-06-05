@@ -375,7 +375,7 @@ Public Class TaskSaveModelAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Me.Formula, ValidFilenameRequired:=True)
+                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
