@@ -194,7 +194,7 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    FindString = TC.SubstitutePropertyFormula(SEDoc, FindString, ValidFilenameRequired:=False)
+                    FindString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -203,7 +203,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, ReplaceString, ValidFilenameRequired:=False)
+                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -345,7 +345,7 @@ Public Class TaskEditProperties
         Return ErrorMessage
     End Function
 
-    Private Overloads Function ProcessInternal(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
         ' Convert glob to regex 
         ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
@@ -385,8 +385,6 @@ Public Class TaskEditProperties
             ErrorMessageList.Add("No properties provided")
         End If
 
-
-        Dim FullName As String = FileName
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
         Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
@@ -423,25 +421,25 @@ Public Class TaskEditProperties
             End If
 
             '######### TBD: Create an Overloads of TC.SubstitutePropertyFormula that uses the OLEProperties object
-            'If Proceed Then
-            '    Try
-            '        FindString = TC.SubstitutePropertyFormula(SEDoc, FindString, ValidFilenameRequired:=False)
-            '    Catch ex As Exception
-            '        Proceed = False
-            '        ExitStatus = 1
-            '        s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
-            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-            '    End Try
+            If Proceed Then
+                Try
+                    FindString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
 
-            '    Try
-            '        ReplaceString = TC.SubstitutePropertyFormula(SEDoc, ReplaceString, ValidFilenameRequired:=False)
-            '    Catch ex As Exception
-            '        Proceed = False
-            '        ExitStatus = 1
-            '        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-            '    End Try
-            'End If
+                Try
+                    ReplaceString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False)
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+            End If
 
             If Proceed Then
 

@@ -4,6 +4,10 @@ Imports System.IO
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ExcelDataReader
+Imports OpenMcdf
+Imports OpenMcdf.Extensions
+Imports OpenMcdf.Extensions.OLEProperties
+Imports SolidEdgePart
 
 Public Class Task_Common
 
@@ -330,6 +334,61 @@ Public Class Task_Common
         Return FoundProp
 
     End Function
+
+
+    Public Function GetOLEPropValue(
+        cf As CompoundFile,
+        PropertySetName As String,
+        PropertyName As String,
+        AddProp As Boolean
+        ) As String
+
+        GetOLEPropValue = ""
+
+        Dim Proceed As Boolean = True
+
+        Dim OLEProp As OLEProperty = Nothing
+
+        Try
+
+            Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+            Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+            Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+
+            If PropertySetName.ToLower = "system" Then OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            If PropertySetName.ToLower = "custom" Then OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+
+        Catch ex As Exception
+
+            Proceed = False
+
+        End Try
+
+        If Proceed Then
+
+            If Not IsNothing(OLEPROP) Then
+
+                Return OLEProp.Value.ToString
+
+            Else
+
+                If AddProp Then
+                    Try
+                        'TBD Add property here
+                    Catch ex As Exception
+                        Proceed = False
+                    End Try
+
+                End If
+
+            End If
+
+        End If
+
+    End Function
+
 
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
     ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
@@ -758,6 +817,8 @@ Public Class Task_Common
 
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal cf As CompoundFile,
+        ByVal FullName As String,
         ByVal Instring As String,
         ValidFilenameRequired As Boolean
         ) As String
@@ -820,6 +881,8 @@ Public Class Task_Common
                 i = Formula.IndexOf(".")  ' First occurrence
                 PropertySet = Formula.Substring(0, i)    ' "Custom"
                 PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
                     i = PropertyName.IndexOf("|")
                     ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
@@ -831,21 +894,26 @@ Public Class Task_Common
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
 
                 If PropertyName.ToLower = "File Name".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileName(SEDoc.FullName))  ' C:\project\part.par -> part.par
+                    DocValues.Add(System.IO.Path.GetFileName(FullName))  ' C:\project\part.par -> part.par
                 ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
-                    DocValues.Add(SEDoc.FullName)
+                    DocValues.Add(FullName)
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))  ' C:\project\part.par -> part
+                    DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(FullName))  ' C:\project\part.par -> part
                 Else
-                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
-                    If Not FoundProp Is Nothing Then
-                        If ValidFilenameRequired Then
-                            DocValues.Add(FCD.SubstituteIllegalCharacters(CStr(FoundProp.Value)))
-                        Else
-                            DocValues.Add(CStr(FoundProp.Value))
-                        End If
+
+                    Dim tmpValue As String = ""
+
+                    If Not IsNothing(SEDoc) Then
+                        FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
+                        If Not FoundProp Is Nothing Then tmpValue = FoundProp.Value.ToString
                     Else
-                        DocValues.Add("")
+                        tmpValue = GetOLEPropValue(cf, PropertySet, PropertyName, False)
+                    End If
+
+                    If ValidFilenameRequired Then
+                        DocValues.Add(FCD.SubstituteIllegalCharacters(tmpValue))
+                    Else
+                        DocValues.Add(tmpValue)
                     End If
 
                 End If
