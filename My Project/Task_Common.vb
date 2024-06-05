@@ -3,6 +3,7 @@
 Imports System.IO
 Imports System.Reflection
 Imports System.Text.RegularExpressions
+Imports System.Windows.Forms.PropertyGridInternal
 Imports ExcelDataReader
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
@@ -368,7 +369,7 @@ Public Class Task_Common
 
         If Proceed Then
 
-            If Not IsNothing(OLEPROP) Then
+            If Not IsNothing(OLEProp) Then
 
                 Return OLEProp.Value.ToString
 
@@ -830,8 +831,10 @@ Public Class Task_Common
         Dim tf As Boolean
         Dim Proceed As Boolean = True
 
-        Dim PropertySet As String
-        Dim PropertyName As String
+        Dim PropertySet As String = ""
+        Dim PropertyName As String = ""
+        Dim PropertyCommand As String = ""
+
         Dim FoundProp As SolidEdgeFramework.Property
 
         Dim DocValues As New List(Of String)
@@ -879,8 +882,11 @@ Public Class Task_Common
                 Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
                 Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
                 i = Formula.IndexOf(".")  ' First occurrence
-                PropertySet = Formula.Substring(0, i)    ' "Custom"
-                PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                Dim tmpFormula = Formula.Split(CType(".", Char))
+                If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
+                If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+                If tmpFormula.Length > 2 Then PropertyCommand = tmpFormula(2) Else PropertyCommand = ""
 
                 'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
@@ -893,15 +899,15 @@ Public Class Task_Common
 
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
 
-                If PropertyName.ToLower = "File Name".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileName(FullName))  ' C:\project\part.par -> part.par
-                ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
-                    DocValues.Add(FullName)
-                ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(FullName))  ' C:\project\part.par -> part
-                Else
+                Dim tmpValue As String = ""
 
-                    Dim tmpValue As String = ""
+                If PropertyName.ToLower = "File Name".ToLower Then
+                    tmpValue = System.IO.Path.GetFileName(FullName)  ' C:\project\part.par -> part.par
+                ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
+                    tmpValue = FullName
+                ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
+                    tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
+                Else
 
                     If Not IsNothing(SEDoc) Then
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
@@ -911,12 +917,63 @@ Public Class Task_Common
                     End If
 
                     If ValidFilenameRequired Then
-                        DocValues.Add(FCD.SubstituteIllegalCharacters(tmpValue))
-                    Else
-                        DocValues.Add(tmpValue)
+                        tmpValue = FCD.SubstituteIllegalCharacters(tmpValue)
                     End If
 
                 End If
+
+                'EXPERIMENTAL TBD, find a text parser that interpretes the string manipulation commands (SubString, IndexOf, LastIndexOf) and formulas
+                If PropertyCommand <> "" Then
+
+                    If Regex.IsMatch(PropertyCommand, "SubString", RegexOptions.IgnoreCase) Then
+
+                        Pattern = "\((.*)\)"
+                        Dim Match = Regex.Match(PropertyCommand, Pattern)
+                        If Match.Groups.Count = 2 Then
+
+                            Dim SubStringValues = Match.Groups.Item(1).ToString.Split(CType(",", Char))
+
+                            For i = 0 To SubStringValues.Length - 1
+
+                                Dim item = SubStringValues(i)
+
+                                If item.ToLower.StartsWith("indexof") Then
+                                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
+                                    item = CStr(tmpValue.IndexOf(CType(item, Char)))
+                                End If
+
+                                If item.ToLower.StartsWith("lastindexof") Then
+                                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
+                                    item = CStr(tmpValue.LastIndexOf(CType(item, Char)))
+                                End If
+
+                                SubStringValues(i) = item
+
+                            Next
+
+                            Select Case SubStringValues.Length
+                                Case 1
+                                    Try
+                                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)))
+                                    Catch ex As Exception
+                                        'TBD implement error message in case of out of index
+                                    End Try
+
+                                Case 2
+                                    Try
+                                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)), CInt(SubStringValues(1)))
+                                    Catch ex As Exception
+                                        'TBD implement error message in case of out of index
+                                    End Try
+                            End Select
+
+                        End If
+
+                    End If
+
+                End If
+
+                DocValues.Add(tmpValue)
 
             Next
         End If
