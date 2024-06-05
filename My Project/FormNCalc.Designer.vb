@@ -34,6 +34,7 @@ Partial Class FormNCalc
         '
         Me.TextEditorNCalc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TextEditorNCalc.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextEditorNCalc.Highlighting = Nothing
         Me.TextEditorNCalc.Location = New System.Drawing.Point(0, 25)
         Me.TextEditorNCalc.Name = "TextEditorNCalc"
         Me.TextEditorNCalc.Size = New System.Drawing.Size(784, 200)
@@ -50,17 +51,17 @@ Partial Class FormNCalc
         '
         'BT_Test
         '
-        Me.BT_Test.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_Test.Image = CType(resources.GetObject("BT_Test.Image"), System.Drawing.Image)
+        Me.BT_Test.Image = Global.Housekeeper.My.Resources.Resources.Play
         Me.BT_Test.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Test.Name = "BT_Test"
-        Me.BT_Test.Size = New System.Drawing.Size(23, 22)
-        Me.BT_Test.Text = "ToolStripButton1"
+        Me.BT_Test.Size = New System.Drawing.Size(47, 22)
+        Me.BT_Test.Text = "Test"
         '
         'TextEditorResult
         '
         Me.TextEditorResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TextEditorResult.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResult.Highlighting = Nothing
         Me.TextEditorResult.Location = New System.Drawing.Point(0, 225)
         Me.TextEditorResult.Name = "TextEditorResult"
         Me.TextEditorResult.ReadOnly = True
@@ -75,8 +76,9 @@ Partial Class FormNCalc
         Me.Controls.Add(Me.TextEditorResult)
         Me.Controls.Add(Me.TextEditorNCalc)
         Me.Controls.Add(Me.ToolStrip1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormNCalc"
-        Me.Text = "FormNCalc"
+        Me.Text = "Property Formula Editor"
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ResumeLayout(False)

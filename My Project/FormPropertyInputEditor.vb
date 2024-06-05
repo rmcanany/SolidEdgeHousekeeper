@@ -376,7 +376,7 @@ Public Class FormPropertyInputEditor
 
         Dim tmp As New FormNCalc
         tmp.TextEditorNCalc.Highlighting = "C#"
-        tmp.TextEditorNCalc.Text = "'-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
+        tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
         tmp.ShowDialog()
         Dim A = tmp.Formula.Replace(vbCrLf, "")
         Clipboard.SetText(A)
