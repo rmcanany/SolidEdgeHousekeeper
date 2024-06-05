@@ -371,4 +371,16 @@ Public Class FormPropertyInputEditor
     Private Sub TextBoxJSON_TextChanged(sender As Object, e As EventArgs) Handles TextBoxJSON.TextChanged
         Me.JSONDict = TextBoxJSON.Text
     End Sub
+
+    Private Sub ButtonNCalc_Click(sender As Object, e As EventArgs) Handles ButtonNCalc.Click
+
+        Dim tmp As New FormNCalc
+        tmp.TextEditorNCalc.Highlighting = "C#"
+        tmp.TextEditorNCalc.Text = "'-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
+        tmp.ShowDialog()
+        Dim A = tmp.Formula.Replace(vbCrLf, "")
+        Clipboard.SetText(A)
+
+    End Sub
+
 End Class

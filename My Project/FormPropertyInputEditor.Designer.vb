@@ -54,6 +54,7 @@ Partial Class FormPropertyInputEditor
         Me.TextBoxJSON = New System.Windows.Forms.TextBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ButtonNCalc = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -103,11 +104,11 @@ Partial Class FormPropertyInputEditor
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.SystemColors.Control
-        Me.Label5.Location = New System.Drawing.Point(409, 39)
+        Me.Label5.Location = New System.Drawing.Point(409, 40)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label5.Size = New System.Drawing.Size(63, 21)
+        Me.Label5.Size = New System.Drawing.Size(64, 20)
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Find string"
         '
@@ -116,11 +117,11 @@ Partial Class FormPropertyInputEditor
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.SystemColors.Control
-        Me.Label7.Location = New System.Drawing.Point(583, 39)
+        Me.Label7.Location = New System.Drawing.Point(583, 40)
         Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label7.Size = New System.Drawing.Size(81, 21)
+        Me.Label7.Size = New System.Drawing.Size(86, 20)
         Me.Label7.TabIndex = 6
         Me.Label7.Text = "Replace string"
         '
@@ -151,10 +152,10 @@ Partial Class FormPropertyInputEditor
         Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label4.AutoSize = True
         Me.TableLayoutPanel3.SetColumnSpan(Me.Label4, 2)
-        Me.Label4.Location = New System.Drawing.Point(9, 5)
+        Me.Label4.Location = New System.Drawing.Point(6, 5)
         Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(56, 16)
+        Me.Label4.Size = New System.Drawing.Size(61, 15)
         Me.Label4.TabIndex = 0
         Me.Label4.Text = "Replace *"
         '
@@ -162,10 +163,10 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(8, 31)
+        Me.Label10.Location = New System.Drawing.Point(7, 31)
         Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(20, 16)
+        Me.Label10.Size = New System.Drawing.Size(22, 15)
         Me.Label10.TabIndex = 1
         Me.Label10.Text = "PT"
         Me.ToolTip1.SetToolTip(Me.Label10, "Replace with Plain Text")
@@ -174,10 +175,10 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(45, 31)
+        Me.Label11.Location = New System.Drawing.Point(43, 31)
         Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(21, 16)
+        Me.Label11.Size = New System.Drawing.Size(24, 15)
         Me.Label11.TabIndex = 2
         Me.Label11.Text = "RX"
         Me.ToolTip1.SetToolTip(Me.Label11, "Replace with a Regular Expression")
@@ -289,10 +290,10 @@ Partial Class FormPropertyInputEditor
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label3.AutoSize = True
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 3)
-        Me.Label3.Location = New System.Drawing.Point(20, 5)
+        Me.Label3.Location = New System.Drawing.Point(18, 5)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(75, 16)
+        Me.Label3.Size = New System.Drawing.Size(79, 15)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Find search *"
         '
@@ -300,10 +301,10 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(9, 31)
+        Me.Label6.Location = New System.Drawing.Point(8, 31)
         Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(20, 16)
+        Me.Label6.Size = New System.Drawing.Size(22, 15)
         Me.Label6.TabIndex = 1
         Me.Label6.Text = "PT"
         Me.ToolTip1.SetToolTip(Me.Label6, "Search using Plain Text")
@@ -315,7 +316,7 @@ Partial Class FormPropertyInputEditor
         Me.Label8.Location = New System.Drawing.Point(44, 31)
         Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(26, 16)
+        Me.Label8.Size = New System.Drawing.Size(26, 15)
         Me.Label8.TabIndex = 2
         Me.Label8.Text = "WC"
         Me.ToolTip1.SetToolTip(Me.Label8, "Search using a Wildcard")
@@ -324,10 +325,10 @@ Partial Class FormPropertyInputEditor
         '
         Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(85, 31)
+        Me.Label9.Location = New System.Drawing.Point(83, 31)
         Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(21, 16)
+        Me.Label9.Size = New System.Drawing.Size(24, 15)
         Me.Label9.TabIndex = 3
         Me.Label9.Text = "RX"
         Me.ToolTip1.SetToolTip(Me.Label9, "Search using a Regular Expression")
@@ -337,11 +338,11 @@ Partial Class FormPropertyInputEditor
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.SystemColors.Control
-        Me.Label2.Location = New System.Drawing.Point(194, 39)
+        Me.Label2.Location = New System.Drawing.Point(194, 25)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label2.Size = New System.Drawing.Size(84, 21)
+        Me.Label2.Size = New System.Drawing.Size(55, 35)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Property name"
         '
@@ -350,11 +351,11 @@ Partial Class FormPropertyInputEditor
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
         Me.Label1.BackColor = System.Drawing.SystemColors.Control
-        Me.Label1.Location = New System.Drawing.Point(114, 39)
+        Me.Label1.Location = New System.Drawing.Point(114, 40)
         Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label1.Size = New System.Drawing.Size(70, 21)
+        Me.Label1.Size = New System.Drawing.Size(71, 20)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Property set"
         '
@@ -362,9 +363,9 @@ Partial Class FormPropertyInputEditor
         '
         Me.CheckBoxCopyToAsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToAsm.AutoSize = True
-        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(576, 300)
+        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(573, 300)
         Me.CheckBoxCopyToAsm.Name = "CheckBoxCopyToAsm"
-        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(47, 20)
+        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(50, 19)
         Me.CheckBoxCopyToAsm.TabIndex = 1
         Me.CheckBoxCopyToAsm.Text = "asm"
         Me.CheckBoxCopyToAsm.UseVisualStyleBackColor = True
@@ -373,9 +374,9 @@ Partial Class FormPropertyInputEditor
         '
         Me.CheckBoxCopyToPar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToPar.AutoSize = True
-        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(626, 300)
+        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(625, 300)
         Me.CheckBoxCopyToPar.Name = "CheckBoxCopyToPar"
-        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(43, 20)
+        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(44, 19)
         Me.CheckBoxCopyToPar.TabIndex = 2
         Me.CheckBoxCopyToPar.Text = "par"
         Me.CheckBoxCopyToPar.UseVisualStyleBackColor = True
@@ -384,9 +385,9 @@ Partial Class FormPropertyInputEditor
         '
         Me.CheckBoxCopyToPsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToPsm.AutoSize = True
-        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(676, 300)
+        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(674, 300)
         Me.CheckBoxCopyToPsm.Name = "CheckBoxCopyToPsm"
-        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(48, 20)
+        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(50, 19)
         Me.CheckBoxCopyToPsm.TabIndex = 3
         Me.CheckBoxCopyToPsm.Text = "psm"
         Me.CheckBoxCopyToPsm.UseVisualStyleBackColor = True
@@ -395,9 +396,9 @@ Partial Class FormPropertyInputEditor
         '
         Me.CheckBoxCopyToDft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToDft.AutoSize = True
-        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(726, 300)
+        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(728, 300)
         Me.CheckBoxCopyToDft.Name = "CheckBoxCopyToDft"
-        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(41, 20)
+        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(39, 19)
         Me.CheckBoxCopyToDft.TabIndex = 4
         Me.CheckBoxCopyToDft.Text = "dft"
         Me.CheckBoxCopyToDft.UseVisualStyleBackColor = True
@@ -408,7 +409,7 @@ Partial Class FormPropertyInputEditor
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(441, 302)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(124, 16)
+        Me.Label13.Size = New System.Drawing.Size(125, 15)
         Me.Label13.TabIndex = 5
         Me.Label13.Text = "Copy these settings to"
         '
@@ -439,7 +440,7 @@ Partial Class FormPropertyInputEditor
         Me.TextBoxJSON.Enabled = False
         Me.TextBoxJSON.Location = New System.Drawing.Point(10, 330)
         Me.TextBoxJSON.Name = "TextBoxJSON"
-        Me.TextBoxJSON.Size = New System.Drawing.Size(554, 23)
+        Me.TextBoxJSON.Size = New System.Drawing.Size(554, 21)
         Me.TextBoxJSON.TabIndex = 8
         '
         'Label14
@@ -447,15 +448,25 @@ Partial Class FormPropertyInputEditor
         Me.Label14.AutoSize = True
         Me.Label14.Location = New System.Drawing.Point(10, 302)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(383, 16)
+        Me.Label14.Size = New System.Drawing.Size(413, 15)
         Me.Label14.TabIndex = 9
         Me.Label14.Text = "* Search legend:    PT: Plain Text    WC: Wildcard    RX: Regular Expression"
         '
+        'ButtonNCalc
+        '
+        Me.ButtonNCalc.Location = New System.Drawing.Point(679, 273)
+        Me.ButtonNCalc.Name = "ButtonNCalc"
+        Me.ButtonNCalc.Size = New System.Drawing.Size(96, 21)
+        Me.ButtonNCalc.TabIndex = 10
+        Me.ButtonNCalc.Text = "NCalc"
+        Me.ButtonNCalc.UseVisualStyleBackColor = True
+        '
         'FormPropertyInputEditor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 361)
+        Me.Controls.Add(Me.ButtonNCalc)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.TextBoxJSON)
         Me.Controls.Add(Me.ButtonCancel)
@@ -466,7 +477,7 @@ Partial Class FormPropertyInputEditor
         Me.Controls.Add(Me.CheckBoxCopyToPar)
         Me.Controls.Add(Me.CheckBoxCopyToAsm)
         Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyInputEditor"
         Me.Text = "Property Input Editor"
@@ -513,4 +524,5 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents ButtonMoveSelectedDown As Button
     Friend WithEvents ButtonMoveSelectedUp As Button
     Friend WithEvents ImageList1 As ImageList
+    Friend WithEvents ButtonNCalc As Button
 End Class
