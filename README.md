@@ -430,6 +430,8 @@ You can copy the settings on the form to other tabs. Set the `Copy To` CheckBoxe
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
+EXPERIMENTAL: Direct edit uses the structured storage for fast execution. 
+
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
 
@@ -521,7 +523,25 @@ Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse
 If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
 ### Save model as
+Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
+Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
+
+Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- General Page**. 
+
+You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
+`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: 
+`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. 
+
+As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
+
+It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
+
+Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. 
+
+The `DXF Flat` option saves the flat pattern of the sheet metal file. 
+
+The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use the Draft `Save As`, using a `Property Filter` if needed. 
 
 For Draft files you can optionally include a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 
@@ -530,7 +550,25 @@ Also for Draft files, the option `Use subdirectory formula` can use an Index Ref
 When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
 
 ### Save drawing as
+Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
+Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
+
+Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- General Page**. 
+
+You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
+`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: 
+`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. 
+
+As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
+
+It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
+
+Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. 
+
+The `DXF Flat` option saves the flat pattern of the sheet metal file. 
+
+The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use the Draft `Save As`, using a `Property Filter` if needed. 
 
 For Draft files you can optionally include a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 

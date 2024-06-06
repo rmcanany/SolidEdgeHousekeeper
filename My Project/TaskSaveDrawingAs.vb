@@ -971,7 +971,7 @@ Public Class TaskSaveDrawingAs
         HelpString += "A more flexible option may be to use the Draft `Save As`, "
         HelpString += "using a `Property Filter` if needed. "
 
-        HelpString = vbCrLf + vbCrLf + "For Draft files you can "
+        HelpString += vbCrLf + vbCrLf + "For Draft files you can "
         HelpString += "optionally include a watermark image on the output.  For the watermark, "
         HelpString += "set X/W and Y/H to position the image, and Scale to change its size. "
         HelpString += "The X/W and Y/H values are fractions of the sheet's "
