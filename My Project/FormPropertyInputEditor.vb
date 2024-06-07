@@ -183,6 +183,15 @@ Public Class FormPropertyInputEditor
         ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
+        ColumnName = "Replace_EX"
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
+
+        ColumnIndex += 1
         ColumnName = "ReplaceString"
         ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
         ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
@@ -246,11 +255,19 @@ Public Class FormPropertyInputEditor
                 If FindOrReplace = "Replace" Then
                     If SearchType = "PT" Then
                         CheckBoxDict(CheckBox.Name.Replace("PT", "RX")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("PT", "EX")).Checked = False
                     End If
 
                     If SearchType = "RX" Then
                         CheckBoxDict(CheckBox.Name.Replace("RX", "PT")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("RX", "EX")).Checked = False
                     End If
+
+                    If SearchType = "EX" Then
+                        CheckBoxDict(CheckBox.Name.Replace("EX", "PT")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("EX", "RX")).Checked = False
+                    End If
+
                 End If
             End If
 
@@ -267,6 +284,7 @@ Public Class FormPropertyInputEditor
                 If FindOrReplace = "Replace" Then
                     tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked
                     tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndexString)).Checked
+                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndexString)).Checked
                     If Not tf Then
                         CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked = True
                     End If
@@ -295,6 +313,7 @@ Public Class FormPropertyInputEditor
 
             tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked
             tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndex)).Checked
+            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndex)).Checked
             If Not tf Then
                 CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked = True
             End If
