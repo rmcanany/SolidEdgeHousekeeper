@@ -964,7 +964,7 @@ Public Class TaskSaveDrawingAs
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
-        HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. "
+        HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
         HelpString += vbCrLf + vbCrLf + "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
         HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
         HelpString += "The drawing must have the same name as the model, and be in the same directory. "
@@ -986,8 +986,8 @@ Public Class TaskSaveDrawingAs
         HelpString += "for example, `%{Custom.Last Revision Date}`. "
         HelpString += vbCrLf + vbCrLf + "When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. "
         HelpString += "The first saves all sheets to one file.  The second saves each sheet to a separate file, "
-        HelpString += "called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix"
-        HelpString += "on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**."
+        HelpString += "called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix "
+        HelpString += "on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.  "
         HelpString += "To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. "
 
 
