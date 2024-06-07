@@ -24,6 +24,7 @@ Public Class FormPropertyInputEditor
     '    "ReplaceString":"Aluminum 6061-T6"},
     ' ...
     '}
+    Dim t As Timer = New Timer()
 
     Public Sub ShowInputEditor(FileType As String)
         Me.FileType = FileType
@@ -50,6 +51,9 @@ Public Class FormPropertyInputEditor
     End Sub
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        t.Interval = 1500
+        AddHandler t.Tick, AddressOf HandleTimerTick
 
         BuildColumnsDict()
 
@@ -179,6 +183,15 @@ Public Class FormPropertyInputEditor
         ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
 
         ColumnIndex += 1
+        ColumnName = "Replace_EX"
+        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
+        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
+        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
+        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
+        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
+        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
+
+        ColumnIndex += 1
         ColumnName = "ReplaceString"
         ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
         ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
@@ -242,11 +255,19 @@ Public Class FormPropertyInputEditor
                 If FindOrReplace = "Replace" Then
                     If SearchType = "PT" Then
                         CheckBoxDict(CheckBox.Name.Replace("PT", "RX")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("PT", "EX")).Checked = False
                     End If
 
                     If SearchType = "RX" Then
                         CheckBoxDict(CheckBox.Name.Replace("RX", "PT")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("RX", "EX")).Checked = False
                     End If
+
+                    If SearchType = "EX" Then
+                        CheckBoxDict(CheckBox.Name.Replace("EX", "PT")).Checked = False
+                        CheckBoxDict(CheckBox.Name.Replace("EX", "RX")).Checked = False
+                    End If
+
                 End If
             End If
 
@@ -263,6 +284,7 @@ Public Class FormPropertyInputEditor
                 If FindOrReplace = "Replace" Then
                     tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked
                     tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndexString)).Checked
+                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndexString)).Checked
                     If Not tf Then
                         CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked = True
                     End If
@@ -291,6 +313,7 @@ Public Class FormPropertyInputEditor
 
             tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked
             tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndex)).Checked
+            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndex)).Checked
             If Not tf Then
                 CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked = True
             End If
@@ -371,4 +394,57 @@ Public Class FormPropertyInputEditor
     Private Sub TextBoxJSON_TextChanged(sender As Object, e As EventArgs) Handles TextBoxJSON.TextChanged
         Me.JSONDict = TextBoxJSON.Text
     End Sub
+
+    Private Sub ButtonNCalc_Click(sender As Object, e As EventArgs) Handles ButtonNCalc.Click
+
+        Dim tmp As New FormNCalc
+        tmp.TextEditorNCalc.Highlighting = "C#"
+        'tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
+        tmp.ShowDialog()
+        Dim A = tmp.Formula.Replace(vbCrLf, "")
+        If A <> "" Then
+            Clipboard.SetText(A)
+            MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
+        End If
+
+    End Sub
+
+    Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
+
+        Dim tmpForm As New Form
+        Dim tmpSize = New Size(200, 75)
+        tmpForm.Text = String.Empty
+        tmpForm.ControlBox = False
+        tmpForm.BackColor = Color.White
+
+        'tmpForm.FormBorderStyle = FormBorderStyle.None
+        tmpForm.Size = tmpSize
+        tmpForm.StartPosition = FormStartPosition.Manual
+        tmpForm.Location = New Point(CInt(Me.Left + Me.Width / 2 - tmpForm.Width / 2), CInt(Me.Top + Me.Height / 2 - tmpForm.Height / 2))
+
+        Dim tmpLabel As New Label
+        tmpLabel.Font = New Font(Me.Font.Name, 8, FontStyle.Bold)
+        tmpLabel.Width = 180
+        tmpLabel.Dock = DockStyle.Fill
+        tmpLabel.TextAlign = ContentAlignment.MiddleCenter
+        tmpLabel.Text = "Expression copied to clipboard"
+        tmpForm.Controls.Add(tmpLabel)
+
+        tmpForm.Show(Me)
+
+        t.Start()
+
+    End Sub
+
+    Sub HandleTimerTick(sender As Object, e As EventArgs)
+
+        For Each item In Me.OwnedForms
+            item.Close()
+        Next
+
+        T.Stop()
+
+    End Sub
+
+
 End Class

@@ -2,12 +2,14 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
 Imports System.Windows.Forms.PropertyGridInternal
 Imports ExcelDataReader
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
+Imports PanoramicData.NCalcExtensions
 Imports SolidEdgePart
 
 Public Class Task_Common
@@ -821,7 +823,8 @@ Public Class Task_Common
         ByVal cf As CompoundFile,
         ByVal FullName As String,
         ByVal Instring As String,
-        ValidFilenameRequired As Boolean
+        ValidFilenameRequired As Boolean,
+        Optional Expression As Boolean = False
         ) As String
 
         ' Replaces property formulas in a string
@@ -833,7 +836,7 @@ Public Class Task_Common
 
         Dim PropertySet As String = ""
         Dim PropertyName As String = ""
-        Dim PropertyCommand As String = ""
+        'Dim PropertyCommand As String = ""
 
         Dim FoundProp As SolidEdgeFramework.Property
 
@@ -886,7 +889,7 @@ Public Class Task_Common
                 Dim tmpFormula = Formula.Split(CType(".", Char))
                 If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
                 If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
-                If tmpFormula.Length > 2 Then PropertyCommand = tmpFormula(2) Else PropertyCommand = ""
+                'If tmpFormula.Length > 2 Then PropertyCommand = tmpFormula(2) Else PropertyCommand = ""
 
                 'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
@@ -922,56 +925,56 @@ Public Class Task_Common
 
                 End If
 
-                'EXPERIMENTAL TBD, find a text parser that interpretes the string manipulation commands (SubString, IndexOf, LastIndexOf) and formulas
-                If PropertyCommand <> "" Then
+                ''EXPERIMENTAL TBD, find a text parser that interpretes the string manipulation commands (SubString, IndexOf, LastIndexOf) and formulas
+                'If PropertyCommand <> "" Then
 
-                    If Regex.IsMatch(PropertyCommand, "SubString", RegexOptions.IgnoreCase) Then
+                '    If Regex.IsMatch(PropertyCommand, "SubString", RegexOptions.IgnoreCase) Then
 
-                        Pattern = "\((.*)\)"
-                        Dim Match = Regex.Match(PropertyCommand, Pattern)
-                        If Match.Groups.Count = 2 Then
+                '        Pattern = "\((.*)\)"
+                '        Dim Match = Regex.Match(PropertyCommand, Pattern)
+                '        If Match.Groups.Count = 2 Then
 
-                            Dim SubStringValues = Match.Groups.Item(1).ToString.Split(CType(",", Char))
+                '            Dim SubStringValues = Match.Groups.Item(1).ToString.Split(CType(",", Char))
 
-                            For i = 0 To SubStringValues.Length - 1
+                '            For i = 0 To SubStringValues.Length - 1
 
-                                Dim item = SubStringValues(i)
+                '                Dim item = SubStringValues(i)
 
-                                If item.ToLower.StartsWith("indexof") Then
-                                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
-                                    item = CStr(tmpValue.IndexOf(CType(item, Char)))
-                                End If
+                '                If item.ToLower.StartsWith("indexof") Then
+                '                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
+                '                    item = CStr(tmpValue.IndexOf(CType(item, Char)))
+                '                End If
 
-                                If item.ToLower.StartsWith("lastindexof") Then
-                                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
-                                    item = CStr(tmpValue.LastIndexOf(CType(item, Char)))
-                                End If
+                '                If item.ToLower.StartsWith("lastindexof") Then
+                '                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
+                '                    item = CStr(tmpValue.LastIndexOf(CType(item, Char)))
+                '                End If
 
-                                SubStringValues(i) = item
+                '                SubStringValues(i) = item
 
-                            Next
+                '            Next
 
-                            Select Case SubStringValues.Length
-                                Case 1
-                                    Try
-                                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)))
-                                    Catch ex As Exception
-                                        'TBD implement error message in case of out of index
-                                    End Try
+                '            Select Case SubStringValues.Length
+                '                Case 1
+                '                    Try
+                '                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)))
+                '                    Catch ex As Exception
+                '                        'TBD implement error message in case of out of index
+                '                    End Try
 
-                                Case 2
-                                    Try
-                                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)), CInt(SubStringValues(1)))
-                                    Catch ex As Exception
-                                        'TBD implement error message in case of out of index
-                                    End Try
-                            End Select
+                '                Case 2
+                '                    Try
+                '                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)), CInt(SubStringValues(1)))
+                '                    Catch ex As Exception
+                '                        'TBD implement error message in case of out of index
+                '                    End Try
+                '            End Select
 
-                        End If
+                '        End If
 
-                    End If
+                '    End If
 
-                End If
+                'End If
 
                 DocValues.Add(tmpValue)
 
@@ -984,6 +987,23 @@ Public Class Task_Common
             For i = 0 To DocValues.Count - 1
                 Outstring = Outstring.Replace(Formulas(i), DocValues(i))
             Next
+
+        End If
+
+        If Expression Then
+
+            Dim nCalcExpression As New ExtendedExpression(Outstring)
+
+            Try
+                Dim A = nCalcExpression.Evaluate()
+
+                Outstring = A.ToString
+
+            Catch ex As Exception
+
+                Outstring = ex.Message.Replace(vbCrLf, "-")
+
+            End Try
 
         End If
 
