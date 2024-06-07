@@ -108,4 +108,11 @@ Public Class FormNCalc
 
     End Sub
 
+    Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
+
+        Dim webAddress As String = "https://github.com/panoramicdata/PanoramicData.NCalcExtensions"
+        Process.Start(webAddress)
+
+    End Sub
+
 End Class

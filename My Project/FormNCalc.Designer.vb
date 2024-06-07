@@ -30,6 +30,9 @@ Partial Class FormNCalc
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TextEditorResult = New ICSharpCode.TextEditor.TextEditorControl()
+        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -45,7 +48,7 @@ Partial Class FormNCalc
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.BT_Save, Me.DD_SavedExpressions})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(784, 25)
@@ -75,11 +78,10 @@ Partial Class FormNCalc
         '
         'DD_SavedExpressions
         '
-        Me.DD_SavedExpressions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.DD_SavedExpressions.Image = CType(resources.GetObject("DD_SavedExpressions.Image"), System.Drawing.Image)
+        Me.DD_SavedExpressions.Image = Global.Housekeeper.My.Resources.Resources.list
         Me.DD_SavedExpressions.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.DD_SavedExpressions.Name = "DD_SavedExpressions"
-        Me.DD_SavedExpressions.Size = New System.Drawing.Size(115, 22)
+        Me.DD_SavedExpressions.Size = New System.Drawing.Size(131, 22)
         Me.DD_SavedExpressions.Text = "Saved Expressions"
         '
         'TextEditorResult
@@ -93,6 +95,27 @@ Partial Class FormNCalc
         Me.TextEditorResult.Size = New System.Drawing.Size(784, 136)
         Me.TextEditorResult.TabIndex = 2
         '
+        'BT_Help
+        '
+        Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Help.Name = "BT_Help"
+        Me.BT_Help.Size = New System.Drawing.Size(52, 22)
+        Me.BT_Help.Text = "Help"
+        '
+        'BT_Delete
+        '
+        Me.BT_Delete.Image = Global.Housekeeper.My.Resources.Resources.delete
+        Me.BT_Delete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Delete.Name = "BT_Delete"
+        Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
+        Me.BT_Delete.Text = "Delete"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
         'FormNCalc
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -101,7 +124,9 @@ Partial Class FormNCalc
         Me.Controls.Add(Me.TextEditorResult)
         Me.Controls.Add(Me.TextEditorNCalc)
         Me.Controls.Add(Me.ToolStrip1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MaximizeBox = False
         Me.Name = "FormNCalc"
         Me.Text = "Property Formula Editor"
         Me.ToolStrip1.ResumeLayout(False)
@@ -118,4 +143,7 @@ Partial Class FormNCalc
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents BT_Save As ToolStripButton
     Friend WithEvents DD_SavedExpressions As ToolStripDropDownButton
+    Friend WithEvents BT_Help As ToolStripButton
+    Friend WithEvents BT_Delete As ToolStripButton
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class
