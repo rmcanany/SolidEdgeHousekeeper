@@ -26,6 +26,9 @@ Partial Class FormNCalc
         Me.TextEditorNCalc = New ICSharpCode.TextEditor.TextEditorControl()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.BT_Test = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_Save = New System.Windows.Forms.ToolStripButton()
+        Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.TextEditorResult = New ICSharpCode.TextEditor.TextEditorControl()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -42,7 +45,7 @@ Partial Class FormNCalc
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.BT_Save, Me.DD_SavedExpressions})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(784, 25)
@@ -56,6 +59,28 @@ Partial Class FormNCalc
         Me.BT_Test.Name = "BT_Test"
         Me.BT_Test.Size = New System.Drawing.Size(47, 22)
         Me.BT_Test.Text = "Test"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_Save
+        '
+        Me.BT_Save.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.BT_Save.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Save.Name = "BT_Save"
+        Me.BT_Save.Size = New System.Drawing.Size(51, 22)
+        Me.BT_Save.Text = "Save"
+        '
+        'DD_SavedExpressions
+        '
+        Me.DD_SavedExpressions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.DD_SavedExpressions.Image = CType(resources.GetObject("DD_SavedExpressions.Image"), System.Drawing.Image)
+        Me.DD_SavedExpressions.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.DD_SavedExpressions.Name = "DD_SavedExpressions"
+        Me.DD_SavedExpressions.Size = New System.Drawing.Size(115, 22)
+        Me.DD_SavedExpressions.Text = "Saved Expressions"
         '
         'TextEditorResult
         '
@@ -90,4 +115,7 @@ Partial Class FormNCalc
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents BT_Test As ToolStripButton
     Friend WithEvents TextEditorResult As ICSharpCode.TextEditor.TextEditorControl
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents BT_Save As ToolStripButton
+    Friend WithEvents DD_SavedExpressions As ToolStripDropDownButton
 End Class
