@@ -188,8 +188,10 @@ Public Class TaskEditProperties
 
             If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
                 ReplaceSearchType = "PT"
-            Else
+            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
                 ReplaceSearchType = "RX"
+            Else
+                ReplaceSearchType = "EX"
             End If
 
             If Proceed Then
@@ -203,7 +205,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False)
+                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -236,6 +238,10 @@ Public Class TaskEditProperties
             If Proceed Then
 
                 Try
+
+                    If ReplaceSearchType = "EX" Then
+
+                    End If
 
                     If FindSearchType = "PT" Then
                         Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
@@ -416,11 +422,12 @@ Public Class TaskEditProperties
 
             If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
                 ReplaceSearchType = "PT"
-            Else
+            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
                 ReplaceSearchType = "RX"
+            Else
+                ReplaceSearchType = "EX"
             End If
 
-            '######### TBD: Create an Overloads of TC.SubstitutePropertyFormula that uses the OLEProperties object
             If Proceed Then
                 Try
                     FindString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
@@ -432,7 +439,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False)
+                    ReplaceString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1

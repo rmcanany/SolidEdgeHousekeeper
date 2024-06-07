@@ -1,8 +1,0 @@
-[EXP]
-Example 1
-[EXP_TEXT]
-'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')+1),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)
-[EXP]
-Example 2
-[EXP_TEXT]
-replace('%{Object}','L=','L:')

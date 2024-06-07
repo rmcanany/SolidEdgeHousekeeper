@@ -375,7 +375,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
-    <Content Include="My Project\SavedExpressions.txt">
+    <Content Include="SavedExpressions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Panoramic Data.ico" />

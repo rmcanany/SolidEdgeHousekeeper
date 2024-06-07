@@ -1,0 +1,8 @@
+[EXP]
+Example 1
+[EXP_TEXT]
+'%{System.Title}' + '-' + toString(cast(substring('%{System.Subject}', lastIndexOf('%{System.Subject}', 'L=')+2, lastIndexOf('%{System.Subject}', ' ')-lastIndexOf('%{System.Subject}', 'L=')-2),'System.Int32'),'D4') + '-' + substring('%{System.Subject}', lastIndexOf('%{System.Subject}', ' ')+1)
+[EXP]
+Example 2
+[EXP_TEXT]
+replace('%{Subject}','L=','L:')

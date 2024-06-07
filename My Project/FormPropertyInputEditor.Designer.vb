@@ -419,11 +419,11 @@ Partial Class FormPropertyInputEditor
         '
         'ButtonNCalc
         '
-        Me.ButtonNCalc.Location = New System.Drawing.Point(679, 273)
+        Me.ButtonNCalc.Location = New System.Drawing.Point(705, 273)
         Me.ButtonNCalc.Name = "ButtonNCalc"
-        Me.ButtonNCalc.Size = New System.Drawing.Size(96, 21)
+        Me.ButtonNCalc.Size = New System.Drawing.Size(117, 23)
         Me.ButtonNCalc.TabIndex = 10
-        Me.ButtonNCalc.Text = "NCalc"
+        Me.ButtonNCalc.Text = "Expression editor"
         Me.ButtonNCalc.UseVisualStyleBackColor = True
         '
         'ButtonClearSelected
