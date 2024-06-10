@@ -21,6 +21,12 @@ Public Class FormNCalc
 
     Public Sub New()
 
+        ' FastColoredTextBox
+        ' https://github.com/PavelTorgashov/FastColoredTextBox/tree/master
+
+        ' NCalcExtension
+        ' https://github.com/panoramicdata/PanoramicData.NCalcExtensions
+
         ' This call is required by the designer.
         InitializeComponent()
 

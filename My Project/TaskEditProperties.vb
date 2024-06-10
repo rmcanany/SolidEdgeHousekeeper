@@ -353,6 +353,9 @@ Public Class TaskEditProperties
 
     Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
+        ' Structured Storage
+        ' https://github.com/ironfede/openmcdf
+
         ' Convert glob to regex 
         ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
         ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
