@@ -398,10 +398,12 @@ Public Class FormPropertyInputEditor
     Private Sub ButtonNCalc_Click(sender As Object, e As EventArgs) Handles ButtonNCalc.Click
 
         Dim tmp As New FormNCalc
-        tmp.TextEditorNCalc.Highlighting = "C#"
+        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
         'tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
         tmp.ShowDialog()
         Dim A = tmp.Formula.Replace(vbCrLf, "")
+        A = A.Split(CType("\\", Char)).First
+
         If A <> "" Then
             Clipboard.SetText(A)
             MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)

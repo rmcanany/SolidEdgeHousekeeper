@@ -353,6 +353,9 @@ Public Class TaskEditProperties
 
     Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
+        ' Structured Storage
+        ' https://github.com/ironfede/openmcdf
+
         ' Convert glob to regex 
         ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
         ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
@@ -395,12 +398,8 @@ Public Class TaskEditProperties
         Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
-        Dim dsiStream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-        Dim co As OLEPropertiesContainer = dsiStream.AsOLEPropertiesContainer
-
-        Dim dsiStream2 As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-        Dim co2 As OLEPropertiesContainer = dsiStream2.AsOLEPropertiesContainer
-
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
         For Each RowIndexString In PropertiesToEditDict.Keys
@@ -448,18 +447,42 @@ Public Class TaskEditProperties
                 End Try
             End If
 
+            'Direct properties editing doesn't support linked files |Rx sintax: " & PropertyName
+            If Proceed Then
+                If FindString.StartsWith("[ERROR]") Then
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Direct edit doesn't support links in Find text '{0}' for property '{1}'", FindString.Replace("[ERROR]", ""), PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End If
+                If ReplaceString.StartsWith("[ERROR]") Then
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Direct edit doesn't support links in Replace text '{0}' for property '{1}'", ReplaceString.Replace("[ERROR]", ""), PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End If
+            End If
+
             If Proceed Then
 
                 Try
 
                     '######## get the property here
-                    If PropertySetName = "System" Then OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    If PropertySetName = "System" Then
+                        dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    End If
 
                     If PropertySetName = "Custom" Then
-                        OLEProp = co2.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                        dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
                         If IsNothing(OLEProp) Then
 
-                            Dim userProperties = co2.UserDefinedProperties
+                            Dim userProperties = co.UserDefinedProperties
                             Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
                             userProperties.PropertyNames(newPropertyId) = PropertyName
                             OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
@@ -467,6 +490,13 @@ Public Class TaskEditProperties
                             userProperties.AddProperty(OLEProp)
 
                         End If
+                    End If
+
+                    If PropertySetName.ToLower = "project" Then
+                        dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName & "*")
                     End If
 
                 Catch ex As Exception
@@ -512,7 +542,7 @@ Public Class TaskEditProperties
 
                     '############ delete the property here
                     If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
-                        co2.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                        co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
                     End If
 
                 Catch ex As Exception
@@ -528,11 +558,8 @@ Public Class TaskEditProperties
                 Try
 
                     '############ save the properties here (!)
-                    If PropertySetName = "System" Then
+                    If PropertySetName = "System" Or PropertySetName = "Custom" Then
                         co.Save(dsiStream)
-                    End If
-                    If PropertySetName = "Custom" Then
-                        co2.Save(dsiStream2)
                     End If
 
                 Catch ex As Exception
@@ -546,7 +573,13 @@ Public Class TaskEditProperties
         Next
 
         '############ save the properties here (!)
-        cf.Commit()
+        If PropertySetName = "System" Or PropertySetName = "Custom" Then
+            cf.Commit()
+        Else
+            ExitStatus = 1
+            s = "Project properties are ReadOnly (Writeable in next release)"
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+        End If
         cf.Close()
 
         ErrorMessage(ExitStatus) = ErrorMessageList
