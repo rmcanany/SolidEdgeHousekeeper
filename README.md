@@ -537,7 +537,7 @@ As illustrated in the examples, a `Property set`, either `System` or `Custom`, i
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 
-Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. 
+Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. 
 
 The `DXF Flat` option saves the flat pattern of the sheet metal file. 
 
@@ -547,7 +547,7 @@ For Draft files you can optionally include a watermark image on the output.  For
 
 Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
 
-When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.  To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
 
 ### Save drawing as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
@@ -564,7 +564,7 @@ As illustrated in the examples, a `Property set`, either `System` or `Custom`, i
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 
-Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. 
+Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. 
 
 The `DXF Flat` option saves the flat pattern of the sheet metal file. 
 
@@ -574,7 +574,7 @@ For Draft files you can optionally include a watermark image on the output.  For
 
 Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
 
-When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffixon file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.  To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
 
 ### Print
 Print settings are accessed on the **Configuration Tab -- Printing Page**.
