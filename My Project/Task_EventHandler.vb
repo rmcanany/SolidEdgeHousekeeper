@@ -265,7 +265,7 @@ Public Class Task_EventHandler
             Button2Image = My.Resources.collapse
         Else
             CheckBox.Image = My.Resources.Unchecked
-            CheckBox2Image = My.Resources.unchecked_disabled
+            CheckBox2Image = My.Resources.Unchecked '_disabled '<---- Why disabled?
             Button2Image = My.Resources.expand
         End If
 

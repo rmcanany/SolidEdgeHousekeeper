@@ -243,7 +243,7 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.SelectAssembly.ToString
                     TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
                     If Task.AppliesToAssembly Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, True)
+                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
                         TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
                     Else
                         CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
@@ -253,7 +253,7 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.SelectPart.ToString
                     TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
                     If Task.AppliesToPart Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, True)
+                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
                         TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
                     Else
                         CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
@@ -263,7 +263,7 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.SelectSheetmetal.ToString
                     TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
                     If Task.AppliesToSheetmetal Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, True)
+                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
                         TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
                     Else
                         CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
@@ -273,7 +273,7 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.SelectDraft.ToString
                     TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
                     If Task.AppliesToDraft Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, True)
+                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
                         TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
                     Else
                         CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
