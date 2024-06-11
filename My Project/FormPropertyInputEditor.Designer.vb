@@ -28,6 +28,7 @@ Partial Class FormPropertyInputEditor
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label12 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -55,7 +56,6 @@ Partial Class FormPropertyInputEditor
         Me.ButtonClearSelected = New System.Windows.Forms.Button()
         Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
         Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
@@ -150,6 +150,18 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(115, 52)
         Me.TableLayoutPanel3.TabIndex = 8
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(45, 31)
+        Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(24, 15)
+        Me.Label12.TabIndex = 3
+        Me.Label12.Text = "RX"
+        Me.ToolTip1.SetToolTip(Me.Label12, "Replace with a Regular Expression")
         '
         'Label4
         '
@@ -429,7 +441,9 @@ Partial Class FormPropertyInputEditor
         'ButtonClearSelected
         '
         Me.ButtonClearSelected.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.White
+        Me.ButtonClearSelected.FlatAppearance.BorderColor = System.Drawing.Color.Silver
+        Me.ButtonClearSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonClearSelected.ImageKey = "Delete_16.png"
         Me.ButtonClearSelected.ImageList = Me.ImageList1
         Me.ButtonClearSelected.Location = New System.Drawing.Point(3, 3)
@@ -437,11 +451,13 @@ Partial Class FormPropertyInputEditor
         Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
         Me.ButtonClearSelected.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
-        Me.ButtonClearSelected.UseVisualStyleBackColor = False
+        Me.ButtonClearSelected.UseVisualStyleBackColor = True
         '
         'ButtonMoveSelectedUp
         '
         Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedUp.FlatAppearance.BorderColor = System.Drawing.Color.Silver
+        Me.ButtonMoveSelectedUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
         Me.ButtonMoveSelectedUp.ImageKey = "up.png"
         Me.ButtonMoveSelectedUp.ImageList = Me.ImageList1
@@ -450,11 +466,13 @@ Partial Class FormPropertyInputEditor
         Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 24)
         Me.ButtonMoveSelectedUp.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
-        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
+        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = True
         '
         'ButtonMoveSelectedDown
         '
         Me.ButtonMoveSelectedDown.BackColor = System.Drawing.SystemColors.Control
+        Me.ButtonMoveSelectedDown.FlatAppearance.BorderColor = System.Drawing.Color.Silver
+        Me.ButtonMoveSelectedDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
         Me.ButtonMoveSelectedDown.ImageKey = "down.png"
         Me.ButtonMoveSelectedDown.ImageList = Me.ImageList1
@@ -463,19 +481,7 @@ Partial Class FormPropertyInputEditor
         Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 24)
         Me.ButtonMoveSelectedDown.TabIndex = 12
         Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
-        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
-        '
-        'Label12
-        '
-        Me.Label12.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(45, 31)
-        Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(24, 15)
-        Me.Label12.TabIndex = 3
-        Me.Label12.Text = "RX"
-        Me.ToolTip1.SetToolTip(Me.Label12, "Replace with a Regular Expression")
+        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = True
         '
         'FormPropertyInputEditor
         '
@@ -494,6 +500,7 @@ Partial Class FormPropertyInputEditor
         Me.Controls.Add(Me.CheckBoxCopyToAsm)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyInputEditor"
         Me.Text = "Property Input Editor"

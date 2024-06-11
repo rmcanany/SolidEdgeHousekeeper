@@ -333,10 +333,10 @@ Public Class Task_EventHandler
         ' https://stackoverflow.com/questions/34064499/how-to-set-cell-color-in-tablelayoutpanel-dynamically
 
         Dim BrushColorFileType As Brush = New SolidBrush(Color.FromArgb(32 + 16, 190, 190, 255))
-        Dim BrushColorHeader As Brush = New SolidBrush(Color.FromArgb(127, 190, 190, 255))
+        Dim BrushColorHeader As Brush = New SolidBrush(Color.FromArgb(127, 190, 190, 255))    '<--------- Need better colors :-)
 
-        If e.Row = 0 Then
-            e.Graphics.FillRectangle(BrushColorHeader, e.CellBounds)
+        If e.Row = 0 And e.Column < 6 Then
+            'e.Graphics.FillRectangle(BrushColorHeader, e.CellBounds)
         End If
 
     End Sub
@@ -344,10 +344,13 @@ Public Class Task_EventHandler
     Shared Sub TLPTask_CellPaint(sender As Object, e As TableLayoutCellPaintEventArgs) 'Handles TLPHeader.CellPaint
         ' https://stackoverflow.com/questions/34064499/how-to-set-cell-color-in-tablelayoutpanel-dynamically
 
-        Dim BrushColor As Brush = New SolidBrush(Color.FromArgb(48, 190, 190, 255))
+        Dim BrushColor As Brush = New SolidBrush(Color.FromArgb(48, 190, 190, 255))    '<--------- Need better colors :-)
 
-        If e.Column > 1 And e.Column < 6 Then
-            e.Graphics.FillRectangle(BrushColor, e.CellBounds)
+        Dim PenColorHeader As Pen = New Pen(New SolidBrush(Color.LightGray))
+
+        If e.Column >= 0 And e.Column <= 6 Then
+            'e.Graphics.FillRectangle(BrushColor, e.CellBounds)
+            e.Graphics.DrawLine(PenColorHeader, e.CellBounds.Right, e.CellBounds.Top, e.CellBounds.Right, e.CellBounds.Bottom)
         End If
 
     End Sub

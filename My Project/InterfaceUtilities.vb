@@ -161,12 +161,13 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.Task.ToString
                     TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
                     Label = FormatLabel(ColumnName, "TASK", Nothing)
+                    Label.Padding = New Padding(5, 5, 0, 0)     '<----- added to control label position
                     'Label.Anchor = AnchorStyles.Left
                     TLPHeader.Controls.Add(Label, ColumnIndex, RowIndex)
                     BaseControlsDict(Label.Name) = Label
 
                 Case BaseControlNames.Help.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth + 2)) '<--- added +2 to not truncate the icon
                     Button = FormatButton(ColumnName, My.Resources.Help, True)
                     TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
                     BaseControlsDict(Button.Name) = Button
@@ -282,11 +283,11 @@ Public Class InterfaceUtilities
                 Case BaseControlNames.Task.ToString
                     TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
                     Label = FormatLabel(ColumnName, Task.Description, Task.Image)
-                    Label.Padding = New Padding(5, 0, 0, 0)
+                    Label.Padding = New Padding(5, 5, 0, 0)
                     TLPTask.Controls.Add(Label, ColumnIndex, RowIndex)
 
                 Case BaseControlNames.Help.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth + 2)) '<--- added +2 to not truncate the icon
                     Button = FormatButton(ColumnName, My.Resources.Help, True)
                     TLPTask.Controls.Add(Button, ColumnIndex, RowIndex)
 
@@ -343,7 +344,7 @@ Public Class InterfaceUtilities
         Dim TLPTasksParameters As New Dictionary(Of String, String)
         Dim ColumnNamesString As String
 
-        TLPTasksParameters("ColumnWidth") = CStr(20)
+        TLPTasksParameters("ColumnWidth") = CStr(23)    '<---- test with 23 instead of 20 to not truncate icons
         TLPTasksParameters("RowHeight") = TLPTasksParameters("ColumnWidth")
         TLPTasksParameters("ColumnCount") = CStr(8)
 
@@ -427,9 +428,12 @@ Public Class InterfaceUtilities
         Dim Indent As String = "        "
 
         Label.Name = Name
+        'Label.Font = New Font(Label.Font.Name, 9.5, FontStyle.Regular) '<--- this to force label height to 16 pixel and not truncate the icons
+
         Label.Text = String.Format("{0}{1}", Indent, LabelText)
-        Label.AutoSize = True
+        Label.AutoSize = False                                          '<--- controlling position with padding, autosize truncate the icons if text is small
         Label.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+        'Label.BackColor = Color.LightBlue                              '<--- use it to debug label size
 
         If Image IsNot Nothing Then
             Label.Image = Image
