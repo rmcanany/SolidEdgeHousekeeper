@@ -338,7 +338,6 @@ Public Class Task_Common
 
     End Function
 
-
     Public Function GetOLEPropValue(
         cf As CompoundFile,
         PropertySetName As String,
@@ -354,14 +353,26 @@ Public Class Task_Common
 
         Try
 
-            Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-            Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+            If PropertySetName.ToLower = "system" Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
-            Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            End If
 
-            If PropertySetName.ToLower = "system" Then OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-            If PropertySetName.ToLower = "custom" Then OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+            If PropertySetName.ToLower = "custom" Then
+                Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+
+                OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+            End If
+
+            If PropertySetName.ToLower = "project" Then
+                Dim Project_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                Dim Project_Properties As OLEPropertiesContainer = Project_Stream.AsOLEPropertiesContainer
+
+                OLEProp = Project_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName Like "*" & PropertyName & "*")
+            End If
 
         Catch ex As Exception
 
@@ -391,7 +402,6 @@ Public Class Task_Common
         End If
 
     End Function
-
 
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
     ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
@@ -865,6 +875,7 @@ Public Class Task_Common
 
         tf = Instring.Contains("%{System")
         tf = tf Or Instring.Contains("%{Custom")
+        tf = tf Or Instring.Contains("%{Project")
 
         If Not tf Then
             Outstring = Instring
@@ -889,13 +900,16 @@ Public Class Task_Common
                 Dim tmpFormula = Formula.Split(CType(".", Char))
                 If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
                 If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
-                'If tmpFormula.Length > 2 Then PropertyCommand = tmpFormula(2) Else PropertyCommand = ""
 
                 'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
-                    i = PropertyName.IndexOf("|")
-                    ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
-                    PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
+                    If Not IsNothing(SEDoc) Then
+                        i = PropertyName.IndexOf("|")
+                        ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
+                        PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
+                    Else
+                        Return "[ERROR]" & PropertyName
+                    End If
                 Else
                     ModelIdx = 0
                 End If
@@ -924,57 +938,6 @@ Public Class Task_Common
                     End If
 
                 End If
-
-                ''EXPERIMENTAL TBD, find a text parser that interpretes the string manipulation commands (SubString, IndexOf, LastIndexOf) and formulas
-                'If PropertyCommand <> "" Then
-
-                '    If Regex.IsMatch(PropertyCommand, "SubString", RegexOptions.IgnoreCase) Then
-
-                '        Pattern = "\((.*)\)"
-                '        Dim Match = Regex.Match(PropertyCommand, Pattern)
-                '        If Match.Groups.Count = 2 Then
-
-                '            Dim SubStringValues = Match.Groups.Item(1).ToString.Split(CType(",", Char))
-
-                '            For i = 0 To SubStringValues.Length - 1
-
-                '                Dim item = SubStringValues(i)
-
-                '                If item.ToLower.StartsWith("indexof") Then
-                '                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
-                '                    item = CStr(tmpValue.IndexOf(CType(item, Char)))
-                '                End If
-
-                '                If item.ToLower.StartsWith("lastindexof") Then
-                '                    item = item.Split(CType("(", Char)).Last.Replace(")", "").Replace("""", "")
-                '                    item = CStr(tmpValue.LastIndexOf(CType(item, Char)))
-                '                End If
-
-                '                SubStringValues(i) = item
-
-                '            Next
-
-                '            Select Case SubStringValues.Length
-                '                Case 1
-                '                    Try
-                '                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)))
-                '                    Catch ex As Exception
-                '                        'TBD implement error message in case of out of index
-                '                    End Try
-
-                '                Case 2
-                '                    Try
-                '                        tmpValue = tmpValue.Substring(CInt(SubStringValues(0)), CInt(SubStringValues(1)))
-                '                    Catch ex As Exception
-                '                        'TBD implement error message in case of out of index
-                '                    End Try
-                '            End Select
-
-                '        End If
-
-                '    End If
-
-                'End If
 
                 DocValues.Add(tmpValue)
 

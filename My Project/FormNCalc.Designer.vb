@@ -22,29 +22,22 @@ Partial Class FormNCalc
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormNCalc))
-        Me.TextEditorNCalc = New ICSharpCode.TextEditor.TextEditorControl()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.BT_Test = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_Save = New System.Windows.Forms.ToolStripButton()
-        Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
-        Me.TextEditorResult = New ICSharpCode.TextEditor.TextEditorControl()
-        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
-        Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.BT_Test = New System.Windows.Forms.ToolStripButton()
+        Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.BT_Save = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
+        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'TextEditorNCalc
-        '
-        Me.TextEditorNCalc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorNCalc.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TextEditorNCalc.Highlighting = Nothing
-        Me.TextEditorNCalc.Location = New System.Drawing.Point(0, 25)
-        Me.TextEditorNCalc.Name = "TextEditorNCalc"
-        Me.TextEditorNCalc.Size = New System.Drawing.Size(784, 200)
-        Me.TextEditorNCalc.TabIndex = 0
         '
         'ToolStrip1
         '
@@ -55,6 +48,58 @@ Partial Class FormNCalc
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'TextEditorFormula
+        '
+        Me.TextEditorFormula.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorFormula.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorFormula.BackBrush = Nothing
+        Me.TextEditorFormula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorFormula.CharHeight = 14
+        Me.TextEditorFormula.CharWidth = 8
+        Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextEditorFormula.IsReplaceMode = False
+        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
+        Me.TextEditorFormula.Name = "TextEditorFormula"
+        Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(784, 182)
+        Me.TextEditorFormula.TabIndex = 3
+        Me.TextEditorFormula.Zoom = 100
+        '
+        'TextEditorResults
+        '
+        Me.TextEditorResults.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorResults.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorResults.BackBrush = Nothing
+        Me.TextEditorResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorResults.CharHeight = 14
+        Me.TextEditorResults.CharWidth = 8
+        Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.IsReplaceMode = False
+        Me.TextEditorResults.Location = New System.Drawing.Point(0, 207)
+        Me.TextEditorResults.Name = "TextEditorResults"
+        Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorResults.Size = New System.Drawing.Size(784, 154)
+        Me.TextEditorResults.TabIndex = 4
+        Me.TextEditorResults.Zoom = 100
+        '
         'BT_Test
         '
         Me.BT_Test.Image = Global.Housekeeper.My.Resources.Resources.Play
@@ -62,19 +107,6 @@ Partial Class FormNCalc
         Me.BT_Test.Name = "BT_Test"
         Me.BT_Test.Size = New System.Drawing.Size(47, 22)
         Me.BT_Test.Text = "Test"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
-        '
-        'BT_Save
-        '
-        Me.BT_Save.Image = Global.Housekeeper.My.Resources.Resources.Save
-        Me.BT_Save.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_Save.Name = "BT_Save"
-        Me.BT_Save.Size = New System.Drawing.Size(51, 22)
-        Me.BT_Save.Text = "Save"
         '
         'DD_SavedExpressions
         '
@@ -84,24 +116,13 @@ Partial Class FormNCalc
         Me.DD_SavedExpressions.Size = New System.Drawing.Size(131, 22)
         Me.DD_SavedExpressions.Text = "Saved Expressions"
         '
-        'TextEditorResult
+        'BT_Save
         '
-        Me.TextEditorResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorResult.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResult.Highlighting = Nothing
-        Me.TextEditorResult.Location = New System.Drawing.Point(0, 225)
-        Me.TextEditorResult.Name = "TextEditorResult"
-        Me.TextEditorResult.ReadOnly = True
-        Me.TextEditorResult.Size = New System.Drawing.Size(784, 136)
-        Me.TextEditorResult.TabIndex = 2
-        '
-        'BT_Help
-        '
-        Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
-        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_Help.Name = "BT_Help"
-        Me.BT_Help.Size = New System.Drawing.Size(52, 22)
-        Me.BT_Help.Text = "Help"
+        Me.BT_Save.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.BT_Save.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Save.Name = "BT_Save"
+        Me.BT_Save.Size = New System.Drawing.Size(51, 22)
+        Me.BT_Save.Text = "Save"
         '
         'BT_Delete
         '
@@ -111,39 +132,43 @@ Partial Class FormNCalc
         Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
         Me.BT_Delete.Text = "Delete"
         '
-        'ToolStripSeparator2
+        'BT_Help
         '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Help.Name = "BT_Help"
+        Me.BT_Help.Size = New System.Drawing.Size(52, 22)
+        Me.BT_Help.Text = "Help"
         '
         'FormNCalc
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 361)
-        Me.Controls.Add(Me.TextEditorResult)
-        Me.Controls.Add(Me.TextEditorNCalc)
+        Me.Controls.Add(Me.TextEditorResults)
+        Me.Controls.Add(Me.TextEditorFormula)
         Me.Controls.Add(Me.ToolStrip1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "FormNCalc"
-        Me.Text = "Property Formula Editor"
+        Me.Text = "Expression editor"
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
+        CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents TextEditorNCalc As ICSharpCode.TextEditor.TextEditorControl
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents BT_Test As ToolStripButton
-    Friend WithEvents TextEditorResult As ICSharpCode.TextEditor.TextEditorControl
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents BT_Save As ToolStripButton
     Friend WithEvents DD_SavedExpressions As ToolStripDropDownButton
     Friend WithEvents BT_Help As ToolStripButton
     Friend WithEvents BT_Delete As ToolStripButton
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents TextEditorFormula As FastColoredTextBoxNS.FastColoredTextBox
+    Friend WithEvents TextEditorResults As FastColoredTextBoxNS.FastColoredTextBox
 End Class
