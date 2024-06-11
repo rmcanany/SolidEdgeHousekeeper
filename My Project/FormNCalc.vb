@@ -19,6 +19,7 @@ Public Class FormNCalc
 
     Dim CommandsList As String = "\b(" '"(?:^|(?<= ))("
 
+    Dim CurrentExpression As String
     Public Sub New()
 
         ' FastColoredTextBox
@@ -157,6 +158,8 @@ Public Class FormNCalc
             End If
         Next
 
+        SR.Close()
+
     End Sub
 
     Private Sub DD_SavedExpressions_DropDownItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles DD_SavedExpressions.DropDownItemClicked
@@ -164,6 +167,7 @@ Public Class FormNCalc
         Dim tmpItem As ToolStripDropDownItem = e.ClickedItem
         TextEditorFormula.Clear()
         TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
+        CurrentExpression = tmpItem.Text
 
     End Sub
 
@@ -189,6 +193,118 @@ Public Class FormNCalc
 
     End Sub
 
+    Private Sub BT_Delete_Click(sender As Object, e As EventArgs) Handles BT_Delete.Click
+
+        Dim A = InputBox("Expression to delete ?", "Delete expression", CurrentExpression)
+
+        If A <> "" Then
+
+            If SavedExpressionsItems.ContainsKey(A) Then
+
+                Dim B = MsgBox("Delete expression " & A & " ?", vbYesNoCancel, "Delete expression")
+
+                Select Case B
+                    Case = MsgBoxResult.Cancel
+                        Exit Sub
+                    Case = MsgBoxResult.No
+                        BT_Delete_Click(sender, e)
+                    Case = MsgBoxResult.Yes
+                        DeleteExpressionItem(A)
+                End Select
+
+            Else
+
+                MsgBox("Expression " & A & " not found.", MsgBoxStyle.Exclamation, "Delete expression")
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub BT_Save_Click(sender As Object, e As EventArgs) Handles BT_Save.Click
+
+        Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+
+        If A <> "" Then
+
+            If SavedExpressionsItems.ContainsKey(A) Then
+
+                Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
+
+                Select Case B
+                    Case = MsgBoxResult.Cancel
+                        Exit Sub
+                    Case = MsgBoxResult.No
+                        BT_Save_Click(sender, e)
+                    Case = MsgBoxResult.Yes
+                        SaveExpressionItem(A, True)
+                End Select
+
+            Else
+                SaveExpressionItem(A, False)
+            End If
+
+            CurrentExpression = A
+
+        End If
+
+    End Sub
+
+    Private Sub SaveExpressionItem(ExpressionName As String, Overwrite As Boolean)
+
+        Dim tmpExpressionsText As String = ""
+
+        If Overwrite Then
+
+            SavedExpressionsItems.Item(ExpressionName) = TextEditorFormula.Text
+
+        Else
+
+            DD_SavedExpressions.DropDownItems.Add(ExpressionName.Replace(vbCrLf, ""))
+            SavedExpressionsItems.Add(ExpressionName.Replace(vbCrLf, ""), TextEditorFormula.Text)
+
+        End If
+
+        For Each item In DD_SavedExpressions.DropDownItems
+
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.text) & vbCrLf
+
+        Next
+
+        IO.File.WriteAllText(Application.StartupPath() & "\SavedExpressions.txt", tmpExpressionsText)
+
+    End Sub
+
+    Private Sub DeleteExpressionItem(ExpressionName As String)
+
+        Dim tmpExpressionsText As String = ""
+
+        DD_SavedExpressions.DropDownItems.RemoveByKey(ExpressionName)
+        For Each item In DD_SavedExpressions.DropDownItems
+            If item.text = ExpressionName Then
+                DD_SavedExpressions.DropDownItems.Remove(item)
+                Exit For
+            End If
+        Next
+
+
+        SavedExpressionsItems.Remove(ExpressionName)
+
+        For Each item In DD_SavedExpressions.DropDownItems
+
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.text) & vbCrLf
+
+        Next
+
+        IO.File.WriteAllText(Application.StartupPath() & "\SavedExpressions.txt", tmpExpressionsText)
+
+        TextEditorFormula.Clear()
+        CurrentExpression = ""
+
+        DD_SavedExpressions.DropDownItems.Item(0).PerformClick()
+
+    End Sub
 
 End Class
 
