@@ -338,7 +338,6 @@ Public Class Task_Common
 
     End Function
 
-
     Public Function GetOLEPropValue(
         cf As CompoundFile,
         PropertySetName As String,
@@ -403,7 +402,6 @@ Public Class Task_Common
         End If
 
     End Function
-
 
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
     ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)

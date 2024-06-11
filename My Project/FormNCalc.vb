@@ -176,9 +176,10 @@ Public Class FormNCalc
 
     Private Sub TextEditorFormula_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextEditorFormula.TextChanged
         Try
+
+            e.ChangedRange.SetStyle(Me.CommentsStyle, "\\((.|\n)*)", RegexOptions.Multiline)
             e.ChangedRange.ClearStyle(New Style() {Me.ParametersStyle})
             e.ChangedRange.SetStyle(Me.ParametersStyle, "'%{[^}']+}'")
-            e.ChangedRange.SetStyle(Me.CommentsStyle, "\\.*$", RegexOptions.Multiline)
             e.ChangedRange.SetStyle(Me.CommandsStyle, CommandsList)
 
         Catch ex As Exception
@@ -187,6 +188,7 @@ Public Class FormNCalc
 
 
     End Sub
+
 
 End Class
 

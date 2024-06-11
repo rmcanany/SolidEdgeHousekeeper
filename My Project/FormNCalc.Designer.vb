@@ -25,15 +25,15 @@ Partial Class FormNCalc
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormNCalc))
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
-        Me.BT_Test = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.BT_Test = New System.Windows.Forms.ToolStripButton()
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
-        Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
-        Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -48,6 +48,58 @@ Partial Class FormNCalc
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'TextEditorFormula
+        '
+        Me.TextEditorFormula.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorFormula.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorFormula.BackBrush = Nothing
+        Me.TextEditorFormula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorFormula.CharHeight = 14
+        Me.TextEditorFormula.CharWidth = 8
+        Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextEditorFormula.IsReplaceMode = False
+        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
+        Me.TextEditorFormula.Name = "TextEditorFormula"
+        Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(784, 182)
+        Me.TextEditorFormula.TabIndex = 3
+        Me.TextEditorFormula.Zoom = 100
+        '
+        'TextEditorResults
+        '
+        Me.TextEditorResults.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.TextEditorResults.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.TextEditorResults.BackBrush = Nothing
+        Me.TextEditorResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextEditorResults.CharHeight = 14
+        Me.TextEditorResults.CharWidth = 8
+        Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.IsReplaceMode = False
+        Me.TextEditorResults.Location = New System.Drawing.Point(0, 207)
+        Me.TextEditorResults.Name = "TextEditorResults"
+        Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
+        Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.TextEditorResults.Size = New System.Drawing.Size(784, 154)
+        Me.TextEditorResults.TabIndex = 4
+        Me.TextEditorResults.Zoom = 100
+        '
         'BT_Test
         '
         Me.BT_Test.Image = Global.Housekeeper.My.Resources.Resources.Play
@@ -55,11 +107,6 @@ Partial Class FormNCalc
         Me.BT_Test.Name = "BT_Test"
         Me.BT_Test.Size = New System.Drawing.Size(47, 22)
         Me.BT_Test.Text = "Test"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
         '
         'DD_SavedExpressions
         '
@@ -85,11 +132,6 @@ Partial Class FormNCalc
         Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
         Me.BT_Delete.Text = "Delete"
         '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
-        '
         'BT_Help
         '
         Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
@@ -97,50 +139,6 @@ Partial Class FormNCalc
         Me.BT_Help.Name = "BT_Help"
         Me.BT_Help.Size = New System.Drawing.Size(52, 22)
         Me.BT_Help.Text = "Help"
-        '
-        'TextEditorFormula
-        '
-        Me.TextEditorFormula.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
-        Me.TextEditorFormula.AutoScrollMinSize = New System.Drawing.Size(27, 14)
-        Me.TextEditorFormula.BackBrush = Nothing
-        Me.TextEditorFormula.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorFormula.CharHeight = 14
-        Me.TextEditorFormula.CharWidth = 8
-        Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
-        Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
-        Me.TextEditorFormula.IsReplaceMode = False
-        Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
-        Me.TextEditorFormula.Name = "TextEditorFormula"
-        Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
-        Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(784, 182)
-        Me.TextEditorFormula.TabIndex = 3
-        Me.TextEditorFormula.Zoom = 100
-        '
-        'TextEditorResults
-        '
-        Me.TextEditorResults.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
-        Me.TextEditorResults.AutoScrollMinSize = New System.Drawing.Size(27, 14)
-        Me.TextEditorResults.BackBrush = Nothing
-        Me.TextEditorResults.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextEditorResults.CharHeight = 14
-        Me.TextEditorResults.CharWidth = 8
-        Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
-        Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
-        Me.TextEditorResults.IsReplaceMode = False
-        Me.TextEditorResults.Location = New System.Drawing.Point(0, 207)
-        Me.TextEditorResults.Name = "TextEditorResults"
-        Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
-        Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(784, 154)
-        Me.TextEditorResults.TabIndex = 4
-        Me.TextEditorResults.Zoom = 100
         '
         'FormNCalc
         '
