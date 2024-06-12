@@ -168,6 +168,7 @@ Public Class FormNCalc
         TextEditorFormula.Clear()
         TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
         CurrentExpression = tmpItem.Text
+        Me.Text = "Expression editor - " & CurrentExpression
 
     End Sub
 
@@ -224,28 +225,13 @@ Public Class FormNCalc
 
     Private Sub BT_Save_Click(sender As Object, e As EventArgs) Handles BT_Save.Click
 
-        Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+        If CurrentExpression <> "" Then
 
-        If A <> "" Then
+            SaveExpressionItem(CurrentExpression, True)
 
-            If SavedExpressionsItems.ContainsKey(A) Then
+        Else
 
-                Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
-
-                Select Case B
-                    Case = MsgBoxResult.Cancel
-                        Exit Sub
-                    Case = MsgBoxResult.No
-                        BT_Save_Click(sender, e)
-                    Case = MsgBoxResult.Yes
-                        SaveExpressionItem(A, True)
-                End Select
-
-            Else
-                SaveExpressionItem(A, False)
-            End If
-
-            CurrentExpression = A
+            BT_SaveAs_Click(sender, e)
 
         End If
 
@@ -301,8 +287,45 @@ Public Class FormNCalc
 
         TextEditorFormula.Clear()
         CurrentExpression = ""
+        Me.Text = "Expression editor"
 
         DD_SavedExpressions.DropDownItems.Item(0).PerformClick()
+
+    End Sub
+
+    Private Sub BT_Clear_Click(sender As Object, e As EventArgs) Handles BT_Clear.Click
+        TextEditorFormula.Clear()
+        CurrentExpression = ""
+        Me.Text = "Expression editor"
+    End Sub
+
+    Private Sub BT_SaveAs_Click(sender As Object, e As EventArgs) Handles BT_SaveAs.Click
+
+        Dim A = InputBox("Expression name ?", "Save expression", CurrentExpression)
+
+        If A <> "" Then
+
+            If SavedExpressionsItems.ContainsKey(A) Then
+
+                Dim B = MsgBox("Overwrite expression " & A & " ?", vbYesNoCancel, "Save expression")
+
+                Select Case B
+                    Case = MsgBoxResult.Cancel
+                        Exit Sub
+                    Case = MsgBoxResult.No
+                        BT_SaveAs_Click(sender, e)
+                    Case = MsgBoxResult.Yes
+                        SaveExpressionItem(A, True)
+                End Select
+
+            Else
+                SaveExpressionItem(A, False)
+            End If
+
+            CurrentExpression = A
+            Me.Text = "Expression editor - " & CurrentExpression
+
+        End If
 
     End Sub
 

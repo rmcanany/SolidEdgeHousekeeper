@@ -431,11 +431,15 @@ Partial Class FormPropertyInputEditor
         '
         'ButtonNCalc
         '
-        Me.ButtonNCalc.Location = New System.Drawing.Point(705, 273)
+        Me.ButtonNCalc.Image = Global.Housekeeper.My.Resources.Resources.fx
+        Me.ButtonNCalc.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.ButtonNCalc.Location = New System.Drawing.Point(697, 273)
         Me.ButtonNCalc.Name = "ButtonNCalc"
-        Me.ButtonNCalc.Size = New System.Drawing.Size(117, 23)
+        Me.ButtonNCalc.Size = New System.Drawing.Size(130, 25)
         Me.ButtonNCalc.TabIndex = 10
         Me.ButtonNCalc.Text = "Expression editor"
+        Me.ButtonNCalc.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ButtonNCalc.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.ButtonNCalc.UseVisualStyleBackColor = True
         '
         'ButtonClearSelected
