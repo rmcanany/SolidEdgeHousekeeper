@@ -30,10 +30,12 @@ Partial Class FormNCalc
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
+        Me.BT_Clear = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.BT_SaveAs = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -41,7 +43,7 @@ Partial Class FormNCalc
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_Delete, Me.ToolStripSeparator2, Me.BT_Help})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.BT_Clear, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(784, 25)
@@ -84,6 +86,14 @@ Partial Class FormNCalc
         Me.BT_Delete.Name = "BT_Delete"
         Me.BT_Delete.Size = New System.Drawing.Size(60, 22)
         Me.BT_Delete.Text = "Delete"
+        '
+        'BT_Clear
+        '
+        Me.BT_Clear.Image = Global.Housekeeper.My.Resources.Resources.unchecked_disabled
+        Me.BT_Clear.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Clear.Name = "BT_Clear"
+        Me.BT_Clear.Size = New System.Drawing.Size(54, 22)
+        Me.BT_Clear.Text = "Clear"
         '
         'ToolStripSeparator2
         '
@@ -140,6 +150,14 @@ Partial Class FormNCalc
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
         '
+        'BT_SaveAs
+        '
+        Me.BT_SaveAs.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.BT_SaveAs.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_SaveAs.Name = "BT_SaveAs"
+        Me.BT_SaveAs.Size = New System.Drawing.Size(67, 22)
+        Me.BT_SaveAs.Text = "Save As"
+        '
         'FormNCalc
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -171,4 +189,6 @@ Partial Class FormNCalc
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents TextEditorFormula As FastColoredTextBoxNS.FastColoredTextBox
     Friend WithEvents TextEditorResults As FastColoredTextBoxNS.FastColoredTextBox
+    Friend WithEvents BT_Clear As ToolStripButton
+    Friend WithEvents BT_SaveAs As ToolStripButton
 End Class

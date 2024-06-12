@@ -378,6 +378,7 @@
     <None Include="Resources\TaskPrint.png" />
     <None Include="Resources\TaskOpenSave.png" />
     <None Include="Resources\fx.ico" />
+    <None Include="My Project\media\fx.png" />
     <Content Include="SavedExpressions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
