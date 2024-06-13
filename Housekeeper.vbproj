@@ -379,6 +379,11 @@
     <None Include="Resources\TaskOpenSave.png" />
     <None Include="Resources\fx.ico" />
     <None Include="My Project\media\fx.png" />
+    <None Include="Resources\SE_asm.png" />
+    <None Include="Resources\SE_cfg.png" />
+    <None Include="Resources\SE_dft.png" />
+    <None Include="Resources\SE_par.png" />
+    <None Include="Resources\SE_psm.png" />
     <Content Include="SavedExpressions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

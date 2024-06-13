@@ -353,6 +353,56 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property SE_asm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("SE_asm", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property SE_cfg() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("SE_cfg", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property SE_dft() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("SE_dft", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property SE_par() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("SE_par", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property SE_psm() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("SE_psm", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property table_of_contents() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("table_of_contents", resourceCulture)
