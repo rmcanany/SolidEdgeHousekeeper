@@ -32,7 +32,6 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
         Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
         Me.ButtonClearSelected = New System.Windows.Forms.Button()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -136,19 +135,12 @@ Partial Class FormVariableInputEditor
         Me.ButtonClearSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonClearSelected.Image = Global.Housekeeper.My.Resources.Resources.Cancel
-        Me.ButtonClearSelected.ImageKey = "Delete_16.png"
         Me.ButtonClearSelected.Location = New System.Drawing.Point(4, 3)
         Me.ButtonClearSelected.Name = "ButtonClearSelected"
         Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
         Me.ButtonClearSelected.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
         Me.ButtonClearSelected.UseVisualStyleBackColor = False
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
         '
         'TableLayoutPanel1
         '
@@ -390,5 +382,4 @@ Partial Class FormVariableInputEditor
     Friend WithEvents CheckBoxCopyToPsm As CheckBox
     Friend WithEvents CheckBoxCopyToDft As CheckBox
     Friend WithEvents LabelCopyTo As Label
-    Friend WithEvents ImageList1 As ImageList
 End Class

@@ -34,7 +34,6 @@ Partial Class FormPropertyInputEditor
         Me.Label11 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.ButtonClearSelected = New System.Windows.Forms.Button()
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
         Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
         Me.CheckBoxSelectAll = New System.Windows.Forms.CheckBox()
@@ -225,8 +224,7 @@ Partial Class FormPropertyInputEditor
         Me.ButtonClearSelected.FlatAppearance.BorderColor = System.Drawing.Color.Silver
         Me.ButtonClearSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
-        Me.ButtonClearSelected.ImageKey = "Delete_16.png"
-        Me.ButtonClearSelected.ImageList = Me.ImageList1
+        Me.ButtonClearSelected.Image = Global.Housekeeper.My.Resources.Resources.Cancel
         Me.ButtonClearSelected.Location = New System.Drawing.Point(3, 3)
         Me.ButtonClearSelected.Name = "ButtonClearSelected"
         Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
@@ -234,22 +232,13 @@ Partial Class FormPropertyInputEditor
         Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
         Me.ButtonClearSelected.UseVisualStyleBackColor = True
         '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "Delete_16.png")
-        Me.ImageList1.Images.SetKeyName(1, "down.png")
-        Me.ImageList1.Images.SetKeyName(2, "up.png")
-        '
         'ButtonMoveSelectedUp
         '
         Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
         Me.ButtonMoveSelectedUp.FlatAppearance.BorderColor = System.Drawing.Color.Silver
         Me.ButtonMoveSelectedUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedUp.ImageKey = "up.png"
-        Me.ButtonMoveSelectedUp.ImageList = Me.ImageList1
+        Me.ButtonMoveSelectedUp.Image = Global.Housekeeper.My.Resources.Resources.up
         Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(36, 3)
         Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
         Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 24)
@@ -263,8 +252,7 @@ Partial Class FormPropertyInputEditor
         Me.ButtonMoveSelectedDown.FlatAppearance.BorderColor = System.Drawing.Color.Silver
         Me.ButtonMoveSelectedDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedDown.ImageKey = "down.png"
-        Me.ButtonMoveSelectedDown.ImageList = Me.ImageList1
+        Me.ButtonMoveSelectedDown.Image = Global.Housekeeper.My.Resources.Resources.down
         Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(69, 3)
         Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
         Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 24)
@@ -550,7 +538,6 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents ButtonClearSelected As Button
     Friend WithEvents ButtonMoveSelectedDown As Button
     Friend WithEvents ButtonMoveSelectedUp As Button
-    Friend WithEvents ImageList1 As ImageList
     Friend WithEvents ButtonNCalc As Button
     Friend WithEvents Label12 As Label
 End Class
