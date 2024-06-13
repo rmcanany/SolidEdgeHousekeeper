@@ -384,7 +384,7 @@ Partial Class Form1
         'BT_TopLevelAsm
         '
         Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_TopLevelAsm.Image = Global.Housekeeper.My.Resources.Resources.asm
+        Me.BT_TopLevelAsm.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
         Me.BT_TopLevelAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_TopLevelAsm.Name = "BT_TopLevelAsm"
         Me.BT_TopLevelAsm.Size = New System.Drawing.Size(23, 22)
@@ -466,7 +466,7 @@ Partial Class Form1
         Me.new_CheckBoxFilterDft.CheckOnClick = True
         Me.new_CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterDft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterDft.Image = Global.Housekeeper.My.Resources.Resources.dft
+        Me.new_CheckBoxFilterDft.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
         Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
         Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
@@ -479,7 +479,7 @@ Partial Class Form1
         Me.new_CheckBoxFilterPsm.CheckOnClick = True
         Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPsm.Image = Global.Housekeeper.My.Resources.Resources.psm
+        Me.new_CheckBoxFilterPsm.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
         Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
         Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
@@ -492,7 +492,7 @@ Partial Class Form1
         Me.new_CheckBoxFilterPar.CheckOnClick = True
         Me.new_CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterPar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPar.Image = Global.Housekeeper.My.Resources.Resources.par
+        Me.new_CheckBoxFilterPar.Image = Global.Housekeeper.My.Resources.Resources.SE_par
         Me.new_CheckBoxFilterPar.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
         Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -506,7 +506,7 @@ Partial Class Form1
         Me.new_CheckBoxFilterAsm.CheckOnClick = True
         Me.new_CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterAsm.Image = Global.Housekeeper.My.Resources.Resources.asm
+        Me.new_CheckBoxFilterAsm.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
         Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
         Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)

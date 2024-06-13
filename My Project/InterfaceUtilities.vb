@@ -136,25 +136,25 @@ Public Class InterfaceUtilities
 
                 Case BaseControlNames.SelectAssembly.ToString
                     TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.asm, True)
+                    Button = FormatButton(ColumnName, My.Resources.SE_asm, True)
                     TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
                     BaseControlsDict(Button.Name) = Button
 
                 Case BaseControlNames.SelectPart.ToString
                     TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.par, True)
+                    Button = FormatButton(ColumnName, My.Resources.SE_par, True)
                     TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
                     BaseControlsDict(Button.Name) = Button
 
                 Case BaseControlNames.SelectSheetmetal.ToString
                     TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.psm, True)
+                    Button = FormatButton(ColumnName, My.Resources.SE_psm, True)
                     TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
                     BaseControlsDict(Button.Name) = Button
 
                 Case BaseControlNames.SelectDraft.ToString
                     TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.dft, True)
+                    Button = FormatButton(ColumnName, My.Resources.SE_dft, True)
                     TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
                     BaseControlsDict(Button.Name) = Button
 
