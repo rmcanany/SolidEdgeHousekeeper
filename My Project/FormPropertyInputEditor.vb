@@ -253,19 +253,30 @@ Public Class FormPropertyInputEditor
 
             tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
             tmpComboBox.Items.Clear()
-            tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager"})
             If Not keepvalue Then
-                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+                tmpComboBox.SelectedItem = Nothing
             Else
                 tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
             End If
+
+            'ElseIf ComboBox.Text = "Material" Then
+
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Material", "Coef. ofThermal Exp", "Thermal Conductivity", "Specific Heat", "Modulus of Elasticity"}......) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            '    If Not keepvalue Then
+            '        tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            '    Else
+            '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            '    End If
 
         ElseIf ComboBox.Text = "Project" Then
             tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
             tmpComboBox.Items.Clear()
             tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
             If Not keepvalue Then
-                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+                tmpComboBox.SelectedItem = Nothing
             Else
                 tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
             End If

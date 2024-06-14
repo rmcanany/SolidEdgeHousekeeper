@@ -468,28 +468,33 @@ Public Class TaskEditProperties
                 Try
 
                     '######## get the property here
-                    If PropertySetName = "System" Then
+                    If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company") Then
                         dsiStream = cf.RootStorage.GetStream("SummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
                     End If
 
-                    If PropertySetName = "Custom" Then
+                    If PropertySetName = "Custom" Or PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
                         dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-                        If IsNothing(OLEProp) Then
+                        If PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company" Then
+                            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDDSI_" & PropertyName.ToUpper)
+                        Else
+                            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                            If IsNothing(OLEProp) Then
 
-                            Dim userProperties = co.UserDefinedProperties
-                            Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                            userProperties.PropertyNames(newPropertyId) = PropertyName
-                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
-                            OLEProp.Value = " "
-                            userProperties.AddProperty(OLEProp)
+                                Dim userProperties = co.UserDefinedProperties
+                                Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                                userProperties.PropertyNames(newPropertyId) = PropertyName
+                                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                                OLEProp.Value = " "
+                                userProperties.AddProperty(OLEProp)
 
+                            End If
                         End If
+
                     End If
 
                     If PropertySetName = "Project" Then

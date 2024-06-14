@@ -217,7 +217,7 @@ Public Class InputEditorDoctor
         Dim PopulatedRowList As New List(Of Integer)
         Dim SourceCheckBox As CheckBox
         Dim TargetCheckBox As CheckBox
-        Dim TextBox As TextBox
+        Dim TextBox As ComboBox
         Dim SourceTextBox As TextBox
         Dim TargetTextBox As TextBox
         Dim SourceComboBox As ComboBox
@@ -232,7 +232,7 @@ Public Class InputEditorDoctor
 
         ' Find which rows are blank and which are populated.
         For RowIndex = 1 To TableLayoutPanel.RowCount - 1
-            TextBox = CType(TableLayoutPanel.GetControlFromPosition(VariableColumnIndex, RowIndex), TextBox)
+            TextBox = CType(TableLayoutPanel.GetControlFromPosition(VariableColumnIndex, RowIndex), ComboBox)
             Dim s As String = TextBox.Text
             If TextBox.Text.Trim = "" Then
                 BlankRowList.Add(RowIndex)
@@ -421,6 +421,7 @@ Public Class InputEditorDoctor
                         SourceComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), ComboBox)
                         TargetComboBox.Text = SourceComboBox.Text
                         SourceComboBox.Text = OldTargetRow(ColumnIndex)("ControlState")
+                        If OldTargetRow(ColumnIndex)("ControlState") = "" Then SourceComboBox.SelectedItem = Nothing
 
                     End If
 
@@ -663,7 +664,12 @@ Public Class InputEditorDoctor
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                         Else
-                            TextBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                TextBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            Else
+                                TextBox.Text = ""
+                            End If
+
                         End If
 
                     ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
@@ -673,13 +679,26 @@ Public Class InputEditorDoctor
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             CheckBox.Checked = CBool(ColumnsDict(ColumnIndex)("DefaultValue"))
                         Else
-                            CheckBox.Checked = CBool(TableValuesDict(RowIndex)(ColumnName))
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                CheckBox.Checked = CBool(TableValuesDict(RowIndex)(ColumnName))
+                            Else
+                                CheckBox.Checked = False
+                            End If
+
                         End If
 
                     ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
                         ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
                         ComboBox = CType(ControlsDict(ControlName), ComboBox)
-                        ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                        If TableValuesDict.ContainsKey(RowIndex) Then
+                            ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                        Else
+                            If ComboBox.Items.Count > 0 Then
+                                ComboBox.SelectedItem = ComboBox.Items(0)
+                            Else
+                                ComboBox.SelectedItem = Nothing
+                            End If
+                        End If
 
                         'If ComboBox.Name.EndsWith("PropertyName") Then
                         '    Try
@@ -693,7 +712,15 @@ Public Class InputEditorDoctor
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             ComboBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                         Else
-                            ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            Else
+                                If ComboBox.Items.Count > 0 Then
+                                    ComboBox.SelectedItem = ComboBox.Items(0)
+                                Else
+                                    ComboBox.SelectedItem = Nothing
+                                End If
+                            End If
                         End If
                     Else
                         MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnIndex)("ColumnControl")))
