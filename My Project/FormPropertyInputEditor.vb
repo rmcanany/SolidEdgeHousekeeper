@@ -74,9 +74,13 @@ Public Class FormPropertyInputEditor
         Dim ComboBoxName As String
         ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
         For Each ComboBoxName In ComboBoxDict.Keys
-            ComboBoxDict(ComboBoxName).Items.Add("System")
-            ComboBoxDict(ComboBoxName).Items.Add("Custom")
-            ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
+            If ComboBoxName.EndsWith("PropertySet") Then
+                ComboBoxDict(ComboBoxName).Items.Add("System")
+                ComboBoxDict(ComboBoxName).Items.Add("Project")
+                ComboBoxDict(ComboBoxName).Items.Add("Custom")
+                ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
+                AddHandler ComboBoxDict(ComboBoxName).SelectedValueChanged, AddressOf ComboBox_TextChanged
+            End If
         Next
 
         TextBoxJSON.Text = Me.JSONDict
@@ -122,7 +126,7 @@ Public Class FormPropertyInputEditor
         ColumnIndex += 1
         ColumnName = "PropertyName"
         ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
+        ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" '"TextBox"
         ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
         ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
         ColumnsDict(ColumnIndex)("DefaultValue") = ""
@@ -199,6 +203,94 @@ Public Class FormPropertyInputEditor
         ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
         ColumnsDict(ColumnIndex)("DefaultValue") = ""
         ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
+
+    End Sub
+
+
+    Private Sub ComboBox_TextChanged(sender As System.Object, e As System.EventArgs)
+
+        If ProcessCheckBoxEvents Then
+
+            Dim ComboBox As ComboBox = DirectCast(sender, ComboBox)
+
+            SetCombo(ComboBox, False)
+
+            'Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+            'ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+            'Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
+
+            'If ComboBox.Text = "System" Then
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+
+            'ElseIf ComboBox.Text = "Project" Then
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
+            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+
+            'ElseIf ComboBox.Text = "Custom" Then
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
+            '    tmpComboBox.Text = ""
+
+            'End If
+
+        End If
+
+    End Sub
+
+    Public Sub SetCombo(ComboBox As ComboBox, keepvalue As Boolean)
+
+        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+        Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
+        Dim tmpValue As String = tmpComboBox.Text
+
+        If ComboBox.Text = "System" Then
+
+            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            tmpComboBox.Items.Clear()
+            tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager"})
+            If Not keepvalue Then
+                tmpComboBox.SelectedItem = Nothing
+            Else
+                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            End If
+
+            'ElseIf ComboBox.Text = "Material" Then
+
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Material", "Coef. ofThermal Exp", "Thermal Conductivity", "Specific Heat", "Modulus of Elasticity"}......) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            '    If Not keepvalue Then
+            '        tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            '    Else
+            '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            '    End If
+
+        ElseIf ComboBox.Text = "Project" Then
+            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            tmpComboBox.Items.Clear()
+            tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
+            If Not keepvalue Then
+                tmpComboBox.SelectedItem = Nothing
+            Else
+                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            End If
+
+        ElseIf ComboBox.Text = "Custom" Then
+            tmpComboBox.Items.Clear()
+            tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
+            If Not keepvalue Then
+                tmpComboBox.Text = ""
+            Else
+                tmpComboBox.Text = tmpValue
+            End If
+
+        End If
 
     End Sub
 
@@ -318,6 +410,17 @@ Public Class FormPropertyInputEditor
                 CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked = True
             End If
 
+        Next
+
+        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+        Dim ComboBoxName As String
+        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+        For Each ComboBoxName In ComboBoxDict.Keys
+            If ComboBoxName.EndsWith("PropertySet") Then
+
+                SetCombo(ComboBoxDict(ComboBoxName), True)
+
+            End If
         Next
 
         SelectedRowIndices = InputEditorDoctor.GetSelectedRowIndices(TableLayoutPanel1)
