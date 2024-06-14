@@ -492,11 +492,11 @@ Public Class TaskEditProperties
                         End If
                     End If
 
-                    If PropertySetName.ToLower = "project" Then
+                    If PropertySetName = "Project" Then
                         dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName & "*")
+                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
                     End If
 
                 Catch ex As Exception
@@ -506,6 +506,13 @@ Public Class TaskEditProperties
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
+            End If
+
+            If IsNothing(OLEProp) Then
+                Proceed = False
+                ExitStatus = 1
+                s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
             End If
 
             If Proceed Then
@@ -558,7 +565,7 @@ Public Class TaskEditProperties
                 Try
 
                     '############ save the properties here (!)
-                    If PropertySetName = "System" Or PropertySetName = "Custom" Then
+                    If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
                         co.Save(dsiStream)
                     End If
 
@@ -573,12 +580,12 @@ Public Class TaskEditProperties
         Next
 
         '############ save the properties here (!)
-        If PropertySetName = "System" Or PropertySetName = "Custom" Then
+        If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
             cf.Commit()
         Else
-            ExitStatus = 1
-            s = "Project properties are ReadOnly (Writeable in next release)"
-            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            'ExitStatus = 1
+            's = "Project properties are ReadOnly (Writeable in next release)"
+            'If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
         End If
         cf.Close()
 

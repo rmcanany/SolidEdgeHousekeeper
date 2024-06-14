@@ -89,9 +89,10 @@ Public Class InputEditorDoctor
                 ElseIf ControlType = "ComboBox" Then
                     ComboBox = New ComboBox
                     ComboBox.Name = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
-                    ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
-                    'ComboBox.Size = New Size(100, 20)
-                    ComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+                    'ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    ComboBox.Dock = DockStyle.Fill
+                    ComboBox.Margin = New Padding(3, 1, 3, 1)
+                    ComboBox.DropDownStyle = If(ComboBox.Name.EndsWith("PropertySet"), ComboBoxStyle.DropDownList, ComboBoxStyle.Simple)
                     ComboBox.TabStop = False
 
                     TableLayoutPanel.Controls.Add(ComboBox, ColumnIndex, RowIndex)
