@@ -212,33 +212,76 @@ Public Class FormPropertyInputEditor
         If ProcessCheckBoxEvents Then
 
             Dim ComboBox As ComboBox = DirectCast(sender, ComboBox)
-            Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
-            ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
-            Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
 
-            If ComboBox.Text = "System" Then
-                tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-                tmpComboBox.Items.Clear()
-                tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
-                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            SetCombo(ComboBox, False)
 
-            ElseIf ComboBox.Text = "Project" Then
-                tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-                tmpComboBox.Items.Clear()
-                tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
-                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            'Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+            'ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+            'Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
 
-            ElseIf ComboBox.Text = "Custom" Then
-                tmpComboBox.Items.Clear()
-                tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
-                tmpComboBox.Text = ""
+            'If ComboBox.Text = "System" Then
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
 
-            End If
+            'ElseIf ComboBox.Text = "Project" Then
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
+            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+
+            'ElseIf ComboBox.Text = "Custom" Then
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
+            '    tmpComboBox.Text = ""
+
+            'End If
 
         End If
 
     End Sub
 
+    Public Sub SetCombo(ComboBox As ComboBox, keepvalue As Boolean)
+
+        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+        Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
+        Dim tmpValue As String = tmpComboBox.Text
+
+        If ComboBox.Text = "System" Then
+
+            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            tmpComboBox.Items.Clear()
+            tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
+            If Not keepvalue Then
+                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            Else
+                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            End If
+
+        ElseIf ComboBox.Text = "Project" Then
+            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            tmpComboBox.Items.Clear()
+            tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
+            If Not keepvalue Then
+                tmpComboBox.SelectedItem = tmpComboBox.Items(0)
+            Else
+                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            End If
+
+        ElseIf ComboBox.Text = "Custom" Then
+            tmpComboBox.Items.Clear()
+            tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
+            If Not keepvalue Then
+                tmpComboBox.Text = ""
+            Else
+                tmpComboBox.Text = tmpValue
+            End If
+
+        End If
+
+    End Sub
 
     Private Sub CheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs)
         Dim CheckBox As CheckBox = DirectCast(sender, CheckBox)
@@ -356,6 +399,17 @@ Public Class FormPropertyInputEditor
                 CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked = True
             End If
 
+        Next
+
+        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
+        Dim ComboBoxName As String
+        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
+        For Each ComboBoxName In ComboBoxDict.Keys
+            If ComboBoxName.EndsWith("PropertySet") Then
+
+                SetCombo(ComboBoxDict(ComboBoxName), True)
+
+            End If
         Next
 
         SelectedRowIndices = InputEditorDoctor.GetSelectedRowIndices(TableLayoutPanel1)

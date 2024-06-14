@@ -81,7 +81,10 @@ Public Class InputEditorDoctor
                     If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                         TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                     End If
-                    TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    'TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    TextBox.Dock = DockStyle.Fill
+                    TextBox.Margin = New Padding(3, 1, 3, 1)
+                    TextBox.Multiline = True
                     'AddHandler TextBox.TextChanged, AddressOf TextBox_TextChanged
 
                     TableLayoutPanel.Controls.Add(TextBox, ColumnIndex, RowIndex)
@@ -677,6 +680,15 @@ Public Class InputEditorDoctor
                         ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
                         ComboBox = CType(ControlsDict(ControlName), ComboBox)
                         ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+
+                        'If ComboBox.Name.EndsWith("PropertyName") Then
+                        '    Try
+                        '        FormPropertyInputEditor.SetCombo(CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex - 1, RowIndex), ComboBox))
+                        '    Catch ex As Exception
+
+                        '    End Try
+
+                        'End If
 
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             ComboBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
