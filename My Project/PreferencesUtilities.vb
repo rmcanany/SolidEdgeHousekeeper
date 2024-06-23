@@ -66,20 +66,14 @@ Public Class PreferencesUtilities
         Dim TaskDescription As String
         Dim TaskName As String
 
-        Dim Infile = GetTaskListPath(CheckExisting:=True)
-
         Dim Filename As String = GetTaskListPath(CheckExisting:=True)
 
-        'Dim BS As New BinarySerialization()
-
-
+        Dim AvailableTasks = BuildTaskListFromScratch()
 
         If Filename = "" Then
-            TaskList = BuildTaskListFromScratch()
+            TaskList = AvailableTasks
         Else
-            'TaskList = BS.ReadFromBinaryFile(Of List(Of Task))(Filename)
-
-            JSONString = IO.File.ReadAllText(Infile)
+            JSONString = IO.File.ReadAllText(Filename)
 
             JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
@@ -88,7 +82,7 @@ Public Class PreferencesUtilities
                 TaskJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
 
-                Task = GetNewTaskInstance(TaskName, TaskDescription)
+                Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
                 If Task IsNot Nothing Then
                     Task.SetFormState(JSONString)
                     TaskList.Add(Task)
@@ -103,15 +97,14 @@ Public Class PreferencesUtilities
 
 
     Public Function GetNewTaskInstance(
+        AvailableTasks As List(Of Task),
         TaskName As String,
         TaskDescription As String
         ) As Task
 
         Dim Task As Task = Nothing
 
-        Dim tmpTaskList = BuildTaskListFromScratch()
-
-        For Each Task In tmpTaskList
+        For Each Task In AvailableTasks
             If Task.Name = TaskName Then
                 Task.Description = TaskDescription
                 Exit For

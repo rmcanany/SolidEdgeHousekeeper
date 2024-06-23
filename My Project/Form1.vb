@@ -695,7 +695,11 @@ Public Class Form1
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
 
+        'Me.SuspendLayout()
+
         Me.TaskList = PU.GetTaskList
+
+        'Me.ResumeLayout()
 
         Dim tmpTaskPanel As Panel = Nothing
 
@@ -706,19 +710,10 @@ Public Class Form1
             End If
         Next
 
-        'For Each Task As Task In TaskList
-        '    'MsgBox(Task.Description)
-        '    tmpTaskPanel.Controls.Add(Task.TaskControl)
-        'Next
-
         For i = TaskList.Count - 1 To 0 Step -1
             Dim Task = TaskList(i)
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
-
-        'Dim IU As New InterfaceUtilities
-
-        'IU.BuildTaskPage(Me.TaskList, TabPageTasks)
 
     End Sub
 

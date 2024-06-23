@@ -361,7 +361,7 @@ Public Class FormEditTaskList
         For Each Task As Task In Me.SourceTaskList
             If SelectedRowIndices.Contains(i) Then
                 TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
-                tmpTaskList.Add(PU.GetNewTaskInstance(Task.Name, TaskDescription))
+                tmpTaskList.Add(PU.GetNewTaskInstance(SourceTaskList, Task.Name, TaskDescription))
             End If
             i += 1
         Next
