@@ -23,13 +23,15 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.AppliesToPart = True
         Me.AppliesToSheetmetal = True
         Me.AppliesToDraft = False
-        Me.HasOptions = False
+        Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
         Me.Category = "Check"
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
 
@@ -114,42 +116,42 @@ Public Class TaskCheckMaterialNotInMaterialTable
     '    Return Me.TLPTask
     'End Function
 
-    'Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
-    '    Dim tmpTLPOptions = New ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
+        Dim tmpTLPOptions = New ExTableLayoutPanel
 
-    '    Dim RowIndex As Integer
-    '    Dim CheckBox As CheckBox
-    '    Dim TextBox As TextBox
-    '    Dim Button As Button
+        Dim RowIndex As Integer
+        Dim CheckBox As CheckBox
+        Dim TextBox As TextBox
+        Dim Button As Button
 
-    '    Dim IU As New InterfaceUtilities
+        Dim IU As New InterfaceUtilities
 
-    '    IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
+        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
 
-    '    RowIndex = 0
+        RowIndex = 0
 
-    '    Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
-    '    AddHandler Button.Click, AddressOf ButtonOptions_Click
-    '    tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
-    '    ControlsDict(Button.Name) = Button
+        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        AddHandler Button.Click, AddressOf ButtonOptions_Click
+        tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
+        ControlsDict(Button.Name) = Button
 
-    '    TextBox = IU.FormatOptionsTextBox(ControlNames.MaterialLibrary.ToString, "")
-    '    TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-    '    AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-    '    tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-    '    ControlsDict(TextBox.Name) = TextBox
+        TextBox = IU.FormatOptionsTextBox(ControlNames.MaterialLibrary.ToString, "")
+        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
+        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
+        ControlsDict(TextBox.Name) = TextBox
 
-    '    RowIndex += 1
+        RowIndex += 1
 
-    '    CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
-    '    'CheckBox.Checked = True
-    '    AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-    '    tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-    '    tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-    '    ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        'CheckBox.Checked = True
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
 
-    '    Return tmpTLPOptions
-    'End Function
+        Return tmpTLPOptions
+    End Function
 
     Private Sub InitializeOptionProperties()
         Dim CheckBox As CheckBox

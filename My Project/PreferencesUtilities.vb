@@ -1,5 +1,7 @@
 ﻿Option Strict On
+Imports System.IO
 Imports Newtonsoft.Json
+
 
 Public Class PreferencesUtilities
 
@@ -14,7 +16,7 @@ Public Class PreferencesUtilities
     End Function
 
     Private Function GetTaskListPath(CheckExisting As Boolean) As String
-        Dim Filename = "task_list.json"
+        Dim Filename = "tasklist.json"
         Dim TaskListPath = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
 
         If CheckExisting Then
@@ -30,25 +32,31 @@ Public Class PreferencesUtilities
 
     Public Sub SaveTaskList(TaskList As List(Of Task))
 
-        'MsgBox("SaveTaskList currently disabled")
+        Dim Filename As String = GetTaskListPath(CheckExisting:=False)
 
-        'Dim tmpJSONDict As New Dictionary(Of String, String)
-        'Dim JSONString As String
+        'Dim BS As New BinarySerialization()
 
-        'Dim Outfile = GetTaskListPath(CheckExisting:=False)
+        'BS.WriteToBinaryFile(Of List(Of Task))(Filename, TaskList)
 
-        'For Each Task As Task In TaskList
-        '    ' To allow copies of a given Task, make the Key Task.Description rather than Task.Name
-        '    tmpJSONDict(Task.Description) = Task.GetFormState()
-        'Next
 
-        'JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+        Dim tmpJSONDict As New Dictionary(Of String, String)
+        Dim JSONString As String
 
-        'IO.File.WriteAllText(Outfile, JSONString)
+        Dim Outfile = GetTaskListPath(CheckExisting:=False)
+
+        For Each Task As Task In TaskList
+            ' To allow copies of a given Task, make the Key Task.Description rather than Task.Name
+            tmpJSONDict(Task.Description) = Task.GetFormState()
+        Next
+
+        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+
+        IO.File.WriteAllText(Outfile, JSONString)
 
     End Sub
 
     Public Function GetTaskList() As List(Of Task)
+
         Dim TaskList As New List(Of Task)
         Dim Task As Task
         Dim JSONDict As Dictionary(Of String, String)
@@ -60,9 +68,17 @@ Public Class PreferencesUtilities
 
         Dim Infile = GetTaskListPath(CheckExisting:=True)
 
-        If Infile = "" Then
+        Dim Filename As String = GetTaskListPath(CheckExisting:=True)
+
+        'Dim BS As New BinarySerialization()
+
+
+
+        If Filename = "" Then
             TaskList = BuildTaskListFromScratch()
         Else
+            'TaskList = BS.ReadFromBinaryFile(Of List(Of Task))(Filename)
+
             JSONString = IO.File.ReadAllText(Infile)
 
             JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
@@ -74,6 +90,7 @@ Public Class PreferencesUtilities
 
                 Task = GetNewTaskInstance(TaskName, TaskDescription)
                 If Task IsNot Nothing Then
+                    Task.SetFormState(JSONString)
                     TaskList.Add(Task)
                 End If
             Next
@@ -83,7 +100,6 @@ Public Class PreferencesUtilities
 
         Return TaskList
     End Function
-
 
 
     Public Function GetNewTaskInstance(

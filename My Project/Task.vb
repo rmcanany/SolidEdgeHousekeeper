@@ -942,6 +942,9 @@ Public MustInherit Class Task
                 Case GetType(Label)
                     ' Nothing to do here
 
+                Case GetType(ExTableLayoutPanel)
+                    ' Nothing to do here
+
                 Case Else
                     MsgBox(String.Format("{0} Control type '{1}' not recognized", "Task", Ctrl.GetType.ToString))
 
