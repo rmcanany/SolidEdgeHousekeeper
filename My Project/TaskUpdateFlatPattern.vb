@@ -3,7 +3,7 @@
 Imports SolidEdgeCommunity.Extensions
 Imports SolidEdgeConstants
 
-Public Class TaskRegenerateFlatModel
+Public Class TaskUpdateFlatPattern
 
     Inherits Task
 
@@ -20,12 +20,15 @@ Public Class TaskRegenerateFlatModel
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckFlatPattern
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+
         ' Options
+
     End Sub
 
-    Public Sub New(Task As TaskRegenerateFlatModel)
+    Public Sub New(Task As TaskUpdateFlatPattern)
 
         'Options
 
@@ -71,9 +74,9 @@ Public Class TaskRegenerateFlatModel
 
         Dim TC As New Task_Common
         Dim DocType = TC.GetDocType(SEDoc)
-        
+
         ' Get FlatpatternModels collection to check if flat patterns exist
-        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels
+        Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Select Case DocType
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
@@ -114,22 +117,22 @@ Public Class TaskRegenerateFlatModel
 
     End Function
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTaskControl(TLPParent As ExTableLayoutPanel) As UCTaskControl
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    'Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TaskControl = New UCTaskControl(Me)
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TaskControl.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TaskControl
+    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

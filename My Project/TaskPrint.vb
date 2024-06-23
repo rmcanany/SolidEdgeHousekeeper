@@ -46,8 +46,11 @@ Public Class TaskPrint
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskPrint
         Me.Category = "Output"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.PrinterName = ""
@@ -61,20 +64,20 @@ Public Class TaskPrint
         Me.SelectedSheets = New List(Of String)
     End Sub
 
-    Public Sub New(Task As TaskPrint)
+    'Public Sub New(Task As TaskPrint)
 
-        'Options
-        Me.PrinterName = Task.PrinterName
-        Me.Copies = Task.Copies
-        Me.AutoOrient = Task.AutoOrient
-        Me.BestFit = Task.BestFit
-        Me.PrintAsBlack = Task.PrintAsBlack
-        Me.ScaleLineTypes = Task.ScaleLineTypes
-        Me.ScaleLineWidths = Task.ScaleLineWidths
+    '    'Options
+    '    Me.PrinterName = Task.PrinterName
+    '    Me.Copies = Task.Copies
+    '    Me.AutoOrient = Task.AutoOrient
+    '    Me.BestFit = Task.BestFit
+    '    Me.PrintAsBlack = Task.PrintAsBlack
+    '    Me.ScaleLineTypes = Task.ScaleLineTypes
+    '    Me.ScaleLineWidths = Task.ScaleLineWidths
 
-        Me.SelectedSheets = Task.SelectedSheets
+    '    Me.SelectedSheets = Task.SelectedSheets
 
-    End Sub
+    'End Sub
 
 
     'PROCESSING
@@ -166,32 +169,32 @@ Public Class TaskPrint
 
     'FORM BUILDING
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        ' Initializations
-        Dim ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
-        ComboBox.Text = CStr(ComboBox.Items(0))
+    '    ' Initializations
+    '    Dim ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
+    '    ComboBox.Text = CStr(ComboBox.Items(0))
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -527,7 +530,7 @@ Public Class TaskPrint
                 Me.ScaleLineWidths = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

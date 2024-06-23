@@ -28,18 +28,22 @@ Public Class TaskCheckInterference
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckInterference
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.NumOccurrencesLimit = 1000
+
     End Sub
 
-    Public Sub New(Task As TaskCheckInterference)
+    'Public Sub New(Task As TaskCheckInterference)
 
-        'Options
-        Me.NumOccurrencesLimit = Task.NumOccurrencesLimit
-    End Sub
+    '    'Options
+    '    Me.NumOccurrencesLimit = Task.NumOccurrencesLimit
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -142,32 +146,32 @@ Public Class TaskCheckInterference
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        ' Initializations
-        Dim TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
-        If TextBox.Text = "" Then TextBox.Text = CStr(Me.NumOccurrencesLimit)
+    '    ' Initializations
+    '    Dim TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
+    '    If TextBox.Text = "" Then TextBox.Text = CStr(Me.NumOccurrencesLimit)
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -183,7 +187,7 @@ Public Class TaskCheckInterference
         RowIndex = 0
 
         TextBox = IU.FormatOptionsTextBox(ControlNames.NumOccurrencesLimit.ToString, "")
-        TextBox.Width = 50
+        TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
         TextBox.Text = "1000"
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
@@ -191,7 +195,7 @@ Public Class TaskCheckInterference
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.NumOccurrencesLimitLabel.ToString, "Maximum number of occurrences to process")
+        Label = IU.FormatOptionsLabel(ControlNames.NumOccurrencesLimitLabel.ToString, "Max number occurrences to process")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
@@ -276,7 +280,7 @@ Public Class TaskCheckInterference
         Select Case Name
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

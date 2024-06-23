@@ -280,7 +280,7 @@
     <Compile Include="My Project\TaskHideConstructions.vb" />
     <Compile Include="My Project\TaskOpenSave.vb" />
     <Compile Include="My Project\TaskPrint.vb" />
-    <Compile Include="My Project\TaskRegenerateFlatModel.vb" />
+    <Compile Include="My Project\TaskUpdateFlatPattern.vb" />
     <Compile Include="My Project\TaskRemoveFaceStyleOverrides.vb" />
     <Compile Include="My Project\TaskRunExternalProgram.vb" />
     <Compile Include="My Project\TaskSaveDrawingAs.vb" />
@@ -296,6 +296,12 @@
     <Compile Include="My Project\Task_Common.vb" />
     <Compile Include="My Project\Task_EventHandler.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
+    <Compile Include="My Project\UCTaskControl.Designer.vb">
+      <DependentUpon>UCTaskControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\UCTaskControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Form1.resx">
@@ -333,6 +339,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\UCTaskControl.resx">
+      <DependentUpon>UCTaskControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

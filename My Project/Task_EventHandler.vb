@@ -16,11 +16,11 @@ Public Class Task_EventHandler
         If Task IsNot Nothing Then
             Select Case Button.Name
                 Case Task.BaseControlNames.Expand.ToString
-                    If Task.TLPOptions.Visible Then
-                        Task.TLPOptions.Visible = False
+                    If Task.TaskOptionsTLP.Visible Then
+                        Task.TaskOptionsTLP.Visible = False
                         Button.Image = My.Resources.expand
                     Else
-                        Task.TLPOptions.Visible = True
+                        Task.TaskOptionsTLP.Visible = True
                         Button.Image = My.Resources.collapse
                     End If
 
@@ -42,7 +42,7 @@ Public Class Task_EventHandler
 
                     For Each Task In Form1.TaskList
                         If Task.HasOptions Then
-                            If Task.TLPOptions.Visible Then
+                            If Task.TaskOptionsTLP.Visible Then
                                 OneShown = True
                                 Exit For
                             End If
@@ -61,7 +61,7 @@ Public Class Task_EventHandler
                             ' Task properties and controls
                             Dim TaskButton = CType(Task.ControlsDict(Task.BaseControlNames.Expand.ToString), Button)
                             Task.IsOptionsHidden = Not OneShown
-                            Task.TLPOptions.Visible = Not OneShown
+                            Task.TaskOptionsTLP.Visible = Not OneShown
                             If OneShown Then
                                 TaskButton.Image = My.Resources.expand
                             Else
@@ -218,17 +218,17 @@ Public Class Task_EventHandler
                     System.Diagnostics.Process.Start(tmpHelpURL)
 
                 Case Task.BaseControlNames.EditTaskList.ToString
-                    Dim EditTaskList As New FormEditTaskList
-                    EditTaskList.ManuallySelectFileTypes = Form1.TaskList(0).ManuallySelectFileTypes
-                    EditTaskList.ShowDialog()
+                    MsgBox("EditTaskList currently disabled", vbOKOnly)
 
-                    If EditTaskList.DialogResult = DialogResult.OK Then
-                        For Each tmpTask As Task In Form1.TaskList
-                            tmpTask.ManuallySelectFileTypes = EditTaskList.ManuallySelectFileTypes
-                        Next
-                    End If
+                    'Dim EditTaskList As New FormEditTaskList
+                    'EditTaskList.ManuallySelectFileTypes = Form1.TaskList(0).ManuallySelectFileTypes
+                    'EditTaskList.ShowDialog()
 
-                    'MsgBox("Not implemented", vbOKOnly)
+                    'If EditTaskList.DialogResult = DialogResult.OK Then
+                    '    For Each tmpTask As Task In Form1.TaskList
+                    '        tmpTask.ManuallySelectFileTypes = EditTaskList.ManuallySelectFileTypes
+                    '    Next
+                    'End If
 
                 Case Else
                     MsgBox(String.Format("{0} No handler for Button '{1}'", "Task_EventHandler", Button.Name))
@@ -274,7 +274,7 @@ Public Class Task_EventHandler
             Case BaseControlNames.SelectTask.ToString
                 Task.IsSelectedTask = CheckBox.Checked
                 If (Task.HasOptions) And (Not Task.AutoHideOptions) Then
-                    Task.TLPOptions.Visible = CheckBox.Checked
+                    Task.TaskOptionsTLP.Visible = CheckBox.Checked
                     Button2 = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
                     Button2.Image = Button2Image
                 End If

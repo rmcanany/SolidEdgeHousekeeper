@@ -58,6 +58,19 @@ Partial Class Form1
         Me.new_CheckBoxFilterAsm = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.TabPageTasks = New System.Windows.Forms.TabPage()
+        Me.TaskPanel = New System.Windows.Forms.Panel()
+        Me.TaskFooterPanel = New System.Windows.Forms.Panel()
+        Me.EditTaskListButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderPanel = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.TaskHeaderEnableButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderCollapseButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleAssemblyButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderTogglePartButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleSheetmetalButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderToggleDraftButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderHelpButton = New System.Windows.Forms.Button()
+        Me.TaskHeaderNameLabel = New System.Windows.Forms.Label()
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
@@ -178,6 +191,10 @@ Partial Class Form1
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
         Me.ToolStrip_List.SuspendLayout()
+        Me.TabPageTasks.SuspendLayout()
+        Me.TaskFooterPanel.SuspendLayout()
+        Me.TaskHeaderPanel.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.TabPageConfiguration.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPageTopLevelAssy.SuspendLayout()
@@ -208,7 +225,7 @@ Partial Class Form1
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(559, 766)
+        Me.TabControl1.Size = New System.Drawing.Size(559, 594)
         Me.TabControl1.TabIndex = 0
         '
         'TabPageHome
@@ -223,7 +240,7 @@ Partial Class Form1
         Me.TabPageHome.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageHome.Name = "TabPageHome"
         Me.TabPageHome.Padding = New System.Windows.Forms.Padding(2, 2, 2, 0)
-        Me.TabPageHome.Size = New System.Drawing.Size(551, 738)
+        Me.TabPageHome.Size = New System.Drawing.Size(551, 566)
         Me.TabPageHome.TabIndex = 0
         Me.TabPageHome.Text = "Home"
         '
@@ -241,7 +258,7 @@ Partial Class Form1
         Me.ListViewFiles.Location = New System.Drawing.Point(2, 27)
         Me.ListViewFiles.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ListViewFiles.Name = "ListViewFiles"
-        Me.ListViewFiles.Size = New System.Drawing.Size(545, 684)
+        Me.ListViewFiles.Size = New System.Drawing.Size(545, 512)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
@@ -288,7 +305,7 @@ Partial Class Form1
         Me.ToolStrip_Filter.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ToolStrip_Filter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Filter.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.new_CheckBoxEnablePropertyFilter, Me.new_ButtonPropertyFilter, Me.ToolStripSeparator6, Me.new_CheckBoxFileSearch, Me.new_ComboBoxFileSearch, Me.new_ButtonFileSearchDelete, Me.ToolStripSeparator7})
-        Me.ToolStrip_Filter.Location = New System.Drawing.Point(2, 711)
+        Me.ToolStrip_Filter.Location = New System.Drawing.Point(2, 539)
         Me.ToolStrip_Filter.Name = "ToolStrip_Filter"
         Me.ToolStrip_Filter.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStrip_Filter.Size = New System.Drawing.Size(545, 25)
@@ -522,13 +539,168 @@ Partial Class Form1
         'TabPageTasks
         '
         Me.TabPageTasks.AutoScroll = True
+        Me.TabPageTasks.Controls.Add(Me.TaskPanel)
+        Me.TabPageTasks.Controls.Add(Me.TaskFooterPanel)
+        Me.TabPageTasks.Controls.Add(Me.TaskHeaderPanel)
         Me.TabPageTasks.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTasks.Name = "TabPageTasks"
         Me.TabPageTasks.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTasks.Size = New System.Drawing.Size(551, 738)
+        Me.TabPageTasks.Size = New System.Drawing.Size(551, 566)
         Me.TabPageTasks.TabIndex = 7
         Me.TabPageTasks.Text = "Tasks"
         Me.TabPageTasks.UseVisualStyleBackColor = True
+        '
+        'TaskPanel
+        '
+        Me.TaskPanel.AutoScroll = True
+        Me.TaskPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskPanel.Location = New System.Drawing.Point(3, 33)
+        Me.TaskPanel.Name = "TaskPanel"
+        Me.TaskPanel.Size = New System.Drawing.Size(545, 490)
+        Me.TaskPanel.TabIndex = 2
+        '
+        'TaskFooterPanel
+        '
+        Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
+        Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 523)
+        Me.TaskFooterPanel.Name = "TaskFooterPanel"
+        Me.TaskFooterPanel.Size = New System.Drawing.Size(545, 40)
+        Me.TaskFooterPanel.TabIndex = 1
+        '
+        'EditTaskListButton
+        '
+        Me.EditTaskListButton.Location = New System.Drawing.Point(19, 8)
+        Me.EditTaskListButton.Name = "EditTaskListButton"
+        Me.EditTaskListButton.Size = New System.Drawing.Size(96, 23)
+        Me.EditTaskListButton.TabIndex = 0
+        Me.EditTaskListButton.Text = "Edit Task List"
+        Me.EditTaskListButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderPanel
+        '
+        Me.TaskHeaderPanel.Controls.Add(Me.TableLayoutPanel2)
+        Me.TaskHeaderPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TaskHeaderPanel.Location = New System.Drawing.Point(3, 3)
+        Me.TaskHeaderPanel.Name = "TaskHeaderPanel"
+        Me.TaskHeaderPanel.Size = New System.Drawing.Size(545, 30)
+        Me.TaskHeaderPanel.TabIndex = 0
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.TableLayoutPanel2.ColumnCount = 9
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderEnableButton, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderCollapseButton, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderToggleAssemblyButton, 3, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderTogglePartButton, 4, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderToggleSheetmetalButton, 5, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderToggleDraftButton, 6, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderHelpButton, 8, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.TaskHeaderNameLabel, 7, 0)
+        Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(545, 30)
+        Me.TableLayoutPanel2.TabIndex = 0
+        '
+        'TaskHeaderEnableButton
+        '
+        Me.TaskHeaderEnableButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderEnableButton.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.TaskHeaderEnableButton.Location = New System.Drawing.Point(33, 3)
+        Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
+        Me.TaskHeaderEnableButton.Size = New System.Drawing.Size(24, 24)
+        Me.TaskHeaderEnableButton.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderEnableButton, "Unselect all")
+        Me.TaskHeaderEnableButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderCollapseButton
+        '
+        Me.TaskHeaderCollapseButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderCollapseButton.Image = Global.Housekeeper.My.Resources.Resources.collapse
+        Me.TaskHeaderCollapseButton.Location = New System.Drawing.Point(63, 3)
+        Me.TaskHeaderCollapseButton.Name = "TaskHeaderCollapseButton"
+        Me.TaskHeaderCollapseButton.Size = New System.Drawing.Size(24, 24)
+        Me.TaskHeaderCollapseButton.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderCollapseButton, "Collapse all")
+        Me.TaskHeaderCollapseButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleAssemblyButton
+        '
+        Me.TaskHeaderToggleAssemblyButton.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
+        Me.TaskHeaderToggleAssemblyButton.Location = New System.Drawing.Point(93, 3)
+        Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
+        Me.TaskHeaderToggleAssemblyButton.Size = New System.Drawing.Size(24, 23)
+        Me.TaskHeaderToggleAssemblyButton.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleAssemblyButton, "Toggle assembly selection")
+        Me.TaskHeaderToggleAssemblyButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderTogglePartButton
+        '
+        Me.TaskHeaderTogglePartButton.Image = Global.Housekeeper.My.Resources.Resources.SE_par
+        Me.TaskHeaderTogglePartButton.Location = New System.Drawing.Point(123, 3)
+        Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
+        Me.TaskHeaderTogglePartButton.Size = New System.Drawing.Size(24, 23)
+        Me.TaskHeaderTogglePartButton.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderTogglePartButton, "Toggle part selection")
+        Me.TaskHeaderTogglePartButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleSheetmetalButton
+        '
+        Me.TaskHeaderToggleSheetmetalButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleSheetmetalButton.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
+        Me.TaskHeaderToggleSheetmetalButton.Location = New System.Drawing.Point(153, 3)
+        Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
+        Me.TaskHeaderToggleSheetmetalButton.Size = New System.Drawing.Size(24, 24)
+        Me.TaskHeaderToggleSheetmetalButton.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleSheetmetalButton, "Toggle sheetmetal selection")
+        Me.TaskHeaderToggleSheetmetalButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderToggleDraftButton
+        '
+        Me.TaskHeaderToggleDraftButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleDraftButton.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
+        Me.TaskHeaderToggleDraftButton.Location = New System.Drawing.Point(183, 3)
+        Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
+        Me.TaskHeaderToggleDraftButton.Size = New System.Drawing.Size(24, 24)
+        Me.TaskHeaderToggleDraftButton.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderToggleDraftButton, "Toggle Draft selection")
+        Me.TaskHeaderToggleDraftButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderHelpButton
+        '
+        Me.TaskHeaderHelpButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderHelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(518, 3)
+        Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
+        Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 24)
+        Me.TaskHeaderHelpButton.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.TaskHeaderHelpButton, "Help")
+        Me.TaskHeaderHelpButton.UseVisualStyleBackColor = True
+        '
+        'TaskHeaderNameLabel
+        '
+        Me.TaskHeaderNameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TaskHeaderNameLabel.AutoSize = True
+        Me.TaskHeaderNameLabel.Location = New System.Drawing.Point(213, 7)
+        Me.TaskHeaderNameLabel.Name = "TaskHeaderNameLabel"
+        Me.TaskHeaderNameLabel.Padding = New System.Windows.Forms.Padding(10, 0, 0, 0)
+        Me.TaskHeaderNameLabel.Size = New System.Drawing.Size(85, 15)
+        Me.TaskHeaderNameLabel.TabIndex = 7
+        Me.TaskHeaderNameLabel.Text = "TASK NAME"
         '
         'TabPageConfiguration
         '
@@ -541,7 +713,7 @@ Partial Class Form1
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 738)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 566)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
@@ -1656,7 +1828,7 @@ Partial Class Form1
         Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageHelp.Name = "TabPageHelp"
         Me.TabPageHelp.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageHelp.Size = New System.Drawing.Size(551, 738)
+        Me.TabPageHelp.Size = New System.Drawing.Size(551, 566)
         Me.TabPageHelp.TabIndex = 6
         Me.TabPageHelp.Text = "Help"
         '
@@ -1728,7 +1900,7 @@ Partial Class Form1
         '
         Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelTimeRemaining.AutoSize = True
-        Me.LabelTimeRemaining.Location = New System.Drawing.Point(12, 807)
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(12, 635)
         Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
         Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 15)
@@ -1748,7 +1920,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 766)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 594)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 2
@@ -1849,7 +2021,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(559, 833)
+        Me.ClientSize = New System.Drawing.Size(559, 661)
         Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -1857,7 +2029,7 @@ Partial Class Form1
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(400, 200)
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MinimumSize = New System.Drawing.Size(575, 871)
+        Me.MinimumSize = New System.Drawing.Size(575, 400)
         Me.Name = "Form1"
         Me.Text = "Solid Edge Housekeeper"
         Me.TabControl1.ResumeLayout(False)
@@ -1867,6 +2039,11 @@ Partial Class Form1
         Me.ToolStrip_Filter.PerformLayout()
         Me.ToolStrip_List.ResumeLayout(False)
         Me.ToolStrip_List.PerformLayout()
+        Me.TabPageTasks.ResumeLayout(False)
+        Me.TaskFooterPanel.ResumeLayout(False)
+        Me.TaskHeaderPanel.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPageTopLevelAssy.ResumeLayout(False)
@@ -2050,4 +2227,17 @@ Partial Class Form1
     Friend WithEvents ColorDialog1 As ColorDialog
     Friend WithEvents CheckBoxUseCurrentSession As CheckBox
     Friend WithEvents CheckBoxPropertyFilterCheckDraftFile As CheckBox
+    Friend WithEvents TaskPanel As Panel
+    Friend WithEvents TaskFooterPanel As Panel
+    Friend WithEvents EditTaskListButton As Button
+    Friend WithEvents TaskHeaderPanel As Panel
+    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents TaskHeaderEnableButton As Button
+    Friend WithEvents TaskHeaderCollapseButton As Button
+    Friend WithEvents TaskHeaderToggleAssemblyButton As Button
+    Friend WithEvents TaskHeaderTogglePartButton As Button
+    Friend WithEvents TaskHeaderToggleSheetmetalButton As Button
+    Friend WithEvents TaskHeaderToggleDraftButton As Button
+    Friend WithEvents TaskHeaderHelpButton As Button
+    Friend WithEvents TaskHeaderNameLabel As Label
 End Class

@@ -1,5 +1,6 @@
 ﻿Option Strict On
 Imports Newtonsoft.Json
+Imports SolidEdgeConstants
 
 Public MustInherit Class Task
     Inherits IsolatedTaskProxy
@@ -15,8 +16,8 @@ Public MustInherit Class Task
     Public Property HasOptions As Boolean
     Public Property HelpURL As String
     Public Property Image As Image
-    Public Property TLPTask As ExTableLayoutPanel
-    Public Property TLPOptions As ExTableLayoutPanel
+    Public Property TaskControl As UCTaskControl
+    Public Property TaskOptionsTLP As ExTableLayoutPanel
     Public Property ManualOptionsOnlyString As String = "Only show options manually. Use [+] to show."
     Public Property IsSelectedTask As Boolean
     Public Property IsSelectedAssembly As Boolean
@@ -74,9 +75,9 @@ Public MustInherit Class Task
 
     Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
 
-    Public MustOverride Function GetTLPTask(
-        TLPParent As ExTableLayoutPanel
-        ) As ExTableLayoutPanel
+    'Public MustOverride Function GetTaskControl(
+    '    TLPParent As ExTableLayoutPanel
+    '    ) As UCTaskControl
 
     Public MustOverride Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -86,6 +87,26 @@ Public MustInherit Class Task
     Public Sub New()
 
     End Sub
+
+    Public Sub GenerateTaskControl()
+
+        ControlsDict = New Dictionary(Of String, Control)
+
+        Me.TaskControl = New UCTaskControl(Me)
+
+        'If Me.Description.Contains("Print") Then
+        '    MsgBox(Me.Description)
+        'End If
+
+        For Each Control As Control In Me.TaskControl.Controls
+            If ControlsDict.Keys.Contains(Control.Name) Then
+                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+            End If
+            ControlsDict(Control.Name) = Control
+        Next
+
+    End Sub
+
 
     'BUILD INTERFACE
 
@@ -849,23 +870,23 @@ Public MustInherit Class Task
 
     Public Sub HandleHideOptionsChange(
         Task As Task,
-        TLPTask As ExTableLayoutPanel,
-        TLPOptions As ExTableLayoutPanel,
+        TaskOptionsTLP As ExTableLayoutPanel,
         HideOptionsCheckbox As CheckBox)
 
-        Dim Button = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
-        Dim ButtonImage As Bitmap
+        'Dim Button = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
+        'Dim ButtonImage As Bitmap
 
-        If HideOptionsCheckbox.Checked Then
-            ButtonImage = My.Resources.expand
-        Else
-            ButtonImage = My.Resources.collapse
-        End If
+        'If HideOptionsCheckbox.Checked Then
+        '    ButtonImage = My.Resources.expand
+        'Else
+        '    ButtonImage = My.Resources.collapse
+        'End If
 
         Task.AutoHideOptions = HideOptionsCheckbox.Checked
-        Me.TLPOptions.Visible = Not HideOptionsCheckbox.Checked
 
-        Button.Image = ButtonImage
+        'Me.TaskOptionsTLP.Visible = Not HideOptionsCheckbox.Checked
+
+        'Button.Image = ButtonImage
 
     End Sub
 

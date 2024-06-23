@@ -28,20 +28,24 @@ Public Class TaskEditVariables
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
         Me.Category = "Edit"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.JSONDict = ""
         Me.AutoAddMissingVariable = False
+
     End Sub
 
-    Public Sub New(Task As TaskEditVariables)
+    'Public Sub New(Task As TaskEditVariables)
 
-        ' Options
-        Me.JSONDict = Task.JSONDict
-        Me.AutoAddMissingVariable = Task.AutoAddMissingVariable
-    End Sub
+    '    ' Options
+    '    Me.JSONDict = Task.JSONDict
+    '    Me.AutoAddMissingVariable = Task.AutoAddMissingVariable
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -262,28 +266,28 @@ Public Class TaskEditVariables
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -425,7 +429,7 @@ Public Class TaskEditVariables
                 Me.AutoAddMissingVariable = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

@@ -1,7 +1,10 @@
 ﻿Option Strict On
 
+Imports System.Runtime.InteropServices
+Imports Antlr.Runtime
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
+Imports SolidEdgePart
 
 Public Class Form1
     Public SEApp As SolidEdgeFramework.Application
@@ -37,6 +40,8 @@ Public Class Form1
     Public Property RememberTaskSelections As Boolean
 
     Public Property SolidEdgeRequired As Integer
+
+    Private Property UseCurrentSession As Boolean = False
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -242,34 +247,37 @@ Public Class Form1
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         ErrorMessage(0) = New List(Of String)
         Dim ExitStatus As Integer = 0
-        Dim NoTaskSelected As Boolean = True
+        'Dim NoTaskSelected As Boolean = True
 
         SolidEdgeRequired = 0
+        Dim SelectedTasksCount As Integer = 0
 
         For Each Task As Task In Me.TaskList
             If Task.IsSelectedTask Then
+                SelectedTasksCount += 1
                 'MsgBox("Update task with info from the form")
-                NoTaskSelected = False
+                'NoTaskSelected = False
                 If Task.RequiresSourceDirectories Then
                     Dim FLU As New FileListUtilities(Me.ListViewFiles)
                     Task.SourceDirectories = FLU.GetSourceDirectories()
                 End If
 
-                SolidEdgeRequired += CType(Task.SolidEdgeRequired, Integer)
+                ' True returns -1 upon conversion
+                SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
 
                 ErrorMessage = Task.CheckStartConditions(ErrorMessage)
             End If
         Next
 
         If SolidEdgeRequired <> 0 Then
-            If Me.TaskList.Count <> SolidEdgeRequired Then
+            If SelectedTasksCount <> SolidEdgeRequired Then
                 msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
                 ExitStatus += 1
             End If
         End If
 
 
-        If NoTaskSelected Then
+        If SelectedTasksCount = 0 Then
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
         End If
 
@@ -617,7 +625,7 @@ Public Class Form1
                     SEStart()
                 End If
             End If
-                ErrorMessagesCombined("Error processing file") = AbortList
+            ErrorMessagesCombined("Error processing file") = AbortList
         End Try
 
         UpdateTimeRemaining()
@@ -689,9 +697,28 @@ Public Class Form1
 
         Me.TaskList = PU.GetTaskList
 
-        Dim IU As New InterfaceUtilities
+        Dim tmpTaskPanel As Panel = Nothing
 
-        IU.BuildTaskPage(Me.TaskList, TabPageTasks)
+        For Each c As Control In TabPageTasks.Controls
+            If c.Name = "TaskPanel" Then
+                tmpTaskPanel = CType(c, Panel)
+                Exit For
+            End If
+        Next
+
+        'For Each Task As Task In TaskList
+        '    'MsgBox(Task.Description)
+        '    tmpTaskPanel.Controls.Add(Task.TaskControl)
+        'Next
+
+        For i = TaskList.Count - 1 To 0 Step -1
+            Dim Task = TaskList(i)
+            tmpTaskPanel.Controls.Add(Task.TaskControl)
+        Next
+
+        'Dim IU As New InterfaceUtilities
+
+        'IU.BuildTaskPage(Me.TaskList, TabPageTasks)
 
     End Sub
 
@@ -1741,7 +1768,179 @@ Public Class Form1
 
     End Sub
 
+    Private Sub TaskHeaderEnableButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderEnableButton.Click
+        For Each Task As Task In Me.TaskList
+            Task.TaskControl.CBEnabled.Checked = False
+        Next
+    End Sub
 
+    Private Sub TaskHeaderCollapseButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderCollapseButton.Click
+        For Each Task As Task In Me.TaskList
+            If Task.HasOptions Then
+                Task.TaskControl.CBExpand.Checked = False
+            End If
+        Next
+    End Sub
+
+    Private Sub TaskHeaderToggleAssemblyButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleAssemblyButton.Click
+
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToAssembly Then
+                    If Not Task.IsSelectedAssembly Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToAssembly Then
+                    Task.TaskControl.CBAssembly.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderTogglePartButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderTogglePartButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToPart Then
+                    If Not Task.IsSelectedPart Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToPart Then
+                    Task.TaskControl.CBPart.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderToggleSheetmetalButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleSheetmetalButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToSheetmetal Then
+                    If Not Task.IsSelectedSheetmetal Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToSheetmetal Then
+                    Task.TaskControl.CBSheetmetal.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderToggleDraftButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleDraftButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToDraft Then
+                    If Not Task.IsSelectedDraft Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToDraft Then
+                    Task.TaskControl.CBDraft.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
+        MsgBox("Not currently implemented", vbOKOnly)
+    End Sub
+
+    Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click
+        Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-descriptions"
+        System.Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub TaskPanel_Scroll(sender As Object, e As ScrollEventArgs) Handles TaskPanel.Scroll
+        ' https://stackoverflow.com/questions/32246132/winforms-layered-controls-with-background-images-cause-tearing-while-scrolling
+        '    If (e.Type == ScrollEventType.First) Then {
+        '        LockWindowUpdate(this.Handle);
+        '    }
+        '    Else {
+        '        LockWindowUpdate(IntPtr.Zero);
+        '        panel1.Update();
+        '        If (e.Type! = ScrollEventType.Last) Then LockWindowUpdate(this.Handle);
+        '    }
+        '}
+
+        '[DllImport("user32.dll", SetLastError = true)]
+        'Private Static extern bool LockWindowUpdate(IntPtr hWnd);
+
+
+        If e.Type = ScrollEventType.First Then
+            LockWindowUpdate(Me.Handle)
+        Else
+            LockWindowUpdate(IntPtr.Zero)
+            TaskPanel.Update()
+            'If Not e.Type = ScrollEventType.Last Then
+            '    LockWindowUpdate(Me.Handle)
+            'End If
+        End If
+
+
+    End Sub
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Private Shared Function LockWindowUpdate(ByVal hWnd As IntPtr) As Boolean
+    End Function
+
+    Private Sub CheckBoxUseCurrentSession_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseCurrentSession.CheckedChanged
+        UseCurrentSession = CheckBoxUseCurrentSession.Checked
+    End Sub
+
+    'Protected Overrides ReadOnly Property CreateParams As CreateParams
+    '    Get
+    '        Const WS_EX_COMPOSITED As Integer = &H2000000
+    '        Dim cp = MyBase.CreateParams
+    '        cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
+    '        Return cp
+    '    End Get
+    'End Property
 
 
     ' Commands I can never remember
@@ -1785,3 +1984,5 @@ Public Class Form1
 
 
 End Class
+
+

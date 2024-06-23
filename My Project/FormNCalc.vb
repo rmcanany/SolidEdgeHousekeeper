@@ -1,5 +1,7 @@
-﻿Imports FastColoredTextBoxNS
-Imports ICSharpCode.TextEditor.Util
+﻿Option Strict On
+
+Imports FastColoredTextBoxNS
+'Imports ICSharpCode.TextEditor.Util
 Imports PanoramicData.NCalcExtensions
 Imports SolidEdgePart
 Imports System.IO
@@ -70,7 +72,7 @@ Public Class FormNCalc
 
         popupMenu.Items.SetAutocompleteItems(items)
 
-        TextEditorFormula.Language = 5
+        TextEditorFormula.Language = CType(5, Language)
 
     End Sub
 
@@ -88,7 +90,7 @@ Public Class FormNCalc
         Dim Matches As MatchCollection = Regex.Matches(calculation, Pattern)
         Dim Parameters As New List(Of String)
 
-        For Each MatchString In Matches
+        For Each MatchString As Match In Matches
             If Not Parameters.Contains(MatchString.Value) Then Parameters.Add(MatchString.Value)
         Next
 
@@ -109,7 +111,7 @@ Public Class FormNCalc
             End If
 
             calculation = calculation.Replace(Parameter, tmpVal)
-            calculation = calculation.Split("\\").First
+            calculation = calculation.Split(CChar("\\")).First
 
         Next
 
@@ -128,7 +130,7 @@ Public Class FormNCalc
             Next
 
             TextEditorResults.Clear()
-            TextEditorResults.Text = "Expression result: " & A & p
+            TextEditorResults.Text = "Expression result: " & CType(A, String) & p
 
         Catch ex As Exception
 
@@ -164,7 +166,9 @@ Public Class FormNCalc
 
     Private Sub DD_SavedExpressions_DropDownItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles DD_SavedExpressions.DropDownItemClicked
 
-        Dim tmpItem As ToolStripDropDownItem = e.ClickedItem
+        'Dim tmpItem As ToolStripDropDownItem = e.ClickedItem
+        Dim tmpItem As ToolStripItem = e.ClickedItem
+
         TextEditorFormula.Clear()
         TextEditorFormula.Text = SavedExpressionsItems.Item(tmpItem.Text)
         CurrentExpression = tmpItem.Text
@@ -252,9 +256,9 @@ Public Class FormNCalc
 
         End If
 
-        For Each item In DD_SavedExpressions.DropDownItems
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
 
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.text) & vbCrLf
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
 
         Next
 
@@ -267,8 +271,8 @@ Public Class FormNCalc
         Dim tmpExpressionsText As String = ""
 
         DD_SavedExpressions.DropDownItems.RemoveByKey(ExpressionName)
-        For Each item In DD_SavedExpressions.DropDownItems
-            If item.text = ExpressionName Then
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
+            If item.Text = ExpressionName Then
                 DD_SavedExpressions.DropDownItems.Remove(item)
                 Exit For
             End If
@@ -277,9 +281,9 @@ Public Class FormNCalc
 
         SavedExpressionsItems.Remove(ExpressionName)
 
-        For Each item In DD_SavedExpressions.DropDownItems
+        For Each item As ToolStripDropDownItem In DD_SavedExpressions.DropDownItems
 
-            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.text) & vbCrLf
+            tmpExpressionsText = tmpExpressionsText & "[EXP]" & vbCrLf & item.Text & vbCrLf & "[EXP_TEXT]" & vbCrLf & SavedExpressionsItems(item.Text) & vbCrLf
 
         Next
 

@@ -29,19 +29,23 @@ Public Class PreferencesUtilities
     End Function
 
     Public Sub SaveTaskList(TaskList As List(Of Task))
-        Dim tmpJSONDict As New Dictionary(Of String, String)
-        Dim JSONString As String
 
-        Dim Outfile = GetTaskListPath(CheckExisting:=False)
+        'MsgBox("SaveTaskList currently disabled")
 
-        For Each Task As Task In TaskList
-            ' To allow copies of a given Task, make the Key Task.Description rather than Task.Name
-            tmpJSONDict(Task.Description) = Task.GetFormState()
-        Next
+        'Dim tmpJSONDict As New Dictionary(Of String, String)
+        'Dim JSONString As String
 
-        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+        'Dim Outfile = GetTaskListPath(CheckExisting:=False)
 
-        IO.File.WriteAllText(Outfile, JSONString)
+        'For Each Task As Task In TaskList
+        '    ' To allow copies of a given Task, make the Key Task.Description rather than Task.Name
+        '    tmpJSONDict(Task.Description) = Task.GetFormState()
+        'Next
+
+        'JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+
+        'IO.File.WriteAllText(Outfile, JSONString)
+
     End Sub
 
     Public Function GetTaskList() As List(Of Task)
@@ -134,7 +138,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskUpdateModelSizeInVariableTable)
         TaskList.Add(New TaskUpdateDesignForCost)
         TaskList.Add(New TaskUpdateDrawingViews)
-        TaskList.Add(New TaskRegenerateFlatModel)
+        TaskList.Add(New TaskUpdateFlatPattern)
 
         ' Edit
         TaskList.Add(New TaskEditProperties)

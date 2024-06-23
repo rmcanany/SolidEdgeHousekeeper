@@ -27,20 +27,24 @@ Public Class TaskUpdatePhysicalProperties
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdatePhysicalProperties
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.HideSymbols = False
         Me.ShowSymbols = False
+
     End Sub
 
-    Public Sub New(Task As TaskUpdatePhysicalProperties)
+    'Public Sub New(Task As TaskUpdatePhysicalProperties)
 
-        ' Options
-        Me.HideSymbols = Task.HideSymbols
-        Me.ShowSymbols = Task.ShowSymbols
-    End Sub
+    '    ' Options
+    '    Me.HideSymbols = Task.HideSymbols
+    '    Me.ShowSymbols = Task.ShowSymbols
+    'End Sub
 
 
     'PROCESSING
@@ -66,6 +70,7 @@ Public Class TaskUpdatePhysicalProperties
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -73,6 +78,7 @@ Public Class TaskUpdatePhysicalProperties
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -87,7 +93,7 @@ Public Class TaskUpdatePhysicalProperties
         Dim Proceed As Boolean
 
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-        Dim VariableFound As Boolean
+        'Dim VariableFound As Boolean
 
         Dim MaterialTable As SolidEdgeFramework.MatTable = SEApp.GetMaterialTable()
         Dim PropertyType As SolidEdgeFramework.MatTablePropIndexConstants
@@ -279,28 +285,28 @@ Public Class TaskUpdatePhysicalProperties
 
     'FORM BUILDING
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -410,7 +416,7 @@ Public Class TaskUpdatePhysicalProperties
                 Me.HideSymbols = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

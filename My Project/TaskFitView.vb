@@ -30,8 +30,11 @@ Public Class TaskFitView
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskFitView
         Me.Category = "Restyle"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.Isometric = False
@@ -40,14 +43,14 @@ Public Class TaskFitView
 
     End Sub
 
-    Public Sub New(Task As TaskFitView)
+    'Public Sub New(Task As TaskFitView)
 
-        ' Options
-        Me.Isometric = Task.Isometric
-        Me.Dimetric = Task.Dimetric
-        Me.Trimetric = Task.Trimetric
+    '    ' Options
+    '    Me.Isometric = Task.Isometric
+    '    Me.Dimetric = Task.Dimetric
+    '    Me.Trimetric = Task.Trimetric
 
-    End Sub
+    'End Sub
 
 
     Public Overrides Function Process(
@@ -157,31 +160,31 @@ Public Class TaskFitView
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        ' Initialize
-        CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Checked = True
+    '    ' Initialize
+    '    CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Checked = True
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -301,23 +304,23 @@ Public Class TaskFitView
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
                 If Me.Isometric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Dimetric.ToString
                 Me.Dimetric = Checkbox.Checked
                 If Me.Dimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Trimetric.ToString
                 Me.Trimetric = Checkbox.Checked
                 If Me.Trimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

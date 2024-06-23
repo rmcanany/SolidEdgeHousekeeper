@@ -5,443 +5,342 @@ Public Class InterfaceUtilities
 
     Private Property TaskList As List(Of Task)
 
-    Public Sub BuildTaskPage(
-        TaskList As List(Of Task),
-        TabPageTask As TabPage)
+    'Public Sub BuildTaskPage(
+    '    TaskList As List(Of Task),
+    '    TabPageTask As TabPage)
 
-        ' TabPageTask is the tab on Form1 that holds the interface built here.
-        ' TLP Base has one row each for: TLPHeader, TLPParent, and TLPEditTaskList.
-        ' TLPHeader has buttons that act on all tasks.
-        ' TLPParent has one row for each TLPTask.
-        ' TLPEditTaskList holds the button for customizing the task list.
+    '    ' TabPageTask is the tab on Form1 that holds the interface built here.
+    '    ' TLP Base has one row each for: TLPHeader, TLPParent, and TLPEditTaskList.
+    '    ' TLPHeader has buttons that act on all tasks.
+    '    ' TLPParent has one row for each TLPTask.
+    '    ' TLPEditTaskList holds the button for customizing the task list.
 
-        Me.TaskList = TaskList
+    '    Me.TaskList = TaskList
 
-        Dim RowIndex As Integer
+    '    Dim RowIndex As Integer
 
-        Dim TLPBase As New ExTableLayoutPanel
+    '    Dim TLPBase As New ExTableLayoutPanel
 
-        Dim TLPParent As New ExTableLayoutPanel
+    '    ' TLPBase.SuspendLayout()
 
-        TLPBase.ColumnCount = 1
-        TLPBase.RowCount = 3
-        TLPBase.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
-        TLPBase.RowStyles.Add(New RowStyle(SizeType.Absolute, 30))
-        TLPBase.RowStyles.Add(New RowStyle(SizeType.Percent, 100))
-        TLPBase.RowStyles.Add(New RowStyle(SizeType.Absolute, 40))
-        TLPBase.Width = TabPageTask.Width
-        TLPBase.Dock = DockStyle.Fill
+    '    Dim TLPParent As New ExTableLayoutPanel
 
-        RowIndex = 0
+    '    ' TLPParent.SuspendLayout()
 
-        Dim TLPHeader = BuildTLPHeader(TLPParent)
+    '    TLPBase.ColumnCount = 1
+    '    TLPBase.RowCount = 3
+    '    TLPBase.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
+    '    TLPBase.RowStyles.Add(New RowStyle(SizeType.Absolute, 30))
+    '    TLPBase.RowStyles.Add(New RowStyle(SizeType.Percent, 100))
+    '    TLPBase.RowStyles.Add(New RowStyle(SizeType.Absolute, 40))
+    '    TLPBase.Width = TabPageTask.Width
+    '    TLPBase.Dock = DockStyle.Fill
 
-        TLPBase.Controls.Add(TLPHeader, 0, RowIndex)
+    '    RowIndex = 0
 
-        RowIndex += 1
+    '    Dim TLPHeader = BuildTLPHeader(TLPParent)
 
-        TLPParent.ColumnCount = 1
-        TLPParent.RowCount = TaskList.Count + 1
-        TLPParent.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
-        TLPParent.BorderStyle = BorderStyle.None
-        TLPParent.Width = TabPageTask.Width - 10  ' Needed for AutoSize to work correctly (maybe).
-        'TLPParent.Dock = DockStyle.Fill
-        TLPParent.AutoScroll = True
+    '    TLPBase.Controls.Add(TLPHeader, 0, RowIndex)
 
-        TLPParent.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
+    '    RowIndex += 1
 
-        Dim i As Integer = 0
+    '    TLPParent.ColumnCount = 1
+    '    TLPParent.RowCount = TaskList.Count + 1
+    '    TLPParent.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
+    '    TLPParent.BorderStyle = BorderStyle.None
+    '    TLPParent.Width = TabPageTask.Width - 10  ' Needed for AutoSize to work correctly (maybe).
+    '    'TLPParent.Dock = DockStyle.Fill
+    '    TLPParent.AutoScroll = True
 
-        For i = 0 To TLPParent.RowCount - 1
-            TLPParent.RowStyles.Add(New RowStyle(SizeType.AutoSize))
-        Next
-        ' Last row is blank
-        TLPParent.RowStyles.Add(New RowStyle(SizeType.Absolute, 15))  ' Needed for AutoSize to work correctly (maybe).
+    '    TLPParent.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
 
-        TLPParent.Anchor = CType(AnchorStyles.Top + AnchorStyles.Left + AnchorStyles.Right + AnchorStyles.Bottom, AnchorStyles)
+    '    Dim i As Integer = 0
 
-        TLPParent.AutoSize = True
-        'TLPParent.AutoSizeMode = AutoSizeMode.GrowAndShrink
+    '    For i = 0 To TLPParent.RowCount - 1
+    '        TLPParent.RowStyles.Add(New RowStyle(SizeType.AutoSize))
+    '    Next
+    '    ' Last row is blank
+    '    TLPParent.RowStyles.Add(New RowStyle(SizeType.Absolute, 15))  ' Needed for AutoSize to work correctly (maybe).
 
-        i = 0
+    '    TLPParent.Anchor = CType(AnchorStyles.Top + AnchorStyles.Left + AnchorStyles.Right + AnchorStyles.Bottom, AnchorStyles)
 
-        For Each Task In TaskList
-            Dim TLPTask = Task.GetTLPTask(TLPParent)
+    '    TLPParent.AutoSize = True
+    '    'TLPParent.AutoSizeMode = AutoSizeMode.GrowAndShrink
 
-            Dim PU As New PreferencesUtilities
-            PU.ConfigureTaskUI(Task)
+    '    i = 0
 
-            TLPParent.Controls.Add(TLPTask, 0, i)
+    '    For Each Task In TaskList
+    '        Dim TLPTask = Task.GetTLPTask(TLPParent)
 
-            i += 1
-        Next
+    '        Dim PU As New PreferencesUtilities
+    '        PU.ConfigureTaskUI(Task)
 
-        TLPBase.Controls.Add(TLPParent, 0, RowIndex)
+    '        TLPParent.Controls.Add(TLPTask, 0, i)
 
-        RowIndex += 1
+    '        i += 1
+    '    Next
 
-        Dim TLPEditTaskList = BuildTLPEditTaskList(TLPParent)
+    '    TLPBase.Controls.Add(TLPParent, 0, RowIndex)
 
-        TLPBase.Controls.Add(TLPEditTaskList, 0, RowIndex)
+    '    RowIndex += 1
 
-        TabPageTask.Controls.Add(TLPBase)
+    '    Dim TLPEditTaskList = BuildTLPEditTaskList(TLPParent)
 
-    End Sub
+    '    TLPBase.Controls.Add(TLPEditTaskList, 0, RowIndex)
 
-    Public Function BuildTLPHeader(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    'TLPParent.ResumeLayout()
 
-        Dim TLPHeader As New ExTableLayoutPanel
+    '    'TLPBase.ResumeLayout()
 
-        Dim TLPTasksParameters = GetTLPTasksParameters()
+    '    TabPageTask.Controls.Add(TLPBase)
 
-        Dim ColumnWidth As Integer = CInt(TLPTasksParameters("ColumnWidth"))
-        Dim RowHeight As Integer = CInt(TLPTasksParameters("RowHeight"))
-        Dim ColumnNames = Split(TLPTasksParameters("ColumnNamesString"), " ").ToList
-        TLPHeader.ColumnCount = CInt(TLPTasksParameters("ColumnCount"))
+    'End Sub
 
-        Dim ColumnName As String
+    'Public Function BuildTLPHeader(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
 
-        TLPHeader.RowCount = 1
-        TLPHeader.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
-        TLPHeader.BorderStyle = BorderStyle.None
-        'TLPHeader.Width = TLPParent.Width - 10
-        TLPHeader.Height = RowHeight + 2
-        TLPHeader.Padding = New Padding(5, 0, 20, 0)
-
-        AddHandler TLPHeader.CellPaint, AddressOf Task_EventHandler.TLPHeader_CellPaint
-
-        Dim RowIndex As Integer
-        Dim ColumnIndex As Integer
+    '    Dim TLPHeader As New ExTableLayoutPanel
 
-        Dim Button As Button
-        Dim Label As Label
-
-        RowIndex = 0
-
-        For ColumnIndex = 0 To TLPHeader.ColumnCount - 1
-            ColumnName = ColumnNames(ColumnIndex)
+    '    Dim TLPTasksParameters = GetTLPTasksParameters()
 
-            Select Case ColumnName
-                Case BaseControlNames.Expand.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.expand, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
+    '    Dim ColumnWidth As Integer = CInt(TLPTasksParameters("ColumnWidth"))
+    '    Dim RowHeight As Integer = CInt(TLPTasksParameters("RowHeight"))
+    '    Dim ColumnNames = Split(TLPTasksParameters("ColumnNamesString"), " ").ToList
+    '    TLPHeader.ColumnCount = CInt(TLPTasksParameters("ColumnCount"))
+
+    '    Dim ColumnName As String
+
+    '    TLPHeader.RowCount = 1
+    '    TLPHeader.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
+    '    TLPHeader.BorderStyle = BorderStyle.None
+    '    'TLPHeader.Width = TLPParent.Width - 10
+    '    TLPHeader.Height = RowHeight + 2
+    '    TLPHeader.Padding = New Padding(5, 0, 20, 0)
+
+    '    AddHandler TLPHeader.CellPaint, AddressOf Task_EventHandler.TLPHeader_CellPaint
 
-                Case BaseControlNames.SelectTask.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.Unchecked, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case BaseControlNames.SelectAssembly.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.SE_asm, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case BaseControlNames.SelectPart.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.SE_par, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case BaseControlNames.SelectSheetmetal.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.SE_psm, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case BaseControlNames.SelectDraft.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    Button = FormatButton(ColumnName, My.Resources.SE_dft, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case BaseControlNames.Task.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
-                    Label = FormatLabel(ColumnName, "TASK", Nothing)
-                    Label.Padding = New Padding(5, 5, 0, 0)     '<----- added to control label position
-                    'Label.Anchor = AnchorStyles.Left
-                    TLPHeader.Controls.Add(Label, ColumnIndex, RowIndex)
-                    BaseControlsDict(Label.Name) = Label
-
-                Case BaseControlNames.Help.ToString
-                    TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth + 2)) '<--- added +2 to not truncate the icon
-                    Button = FormatButton(ColumnName, My.Resources.Help, True)
-                    TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
-                    BaseControlsDict(Button.Name) = Button
-
-                Case Else
-                    MsgBox(String.Format("{0} Column name '{1}' not recognized", Me.ToString, ColumnName))
-
-            End Select
-        Next
-
-        For RowIndex = 0 To TLPHeader.RowCount - 1
-            TLPHeader.RowStyles.Add(New RowStyle(SizeType.Absolute, RowHeight))
-        Next
-
-        TLPHeader.Dock = DockStyle.Fill
-
-        Return TLPHeader
-    End Function
-
-    Public Function BuildTLPTask(
-        Task As Task,
-        TLPParent As ExTableLayoutPanel
-        ) As ExTableLayoutPanel
-
-        Dim TLPTask As New ExTableLayoutPanel(Task)
-
-        AddHandler TLPTask.CellPaint, AddressOf Task_EventHandler.TLPTask_CellPaint
-
-        Dim ColumnIndex As Integer
-        Dim RowIndex As Integer
-
-        Dim Button As Button
-        Dim CheckBox As CheckBox
-        Dim Label As Label
-
-        Dim TLPTasksParameters = GetTLPTasksParameters()
-
-        Dim ColumnWidth As Integer = CInt(TLPTasksParameters("ColumnWidth"))
-        Dim RowHeight As Integer = CInt(TLPTasksParameters("RowHeight"))
-        Dim ColumnNames = Split(TLPTasksParameters("ColumnNamesString"), " ").ToList
-        TLPTask.ColumnCount = CInt(TLPTasksParameters("ColumnCount"))
-
-        Dim ColumnName As String
-
-        TLPTask.RowCount = 2
-        TLPTask.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
-        TLPTask.BorderStyle = BorderStyle.None
-        TLPTask.Width = TLPParent.Width - 10
-        TLPTask.AutoSize = True
-
-        RowIndex = 0
-
-        For ColumnIndex = 0 To TLPTask.ColumnCount - 1
-            ColumnName = ColumnNames(ColumnIndex)
-
-            Select Case ColumnName
-
-                Case BaseControlNames.Expand.ToString '"Expand"
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    If Task.HasOptions Then
-                        Button = FormatButton(ColumnName, My.Resources.expand, True)
-                        TLPTask.Controls.Add(Button, ColumnIndex, RowIndex)
-                    Else
-                        Button = FormatButton(ColumnName, My.Resources.expand_disabled, False)
-                        TLPTask.Controls.Add(Button, ColumnIndex, RowIndex)
-                    End If
-
-                Case BaseControlNames.SelectTask.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
-                    TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-
-                Case BaseControlNames.SelectAssembly.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    If Task.AppliesToAssembly Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    Else
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    End If
-
-                Case BaseControlNames.SelectPart.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    If Task.AppliesToPart Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    Else
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    End If
-
-                Case BaseControlNames.SelectSheetmetal.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    If Task.AppliesToSheetmetal Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    Else
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    End If
-
-                Case BaseControlNames.SelectDraft.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
-                    If Task.AppliesToDraft Then
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.Unchecked, True)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    Else
-                        CheckBox = FormatCheckBox(ColumnName, My.Resources.unchecked_disabled, False)
-                        TLPTask.Controls.Add(CheckBox, ColumnIndex, RowIndex)
-                    End If
-
-                Case BaseControlNames.Task.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
-                    Label = FormatLabel(ColumnName, Task.Description, Task.Image)
-                    Label.Padding = New Padding(5, 5, 0, 0)
-                    TLPTask.Controls.Add(Label, ColumnIndex, RowIndex)
-
-                Case BaseControlNames.Help.ToString
-                    TLPTask.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth + 2)) '<--- added +2 to not truncate the icon
-                    Button = FormatButton(ColumnName, My.Resources.Help, True)
-                    TLPTask.Controls.Add(Button, ColumnIndex, RowIndex)
-
-                Case Else
-                    MsgBox(String.Format("{0} Column name '{1}' not recognized", Me.ToString, ColumnName))
-            End Select
-        Next
-
-        For RowIndex = 0 To TLPTask.RowCount - 1
-            'TLPTask.RowStyles.Add(New RowStyle(SizeType.Absolute, RowHeight))
-            TLPTask.RowStyles.Add(New RowStyle(SizeType.AutoSize))
-        Next
-
-        'TLPTask.Dock = DockStyle.Fill
-        TLPTask.Anchor = CType(AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Right + AnchorStyles.Bottom, AnchorStyles)
-
-        Return TLPTask
-    End Function
-
-    Public Function BuildTLPEditTaskList(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        Dim TLPEditTaskList As New ExTableLayoutPanel
-
-        AddHandler TLPEditTaskList.CellPaint, AddressOf Task_EventHandler.TLPHeader_CellPaint
-
-        TLPEditTaskList.RowCount = 1
-        TLPEditTaskList.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
-        TLPEditTaskList.BorderStyle = BorderStyle.None
-        TLPEditTaskList.Padding = New Padding(5, 0, 20, 0)
-
-        TLPEditTaskList.ColumnCount = 2
-
-        TLPEditTaskList.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, 100))
-        TLPEditTaskList.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
-
-        TLPEditTaskList.Dock = DockStyle.Fill
-
-        Dim Button As Button
-        'Dim Label As Label
-
-        Button = FormatOptionsButton("EditTaskList", "Edit task list")
-        'Button.Width = 100
-        AddHandler Button.Click, AddressOf Task_EventHandler.Button_Click
-
-        TLPEditTaskList.Controls.Add(Button, 0, 0)
-
-        'Label = FormatOptionsLabel("EditTaskListLabel", "Edit task list")
-        'TLPEditTaskList.Controls.Add(Label, 1, 0)
-
-
-        Return TLPEditTaskList
-    End Function
-
-    Public Function GetTLPTasksParameters() As Dictionary(Of String, String)
-        Dim TLPTasksParameters As New Dictionary(Of String, String)
-        Dim ColumnNamesString As String
-
-        TLPTasksParameters("ColumnWidth") = CStr(23)    '<---- test with 23 instead of 20 to not truncate icons
-        TLPTasksParameters("RowHeight") = TLPTasksParameters("ColumnWidth")
-        TLPTasksParameters("ColumnCount") = CStr(8)
-
-        ColumnNamesString = BaseControlNames.Expand.ToString
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectTask.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectAssembly.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectPart.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectSheetmetal.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectDraft.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.Task.ToString)
-        ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.Help.ToString)
-
-        TLPTasksParameters("ColumnNamesString") = ColumnNamesString
-
-
-        Return TLPTasksParameters
-    End Function
-
-
-
-    Public Function FormatButton(
-        Name As String,
-        Image As Image,
-        Enabled As Boolean
-        ) As Button
-
-        Dim Button As New Button
-
-        Button.Name = Name
-        Button.Text = ""
-        Button.FlatStyle = FlatStyle.Flat
-        Button.FlatAppearance.BorderSize = 0
-        Button.Image = Image
-        Button.Enabled = Enabled
-
-        'Button.Dock = DockStyle.Fill
-        Button.Anchor = AnchorStyles.None
-
-        AddHandler Button.Click, AddressOf Task_EventHandler.Button_Click
-
-        Return Button
-    End Function
-
-    Private Function FormatCheckBox(
-        Name As String,
-        Image As Image,
-        Enabled As Boolean
-        ) As CheckBox
-
-        Dim CheckBox As New CheckBox
-
-        CheckBox.Name = Name
-        CheckBox.Text = ""
-
-        'CheckBox.Dock = DockStyle.Fill
-        CheckBox.Anchor = AnchorStyles.None
-
-        CheckBox.Appearance = Appearance.Button
-        CheckBox.FlatStyle = FlatStyle.Flat
-        CheckBox.FlatAppearance.BorderSize = 0
-        CheckBox.FlatAppearance.CheckedBackColor = Color.Transparent
-        CheckBox.FlatAppearance.MouseOverBackColor = Color.Transparent 'SystemColors.Control
-        CheckBox.FlatAppearance.MouseDownBackColor = Color.Transparent
-
-        CheckBox.Image = Image
-
-        CheckBox.Enabled = Enabled
-
-        AddHandler CheckBox.CheckedChanged, AddressOf Task_EventHandler.CheckBox_CheckedChanged
-
-        Return CheckBox
-    End Function
-
-    Public Function FormatLabel(
-        Name As String,
-        LabelText As String,
-        Image As Image
-        ) As Label
-
-        Dim Label As New Label
-        Dim Indent As String = "        "
-
-        Label.Name = Name
-        'Label.Font = New Font(Label.Font.Name, 9.5, FontStyle.Regular) '<--- this to force label height to 16 pixel and not truncate the icons
-
-        Label.Text = String.Format("{0}{1}", Indent, LabelText)
-        Label.AutoSize = False                                          '<--- controlling position with padding, autosize truncate the icons if text is small
-        Label.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
-        'Label.BackColor = Color.LightBlue                              '<--- use it to debug label size
-
-        If Image IsNot Nothing Then
-            Label.Image = Image
-            Label.ImageAlign = ContentAlignment.MiddleLeft
-        End If
-
-        Return Label
-    End Function
+    '    Dim RowIndex As Integer
+    '    Dim ColumnIndex As Integer
+
+    '    Dim Button As Button
+    '    Dim Label As Label
+
+    '    RowIndex = 0
+
+    '    For ColumnIndex = 0 To TLPHeader.ColumnCount - 1
+    '        ColumnName = ColumnNames(ColumnIndex)
+
+    '        Select Case ColumnName
+    '            Case BaseControlNames.Expand.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.expand, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.SelectTask.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.Unchecked, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.SelectAssembly.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.SE_asm, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.SelectPart.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.SE_par, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.SelectSheetmetal.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.SE_psm, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.SelectDraft.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth))
+    '                Button = FormatButton(ColumnName, My.Resources.SE_dft, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case BaseControlNames.Task.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
+    '                Label = FormatLabel(ColumnName, "TASK", Nothing)
+    '                Label.Padding = New Padding(5, 5, 0, 0)     '<----- added to control label position
+    '                'Label.Anchor = AnchorStyles.Left
+    '                TLPHeader.Controls.Add(Label, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Label.Name) = Label
+
+    '            Case BaseControlNames.Help.ToString
+    '                TLPHeader.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, ColumnWidth + 2)) '<--- added +2 to not truncate the icon
+    '                Button = FormatButton(ColumnName, My.Resources.Help, True)
+    '                TLPHeader.Controls.Add(Button, ColumnIndex, RowIndex)
+    '                BaseControlsDict(Button.Name) = Button
+
+    '            Case Else
+    '                MsgBox(String.Format("{0} Column name '{1}' not recognized", Me.ToString, ColumnName))
+
+    '        End Select
+    '    Next
+
+    '    For RowIndex = 0 To TLPHeader.RowCount - 1
+    '        TLPHeader.RowStyles.Add(New RowStyle(SizeType.Absolute, RowHeight))
+    '    Next
+
+    '    TLPHeader.Dock = DockStyle.Fill
+
+    '    Return TLPHeader
+    'End Function
+
+    'Public Function BuildTLPTask(
+    '    Task As Task,
+    '    ) As UCTaskControl
+
+    '    Dim TaskUC As New UCTaskControl(Task)
+
+    '    'AddHandler TLPTask.CellPaint, AddressOf Task_EventHandler.TLPTask_CellPaint
+
+    '    Return TaskUC
+    'End Function
+
+    'Public Function BuildTLPEditTaskList(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    Dim TLPEditTaskList As New ExTableLayoutPanel
+
+    '    AddHandler TLPEditTaskList.CellPaint, AddressOf Task_EventHandler.TLPHeader_CellPaint
+
+    '    TLPEditTaskList.RowCount = 1
+    '    TLPEditTaskList.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
+    '    TLPEditTaskList.BorderStyle = BorderStyle.None
+    '    TLPEditTaskList.Padding = New Padding(5, 0, 20, 0)
+
+    '    TLPEditTaskList.ColumnCount = 2
+
+    '    TLPEditTaskList.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, 100))
+    '    TLPEditTaskList.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100))
+
+    '    TLPEditTaskList.Dock = DockStyle.Fill
+
+    '    Dim Button As Button
+    '    'Dim Label As Label
+
+    '    Button = FormatOptionsButton("EditTaskList", "Edit task list")
+    '    'Button.Width = 100
+    '    AddHandler Button.Click, AddressOf Task_EventHandler.Button_Click
+
+    '    TLPEditTaskList.Controls.Add(Button, 0, 0)
+
+    '    'Label = FormatOptionsLabel("EditTaskListLabel", "Edit task list")
+    '    'TLPEditTaskList.Controls.Add(Label, 1, 0)
+
+
+    '    Return TLPEditTaskList
+    'End Function
+
+    'Public Function GetTLPTasksParameters() As Dictionary(Of String, String)
+    '    Dim TLPTasksParameters As New Dictionary(Of String, String)
+    '    Dim ColumnNamesString As String
+
+    '    TLPTasksParameters("ColumnWidth") = CStr(23)    '<---- test with 23 instead of 20 to not truncate icons
+    '    TLPTasksParameters("RowHeight") = TLPTasksParameters("ColumnWidth")
+    '    TLPTasksParameters("ColumnCount") = CStr(8)
+
+    '    ColumnNamesString = BaseControlNames.Expand.ToString
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectTask.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectAssembly.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectPart.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectSheetmetal.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.SelectDraft.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.Task.ToString)
+    '    ColumnNamesString = String.Format("{0} {1}", ColumnNamesString, BaseControlNames.Help.ToString)
+
+    '    TLPTasksParameters("ColumnNamesString") = ColumnNamesString
+
+
+    '    Return TLPTasksParameters
+    'End Function
+
+
+
+    'Public Function FormatButton(
+    '    Name As String,
+    '    Image As Image,
+    '    Enabled As Boolean
+    '    ) As Button
+
+    '    Dim Button As New Button
+
+    '    Button.Name = Name
+    '    Button.Text = ""
+    '    Button.FlatStyle = FlatStyle.Flat
+    '    Button.FlatAppearance.BorderSize = 0
+    '    Button.Image = Image
+    '    Button.Enabled = Enabled
+
+    '    'Button.Dock = DockStyle.Fill
+    '    Button.Anchor = AnchorStyles.None
+
+    '    AddHandler Button.Click, AddressOf Task_EventHandler.Button_Click
+
+    '    Return Button
+    'End Function
+
+    'Private Function FormatCheckBox(
+    '    Name As String,
+    '    Image As Image,
+    '    Enabled As Boolean
+    '    ) As CheckBox
+
+    '    Dim CheckBox As New CheckBox
+
+    '    CheckBox.Name = Name
+    '    CheckBox.Text = ""
+
+    '    'CheckBox.Dock = DockStyle.Fill
+    '    CheckBox.Anchor = AnchorStyles.None
+
+    '    CheckBox.Appearance = Appearance.Button
+    '    CheckBox.FlatStyle = FlatStyle.Flat
+    '    CheckBox.FlatAppearance.BorderSize = 0
+    '    CheckBox.FlatAppearance.CheckedBackColor = Color.Transparent
+    '    CheckBox.FlatAppearance.MouseOverBackColor = Color.Transparent 'SystemColors.Control
+    '    CheckBox.FlatAppearance.MouseDownBackColor = Color.Transparent
+
+    '    CheckBox.Image = Image
+
+    '    CheckBox.Enabled = Enabled
+
+    '    AddHandler CheckBox.CheckedChanged, AddressOf Task_EventHandler.CheckBox_CheckedChanged
+
+    '    Return CheckBox
+    'End Function
+
+    'Public Function FormatLabel(
+    '    Name As String,
+    '    LabelText As String,
+    '    Image As Image
+    '    ) As Label
+
+    '    Dim Label As New Label
+    '    Dim Indent As String = "        "
+
+    '    Label.Name = Name
+    '    'Label.Font = New Font(Label.Font.Name, 9.5, FontStyle.Regular) '<--- this to force label height to 16 pixel and not truncate the icons
+
+    '    Label.Text = String.Format("{0}{1}", Indent, LabelText)
+    '    Label.AutoSize = False                                          '<--- controlling position with padding, autosize truncate the icons if text is small
+    '    Label.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+    '    'Label.BackColor = Color.LightBlue                              '<--- use it to debug label size
+
+    '    If Image IsNot Nothing Then
+    '        Label.Image = Image
+    '        Label.ImageAlign = ContentAlignment.MiddleLeft
+    '    End If
+
+    '    Return Label
+    'End Function
 
     Public Sub FormatTLPOptions(
         TLP As TableLayoutPanel,

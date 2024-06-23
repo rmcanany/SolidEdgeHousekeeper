@@ -400,7 +400,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 ### Update drawing views
 Checks drawing views one by one, and updates them if needed.
 
-### Regenerate flat model
+### Update flat pattern
 Regenerates missing flat models by activating flat environment. Requires running in foreground. 
 
 ### Edit properties

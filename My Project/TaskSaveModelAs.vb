@@ -50,8 +50,11 @@ Public Class TaskSaveModelAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.NewFileTypeName = ""
@@ -68,22 +71,22 @@ Public Class TaskSaveModelAs
 
     End Sub
 
-    Public Sub New(Task As TaskSaveModelAs)
+    'Public Sub New(Task As TaskSaveModelAs)
 
-        'Options
-        Me.NewFileTypeName = Task.NewFileTypeName
-        Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
-        Me.NewDir = Task.NewDir
-        Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
-        Me.Formula = Task.Formula
-        Me.CropImage = Task.CropImage
-        Me.HideConstructions = Task.HideConstructions
-        Me.FitView = Task.FitView
-        Me.Isometric = Task.Isometric
-        Me.Dimetric = Task.Dimetric
-        Me.Trimetric = Task.Trimetric
+    '    'Options
+    '    Me.NewFileTypeName = Task.NewFileTypeName
+    '    Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
+    '    Me.NewDir = Task.NewDir
+    '    Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
+    '    Me.Formula = Task.Formula
+    '    Me.CropImage = Task.CropImage
+    '    Me.HideConstructions = Task.HideConstructions
+    '    Me.FitView = Task.FitView
+    '    Me.Isometric = Task.Isometric
+    '    Me.Dimetric = Task.Dimetric
+    '    Me.Trimetric = Task.Trimetric
 
-    End Sub
+    'End Sub
 
 
     Public Overrides Function Process(
@@ -705,28 +708,28 @@ Public Class TaskSaveModelAs
 
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -1035,23 +1038,23 @@ Public Class TaskSaveModelAs
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
                 If Me.Isometric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Dimetric.ToString
                 Me.Dimetric = Checkbox.Checked
                 If Me.Dimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Trimetric.ToString
                 Me.Trimetric = Checkbox.Checked
                 If Me.Trimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

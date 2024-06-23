@@ -53,8 +53,11 @@ Public Class TaskSaveDrawingAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.NewFileTypeName = ""
@@ -71,22 +74,22 @@ Public Class TaskSaveDrawingAs
         Me.PDFPerSheetSuppressSheetname = False
     End Sub
 
-    Public Sub New(Task As TaskSaveDrawingAs)
+    'Public Sub New(Task As TaskSaveDrawingAs)
 
-        'Options
-        Me.NewFileTypeName = Task.NewFileTypeName
-        Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
-        Me.NewDir = Task.NewDir
-        Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
-        Me.Formula = Task.Formula
-        'Me.CropImage = Task.CropImage
-        Me.AddWatermark = Task.AddWatermark
-        Me.WatermarkFilename = Task.WatermarkFilename
-        Me.WatermarkPositionX = Task.WatermarkPositionX
-        Me.WatermarkPositionY = Task.WatermarkPositionY
-        Me.WatermarkScale = Task.WatermarkScale
-        Me.PDFPerSheetSuppressSheetname = Task.PDFPerSheetSuppressSheetname
-    End Sub
+    '    'Options
+    '    Me.NewFileTypeName = Task.NewFileTypeName
+    '    Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
+    '    Me.NewDir = Task.NewDir
+    '    Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
+    '    Me.Formula = Task.Formula
+    '    'Me.CropImage = Task.CropImage
+    '    Me.AddWatermark = Task.AddWatermark
+    '    Me.WatermarkFilename = Task.WatermarkFilename
+    '    Me.WatermarkPositionX = Task.WatermarkPositionX
+    '    Me.WatermarkPositionY = Task.WatermarkPositionY
+    '    Me.WatermarkScale = Task.WatermarkScale
+    '    Me.PDFPerSheetSuppressSheetname = Task.PDFPerSheetSuppressSheetname
+    'End Sub
 
 
     Public Overrides Function Process(
@@ -420,41 +423,41 @@ Public Class TaskSaveDrawingAs
 
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        Me.TLPOptions = BuildTLPOptions()
+    '    Me.TLPOptions = BuildTLPOptions()
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        ' Initializations
-        'Dim Ctrl As Control
-        Dim ComboBox As ComboBox
+    '    ' Initializations
+    '    'Dim Ctrl As Control
+    '    Dim ComboBox As ComboBox
 
-        'Ctrl = FindTLPControl(TLPOptions, "ComboBox", "NewFileTypeName")
-        'If Ctrl IsNot Nothing Then
-        '    ComboBox = CType(Ctrl, ComboBox)
-        '    ComboBox.Text = CStr(ComboBox.Items(0))
-        'End If
+    '    'Ctrl = FindTLPControl(TLPOptions, "ComboBox", "NewFileTypeName")
+    '    'If Ctrl IsNot Nothing Then
+    '    '    ComboBox = CType(Ctrl, ComboBox)
+    '    '    ComboBox.Text = CStr(ComboBox.Items(0))
+    '    'End If
 
-        ComboBox = CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox)
-        ComboBox.Text = CStr(ComboBox.Items(0))
+    '    ComboBox = CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox)
+    '    ComboBox.Text = CStr(ComboBox.Items(0))
 
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
+    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -485,6 +488,15 @@ Public Class TaskSaveDrawingAs
         Label = IU.FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
         tmpTLPOptions.Controls.Add(Label, 2, RowIndex)
         ControlsDict(Label.Name) = Label
+
+        RowIndex += 1
+
+        CheckBox = IU.FormatOptionsCheckBox(ControlNames.PDFPerSheetSuppressSheetname.ToString, "Suppress sheet suffix on 1-page drawings")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 3)
+        CheckBox.Visible = False
+        ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
 
@@ -528,15 +540,6 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.PDFPerSheetSuppressSheetname.ToString, "PDF per sheet -- Suppress sheet suffix on 1-page drawings")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 3)
-        CheckBox.Visible = False
-        ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
         CheckBox = IU.FormatOptionsCheckBox(ControlNames.AddWatermark.ToString, "Add watermark to drawing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -570,7 +573,7 @@ Public Class TaskSaveDrawingAs
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkScaleLabel.ToString, "Watermark scale")
+        Label = IU.FormatOptionsLabel(ControlNames.WatermarkScaleLabel.ToString, "Scale")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -587,7 +590,7 @@ Public Class TaskSaveDrawingAs
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionXLabel.ToString, "Watermark position X/W")
+        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionXLabel.ToString, "Position X/W")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -604,7 +607,7 @@ Public Class TaskSaveDrawingAs
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionYLabel.ToString, "Watermark position Y/H")
+        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionYLabel.ToString, "Position Y/H")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -864,7 +867,7 @@ Public Class TaskSaveDrawingAs
                 CType(ControlsDict(ControlNames.WatermarkPositionYLabel.ToString), Label).Visible = Me.AddWatermark
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, CheckBox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, CheckBox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
