@@ -88,6 +88,7 @@ Partial Class UCTaskControl
         Me.CBSheetmetal.BackColor = System.Drawing.Color.Transparent
         Me.CBSheetmetal.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBSheetmetal.FlatAppearance.BorderSize = 0
+        Me.CBSheetmetal.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBSheetmetal.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBSheetmetal.Location = New System.Drawing.Point(155, 5)
         Me.CBSheetmetal.Margin = New System.Windows.Forms.Padding(5)
@@ -103,6 +104,7 @@ Partial Class UCTaskControl
         Me.CBPart.BackColor = System.Drawing.Color.Transparent
         Me.CBPart.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBPart.FlatAppearance.BorderSize = 0
+        Me.CBPart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBPart.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBPart.Location = New System.Drawing.Point(125, 5)
         Me.CBPart.Margin = New System.Windows.Forms.Padding(5)
@@ -118,6 +120,7 @@ Partial Class UCTaskControl
         Me.CBAssembly.BackColor = System.Drawing.Color.Transparent
         Me.CBAssembly.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBAssembly.FlatAppearance.BorderSize = 0
+        Me.CBAssembly.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBAssembly.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBAssembly.Location = New System.Drawing.Point(95, 5)
         Me.CBAssembly.Margin = New System.Windows.Forms.Padding(5)
@@ -147,6 +150,8 @@ Partial Class UCTaskControl
         Me.CBEnabled.AutoSize = True
         Me.CBEnabled.BackColor = System.Drawing.Color.Transparent
         Me.CBEnabled.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CBEnabled.FlatAppearance.BorderSize = 0
+        Me.CBEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBEnabled.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBEnabled.Location = New System.Drawing.Point(35, 5)
         Me.CBEnabled.Margin = New System.Windows.Forms.Padding(5)
@@ -161,6 +166,8 @@ Partial Class UCTaskControl
         Me.CBDraft.AutoSize = True
         Me.CBDraft.BackColor = System.Drawing.Color.Transparent
         Me.CBDraft.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CBDraft.FlatAppearance.BorderSize = 0
+        Me.CBDraft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBDraft.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBDraft.Location = New System.Drawing.Point(185, 5)
         Me.CBDraft.Margin = New System.Windows.Forms.Padding(5)
@@ -195,7 +202,6 @@ Partial Class UCTaskControl
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Controls.Add(Me.TLP)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(0)
