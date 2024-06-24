@@ -40,9 +40,7 @@ Public Class UCTaskControl
         Me.TLP.Controls.Add(TaskOptionsTLP, col_idx, row_idx)
     End Sub
 
-    Private Sub TLP_Paint(sender As Object, e As PaintEventArgs) Handles TLP.Paint
 
-    End Sub
 
     Private Sub UpdateAppliesToCBs(Enabled As Boolean)
 
@@ -145,6 +143,18 @@ Public Class UCTaskControl
     Private Sub HelpButton_Click(sender As Object, e As EventArgs) Handles HelpButton.Click
         System.Diagnostics.Process.Start(Me.Task.HelpURL)
     End Sub
+
+    Private Sub UCTaskControl_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+
+        ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle,
+                                Color.Gray, 0, ButtonBorderStyle.Solid,
+                                Color.Gray, 1, ButtonBorderStyle.Solid,
+                                Color.Gray, 0, ButtonBorderStyle.Solid,
+                                Color.Gray, 0, ButtonBorderStyle.Solid)
+        'left, top, right, bottom
+
+    End Sub
+
 End Class
 
 
