@@ -99,7 +99,7 @@ Public Class TaskCheckFlatPattern
                 Next
             Else
                 ExitStatus = 1
-                ErrorMessageList.Add("Flat pattern is missing")
+                ErrorMessageList.Add("No flat patterns found")
             End If
         End If
         ErrorMessage(ExitStatus) = ErrorMessageList

@@ -188,14 +188,8 @@ Public Class PreferencesUtilities
 
         CheckForUnknownTasks(KnownTasks)
 
-        'Dim tmpTaskList As New List(Of Task)
-        'For Each Task In TaskList
-        '    If Task.HasOptions Then tmpTaskList.Add(Task)
-        'Next
-
-        'Return tmpTaskList
-
         Return TaskList
+
     End Function
 
     Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))

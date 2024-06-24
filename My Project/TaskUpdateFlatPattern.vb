@@ -28,11 +28,11 @@ Public Class TaskUpdateFlatPattern
 
     End Sub
 
-    Public Sub New(Task As TaskUpdateFlatPattern)
+    'Public Sub New(Task As TaskUpdateFlatPattern)
 
-        'Options
+    '    'Options
 
-    End Sub
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -99,7 +99,7 @@ Public Class TaskUpdateFlatPattern
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         End If
-        
+
         ' Active flat environment to regenerate flat model then save part if no errors
         If ExitStatus = 0 And FlatpatternModels.Count > 0 Then
             SEDoc.Activate
@@ -110,6 +110,17 @@ Public Class TaskUpdateFlatPattern
             SEApp.DoIdle()
             SEDoc.Save()
             SEApp.DoIdle()
+        End If
+
+        If ExitStatus = 0 Then
+            If FlatpatternModels.Count > 0 Then
+                For Each FPM As SolidEdgePart.FlatPatternModel In FlatpatternModels
+                    FPM.Update()
+                Next
+            Else
+                ExitStatus = 1
+                ErrorMessageList.Add("No flat patterns found")
+            End If
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
