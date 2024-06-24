@@ -91,7 +91,6 @@ Public Class PreferencesUtilities
 
         End If
 
-
         Return TaskList
     End Function
 
