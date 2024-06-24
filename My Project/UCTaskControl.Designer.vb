@@ -136,6 +136,7 @@ Partial Class UCTaskControl
         Me.CBExpand.BackColor = System.Drawing.Color.Transparent
         Me.CBExpand.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBExpand.FlatAppearance.BorderSize = 0
+        Me.CBExpand.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBExpand.Image = Global.Housekeeper.My.Resources.Resources.expand_disabled
         Me.CBExpand.Location = New System.Drawing.Point(65, 5)
         Me.CBExpand.Margin = New System.Windows.Forms.Padding(5)
@@ -189,6 +190,8 @@ Partial Class UCTaskControl
         '
         'HelpButton
         '
+        Me.HelpButton.FlatAppearance.BorderSize = 0
+        Me.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.HelpButton.Location = New System.Drawing.Point(290, 3)
         Me.HelpButton.Name = "HelpButton"
