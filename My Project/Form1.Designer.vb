@@ -561,7 +561,7 @@ Partial Class Form1
         '
         'TaskFooterPanel
         '
-        Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSkyBlue
         Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 523)
@@ -589,7 +589,7 @@ Partial Class Form1
         '
         'TableLayoutPanel2
         '
-        Me.TableLayoutPanel2.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.TableLayoutPanel2.BackColor = System.Drawing.Color.LightSkyBlue
         Me.TableLayoutPanel2.ColumnCount = 9
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -619,6 +619,8 @@ Partial Class Form1
         'TaskHeaderEnableButton
         '
         Me.TaskHeaderEnableButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderEnableButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderEnableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TaskHeaderEnableButton.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.TaskHeaderEnableButton.Location = New System.Drawing.Point(33, 3)
         Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
@@ -640,6 +642,8 @@ Partial Class Form1
         '
         'TaskHeaderToggleAssemblyButton
         '
+        Me.TaskHeaderToggleAssemblyButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleAssemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TaskHeaderToggleAssemblyButton.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
         Me.TaskHeaderToggleAssemblyButton.Location = New System.Drawing.Point(93, 3)
         Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
@@ -650,6 +654,8 @@ Partial Class Form1
         '
         'TaskHeaderTogglePartButton
         '
+        Me.TaskHeaderTogglePartButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderTogglePartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TaskHeaderTogglePartButton.Image = Global.Housekeeper.My.Resources.Resources.SE_par
         Me.TaskHeaderTogglePartButton.Location = New System.Drawing.Point(123, 3)
         Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
@@ -661,6 +667,8 @@ Partial Class Form1
         'TaskHeaderToggleSheetmetalButton
         '
         Me.TaskHeaderToggleSheetmetalButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleSheetmetalButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleSheetmetalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TaskHeaderToggleSheetmetalButton.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
         Me.TaskHeaderToggleSheetmetalButton.Location = New System.Drawing.Point(153, 3)
         Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
@@ -672,6 +680,8 @@ Partial Class Form1
         'TaskHeaderToggleDraftButton
         '
         Me.TaskHeaderToggleDraftButton.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TaskHeaderToggleDraftButton.FlatAppearance.BorderSize = 0
+        Me.TaskHeaderToggleDraftButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.TaskHeaderToggleDraftButton.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
         Me.TaskHeaderToggleDraftButton.Location = New System.Drawing.Point(183, 3)
         Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
