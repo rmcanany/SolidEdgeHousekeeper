@@ -5,7 +5,12 @@ Imports Newtonsoft.Json
 
 Public Class PreferencesUtilities
 
-    Private Function GetPreferencesDirectory() As String
+    Public Function GetStartupDirectory() As String
+        Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
+        Return StartupDirectory
+    End Function
+
+    Public Function GetPreferencesDirectory() As String
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim PreferencesDirectory = "Preferences"
         Return String.Format("{0}\{1}", StartupPath, PreferencesDirectory)
@@ -22,6 +27,52 @@ Public Class PreferencesUtilities
         Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
 
+    Public Sub CreateNCalcSavedExpressions()
+        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", GetPreferencesDirectory)
+
+        If Not FileIO.FileSystem.FileExists(SavedExpressionsFilename) Then
+            Dim Outlist As New List(Of String)
+
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example 1")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("")
+            Outlist.Add("'%{System.Title}' + '-' + toString(cast(substring('%{System.Subject}', lastIndexOf('%{System.Subject}', 'L=')+2, lastIndexOf('%{System.Subject}', ' ')-lastIndexOf('%{System.Subject}', 'L=')-2),'System.Int32'),'D4') + '-' + substring('%{System.Subject}', lastIndexOf('%{System.Subject}', ' ')+1)")
+            Outlist.Add("")
+            Outlist.Add("\\ Example of text manipulation And number formatting")
+            Outlist.Add("\\ System.Title <-- any string")
+            Outlist.Add("\\ System.Subject <-- need to end with this format L=xxx YY")
+            Outlist.Add("\\ xxx can be any number from 0 to 9999 And YY any two letters")
+            Outlist.Add("\\ xxx will be transformed in D4 syntax (example 65 will became 0065)")
+            Outlist.Add("")
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example If()")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("if ('%{System.Title}' == 'Dog','Meat',")
+            Outlist.Add("if('%{System.Title}' == 'Cat','Fish',")
+            Outlist.Add("if('%{System.Title}' == 'Cow','Hay','unknow')))")
+            Outlist.Add("")
+            Outlist.Add("\\Example of the usage of if() statement, valid inputs Dog, Cat, Cow")
+            Outlist.Add("")
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example Replace()")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("")
+            Outlist.Add("replace('%{System.Subject}','L=','L:')")
+            Outlist.Add("")
+            Outlist.Add("\\ %{System.Subject} must contains 'L='")
+            Outlist.Add("")
+            Outlist.Add("[EXP]")
+            Outlist.Add("Example toUpper()")
+            Outlist.Add("[EXP_TEXT]")
+            Outlist.Add("")
+            Outlist.Add("toUpper('%{System.Title}')")
+            Outlist.Add("")
+            Outlist.Add("\\Any text will be converted in UPPERCASE")
+
+            IO.File.WriteAllLines(SavedExpressionsFilename, Outlist)
+        End If
+    End Sub
 
     Private Function GetTaskListPath(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"

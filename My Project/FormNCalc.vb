@@ -146,7 +146,12 @@ Public Class FormNCalc
         TextEditorFormula.WordWrap = True
         TextEditorResults.WordWrap = True
 
-        Dim SR As IO.StreamReader = IO.File.OpenText(Application.StartupPath() & "\SavedExpressions.txt")
+        Dim PU As New PreferencesUtilities
+        Dim PreferencesDirectory = PU.GetPreferencesDirectory()
+
+        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", PreferencesDirectory)
+
+        Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
         Dim SavedExpressions = SR.ReadToEnd
 
         Dim Expressions = SavedExpressions.Split(New String() {"[EXP]"}, StringSplitOptions.RemoveEmptyEntries)
@@ -161,6 +166,7 @@ Public Class FormNCalc
         Next
 
         SR.Close()
+
 
     End Sub
 
@@ -262,7 +268,12 @@ Public Class FormNCalc
 
         Next
 
-        IO.File.WriteAllText(Application.StartupPath() & "\SavedExpressions.txt", tmpExpressionsText)
+        Dim PU As New PreferencesUtilities
+        Dim PreferencesDirectory = PU.GetPreferencesDirectory()
+
+        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", PreferencesDirectory)
+
+        IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
 
     End Sub
 

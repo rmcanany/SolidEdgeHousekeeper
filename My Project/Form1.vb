@@ -640,6 +640,7 @@ Public Class Form1
 
         PU.CreatePreferencesDirectory()
         PU.CreateFilenameCharmap()
+        PU.CreateNCalcSavedExpressions()
 
         PopulateCheckedListBoxes()
         LoadDefaults()
@@ -1950,16 +1951,6 @@ Public Class Form1
         UseCurrentSession = CheckBoxUseCurrentSession.Checked
     End Sub
 
-    'Protected Overrides ReadOnly Property CreateParams As CreateParams
-    '    Get
-    '        Const WS_EX_COMPOSITED As Integer = &H2000000
-    '        Dim cp = MyBase.CreateParams
-    '        cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
-    '        Return cp
-    '    End Get
-    'End Property
-
-
     ' Commands I can never remember
 
     ' System.Windows.Forms.Application.DoEvents()
@@ -1998,6 +1989,16 @@ Public Class Form1
 
     ' Iterate through an Enum
     ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+
+    'Protected Overrides ReadOnly Property CreateParams As CreateParams
+    '    Get
+    '        Const WS_EX_COMPOSITED As Integer = &H2000000
+    '        Dim cp = MyBase.CreateParams
+    '        cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
+    '        Return cp
+    '    End Get
+    'End Property
+
 
 
 End Class
