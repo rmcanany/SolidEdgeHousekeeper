@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports SolidEdgeAssembly
+'Imports SolidEdgeAssembly
 
 Public Class TaskActivateAndUpdateAll
     Inherits Task
@@ -72,7 +72,7 @@ Public Class TaskActivateAndUpdateAll
 
         If TC.GetDocType(SEDoc) = "asm" Then
             Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
-            tmpSEDoc = CType(SEDoc, AssemblyDocument)
+            tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
             tmpSEDoc.ActivateAll()
             tmpSEDoc.UpdateAll()

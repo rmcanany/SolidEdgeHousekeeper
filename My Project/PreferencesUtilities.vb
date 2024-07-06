@@ -8,12 +8,20 @@ Public Class PreferencesUtilities
     Private Function GetPreferencesDirectory() As String
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim PreferencesDirectory = "Preferences"
-
-        ' Dim Defaults As String() = Nothing
-        ' Defaults = IO.File.ReadAllLines(DefaultsFilename)
-
         Return String.Format("{0}\{1}", StartupPath, PreferencesDirectory)
     End Function
+
+    Public Sub CreatePreferencesDirectory()
+        Dim PreferencesDirectory = GetPreferencesDirectory()
+        If Not FileIO.FileSystem.DirectoryExists(PreferencesDirectory) Then
+            FileIO.FileSystem.CreateDirectory(PreferencesDirectory)
+        End If
+    End Sub
+
+    Public Sub CreateFilenameCharmap()
+        Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
+    End Sub
+
 
     Private Function GetTaskListPath(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
@@ -34,18 +42,13 @@ Public Class PreferencesUtilities
 
         Dim Filename As String = GetTaskListPath(CheckExisting:=False)
 
-        'Dim BS As New BinarySerialization()
-
-        'BS.WriteToBinaryFile(Of List(Of Task))(Filename, TaskList)
-
-
         Dim tmpJSONDict As New Dictionary(Of String, String)
         Dim JSONString As String
 
         Dim Outfile = GetTaskListPath(CheckExisting:=False)
 
         For Each Task As Task In TaskList
-            ' To allow copies of a given Task, make the Key Task.Description rather than Task.Name
+            ' To allow copies of a given Task, the Key Task.Description rather than Task.Name
             tmpJSONDict(Task.Description) = Task.GetFormState()
         Next
 
@@ -83,6 +86,7 @@ Public Class PreferencesUtilities
                 TaskName = TaskJSONDict("TaskName")
 
                 Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
+
                 If Task IsNot Nothing Then
                     Task.SetFormState(JSONString)
                     TaskList.Add(Task)
@@ -102,36 +106,19 @@ Public Class PreferencesUtilities
         ) As Task
 
         Dim Task As Task = Nothing
+        Dim tmpTask As Task = Nothing
 
         For Each Task In AvailableTasks
             If Task.Name = TaskName Then
-                Task.Description = TaskDescription
+                tmpTask = CType(Activator.CreateInstance(Task.GetType), Task)
+                tmpTask.Description = TaskDescription
                 Exit For
             End If
         Next
 
-        Return Task
+        Return tmpTask
     End Function
 
-    Public Sub ConfigureTaskUI(Task As Task)
-        Dim JSONDict As Dictionary(Of String, String)
-        Dim JSONString As String
-
-        'Dim TaskJSONDict As Dictionary(Of String, String)
-        Dim TaskJSONString As String
-
-        Dim Infile = GetTaskListPath(CheckExisting:=True)
-
-        If Not Infile = "" Then
-            JSONString = IO.File.ReadAllText(Infile)
-
-            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-            TaskJSONString = JSONDict(Task.Description)
-
-            Task.SetFormState(TaskJSONString)
-        End If
-    End Sub
 
     Public Function BuildTaskListFromScratch() As List(Of Task)
         Dim TaskList As New List(Of Task)
@@ -226,18 +213,6 @@ Public Class PreferencesUtilities
             End If
 
         End If
-    End Sub
-
-    Public Sub CreatePreferencesFolder()
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim PreferencesFolder As String = String.Format("{0}\Preferences", StartupPath)
-        If Not FileIO.FileSystem.DirectoryExists(PreferencesFolder) Then
-            FileIO.FileSystem.CreateDirectory(PreferencesFolder)
-        End If
-    End Sub
-
-    Public Sub CreateFilenameCharmap()
-        Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
 
 End Class

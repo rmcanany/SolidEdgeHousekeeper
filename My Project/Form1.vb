@@ -638,7 +638,7 @@ Public Class Form1
 
         Dim PU As New PreferencesUtilities()
 
-        PU.CreatePreferencesFolder()
+        PU.CreatePreferencesDirectory()
         PU.CreateFilenameCharmap()
 
         PopulateCheckedListBoxes()
@@ -1883,7 +1883,29 @@ Public Class Form1
     End Sub
 
     Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
-        MsgBox("Not currently implemented", vbOKOnly)
+        'MsgBox("Not currently implemented", vbOKOnly)
+        Dim ETL As New FormEditTaskList()
+        Dim DialogResult As DialogResult
+        Dim tmpTasks As New List(Of Task)
+
+        DialogResult = ETL.ShowDialog()
+
+        If DialogResult = DialogResult.OK Then
+            Me.TaskList = ETL.TaskList
+
+            Dim s As String = ""
+
+            s = "Restart Housekeeper for your changes to take effect."
+            s = String.Format("{0}{1}", s, vbCrLf)
+            s = String.Format("{0}{1}{2}", s, "Once restarted, any new Tasks can be configured as needed.", vbCrLf)
+
+            'For Each Task As Task In Me.TaskList
+            '    s = String.Format("{0}{1}{2}", s, Task.Description, vbCrLf)
+            'Next
+            MsgBox(s, vbOKOnly)
+
+        End If
+
     End Sub
 
     Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click

@@ -39,28 +39,6 @@ Public Class OccurrenceGetter
 
     End Sub
 
-    'Private Sub GetOccurrences(SEDoc As SolidEdgeAssembly.AssemblyDocument)
-
-    '    Dim Occurrences As SolidEdgeAssembly.Occurrences = SEDoc.Occurrences
-    '    Dim Occurrence As SolidEdgeAssembly.Occurrence
-
-    '    If Occurrences.Count > 0 Then
-    '        For Each Occurrence In Occurrences
-    '            If Not AllOccurrences.Contains(Occurrence) Then
-    '                AllOccurrenceNames.Add(Occurrence.Name)
-    '                AllOccurrences.Add(Occurrence)
-
-    '                If Occurrence.Subassembly Then
-    '                    GetOccurrences(CType(Occurrence.OccurrenceDocument, SolidEdgeAssembly.AssemblyDocument))
-
-    '                End If
-    '            End If
-
-    '        Next
-
-    '    End If
-
-    'End Sub
 
     Private Sub RecurseSubs(SubOccurrence As SolidEdgeAssembly.SubOccurrence,
                             IgnoreIncludeInReportsFlag As Boolean)
@@ -79,36 +57,8 @@ Public Class OccurrenceGetter
                     Next
                 End If
             End If
-            'If IgnoreIncludeInReportsFlag Then
-            '    AllSubOccurrences.Add(SubOccurrence)
-            '    AllSubOccurrenceNames.Add(SubOccurrence.Name)
-            '    If SubOccurrence.Subassembly Then
-            '        SubSubs = SubOccurrence.SubOccurrences
-            '        For Each SubSub In SubSubs
-            '            RecurseSubs(SubSub, IgnoreIncludeInReportsFlag)
-            '        Next
-            '    End If
-            'Else
-            '    If Not SubOccurrence.ExcludeFromReports Then
-            '        AllSubOccurrences.Add(SubOccurrence)
-            '        AllSubOccurrenceNames.Add(SubOccurrence.Name)
-            '        If SubOccurrence.Subassembly Then
-            '            SubSubs = SubOccurrence.SubOccurrences
-            '            For Each SubSub In SubSubs
-            '                RecurseSubs(SubSub, IgnoreIncludeInReportsFlag)
-            '            Next
-            '        End If
-            '    End If
-            'End If
         End If
     End Sub
-
-    'Private Sub RecurseSubOccurrence(SubOccurrence As SolidEdgeAssembly.SubOccurrence)
-    '    If Not AllSubOccurrences.Contains(SubOccurrence) Then
-    '        AllSubOccurrences.Add(SubOccurrence)
-
-    '    End If
-    'End Sub
 
 
 

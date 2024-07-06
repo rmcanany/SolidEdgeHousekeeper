@@ -40,6 +40,7 @@ Partial Class FormEditTaskListChangeColor
         Me.ComboBoxColor.Location = New System.Drawing.Point(105, 20)
         Me.ComboBoxColor.Name = "ComboBoxColor"
         Me.ComboBoxColor.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBoxColor.Sorted = True
         Me.ComboBoxColor.TabIndex = 1
         '
         'TextBoxColorSaturation
@@ -126,7 +127,7 @@ Partial Class FormEditTaskListChangeColor
         Me.Controls.Add(Me.TextBoxColorSaturation)
         Me.Controls.Add(Me.ComboBoxColor)
         Me.Name = "FormEditTaskListChangeColor"
-        Me.Text = "FormEditTaskListCustomize"
+        Me.Text = "Change Color"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

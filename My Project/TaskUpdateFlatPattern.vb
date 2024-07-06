@@ -116,6 +116,11 @@ Public Class TaskUpdateFlatPattern
             If FlatpatternModels.Count > 0 Then
                 For Each FPM As SolidEdgePart.FlatPatternModel In FlatpatternModels
                     FPM.Update()
+                    SEApp.DoIdle()
+                    If Not FPM.IsUpToDate Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Unable to update flat pattern")
+                    End If
                 Next
             Else
                 ExitStatus = 1

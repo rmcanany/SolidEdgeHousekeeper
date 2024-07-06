@@ -31,6 +31,8 @@ Public Class UCTaskControl
 
         Me.Dock = DockStyle.Top
 
+        Me.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
+
 
     End Sub
 

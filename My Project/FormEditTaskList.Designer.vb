@@ -49,7 +49,7 @@ Partial Class FormEditTaskList
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(608, 545)
+        Me.ButtonOK.Location = New System.Drawing.Point(392, 325)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
         Me.ButtonOK.TabIndex = 1
@@ -59,7 +59,7 @@ Partial Class FormEditTaskList
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(698, 545)
+        Me.ButtonCancel.Location = New System.Drawing.Point(482, 325)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
         Me.ButtonCancel.TabIndex = 2
@@ -103,7 +103,7 @@ Partial Class FormEditTaskList
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 1
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(776, 493)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(560, 273)
         Me.ExTableLayoutPanel1.TabIndex = 7
         Me.ExTableLayoutPanel1.Task = Nothing
         '
@@ -116,7 +116,7 @@ Partial Class FormEditTaskList
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonMoveDown, 0, 4)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ButtonMoveUp, 0, 3)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(341, 3)
+        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(233, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
         Me.ExTableLayoutPanel2.RowCount = 6
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -125,14 +125,14 @@ Partial Class FormEditTaskList
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(94, 487)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(94, 267)
         Me.ExTableLayoutPanel2.TabIndex = 4
         Me.ExTableLayoutPanel2.Task = Nothing
         '
         'ButtonRemove
         '
         Me.ButtonRemove.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonRemove.Location = New System.Drawing.Point(9, 216)
+        Me.ButtonRemove.Location = New System.Drawing.Point(9, 106)
         Me.ButtonRemove.Name = "ButtonRemove"
         Me.ButtonRemove.Size = New System.Drawing.Size(75, 23)
         Me.ButtonRemove.TabIndex = 9
@@ -142,7 +142,7 @@ Partial Class FormEditTaskList
         'ButtonAdd
         '
         Me.ButtonAdd.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonAdd.Location = New System.Drawing.Point(9, 186)
+        Me.ButtonAdd.Location = New System.Drawing.Point(9, 76)
         Me.ButtonAdd.Name = "ButtonAdd"
         Me.ButtonAdd.Size = New System.Drawing.Size(75, 23)
         Me.ButtonAdd.TabIndex = 8
@@ -152,7 +152,7 @@ Partial Class FormEditTaskList
         'ButtonMoveDown
         '
         Me.ButtonMoveDown.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonMoveDown.Location = New System.Drawing.Point(9, 276)
+        Me.ButtonMoveDown.Location = New System.Drawing.Point(9, 166)
         Me.ButtonMoveDown.Name = "ButtonMoveDown"
         Me.ButtonMoveDown.Size = New System.Drawing.Size(75, 23)
         Me.ButtonMoveDown.TabIndex = 5
@@ -162,7 +162,7 @@ Partial Class FormEditTaskList
         'ButtonMoveUp
         '
         Me.ButtonMoveUp.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonMoveUp.Location = New System.Drawing.Point(9, 246)
+        Me.ButtonMoveUp.Location = New System.Drawing.Point(9, 136)
         Me.ButtonMoveUp.Name = "ButtonMoveUp"
         Me.ButtonMoveUp.Size = New System.Drawing.Size(75, 23)
         Me.ButtonMoveUp.TabIndex = 4
@@ -179,7 +179,9 @@ Partial Class FormEditTaskList
         Me.DataGridViewSource.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.DataGridViewSource.Location = New System.Drawing.Point(3, 3)
         Me.DataGridViewSource.Name = "DataGridViewSource"
-        Me.DataGridViewSource.Size = New System.Drawing.Size(332, 487)
+        Me.DataGridViewSource.RowHeadersVisible = False
+        Me.DataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridViewSource.Size = New System.Drawing.Size(224, 267)
         Me.DataGridViewSource.TabIndex = 3
         '
         'DataGridViewTarget
@@ -190,21 +192,23 @@ Partial Class FormEditTaskList
         Me.DataGridViewTarget.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewTarget.ContextMenuStrip = Me.ContextMenuStrip1
         Me.DataGridViewTarget.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridViewTarget.Location = New System.Drawing.Point(441, 3)
+        Me.DataGridViewTarget.Location = New System.Drawing.Point(333, 3)
         Me.DataGridViewTarget.Name = "DataGridViewTarget"
-        Me.DataGridViewTarget.Size = New System.Drawing.Size(332, 487)
+        Me.DataGridViewTarget.RowHeadersVisible = False
+        Me.DataGridViewTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridViewTarget.Size = New System.Drawing.Size(224, 267)
         Me.DataGridViewTarget.TabIndex = 5
         '
         'FormEditTaskList
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 581)
+        Me.ClientSize = New System.Drawing.Size(584, 361)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
         Me.Name = "FormEditTaskList"
-        Me.Text = "FormEditTaskList"
+        Me.Text = "Edit Task List"
         Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.TaskListBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Form1BindingSource, System.ComponentModel.ISupportInitialize).EndInit()

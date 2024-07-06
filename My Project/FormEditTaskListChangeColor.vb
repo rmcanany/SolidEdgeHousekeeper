@@ -49,7 +49,7 @@ Public Class FormEditTaskListChangeColor
     End Sub
 
     Private Sub FormEditTaskListChangeColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White".Split(" "c).ToList
+        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White Orange Purple".Split(" "c).ToList
         For Each s As String In ColorHueList
             ComboBoxColor.Items.Add(s)
         Next
@@ -97,6 +97,14 @@ Public Class FormEditTaskListChangeColor
             Case "White"
                 R = 255
                 G = 255
+                B = 255
+            Case "Orange"
+                R = 255
+                G = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
+            Case "Purple"
+                R = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
                 B = 255
         End Select
 
