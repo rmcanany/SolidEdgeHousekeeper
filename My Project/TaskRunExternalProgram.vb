@@ -41,13 +41,6 @@ Public Class TaskRunExternalProgram
 
     End Sub
 
-    'Public Sub New(Task As TaskRunExternalProgram)
-
-    '    'Options
-    '    Me.ExternalProgram = Task.ExternalProgram
-    '    Me.SaveAfterProcessing = Task.SaveAfterProcessing
-    'End Sub
-
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -70,6 +63,7 @@ Public Class TaskRunExternalProgram
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -77,6 +71,7 @@ Public Class TaskRunExternalProgram
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -150,27 +145,6 @@ Public Class TaskRunExternalProgram
     End Function
 
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -179,18 +153,18 @@ Public Class TaskRunExternalProgram
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Program")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Program")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.ExternalProgram.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.ExternalProgram.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -198,7 +172,7 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.SaveAfterProcessing.ToString, "Save file after processing")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SaveAfterProcessing.ToString, "Save file after processing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -206,7 +180,7 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

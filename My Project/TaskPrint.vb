@@ -64,24 +64,6 @@ Public Class TaskPrint
         Me.SelectedSheets = New List(Of String)
     End Sub
 
-    'Public Sub New(Task As TaskPrint)
-
-    '    'Options
-    '    Me.PrinterName = Task.PrinterName
-    '    Me.Copies = Task.Copies
-    '    Me.AutoOrient = Task.AutoOrient
-    '    Me.BestFit = Task.BestFit
-    '    Me.PrintAsBlack = Task.PrintAsBlack
-    '    Me.ScaleLineTypes = Task.ScaleLineTypes
-    '    Me.ScaleLineWidths = Task.ScaleLineWidths
-
-    '    Me.SelectedSheets = Task.SelectedSheets
-
-    'End Sub
-
-
-    'PROCESSING
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -103,6 +85,7 @@ Public Class TaskPrint
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -110,6 +93,7 @@ Public Class TaskPrint
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -167,33 +151,6 @@ Public Class TaskPrint
     End Function
 
 
-    'FORM BUILDING
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    ' Initializations
-    '    Dim ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
-    '    ComboBox.Text = CStr(ComboBox.Items(0))
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -214,13 +171,13 @@ Public Class TaskPrint
 
         Dim OptionList As New List(Of String)
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 10, 100, 200)
+        FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 10, 100, 200)
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.PrinterName.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.PrinterName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
@@ -229,29 +186,29 @@ Public Class TaskPrint
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.Copies.ToString, "1")
+        TextBox = FormatOptionsTextBox(ControlNames.Copies.ToString, "1")
         TextBox.Anchor = AnchorStyles.Left
         TextBox.Width = 100
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.CopiesLabel.ToString, "Copies")
+        Label = FormatOptionsLabel(ControlNames.CopiesLabel.ToString, "Copies")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.SelectSheets.ToString, "Select Sheets")
+        Button = FormatOptionsButton(ControlNames.SelectSheets.ToString, "Select Sheets")
         Button.AutoSize = False
         Button.Width = 100
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.SelectedSheets.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.SelectedSheets.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -260,7 +217,7 @@ Public Class TaskPrint
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ShowPrintingOptions.ToString, "Show printing options")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ShowPrintingOptions.ToString, "Show printing options")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -278,7 +235,7 @@ Public Class TaskPrint
             CtrlName = s
             CtrlText = GenerateCtrlText(s)
 
-            CheckBox = IU.FormatOptionsCheckBox(CtrlName, CtrlText)
+            CheckBox = FormatOptionsCheckBox(CtrlName, CtrlText)
             AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
             tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
             tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -291,7 +248,7 @@ Public Class TaskPrint
 
         'RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

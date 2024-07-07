@@ -115,18 +115,18 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -134,7 +134,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -142,7 +142,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

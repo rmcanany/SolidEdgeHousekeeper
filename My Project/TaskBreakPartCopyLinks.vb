@@ -36,13 +36,6 @@ Public Class TaskBreakPartCopyLinks
         Me.BreakConstructionCopies = False
     End Sub
 
-    'Public Sub New(Task As TaskBreakPartCopyLinks)
-
-    '    'Options
-    '    Me.BreakDesignCopies = Task.BreakDesignCopies
-    '    Me.BreakConstructionCopies = Task.BreakConstructionCopies
-    'End Sub
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -72,6 +65,7 @@ Public Class TaskBreakPartCopyLinks
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -117,7 +111,7 @@ Public Class TaskBreakPartCopyLinks
                             For Each CopiedPart In CopiedParts
                                 ' Synchronous part copies are not linked.
                                 ' Must be ignored or NotImplemented exception will be thrown
-                                If CopiedPart.ModelingModeType = 2
+                                If CopiedPart.ModelingModeType = 2 Then
                                     If Not CopiedPart.IsBroken Then
                                         FileChanged = True
                                         CopiedPart.BreakLinks()
@@ -136,16 +130,16 @@ Public Class TaskBreakPartCopyLinks
                 End If
             End If
         End If
-        
+
         If BreakConstructionCopies Then
             If Not CopyConstructions Is Nothing Then
-                if (CopyConstructions.Count > 0) And (CopyConstructions.Count < 300) Then
-                    For Each CopyConstruction in CopyConstructions
+                If (CopyConstructions.Count > 0) And (CopyConstructions.Count < 300) Then
+                    For Each CopyConstruction In CopyConstructions
                         ' Synchronous part copies are not links.
                         ' Must be ignored or NotImplemented exception will be thrown
-                        If CopyConstruction.ModelingModeType = 2
+                        If CopyConstruction.ModelingModeType = 2 Then
                             If Not CopyConstruction.IsBroken Then
-                                FileChanged = true
+                                FileChanged = True
                                 CopyConstruction.BreakLinks()
                                 SEApp.DoIdle()
                                 ' SE will report an out of date link on next open if we don' update
@@ -160,7 +154,7 @@ Public Class TaskBreakPartCopyLinks
                 End If
             End If
         End If
-        
+
         If (ExitStatus = 0) And (FileChanged = True) Then
             SEDoc.Save()
             SEApp.DoIdle()
@@ -170,26 +164,6 @@ Public Class TaskBreakPartCopyLinks
 
     End Function
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -197,13 +171,13 @@ Public Class TaskBreakPartCopyLinks
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.BreakDesignCopies.ToString, "Break design copy links")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakDesignCopies.ToString, "Break design copy links")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -211,7 +185,7 @@ Public Class TaskBreakPartCopyLinks
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.BreakConstructionCopies.ToString, "Break construction copy links")
+        CheckBox = FormatOptionsCheckBox(ControlNames.BreakConstructionCopies.ToString, "Break construction copy links")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -219,7 +193,7 @@ Public Class TaskBreakPartCopyLinks
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

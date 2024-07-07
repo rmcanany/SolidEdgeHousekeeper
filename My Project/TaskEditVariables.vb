@@ -40,13 +40,6 @@ Public Class TaskEditVariables
 
     End Sub
 
-    'Public Sub New(Task As TaskEditVariables)
-
-    '    ' Options
-    '    Me.JSONDict = Task.JSONDict
-    '    Me.AutoAddMissingVariable = Task.AutoAddMissingVariable
-    'End Sub
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -68,6 +61,7 @@ Public Class TaskEditVariables
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -75,6 +69,7 @@ Public Class TaskEditVariables
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -266,27 +261,6 @@ Public Class TaskEditVariables
     End Function
 
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -295,18 +269,18 @@ Public Class TaskEditVariables
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
+        Button = FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -314,7 +288,7 @@ Public Class TaskEditVariables
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.AutoAddMissingVariable.ToString, "Add any variable not already in the file")
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoAddMissingVariable.ToString, "Add any variable not already in the file")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -322,7 +296,7 @@ Public Class TaskEditVariables
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox

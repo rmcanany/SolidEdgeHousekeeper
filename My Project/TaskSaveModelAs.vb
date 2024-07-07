@@ -71,24 +71,6 @@ Public Class TaskSaveModelAs
 
     End Sub
 
-    'Public Sub New(Task As TaskSaveModelAs)
-
-    '    'Options
-    '    Me.NewFileTypeName = Task.NewFileTypeName
-    '    Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
-    '    Me.NewDir = Task.NewDir
-    '    Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
-    '    Me.Formula = Task.Formula
-    '    Me.CropImage = Task.CropImage
-    '    Me.HideConstructions = Task.HideConstructions
-    '    Me.FitView = Task.FitView
-    '    Me.Isometric = Task.Isometric
-    '    Me.Dimetric = Task.Dimetric
-    '    Me.Trimetric = Task.Trimetric
-
-    'End Sub
-
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -110,6 +92,7 @@ Public Class TaskSaveModelAs
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -117,6 +100,7 @@ Public Class TaskSaveModelAs
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -708,27 +692,6 @@ Public Class TaskSaveModelAs
 
 
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -742,26 +705,26 @@ Public Class TaskSaveModelAs
         Dim ControlWidth As Integer = 150
         Dim NewFileTypeLabelText = "(Sheetmetal only: PDF, DXF)"
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 7, 75, 75)
+        FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 7, 75, 75)
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(ComboBox, 2)
         ControlsDict(ComboBox.Name) = ComboBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
+        Label = FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
         tmpTLPOptions.Controls.Add(Label, 2, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -769,12 +732,12 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
+        Button = FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -783,7 +746,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -791,9 +754,9 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.Formula.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(TextBox, 3)
         TextBox.Visible = False
@@ -801,7 +764,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CropImage.ToString, "Crop image to model size")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CropImage.ToString, "Crop image to model size")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -810,7 +773,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideConstructions.ToString, "Hide constructions")
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideConstructions.ToString, "Hide constructions")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -819,7 +782,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.FitView.ToString, "Fit view")
+        CheckBox = FormatOptionsCheckBox(ControlNames.FitView.ToString, "Fit view")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -828,7 +791,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -837,7 +800,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -846,7 +809,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -855,7 +818,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

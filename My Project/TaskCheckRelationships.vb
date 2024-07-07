@@ -42,15 +42,6 @@ Public Class TaskCheckRelationships
 
     End Sub
 
-    Public Sub New(Task As TaskCheckRelationships)
-
-        ' Options
-        Me.CheckFailed = Task.CheckFailed
-        Me.CheckUnderconstrained = Task.CheckUnderconstrained
-        Me.CheckSuppressed = Task.CheckSuppressed
-    End Sub
-
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -405,40 +396,19 @@ Public Class TaskCheckRelationships
     End Function
 
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CheckFailed.ToString, "Check failed relationships")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckFailed.ToString, "Check failed relationships")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -446,7 +416,7 @@ Public Class TaskCheckRelationships
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CheckUnderconstrained.ToString, "Check underconstrained relationships")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckUnderconstrained.ToString, "Check underconstrained relationships")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -454,7 +424,7 @@ Public Class TaskCheckRelationships
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CheckSuppressed.ToString, "Check suppressed relationships")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckSuppressed.ToString, "Check suppressed relationships")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -462,7 +432,7 @@ Public Class TaskCheckRelationships
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

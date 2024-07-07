@@ -74,24 +74,6 @@ Public Class TaskSaveDrawingAs
         Me.PDFPerSheetSuppressSheetname = False
     End Sub
 
-    'Public Sub New(Task As TaskSaveDrawingAs)
-
-    '    'Options
-    '    Me.NewFileTypeName = Task.NewFileTypeName
-    '    Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
-    '    Me.NewDir = Task.NewDir
-    '    Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
-    '    Me.Formula = Task.Formula
-    '    'Me.CropImage = Task.CropImage
-    '    Me.AddWatermark = Task.AddWatermark
-    '    Me.WatermarkFilename = Task.WatermarkFilename
-    '    Me.WatermarkPositionX = Task.WatermarkPositionX
-    '    Me.WatermarkPositionY = Task.WatermarkPositionY
-    '    Me.WatermarkScale = Task.WatermarkScale
-    '    Me.PDFPerSheetSuppressSheetname = Task.PDFPerSheetSuppressSheetname
-    'End Sub
-
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -113,6 +95,7 @@ Public Class TaskSaveDrawingAs
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -120,6 +103,7 @@ Public Class TaskSaveDrawingAs
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -422,41 +406,6 @@ Public Class TaskSaveDrawingAs
 
 
 
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    ' Initializations
-    '    'Dim Ctrl As Control
-    '    Dim ComboBox As ComboBox
-
-    '    'Ctrl = FindTLPControl(TLPOptions, "ComboBox", "NewFileTypeName")
-    '    'If Ctrl IsNot Nothing Then
-    '    '    ComboBox = CType(Ctrl, ComboBox)
-    '    '    ComboBox.Text = CStr(ComboBox.Items(0))
-    '    'End If
-
-    '    ComboBox = CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox)
-    '    ComboBox.Text = CStr(ComboBox.Items(0))
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -471,27 +420,27 @@ Public Class TaskSaveDrawingAs
         Dim NewFileTypeLabelText = ""
         'Dim Ctrl As Control
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 12, 75, 75)
+        FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 12, 75, 75)
         'tmpTLPOptions.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(ComboBox, 2)
         ControlsDict(ComboBox.Name) = ComboBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
+        Label = FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
         tmpTLPOptions.Controls.Add(Label, 2, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.PDFPerSheetSuppressSheetname.ToString, "Suppress sheet suffix on 1-page drawings")
+        CheckBox = FormatOptionsCheckBox(ControlNames.PDFPerSheetSuppressSheetname.ToString, "Suppress sheet suffix on 1-page drawings")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -500,7 +449,7 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -508,12 +457,12 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
+        Button = FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -522,7 +471,7 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -530,9 +479,9 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.Formula.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(TextBox, 3)
         TextBox.Visible = False
@@ -540,7 +489,7 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.AddWatermark.ToString, "Add watermark to drawing")
+        CheckBox = FormatOptionsCheckBox(ControlNames.AddWatermark.ToString, "Add watermark to drawing")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -548,13 +497,13 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.BrowseWatermarkFilename.ToString, "File")
+        Button = FormatOptionsButton(ControlNames.BrowseWatermarkFilename.ToString, "File")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         Button.Visible = False
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.WatermarkFilename.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.WatermarkFilename.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -564,16 +513,16 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.WatermarkScale.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.WatermarkScale.ToString, "")
         TextBox.Text = "1.0"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkScaleLabel.ToString, "Scale")
+        Label = FormatOptionsLabel(ControlNames.WatermarkScaleLabel.ToString, "Scale")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -581,16 +530,16 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.WatermarkPositionX.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.WatermarkPositionX.ToString, "")
         TextBox.Text = "0.5"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionXLabel.ToString, "Position X/W")
+        Label = FormatOptionsLabel(ControlNames.WatermarkPositionXLabel.ToString, "Position X/W")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -598,16 +547,16 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.WatermarkPositionY.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.WatermarkPositionY.ToString, "")
         TextBox.Text = "0.5"
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.WatermarkPositionYLabel.ToString, "Position Y/H")
+        Label = FormatOptionsLabel(ControlNames.WatermarkPositionYLabel.ToString, "Position Y/H")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         tmpTLPOptions.SetColumnSpan(Label, 2)
         Label.Visible = False
@@ -615,7 +564,7 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

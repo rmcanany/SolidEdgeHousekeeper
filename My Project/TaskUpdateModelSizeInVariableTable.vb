@@ -66,20 +66,6 @@ Public Class TaskUpdateModelSizeInVariableTable
 
     End Sub
 
-    'Public Sub New(Task As TaskUpdateModelSizeInVariableTable)
-
-    '    ' Options
-    '    Me.ReportXYZ = Task.ReportXYZ
-    '    Me.XVariableName = Task.XVariableName
-    '    Me.YVariableName = Task.YVariableName
-    '    Me.ZVariableName = Task.ZVariableName
-    '    Me.ReportMinMidMax = Task.ReportMinMidMax
-    '    Me.MinVariableName = Task.MinVariableName
-    '    Me.MidVariableName = Task.MidVariableName
-    '    Me.MaxVariableName = Task.MaxVariableName
-
-    'End Sub
-
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -102,6 +88,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -109,6 +96,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -229,37 +217,6 @@ Public Class TaskUpdateModelSizeInVariableTable
     End Function
 
 
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    ' Initialize display by double-toggling the 'Report' checkboxes.
-    '    Dim CheckBox As CheckBox
-    '    CheckBox = CType(ControlsDict(ControlNames.ReportXYZ.ToString), CheckBox)
-    '    CheckBox.Checked = Not CheckBox.Checked
-    '    CheckBox.Checked = Not CheckBox.Checked
-    '    CheckBox = CType(ControlsDict(ControlNames.ReportMinMidMax.ToString), CheckBox)
-    '    CheckBox.Checked = Not CheckBox.Checked
-    '    CheckBox.Checked = Not CheckBox.Checked
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -268,14 +225,14 @@ Public Class TaskUpdateModelSizeInVariableTable
         Dim Label As Label
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 9)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 9)
 
         RowIndex = 0
 
         ' XYZ
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ReportXYZ.ToString, "Report XYZ.  (Enter variable names)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ReportXYZ.ToString, "Report XYZ.  (Enter variable names)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -283,42 +240,42 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.XVariableLabel.ToString, "X")
+        Label = FormatOptionsLabel(ControlNames.XVariableLabel.ToString, "X")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.XVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.XVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.YVariableLabel.ToString, "Y")
+        Label = FormatOptionsLabel(ControlNames.YVariableLabel.ToString, "Y")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.YVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.YVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.ZVariableLabel.ToString, "Z")
+        Label = FormatOptionsLabel(ControlNames.ZVariableLabel.ToString, "Z")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.ZVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.ZVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
@@ -327,7 +284,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         ' MinMidMax
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ReportMinMidMax.ToString, "Report Min Mid Max.  (Enter variable names)")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ReportMinMidMax.ToString, "Report Min Mid Max.  (Enter variable names)")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -335,42 +292,42 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.MinVariableLabel.ToString, "Min")
+        Label = FormatOptionsLabel(ControlNames.MinVariableLabel.ToString, "Min")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.MinVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MinVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.MidVariableLabel.ToString, "Mid")
+        Label = FormatOptionsLabel(ControlNames.MidVariableLabel.ToString, "Mid")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.MidVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MidVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
 
         RowIndex += 1
 
-        Label = IU.FormatOptionsLabel(ControlNames.MaxVariableLabel.ToString, "Max")
+        Label = FormatOptionsLabel(ControlNames.MaxVariableLabel.ToString, "Max")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.MaxVariableName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MaxVariableName.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         TextBox.Visible = False
         ControlsDict(TextBox.Name) = TextBox
@@ -378,7 +335,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         ' HideOptions
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

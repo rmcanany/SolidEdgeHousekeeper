@@ -39,15 +39,6 @@ Public Class TaskUpdatePhysicalProperties
 
     End Sub
 
-    'Public Sub New(Task As TaskUpdatePhysicalProperties)
-
-    '    ' Options
-    '    Me.HideSymbols = Task.HideSymbols
-    '    Me.ShowSymbols = Task.ShowSymbols
-    'End Sub
-
-
-    'PROCESSING
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -283,56 +274,33 @@ Public Class TaskUpdatePhysicalProperties
     End Function
 
 
-    'FORM BUILDING
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ShowSymbols.ToString, "Show symbols")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ShowSymbols.ToString, "Show symbols")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideSymbols.ToString, "Hide symbols")
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideSymbols.ToString, "Hide symbols")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)

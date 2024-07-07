@@ -192,7 +192,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskEditVariables)
         TaskList.Add(New TaskEditInteractively)
 
-        ' Appearance
+        ' Restyle
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)
         TaskList.Add(New TaskUpdateDrawingStylesFromTemplate)
         TaskList.Add(New TaskRemoveFaceStyleOverrides)
@@ -211,10 +211,8 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskCheckDrawingPartsList)
         TaskList.Add(New TaskCheckDrawings)
 
-        ' External
-        TaskList.Add(New TaskRunExternalProgram)
-
         ' Output
+        TaskList.Add(New TaskRunExternalProgram)
         TaskList.Add(New TaskSaveModelAs)
         TaskList.Add(New TaskSaveDrawingAs)
         TaskList.Add(New TaskPrint)

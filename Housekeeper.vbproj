@@ -241,7 +241,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\InputEditorDoctor.vb" />
-    <Compile Include="My Project\InterfaceUtilities.vb" />
     <Compile Include="My Project\IsolatedTask.vb" />
     <Compile Include="My Project\IsolatedTaskProxy.vb" />
     <Compile Include="My Project\MaterialDoctor.vb" />
@@ -294,7 +293,6 @@
     <Compile Include="My Project\TaskUpdatePartCopies.vb" />
     <Compile Include="My Project\TaskUpdatePhysicalProperties.vb" />
     <Compile Include="My Project\Task_Common.vb" />
-    <Compile Include="My Project\Task_EventHandler.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
     <Compile Include="My Project\UCTaskControl.Designer.vb">
       <DependentUpon>UCTaskControl.vb</DependentUpon>
