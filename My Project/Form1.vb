@@ -45,45 +45,22 @@ Public Class Form1
 
     'DESCRIPTION
     'Solid Edge Housekeeper
-    'Robert McAnany 2020
+    'Robert McAnany 2020-2024
     '
-    'Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
-    'Most of the rest was copied verbatim from Jason's repo or Tushar's blog.
+    'This section is about the code.  To read how to use it, see the Readme on GitHub.
     '
-    'This description is about the organization of the code.  To read how to use it, see the 
-    'Readme Tab on Form1.
+    'The program performs various tasks on batches of files.  Each task is housed in
+    'its own class, inherited from the superclass, Task.vb.
     '
-    'The program performs various tasks on batches of files.  Each task for each file type is 
-    'contained in a separate Function.  
-    '
-    'The basic flow is Process() -> ProcessFiles() -> ProcessFile().  The ProcessFile() routine 
-    'calls, in turn, each task that has been checked on the form.  The call is handled in the
-    'LaunchTask class, which in turn calls the file type's respective tasks.  These are housed
-    'in AssemblyTasks, PartTasks, etc.
-    '
-    'Error handling is localized in the ProcessFile() routine.  Running hundreds or thousands of 
-    'files in a row can sometimes cause an Application malfunction.  In such cases, ProcessFile() 
-    'retries the tasks.  Most of the time it succeeds on the second attempt.
-    'UPDATE 20200507:  Implementing Jason's IsolatedTask scheme seems to have fixed the Application
-    'malfunctions.  Removed the retry functionality in ProcessFile().
-    '
-    'The mapping between checkboxes and tasks is done in the LabelToAction class.  It creates one 
-    'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
-    'LabelToActionAssembly, LabelToActionPart, etc.  
-    '
-    'The main processing is done in this file, Form1.vb.  Some ancillary routines are housed in 
-    'their own Partial Class, Form1.*.vb file.
+    'Creating a new Task
+    '-- It's probably easiest to copy an existing task to use as a template.
+    '-- Choose a category from [Update, Edit, Restyle, Check, Output], or make a new one.
+    '-- Document the task in GetHelpText().  The GitHub Readme is auto-populated with this info.
+    '-- Add the task to the list in PreferencesUtilities.BuildTaskListFromScratch().
+    '    -- The tasks are presented in the UI in the same order as the list.
+    '    -- Place yours in the the appropriate category.
+    '    -- For a new category, also update Task.SetColorFromCategory().
 
-    'To add tasks to the program is a matter of adding the code to the appropriate Tasks class.  
-    'Note, each task has a Public and Private component.  The Public part sets up the IsolatedTask.
-    'The Private part does the actual task processing.  Getting the task to the form's 
-    'CheckedListBoxes is accomplished by adding a corresponding entry in the LabelToAction class 
-    'and updating LaunchTask accordingly.  
-
-    'To add new user-specific input entails first adding the appropriate control to the form.  
-    'The second step would be to add that information to the Configuration dictionary in the 
-    'ReconcileFormChanges routine.  Next would be to modify CheckStartConditions to validate 
-    'any user input.  Finally, the LoadDefaults would need to be updated as required.
 
     Private Sub ProcessAll()
 
