@@ -38,13 +38,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.RemoveFaceStyleOverrides = False
     End Sub
 
-    'Public Sub New(Task As TaskUpdateMaterialFromMaterialTable)
-
-    '    'Options
-    '    Me.ActiveMaterialLibrary = Task.ActiveMaterialLibrary
-    '    Me.RemoveFaceStyleOverrides = Task.RemoveFaceStyleOverrides
-    'End Sub
-
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -67,6 +60,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -74,6 +68,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -111,27 +106,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
     End Function
 
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel

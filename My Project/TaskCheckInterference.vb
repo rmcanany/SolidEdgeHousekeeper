@@ -39,11 +39,6 @@ Public Class TaskCheckInterference
 
     End Sub
 
-    'Public Sub New(Task As TaskCheckInterference)
-
-    '    'Options
-    '    Me.NumOccurrencesLimit = Task.NumOccurrencesLimit
-    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -146,30 +141,6 @@ Public Class TaskCheckInterference
     End Function
 
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    Me.TLPOptions = BuildTLPOptions()
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    ' Initializations
-    '    Dim TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
-    '    If TextBox.Text = "" Then TextBox.Text = CStr(Me.NumOccurrencesLimit)
-
-    '    Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-    '    Return Me.TLPTask
-    'End Function
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel

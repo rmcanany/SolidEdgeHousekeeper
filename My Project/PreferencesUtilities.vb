@@ -185,12 +185,12 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskUpdateDesignForCost)
         TaskList.Add(New TaskUpdateDrawingViews)
         TaskList.Add(New TaskUpdateFlatPattern)
+        TaskList.Add(New TaskBreakPartCopyLinks)
 
         ' Edit
         TaskList.Add(New TaskEditProperties)
         TaskList.Add(New TaskEditVariables)
         TaskList.Add(New TaskEditInteractively)
-        TaskList.Add(New TaskBreakPartCopyLinks)
 
         ' Appearance
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)

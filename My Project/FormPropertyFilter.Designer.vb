@@ -54,20 +54,20 @@ Partial Class FormPropertyFilter
         '
         'ButtonPropertyFilterCancel
         '
-        Me.ButtonPropertyFilterCancel.Location = New System.Drawing.Point(488, 493)
+        Me.ButtonPropertyFilterCancel.Location = New System.Drawing.Point(569, 526)
         Me.ButtonPropertyFilterCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterCancel.Name = "ButtonPropertyFilterCancel"
-        Me.ButtonPropertyFilterCancel.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertyFilterCancel.Size = New System.Drawing.Size(88, 23)
         Me.ButtonPropertyFilterCancel.TabIndex = 22
         Me.ButtonPropertyFilterCancel.Text = "Cancel"
         Me.ButtonPropertyFilterCancel.UseVisualStyleBackColor = True
         '
         'ButtonPropertyFilterOK
         '
-        Me.ButtonPropertyFilterOK.Location = New System.Drawing.Point(394, 493)
+        Me.ButtonPropertyFilterOK.Location = New System.Drawing.Point(460, 526)
         Me.ButtonPropertyFilterOK.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterOK.Name = "ButtonPropertyFilterOK"
-        Me.ButtonPropertyFilterOK.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertyFilterOK.Size = New System.Drawing.Size(88, 23)
         Me.ButtonPropertyFilterOK.TabIndex = 21
         Me.ButtonPropertyFilterOK.Text = "OK"
         Me.ButtonPropertyFilterOK.UseVisualStyleBackColor = True
@@ -80,7 +80,7 @@ Partial Class FormPropertyFilter
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(585, 468)
+        Me.TabControl1.Size = New System.Drawing.Size(682, 499)
         Me.TabControl1.TabIndex = 23
         '
         'TabPage1
@@ -104,30 +104,30 @@ Partial Class FormPropertyFilter
         Me.TabPage1.Controls.Add(Me.ComboBoxPropertyFilterPropertySet)
         Me.TabPage1.Controls.Add(Me.ButtonPropertyFilterSave)
         Me.TabPage1.Controls.Add(Me.ComboBoxPropertyFilterName)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 24)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 25)
         Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPage1.Size = New System.Drawing.Size(577, 440)
+        Me.TabPage1.Size = New System.Drawing.Size(674, 470)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Options"
         '
         'ButtonPropertyFilterDelete
         '
-        Me.ButtonPropertyFilterDelete.Location = New System.Drawing.Point(469, 28)
+        Me.ButtonPropertyFilterDelete.Location = New System.Drawing.Point(547, 30)
         Me.ButtonPropertyFilterDelete.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterDelete.Name = "ButtonPropertyFilterDelete"
-        Me.ButtonPropertyFilterDelete.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonPropertyFilterDelete.Size = New System.Drawing.Size(88, 25)
         Me.ButtonPropertyFilterDelete.TabIndex = 36
         Me.ButtonPropertyFilterDelete.Text = "Delete"
         Me.ButtonPropertyFilterDelete.UseVisualStyleBackColor = True
         '
         'ButtonFormula
         '
-        Me.ButtonFormula.Location = New System.Drawing.Point(469, 407)
+        Me.ButtonFormula.Location = New System.Drawing.Point(547, 434)
         Me.ButtonFormula.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonFormula.Name = "ButtonFormula"
-        Me.ButtonFormula.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonFormula.Size = New System.Drawing.Size(88, 23)
         Me.ButtonFormula.TabIndex = 35
         Me.ButtonFormula.Text = "Edit"
         Me.ButtonFormula.UseVisualStyleBackColor = True
@@ -135,141 +135,141 @@ Partial Class FormPropertyFilter
         'LabelFormula
         '
         Me.LabelFormula.AutoSize = True
-        Me.LabelFormula.Location = New System.Drawing.Point(19, 384)
+        Me.LabelFormula.Location = New System.Drawing.Point(22, 410)
         Me.LabelFormula.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelFormula.Name = "LabelFormula"
-        Me.LabelFormula.Size = New System.Drawing.Size(45, 15)
+        Me.LabelFormula.Size = New System.Drawing.Size(50, 16)
         Me.LabelFormula.TabIndex = 34
         Me.LabelFormula.Text = "Formula"
         '
         'TextBoxFormula
         '
-        Me.TextBoxFormula.Location = New System.Drawing.Point(19, 407)
+        Me.TextBoxFormula.Location = New System.Drawing.Point(22, 434)
         Me.TextBoxFormula.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFormula.Name = "TextBoxFormula"
-        Me.TextBoxFormula.Size = New System.Drawing.Size(432, 22)
+        Me.TextBoxFormula.Size = New System.Drawing.Size(503, 23)
         Me.TextBoxFormula.TabIndex = 33
         '
         'LabelPropertyFilterValue
         '
         Me.LabelPropertyFilterValue.AutoSize = True
-        Me.LabelPropertyFilterValue.Location = New System.Drawing.Point(394, 70)
+        Me.LabelPropertyFilterValue.Location = New System.Drawing.Point(460, 75)
         Me.LabelPropertyFilterValue.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPropertyFilterValue.Name = "LabelPropertyFilterValue"
-        Me.LabelPropertyFilterValue.Size = New System.Drawing.Size(33, 15)
+        Me.LabelPropertyFilterValue.Size = New System.Drawing.Size(35, 16)
         Me.LabelPropertyFilterValue.TabIndex = 32
         Me.LabelPropertyFilterValue.Text = "Value"
         '
         'LabelPropertyFilterComparison
         '
         Me.LabelPropertyFilterComparison.AutoSize = True
-        Me.LabelPropertyFilterComparison.Location = New System.Drawing.Point(281, 70)
+        Me.LabelPropertyFilterComparison.Location = New System.Drawing.Point(328, 75)
         Me.LabelPropertyFilterComparison.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPropertyFilterComparison.Name = "LabelPropertyFilterComparison"
-        Me.LabelPropertyFilterComparison.Size = New System.Drawing.Size(65, 15)
+        Me.LabelPropertyFilterComparison.Size = New System.Drawing.Size(71, 16)
         Me.LabelPropertyFilterComparison.TabIndex = 31
         Me.LabelPropertyFilterComparison.Text = "Comparison"
         '
         'LabelPropertyFilterPropertyName
         '
         Me.LabelPropertyFilterPropertyName.AutoSize = True
-        Me.LabelPropertyFilterPropertyName.Location = New System.Drawing.Point(131, 70)
+        Me.LabelPropertyFilterPropertyName.Location = New System.Drawing.Point(153, 75)
         Me.LabelPropertyFilterPropertyName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPropertyFilterPropertyName.Name = "LabelPropertyFilterPropertyName"
-        Me.LabelPropertyFilterPropertyName.Size = New System.Drawing.Size(78, 15)
+        Me.LabelPropertyFilterPropertyName.Size = New System.Drawing.Size(84, 16)
         Me.LabelPropertyFilterPropertyName.TabIndex = 30
         Me.LabelPropertyFilterPropertyName.Text = "Property name"
         '
         'LabelPropertyFilterPropertySet
         '
         Me.LabelPropertyFilterPropertySet.AutoSize = True
-        Me.LabelPropertyFilterPropertySet.Location = New System.Drawing.Point(19, 70)
+        Me.LabelPropertyFilterPropertySet.Location = New System.Drawing.Point(22, 75)
         Me.LabelPropertyFilterPropertySet.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPropertyFilterPropertySet.Name = "LabelPropertyFilterPropertySet"
-        Me.LabelPropertyFilterPropertySet.Size = New System.Drawing.Size(67, 15)
+        Me.LabelPropertyFilterPropertySet.Size = New System.Drawing.Size(70, 16)
         Me.LabelPropertyFilterPropertySet.TabIndex = 29
         Me.LabelPropertyFilterPropertySet.Text = "Property set"
         '
         'LabelPropertyFilterName
         '
         Me.LabelPropertyFilterName.AutoSize = True
-        Me.LabelPropertyFilterName.Location = New System.Drawing.Point(19, 5)
+        Me.LabelPropertyFilterName.Location = New System.Drawing.Point(22, 5)
         Me.LabelPropertyFilterName.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.LabelPropertyFilterName.Name = "LabelPropertyFilterName"
-        Me.LabelPropertyFilterName.Size = New System.Drawing.Size(104, 15)
+        Me.LabelPropertyFilterName.Size = New System.Drawing.Size(111, 16)
         Me.LabelPropertyFilterName.TabIndex = 28
         Me.LabelPropertyFilterName.Text = "Property filter name"
         '
         'ListViewPropertyFilter
         '
         Me.ListViewPropertyFilter.HideSelection = False
-        Me.ListViewPropertyFilter.Location = New System.Drawing.Point(19, 164)
+        Me.ListViewPropertyFilter.Location = New System.Drawing.Point(22, 175)
         Me.ListViewPropertyFilter.Margin = New System.Windows.Forms.Padding(2)
         Me.ListViewPropertyFilter.Name = "ListViewPropertyFilter"
-        Me.ListViewPropertyFilter.Size = New System.Drawing.Size(526, 212)
+        Me.ListViewPropertyFilter.Size = New System.Drawing.Size(613, 226)
         Me.ListViewPropertyFilter.TabIndex = 27
         Me.ListViewPropertyFilter.UseCompatibleStateImageBehavior = False
         '
         'ButtonPropertyFilterRemove
         '
-        Me.ButtonPropertyFilterRemove.Location = New System.Drawing.Point(469, 132)
+        Me.ButtonPropertyFilterRemove.Location = New System.Drawing.Point(547, 141)
         Me.ButtonPropertyFilterRemove.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterRemove.Name = "ButtonPropertyFilterRemove"
-        Me.ButtonPropertyFilterRemove.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertyFilterRemove.Size = New System.Drawing.Size(88, 23)
         Me.ButtonPropertyFilterRemove.TabIndex = 26
         Me.ButtonPropertyFilterRemove.Text = "Remove"
         Me.ButtonPropertyFilterRemove.UseVisualStyleBackColor = True
         '
         'ButtonPropertyFilterAdd
         '
-        Me.ButtonPropertyFilterAdd.Location = New System.Drawing.Point(375, 132)
+        Me.ButtonPropertyFilterAdd.Location = New System.Drawing.Point(438, 141)
         Me.ButtonPropertyFilterAdd.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterAdd.Name = "ButtonPropertyFilterAdd"
-        Me.ButtonPropertyFilterAdd.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertyFilterAdd.Size = New System.Drawing.Size(88, 23)
         Me.ButtonPropertyFilterAdd.TabIndex = 25
         Me.ButtonPropertyFilterAdd.Text = "Add"
         Me.ButtonPropertyFilterAdd.UseVisualStyleBackColor = True
         '
         'TextBoxPropertyFilterValue
         '
-        Me.TextBoxPropertyFilterValue.Location = New System.Drawing.Point(394, 93)
+        Me.TextBoxPropertyFilterValue.Location = New System.Drawing.Point(460, 99)
         Me.TextBoxPropertyFilterValue.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPropertyFilterValue.Name = "TextBoxPropertyFilterValue"
-        Me.TextBoxPropertyFilterValue.Size = New System.Drawing.Size(151, 22)
+        Me.TextBoxPropertyFilterValue.Size = New System.Drawing.Size(176, 23)
         Me.TextBoxPropertyFilterValue.TabIndex = 24
         '
         'ComboBoxPropertyFilterComparison
         '
         Me.ComboBoxPropertyFilterComparison.FormattingEnabled = True
-        Me.ComboBoxPropertyFilterComparison.Location = New System.Drawing.Point(281, 93)
+        Me.ComboBoxPropertyFilterComparison.Location = New System.Drawing.Point(328, 99)
         Me.ComboBoxPropertyFilterComparison.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterComparison.Name = "ComboBoxPropertyFilterComparison"
-        Me.ComboBoxPropertyFilterComparison.Size = New System.Drawing.Size(95, 23)
+        Me.ComboBoxPropertyFilterComparison.Size = New System.Drawing.Size(110, 24)
         Me.ComboBoxPropertyFilterComparison.TabIndex = 23
         '
         'TextBoxPropertyFilterPropertyName
         '
-        Me.TextBoxPropertyFilterPropertyName.Location = New System.Drawing.Point(131, 93)
+        Me.TextBoxPropertyFilterPropertyName.Location = New System.Drawing.Point(153, 99)
         Me.TextBoxPropertyFilterPropertyName.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxPropertyFilterPropertyName.Name = "TextBoxPropertyFilterPropertyName"
-        Me.TextBoxPropertyFilterPropertyName.Size = New System.Drawing.Size(132, 22)
+        Me.TextBoxPropertyFilterPropertyName.Size = New System.Drawing.Size(153, 23)
         Me.TextBoxPropertyFilterPropertyName.TabIndex = 22
         '
         'ComboBoxPropertyFilterPropertySet
         '
         Me.ComboBoxPropertyFilterPropertySet.FormattingEnabled = True
-        Me.ComboBoxPropertyFilterPropertySet.Location = New System.Drawing.Point(19, 93)
+        Me.ComboBoxPropertyFilterPropertySet.Location = New System.Drawing.Point(22, 99)
         Me.ComboBoxPropertyFilterPropertySet.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterPropertySet.Name = "ComboBoxPropertyFilterPropertySet"
-        Me.ComboBoxPropertyFilterPropertySet.Size = New System.Drawing.Size(95, 23)
+        Me.ComboBoxPropertyFilterPropertySet.Size = New System.Drawing.Size(110, 24)
         Me.ComboBoxPropertyFilterPropertySet.TabIndex = 21
         '
         'ButtonPropertyFilterSave
         '
-        Me.ButtonPropertyFilterSave.Location = New System.Drawing.Point(375, 28)
+        Me.ButtonPropertyFilterSave.Location = New System.Drawing.Point(438, 30)
         Me.ButtonPropertyFilterSave.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonPropertyFilterSave.Name = "ButtonPropertyFilterSave"
-        Me.ButtonPropertyFilterSave.Size = New System.Drawing.Size(75, 22)
+        Me.ButtonPropertyFilterSave.Size = New System.Drawing.Size(88, 23)
         Me.ButtonPropertyFilterSave.TabIndex = 20
         Me.ButtonPropertyFilterSave.Text = "Save"
         Me.ButtonPropertyFilterSave.UseVisualStyleBackColor = True
@@ -277,10 +277,10 @@ Partial Class FormPropertyFilter
         'ComboBoxPropertyFilterName
         '
         Me.ComboBoxPropertyFilterName.FormattingEnabled = True
-        Me.ComboBoxPropertyFilterName.Location = New System.Drawing.Point(19, 28)
+        Me.ComboBoxPropertyFilterName.Location = New System.Drawing.Point(22, 30)
         Me.ComboBoxPropertyFilterName.Margin = New System.Windows.Forms.Padding(2)
         Me.ComboBoxPropertyFilterName.Name = "ComboBoxPropertyFilterName"
-        Me.ComboBoxPropertyFilterName.Size = New System.Drawing.Size(338, 23)
+        Me.ComboBoxPropertyFilterName.Size = New System.Drawing.Size(394, 24)
         Me.ComboBoxPropertyFilterName.Sorted = True
         Me.ComboBoxPropertyFilterName.TabIndex = 19
         '
@@ -292,29 +292,29 @@ Partial Class FormPropertyFilter
         Me.TabPage2.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPage2.Size = New System.Drawing.Size(577, 440)
+        Me.TabPage2.Size = New System.Drawing.Size(674, 471)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Readme"
         '
         'TextBoxReadme
         '
-        Me.TextBoxReadme.Location = New System.Drawing.Point(13, 6)
+        Me.TextBoxReadme.Location = New System.Drawing.Point(15, 6)
         Me.TextBoxReadme.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxReadme.Multiline = True
         Me.TextBoxReadme.Name = "TextBoxReadme"
         Me.TextBoxReadme.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBoxReadme.Size = New System.Drawing.Size(563, 431)
+        Me.TextBoxReadme.Size = New System.Drawing.Size(656, 459)
         Me.TextBoxReadme.TabIndex = 0
         '
         'FormPropertyFilter
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(586, 518)
+        Me.ClientSize = New System.Drawing.Size(684, 553)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.ButtonPropertyFilterCancel)
         Me.Controls.Add(Me.ButtonPropertyFilterOK)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FormPropertyFilter"

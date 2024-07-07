@@ -24,7 +24,7 @@ Public Class TaskBreakPartCopyLinks
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartCopies
-        Me.Category = "Edit"
+        Me.Category = "Update"
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -261,6 +261,10 @@ Public Class TaskBreakPartCopyLinks
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+            End If
+            If Not (Me.BreakDesignCopies Or Me.BreakConstructionCopies) Then
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Select at least one type of link to break", Indent))
             End If
 
         End If

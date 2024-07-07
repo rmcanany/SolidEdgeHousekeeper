@@ -44,7 +44,6 @@ Public MustInherit Class Task
     Public Property RequiresSourceDirectories As Boolean
     Public Property SourceDirectories As List(Of String)
 
-
     Public TLPHeader As ExTableLayoutPanel
     Public Property ControlsDict As Dictionary(Of String, Control)
     Shared Property BaseControlsDict As New Dictionary(Of String, Control)
@@ -58,11 +57,11 @@ Public MustInherit Class Task
     Public Property ColorG As Integer
     Public Property ColorB As Integer
 
-    Public Property AssemblyTemplate As String
-    Public Property PartTemplate As String
-    Public Property SheetmetalTemplate As String
-    Public Property DraftTemplate As String
-    Public Property MaterialTable As String
+    'Public Property AssemblyTemplate As String
+    'Public Property PartTemplate As String
+    'Public Property SheetmetalTemplate As String
+    'Public Property DraftTemplate As String
+    'Public Property MaterialTable As String
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
 
@@ -89,9 +88,6 @@ Public MustInherit Class Task
 
     Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
 
-    'Public MustOverride Function GetTaskControl(
-    '    TLPParent As ExTableLayoutPanel
-    '    ) As UCTaskControl
 
     Public MustOverride Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -108,10 +104,6 @@ Public MustInherit Class Task
 
         Me.TaskControl = New UCTaskControl(Me)
 
-        'If Me.Description.Contains("Print") Then
-        '    MsgBox(Me.Description)
-        'End If
-
         For Each Control As Control In Me.TaskControl.Controls
             If ControlsDict.Keys.Contains(Control.Name) Then
                 MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
@@ -126,22 +118,25 @@ Public MustInherit Class Task
     Public Sub ResetTaskColor()
         Me.TaskControl.BackColor = Color.FromArgb(Me.ColorR, Me.ColorG, Me.ColorB)
     End Sub
+
     Public Sub SetColorFromCategory(Task As Task)
 
-        Task.ColorSaturation = 0.05
+        ' Red Green Blue Cyan Magenta Yellow White Orange Purple
+
+        Task.ColorSaturation = 0.1
         Task.ColorBrightness = 1
 
         Select Case Task.Category.ToLower
             Case "update"
-                Task.ColorHue = "Green"
+                Task.ColorHue = "Orange"
             Case "edit"
-                Task.ColorHue = "Magenta"
-            Case "restyle"
                 Task.ColorHue = "Cyan"
+            Case "restyle"
+                Task.ColorHue = "Red"
             Case "check"
                 Task.ColorHue = "Yellow"
             Case "output"
-                Task.ColorHue = "Red"
+                Task.ColorHue = "Purple"
             Case Else
                 MsgBox(String.Format("Task '{0}' category '{1}' not recognized", Task.Name, Task.Category.ToLower))
         End Select
@@ -150,6 +145,9 @@ Public MustInherit Class Task
     End Sub
 
     Public Sub SetRBGFromHSB(Task As Task)
+
+        ' Red Green Blue Cyan Magenta Yellow White Orange Purple
+
         Dim R As Integer = 0
         Dim G As Integer = 0
         Dim B As Integer = 0
@@ -157,31 +155,39 @@ Public MustInherit Class Task
         Select Case Task.ColorHue
             Case "Red"
                 R = 255
-                G = CInt(255 * (1 - Task.ColorSaturation))
-                B = CInt(255 * (1 - Task.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
             Case "Green"
-                R = CInt(255 * (1 - Task.ColorSaturation))
+                R = CInt(255 * (1 - Me.ColorSaturation))
                 G = 255
-                B = CInt(255 * (1 - Task.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
             Case "Blue"
-                R = CInt(255 * (1 - Task.ColorSaturation))
-                G = CInt(255 * (1 - Task.ColorSaturation))
+                R = CInt(255 * (1 - Me.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
                 B = 255
             Case "Cyan"
-                R = CInt(255 * (1 - Task.ColorSaturation))
+                R = CInt(255 * (1 - Me.ColorSaturation))
                 G = 255
                 B = 255
             Case "Magenta"
                 R = 255
-                G = CInt(255 * (1 - Task.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
                 B = 255
             Case "Yellow"
                 R = 255
                 G = 255
-                B = CInt(255 * (1 - Task.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
             Case "White"
                 R = 255
                 G = 255
+                B = 255
+            Case "Orange"
+                R = 255
+                G = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
+            Case "Purple"
+                R = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
                 B = 255
         End Select
 

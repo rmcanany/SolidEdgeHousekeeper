@@ -659,6 +659,14 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
+        CheckBox = IU.FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Edit properties outside of Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = IU.FormatOptionsCheckBox(ControlNames.AutoUpdateMaterial.ToString, "For Material, update density, face style, etc.")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -679,14 +687,6 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
-
-        RowIndex += 1
-
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Edit properties outside of Solid Edge")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
 

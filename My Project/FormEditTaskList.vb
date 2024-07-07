@@ -33,7 +33,39 @@ Public Class FormEditTaskList
 
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        Me.DialogResult = DialogResult.OK
+
+        Dim DescriptionList As New List(Of String)
+        Dim RepeatsList As New List(Of String)
+
+        For Each Task As Task In Me.TaskList
+            DescriptionList.Add(Task.Description)
+        Next
+
+        DescriptionList.Sort()
+
+        Dim s As String
+        Dim s2 As String
+
+        For i = 1 To DescriptionList.Count - 1
+            s = DescriptionList(i)
+            s2 = DescriptionList(i - 1)
+            If s = s2 Then
+                If Not RepeatsList.Contains(s) Then
+                    RepeatsList.Add(s)
+                End If
+            End If
+        Next
+
+        If RepeatsList.Count = 0 Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            s = String.Format("Task names must be unique{0}", vbCrLf)
+            s = String.Format("{0}Please rename the following:{1}", s, vbCrLf)
+            For Each s2 In RepeatsList
+                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+            Next
+            MsgBox(s, vbOKOnly)
+        End If
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click

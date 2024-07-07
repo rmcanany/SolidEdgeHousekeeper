@@ -403,6 +403,9 @@ Checks drawing views one by one, and updates them if needed.
 ### Update flat pattern
 Regenerates missing flat models by activating flat environment. Requires running in foreground. 
 
+### Break part copy links
+Break design and/or construction part copy links
+
 ### Edit properties
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. 
 
@@ -457,9 +460,6 @@ Brings up files one at a time for manual processing. A dialog box lets you tell 
 Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. 
 
 Also, do not Close the file or do a Save As on it. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an exception. 
-
-### Break part copy links
-Break design and/or construction part copy links
 
 ### Update model styles from template
 Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. 

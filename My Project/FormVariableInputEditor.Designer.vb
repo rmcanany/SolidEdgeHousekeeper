@@ -54,9 +54,10 @@ Partial Class FormVariableInputEditor
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(557, 326)
+        Me.ButtonOK.Location = New System.Drawing.Point(650, 401)
+        Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(94, 27)
+        Me.ButtonOK.Size = New System.Drawing.Size(110, 33)
         Me.ButtonOK.TabIndex = 0
         Me.ButtonOK.Text = "OK"
         Me.ToolTip1.SetToolTip(Me.ButtonOK, "OK")
@@ -65,9 +66,10 @@ Partial Class FormVariableInputEditor
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(667, 326)
+        Me.ButtonCancel.Location = New System.Drawing.Point(778, 401)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(105, 27)
+        Me.ButtonCancel.Size = New System.Drawing.Size(122, 33)
         Me.ButtonCancel.TabIndex = 1
         Me.ButtonCancel.Text = "Cancel"
         Me.ToolTip1.SetToolTip(Me.ButtonCancel, "Cancel")
@@ -78,16 +80,18 @@ Partial Class FormVariableInputEditor
         Me.TextBoxJSON.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxJSON.Enabled = False
-        Me.TextBoxJSON.Location = New System.Drawing.Point(22, 326)
+        Me.TextBoxJSON.Location = New System.Drawing.Point(26, 401)
+        Me.TextBoxJSON.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TextBoxJSON.Name = "TextBoxJSON"
-        Me.TextBoxJSON.Size = New System.Drawing.Size(517, 20)
+        Me.TextBoxJSON.Size = New System.Drawing.Size(602, 23)
         Me.TextBoxJSON.TabIndex = 3
         '
         'CheckBoxSelectAll
         '
         Me.CheckBoxSelectAll.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.CheckBoxSelectAll.AutoSize = True
-        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(42, 33)
+        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(51, 42)
+        Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
         Me.CheckBoxSelectAll.Size = New System.Drawing.Size(15, 14)
         Me.CheckBoxSelectAll.TabIndex = 2
@@ -103,9 +107,10 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonMoveSelectedDown.Image = Global.Housekeeper.My.Resources.Resources.down
-        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(70, 3)
+        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(83, 4)
+        Me.ButtonMoveSelectedDown.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
-        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(29, 29)
         Me.ButtonMoveSelectedDown.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
         Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = False
@@ -119,9 +124,10 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonMoveSelectedUp.Image = Global.Housekeeper.My.Resources.Resources.up
-        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(37, 3)
+        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(44, 4)
+        Me.ButtonMoveSelectedUp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
-        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(29, 29)
         Me.ButtonMoveSelectedUp.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
         Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = False
@@ -135,9 +141,10 @@ Partial Class FormVariableInputEditor
         Me.ButtonClearSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonClearSelected.Image = Global.Housekeeper.My.Resources.Resources.Cancel
-        Me.ButtonClearSelected.Location = New System.Drawing.Point(4, 3)
+        Me.ButtonClearSelected.Location = New System.Drawing.Point(5, 4)
+        Me.ButtonClearSelected.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonClearSelected.Name = "ButtonClearSelected"
-        Me.ButtonClearSelected.Size = New System.Drawing.Size(25, 24)
+        Me.ButtonClearSelected.Size = New System.Drawing.Size(29, 29)
         Me.ButtonClearSelected.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
         Me.ButtonClearSelected.UseVisualStyleBackColor = False
@@ -147,11 +154,11 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 6
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 128.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 175.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel4, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 0)
@@ -159,19 +166,20 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 4, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 5, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 0, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(10, 10)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 12)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 9
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(765, 260)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(892, 320)
         Me.TableLayoutPanel1.TabIndex = 4
         '
         'TableLayoutPanel4
@@ -183,22 +191,24 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel4.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.Label4, 0, 1)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(249, 3)
+        Me.TableLayoutPanel4.Location = New System.Drawing.Point(291, 4)
+        Me.TableLayoutPanel4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 2
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17.0!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(176, 54)
+        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21.0!))
+        Me.TableLayoutPanel4.Size = New System.Drawing.Size(204, 66)
         Me.TableLayoutPanel4.TabIndex = 5
         '
         'Label3
         '
         Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(3, 24)
+        Me.Label3.Location = New System.Drawing.Point(4, 29)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.Label3.Size = New System.Drawing.Size(98, 13)
+        Me.Label3.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.Label3.Size = New System.Drawing.Size(114, 16)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Number or formula"
         '
@@ -206,10 +216,11 @@ Partial Class FormVariableInputEditor
         '
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(3, 41)
+        Me.Label4.Location = New System.Drawing.Point(4, 50)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.Label4.Size = New System.Drawing.Size(132, 13)
+        Me.Label4.Padding = New System.Windows.Forms.Padding(6, 0, 0, 0)
+        Me.Label4.Size = New System.Drawing.Size(147, 16)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Blank OK if only exposing"
         '
@@ -217,10 +228,11 @@ Partial Class FormVariableInputEditor
         '
         Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(113, 35)
+        Me.Label2.Location = New System.Drawing.Point(132, 44)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Padding = New System.Windows.Forms.Padding(5, 6, 5, 6)
-        Me.Label2.Size = New System.Drawing.Size(84, 25)
+        Me.Label2.Padding = New System.Windows.Forms.Padding(6, 7, 6, 7)
+        Me.Label2.Size = New System.Drawing.Size(92, 30)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Variable name"
         '
@@ -228,10 +240,11 @@ Partial Class FormVariableInputEditor
         '
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(431, 35)
+        Me.Label5.Location = New System.Drawing.Point(503, 44)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Padding = New System.Windows.Forms.Padding(5, 6, 5, 6)
-        Me.Label5.Size = New System.Drawing.Size(59, 25)
+        Me.Label5.Padding = New System.Windows.Forms.Padding(6, 7, 6, 7)
+        Me.Label5.Size = New System.Drawing.Size(67, 30)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "Unit type"
         '
@@ -239,10 +252,11 @@ Partial Class FormVariableInputEditor
         '
         Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.Bottom
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(582, 41)
+        Me.Label6.Location = New System.Drawing.Point(681, 51)
+        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label6.Name = "Label6"
-        Me.Label6.Padding = New System.Windows.Forms.Padding(0, 0, 0, 6)
-        Me.Label6.Size = New System.Drawing.Size(42, 19)
+        Me.Label6.Padding = New System.Windows.Forms.Padding(0, 0, 0, 7)
+        Me.Label6.Size = New System.Drawing.Size(43, 23)
         Me.Label6.TabIndex = 7
         Me.Label6.Text = "Expose"
         '
@@ -250,10 +264,11 @@ Partial Class FormVariableInputEditor
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(631, 35)
+        Me.Label7.Location = New System.Drawing.Point(736, 44)
+        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
-        Me.Label7.Padding = New System.Windows.Forms.Padding(5, 6, 5, 6)
-        Me.Label7.Size = New System.Drawing.Size(81, 25)
+        Me.Label7.Padding = New System.Windows.Forms.Padding(6, 7, 6, 7)
+        Me.Label7.Size = New System.Drawing.Size(87, 30)
         Me.Label7.TabIndex = 8
         Me.Label7.Text = "Expose name"
         '
@@ -268,21 +283,23 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel2.Controls.Add(Me.ButtonClearSelected, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.ButtonMoveSelectedUp, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.CheckBoxSelectAll, 1, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(5, 5)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(5, 6)
+        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(100, 50)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(117, 62)
         Me.TableLayoutPanel2.TabIndex = 0
         '
         'CheckBoxCopyToAsm
         '
         Me.CheckBoxCopyToAsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToAsm.AutoSize = True
-        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(575, 290)
+        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(676, 357)
+        Me.CheckBoxCopyToAsm.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBoxCopyToAsm.Name = "CheckBoxCopyToAsm"
-        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(45, 17)
+        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(47, 20)
         Me.CheckBoxCopyToAsm.TabIndex = 5
         Me.CheckBoxCopyToAsm.Text = "asm"
         Me.CheckBoxCopyToAsm.UseVisualStyleBackColor = True
@@ -291,9 +308,10 @@ Partial Class FormVariableInputEditor
         '
         Me.CheckBoxCopyToPar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToPar.AutoSize = True
-        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(625, 290)
+        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(734, 357)
+        Me.CheckBoxCopyToPar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBoxCopyToPar.Name = "CheckBoxCopyToPar"
-        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(41, 17)
+        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(43, 20)
         Me.CheckBoxCopyToPar.TabIndex = 6
         Me.CheckBoxCopyToPar.Text = "par"
         Me.CheckBoxCopyToPar.UseVisualStyleBackColor = True
@@ -302,9 +320,10 @@ Partial Class FormVariableInputEditor
         '
         Me.CheckBoxCopyToPsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToPsm.AutoSize = True
-        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(675, 290)
+        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(792, 357)
+        Me.CheckBoxCopyToPsm.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBoxCopyToPsm.Name = "CheckBoxCopyToPsm"
-        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(45, 17)
+        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(48, 20)
         Me.CheckBoxCopyToPsm.TabIndex = 7
         Me.CheckBoxCopyToPsm.Text = "psm"
         Me.CheckBoxCopyToPsm.UseVisualStyleBackColor = True
@@ -313,9 +332,10 @@ Partial Class FormVariableInputEditor
         '
         Me.CheckBoxCopyToDft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxCopyToDft.AutoSize = True
-        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(725, 290)
+        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(849, 357)
+        Me.CheckBoxCopyToDft.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBoxCopyToDft.Name = "CheckBoxCopyToDft"
-        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(38, 17)
+        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(41, 20)
         Me.CheckBoxCopyToDft.TabIndex = 8
         Me.CheckBoxCopyToDft.Text = "dft"
         Me.CheckBoxCopyToDft.UseVisualStyleBackColor = True
@@ -324,17 +344,18 @@ Partial Class FormVariableInputEditor
         '
         Me.LabelCopyTo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LabelCopyTo.AutoSize = True
-        Me.LabelCopyTo.Location = New System.Drawing.Point(393, 291)
+        Me.LabelCopyTo.Location = New System.Drawing.Point(458, 358)
+        Me.LabelCopyTo.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelCopyTo.Name = "LabelCopyTo"
-        Me.LabelCopyTo.Size = New System.Drawing.Size(168, 13)
+        Me.LabelCopyTo.Size = New System.Drawing.Size(188, 16)
         Me.LabelCopyTo.TabIndex = 9
         Me.LabelCopyTo.Text = "Copy these settings to another tab"
         '
         'FormVariableInputEditor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(784, 361)
+        Me.ClientSize = New System.Drawing.Size(915, 444)
         Me.Controls.Add(Me.LabelCopyTo)
         Me.Controls.Add(Me.CheckBoxCopyToDft)
         Me.Controls.Add(Me.CheckBoxCopyToPsm)
@@ -344,9 +365,10 @@ Partial Class FormVariableInputEditor
         Me.Controls.Add(Me.TextBoxJSON)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(800, 400)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.MinimumSize = New System.Drawing.Size(931, 483)
         Me.Name = "FormVariableInputEditor"
         Me.Text = "Variable Input Editor"
         Me.TableLayoutPanel1.ResumeLayout(False)

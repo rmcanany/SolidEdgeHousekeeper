@@ -29,13 +29,13 @@ Partial Class FormNCalc
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.DD_SavedExpressions = New System.Windows.Forms.ToolStripDropDownButton()
         Me.BT_Save = New System.Windows.Forms.ToolStripButton()
+        Me.BT_SaveAs = New System.Windows.Forms.ToolStripButton()
         Me.BT_Delete = New System.Windows.Forms.ToolStripButton()
         Me.BT_Clear = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.TextEditorFormula = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TextEditorResults = New FastColoredTextBoxNS.FastColoredTextBox()
-        Me.BT_SaveAs = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.TextEditorFormula, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TextEditorResults, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -46,7 +46,7 @@ Partial Class FormNCalc
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.BT_Clear, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(784, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(915, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -78,6 +78,14 @@ Partial Class FormNCalc
         Me.BT_Save.Name = "BT_Save"
         Me.BT_Save.Size = New System.Drawing.Size(51, 22)
         Me.BT_Save.Text = "Save"
+        '
+        'BT_SaveAs
+        '
+        Me.BT_SaveAs.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.BT_SaveAs.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_SaveAs.Name = "BT_SaveAs"
+        Me.BT_SaveAs.Size = New System.Drawing.Size(67, 22)
+        Me.BT_SaveAs.Text = "Save As"
         '
         'BT_Delete
         '
@@ -119,13 +127,15 @@ Partial Class FormNCalc
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
+        Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextEditorFormula.Name = "TextEditorFormula"
         Me.TextEditorFormula.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorFormula.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorFormula.ServiceColors = CType(resources.GetObject("TextEditorFormula.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorFormula.Size = New System.Drawing.Size(784, 182)
+        Me.TextEditorFormula.Size = New System.Drawing.Size(915, 224)
         Me.TextEditorFormula.TabIndex = 3
         Me.TextEditorFormula.Zoom = 100
         '
@@ -140,34 +150,30 @@ Partial Class FormNCalc
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
-        Me.TextEditorResults.Location = New System.Drawing.Point(0, 207)
+        Me.TextEditorResults.Location = New System.Drawing.Point(0, 249)
+        Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextEditorResults.Name = "TextEditorResults"
         Me.TextEditorResults.Paddings = New System.Windows.Forms.Padding(0)
         Me.TextEditorResults.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.TextEditorResults.ServiceColors = CType(resources.GetObject("TextEditorResults.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
-        Me.TextEditorResults.Size = New System.Drawing.Size(784, 154)
+        Me.TextEditorResults.Size = New System.Drawing.Size(915, 196)
         Me.TextEditorResults.TabIndex = 4
         Me.TextEditorResults.Zoom = 100
         '
-        'BT_SaveAs
-        '
-        Me.BT_SaveAs.Image = Global.Housekeeper.My.Resources.Resources.Save
-        Me.BT_SaveAs.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_SaveAs.Name = "BT_SaveAs"
-        Me.BT_SaveAs.Size = New System.Drawing.Size(67, 22)
-        Me.BT_SaveAs.Text = "Save As"
-        '
         'FormNCalc
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(784, 361)
+        Me.ClientSize = New System.Drawing.Size(915, 445)
         Me.Controls.Add(Me.TextEditorResults)
         Me.Controls.Add(Me.TextEditorFormula)
         Me.Controls.Add(Me.ToolStrip1)
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.MaximizeBox = False
         Me.Name = "FormNCalc"
         Me.Text = "Expression editor"
