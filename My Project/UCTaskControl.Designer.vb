@@ -90,6 +90,7 @@ Partial Class UCTaskControl
         Me.CBSheetmetal.BackColor = System.Drawing.Color.Transparent
         Me.CBSheetmetal.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBSheetmetal.FlatAppearance.BorderSize = 0
+        Me.CBSheetmetal.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBSheetmetal.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBSheetmetal.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBSheetmetal.Location = New System.Drawing.Point(181, 6)
@@ -106,6 +107,7 @@ Partial Class UCTaskControl
         Me.CBPart.BackColor = System.Drawing.Color.Transparent
         Me.CBPart.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBPart.FlatAppearance.BorderSize = 0
+        Me.CBPart.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBPart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBPart.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBPart.Location = New System.Drawing.Point(146, 6)
@@ -122,6 +124,7 @@ Partial Class UCTaskControl
         Me.CBAssembly.BackColor = System.Drawing.Color.Transparent
         Me.CBAssembly.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBAssembly.FlatAppearance.BorderSize = 0
+        Me.CBAssembly.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBAssembly.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBAssembly.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBAssembly.Location = New System.Drawing.Point(111, 6)
@@ -138,6 +141,7 @@ Partial Class UCTaskControl
         Me.CBExpand.BackColor = System.Drawing.Color.Transparent
         Me.CBExpand.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBExpand.FlatAppearance.BorderSize = 0
+        Me.CBExpand.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBExpand.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBExpand.Image = Global.Housekeeper.My.Resources.Resources.expand_disabled
         Me.CBExpand.Location = New System.Drawing.Point(76, 6)
@@ -154,6 +158,7 @@ Partial Class UCTaskControl
         Me.CBEnabled.BackColor = System.Drawing.Color.Transparent
         Me.CBEnabled.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBEnabled.FlatAppearance.BorderSize = 0
+        Me.CBEnabled.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBEnabled.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBEnabled.Location = New System.Drawing.Point(41, 6)
@@ -170,6 +175,7 @@ Partial Class UCTaskControl
         Me.CBDraft.BackColor = System.Drawing.Color.Transparent
         Me.CBDraft.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CBDraft.FlatAppearance.BorderSize = 0
+        Me.CBDraft.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBDraft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBDraft.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBDraft.Location = New System.Drawing.Point(216, 6)
