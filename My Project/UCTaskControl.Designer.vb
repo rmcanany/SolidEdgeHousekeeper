@@ -39,6 +39,7 @@ Partial Class UCTaskControl
         '
         Me.TLP.AutoSize = True
         Me.TLP.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TLP.BackColor = System.Drawing.Color.Transparent
         Me.TLP.ColumnCount = 9
         Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
         Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
@@ -66,7 +67,7 @@ Partial Class UCTaskControl
         Me.TLP.RowCount = 2
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TLP.Size = New System.Drawing.Size(363, 37)
+        Me.TLP.Size = New System.Drawing.Size(364, 37)
         Me.TLP.TabIndex = 0
         Me.TLP.Task = Nothing
         '
@@ -182,11 +183,11 @@ Partial Class UCTaskControl
         '
         Me.TaskName.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.TaskName.AutoSize = True
-        Me.TaskName.Location = New System.Drawing.Point(249, 10)
+        Me.TaskName.Location = New System.Drawing.Point(249, 11)
         Me.TaskName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.TaskName.Name = "TaskName"
         Me.TaskName.Padding = New System.Windows.Forms.Padding(12, 0, 0, 0)
-        Me.TaskName.Size = New System.Drawing.Size(75, 16)
+        Me.TaskName.Size = New System.Drawing.Size(76, 15)
         Me.TaskName.TabIndex = 12
         Me.TaskName.Text = "Task Name"
         '
@@ -195,7 +196,7 @@ Partial Class UCTaskControl
         Me.HelpButton.FlatAppearance.BorderSize = 0
         Me.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
-        Me.HelpButton.Location = New System.Drawing.Point(332, 4)
+        Me.HelpButton.Location = New System.Drawing.Point(333, 4)
         Me.HelpButton.Margin = New System.Windows.Forms.Padding(4)
         Me.HelpButton.Name = "HelpButton"
         Me.HelpButton.Size = New System.Drawing.Size(27, 28)
@@ -204,15 +205,16 @@ Partial Class UCTaskControl
         '
         'UCTaskControl
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoSize = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.TLP)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(0)
         Me.Name = "UCTaskControl"
-        Me.Size = New System.Drawing.Size(363, 37)
+        Me.Size = New System.Drawing.Size(364, 37)
         Me.TLP.ResumeLayout(False)
         Me.TLP.PerformLayout()
         Me.ResumeLayout(False)
