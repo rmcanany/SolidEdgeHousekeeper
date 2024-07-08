@@ -33,9 +33,9 @@ Public Class UCTaskControl
 
         Me.Dock = DockStyle.Top
 
-        Me.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
+        'Me.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
         ' tableLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-        Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        'Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 
     End Sub
 
