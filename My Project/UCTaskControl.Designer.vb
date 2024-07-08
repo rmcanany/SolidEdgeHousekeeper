@@ -41,15 +41,15 @@ Partial Class UCTaskControl
         Me.TLP.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.TLP.BackColor = System.Drawing.Color.Transparent
         Me.TLP.ColumnCount = 9
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLP.Controls.Add(Me.LBImage, 0, 0)
         Me.TLP.Controls.Add(Me.CBSheetmetal, 5, 0)
         Me.TLP.Controls.Add(Me.CBPart, 4, 0)
@@ -67,7 +67,7 @@ Partial Class UCTaskControl
         Me.TLP.RowCount = 2
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TLP.Size = New System.Drawing.Size(364, 37)
+        Me.TLP.Size = New System.Drawing.Size(324, 37)
         Me.TLP.TabIndex = 0
         Me.TLP.Task = Nothing
         '
@@ -76,7 +76,7 @@ Partial Class UCTaskControl
         Me.LBImage.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LBImage.BackColor = System.Drawing.Color.Transparent
         Me.LBImage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.LBImage.Location = New System.Drawing.Point(3, 0)
+        Me.LBImage.Location = New System.Drawing.Point(1, 0)
         Me.LBImage.Margin = New System.Windows.Forms.Padding(0)
         Me.LBImage.Name = "LBImage"
         Me.LBImage.Size = New System.Drawing.Size(28, 37)
@@ -93,10 +93,10 @@ Partial Class UCTaskControl
         Me.CBSheetmetal.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBSheetmetal.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBSheetmetal.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.CBSheetmetal.Location = New System.Drawing.Point(181, 6)
+        Me.CBSheetmetal.Location = New System.Drawing.Point(156, 6)
         Me.CBSheetmetal.Margin = New System.Windows.Forms.Padding(6)
         Me.CBSheetmetal.Name = "CBSheetmetal"
-        Me.CBSheetmetal.Size = New System.Drawing.Size(23, 25)
+        Me.CBSheetmetal.Size = New System.Drawing.Size(18, 25)
         Me.CBSheetmetal.TabIndex = 5
         Me.CBSheetmetal.UseVisualStyleBackColor = False
         '
@@ -110,10 +110,10 @@ Partial Class UCTaskControl
         Me.CBPart.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBPart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBPart.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.CBPart.Location = New System.Drawing.Point(146, 6)
+        Me.CBPart.Location = New System.Drawing.Point(126, 6)
         Me.CBPart.Margin = New System.Windows.Forms.Padding(6)
         Me.CBPart.Name = "CBPart"
-        Me.CBPart.Size = New System.Drawing.Size(23, 25)
+        Me.CBPart.Size = New System.Drawing.Size(18, 25)
         Me.CBPart.TabIndex = 4
         Me.CBPart.UseVisualStyleBackColor = False
         '
@@ -127,10 +127,10 @@ Partial Class UCTaskControl
         Me.CBAssembly.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBAssembly.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBAssembly.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.CBAssembly.Location = New System.Drawing.Point(111, 6)
+        Me.CBAssembly.Location = New System.Drawing.Point(96, 6)
         Me.CBAssembly.Margin = New System.Windows.Forms.Padding(6)
         Me.CBAssembly.Name = "CBAssembly"
-        Me.CBAssembly.Size = New System.Drawing.Size(23, 25)
+        Me.CBAssembly.Size = New System.Drawing.Size(18, 25)
         Me.CBAssembly.TabIndex = 3
         Me.CBAssembly.UseVisualStyleBackColor = False
         '
@@ -144,10 +144,10 @@ Partial Class UCTaskControl
         Me.CBExpand.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBExpand.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBExpand.Image = Global.Housekeeper.My.Resources.Resources.expand_disabled
-        Me.CBExpand.Location = New System.Drawing.Point(76, 6)
+        Me.CBExpand.Location = New System.Drawing.Point(66, 6)
         Me.CBExpand.Margin = New System.Windows.Forms.Padding(6)
         Me.CBExpand.Name = "CBExpand"
-        Me.CBExpand.Size = New System.Drawing.Size(23, 25)
+        Me.CBExpand.Size = New System.Drawing.Size(18, 25)
         Me.CBExpand.TabIndex = 2
         Me.CBExpand.UseVisualStyleBackColor = False
         '
@@ -161,10 +161,10 @@ Partial Class UCTaskControl
         Me.CBEnabled.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBEnabled.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.CBEnabled.Location = New System.Drawing.Point(41, 6)
+        Me.CBEnabled.Location = New System.Drawing.Point(36, 6)
         Me.CBEnabled.Margin = New System.Windows.Forms.Padding(6)
         Me.CBEnabled.Name = "CBEnabled"
-        Me.CBEnabled.Size = New System.Drawing.Size(23, 25)
+        Me.CBEnabled.Size = New System.Drawing.Size(18, 25)
         Me.CBEnabled.TabIndex = 1
         Me.CBEnabled.UseVisualStyleBackColor = False
         '
@@ -178,10 +178,10 @@ Partial Class UCTaskControl
         Me.CBDraft.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent
         Me.CBDraft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBDraft.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.CBDraft.Location = New System.Drawing.Point(216, 6)
+        Me.CBDraft.Location = New System.Drawing.Point(186, 6)
         Me.CBDraft.Margin = New System.Windows.Forms.Padding(6)
         Me.CBDraft.Name = "CBDraft"
-        Me.CBDraft.Size = New System.Drawing.Size(23, 25)
+        Me.CBDraft.Size = New System.Drawing.Size(18, 25)
         Me.CBDraft.TabIndex = 11
         Me.CBDraft.UseVisualStyleBackColor = False
         '
@@ -189,7 +189,7 @@ Partial Class UCTaskControl
         '
         Me.TaskName.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.TaskName.AutoSize = True
-        Me.TaskName.Location = New System.Drawing.Point(249, 11)
+        Me.TaskName.Location = New System.Drawing.Point(214, 11)
         Me.TaskName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.TaskName.Name = "TaskName"
         Me.TaskName.Padding = New System.Windows.Forms.Padding(12, 0, 0, 0)
@@ -202,10 +202,10 @@ Partial Class UCTaskControl
         Me.HelpButton.FlatAppearance.BorderSize = 0
         Me.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
-        Me.HelpButton.Location = New System.Drawing.Point(333, 4)
+        Me.HelpButton.Location = New System.Drawing.Point(298, 4)
         Me.HelpButton.Margin = New System.Windows.Forms.Padding(4)
         Me.HelpButton.Name = "HelpButton"
-        Me.HelpButton.Size = New System.Drawing.Size(27, 28)
+        Me.HelpButton.Size = New System.Drawing.Size(22, 28)
         Me.HelpButton.TabIndex = 13
         Me.HelpButton.UseVisualStyleBackColor = True
         '
@@ -220,7 +220,7 @@ Partial Class UCTaskControl
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(0)
         Me.Name = "UCTaskControl"
-        Me.Size = New System.Drawing.Size(364, 37)
+        Me.Size = New System.Drawing.Size(324, 37)
         Me.TLP.ResumeLayout(False)
         Me.TLP.PerformLayout()
         Me.ResumeLayout(False)
