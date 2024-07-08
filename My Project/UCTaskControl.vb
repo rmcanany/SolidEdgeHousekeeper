@@ -8,6 +8,8 @@ Public Class UCTaskControl
         ' This call is required by the designer.
         InitializeComponent()
 
+
+
         Me.Task = Task
         Me.TaskName.Text = Task.Description
         Me.LBImage.Image = Task.Image
@@ -32,7 +34,8 @@ Public Class UCTaskControl
         Me.Dock = DockStyle.Top
 
         Me.BackColor = Color.FromArgb(Task.ColorR, Task.ColorG, Task.ColorB)
-
+        ' tableLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+        Me.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 
     End Sub
 

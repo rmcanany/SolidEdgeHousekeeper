@@ -61,7 +61,7 @@ Partial Class UCTaskControl
         Me.TLP.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLP.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize
         Me.TLP.Location = New System.Drawing.Point(0, 0)
-        Me.TLP.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TLP.Margin = New System.Windows.Forms.Padding(4)
         Me.TLP.Name = "TLP"
         Me.TLP.RowCount = 2
         Me.TLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
@@ -92,7 +92,7 @@ Partial Class UCTaskControl
         Me.CBSheetmetal.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBSheetmetal.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBSheetmetal.Location = New System.Drawing.Point(181, 6)
-        Me.CBSheetmetal.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBSheetmetal.Margin = New System.Windows.Forms.Padding(6)
         Me.CBSheetmetal.Name = "CBSheetmetal"
         Me.CBSheetmetal.Size = New System.Drawing.Size(23, 25)
         Me.CBSheetmetal.TabIndex = 5
@@ -108,7 +108,7 @@ Partial Class UCTaskControl
         Me.CBPart.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBPart.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBPart.Location = New System.Drawing.Point(146, 6)
-        Me.CBPart.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBPart.Margin = New System.Windows.Forms.Padding(6)
         Me.CBPart.Name = "CBPart"
         Me.CBPart.Size = New System.Drawing.Size(23, 25)
         Me.CBPart.TabIndex = 4
@@ -124,7 +124,7 @@ Partial Class UCTaskControl
         Me.CBAssembly.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBAssembly.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBAssembly.Location = New System.Drawing.Point(111, 6)
-        Me.CBAssembly.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBAssembly.Margin = New System.Windows.Forms.Padding(6)
         Me.CBAssembly.Name = "CBAssembly"
         Me.CBAssembly.Size = New System.Drawing.Size(23, 25)
         Me.CBAssembly.TabIndex = 3
@@ -140,7 +140,7 @@ Partial Class UCTaskControl
         Me.CBExpand.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBExpand.Image = Global.Housekeeper.My.Resources.Resources.expand_disabled
         Me.CBExpand.Location = New System.Drawing.Point(76, 6)
-        Me.CBExpand.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBExpand.Margin = New System.Windows.Forms.Padding(6)
         Me.CBExpand.Name = "CBExpand"
         Me.CBExpand.Size = New System.Drawing.Size(23, 25)
         Me.CBExpand.TabIndex = 2
@@ -156,7 +156,7 @@ Partial Class UCTaskControl
         Me.CBEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBEnabled.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBEnabled.Location = New System.Drawing.Point(41, 6)
-        Me.CBEnabled.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBEnabled.Margin = New System.Windows.Forms.Padding(6)
         Me.CBEnabled.Name = "CBEnabled"
         Me.CBEnabled.Size = New System.Drawing.Size(23, 25)
         Me.CBEnabled.TabIndex = 1
@@ -172,7 +172,7 @@ Partial Class UCTaskControl
         Me.CBDraft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.CBDraft.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.CBDraft.Location = New System.Drawing.Point(216, 6)
-        Me.CBDraft.Margin = New System.Windows.Forms.Padding(6, 6, 6, 6)
+        Me.CBDraft.Margin = New System.Windows.Forms.Padding(6)
         Me.CBDraft.Name = "CBDraft"
         Me.CBDraft.Size = New System.Drawing.Size(23, 25)
         Me.CBDraft.TabIndex = 11
@@ -196,7 +196,7 @@ Partial Class UCTaskControl
         Me.HelpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.HelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.HelpButton.Location = New System.Drawing.Point(332, 4)
-        Me.HelpButton.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.HelpButton.Margin = New System.Windows.Forms.Padding(4)
         Me.HelpButton.Name = "HelpButton"
         Me.HelpButton.Size = New System.Drawing.Size(27, 28)
         Me.HelpButton.TabIndex = 13
