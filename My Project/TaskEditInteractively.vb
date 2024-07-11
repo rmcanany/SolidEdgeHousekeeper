@@ -597,31 +597,40 @@ Public Class TaskEditInteractively
         HelpString += "A dialog box lets you tell Housekeeper when you are done. "
         HelpString += "You can save the file or not, or choose to abort.  "
         HelpString += "Aborting stops processing and returns you to the Housekeeper main form.  "
+
         HelpString += vbCrLf + vbCrLf + "![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)"
-        HelpString += vbCrLf + vbCrLf + "You choose where the dialog box is placed on the screen. "
+
+        HelpString += vbCrLf + vbCrLf + "As shown below, you choose where the dialog box is placed on the screen. "
         HelpString += "The `X` and `Y` values are the number of pixels from the left and top of the screen, respectively. "
         HelpString += "You can optionally set a countdown timer and/or start a command. "
+
         HelpString += vbCrLf + vbCrLf + "![Edit Interactively Options](My%20Project/media/edit_interactively.png)"
-        HelpString += vbCrLf + vbCrLf + "The `timer` lets you run hands-free. "
+
+        HelpString += vbCrLf + vbCrLf + "The countdown timer lets you run hands-free. "
         HelpString += "This can be handy for doing a quick inspection of a batch of files, for example. "
         HelpString += "If something catches your eye, you can pause the timer.  "
         HelpString += "There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  "
-        HelpString += vbCrLf + vbCrLf + "The `command` option launches a command when the file opens.  "
+
+        HelpString += vbCrLf + vbCrLf + "The `Start command` option launches a command when the file opens.  "
         HelpString += "This can help keep you on track when you have a small chore to complete on a bunch of files.  "
         HelpString += "For example, activating the `Update file on save` option on the `Physical Properties` dialog.  "
+
         HelpString += vbCrLf + vbCrLf + "The dropdown list contains commands that we thought might be useful.  "
         HelpString += "You can customize the list.  Instructions to do so are in the file "
         HelpString += "`EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. "
         HelpString += "That file also shows how to find commands and their corresponding ID numbers. "
         HelpString += "Many commands are available.  It's worth checking out. "
+
         HelpString += vbCrLf + vbCrLf + "Some rules for interactive editing apply. "
         HelpString += "It is important to leave Solid Edge in the state you found it when the file was opened. "
         HelpString += "For example, if you open another file, such as a drawing, you need to close it. "
         HelpString += "If you add or modify a feature, you need to click Finish. "
         HelpString += "If you used the `Start command` option, you need to close any dialog opened in the process. "
-        HelpString += vbCrLf + vbCrLf + "Also, do not `Close` the file or do a `Save As` on the file being processed. "
+
+        HelpString += vbCrLf + vbCrLf + "Also, do not `Close` or `Save As` the file being processed. "
         HelpString += "Housekeeper maintains a `reference` to the file. "
         HelpString += "Those two commands cause the reference to be lost, resulting in an error. "
+
         HelpString += vbCrLf + vbCrLf + "One last thing.  Macros interact with Solid Edge through something called the Windows Component Object Model.  "
         HelpString += "That framework appears to have some sort of built-in inactivity detection.  "
         HelpString += "If you let this command sit idle for a period of time, COM reports an error. "

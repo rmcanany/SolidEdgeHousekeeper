@@ -459,19 +459,19 @@ Brings up files one at a time for manual processing. A dialog box lets you tell 
 
 ![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)
 
-You choose where the dialog box is placed on the screen. The `X` and `Y` values are the number of pixels from the left and top of the screen, respectively. You can optionally set a countdown timer and/or start a command. 
+As shown below, you choose where the dialog box is placed on the screen. The `X` and `Y` values are the number of pixels from the left and top of the screen, respectively. You can optionally set a countdown timer and/or start a command. 
 
 ![Edit Interactively Options](My%20Project/media/edit_interactively.png)
 
-The `timer` lets you run hands-free. This can be handy for doing a quick inspection of a batch of files, for example. If something catches your eye, you can pause the timer.  There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  
+The countdown timer lets you run hands-free. This can be handy for doing a quick inspection of a batch of files, for example. If something catches your eye, you can pause the timer.  There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  
 
-The `command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog.  
+The `Start command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog.  
 
 The dropdown list contains commands that we thought might be useful.  You can customize the list.  Instructions to do so are in the file `EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. That file also shows how to find commands and their corresponding ID numbers. Many commands are available.  It's worth checking out. 
 
 Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. If you used the `Start command` option, you need to close any dialog opened in the process. 
 
-Also, do not `Close` the file or do a `Save As` on the file being processed. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an error. 
+Also, do not `Close` or `Save As` the file being processed. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an error. 
 
 One last thing.  Macros interact with Solid Edge through something called the Windows Component Object Model.  That framework appears to have some sort of built-in inactivity detection.  If you let this command sit idle for a period of time, COM reports an error. It doesn't really hurt anything, but Housekeeper stops and restarts SE any time a COM error occurs. I get around it by selecting only a small number of files to work on at a time. 
 
