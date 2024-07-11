@@ -105,6 +105,7 @@ Public MustInherit Class Task
         ControlsDict = New Dictionary(Of String, Control)
 
         Me.TaskControl = New UCTaskControl(Me)
+        Me.TaskControl.BackColor = Color.FromArgb(Me.ColorR, Me.ColorG, Me.ColorB)
 
         For Each Control As Control In Me.TaskControl.Controls
             If ControlsDict.Keys.Contains(Control.Name) Then

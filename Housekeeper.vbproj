@@ -198,6 +198,12 @@
     <Compile Include="My Project\Form1.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormEditInteractively.Designer.vb">
+      <DependentUpon>FormEditInteractively.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormEditInteractively.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormEditTaskList.Designer.vb">
       <DependentUpon>FormEditTaskList.vb</DependentUpon>
     </Compile>
@@ -305,6 +311,9 @@
     <EmbeddedResource Include="My Project\Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormEditInteractively.resx">
+      <DependentUpon>FormEditInteractively.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormEditTaskList.resx">
       <DependentUpon>FormEditTaskList.vb</DependentUpon>

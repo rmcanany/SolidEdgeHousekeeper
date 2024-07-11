@@ -618,6 +618,7 @@ Public Class Form1
         PU.CreatePreferencesDirectory()
         PU.CreateFilenameCharmap()
         PU.CreateNCalcSavedExpressions()
+        PU.CreateEditInteractivelyCommands()
 
         PopulateCheckedListBoxes()
         LoadDefaults()

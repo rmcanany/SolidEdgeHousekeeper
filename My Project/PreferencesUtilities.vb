@@ -74,6 +74,79 @@ Public Class PreferencesUtilities
         End If
     End Sub
 
+    Public Sub CreateEditInteractivelyCommands()
+
+        'Description                CCA    CCP    CCS    CCD
+        'Display cfgs               32826			
+        'Edit links                 57857                57857
+        'Edit variables             25036  25036  25036  10504
+        'File options               25042  25042  25042  10508
+        'File properties            40001  40001  40001  40001
+        'Flat pattern                             45066	
+        'Format style               33058  25030  25030	
+        'Inquire element            25072  25072  25072	
+        'Interpart manager          40277  40277  40277	
+        'Part painter                      40314  40314	
+        'Physical properties        25038  25038  25038	
+        'Property manager           50005  50005  50005	
+        'Replace part               32808
+        'Sheet setup                                     10002
+        'View Backgrounds                               10211
+
+        Dim EditInteractivelyCommandsFilename = String.Format("{0}\EditInteractivelyCommands.txt", GetPreferencesDirectory)
+
+        If Not FileIO.FileSystem.FileExists(EditInteractivelyCommandsFilename) Then
+
+            Dim Outlist As New List(Of String)
+
+
+            Outlist.Add("'This file stores command IDs for the Edit Interactively task.")
+            Outlist.Add("'")
+            Outlist.Add("'The format is: Description, Assembly ID, Part ID, Sheetmetal ID, Draft ID")
+            Outlist.Add("'Where 'ID' above means the command ID number found in the API documentation.")
+            Outlist.Add("'")
+            Outlist.Add("'You can add/remove items from the list.  The description is just text for the")
+            Outlist.Add("'user.  You can change it to your preference.")
+            Outlist.Add("'")
+            Outlist.Add("'To find what commands are available, consult the API documentation.  For SE2024,")
+            Outlist.Add("'here are the locations:")
+            Outlist.Add("'")
+            Outlist.Add("'Assembly: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~AssemblyCommandConstants.html")
+            Outlist.Add("'Part: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~PartCommandConstants.html")
+            Outlist.Add("'Sheetmetal: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~SheetMetalCommandConstants.html")
+            Outlist.Add("'Draft: https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeConstants~DetailCommandConstants.html")
+            Outlist.Add("'")
+            Outlist.Add("'If a command is not available for a given file type, or you do not want to show it,")
+            Outlist.Add("'enter zero in that field.")
+            Outlist.Add("'")
+            Outlist.Add("'You can add comments to this file if desired.  Just begin the line with the")
+            Outlist.Add("'single-quote (') character.")
+            Outlist.Add("'")
+            Outlist.Add("'If you mess up the file in some way, you can delete it.  It will be regenerated next time")
+            Outlist.Add("'the program starts.")
+            Outlist.Add("'")
+            Outlist.Add("Manual entry, 0, 0, 0, 0")
+            Outlist.Add("Display cfgs, 32826, 0, 0, 0")
+            Outlist.Add("Edit links, 57857, 0, 0, 57857")
+            Outlist.Add("Edit variables, 25036, 25036, 25036, 10504")
+            Outlist.Add("File options, 25042, 25042, 25042, 10508")
+            Outlist.Add("File properties, 40001, 40001, 40001, 40001")
+            Outlist.Add("Flat pattern, 0, 0, 45066, 0")
+            Outlist.Add("Format style, 33058, 25030, 25030, 0")
+            Outlist.Add("Inquire element, 25072, 25072, 25072, 0")
+            Outlist.Add("Interpart manager, 40277, 40277, 40277, 0")
+            Outlist.Add("Part painter, 0, 40314, 40314, 0")
+            Outlist.Add("Physical properties, 25038, 25038, 25038, 0")
+            Outlist.Add("Property manager, 50005, 50005, 50005, 0")
+            Outlist.Add("Replace part, 32808, 0, 0, 0")
+            Outlist.Add("Sheet setup, 0, 0, 0, 10002")
+            Outlist.Add("View backgrounds, 0, 0, 0, 10211")
+
+            IO.File.WriteAllLines(EditInteractivelyCommandsFilename, Outlist)
+        End If
+
+
+    End Sub
     Private Function GetTaskListPath(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
         Dim TaskListPath = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
