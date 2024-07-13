@@ -444,6 +444,8 @@ Public Class Form1
         '############### This prevent the ability to process file with tasks that don't need Solid Edge
         '############### A new option should be inserted to prevent this situation
 
+        'Dim PropList = TC.GetFileProperties(Path)
+
         Try
             If SolidEdgeRequired > 0 Then
                 If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then

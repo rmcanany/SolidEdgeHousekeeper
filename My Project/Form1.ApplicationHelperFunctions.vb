@@ -77,7 +77,7 @@ Partial Class Form1
                 SEApp = Nothing
             End If
 
-            System.Threading.Thread.Sleep(3000)
+            System.Threading.Thread.Sleep(100)
 
         End If
 

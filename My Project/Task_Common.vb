@@ -6,10 +6,12 @@ Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
 Imports System.Windows.Forms.PropertyGridInternal
 Imports ExcelDataReader
+'Imports Microsoft.WindowsAPICodePack
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports PanoramicData.NCalcExtensions
+Imports Shell32
 Imports SolidEdgePart
 
 Public Class Task_Common
@@ -49,10 +51,39 @@ Public Class Task_Common
 
         Try
             Dim fi As New IO.FileInfo(fileName)
+            Dim i = 1
         Catch ex As Exception
             Return False
         End Try
         Return True
+
+    End Function
+
+    Public Function GetFileProperties(Filename As String) As List(Of String)
+
+        Dim PropList As New List(Of String)
+        Dim ValList As New List(Of String)
+
+        Dim shell As New Shell32.Shell
+        Dim Directory As Shell32.Folder
+
+        Directory = shell.NameSpace(System.IO.Path.GetDirectoryName(Filename))
+
+        Dim n = 1000
+        For Each s In Directory.Items
+            If Directory.GetDetailsOf(s, 0) = Path.GetFileName(Filename) Then
+                For i = 0 To n
+                    Dim Val = Directory.GetDetailsOf(s, i)
+                    If Not Val = "" Then
+                        Dim Key = Directory.GetDetailsOf(Directory.Items, i)
+                        ValList.Add(String.Format("{0}: {1}", Key, Val))
+                    End If
+                Next
+                Exit For
+            End If
+        Next
+
+        Return ValList
 
     End Function
 
