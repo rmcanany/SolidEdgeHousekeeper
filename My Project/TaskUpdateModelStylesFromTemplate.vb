@@ -1,4 +1,8 @@
 ﻿Option Strict On
+Imports System.Windows.Shapes
+Imports SolidEdgeFramework
+
+
 'Imports Microsoft.WindowsAPICodePack.Dialogs
 'Imports SolidEdgeAssembly
 'Imports SolidEdgeFramework
@@ -10,6 +14,17 @@ Public Class TaskUpdateModelStylesFromTemplate
     Public Property AssemblyTemplate As String
     Public Property PartTemplate As String
     Public Property SheetmetalTemplate As String
+    Public Property UpdateDimensionStyles As Boolean
+    Public Property UpdateFaceStyles As Boolean
+    Public Property UpdateLinearStyles As Boolean
+    Public Property UpdateTextCharStyles As Boolean
+    Public Property UpdateTextStyles As Boolean
+    Public Property UpdateViewStyles As Boolean
+    Public Property UpdateBaseStyles As Boolean
+    Public Property RemoveNonTemplateStyles As Boolean
+
+    ' DimensionStyles, FaceStyles,
+    ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
 
     Enum ControlNames
         BrowseAssembly
@@ -18,6 +33,14 @@ Public Class TaskUpdateModelStylesFromTemplate
         PartTemplate
         BrowseSheetmetal
         SheetmetalTemplate
+        UpdateDimensionStyles
+        UpdateFaceStyles
+        UpdateLinearStyles
+        UpdateTextCharStyles
+        UpdateTextStyles
+        UpdateViewStyles
+        UpdateBaseStyles
+        RemoveNonTemplateStyles
         HideOptions
     End Enum
 
@@ -44,6 +67,14 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.AssemblyTemplate = ""
         Me.PartTemplate = ""
         Me.SheetmetalTemplate = ""
+        Me.UpdateDimensionStyles = False
+        Me.UpdateFaceStyles = False
+        Me.UpdateLinearStyles = False
+        Me.UpdateTextCharStyles = False
+        Me.UpdateTextStyles = False
+        Me.UpdateViewStyles = False
+        Me.UpdateBaseStyles = False
+        Me.RemoveNonTemplateStyles = False
 
     End Sub
 
@@ -87,116 +118,198 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TempErrorMessageList As New List(Of String)
-
-        Dim TemplateDoc As SolidEdgeFramework.SolidEdgeDocument
-        Dim TemplateFilename As String = ""
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim TC As New Task_Common
+
+        Dim AsmTemplateDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
+        Dim ParTemplateDoc As SolidEdgePart.PartDocument = Nothing
+        Dim PsmTemplateDoc As SolidEdgePart.SheetMetalDocument = Nothing
+
+        Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles = Nothing
+        Dim TemplateDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles = Nothing
+
+        Dim DocLinearStyles As SolidEdgeFramework.LinearStyles = Nothing
+        Dim TemplateLinearStyles As SolidEdgeFramework.LinearStyles = Nothing
+
+        Dim DocTextCharStyles As SolidEdgeFramework.TextCharStyles = Nothing
+        Dim TemplateTextCharStyles As SolidEdgeFramework.TextCharStyles = Nothing
+
+        Dim DocTextStyles As SolidEdgeFramework.TextStyles = Nothing
+        Dim TemplateTextStyles As SolidEdgeFramework.TextStyles = Nothing
+
+        Dim DocViewStyles As SolidEdgeFramework.ViewStyles = Nothing
+        Dim TemplateViewStyles As SolidEdgeFramework.ViewStyles = Nothing
+
+        Dim DocWindows As SolidEdgeFramework.Windows = Nothing
+        Dim TemplateWindows As SolidEdgeFramework.Windows = Nothing
+
+
+        ' All style collections.
+        ' DimensionStyles, FaceStyles, FillStyles, HatchPatternStyles, 
+        ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
+
+        ' Styles updated
+        ' DimensionStyles, FaceStyles,
+        ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
+
         Dim DocType As String = TC.GetDocType(SEDoc)
 
         Select Case DocType
-            Case Is = "asm"
-                Dim AsmDoc As SolidEdgeAssembly.AssemblyDocument
-                AsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+            Case "asm"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                AsmTemplateDoc = CType(SEApp.Documents.Open(Me.AssemblyTemplate), SolidEdgeAssembly.AssemblyDocument)
 
-                TemplateFilename = Me.AssemblyTemplate
+                tmpSEDoc.Activate()
 
-                ' Import face styles from template
-                AsmDoc.ImportStyles(TemplateFilename, True)
-                SEApp.DoIdle()
+                ' DimensionStyles
+                DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+                TemplateDimensionStyles = CType(AsmTemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
-                TemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeFramework.SolidEdgeDocument)
-                SEApp.DoIdle()
-
-                ' Update base styles from template
-                TempErrorMessageList = UpdateBaseStyles(SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' FaceStyles
+                If Me.UpdateFaceStyles Then
+                    tmpSEDoc.ImportStyles(Me.AssemblyTemplate, True)
                 End If
 
-                ' Update view styles from template
-                TempErrorMessageList = UpdateViewStyles(SEApp, SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' LinearStyles
+                DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+                TemplateLinearStyles = CType(AsmTemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+                ' TextCharStyles
+                DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+                TemplateTextCharStyles = CType(AsmTemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+                ' In SE2024 the TextStyles collection lists LineStyle objects
+                '' TextStyles
+                'DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
+                'TemplateTextStyles = CType(AsmTemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+                ' ViewStyles
+                DocViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                TemplateViewStyles = CType(AsmTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+
+                ' Windows
+                DocWindows = tmpSEDoc.Windows
+                TemplateWindows = AsmTemplateDoc.Windows
+
+                ' BaseStyles
+                If Me.UpdateBaseStyles Then
+                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(AsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
+                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If
 
-                TemplateDoc.Close()
-                SEApp.DoIdle()
+            Case "par"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                ParTemplateDoc = CType(SEApp.Documents.Open(Me.PartTemplate), SolidEdgePart.PartDocument)
 
-            Case Is = "par"
-                Dim ParDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
+                tmpSEDoc.Activate()
 
-                TemplateFilename = Me.PartTemplate
+                ' DimensionStyles
+                DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+                TemplateDimensionStyles = CType(ParTemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
-                ParDoc.ImportStyles(TemplateFilename, True)
-                SEApp.DoIdle()
-
-                TemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeFramework.SolidEdgeDocument)
-                SEApp.DoIdle()
-
-                ' Update base styles from template
-                TempErrorMessageList = UpdateBaseStyles(SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' FaceStyles
+                If Me.UpdateFaceStyles Then
+                    tmpSEDoc.ImportStyles(Me.PartTemplate, True)
                 End If
 
-                ' Update view styles from template
-                TempErrorMessageList = UpdateViewStyles(SEApp, SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' LinearStyles
+                DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+                TemplateLinearStyles = CType(ParTemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+                ' TextCharStyles
+                DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+                TemplateTextCharStyles = CType(ParTemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+                ' TextStyles
+                DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
+                TemplateTextStyles = CType(ParTemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+                ' ViewStyles
+                DocViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                TemplateViewStyles = CType(ParTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+
+                ' Windows
+                DocWindows = tmpSEDoc.Windows
+                TemplateWindows = ParTemplateDoc.Windows
+
+                ' BaseStyles
+                If Me.UpdateBaseStyles Then
+                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(ParTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
+                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If
 
-                TemplateDoc.Close()
-                SEApp.DoIdle()
+            Case "psm"
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                PsmTemplateDoc = CType(SEApp.Documents.Open(Me.SheetmetalTemplate), SolidEdgePart.SheetMetalDocument)
 
-            Case Is = "psm"
-                Dim PsmDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                tmpSEDoc.Activate()
 
-                TemplateFilename = Me.SheetmetalTemplate
+                ' DimensionStyles
+                DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
+                TemplateDimensionStyles = CType(PsmTemplateDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
-                PsmDoc.ImportStyles(TemplateFilename, True)
-                SEApp.DoIdle()
-
-                TemplateDoc = CType(SEApp.Documents.Open(TemplateFilename), SolidEdgeFramework.SolidEdgeDocument)
-                SEApp.DoIdle()
-
-                TempErrorMessageList = UpdateBaseStyles(SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' FaceStyles
+                If Me.UpdateFaceStyles Then
+                    tmpSEDoc.ImportStyles(Me.SheetmetalTemplate, True)
                 End If
 
-                ' Update view styles from template
-                TempErrorMessageList = UpdateViewStyles(SEApp, SEDoc, TemplateDoc)
-                If TempErrorMessageList.Count > 0 Then
-                    ExitStatus = 1
-                    For Each s As String In TempErrorMessageList
-                        ErrorMessageList.Add(s)
-                    Next
+                ' LinearStyles
+                DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+                TemplateLinearStyles = CType(PsmTemplateDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
+
+                ' TextCharStyles
+                DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+                TemplateTextCharStyles = CType(PsmTemplateDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
+
+                ' TextStyles
+                DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
+                TemplateTextStyles = CType(PsmTemplateDoc.TextStyles, SolidEdgeFramework.TextStyles)
+
+                ' ViewStyles
+                DocViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                TemplateViewStyles = CType(PsmTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+
+                ' Windows
+                DocWindows = tmpSEDoc.Windows
+                TemplateWindows = PsmTemplateDoc.Windows
+
+                ' BaseStyles
+                If Me.UpdateBaseStyles Then
+                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(PsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
+                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If
-
-                TemplateDoc.Close()
-                SEApp.DoIdle()
-
-            Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
 
         End Select
+
+        If Me.UpdateDimensionStyles Then
+            SupplementalErrorMessage = DoUpdateDimensionStyles(DocDimensionStyles, TemplateDimensionStyles)
+            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+        End If
+
+        If Me.UpdateLinearStyles Then
+            SupplementalErrorMessage = DoUpdateLinearStyles(DocLinearStyles, TemplateLinearStyles)
+            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+        End If
+
+        If Me.UpdateTextCharStyles Then
+            SupplementalErrorMessage = DoUpdateTextCharStyles(DocTextCharStyles, TemplateTextCharStyles)
+            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+        End If
+
+        If Not (DocTextStyles Is Nothing Or TemplateTextStyles Is Nothing) Then
+            If Me.UpdateTextStyles Then
+                SupplementalErrorMessage = DoUpdateTextStyles(DocTextStyles, TemplateTextStyles)
+                Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            End If
+        End If
+
+        If Me.UpdateViewStyles Then
+            SupplementalErrorMessage = DoUpdateViewStyles(DocViewStyles, TemplateViewStyles)
+            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+            SetActiveViewStyle(SEApp, DocWindows, TemplateWindows, AsmTemplateDoc, ParTemplateDoc, PsmTemplateDoc)
+        End If
 
 
         If SEDoc.ReadOnly Then
@@ -213,11 +326,479 @@ Public Class TaskUpdateModelStylesFromTemplate
     End Function
 
 
-    Private Function UpdateBaseStyles(
+    Private Sub SetActiveViewStyle(SEApp As SolidEdgeFramework.Application,
+                                   DocWindows As SolidEdgeFramework.Windows,
+                                   TemplateWindows As SolidEdgeFramework.Windows,
+                                   AsmTemplateDoc As SolidEdgeAssembly.AssemblyDocument,
+                                   ParTemplateDoc As SolidEdgePart.PartDocument,
+                                   PsmTemplateDoc As SolidEdgePart.SheetMetalDocument
+                                   )
+
+        Dim TemplateActiveViewStyle As SolidEdgeFramework.ViewStyle = Nothing
+        Dim DocActiveViewStyle As SolidEdgeFramework.ViewStyle = Nothing
+
+        If AsmTemplateDoc IsNot Nothing Then
+            AsmTemplateDoc.Activate()
+            SEApp.DoIdle()
+        End If
+        If ParTemplateDoc IsNot Nothing Then
+            ParTemplateDoc.Activate()
+            SEApp.DoIdle()
+        End If
+        If PsmTemplateDoc IsNot Nothing Then
+            PsmTemplateDoc.Activate()
+            SEApp.DoIdle()
+        End If
+
+        For Each Window As SolidEdgeFramework.Window In TemplateWindows
+            Dim View = Window.View
+            TemplateActiveViewStyle = CType(View.ViewStyle, SolidEdgeFramework.ViewStyle)
+        Next
+
+        Dim ViewStyleName = TemplateActiveViewStyle.StyleName
+
+        If AsmTemplateDoc IsNot Nothing Then
+            AsmTemplateDoc.Close()
+            SEApp.DoIdle()
+        End If
+        If ParTemplateDoc IsNot Nothing Then
+            ParTemplateDoc.Close()
+            SEApp.DoIdle()
+        End If
+        If PsmTemplateDoc IsNot Nothing Then
+            PsmTemplateDoc.Close()
+            SEApp.DoIdle()
+        End If
+
+        For Each Window As SolidEdgeFramework.Window In DocWindows
+            Dim View = Window.View
+            View.Style = ViewStyleName
+        Next
+
+
+    End Sub
+
+    Private Function DoUpdateViewStyles(
+        ByRef DocViewStyles As SolidEdgeFramework.ViewStyles,
+        ByRef TemplateViewStyles As SolidEdgeFramework.ViewStyles
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim TC As New Task_Common
+
+        For Each TemplateViewStyle As SolidEdgeFramework.ViewStyle In TemplateViewStyles
+            If Not TemplateStyleNames.Contains(TemplateViewStyle.StyleName) Then
+                TemplateStyleNames.Add(TemplateViewStyle.StyleName)
+            End If
+
+            Dim TemplateStyleInDoc = False
+
+            For Each DocViewStyle As SolidEdgeFramework.ViewStyle In DocViewStyles
+                If Not DocStyleNames.Contains(DocViewStyle.StyleName) Then
+                    DocStyleNames.Add(DocViewStyle.StyleName)
+                End If
+                If TemplateViewStyle.StyleName = DocViewStyle.StyleName Then
+                    TemplateStyleInDoc = True
+                    Try
+                        TC.CopyProperties(TemplateViewStyle, DocViewStyle)
+
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
+                    End Try
+
+                    'Update skybox
+                    If TemplateViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox Then
+                        DocViewStyle.SkyboxType = TemplateViewStyle.SkyboxType
+
+                        Dim s As String = ""
+                        Dim i As Integer
+                        For i = 0 To 5
+                            Try
+                                s = TemplateViewStyle.GetSkyboxSideFilename(i)
+                                DocViewStyle.SetSkyboxSideFilename(i, s)
+                            Catch ex As Exception
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+                            End Try
+                        Next
+
+                    End If
+
+                    Exit For
+
+                End If
+            Next
+
+            If Not TemplateStyleInDoc Then
+                ' Add it
+                Dim NewViewStyle = DocViewStyles.Add(TemplateViewStyle.StyleName, "")
+                Try
+                    TC.CopyProperties(TemplateViewStyle, NewViewStyle)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error applying ViewStyle '{0}'", TemplateViewStyle.StyleName))
+                End Try
+
+                'Update skybox
+                If TemplateViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox Then
+                    NewViewStyle.SkyboxType = TemplateViewStyle.SkyboxType
+
+                    Dim s As String = ""
+                    Dim i As Integer
+                    For i = 0 To 5
+                        Try
+                            s = TemplateViewStyle.GetSkyboxSideFilename(i)
+                            NewViewStyle.SetSkyboxSideFilename(i, s)
+                        Catch ex As Exception
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+                        End Try
+                    Next
+
+                End If
+
+            End If
+        Next
+
+        Dim tf As Boolean
+        If Me.RemoveNonTemplateStyles Then
+            For Each DocViewStyle As SolidEdgeFramework.ViewStyle In DocViewStyles
+                tf = Not DocViewStyle.StyleName.ToLower() = "default"
+                tf = tf And Not TemplateStyleNames.Contains(DocViewStyle.StyleName)
+                If tf Then
+                    Dim s = DocViewStyle.StyleName.ToString
+                    Try
+                        DocViewStyle.Delete()
+                        DocStyleNames.Remove(s)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to remove ViewStyle '{0}'", s))
+                    End Try
+                End If
+            Next
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function DoUpdateTextStyles(
+        ByRef DocTextStyles As SolidEdgeFramework.TextStyles,
+        ByRef TemplateTextStyles As SolidEdgeFramework.TextStyles
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim TC As New Task_Common
+
+        For Each TemplateTextStyle As SolidEdgeFramework.TextStyle In TemplateTextStyles
+            If Not TemplateStyleNames.Contains(TemplateTextStyle.Name) Then
+                TemplateStyleNames.Add(TemplateTextStyle.Name)
+            End If
+
+            Dim TemplateStyleInDoc = False
+
+            For Each DocTextStyle As SolidEdgeFramework.TextStyle In DocTextStyles
+                If Not DocStyleNames.Contains(DocTextStyle.Name) Then
+                    DocStyleNames.Add(DocTextStyle.Name)
+                End If
+                If TemplateTextStyle.Name = DocTextStyle.Name Then
+                    TemplateStyleInDoc = True
+
+                    Try
+                        TC.CopyProperties(TemplateTextStyle, DocTextStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                    End Try
+
+                    Exit For
+                End If
+            Next
+
+            If Not TemplateStyleInDoc Then
+                ' Add it
+                Dim NewTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
+                Try
+                    TC.CopyProperties(TemplateTextStyle, NewTextStyle)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                End Try
+            End If
+
+        Next
+
+        Dim tf As Boolean
+        If Me.RemoveNonTemplateStyles Then
+            For Each DocTextStyle As SolidEdgeFramework.TextStyle In DocTextStyles
+                tf = Not DocTextStyle.Name.ToLower() = "default"
+                tf = tf And Not TemplateStyleNames.Contains(DocTextStyle.Name)
+                If tf Then
+                    Dim s = DocTextStyle.Name.ToString
+                    Try
+                        DocTextStyles.Remove(DocTextStyle.Name)
+                        DocStyleNames.Remove(s)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to remove TextStyle '{0}'", s))
+                    End Try
+                End If
+            Next
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function DoUpdateTextCharStyles(
+        ByRef DocTextCharStyles As SolidEdgeFramework.TextCharStyles,
+        ByRef TemplateTextCharStyles As SolidEdgeFramework.TextCharStyles
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim TC As New Task_Common
+
+        For Each TemplateTextCharStyle As SolidEdgeFramework.TextCharStyle In TemplateTextCharStyles
+            If Not TemplateStyleNames.Contains(TemplateTextCharStyle.Name) Then
+                TemplateStyleNames.Add(TemplateTextCharStyle.Name)
+            End If
+
+            Dim TemplateStyleInDoc = False
+
+            For Each DocTextCharStyle As SolidEdgeFramework.TextCharStyle In DocTextCharStyles
+                If Not DocStyleNames.Contains(DocTextCharStyle.Name) Then
+                    DocStyleNames.Add(DocTextCharStyle.Name)
+                End If
+                If TemplateTextCharStyle.Name = DocTextCharStyle.Name Then
+                    TemplateStyleInDoc = True
+
+                    Try
+                        TC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                    End Try
+
+                    Exit For
+
+                End If
+            Next
+
+            If Not TemplateStyleInDoc Then
+                ' Add it
+                Dim NewTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
+                Try
+                    TC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                End Try
+            End If
+
+        Next
+
+        Dim tf As Boolean
+        If Me.RemoveNonTemplateStyles Then
+            For Each DocTextCharStyle As SolidEdgeFramework.TextCharStyle In DocTextCharStyles
+                tf = Not DocTextCharStyle.Name.ToLower() = "default"
+                tf = tf And Not TemplateStyleNames.Contains(DocTextCharStyle.Name)
+                If tf Then
+                    Dim s = DocTextCharStyle.Name.ToString
+                    Try
+                        DocTextCharStyles.Remove(DocTextCharStyle.Name)
+                        DocStyleNames.Remove(s)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to remove TextCharStyle '{0}'", s))
+                    End Try
+                End If
+            Next
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function DoUpdateLinearStyles(
+        ByRef DocLinearStyles As SolidEdgeFramework.LinearStyles,
+        ByRef TemplateLinearStyles As SolidEdgeFramework.LinearStyles
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim TC As New Task_Common
+
+        For Each TemplateLinearStyle As SolidEdgeFramework.LinearStyle In TemplateLinearStyles
+            If Not TemplateStyleNames.Contains(TemplateLinearStyle.Name) Then
+                TemplateStyleNames.Add(TemplateLinearStyle.Name)
+            End If
+
+            Dim TemplateStyleInDoc = False
+
+            For Each DocLinearStyle As SolidEdgeFramework.LinearStyle In DocLinearStyles
+                If Not DocStyleNames.Contains(DocLinearStyle.Name) Then
+                    DocStyleNames.Add(DocLinearStyle.Name)
+                End If
+                If TemplateLinearStyle.Name = DocLinearStyle.Name Then
+                    TemplateStyleInDoc = True
+
+                    Try
+                        TC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                    End Try
+
+                    Exit For
+                End If
+            Next
+
+            If Not TemplateStyleInDoc Then
+                ' Add it
+                Dim NewLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
+                Try
+                    TC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                End Try
+            End If
+
+        Next
+
+        Dim tf As Boolean
+        If Me.RemoveNonTemplateStyles Then
+            For Each DocLinearStyle As SolidEdgeFramework.LinearStyle In DocLinearStyles
+                tf = Not DocLinearStyle.Name.ToLower() = "default"
+                tf = tf And Not TemplateStyleNames.Contains(DocLinearStyle.Name)
+                If tf Then
+                    Dim s = DocLinearStyle.Name.ToString
+                    Try
+                        DocLinearStyles.Remove(DocLinearStyle.Name)
+                        DocStyleNames.Remove(s)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to remove LinearStyle '{0}'", s))
+                    End Try
+                End If
+            Next
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Function DoUpdateDimensionStyles(
+        ByRef DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles,
+        ByRef TemplateDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessageList As New List(Of String)
+
+        Dim DocStyleNames As New List(Of String)
+        Dim TemplateStyleNames As New List(Of String)
+        Dim MissingStyles As String = ""
+
+        Dim TC As New Task_Common
+
+        For Each TemplateDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In TemplateDimensionStyles
+            If Not TemplateStyleNames.Contains(TemplateDimensionStyle.Name) Then
+                TemplateStyleNames.Add(TemplateDimensionStyle.Name)
+            End If
+
+            Dim TemplateStyleInDoc = False
+
+            For Each DocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In DocDimensionStyles
+                If Not DocStyleNames.Contains(DocDimensionStyle.Name) Then
+                    DocStyleNames.Add(DocDimensionStyle.Name)
+                End If
+                If TemplateDimensionStyle.Name = DocDimensionStyle.Name Then
+                    TemplateStyleInDoc = True
+
+                    Try
+                        TC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                    End Try
+
+                    Exit For
+                End If
+            Next
+
+            If Not TemplateStyleInDoc Then
+                ' Add it
+                Dim NewDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
+                Try
+                    TC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                End Try
+            End If
+
+        Next
+
+        Dim tf As Boolean
+        If Me.RemoveNonTemplateStyles Then
+            For Each DocDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In DocDimensionStyles
+                tf = Not DocDimensionStyle.Name.ToLower() = "default"
+                tf = tf And Not TemplateStyleNames.Contains(DocDimensionStyle.Name)
+                If tf Then
+                    Dim s = DocDimensionStyle.Name.ToString
+                    Try
+                        DocDimensionStyles.Remove(DocDimensionStyle.Name)
+                        DocStyleNames.Remove(s)
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Unable to remove DimensionStyle '{0}'", s))
+                    End Try
+                End If
+            Next
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+
+    Private Function DoUpdateBaseStyles(
         ByRef SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByRef SETemplateDoc As SolidEdgeFramework.SolidEdgeDocument
-        ) As List(Of String)
+        ) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExitStatus As Integer = 0
         Dim ErrorMessageList As New List(Of String)
 
         Dim TemplateBaseStyles As New Dictionary(Of String, SolidEdgeFramework.FaceStyle)
@@ -230,10 +811,12 @@ Public Class TaskUpdateModelStylesFromTemplate
         DocBaseStyles = GetBaseStyles(SEDoc)
 
         If DocBaseStyles.Keys.Count < TemplateBaseStyles.Keys.Count Then
+            ExitStatus = 1
             ErrorMessageList.Add("Unable to update all Color Manager base styles")
         End If
 
-        Return ErrorMessageList
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
     End Function
 
     Private Function GetBaseStyles(
@@ -429,134 +1012,6 @@ Public Class TaskUpdateModelStylesFromTemplate
 
     End Sub
 
-    Private Function UpdateViewStyles(
-        ByRef SEApp As SolidEdgeFramework.Application,
-        ByRef SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByRef SETemplateDoc As SolidEdgeFramework.SolidEdgeDocument
-        ) As List(Of String)
-
-        Dim ErrorMessageList As New List(Of String)
-
-        Dim TempErrorMessageList As New List(Of String)
-
-        Dim TemplateViewStyles As SolidEdgeFramework.ViewStyles = Nothing
-        Dim DocViewStyles As SolidEdgeFramework.ViewStyles = Nothing
-        Dim DocViewStyle As SolidEdgeFramework.ViewStyle
-        Dim TemplateActiveViewStyle As SolidEdgeFramework.ViewStyle = Nothing
-        Dim DocActiveViewStyle As SolidEdgeFramework.ViewStyle = Nothing
-
-        Dim DocWindows As SolidEdgeFramework.Windows = Nothing
-        Dim TemplateWindows As SolidEdgeFramework.Windows = Nothing
-        Dim Window As SolidEdgeFramework.Window
-        Dim View As SolidEdgeFramework.View
-
-        Dim AsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
-        Dim AsmTemplateDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
-        Dim ParDoc As SolidEdgePart.PartDocument = Nothing
-        Dim ParTemplateDoc As SolidEdgePart.PartDocument = Nothing
-        Dim PsmDoc As SolidEdgePart.SheetMetalDocument = Nothing
-        Dim PsmTemplateDoc As SolidEdgePart.SheetMetalDocument = Nothing
-
-        Dim tf As Boolean
-
-        Dim TC As New Task_Common
-
-        Dim DocType As String = TC.GetDocType(SEDoc)
-
-        Select Case DocType
-            Case = "asm"
-                AsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-                DocViewStyles = CType(AsmDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                DocWindows = AsmDoc.Windows
-
-                AsmTemplateDoc = CType(SETemplateDoc, SolidEdgeAssembly.AssemblyDocument)
-                TemplateViewStyles = CType(AsmTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                TemplateWindows = AsmTemplateDoc.Windows
-
-                AsmTemplateDoc.Activate()
-
-            Case = "par"
-                ParDoc = CType(SEDoc, SolidEdgePart.PartDocument)
-                DocViewStyles = CType(ParDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                DocWindows = ParDoc.Windows
-
-                ParTemplateDoc = CType(SETemplateDoc, SolidEdgePart.PartDocument)
-                TemplateViewStyles = CType(ParTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                TemplateWindows = ParTemplateDoc.Windows
-
-                ParTemplateDoc.Activate()
-
-            Case = "psm"
-                PsmDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                DocViewStyles = CType(PsmDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                DocWindows = PsmDoc.Windows
-
-                PsmTemplateDoc = CType(SETemplateDoc, SolidEdgePart.SheetMetalDocument)
-                TemplateViewStyles = CType(PsmTemplateDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
-                TemplateWindows = PsmTemplateDoc.Windows
-
-                PsmTemplateDoc.Activate()
-
-            Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
-        End Select
-
-        'SETemplateDoc.Activate()
-
-        For Each Window In TemplateWindows
-            View = Window.View
-            TemplateActiveViewStyle = CType(View.ViewStyle, SolidEdgeFramework.ViewStyle)
-        Next
-
-        If DocType = "asm" Then
-            AsmDoc.Activate()
-            DocActiveViewStyle = DocViewStyles.AddFromFile(AsmTemplateDoc.FullName, TemplateActiveViewStyle.StyleName)
-        End If
-        If DocType = "par" Then
-            ParDoc.Activate()
-            DocActiveViewStyle = DocViewStyles.AddFromFile(ParTemplateDoc.FullName, TemplateActiveViewStyle.StyleName)
-        End If
-        If DocType = "psm" Then
-            PsmDoc.Activate()
-            DocActiveViewStyle = DocViewStyles.AddFromFile(PsmTemplateDoc.FullName, TemplateActiveViewStyle.StyleName)
-        End If
-
-        SEApp.DoIdle()
-
-        'Update skybox
-        DocActiveViewStyle.SkyboxType = SolidEdgeFramework.SeSkyboxType.seSkyboxTypeSkybox
-
-        Dim s As String
-        Dim i As Integer
-
-        For i = 0 To 5
-            s = TemplateActiveViewStyle.GetSkyboxSideFilename(i)
-            DocActiveViewStyle.SetSkyboxSideFilename(i, s)
-        Next
-
-        SEApp.DoIdle()
-
-        For Each Window In DocWindows
-            View = Window.View
-            View.Style = DocActiveViewStyle.StyleName
-        Next
-
-        SEApp.DoIdle()
-
-        For Each DocViewStyle In DocViewStyles
-            tf = Not DocViewStyle.StyleName.ToLower() = "default"
-            tf = tf And Not DocViewStyle.StyleName = DocActiveViewStyle.StyleName
-            If tf Then
-                Try
-                    DocViewStyle.Delete()
-                Catch ex As Exception
-                End Try
-            End If
-        Next
-
-        Return ErrorMessageList
-    End Function
-
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -611,8 +1066,71 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateDimensionStyles.ToString, "Update dimension styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateLinearStyles.ToString, "Update linear styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateTextCharStyles.ToString, "Update text char styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateTextStyles.ToString, "Update text styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateViewStyles.ToString, "Update view styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateBaseStyles.ToString, "Update base styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveNonTemplateStyles.ToString, "Remove styles not in template")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
-        'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -620,24 +1138,6 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.AssemblyTemplate.ToString), TextBox)
-        Me.AssemblyTemplate = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.PartTemplate.ToString), TextBox)
-        Me.PartTemplate = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.SheetmetalTemplate.ToString), TextBox)
-        Me.SheetmetalTemplate = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -751,6 +1251,30 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         Select Case Name
 
+            Case ControlNames.UpdateDimensionStyles.ToString
+                Me.UpdateDimensionStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateFaceStyles.ToString
+                Me.UpdateFaceStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateLinearStyles.ToString
+                Me.UpdateLinearStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateTextCharStyles.ToString
+                Me.UpdateTextCharStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateTextStyles.ToString
+                Me.UpdateTextStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateViewStyles.ToString
+                Me.UpdateViewStyles = Checkbox.Checked
+
+            Case ControlNames.UpdateBaseStyles.ToString
+                Me.UpdateBaseStyles = Checkbox.Checked
+
+            Case ControlNames.RemoveNonTemplateStyles.ToString
+                Me.RemoveNonTemplateStyles = Checkbox.Checked
+
             Case ControlNames.HideOptions.ToString
                 HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
@@ -784,8 +1308,15 @@ Public Class TaskUpdateModelStylesFromTemplate
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. "
-        HelpString += vbCrLf + vbCrLf + "Note, the view style must be a named style.  Overrides are ignored. "
+        HelpString = "Updates the styles you select from a template you specify. "
+        HelpString += "Styles present in the template, but not in the file, are added. "
+        HelpString += "Styles present in the file, but not in the template, can optionally be removed if possible. "
+        HelpString += "It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). "
+        HelpString += vbCrLf + vbCrLf + "Styles are updated/added as described, but no mapping takes place. "
+        HelpString += "For example, if the template has a dimension style ANSI(in), and the file uses ANSI(inch), the dimensions will not be updated. "
+        HelpString += "A workaround is to create the target style in the template and modify it in that file as needed. "
+        HelpString += vbCrLf + vbCrLf + "The active view style of the file is changed to match the one active in the template. "
+        HelpString += "Note, it must be a named style.  Overrides are ignored. "
         HelpString += "To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`."
         HelpString += vbCrLf + vbCrLf + "![View Override Dialog](My%20Project/media/view_override_dialog.png)"
 

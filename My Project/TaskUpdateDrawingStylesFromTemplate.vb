@@ -141,7 +141,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         If Me.UpdateStyles Then
 
-            ' ############  DimensionStyles ############
+            ' ############ DimensionStyles ############
             Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
             DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
@@ -177,6 +177,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
+            ' ############ DrawingViewStyles ############
             Dim DocDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
             DocDrawingViewStyles = CType(tmpSEDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
 
@@ -212,8 +213,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ LinearStyles ############
             Dim DocLinearStyles As SolidEdgeFramework.LinearStyles
             DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
 
@@ -249,10 +249,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
-
-
+            ' ############ TableStyles ############
             Dim DocTableStyles As SolidEdgeFrameworkSupport.TableStyles
             DocTableStyles = CType(tmpSEDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
 
@@ -294,8 +291,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ TextCharStyles ############
             Dim DocTextCharStyles As SolidEdgeFramework.TextCharStyles
             DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
 
@@ -331,8 +327,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ TextStyles ############
             Dim DocTextStyles As SolidEdgeFramework.TextStyles
             DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
 
@@ -367,10 +362,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             TemplateStyleNames.Clear()
             MissingStyles = ""
         End If
-
-
-
-
 
 
         SETemplateDoc.Close()
@@ -462,24 +453,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox)
-        Me.DraftTemplate = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateBorder.ToString), CheckBox)
-        Me.UpdateBorder = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateStyles.ToString), CheckBox)
-        Me.UpdateStyles = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
