@@ -476,9 +476,11 @@ Also, do not `Close` or `Save As` the file being processed. Housekeeper maintain
 One last thing.  Macros interact with Solid Edge through something called the Windows Component Object Model.  That framework appears to have some sort of built-in inactivity detection.  If you let this command sit idle for a period of time, COM reports an error. It doesn't really hurt anything, but Housekeeper stops and restarts SE any time a COM error occurs. I get around it by selecting only a small number of files to work on at a time. 
 
 ### Update model styles from template
-Updates the file with face and view styles from a file you specify on the **Configuration Tab -- Templates Page**. 
+Updates the styles you select from a template you specify. Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed if possible. It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). 
 
-Note, the view style must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
+Styles are updated/added as described, but no mapping takes place. For example, if the template has a dimension style ANSI(in), and the file uses ANSI(inch), the dimensions will not be updated. A workaround is to create the target style in the template and modify it in that file as needed. 
+
+The active view style of the file is changed to match the one active in the template. Note, it must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
 ![View Override Dialog](My%20Project/media/view_override_dialog.png)
 
