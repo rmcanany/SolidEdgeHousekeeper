@@ -561,29 +561,15 @@ For image file formats there are additional options. You can hide constructions 
 ### Save drawing as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
-Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. These controls are on the **Task Tab** below the task list. 
+Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
-Images can be saved with the aspect ratio of the model, rather than the window. The option is called `Save as image -- crop to model size`. It is located on the **Configuration Tab -- General Page**. 
+You can optionally create subdirectories using a formula similar to the Property Text Callout. See the `Save model as` help topic for details. 
 
-You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
-`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: 
-`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. 
+You can optionally include a watermark image on the drawing output file.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 
-As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
+The option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
 
-It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
-
-Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. 
-
-The `DXF Flat` option saves the flat pattern of the sheet metal file. 
-
-The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use the Draft `Save As`, using a `Property Filter` if needed. 
-
-For Draft files you can optionally include a watermark image on the output.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
-
-Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
-
-When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**.  To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. 
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
 
 ### Print
 Print settings are accessed on the **Configuration Tab -- Printing Page**.
