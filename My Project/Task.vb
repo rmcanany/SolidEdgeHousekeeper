@@ -298,10 +298,10 @@ Public MustInherit Class Task
         Dim s As String
         Dim tmpHelpURL As String
 
-        s = tmpLabelText
-        s = s.Replace("/", "")
-        s = s.Replace(" ", "-")
-        s = s.ToLower
+        s = tmpLabelText  '  'Open save'
+        s = s.Replace("/", "")  '  'Open save' -> 'Open save'
+        s = s.Replace(" ", "-")  '  'Open save' -> 'Open-save'
+        s = s.ToLower  '  'Open save' -> 'open-save'
 
         tmpHelpURL = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper#{0}", s)
 

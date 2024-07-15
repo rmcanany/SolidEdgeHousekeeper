@@ -459,7 +459,11 @@ Partial Class Form1
     Private Sub BuildReadmeFile()
 
         Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim VersionSpecificReadmeFileName = ReadmeFileName.Replace(".md", String.Format("-{0}.md", Me.Version))
+
+        ' StartupPath is hard coded so this doesn't do anything on a user's machine
         Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+
         Dim TaskListHeader As String = "<!-- Start -->"
         Dim Proceed As Boolean = True
         Dim i As Integer
@@ -514,7 +518,7 @@ Partial Class Form1
 
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
-
+            IO.File.WriteAllLines(VersionSpecificReadmeFileName, ReadmeOut)
 
         End If
 

@@ -7,6 +7,10 @@ Imports SolidEdgeCommunity
 Imports SolidEdgePart
 
 Public Class Form1
+
+    Public Property Version As String = "2024.2"
+
+
     Public SEApp As SolidEdgeFramework.Application
 
     Private DefaultsFilename As String
@@ -654,7 +658,7 @@ Public Class Form1
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2024.2"
+        Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
