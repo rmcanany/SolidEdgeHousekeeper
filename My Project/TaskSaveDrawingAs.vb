@@ -905,6 +905,13 @@ Public Class TaskSaveDrawingAs
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "See the `Save model as` help topic for details. "
 
+        HelpString += vbCrLf + vbCrLf + "Unlike with model files, draft subdirectory formulas can include an Index Reference designator (eg, `|R1`). "
+        HelpString += "This is the way to refer to a model contained in the draft file, "
+        HelpString += "similar to Property Text in a Callout. "
+        HelpString += "For example, `%{System.Material|R1}`. "
+        HelpString += "To refer to properties of the draft file itself, do not specify a designator, "
+        HelpString += "for example, `%{Custom.Last Revision Date}`. "
+
         HelpString += vbCrLf + vbCrLf + "You can "
         HelpString += "optionally include a watermark image on the drawing output file.  For the watermark, "
         HelpString += "set X/W and Y/H to position the image, and Scale to change its size. "
@@ -912,12 +919,6 @@ Public Class TaskSaveDrawingAs
         HelpString += "width and height, respectively. "
         HelpString += "So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. "
         HelpString += "Note some file formats may not support bitmap output."
-        HelpString += vbCrLf + vbCrLf + "The option `Use subdirectory formula` can use an Index Reference designator "
-        HelpString += "to select a model file contained in the draft file. "
-        HelpString += "This is similar to Property Text in a Callout, "
-        HelpString += "for example, `%{System.Material|R1}`. "
-        HelpString += "To refer to properties of the draft file itself, do not specify a designator, "
-        HelpString += "for example, `%{Custom.Last Revision Date}`. "
 
         HelpString += vbCrLf + vbCrLf + "When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. "
         HelpString += "The first saves all sheets to one file.  The second saves each sheet to a separate file, "

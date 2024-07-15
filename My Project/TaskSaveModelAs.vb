@@ -1156,6 +1156,9 @@ Public Class TaskSaveModelAs
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
+
+        HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_model_as.png)"
+
         HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "

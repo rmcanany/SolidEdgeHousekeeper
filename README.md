@@ -541,6 +541,8 @@ If you are writing your own program, be aware several interoperability rules app
 ### Save model as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
+![Save Model As](My%20Project/media/save_model_as.png)
+
 Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
@@ -565,9 +567,9 @@ Select the file type using the `Save As` combobox. Select the directory using th
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. See the `Save model as` help topic for details. 
 
-You can optionally include a watermark image on the drawing output file.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
+Unlike with model files, draft subdirectory formulas can include an Index Reference designator (eg, `|R1`). This is the way to refer to a model contained in the draft file, similar to Property Text in a Callout. For example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
 
-The option `Use subdirectory formula` can use an Index Reference designator to select a model file contained in the draft file. This is similar to Property Text in a Callout, for example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
+You can optionally include a watermark image on the drawing output file.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 
 When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
 
