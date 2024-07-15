@@ -1874,16 +1874,33 @@ Public Class Form1
         If DialogResult = DialogResult.OK Then
             Me.TaskList = ETL.TaskList
 
-            Dim s As String = ""
+            'Dim s As String = ""
 
-            s = "Restart Housekeeper for your changes to take effect."
-            s = String.Format("{0}{1}", s, vbCrLf)
-            s = String.Format("{0}{1}{2}", s, "Once restarted, any new Tasks can be configured as needed.", vbCrLf)
+            's = "Restart Housekeeper for your changes to take effect."
+            's = String.Format("{0}{1}", s, vbCrLf)
+            's = String.Format("{0}{1}{2}", s, "Once restarted, any new Tasks can be configured as needed.", vbCrLf)
 
-            'For Each Task As Task In Me.TaskList
-            '    s = String.Format("{0}{1}{2}", s, Task.Description, vbCrLf)
-            'Next
-            MsgBox(s, vbOKOnly)
+            ''For Each Task As Task In Me.TaskList
+            ''    s = String.Format("{0}{1}{2}", s, Task.Description, vbCrLf)
+            ''Next
+            'MsgBox(s, vbOKOnly)
+
+            Dim tmpTaskPanel As Panel = Nothing
+
+            For Each c As Control In TabPageTasks.Controls
+                If c.Name = "TaskPanel" Then
+                    tmpTaskPanel = CType(c, Panel)
+                    Exit For
+                End If
+            Next
+
+            tmpTaskPanel.Controls.Clear()
+
+            For i = TaskList.Count - 1 To 0 Step -1
+                Dim Task = TaskList(i)
+                tmpTaskPanel.Controls.Add(Task.TaskControl)
+            Next
+
 
         End If
 

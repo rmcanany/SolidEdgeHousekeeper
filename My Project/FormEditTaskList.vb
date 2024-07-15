@@ -290,6 +290,7 @@ Public Class FormEditTaskList
                 Me.TaskList(i).ColorR = ChangeColor.ColorR
                 Me.TaskList(i).ColorG = ChangeColor.ColorG
                 Me.TaskList(i).ColorB = ChangeColor.ColorB
+                Me.TaskList(i).ResetTaskColor()
             Next
             UpdateDataGridView()
             'MsgBox("OK")
