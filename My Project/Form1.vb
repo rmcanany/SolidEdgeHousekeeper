@@ -653,11 +653,18 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
+        ' Help page
         LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
-        LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
+        Dim Version = Me.Version
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+        Dim HelpURL = String.Format("{0}#readme", VersionSpecificReadme)
+
+        LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, HelpURL)
+
+        ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
         new_CheckBoxFileSearch.Checked = False
@@ -1911,7 +1918,14 @@ Public Class Form1
     End Sub
 
     Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click
-        Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-descriptions"
+        'Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-descriptions"
+
+        Dim Version = Me.Version
+
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+
+        Dim HelpURL = String.Format("{0}#task-descriptions", VersionSpecificReadme)
+
         System.Diagnostics.Process.Start(HelpURL)
     End Sub
 
