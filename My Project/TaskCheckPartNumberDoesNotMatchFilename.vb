@@ -88,14 +88,14 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim PartNumberFound As Boolean
         Dim Filename As String
 
-        Filename = SEDoc.FullName
-        If Filename.Contains("!") Then
-            Filename = Filename.Split("!"c)(0)
-        End If
+        Dim TC As New Task_Common
+
+        Filename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        'If Filename.Contains("!") Then
+        '    Filename = Filename.Split("!"c)(0)
+        'End If
 
         Filename = System.IO.Path.GetFileName(Filename)  ' Removes path
-
-        Dim TC As New Task_Common
 
         If PropertyName = "" Then
             ExitStatus = 1

@@ -653,7 +653,7 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        ' Help page
+        ' Help Tab LinkLabel
         LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1

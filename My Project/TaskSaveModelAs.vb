@@ -344,11 +344,10 @@ Public Class TaskSaveModelAs
         Dim TC As New Task_Common
         Dim FCD As New FilenameCharmapDoctor()
 
-        OldFullFilename = SEDoc.FullName
-
-        If OldFullFilename.Contains("!") Then
-            OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
-        End If
+        OldFullFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        'If OldFullFilename.Contains("!") Then
+        '    OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
+        'End If
 
         OldDirectoryName = System.IO.Path.GetDirectoryName(OldFullFilename)
         OldFilenameWOExt = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)

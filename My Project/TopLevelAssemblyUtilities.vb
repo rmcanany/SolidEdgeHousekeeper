@@ -559,9 +559,11 @@ Public Class TopLevelAssemblyUtilities
 
         ' 20230730
         ' Deal with FOA files
-        If Filename.Contains("!") Then
-            Filename = Filename.Split("!"c)(0)  ' c:\project\foa.asm!Member1 > c:\project\foa.asm
-        End If
+        Dim TC As New Task_Common
+        Filename = TC.SplitFOAName(Filename)("Filename")
+        'If Filename.Contains("!") Then
+        '    Filename = Filename.Split("!"c)(0)  ' c:\project\foa.asm!Member1 > c:\project\foa.asm
+        'End If
 
 
         If FileIO.FileSystem.FileExists(Filename) Then
@@ -609,9 +611,10 @@ Public Class TopLevelAssemblyUtilities
                                 If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
                                     LinkedDocName = LinkedDoc.FullName
 
-                                    If LinkedDocName.Contains("!") Then
-                                        LinkedDocName = LinkedDocName.Split("!"c)(0)
-                                    End If
+                                    LinkedDocName = TC.SplitFOAName(LinkedDocName)("Filename")
+                                    'If LinkedDocName.Contains("!") Then
+                                    '    LinkedDocName = LinkedDocName.Split("!"c)(0)
+                                    'End If
 
                                     Extension = IO.Path.GetExtension(LinkedDocName)
 

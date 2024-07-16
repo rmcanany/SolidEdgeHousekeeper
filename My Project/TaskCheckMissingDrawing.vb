@@ -72,11 +72,13 @@ Public Class TaskCheckMissingDrawing
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
-        ModelFilename = SEDoc.FullName
+        Dim TC As New Task_Common
 
-        If ModelFilename.Contains("!") Then
-            ModelFilename = ModelFilename.Split("!"c)(0)
-        End If
+        ModelFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+
+        'If ModelFilename.Contains("!") Then
+        '    ModelFilename = ModelFilename.Split("!"c)(0)
+        'End If
 
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 

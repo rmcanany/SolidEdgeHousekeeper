@@ -877,21 +877,12 @@ Public Class Task_Common
 
         Dim PropertySet As String = ""
         Dim PropertyName As String = ""
-        'Dim PropertyCommand As String = ""
 
         Dim FoundProp As SolidEdgeFramework.Property
 
         Dim DocValues As New List(Of String)
-        'Dim DocValue As String
 
-        'Dim StartPositions As New List(Of Integer)
-        'Dim StartPosition As Integer
-        'Dim EndPositions As New List(Of Integer)
-        'Dim EndPosition As Integer
-        'Dim Length As Integer
         Dim i As Integer
-        'Dim msg As String
-
 
         Dim Formulas As New List(Of String)
         Dim Formula As String
@@ -903,6 +894,8 @@ Public Class Task_Common
         Dim ModelIdx As Integer
 
         Dim FCD As New FilenameCharmapDoctor
+
+        FullName = SplitFOAName(FullName)("Filename")
 
         tf = Instring.Contains("%{System")
         tf = tf Or Instring.Contains("%{Custom")

@@ -407,33 +407,33 @@ Regenerates missing flat models by activating flat environment. Requires running
 Break design and/or construction part copy links
 
 ### Edit properties
-Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. 
+Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button. 
 
 ![Find_Replace](My%20Project/media/property_input_editor.png)
 
-A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section above. 
+A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
 There are three search modes, `PT`, `WC`, and `RX`. 
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
-- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. 
+- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
 
-If the specified property does not exist in the file, you can optionally have it added automatically. This option is set on the **Configuration Tab -- General Page**. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
+If the specified property does not exist in the file, you can optionally add it by enabling the `Add any property not already in file` option. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-If you are changing `System.Material` specifically, there is an option to automatically update the part's material properties (density, face styles, etc.). Set the option on the **Configuration Tab -- General Page**. 
+On the other hand, if you want to delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` as the Replace string. As above, this only works for `Custom` properties. 
+
+If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
 
 The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
 
-You can copy the settings on the form to other tabs. Set the `Copy To` CheckBoxes as desired.
-
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-EXPERIMENTAL: Direct edit uses the structured storage for fast execution. 
+EXPERIMENTAL: Direct edit uses the structured storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
