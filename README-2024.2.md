@@ -407,7 +407,7 @@ Regenerates missing flat models by activating flat environment. Requires running
 Break design and/or construction part copy links
 
 ### Edit properties
-Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. Activate the editor using the `Property find/replace` `Edit` button. 
+Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. To activate the editor click the `Edit` button in the options panel. 
 
 ![Find_Replace](My%20Project/media/property_input_editor.png)
 

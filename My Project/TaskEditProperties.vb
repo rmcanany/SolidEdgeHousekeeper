@@ -927,7 +927,7 @@ Public Class TaskEditProperties
 
         HelpString = "Searches for text in a specified property and replaces it if found. "
         HelpString += "The property, search text, and replacement text are entered on the Input Editor. "
-        HelpString += "Activate the editor using the `Property find/replace` `Edit` button. "
+        HelpString += "To activate the editor click the `Edit` button in the options panel. "
 
         HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_input_editor.png)"
 
