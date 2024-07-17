@@ -321,41 +321,51 @@ Public Class TaskEditProperties
                 Try
 
                     '######## get the property here
-                    If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company") Then
+                    If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
                         dsiStream = cf.RootStorage.GetStream("SummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
                     End If
 
-                    If PropertySetName = "Custom" Or PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                    If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
                         dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        If PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company" Then
-                            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDDSI_" & PropertyName.ToUpper)
-                        Else
-                            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-                            If IsNothing(OLEProp) Then
-
-                                Dim userProperties = co.UserDefinedProperties
-                                Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                                userProperties.PropertyNames(newPropertyId) = PropertyName
-                                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
-                                OLEProp.Value = " "
-                                userProperties.AddProperty(OLEProp)
-
-                            End If
-                        End If
-
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
                     End If
 
-                    If PropertySetName = "Project" Then
+                    If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
                         dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
                     End If
+
+                    If PropertySetName = "Custom" Then
+                        dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                        If IsNothing(OLEProp) Then
+
+                            Dim userProperties = co.UserDefinedProperties
+                            Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                            userProperties.PropertyNames(newPropertyId) = PropertyName
+                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                            OLEProp.Value = " "
+                            userProperties.AddProperty(OLEProp)
+
+                        End If
+
+                    End If
+
+                    'If PropertySetName = "Project" Then
+                    '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+                    'End If
 
                 Catch ex As Exception
                     Proceed = False

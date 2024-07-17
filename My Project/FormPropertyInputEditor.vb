@@ -76,7 +76,7 @@ Public Class FormPropertyInputEditor
         For Each ComboBoxName In ComboBoxDict.Keys
             If ComboBoxName.EndsWith("PropertySet") Then
                 ComboBoxDict(ComboBoxName).Items.Add("System")
-                ComboBoxDict(ComboBoxName).Items.Add("Project")
+                'ComboBoxDict(ComboBoxName).Items.Add("Project")
                 ComboBoxDict(ComboBoxName).Items.Add("Custom")
                 ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
                 AddHandler ComboBoxDict(ComboBoxName).SelectedValueChanged, AddressOf ComboBox_TextChanged
@@ -253,7 +253,7 @@ Public Class FormPropertyInputEditor
 
             tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
             tmpComboBox.Items.Clear()
-            tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager"})
+            tmpComboBox.Items.AddRange({"", "Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager", "Document Number", "Revision", "Project Name"})
             If Not keepvalue Then
                 tmpComboBox.SelectedItem = Nothing
             Else
@@ -271,15 +271,15 @@ Public Class FormPropertyInputEditor
             '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
             '    End If
 
-        ElseIf ComboBox.Text = "Project" Then
-            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            tmpComboBox.Items.Clear()
-            tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
-            If Not keepvalue Then
-                tmpComboBox.SelectedItem = Nothing
-            Else
-                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
-            End If
+            'ElseIf ComboBox.Text = "Project" Then
+            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+            '    tmpComboBox.Items.Clear()
+            '    tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
+            '    If Not keepvalue Then
+            '        tmpComboBox.SelectedItem = Nothing
+            '    Else
+            '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
+            '    End If
 
         ElseIf ComboBox.Text = "Custom" Then
             tmpComboBox.Items.Clear()
