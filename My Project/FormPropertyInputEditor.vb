@@ -26,29 +26,29 @@ Public Class FormPropertyInputEditor
     '}
     Dim t As Timer = New Timer()
 
-    Public Sub ShowInputEditor(FileType As String)
-        Me.FileType = FileType
+    'Public Sub ShowInputEditor(FileType As String)
+    '    Me.FileType = FileType
 
-        If FileType = "asm" Then
-            CheckBoxCopyToAsm.Checked = True
-            CheckBoxCopyToAsm.Enabled = False
-        End If
-        If FileType = "par" Then
-            CheckBoxCopyToPar.Checked = True
-            CheckBoxCopyToPar.Enabled = False
-        End If
-        If FileType = "psm" Then
-            CheckBoxCopyToPsm.Checked = True
-            CheckBoxCopyToPsm.Enabled = False
-        End If
-        If FileType = "dft" Then
-            CheckBoxCopyToDft.Checked = True
-            CheckBoxCopyToDft.Enabled = False
-        End If
+    '    If FileType = "asm" Then
+    '        CheckBoxCopyToAsm.Checked = True
+    '        CheckBoxCopyToAsm.Enabled = False
+    '    End If
+    '    If FileType = "par" Then
+    '        CheckBoxCopyToPar.Checked = True
+    '        CheckBoxCopyToPar.Enabled = False
+    '    End If
+    '    If FileType = "psm" Then
+    '        CheckBoxCopyToPsm.Checked = True
+    '        CheckBoxCopyToPsm.Enabled = False
+    '    End If
+    '    If FileType = "dft" Then
+    '        CheckBoxCopyToDft.Checked = True
+    '        CheckBoxCopyToDft.Enabled = False
+    '    End If
 
-        Me.ShowDialog()
+    '    Me.ShowDialog()
 
-    End Sub
+    'End Sub
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -253,7 +253,8 @@ Public Class FormPropertyInputEditor
 
             tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
             tmpComboBox.Items.Clear()
-            tmpComboBox.Items.AddRange({"", "Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager", "Document Number", "Revision", "Project Name"})
+            tmpComboBox.Items.AddRange({"", "Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager",
+                                       "Document Number", "Revision", "Project Name", "Material", "Sheet Metal Gage"})
             If Not keepvalue Then
                 tmpComboBox.SelectedItem = Nothing
             Else

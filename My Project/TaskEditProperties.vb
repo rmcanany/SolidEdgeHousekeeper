@@ -165,11 +165,13 @@ Public Class TaskEditProperties
 
         If ExitStatus = 0 Then
 
+            Dim IsFOA As Boolean = False
             If DocType = "asm" Then
                 tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                IsFOA = tmpAsmDoc.IsFileFamilyByDocument
             End If
 
-            If (DocType = "asm") And (tmpAsmDoc.IsFileFamilyByDocument) Then
+            If (DocType = "asm") And (IsFOA) Then
                 Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
                 If Not Members.GlobalEditMode Then
                     ExitStatus = 1
@@ -833,7 +835,6 @@ Public Class TaskEditProperties
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
-        'Dim Ctrl As Control
         Dim TextBox As TextBox
 
         Select Case Name
@@ -845,14 +846,11 @@ Public Class TaskEditProperties
                 ' Workaround
                 Dim FileType = "asm"
 
-                PropertyInputEditor.ShowInputEditor(FileType)
+                PropertyInputEditor.ShowDialog()
 
                 If PropertyInputEditor.DialogResult = DialogResult.OK Then
-                    'Me.JSONDict = PropertyInputEditor.JSONDict
-
                     TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
                     TextBox.Text = PropertyInputEditor.JSONDict
-
                 End If
 
             Case ControlNames.Browse.ToString
@@ -986,7 +984,7 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
         HelpString += "If you want to try that out, select the option `Edit properties outside Solid Edge`. "
-        HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties are read-only for now. "
+        HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
         HelpString += "That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. "
         HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
 
