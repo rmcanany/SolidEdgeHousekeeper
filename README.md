@@ -430,7 +430,9 @@ The properties are processed in the order in the table. You can change the order
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-EXPERIMENTAL: Direct edit uses the structured storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+
+Due to some upstream limitations, certain properties are read-only for now. That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.

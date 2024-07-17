@@ -984,8 +984,11 @@ Public Class TaskEditProperties
         HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
 
-        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit uses the structured storage for fast execution. "
+        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
         HelpString += "If you want to try that out, select the option `Edit properties outside Solid Edge`. "
+        HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties are read-only for now. "
+        HelpString += "That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. "
+        HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
 
         Return HelpString
     End Function

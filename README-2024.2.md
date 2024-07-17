@@ -314,15 +314,11 @@ You can interrupt the program before it finishes. As shown above, while processi
 To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on the Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
 
 
-## CAVEATS
-
-Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge. To maintain a clean environment, the program restarts Solid Edge periodically. (Set the frequency on the **Configuration Tab -- General Page**.) This is by design and does not necessarily indicate a problem.
-
-However, problems can arise. Those cases will be reported in the log file with the message `Error processing file`. A stack trace will be included, which may help debugging. If four of these errors are detected in a run, the programs halts with the Status Bar message `Processing aborted`.
-
-Please note this is not a perfect program.  It is not guaranteed not to mess up your work.  Back up any files before using it.
-
 ## KNOWN ISSUES
+
+**Not a perfect program**
+*Cause*: Not a perfect programmer.  
+*Possible workaround*: Back up any files before using it.  I mean it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  
 
 **Does not support managed files**  
 *Cause*: Unknown.  
@@ -434,7 +430,9 @@ The properties are processed in the order in the table. You can change the order
 
 Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-EXPERIMENTAL: Direct edit uses the structured storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+
+Due to some upstream limitations, certain properties are read-only for now. That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
