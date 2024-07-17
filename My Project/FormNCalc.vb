@@ -55,7 +55,7 @@ Public Class FormNCalc
 
         Dim SolidEdgeProperties As List(Of String) = New List(Of String) From {"System", "System.Title", "System.Subject", "System.Author", "System.Keywords", "System.Comments",
             "System.Template", "System.LastAuthor", "System.RevNumber", "System.EditTime", "System.LastPrinted", "System.Create_DTM", "System.LastSave_DTM", "System.PageCount",
-            "System.WordCount", "System.CharCount", "System.AppName", "System.Doc_Security", "Project", "Project.Document Number", "Project.Revision", "Project.Name", "Custom"}
+            "System.WordCount", "System.CharCount", "System.AppName", "System.Doc_Security", "System.Document Number", "System.Revision", "System.Name", "Custom"}
 
         popupMenu.SearchPattern = "[\w\.]"
         'popupMenu.Items.SetAutocompleteItems(NCalcExtensionsWords)

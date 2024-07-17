@@ -384,11 +384,25 @@ Public Class Task_Common
 
         Try
 
-            If PropertySetName.ToLower = "system" Then
+            If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
                 Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
                 Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
                 OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            End If
+
+            If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            End If
+
+            If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
             End If
 
             If PropertySetName.ToLower = "custom" Then
@@ -396,13 +410,6 @@ Public Class Task_Common
                 Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
 
                 OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-            End If
-
-            If PropertySetName.ToLower = "project" Then
-                Dim Project_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                Dim Project_Properties As OLEPropertiesContainer = Project_Stream.AsOLEPropertiesContainer
-
-                OLEProp = Project_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName Like "*" & PropertyName & "*")
             End If
 
         Catch ex As Exception
