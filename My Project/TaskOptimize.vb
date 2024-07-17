@@ -113,18 +113,23 @@ Public Class TaskOptimize
             SEApp.DoIdle()
             
             'Recognize holes (Only work if the body are in Synchronous Mode)
-            SEModel = SEModels.Item(1)
-            Dim numBodies As Integer = 1
-            Dim SEModelBody As SolidEdgeGeometry.Body
-            SEModelBody = CType(SEModel.Body, SolidEdgeGeometry.Body)
-            Dim SEBodies As Array
-            SEBodies = New SolidEdgeGeometry.Body(0) {SEModelBody}
-            Dim numHoles As Integer = 1
-            Dim SERecognizedHoles As Array
-            SERecognizedHoles = New Object() {}
-            SEModel.Holes.RecognizeAndCreateHoleGroups(numBodies, SEBodies, numHoles, SERecognizedHoles) 
-            SEApp.DoIdle()
-            SEModel.Recompute()
+            Try
+                SEModel = SEModels.Item(1)
+                Dim numBodies As Integer = 1
+                Dim SEModelBody As SolidEdgeGeometry.Body
+                SEModelBody = CType(SEModel.Body, SolidEdgeGeometry.Body)
+                Dim SEBodies As Array
+                SEBodies = New SolidEdgeGeometry.Body(0) {SEModelBody}
+                Dim numHoles As Integer = 1
+                Dim SERecognizedHoles As Array
+                SERecognizedHoles = New Object() {}
+                SEModel.Holes.RecognizeAndCreateHoleGroups(numBodies, SEBodies, numHoles, SERecognizedHoles) 
+                SEApp.DoIdle()
+                SEModel.Recompute()
+            Catch
+                'Holes don't found
+            Finally
+            End Try
             
             'Finish in Ordered Mode ready to work (This could be an option)
             Select Case SEDoc.Type
