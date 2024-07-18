@@ -84,7 +84,7 @@ Public Class InputEditorDoctor
                     'TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
                     TextBox.Dock = DockStyle.Fill
                     TextBox.Margin = New Padding(3, 1, 3, 1)
-                    TextBox.Multiline = True
+                    'TextBox.Multiline = True
                     'AddHandler TextBox.TextChanged, AddressOf TextBox_TextChanged
 
                     TableLayoutPanel.Controls.Add(TextBox, ColumnIndex, RowIndex)

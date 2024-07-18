@@ -410,42 +410,42 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
-There are three search modes, `PT`, `WC`, `RX`, and `EX`. 
+There are four search modes, `PT`, `WC`, `RX`, and `EX`. 
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
 
-The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value in some file being processed is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
 
 If the specified property does not exist in the file, you can optionally add it by enabling the `Add any property not already in file` option. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-On the other hand, if you want to delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` as the Replace string. As above, this only works for `Custom` properties. 
+To delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` for the Replace string. As above, this only works for `Custom` properties. 
 
 If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
 
 The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
 
-Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
 
 Due to some upstream limitations, certain properties in Structured Storage are read-only for now. That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
 
-There are other items that Solid Edge presents as properties, but are not kept in Structured Storage. As such, they are not accesible using this technique. There are quite a few of these, for example density, fill style, etc. The only two in this category that are currently supported by Housekeeper (but not Structured Storage) are `System.Material` and `System.Sheet Metal Gage`. 
+There are other items that Solid Edge presents as properties, but do not actually reside in a Structured Storage property stream. As such, they are not accesible using this technique. There are quite a few of these, for example density, fill style, etc. The only two in this category that are currently supported by Housekeeper (but not Structured Storage) are `System.Material` and `System.Sheet Metal Gage`. 
 
 **Expressions**
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
-With this tool you create an `expression` to use in a `Find` and/or `Replace` string. It functions similar to a formula in Excel. You can do string manipulations, like changing capitalization or rearranging text. You can create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. 
+An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Find` and `Replace` strings. To create one, click the `Expression Editor` button on the input editor form. 
 
-Like Excel, the expression must return a value.  Nested expressions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
+You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
-You can check your expression using the `Test` button. If there are variables not defined in the formula itself, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Save Expressions` button.  There are a couple of example saved expressions you can review there. The `Help` button opens a web site where you can learn more. 
+You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to start getting the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
 Available functions
 
