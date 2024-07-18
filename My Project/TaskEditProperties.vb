@@ -942,12 +942,13 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section in this README file. "
 
-        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`. "
+        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, `RX`, and `EX`. "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
+        HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
 
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
@@ -985,8 +986,53 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
         HelpString += "If you want to try that out, select the option `Edit properties outside Solid Edge`. "
         HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
-        HelpString += "That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. "
+        HelpString += "That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. "
         HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
+        HelpString += vbCrLf + vbCrLf + "There are other items that Solid Edge presents as properties, but are not kept in Structured Storage. "
+        HelpString += "As such, they are not accesible using this technique. "
+        HelpString += "There are quite a few of these, for example density, fill style, etc. "
+        HelpString += "The only two in this category that are currently supported by Housekeeper (but not Structured Storage) "
+        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
+
+        HelpString += vbCrLf + vbCrLf + "**Expressions**"
+
+        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
+
+        HelpString += vbCrLf + vbCrLf + "With this tool you create an `expression` to use in a `Find` and/or `Replace` string. "
+        HelpString += "It functions similar to a formula in Excel. "
+        HelpString += "You can do string manipulations, like changing capitalization or rearranging text. "
+        HelpString += "You can create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. "
+
+        HelpString += vbCrLf + vbCrLf + "Like Excel, the expression must return a value.  Nested expressions are the norm for complex manipulations. "
+        HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
+
+        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` button. "
+        HelpString += "If there are variables not defined in the formula itself, for example `%{Custom.Engineer}`, it prompts you for a value. "
+        HelpString += "You can `Save` or `Save As` your expression with the buttons provided. "
+        HelpString += "Retreive them with the `Save Expressions` button.  There are a couple of example saved expressions you can review there. "
+        HelpString += "The `Help` button opens a web site where you can learn more. "
+
+        HelpString += vbCrLf + vbCrLf + "Available functions"
+        HelpString += vbCrLf + vbCrLf + "`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, "
+        HelpString += "`dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,"
+        HelpString += "`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, "
+        HelpString += "`format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, "
+        HelpString += "`indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, "
+        HelpString += "`isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, "
+        HelpString += "`join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, "
+        HelpString += "`list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, "
+        HelpString += "`nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, "
+        HelpString += "`regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, "
+        HelpString += "`select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, "
+        HelpString += "`startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, "
+        HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
+        HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
+        HelpString += ""
+        HelpString += ""
+        HelpString += ""
+        HelpString += ""
+        HelpString += ""
+
 
         Return HelpString
     End Function

@@ -410,11 +410,12 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
-There are three search modes, `PT`, `WC`, and `RX`. 
+There are three search modes, `PT`, `WC`, `RX`, and `EX`. 
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
+- `EX` stands for 'Expression'.  It is discussed below. 
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
@@ -432,7 +433,23 @@ Note the textbox adjacent to the `Edit` button is a `Dictionary` representation 
 
 EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
 
-Due to some upstream limitations, certain properties in Structured Storage are read-only for now. That means you can use them in formulas in the `Find string` and `Replace string`, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
+Due to some upstream limitations, certain properties in Structured Storage are read-only for now. That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
+
+There are other items that Solid Edge presents as properties, but are not kept in Structured Storage. As such, they are not accesible using this technique. There are quite a few of these, for example density, fill style, etc. The only two in this category that are currently supported by Housekeeper (but not Structured Storage) are `System.Material` and `System.Sheet Metal Gage`. 
+
+**Expressions**
+
+![Expression Editor](My%20Project/media/expression_editor.png)
+
+With this tool you create an `expression` to use in a `Find` and/or `Replace` string. It functions similar to a formula in Excel. You can do string manipulations, like changing capitalization or rearranging text. You can create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. 
+
+Like Excel, the expression must return a value.  Nested expressions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
+
+You can check your expression using the `Test` button. If there are variables not defined in the formula itself, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Save Expressions` button.  There are a couple of example saved expressions you can review there. The `Help` button opens a web site where you can learn more. 
+
+Available functions
+
+`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.

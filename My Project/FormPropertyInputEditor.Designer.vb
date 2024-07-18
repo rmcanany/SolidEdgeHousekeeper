@@ -405,6 +405,7 @@ Partial Class FormPropertyInputEditor
         '
         'ButtonNCalc
         '
+        Me.ButtonNCalc.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonNCalc.Image = Global.Housekeeper.My.Resources.Resources.fx
         Me.ButtonNCalc.ImageAlign = System.Drawing.ContentAlignment.TopCenter
         Me.ButtonNCalc.Location = New System.Drawing.Point(697, 301)
