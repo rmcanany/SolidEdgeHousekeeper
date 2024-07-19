@@ -62,6 +62,7 @@ Public Class Task_Common
     End Function
 
     Public Function GetFileProperties(Filename As String) As List(Of String)
+        ' Gets the properties using Windows functionality
 
         Dim PropList As New List(Of String)
         Dim ValList As New List(Of String)
@@ -416,6 +417,26 @@ Public Class Task_Common
                                 FoundProp = PropertySet.Item(3)
                                 PropertyFound = True
                                 Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "MechanicalModeling" Then
+
+                        Select Case PropertyName
+
+                            Case = "Material"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Sheet Metal Gage"
+                                If GetDocType(SEDoc) = "psm" Then
+                                    FoundProp = PropertySet.Item(2)
+                                    PropertyFound = True
+                                    Exit For
+                                End If
 
                         End Select
 
