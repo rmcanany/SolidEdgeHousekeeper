@@ -44,11 +44,6 @@ Partial Class FormPropertyInputEditor
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.CheckBoxCopyToAsm = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToPar = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToPsm = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToDft = New System.Windows.Forms.CheckBox()
-        Me.Label13 = New System.Windows.Forms.Label()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.TextBoxJSON = New System.Windows.Forms.TextBox()
@@ -369,60 +364,6 @@ Partial Class FormPropertyInputEditor
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Property set"
         '
-        'CheckBoxCopyToAsm
-        '
-        Me.CheckBoxCopyToAsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToAsm.AutoSize = True
-        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(626, 320)
-        Me.CheckBoxCopyToAsm.Name = "CheckBoxCopyToAsm"
-        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(47, 20)
-        Me.CheckBoxCopyToAsm.TabIndex = 1
-        Me.CheckBoxCopyToAsm.Text = "asm"
-        Me.CheckBoxCopyToAsm.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToPar
-        '
-        Me.CheckBoxCopyToPar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToPar.AutoSize = True
-        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(676, 320)
-        Me.CheckBoxCopyToPar.Name = "CheckBoxCopyToPar"
-        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(43, 20)
-        Me.CheckBoxCopyToPar.TabIndex = 2
-        Me.CheckBoxCopyToPar.Text = "par"
-        Me.CheckBoxCopyToPar.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToPsm
-        '
-        Me.CheckBoxCopyToPsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToPsm.AutoSize = True
-        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(726, 320)
-        Me.CheckBoxCopyToPsm.Name = "CheckBoxCopyToPsm"
-        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(48, 20)
-        Me.CheckBoxCopyToPsm.TabIndex = 3
-        Me.CheckBoxCopyToPsm.Text = "psm"
-        Me.CheckBoxCopyToPsm.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToDft
-        '
-        Me.CheckBoxCopyToDft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToDft.AutoSize = True
-        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(776, 320)
-        Me.CheckBoxCopyToDft.Name = "CheckBoxCopyToDft"
-        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(41, 20)
-        Me.CheckBoxCopyToDft.TabIndex = 4
-        Me.CheckBoxCopyToDft.Text = "dft"
-        Me.CheckBoxCopyToDft.UseVisualStyleBackColor = True
-        '
-        'Label13
-        '
-        Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(491, 322)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(124, 16)
-        Me.Label13.TabIndex = 5
-        Me.Label13.Text = "Copy these settings to"
-        '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -464,9 +405,10 @@ Partial Class FormPropertyInputEditor
         '
         'ButtonNCalc
         '
+        Me.ButtonNCalc.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonNCalc.Image = Global.Housekeeper.My.Resources.Resources.fx
         Me.ButtonNCalc.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.ButtonNCalc.Location = New System.Drawing.Point(697, 291)
+        Me.ButtonNCalc.Location = New System.Drawing.Point(697, 301)
         Me.ButtonNCalc.Name = "ButtonNCalc"
         Me.ButtonNCalc.Size = New System.Drawing.Size(130, 27)
         Me.ButtonNCalc.TabIndex = 10
@@ -485,11 +427,6 @@ Partial Class FormPropertyInputEditor
         Me.Controls.Add(Me.TextBoxJSON)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Controls.Add(Me.Label13)
-        Me.Controls.Add(Me.CheckBoxCopyToDft)
-        Me.Controls.Add(Me.CheckBoxCopyToPsm)
-        Me.Controls.Add(Me.CheckBoxCopyToPar)
-        Me.Controls.Add(Me.CheckBoxCopyToAsm)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -525,11 +462,6 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents Label11 As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
     Friend WithEvents CheckBoxSelectAll As CheckBox
-    Friend WithEvents CheckBoxCopyToAsm As CheckBox
-    Friend WithEvents CheckBoxCopyToPar As CheckBox
-    Friend WithEvents CheckBoxCopyToPsm As CheckBox
-    Friend WithEvents CheckBoxCopyToDft As CheckBox
-    Friend WithEvents Label13 As Label
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents TextBoxJSON As TextBox

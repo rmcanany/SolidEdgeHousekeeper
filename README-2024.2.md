@@ -2,7 +2,7 @@
 <p align=center>Robert McAnany 2024
 
 **Contributors:**
-@farfilli (aka @[Francesco Arfilli]), @daysanduski, @mmtrebuchet, @[o_o ....码]
+@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet, @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007)
 
 **Beta Testers:**
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347 
@@ -78,15 +78,13 @@ If you are upgrading from a previous release, you should be able to copy the set
 
 ![Tabs](My%20Project/media/tabs.png)
 
-On each file type's tab, select which tasks to perform. On the Home tab, select which files to process. You can select files by folder, subfolder, top-level assembly, top-level folder, list, or drag-and-drop. There can be any number of each, in any combination. You can refine the search using a property filter, a wildcard filter, or both. See **FILE SELECTION AND FILTERING** below for details. 
+Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See **FILE SELECTION AND FILTERING** below for details. 
 
 If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look for file names starting with 'Housekeeper' in the `%temp%` folder.
 
-The first time you use the program, some site-specific information is needed. This includes the location of your templates, your preferred printer, etc. These are populated on the **Configuration Tab**.
-
 ![Status Bar](My%20Project/media/status_bar_ready.png)
 
-To start execution, click the `Process` button.  The status bar provides feedback to help you monitor progress. You can also stop execution if desired. See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
+To start execution, click the `Process` button.  The status bar tracks progress. You can also stop execution if desired. See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
 
 
 
@@ -95,7 +93,7 @@ To start execution, click the `Process` button.  The status bar provides feedbac
 
 ### Selection
 
-The **Home Tab** is where you select which files to process.  As mentioned above, using the Selection Toolbar, you can select by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
+You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
 Another option is to drag and drop files from Windows File Explorer. You can use drag and drop and the toolbar in combination.
 
@@ -164,12 +162,12 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Open:** Opens the files in Solid Edge.
 - **Open folder:** Opens the files in Windows File Explorer.
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
-- **Process selected:** Runs selected Tasks on the selected files. Same as clicking **Process** at the bottom of the **Home Tab**.
+- **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
 
 #### 5. Update
 
-The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), an update is required.
+The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), an update is required.  In those cases the button will turn orange to let you know.  
 
 #### 6. File Type
 
@@ -193,7 +191,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
-You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Open/Save Page**.
+You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Status Page**.
 
 ![File open save options](My%20Project/media/file_open_save_options.png)
 
@@ -201,7 +199,7 @@ After processing, you can choose to change the Status back to the old value, or 
 
 If you want simply to change the Status on a batch of files, choose the `Open/Save` Task for each document type.
 
-If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Document Manager. It can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Document Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
 
 ### Filtering
 
@@ -241,7 +239,7 @@ Select the Comparison from its dropdown box. The choices are `contains`, `is_exa
 
 `Contains` means the Value can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
-`Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike with `contains`, in this example, `Cast Aluminum Jigplate` would *not* match because it doesn't start with `Aluminum`. (`*Aluminum*` *would* match, by the way.)
+`Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike `contains`, in this example, `Cast Aluminum Jigplate` would *not* match because it doesn't start with `Aluminum`. (`*Aluminum*` *would* match, by the way.)
 
 Internally the [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) is used to make the wildcard comparison.  Visit the link for details and examples.
 
@@ -311,20 +309,16 @@ A checkbox ![Error](Resources/icons8_unchecked_checkbox_16.png) to the left of t
 
 You can monitor progress on the status bar.  It shows the number of files processed, the current file, and an estimate of time remaining.
  
-You can also interrupt the program before it finishes. As shown above, while processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
+You can interrupt the program before it finishes. As shown above, while processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
 To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on the Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
 
 
-## CAVEATS
-
-Since the program can process a large number of files in a short amount of time, it can be very taxing on Solid Edge. To maintain a clean environment, the program restarts Solid Edge periodically. (Set the frequency on the **Configuration Tab -- General Page**.) This is by design and does not necessarily indicate a problem.
-
-However, problems can arise. Those cases will be reported in the log file with the message `Error processing file`. A stack trace will be included, which may help debugging. If four of these errors are detected in a run, the programs halts with the Status Bar message `Processing aborted`.
-
-Please note this is not a perfect program.  It is not guaranteed not to mess up your work.  Back up any files before using it.
-
 ## KNOWN ISSUES
+
+**Not a perfect program**
+*Cause*: Not a perfect programmer.  
+*Possible workaround*: Back up any files before using it.  I mean it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  
 
 **Does not support managed files**  
 *Cause*: Unknown.  
@@ -353,6 +347,9 @@ Some tasks cannot be run on older versions.
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
+
+### Optimize
+Open a document, optimize faces, recognize hole and save in the current version.
 
 ### Open save
 Open a document and save in the current version.
@@ -413,27 +410,46 @@ Searches for text in a specified property and replaces it if found. The property
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
-There are three search modes, `PT`, `WC`, and `RX`. 
+There are four search modes, `PT`, `WC`, `RX`, and `EX`. 
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
+- `EX` stands for 'Expression'.  It is discussed below. 
 
-The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value in some file being processed is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
 
 If the specified property does not exist in the file, you can optionally add it by enabling the `Add any property not already in file` option. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-On the other hand, if you want to delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` as the Replace string. As above, this only works for `Custom` properties. 
+To delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` for the Replace string. As above, this only works for `Custom` properties. 
 
 If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
 
 The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
 
-Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
-EXPERIMENTAL: Direct edit uses the structured storage for fast execution. If you want to try that out, select the option `Edit properties outside Solid Edge`. 
+EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
+
+Due to some upstream limitations, certain properties in Structured Storage are read-only for now. That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
+
+There are other items that Solid Edge presents as properties, but do not actually reside in a Structured Storage property stream. As such, they are not accesible using this technique. There are quite a few of these, for example density, fill style, etc. The only two in this category that are currently supported by Housekeeper (but not Structured Storage) are `System.Material` and `System.Sheet Metal Gage`. 
+
+**Expressions**
+
+![Expression Editor](My%20Project/media/expression_editor.png)
+
+An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Find` and `Replace` strings. To create one, click the `Expression Editor` button on the input editor form. 
+
+You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
+
+You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to start getting the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
+
+Available functions
+
+`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.

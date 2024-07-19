@@ -50,7 +50,7 @@ Public Class PreferencesUtilities
             Outlist.Add("[EXP_TEXT]")
             Outlist.Add("if ('%{System.Title}' == 'Dog','Meat',")
             Outlist.Add("if('%{System.Title}' == 'Cat','Fish',")
-            Outlist.Add("if('%{System.Title}' == 'Cow','Hay','unknow')))")
+            Outlist.Add("if('%{System.Title}' == 'Cow','Hay','unknown')))")
             Outlist.Add("")
             Outlist.Add("\\Example of the usage of if() statement, valid inputs Dog, Cat, Cow")
             Outlist.Add("")

@@ -165,8 +165,10 @@ Public Class TaskEditProperties
 
         If ExitStatus = 0 Then
 
+            Dim IsFOA As Boolean = False
             If DocType = "asm" Then
                 tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                IsFOA = tmpAsmDoc.IsFileFamilyByDocument
             End If
 
             If (DocType = "asm") And (IsFOA) Then
@@ -833,7 +835,6 @@ Public Class TaskEditProperties
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
-        'Dim Ctrl As Control
         Dim TextBox As TextBox
 
         Select Case Name
@@ -845,14 +846,11 @@ Public Class TaskEditProperties
                 ' Workaround
                 Dim FileType = "asm"
 
-                PropertyInputEditor.ShowInputEditor(FileType)
+                PropertyInputEditor.ShowDialog()
 
                 If PropertyInputEditor.DialogResult = DialogResult.OK Then
-                    'Me.JSONDict = PropertyInputEditor.JSONDict
-
                     TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
                     TextBox.Text = PropertyInputEditor.JSONDict
-
                 End If
 
             Case ControlNames.Browse.ToString
@@ -944,18 +942,20 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section in this README file. "
 
-        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`. "
+        HelpString += vbCrLf + vbCrLf + "There are four search modes, `PT`, `WC`, `RX`, and `EX`. "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
+        HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
 
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
         HelpString += "the replacement is `ALUMINUM`, "
-        HelpString += "and the property value is `Aluminum 6061-T6`. "
+        HelpString += "and the property value in some file being processed is `Aluminum 6061-T6`. "
         HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
+
         ' HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
 
         HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
@@ -966,9 +966,9 @@ Public Class TaskEditProperties
         HelpString += "you can optionally add it by enabling the `Add any property not already in file` option. "
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
 
-        HelpString += vbCrLf + vbCrLf + "On the other hand, if you want to delete a property, "
+        HelpString += vbCrLf + vbCrLf + "To delete a property, "
         HelpString += "set the Replace type to `PT` and "
-        HelpString += "enter the special code `%{DeleteProperty}` as the Replace string. "
+        HelpString += "enter the special code `%{DeleteProperty}` for the Replace string. "
         HelpString += "As above, this only works for `Custom` properties. "
 
         HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, you can "
@@ -981,11 +981,57 @@ Public Class TaskEditProperties
         HelpString += "The delete button, also at the top of the form, removes selected rows. "
 
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "is a representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
 
-        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit uses the structured storage for fast execution. "
-        HelpString += "If you want to try that out, select the option `Edit properties outside Solid Edge`. "
+        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
+        HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
+        HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
+        HelpString += "That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. "
+        HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
+
+        HelpString += vbCrLf + vbCrLf + "There are other items that Solid Edge presents as properties, "
+        HelpString += "but do not actually reside in a Structured Storage property stream. "
+        HelpString += "As such, they are not accesible using this technique. "
+        HelpString += "There are quite a few of these, for example density, fill style, etc. "
+        HelpString += "The only two in this category that are currently supported by Housekeeper (but not Structured Storage) "
+        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
+
+        HelpString += vbCrLf + vbCrLf + "**Expressions**"
+
+        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
+
+        HelpString += vbCrLf + vbCrLf + "An `expression` is similar to a formula in Excel. "
+        HelpString += "Expressions enable more complex manipulations of the `Find` and `Replace` strings. "
+        HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
+
+        HelpString += vbCrLf + vbCrLf + "You can perform string processing, "
+        HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. "
+        HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
+        HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
+
+        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` button. "
+        HelpString += "If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
+        HelpString += "You can `Save` or `Save As` your expression with the buttons provided. "
+        HelpString += "Retreive them with the `Saved Expressions` drop-down. "
+        HelpString += "That drop-down comes with a few examples. You can study those to start getting the hang of it. "
+        HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "
+
+        HelpString += vbCrLf + vbCrLf + "Available functions"
+        HelpString += vbCrLf + vbCrLf + "`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, "
+        HelpString += "`dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,"
+        HelpString += "`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, "
+        HelpString += "`format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, "
+        HelpString += "`indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, "
+        HelpString += "`isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, "
+        HelpString += "`join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, "
+        HelpString += "`list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, "
+        HelpString += "`nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, "
+        HelpString += "`regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, "
+        HelpString += "`select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, "
+        HelpString += "`startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, "
+        HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
+        HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
 
         Return HelpString
     End Function

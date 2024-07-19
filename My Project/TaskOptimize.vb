@@ -78,32 +78,99 @@ Public Class TaskOptimize
         Else
             Dim SEModels As Models = Nothing
             
-            ' Make: zoom fit, hide coordinate system and hide reference planes 
+            ' Determine the type of document 
             Select Case SEDoc.Type
                 Case SolidEdgeFramework.DocumentTypeConstants.igPartDocument
                     Dim SEPartDocument As PartDocument
                     SEPartDocument = CType(SEApp.ActiveDocument, PartDocument)
-                    If CType(ModelingModeConstants.seModelingModeOrdered,Boolean) Then
-                        SEPartDocument.ModelingMode = CType(ModelingModeConstants.seModelingModeSynchronous,ModelingModeConstants)
-                    End If
                     SEModels = SEPartDocument.Models 
+                    'Hide Coordinate Systems Icon (This could be an option)
                     SEPartDocument.CoordinateSystems.Visible = False
+                    'Hide Reference Planes (This could be an option)
                     SEPartDocument.RefPlanes.Item(1).Visible = False
                     SEPartDocument.RefPlanes.Item(2).Visible = False
                     SEPartDocument.RefPlanes.Item(3).Visible = False
-                    SEApp.StartCommand(CType(SolidEdgeConstants.PartCommandConstants.PartViewFit,SolidEdgeFramework.SolidEdgeCommandConstants))
+                    'Make Zoom Fit
+                    SEApp.StartCommand(SolidEdgeConstants.PartCommandConstants.PartViewFit)
+                    'Determine if the first body is in Synchronous Mode
+                    Try
+                        If CType(SolidEdgePart.ModelingModeConstants.seModelingModeOrdered,Boolean) Then
+                            SEPartDocument.ModelingMode = CType(SolidEdgePart.ModelingModeConstants.seModelingModeSynchronous,SolidEdgePart.ModelingModeConstants)
+                        End If
+                    Catch
+                        'The first body are in Ordered Mode, move to Synchronous is needed
+                        Dim SEFeatures As SolidEdgePart.Features = Nothing
+                        Dim SEFeature As Object = Nothing
+                        Dim SEModelPart As SolidEdgePart.Model
+                        SEModelPart = SEModels.Item(1)
+                        SEFeatures = SEModelPart.Features
+                        Dim bIgnoreWarnings As Boolean = True
+                        Dim bExtentSelection As Boolean = True
+                        Dim aErrorMessages As Array
+                        Dim aWarningMessages As Array
+                        Dim lNumberOfFeaturesCausingError As Integer
+                        Dim lNumberOfFeaturesCausingWarning As Integer
+                        For Each SEFeature In SEFeatures
+                            aErrorMessages = Array.CreateInstance(GetType(String), 0)
+                            aWarningMessages = Array.CreateInstance(GetType(String), 0)
+                            Dim dVolumeDifference As Double = 0
+                            'MoveToSynchronous in Part Mode have 8 arguments
+                            SEPartDocument.MoveToSynchronous(SEFeature, 
+                                                             bIgnoreWarnings, 
+                                                             bExtentSelection, 
+                                                             lNumberOfFeaturesCausingError, 
+                                                             aErrorMessages, 
+                                                             lNumberOfFeaturesCausingWarning, 
+                                                             aWarningMessages, 
+                                                             dVolumeDifference)
+                        Next
+                        SEPartDocument.ModelingMode = CType(SolidEdgePart.ModelingModeConstants.seModelingModeSynchronous,SolidEdgePart.ModelingModeConstants)
+                    End Try
+                    
                 Case SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
                     Dim SEPartDocument As SheetMetalDocument
                     SEPartDocument = CType(SEApp.ActiveDocument, SheetMetalDocument)
-                    If CType(ModelingModeConstants.seModelingModeOrdered,Boolean) Then
-                        SEPartDocument.ModelingMode = CType(ModelingModeConstants.seModelingModeSynchronous,ModelingModeConstants)
-                    End If
                     SEModels = SEPartDocument.Models 
+                    'Hide Coordinate Systems Icon (This could be an option)
                     SEPartDocument.CoordinateSystems.Visible = False
+                    'Hide Reference Planes (This could be an option)
                     SEPartDocument.RefPlanes.Item(1).Visible = False
                     SEPartDocument.RefPlanes.Item(2).Visible = False
                     SEPartDocument.RefPlanes.Item(3).Visible = False
-                    SEApp.StartCommand(CType(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalViewFit, SolidEdgeFramework.SolidEdgeCommandConstants))
+                    'Make Zoom Fit 
+                    SEApp.StartCommand(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalViewFit)
+                    'Determine if the first body is in Synchronous Mode
+                    Try
+                        If CType(SolidEdgePart.ModelingModeConstants.seModelingModeOrdered,Boolean) Then
+                            SEPartDocument.ModelingMode = CType(SolidEdgePart.ModelingModeConstants.seModelingModeSynchronous,SolidEdgePart.ModelingModeConstants)
+                        End If
+                    Catch
+                        'The first body are in Ordered Mode, move to Synchronous is needed
+                        Dim SEFeatures As SolidEdgePart.Features = Nothing
+                        Dim SEFeature As Object = Nothing
+                        Dim SEModelSheetMetal As SolidEdgePart.Model
+                        SEModelSheetMetal = SEModels.Item(1)
+                        SEFeatures = SEModelSheetMetal.Features
+                        Dim bIgnoreWarnings As Boolean = True
+                        Dim bExtentSelection As Boolean = True
+                        Dim aErrorMessages As Array
+                        Dim aWarningMessages As Array
+                        Dim lNumberOfFeaturesCausingError As Integer
+                        Dim lNumberOfFeaturesCausingWarning As Integer
+                        For Each SEFeature In SEFeatures
+                            aErrorMessages = Array.CreateInstance(GetType(String), 0)
+                            aWarningMessages = Array.CreateInstance(GetType(String), 0)
+                            'MoveToSynchronous in SheetMetal Mode have 7 arguments
+                            SEPartDocument.MoveToSynchronous(SEFeature, 
+                                                             bIgnoreWarnings, 
+                                                             bExtentSelection, 
+                                                             lNumberOfFeaturesCausingError, 
+                                                             aErrorMessages, 
+                                                             lNumberOfFeaturesCausingWarning, 
+                                                             aWarningMessages)
+                        Next
+                        SEPartDocument.ModelingMode = CType(SolidEdgePart.ModelingModeConstants.seModelingModeSynchronous,SolidEdgePart.ModelingModeConstants)
+                    End Try
             End Select
             
             'Heal and optimize the body
@@ -112,7 +179,7 @@ Public Class TaskOptimize
             SEModel.HealAndOptimizeBody(False, True)
             SEApp.DoIdle()
             
-            'Recognize holes (Only work if the body are in Synchronous Mode)
+            'Recognize holes
             Try
                 SEModel = SEModels.Item(1)
                 Dim numBodies As Integer = 1
@@ -127,8 +194,7 @@ Public Class TaskOptimize
                 SEApp.DoIdle()
                 SEModel.Recompute()
             Catch
-                'Holes don't found
-            Finally
+                'Holes not found
             End Try
             
             'Finish in Ordered Mode ready to work (This could be an option)
@@ -215,3 +281,4 @@ Public Class TaskOptimize
     End Function
 
 End Class
+
