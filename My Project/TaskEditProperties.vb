@@ -423,14 +423,17 @@ Public Class TaskEditProperties
                     ' <<<<<<<<<<<<<<<<<<<<<<<<<<< Also, it will trigger a formula substitution which almost certainly won't find 'DeleteProperty'
 
                     '############ delete the property here
-                    If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+                    'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+                    '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                    'End If
+                    If ReplaceString.ToLower = "%{DeleteProperty}".ToLower Then
                         co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
                     End If
 
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to delete property value '{0}'.  This command only works on custom properties.", PropertyName)
+                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
@@ -963,7 +966,7 @@ Public Class TaskEditProperties
         HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
 
         HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
-        HelpString += "you can optionally add it by enabling the `Add any property not already in file` option. "
+        HelpString += "you can optionally add it by enabling `Add any property not already in file`. "
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
 
         HelpString += vbCrLf + vbCrLf + "To delete a property, "
@@ -986,15 +989,16 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
         HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
-        HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
-        HelpString += "That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. "
-        HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
 
-        HelpString += vbCrLf + vbCrLf + "There are other items that Solid Edge presents as properties, "
-        HelpString += "but do not actually reside in a Structured Storage property stream. "
+        'HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
+        'HelpString += "That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. "
+        'HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
+
+        HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
+        HelpString += "but do not actually reside in a Structured Storage 'Property Stream'. "
         HelpString += "As such, they are not accesible using this technique. "
-        HelpString += "There are quite a few of these, for example density, fill style, etc. "
-        HelpString += "The only two in this category that are currently supported by Housekeeper (but not Structured Storage) "
+        HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
+        HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
         HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
 
         HelpString += vbCrLf + vbCrLf + "**Expressions**"
@@ -1002,7 +1006,7 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
 
         HelpString += vbCrLf + vbCrLf + "An `expression` is similar to a formula in Excel. "
-        HelpString += "Expressions enable more complex manipulations of the `Find` and `Replace` strings. "
+        HelpString += "Expressions enable more complex manipulations of the `Replace` string. "
         HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
 
         HelpString += vbCrLf + vbCrLf + "You can perform string processing, "

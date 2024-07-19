@@ -421,7 +421,7 @@ The search *is not* case sensitive, the replacement *is*. For example, say the s
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
 
-If the specified property does not exist in the file, you can optionally add it by enabling the `Add any property not already in file` option. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
+If the specified property does not exist in the file, you can optionally add it by enabling `Add any property not already in file`. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
 To delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` for the Replace string. As above, this only works for `Custom` properties. 
 
@@ -433,15 +433,13 @@ Note the textbox adjacent to the `Edit` button is a representation of the table 
 
 EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
 
-Due to some upstream limitations, certain properties in Structured Storage are read-only for now. That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. 
-
-There are other items that Solid Edge presents as properties, but do not actually reside in a Structured Storage property stream. As such, they are not accesible using this technique. There are quite a few of these, for example density, fill style, etc. The only two in this category that are currently supported by Housekeeper (but not Structured Storage) are `System.Material` and `System.Sheet Metal Gage`. 
+There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage 'Property Stream'. As such, they are not accesible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
 
 **Expressions**
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
-An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Find` and `Replace` strings. To create one, click the `Expression Editor` button on the input editor form. 
+An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
 
 You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
