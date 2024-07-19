@@ -201,6 +201,7 @@ Public Class InputEditorDoctor
                         DirectCast(Control, TextBox).Text = ""
                     ElseIf Control.GetType Is GetType(ComboBox) Then
                         DirectCast(Control, ComboBox).Text = "System"
+                        If DirectCast(Control, ComboBox).Text <> "System" Then DirectCast(Control, ComboBox).Text = ""
                     ElseIf Control.GetType Is GetType(CheckBox) Then
                         DirectCast(Control, CheckBox).Checked = False
                     End If

@@ -2,8 +2,10 @@
 
 Imports System.IO
 Imports System.Reflection
+Imports System.Security.AccessControl
 Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
+Imports System.Windows
 Imports System.Windows.Forms.PropertyGridInternal
 Imports ExcelDataReader
 'Imports Microsoft.WindowsAPICodePack
@@ -340,6 +342,84 @@ Public Class Task_Common
                         End If
                     Catch ex As Exception
                     End Try
+
+                    If PropertySetName = "System" And PropertySet.Name = "SummaryInformation" Then
+
+                        Select Case PropertyName
+                            Case = "Title"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Subject"
+                                FoundProp = PropertySet.Item(2)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Author"
+                                FoundProp = PropertySet.Item(3)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Keywords"
+                                FoundProp = PropertySet.Item(4)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Comments"
+                                FoundProp = PropertySet.Item(5)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "DocumentSummaryInformation" Then
+
+                        Select Case PropertyName
+
+                            Case = "Category"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Company"
+                                FoundProp = PropertySet.Item(11)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Manager"
+                                FoundProp = PropertySet.Item(10)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "ProjectInformation" Then
+
+                        Select Case PropertyName
+
+                            Case = "Document Number"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Revision"
+                                FoundProp = PropertySet.Item(2)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Project Name"
+                                FoundProp = PropertySet.Item(3)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
 
                 Next
 
