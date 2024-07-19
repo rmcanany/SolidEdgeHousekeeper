@@ -169,7 +169,7 @@ Public Class TaskEditProperties
                 tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
             End If
 
-            If (DocType = "asm") Then 'And (tmpAsmDoc.IsFileFamilyByDocument) Then '##### this statement throws an error in case tmpAsmDoc is nothing
+            If (DocType = "asm") And (IsFOA) Then
                 Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
                 If Not Members.GlobalEditMode Then
                     ExitStatus = 1
