@@ -1,5 +1,9 @@
-![Logo](My%20Project/media/logo.png)
-<p align=center>Robert McAnany 2024
+<div class="center">
+  <p align=center>
+  <img src="My%20Project/media/logo.png" width=50%;>
+  <p align=center>
+  <span class="description">Robert McAnany 2024</span>
+</div>
 
 **Contributors:**
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet, @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007)

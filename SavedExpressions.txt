@@ -4,24 +4,23 @@ Example 1
 
 '%{System.Title}' + '-' + toString(cast(substring('%{System.Subject}', lastIndexOf('%{System.Subject}', 'L=')+2, lastIndexOf('%{System.Subject}', ' ')-lastIndexOf('%{System.Subject}', 'L=')-2),'System.Int32'),'D4') + '-' + substring('%{System.Subject}', lastIndexOf('%{System.Subject}', ' ')+1)
 
-\\ Example of text manipulation and number formatting
+\\ Example of text manipulation And number formatting
 \\ System.Title <-- any string
 \\ System.Subject <-- need to end with this format L=xxx YY
-\\ xxx can be any number from 0 to 9999 and YY any two letters
+\\ xxx can be any number from 0 to 9999 And YY any two letters
 \\ xxx will be transformed in D4 syntax (example 65 will became 0065)
 
 [EXP]
-Example if()
+Example If()
 [EXP_TEXT]
-
-if('%{System.Title}' == 'Dog','Meat',
+if ('%{System.Title}' == 'Dog','Meat',
 if('%{System.Title}' == 'Cat','Fish',
 if('%{System.Title}' == 'Cow','Hay','unknow')))
 
 \\Example of the usage of if() statement, valid inputs Dog, Cat, Cow
 
 [EXP]
-Example replace()
+Example Replace()
 [EXP_TEXT]
 
 replace('%{System.Subject}','L=','L:')
