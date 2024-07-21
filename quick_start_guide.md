@@ -26,7 +26,7 @@ Select which files to process on the **Home Tab**.  Select what to do on the **T
 
 There are lots (and lots) of ways to select files.  To keep it simple we'll only mention two.  To select a single folder, click ![Folder](Resources/icons8_Folder_16.png).  To select a folder and sub folders, click ![Folders](Resources/icons8_folder_tree_16.png).  To clear the list, click ![Remove All](Resources/icons8_trash_16.png).
 
-When processing is complete, if any errors are found, Housekeeper will open the a log file showing each error and the file in which it occurred. 
+When processing is complete, if any errors are found, a log file will open showing each error and the file in which it occurred. 
 
 You can interrupt the program before it finishes. While processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
@@ -37,3 +37,5 @@ If you are unsure about what something does or how it works, look for this ![Fol
 When you're ready to learn more, try the [<ins>**README**</ins>](https://github.com/rmcanany/solidedgehousekeeper#readme).  It goes in depth on pretty much every aspect of the program.  If you have a specific topic in mind, click ![Table of Contents](My%20Project/media/table_of_contents_icon.png) at the top of the page.  It will open the table of contents to help you quickly find what you need.
 
 If you get stuck, head over to the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There are lots of experienced users who are glad to help out.
+
+Good luck and happy Housekeeping!
