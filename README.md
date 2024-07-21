@@ -21,6 +21,8 @@
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
+If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  It's not nearly as detailed as this README, but you will be up and running much more quickly.
+
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
 </p>
