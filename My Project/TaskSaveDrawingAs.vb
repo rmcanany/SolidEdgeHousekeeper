@@ -574,48 +574,6 @@ Public Class TaskSaveDrawingAs
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox)
-        Me.NewFileTypeName = ComboBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.SaveInOriginalDirectory.ToString), CheckBox)
-        Me.SaveInOriginalDirectory = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.NewDir.ToString), TextBox)
-        Me.NewDir = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
-        Me.UseSubdirectoryFormula = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.Formula.ToString), TextBox)
-        Me.Formula = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.PDFPerSheetSuppressSheetname.ToString), CheckBox)
-        Me.PDFPerSheetSuppressSheetname = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AddWatermark.ToString), CheckBox)
-        Me.AddWatermark = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.WatermarkFilename.ToString), TextBox)
-        Me.WatermarkFilename = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.WatermarkScale.ToString), TextBox)
-        Me.WatermarkScale = CDbl(TextBox.Text)
-
-        TextBox = CType(ControlsDict(ControlNames.WatermarkPositionX.ToString), TextBox)
-        Me.WatermarkPositionX = CDbl(TextBox.Text)
-
-        TextBox = CType(ControlsDict(ControlNames.WatermarkPositionY.ToString), TextBox)
-        Me.WatermarkPositionY = CDbl(TextBox.Text)
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -897,7 +855,10 @@ Public Class TaskSaveDrawingAs
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
-        HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
+
+        HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_drawing_as.png)"
+
+        HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
 
@@ -922,7 +883,7 @@ Public Class TaskSaveDrawingAs
         HelpString += vbCrLf + vbCrLf + "When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. "
         HelpString += "The first saves all sheets to one file.  The second saves each sheet to a separate file, "
         HelpString += "using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix "
-        HelpString += "on file with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  "
+        HelpString += "on files with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  "
         HelpString += "To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types "
         HelpString += "before running this command. "
 

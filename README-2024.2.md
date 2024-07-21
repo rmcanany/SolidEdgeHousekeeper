@@ -365,7 +365,7 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 <!-- Start -->
 
 ### Open save
-Open a document and save in the current version.
+Opens a document and saves in the current version.
 
 ### Activate and update all
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
@@ -375,32 +375,30 @@ Can run out of memory for very large assemblies.
 ### Update material from material table
 Checks to see if the part's material name and properties match any material in a file you specify on the Options panel. 
 
-If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
+If the names match, but their properties (e.g., density, face style, etc.) do not, the material is updated. If no match is found, or no material is assigned, it is reported in the log file.
 
 You can optionally remove any face style overrides. Set the option on the Options panel. 
 
 ### Update part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the Options panel.
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively by enabling `Update parent documents` on the Options panel.
 
 ### Update physical properties
-Updates mass, volume, etc.  Models with no density are reported in the log file. 
+Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 
 
-You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the Options panel. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
+You can optionally control the display of the physical properties symbols. They can either be shown, hidden, or left unchanged. To leave their display unchanged, disable both the `Show` and `Hide` options. 
 
-Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
+Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. One fix that often works is to open the file in SE, change the material, then change it back. To see if it worked, run `Inspect > Physical Properties`, then check for `Mass` in the Variable Table. 
 
 ### Update model size in variable table
 Copies the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
 
 The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
-![Overall Size Options](My%20Project/media/overall_size_options.png)
-
 The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the Options panel. Set the desired variable names there, too. 
 
 Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
 
-The command reports sheet metal size in the formed state. For a flat pattern, instead of this using this command, you can use the variables from the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
+The command reports sheet metal size in the formed state. For a flat pattern, instead of creating new variables using this command, you can use the variables already created by the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
 
 ### Update design for cost
 Updates DesignForCost and saves the document.
@@ -411,7 +409,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 Checks drawing views one by one, and updates them if needed.
 
 ### Update flat pattern
-Regenerates missing flat models by activating flat environment. Requires running in foreground. 
+Regenerates missing flat models by activating flat environment. 
 
 ### Break part copy links
 Break design and/or construction part copy links
@@ -420,6 +418,8 @@ Break design and/or construction part copy links
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. To activate the editor click the `Edit` button in the options panel. 
 
 ![Find_Replace](My%20Project/media/property_input_editor.png)
+
+**Using the Input Editor**
 
 A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
@@ -430,9 +430,19 @@ There are four search modes, `PT`, `WC`, `RX`, and `EX`.
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
 
-The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value in some file being processed is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
+
+Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+
+**Case Sensitivity**
+
+The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value in a file is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
+
+**Property Formula**
 
 In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
+
+**Options**
 
 If the specified property does not exist in the file, you can optionally add it by enabling `Add any property not already in file`. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
@@ -440,27 +450,25 @@ To delete a property, set the Replace type to `PT` and enter the special code `%
 
 If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
 
-The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
-
-Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
-
-EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
-
-There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage 'Property Stream'. As such, they are not accesible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
-
 **Expressions**
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
 An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
 
-You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
+You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
-You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to start getting the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
+You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
 Available functions
 
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
+
+**Edit Outside Solid Edge (Experimental)**
+
+Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
+
+There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage 'Property Stream'. As such, they are not accesible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
 
 ### Edit variables
 Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Edit` button. 
@@ -477,9 +485,7 @@ If exposing a variable, the Expose name defaults to the variable name. You can o
 
 The variables are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
 
-You can copy the settings on the form to other tabs.  Set the `Copy To` CheckBoxes as desired.
-
-Note the textbox adjacent to the `Edit` button is a `Dictionary` representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
 ### Edit interactively
 Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. You can save the file or not, or choose to abort.  Aborting stops processing and returns you to the Housekeeper main form.  
@@ -551,9 +557,9 @@ Checks the file's material against the material table. The material table is cho
 Assumes drawing has the same name as the model, and is in the same directory
 
 ### Check part number does not match filename
-Checks if the file name contains the part number. The part number is drawn from a property you specify on the Options panel. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
+Checks if the file name contains the part number. Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
-![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)
+The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 
 ### Check part copies
 If the file has any insert part copies, checks if they are up to date.
@@ -577,7 +583,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 ![Save Model As](My%20Project/media/save_model_as.png)
 
-Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
+Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
 `Material %{System.Material} Gage %{System.Sheet Metal Gage}`. 
@@ -597,7 +603,9 @@ For image file formats there are additional options. You can hide constructions 
 ### Save drawing as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
-Select the file type using the `Save As` combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
+![Save Model As](My%20Project/media/save_drawing_as.png)
+
+Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. See the `Save model as` help topic for details. 
 
@@ -605,18 +613,20 @@ Unlike with model files, draft subdirectory formulas can include an Index Refere
 
 You can optionally include a watermark image on the drawing output file.  For the watermark, set X/W and Y/H to position the image, and Scale to change its size. The X/W and Y/H values are fractions of the sheet's width and height, respectively. So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. Note some file formats may not support bitmap output.
 
-When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
+When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on files with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
 
 ### Print
-Print settings are accessed on the Options panel. 
+Prints drawings. 
 
-![Printer_Setup](My%20Project/media/printer_setup.png)
+![Printer_Setup](My%20Project/media/print.png)
 
 The dropdown should list all installed printers. 
 
-Click `Select sheet sizes` button to assign sheet sizes to the selected printer. 
+If you use more than one printer, use `Edit task list` to add one or more Print tasks. Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. 
 
-For multiple printers, use `Edit task list` to add one or more, then set assigned sheet sizes accordingly. 
+You assign sheet sizes to a printer with the `Select Sheets` button. Print jobs are routed on a per-sheet basis. So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. 
+
+![Printer_Setup](My%20Project/media/sheet_selector.png)
 
 This command may not work with PDF printers. Try the Save As PDF command instead. 
 
@@ -624,26 +634,26 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 ## KNOWN ISSUES
 
 **The program is not perfect**
-*Cause*: The programmer is not perfect.
-*Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  
+- *Cause*: The programmer is not perfect.
+- *Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  So, you know, back up any files before using it.  
 
 **Does not support managed files**
-*Cause*: Unknown.
-*Possible workaround*: Process the files in an unmanaged workspace.
-*Update 10/10/2021* Some users have reported success with BiDM managed files.
-*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
+- *Cause*: Unknown.
+- *Possible workaround*: Process the files in an unmanaged workspace.
+- *Update 10/10/2021* Some users have reported success with BiDM managed files.
+- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
 
 **Some tasks cannot run on older Solid Edge versions**
-*Cause*: Probably an API call Not available in previous versions.
-*Possible workaround*: Use the latest version, or avoid use of the task causing problems.
+- *Cause*: Probably an API call not available in previous versions.
+- *Possible workaround*: Use the latest version, or avoid use of the task causing problems.
 
 **May not support multiple installed Solid Edge versions**
-*Cause*: Unknown.
-*Possible workaround*: Use the version that was 'silently' installed.
+- *Cause*: Unknown.
+- *Possible workaround*: Use the version that was 'silently' installed.
 
 **Pathfinder sometimes blank during Interactive Edit**
-*Cause*: Unknown.
-*Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window.
+- *Cause*: Unknown.
+- *Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window.
 
 
 ## CODE ORGANIZATION

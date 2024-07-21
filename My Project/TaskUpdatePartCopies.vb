@@ -196,17 +196,6 @@ Public Class TaskUpdatePartCopies
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateParents.ToString), CheckBox)
-        Me.UpdateParents = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -240,7 +229,6 @@ Public Class TaskUpdatePartCopies
     End Function
 
 
-
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
@@ -264,8 +252,8 @@ Public Class TaskUpdatePartCopies
         Dim HelpString As String
         HelpString = "In conjuction with `Assembly Activate and update all`, "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings. "
-        HelpString += "You can optionally update the parent files recursively. "
-        HelpString += "That option is on the Options panel."
+        HelpString += "You can optionally update the parent files recursively "
+        HelpString += "by enabling `Update parent documents` on the Options panel."
 
         Return HelpString
     End Function

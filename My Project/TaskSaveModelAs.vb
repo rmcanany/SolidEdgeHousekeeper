@@ -1158,7 +1158,7 @@ Public Class TaskSaveModelAs
 
         HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_model_as.png)"
 
-        HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
+        HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
 

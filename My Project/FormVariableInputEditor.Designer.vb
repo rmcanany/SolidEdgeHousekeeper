@@ -41,11 +41,6 @@ Partial Class FormVariableInputEditor
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.CheckBoxCopyToAsm = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToPar = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToPsm = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxCopyToDft = New System.Windows.Forms.CheckBox()
-        Me.LabelCopyTo = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -55,7 +50,7 @@ Partial Class FormVariableInputEditor
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonOK.Location = New System.Drawing.Point(650, 401)
-        Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(110, 33)
         Me.ButtonOK.TabIndex = 0
@@ -67,7 +62,7 @@ Partial Class FormVariableInputEditor
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonCancel.Location = New System.Drawing.Point(778, 401)
-        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(122, 33)
         Me.ButtonCancel.TabIndex = 1
@@ -81,7 +76,7 @@ Partial Class FormVariableInputEditor
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxJSON.Enabled = False
         Me.TextBoxJSON.Location = New System.Drawing.Point(26, 401)
-        Me.TextBoxJSON.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TextBoxJSON.Margin = New System.Windows.Forms.Padding(4)
         Me.TextBoxJSON.Name = "TextBoxJSON"
         Me.TextBoxJSON.Size = New System.Drawing.Size(602, 23)
         Me.TextBoxJSON.TabIndex = 3
@@ -91,7 +86,7 @@ Partial Class FormVariableInputEditor
         Me.CheckBoxSelectAll.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.CheckBoxSelectAll.AutoSize = True
         Me.CheckBoxSelectAll.Location = New System.Drawing.Point(51, 42)
-        Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
         Me.CheckBoxSelectAll.Size = New System.Drawing.Size(15, 14)
         Me.CheckBoxSelectAll.TabIndex = 2
@@ -108,7 +103,7 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonMoveSelectedDown.Image = Global.Housekeeper.My.Resources.Resources.down
         Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(83, 4)
-        Me.ButtonMoveSelectedDown.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonMoveSelectedDown.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
         Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(29, 29)
         Me.ButtonMoveSelectedDown.TabIndex = 2
@@ -125,7 +120,7 @@ Partial Class FormVariableInputEditor
         Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonMoveSelectedUp.Image = Global.Housekeeper.My.Resources.Resources.up
         Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(44, 4)
-        Me.ButtonMoveSelectedUp.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonMoveSelectedUp.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
         Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(29, 29)
         Me.ButtonMoveSelectedUp.TabIndex = 1
@@ -142,7 +137,7 @@ Partial Class FormVariableInputEditor
         Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
         Me.ButtonClearSelected.Image = Global.Housekeeper.My.Resources.Resources.Cancel
         Me.ButtonClearSelected.Location = New System.Drawing.Point(5, 4)
-        Me.ButtonClearSelected.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ButtonClearSelected.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonClearSelected.Name = "ButtonClearSelected"
         Me.ButtonClearSelected.Size = New System.Drawing.Size(29, 29)
         Me.ButtonClearSelected.TabIndex = 0
@@ -167,7 +162,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 5, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 0, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 12)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 9
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74.0!))
@@ -192,7 +187,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel4.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.Label4, 0, 1)
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(291, 4)
-        Me.TableLayoutPanel4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TableLayoutPanel4.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 2
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -284,7 +279,7 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel2.Controls.Add(Me.ButtonMoveSelectedUp, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.CheckBoxSelectAll, 1, 1)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(5, 6)
-        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
@@ -292,82 +287,18 @@ Partial Class FormVariableInputEditor
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(117, 62)
         Me.TableLayoutPanel2.TabIndex = 0
         '
-        'CheckBoxCopyToAsm
-        '
-        Me.CheckBoxCopyToAsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToAsm.AutoSize = True
-        Me.CheckBoxCopyToAsm.Location = New System.Drawing.Point(676, 357)
-        Me.CheckBoxCopyToAsm.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.CheckBoxCopyToAsm.Name = "CheckBoxCopyToAsm"
-        Me.CheckBoxCopyToAsm.Size = New System.Drawing.Size(47, 20)
-        Me.CheckBoxCopyToAsm.TabIndex = 5
-        Me.CheckBoxCopyToAsm.Text = "asm"
-        Me.CheckBoxCopyToAsm.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToPar
-        '
-        Me.CheckBoxCopyToPar.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToPar.AutoSize = True
-        Me.CheckBoxCopyToPar.Location = New System.Drawing.Point(734, 357)
-        Me.CheckBoxCopyToPar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.CheckBoxCopyToPar.Name = "CheckBoxCopyToPar"
-        Me.CheckBoxCopyToPar.Size = New System.Drawing.Size(43, 20)
-        Me.CheckBoxCopyToPar.TabIndex = 6
-        Me.CheckBoxCopyToPar.Text = "par"
-        Me.CheckBoxCopyToPar.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToPsm
-        '
-        Me.CheckBoxCopyToPsm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToPsm.AutoSize = True
-        Me.CheckBoxCopyToPsm.Location = New System.Drawing.Point(792, 357)
-        Me.CheckBoxCopyToPsm.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.CheckBoxCopyToPsm.Name = "CheckBoxCopyToPsm"
-        Me.CheckBoxCopyToPsm.Size = New System.Drawing.Size(48, 20)
-        Me.CheckBoxCopyToPsm.TabIndex = 7
-        Me.CheckBoxCopyToPsm.Text = "psm"
-        Me.CheckBoxCopyToPsm.UseVisualStyleBackColor = True
-        '
-        'CheckBoxCopyToDft
-        '
-        Me.CheckBoxCopyToDft.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBoxCopyToDft.AutoSize = True
-        Me.CheckBoxCopyToDft.Location = New System.Drawing.Point(849, 357)
-        Me.CheckBoxCopyToDft.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
-        Me.CheckBoxCopyToDft.Name = "CheckBoxCopyToDft"
-        Me.CheckBoxCopyToDft.Size = New System.Drawing.Size(41, 20)
-        Me.CheckBoxCopyToDft.TabIndex = 8
-        Me.CheckBoxCopyToDft.Text = "dft"
-        Me.CheckBoxCopyToDft.UseVisualStyleBackColor = True
-        '
-        'LabelCopyTo
-        '
-        Me.LabelCopyTo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LabelCopyTo.AutoSize = True
-        Me.LabelCopyTo.Location = New System.Drawing.Point(458, 358)
-        Me.LabelCopyTo.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelCopyTo.Name = "LabelCopyTo"
-        Me.LabelCopyTo.Size = New System.Drawing.Size(188, 16)
-        Me.LabelCopyTo.TabIndex = 9
-        Me.LabelCopyTo.Text = "Copy these settings to another tab"
-        '
         'FormVariableInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(915, 444)
-        Me.Controls.Add(Me.LabelCopyTo)
-        Me.Controls.Add(Me.CheckBoxCopyToDft)
-        Me.Controls.Add(Me.CheckBoxCopyToPsm)
-        Me.Controls.Add(Me.CheckBoxCopyToPar)
-        Me.Controls.Add(Me.CheckBoxCopyToAsm)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.TextBoxJSON)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
         Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MinimumSize = New System.Drawing.Size(931, 483)
         Me.Name = "FormVariableInputEditor"
         Me.Text = "Variable Input Editor"
@@ -399,9 +330,4 @@ Partial Class FormVariableInputEditor
     Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents Label7 As Label
-    Friend WithEvents CheckBoxCopyToAsm As CheckBox
-    Friend WithEvents CheckBoxCopyToPar As CheckBox
-    Friend WithEvents CheckBoxCopyToPsm As CheckBox
-    Friend WithEvents CheckBoxCopyToDft As CheckBox
-    Friend WithEvents LabelCopyTo As Label
 End Class

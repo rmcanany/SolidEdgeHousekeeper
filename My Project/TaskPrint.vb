@@ -31,8 +31,6 @@ Public Class TaskPrint
     End Enum
 
 
-    'CONSTRUCTORS
-
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
@@ -63,6 +61,7 @@ Public Class TaskPrint
 
         Me.SelectedSheets = New List(Of String)
     End Sub
+
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -259,45 +258,6 @@ Public Class TaskPrint
     End Function
 
 
-    'INITIALIZATION AND START CONDITIONS
-
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
-        Me.PrinterName = ComboBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.Copies.ToString), TextBox)
-        Me.Copies = CShort(TextBox.Text)
-
-        TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
-        Me.SelectedSheets = Split(TextBox.Text, " ").ToList
-
-        CheckBox = CType(ControlsDict(ControlNames.ShowPrintingOptions.ToString), CheckBox)
-        Me.ShowPrintingOptions = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoOrient.ToString), CheckBox)
-        Me.AutoOrient = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.BestFit.ToString), CheckBox)
-        Me.BestFit = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.PrintAsBlack.ToString), CheckBox)
-        Me.PrintAsBlack = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.ScaleLineTypes.ToString), CheckBox)
-        Me.ScaleLineTypes = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.ScaleLineWidths.ToString), CheckBox)
-        Me.ScaleLineWidths = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -420,10 +380,6 @@ Public Class TaskPrint
     End Function
 
 
-
-
-    'EVENT HANDLERS
-
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
@@ -538,15 +494,17 @@ Public Class TaskPrint
     End Sub
 
 
-    'HELP
-
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Print settings are accessed on the Options panel. "
-        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/printer_setup.png)"
+        HelpString = "Prints drawings. "
+        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/print.png)"
         HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
-        HelpString += vbCrLf + vbCrLf + "Click `Select sheet sizes` button to assign sheet sizes to the selected printer. "
-        HelpString += vbCrLf + vbCrLf + "For multiple printers, use `Edit task list` to add one or more, then set assigned sheet sizes accordingly. "
+        HelpString += vbCrLf + vbCrLf + "If you use more than one printer, use `Edit task list` to add one or more Print tasks. "
+        HelpString += "Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. "
+        HelpString += vbCrLf + vbCrLf + "You assign sheet sizes to a printer with the `Select Sheets` button. "
+        HelpString += "Print jobs are routed on a per-sheet basis. "
+        HelpString += "So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. "
+        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/sheet_selector.png)"
         HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
         HelpString += "Try the Save As PDF command instead. "
 

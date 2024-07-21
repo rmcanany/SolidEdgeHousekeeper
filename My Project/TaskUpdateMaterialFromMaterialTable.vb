@@ -152,21 +152,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.ActiveMaterialLibrary.ToString), TextBox)
-        Me.ActiveMaterialLibrary = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox)
-        Me.RemoveFaceStyleOverrides = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -264,15 +249,13 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Sub
 
 
-
-
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks to see if the part's material name and properties match any material "
         HelpString += "in a file you specify on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "If the names match, "
-        HelpString += "but their properties (e.g., face style) do not, the material is updated. "
-        HelpString += "If the names do not match, or no material is assigned, it is reported in the log file."
+        HelpString += "but their properties (e.g., density, face style, etc.) do not, the material is updated. "
+        HelpString += "If no match is found, or no material is assigned, it is reported in the log file."
         HelpString += vbCrLf + vbCrLf + "You can optionally remove any face style overrides. "
         HelpString += "Set the option on the Options panel. "
 

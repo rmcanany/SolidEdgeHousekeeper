@@ -10,31 +10,6 @@ Public Class FormVariableInputEditor
     Public Property JSONDict As String
     Public Property UseNewTaskTab As Boolean
 
-    Public Sub ShowInputEditor(FileType As String)
-        Me.FileType = FileType
-
-        If FileType = "asm" Then
-            CheckBoxCopyToAsm.Checked = True
-            CheckBoxCopyToAsm.Enabled = False
-        End If
-        If FileType = "par" Then
-            CheckBoxCopyToPar.Checked = True
-            CheckBoxCopyToPar.Enabled = False
-        End If
-        If FileType = "psm" Then
-            CheckBoxCopyToPsm.Checked = True
-            CheckBoxCopyToPsm.Enabled = False
-        End If
-        If FileType = "dft" Then
-            CheckBoxCopyToDft.Checked = True
-            CheckBoxCopyToDft.Enabled = False
-        End If
-
-        CheckBoxCopyToDft.Enabled = False
-
-        Me.ShowDialog()
-
-    End Sub
 
 
     Private Sub Form1_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
@@ -153,14 +128,6 @@ Public Class FormVariableInputEditor
 
     End Sub
 
-
-    Private Sub TextBox_TextChanged(sender As System.Object, e As System.EventArgs)
-        'When you modify the contents of any textbox, the name of that textbox
-        'and its current contents will be displayed in the title bar
-
-        'Dim box As TextBox = DirectCast(sender, TextBox)
-        'Me.Text = box.Name & ": " & box.Text
-    End Sub
 
     Private Sub ReconcileFormControls()
         Dim CheckBoxDict As New Dictionary(Of String, CheckBox)

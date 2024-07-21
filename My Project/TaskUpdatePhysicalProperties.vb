@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports Newtonsoft.Json
 
 Public Class TaskUpdatePhysicalProperties
     Inherits Task
@@ -84,16 +83,13 @@ Public Class TaskUpdatePhysicalProperties
         Dim Proceed As Boolean
 
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-        'Dim VariableFound As Boolean
 
         Dim MaterialTable As SolidEdgeFramework.MatTable = SEApp.GetMaterialTable()
         Dim PropertyType As SolidEdgeFramework.MatTablePropIndexConstants
         PropertyType = SolidEdgeFramework.MatTablePropIndexConstants.seDensity
-        'Dim PropValue As String = Nothing
         Dim PropValue As Object = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
-
 
         Dim Density As Double
 
@@ -311,22 +307,6 @@ Public Class TaskUpdatePhysicalProperties
     End Function
 
 
-    'ERROR CHECKING
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.ShowSymbols.ToString), CheckBox)
-        Me.ShowSymbols = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideSymbols.ToString), CheckBox)
-        Me.HideSymbols = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -368,8 +348,6 @@ Public Class TaskUpdatePhysicalProperties
     End Function
 
 
-    'EVENT HANDLERS
-
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
@@ -396,18 +374,19 @@ Public Class TaskUpdatePhysicalProperties
     Private Function GetHelpText() As String
         Dim HelpString As String
 
-        HelpString = "Updates mass, volume, etc.  Models with no density are reported in the log file. "
-        HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the center of mass symbol. "
-        HelpString += "It can either be shown, hidden, or left unchanged. "
-        HelpString += "The option is set on the Options panel. "
-        HelpString += "To leave the symbol's display unchanged, "
+        HelpString = "Updates mass, volume, etc.  Models with no assigned density are reported in the log file. "
+
+        HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the physical properties symbols. "
+        HelpString += "They can either be shown, hidden, or left unchanged. "
+        HelpString += "To leave their display unchanged, "
         HelpString += "disable both the `Show` and `Hide` options. "
-        HelpString += "Note, controlling the symbol display only works for assembly files at this time. "
+
         HelpString += vbCrLf + vbCrLf + "Occasionally, the physical properties are updated correctly, "
         HelpString += "but the results are not carried over to the Variable Table. "
-        HelpString += "The error is detected and reported in the log file. The easiest fix I've found "
-        HelpString += "is to open the file in SE, change the material, then change it right back. "
-        HelpString += "You can verify if it worked by checking for `Mass` in the Variable Table. "
+        HelpString += "The error is detected and reported in the log file. One fix that often works "
+        HelpString += "is to open the file in SE, change the material, then change it back. "
+        HelpString += "To see if it worked, run `Inspect > Physical Properties`, "
+        HelpString += "then check for `Mass` in the Variable Table. "
 
         Return HelpString
     End Function

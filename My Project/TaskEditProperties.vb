@@ -942,6 +942,8 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_input_editor.png)"
 
+        HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
+
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section in this README file. "
 
@@ -953,17 +955,30 @@ Public Class TaskEditProperties
         HelpString += "for more information."
         HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
 
+        HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
+        HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
+        HelpString += "at the top of the form.  Only one row can be moved at a time. "
+        HelpString += "The delete button, also at the top of the form, removes selected rows. "
+
+        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
+        HelpString += "is a representation of the table settings in `JSON` format. "
+        HelpString += "You can edit it if you want, but the form is probably easier to use. "
+
+        HelpString += vbCrLf + vbCrLf + "**Case Sensitivity**"
+
         HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
         HelpString += "For example, say the search is `aluminum`, "
         HelpString += "the replacement is `ALUMINUM`, "
-        HelpString += "and the property value in some file being processed is `Aluminum 6061-T6`. "
+        HelpString += "and the property value in a file is `Aluminum 6061-T6`. "
         HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
 
-        ' HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
+        HelpString += vbCrLf + vbCrLf + "**Property Formula**"
 
         HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
         HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
         HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
+
+        HelpString += vbCrLf + vbCrLf + "**Options**"
 
         HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
         HelpString += "you can optionally add it by enabling `Add any property not already in file`. "
@@ -978,29 +993,6 @@ Public Class TaskEditProperties
         HelpString += "also update the properties associated with the material itself. "
         HelpString += "Select the option `For material, update density, face styles, etc.`. "
 
-        HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
-        HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
-        HelpString += "at the top of the form.  Only one row can be moved at a time. "
-        HelpString += "The delete button, also at the top of the form, removes selected rows. "
-
-        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a representation of the table settings in `JSON` format. "
-        HelpString += "You can edit it if you want, but the form is probably easier to use. "
-
-        HelpString += vbCrLf + vbCrLf + "EXPERIMENTAL: Direct edit using Windows Structured Storage for fast execution. "
-        HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
-
-        'HelpString += vbCrLf + vbCrLf + "Due to some upstream limitations, certain properties in Structured Storage are read-only for now. "
-        'HelpString += "That means you can use them in formulas in the `Find` and `Replace` strings, but cannot change the properties themselves. "
-        'HelpString += "The affected properties are `System.Document Number`, `System.Revision`, `System.Project Name`. "
-
-        HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
-        HelpString += "but do not actually reside in a Structured Storage 'Property Stream'. "
-        HelpString += "As such, they are not accesible using this technique. "
-        HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
-        HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
-        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
-
         HelpString += vbCrLf + vbCrLf + "**Expressions**"
 
         HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
@@ -1010,7 +1002,7 @@ Public Class TaskEditProperties
         HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
 
         HelpString += vbCrLf + vbCrLf + "You can perform string processing, "
-        HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The avaialable functions are listed below. "
+        HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. "
         HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
         HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
 
@@ -1018,7 +1010,7 @@ Public Class TaskEditProperties
         HelpString += "If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
         HelpString += "You can `Save` or `Save As` your expression with the buttons provided. "
         HelpString += "Retreive them with the `Saved Expressions` drop-down. "
-        HelpString += "That drop-down comes with a few examples. You can study those to start getting the hang of it. "
+        HelpString += "That drop-down comes with a few examples. You can study those to get the hang of it. "
         HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "
 
         HelpString += vbCrLf + vbCrLf + "Available functions"
@@ -1036,6 +1028,18 @@ Public Class TaskEditProperties
         HelpString += "`startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, "
         HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
         HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
+
+        HelpString += vbCrLf + vbCrLf + "**Edit Outside Solid Edge (Experimental)**"
+
+        HelpString += vbCrLf + vbCrLf + "Direct edit using Windows Structured Storage for fast execution. "
+        HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
+
+        HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
+        HelpString += "but do not actually reside in a Structured Storage 'Property Stream'. "
+        HelpString += "As such, they are not accesible using this technique. "
+        HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
+        HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
+        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
 
         Return HelpString
     End Function

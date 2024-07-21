@@ -227,21 +227,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.PropertySet.ToString), ComboBox)
-        Me.PropertySet = ComboBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.PropertyName.ToString), TextBox)
-        Me.PropertyName = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -329,11 +314,13 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks if the file name contains the part number. "
-        HelpString += "The part number is drawn from a property you specify on the Options panel. "
-        HelpString += "It only checks that the part number appears somewhere in the file name. "
+        HelpString += "Enter the property name that holds part number on the Options panel. "
+        HelpString += "A `Property set`, either `System` or `Custom`, is required. "
+        HelpString += "For more information, see the **Property Filter** section in this README file. "
+
+        HelpString += vbCrLf + vbCrLf + "The command only checks that the part number appears somewhere in the file name. "
         HelpString += "If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, "
         HelpString += "you will get a match. "
-        HelpString += vbCrLf + vbCrLf + "![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)"
 
         Return HelpString
     End Function

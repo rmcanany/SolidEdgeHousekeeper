@@ -1,8 +1,8 @@
 ﻿Option Strict On
 
-Imports System.Security.Cryptography
-Imports SolidEdgeConstants
-Imports SolidEdgeFramework
+'Imports System.Security.Cryptography
+'Imports SolidEdgeConstants
+'Imports SolidEdgeFramework
 
 Public Class TaskUpdateModelSizeInVariableTable
     Inherits Task
@@ -144,7 +144,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
-                            Variable = CType(Variables.Add(VariableName, Formula), variable)
+                            Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
                             ExitStatus = 1
@@ -180,7 +180,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
-                            Variable = CType(Variables.Add(VariableName, Formula), variable)
+                            Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
                             ExitStatus = 1
@@ -214,6 +214,39 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
+    End Function
+
+    Private Function CheckDuplicates() As Boolean
+        Dim HasDuplicates As Boolean = False
+        Dim s As String
+
+        Dim XYZList As List(Of String) = {Me.XVariableName.Trim, Me.YVariableName.Trim, Me.ZVariableName.Trim}.ToList
+        Dim MinMidMaxList As List(Of String) = {Me.MinVariableName.Trim, Me.MidVariableName.Trim, Me.MaxVariableName.Trim}.ToList
+
+        Dim CombinedList As New List(Of String)
+        For Each s In XYZList
+            CombinedList.Add(s)
+        Next
+        For Each s In MinMidMaxList
+            CombinedList.Add(s)
+        Next
+
+        If Me.ReportXYZ And Me.ReportMinMidMax Then
+            If CombinedList.Contains("") Then HasDuplicates = True
+            If Not CombinedList.Count = CombinedList.Distinct.Count Then HasDuplicates = True
+
+
+        ElseIf Me.ReportXYZ Then
+            If XYZList.Contains("") Then HasDuplicates = True
+            If Not XYZList.Count = XYZList.Distinct.Count Then HasDuplicates = True
+
+        ElseIf Me.ReportMinMidMax Then
+            If MinMidMaxList.Contains("") Then HasDuplicates = True
+            If Not MinMidMaxList.Count = MinMidMaxList.Distinct.Count Then HasDuplicates = True
+
+        End If
+
+        Return HasDuplicates
     End Function
 
 
@@ -345,39 +378,6 @@ Public Class TaskUpdateModelSizeInVariableTable
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        CheckBox = CType(ControlsDict(ControlNames.ReportXYZ.ToString), CheckBox)
-        Me.ReportXYZ = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.XVariableName.ToString), TextBox)
-        Me.XVariableName = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.YVariableName.ToString), TextBox)
-        Me.YVariableName = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.ZVariableName.ToString), TextBox)
-        Me.ZVariableName = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.ReportMinMidMax.ToString), CheckBox)
-        Me.ReportMinMidMax = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.MinVariableName.ToString), TextBox)
-        Me.MinVariableName = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.MidVariableName.ToString), TextBox)
-        Me.MidVariableName = TextBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.MaxVariableName.ToString), TextBox)
-        Me.MaxVariableName = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -442,39 +442,6 @@ Public Class TaskUpdateModelSizeInVariableTable
             Return PriorErrorMessage
         End If
 
-    End Function
-
-    Private Function CheckDuplicates() As Boolean
-        Dim HasDuplicates As Boolean = False
-        Dim s As String
-
-        Dim XYZList As List(Of String) = {Me.XVariableName.Trim, Me.YVariableName.Trim, Me.ZVariableName.Trim}.ToList
-        Dim MinMidMaxList As List(Of String) = {Me.MinVariableName.Trim, Me.MidVariableName.Trim, Me.MaxVariableName.Trim}.ToList
-
-        Dim CombinedList As New List(Of String)
-        For Each s In XYZList
-            CombinedList.Add(s)
-        Next
-        For Each s In MinMidMaxList
-            CombinedList.Add(s)
-        Next
-
-        If Me.ReportXYZ And Me.ReportMinMidMax Then
-            If CombinedList.Contains("") Then HasDuplicates = True
-            If Not CombinedList.Count = CombinedList.Distinct.Count Then HasDuplicates = True
-
-
-        ElseIf Me.ReportXYZ Then
-            If XYZList.Contains("") Then HasDuplicates = True
-            If Not XYZList.Count = XYZList.Distinct.Count Then HasDuplicates = True
-
-        ElseIf Me.ReportMinMidMax Then
-            If MinMidMaxList.Contains("") Then HasDuplicates = True
-            If Not MinMidMaxList.Count = MinMidMaxList.Distinct.Count Then HasDuplicates = True
-
-        End If
-
-        Return HasDuplicates
     End Function
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
@@ -558,19 +525,22 @@ Public Class TaskUpdateModelSizeInVariableTable
         HelpString += "This is primarily intended for standard cross-section material "
         HelpString += "(barstock, channel, etc.), but can be used for any purpose. "
         HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
+
         HelpString += vbCrLf + vbCrLf + "The size is determined using the built-in Solid Edge `RangeBox`. "
         HelpString += "The range box is oriented along the XYZ axes. "
         HelpString += "Misleading values will result for parts with an off axis orientation, such as a 3D tube. "
-        HelpString += vbCrLf + vbCrLf + "![Overall Size Options](My%20Project/media/overall_size_options.png)"
+
         HelpString += vbCrLf + vbCrLf + "The size can be reported as `XYZ`, or `MinMidMax`, or both. "
         HelpString += "`MinMidMax` is independent of the part's orientation in the file. "
         HelpString += "Set your preference on the Options panel. "
         HelpString += "Set the desired variable names there, too. "
+
         HelpString += vbCrLf + vbCrLf + "Note that the values are non-associative copies. "
         HelpString += "Any change to the model will require rerunning this command to update the variable table. "
+
         HelpString += vbCrLf + vbCrLf + "The command reports sheet metal size in the formed state. "
-        HelpString += "For a flat pattern, instead of this using this command, "
-        HelpString += "you can use the variables from the flat pattern command -- "
+        HelpString += "For a flat pattern, instead of creating new variables using this command, "
+        HelpString += "you can use the variables already created by the flat pattern command -- "
         HelpString += "`Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. "
 
         Return HelpString

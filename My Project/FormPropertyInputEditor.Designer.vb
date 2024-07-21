@@ -63,7 +63,7 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel1.ColumnCount = 11
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
@@ -71,7 +71,7 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666!))
         Me.TableLayoutPanel1.Controls.Add(Me.Label5, 5, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label7, 9, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel3, 7, 0)
@@ -100,7 +100,7 @@ Partial Class FormPropertyInputEditor
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.SystemColors.Control
-        Me.Label5.Location = New System.Drawing.Point(443, 43)
+        Me.Label5.Location = New System.Drawing.Point(437, 43)
         Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
@@ -113,7 +113,7 @@ Partial Class FormPropertyInputEditor
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
         Me.Label7.BackColor = System.Drawing.SystemColors.Control
-        Me.Label7.Location = New System.Drawing.Point(692, 43)
+        Me.Label7.Location = New System.Drawing.Point(646, 43)
         Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
@@ -136,7 +136,7 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel3.Controls.Add(Me.Label4, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Label10, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.Label11, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(569, 4)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(523, 4)
         Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
@@ -281,7 +281,7 @@ Partial Class FormPropertyInputEditor
         Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label8, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label9, 2, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(320, 4)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(314, 4)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 2

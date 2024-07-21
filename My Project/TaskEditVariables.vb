@@ -377,7 +377,7 @@ Public Class TaskEditVariables
                 ' Workaround
                 Dim FileType = "asm"
 
-                VariableInputEditor.ShowInputEditor(FileType)
+                VariableInputEditor.ShowDialog()
 
                 If VariableInputEditor.DialogResult = DialogResult.OK Then
                     Me.JSONDict = VariableInputEditor.JSONDict
@@ -430,25 +430,30 @@ Public Class TaskEditVariables
 
         HelpString = "Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. "
         HelpString += "Access the form using the `Edit` button. "
+
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
+
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
         HelpString += "underscore '_' character."
+
         HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added automatically.  "
         HelpString += "Set the option on the Options panel. "
+
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
         HelpString += "program will report an error."
+
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
+
         HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time.  "
         HelpString += "The delete button, also at the top of the form, removes selected rows.  "
-        HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs.  "
-        HelpString += "Set the `Copy To` CheckBoxes as desired."
+
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "is a representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
 
         Return HelpString
