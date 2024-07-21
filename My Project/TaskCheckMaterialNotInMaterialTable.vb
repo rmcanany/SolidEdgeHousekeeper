@@ -241,7 +241,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks the file's material against the material table. "
-        HelpString += "The material table is chosen on the **Configuration Tab -- Templates Page**. "
+        HelpString += "The material table is chosen on the Options panel. "
 
         Return HelpString
     End Function

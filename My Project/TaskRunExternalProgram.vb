@@ -309,7 +309,7 @@ Public Class TaskRunExternalProgram
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. "
-        HelpString += "It is located on the **Task Tab** below the task list. "
+        HelpString += "It is located on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
         HelpString += "See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
 

@@ -1,4 +1,6 @@
 Option Strict On
+Imports System.Security.Cryptography
+Imports System.Threading
 
 Partial Class Form1
 
@@ -506,6 +508,56 @@ Partial Class Form1
                 ReadmeOut.Add(Task.HelpText)
                 ReadmeOut.Add("")
             Next
+
+            ReadmeOut.Add("")
+            msg = "## KNOWN ISSUES"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**The program is not perfect**"
+            ReadmeOut.Add(msg)
+            msg = "*Cause*: The programmer is not perfect."
+            ReadmeOut.Add(msg)
+            msg = "*Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  "
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Does not support managed files**"
+            ReadmeOut.Add(msg)
+            msg = "*Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "*Possible workaround*: Process the files in an unmanaged workspace."
+            ReadmeOut.Add(msg)
+            msg = "*Update 10/10/2021* Some users have reported success with BiDM managed files."
+            ReadmeOut.Add(msg)
+            msg = "*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Some tasks cannot run on older Solid Edge versions**"
+            ReadmeOut.Add(msg)
+            msg = "*Cause*: Probably an API call Not available in previous versions."
+            ReadmeOut.Add(msg)
+            msg = "*Possible workaround*: Use the latest version, or avoid use of the task causing problems."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**May not support multiple installed Solid Edge versions**"
+            ReadmeOut.Add(msg)
+            msg = "*Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "*Possible workaround*: Use the version that was 'silently' installed."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Pathfinder sometimes blank during Interactive Edit**"
+            ReadmeOut.Add(msg)
+            msg = "*Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "*Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
 
             msg = ""
             ReadmeOut.Add("")

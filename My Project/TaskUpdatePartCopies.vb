@@ -265,7 +265,7 @@ Public Class TaskUpdatePartCopies
         HelpString = "In conjuction with `Assembly Activate and update all`, "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings. "
         HelpString += "You can optionally update the parent files recursively. "
-        HelpString += "That option is on the **Configuration Tab -- General Page**."
+        HelpString += "That option is on the Options panel."
 
         Return HelpString
     End Function

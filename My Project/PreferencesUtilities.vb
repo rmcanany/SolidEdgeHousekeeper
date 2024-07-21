@@ -249,7 +249,6 @@ Public Class PreferencesUtilities
         Dim KnownTasks As New List(Of String)
 
         ' Update
-        TaskList.Add(New TaskOptimize)
         TaskList.Add(New TaskOpenSave)
         TaskList.Add(New TaskActivateAndUpdateAll)
         TaskList.Add(New TaskUpdateMaterialFromMaterialTable)
@@ -265,6 +264,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskEditProperties)
         TaskList.Add(New TaskEditVariables)
         TaskList.Add(New TaskEditInteractively)
+        TaskList.Add(New TaskRecognizeHoles)
 
         ' Restyle
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)

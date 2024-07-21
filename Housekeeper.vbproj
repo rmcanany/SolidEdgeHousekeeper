@@ -284,7 +284,7 @@
     <Compile Include="My Project\TaskFitView.vb" />
     <Compile Include="My Project\TaskHideConstructions.vb" />
     <Compile Include="My Project\TaskOpenSave.vb" />
-    <Compile Include="My Project\TaskOptimize.vb" />
+    <Compile Include="My Project\TaskRecognizeHoles.vb" />
     <Compile Include="My Project\TaskPrint.vb" />
     <Compile Include="My Project\TaskUpdateFlatPattern.vb" />
     <Compile Include="My Project\TaskRemoveFaceStyleOverrides.vb" />

@@ -399,7 +399,7 @@ Public Class TaskUpdatePhysicalProperties
         HelpString = "Updates mass, volume, etc.  Models with no density are reported in the log file. "
         HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the center of mass symbol. "
         HelpString += "It can either be shown, hidden, or left unchanged. "
-        HelpString += "The option is set on the **Configuration Tab -- General Page**. "
+        HelpString += "The option is set on the Options panel. "
         HelpString += "To leave the symbol's display unchanged, "
         HelpString += "disable both the `Show` and `Hide` options. "
         HelpString += "Note, controlling the symbol display only works for assembly files at this time. "

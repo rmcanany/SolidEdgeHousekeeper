@@ -542,16 +542,11 @@ Public Class TaskPrint
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Print settings are accessed on the **Configuration Tab -- Printing Page**."
+        HelpString = "Print settings are accessed on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/printer_setup.png)"
         HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
-        HelpString += "You can configure up to two of them, `Printer1` and `Printer2`. "
-        HelpString += "`Printer1` is the default.  It prints everything not assigned to `Printer2`. "
-        HelpString += vbCrLf + vbCrLf + "`Printer2` prints any sheet on the drawing whose size is listed in the Sheet selection textbox. "
-        HelpString += "Click the `Set` button to select the sheet sizes. "
-        HelpString += vbCrLf + vbCrLf + "Enable/disable a printer using the checkbox next to its name. "
-        HelpString += "If you need to print only certain sizes of drawings, you can disable `Printer1` "
-        HelpString += "and enable `Printer2` with the desired sheet sizes set. "
+        HelpString += vbCrLf + vbCrLf + "Click `Select sheet sizes` button to assign sheet sizes to the selected printer. "
+        HelpString += vbCrLf + vbCrLf + "For multiple printers, use `Edit task list` to add one or more, then set assigned sheet sizes accordingly. "
         HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
         HelpString += "Try the Save As PDF command instead. "
 

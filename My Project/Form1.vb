@@ -276,7 +276,7 @@ Public Class Form1
         If (Len(SaveMsg) <> 0) And CheckBoxWarnSave.Checked Then
             Dim s As String = "The following options require the original file to be saved." + Chr(13)
             s += "Please verify you have a backup before continuing."
-            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- Open/Save Page."
+            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
             SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
         Else
             SaveMsg = ""
@@ -1918,7 +1918,7 @@ Public Class Form1
     End Sub
 
     Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click
-        'Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-descriptions"
+        'Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-tab"
 
         Dim Version = Me.Version
 

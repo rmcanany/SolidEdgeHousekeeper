@@ -429,14 +429,13 @@ Public Class TaskEditVariables
         Dim HelpString As String
 
         HelpString = "Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. "
-        HelpString += "Access the form using the `Variables edit/add/expose` `Edit` button. "
-        HelpString += "It is located below the task list on each **Task Tab**."
+        HelpString += "Access the form using the `Edit` button. "
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
         HelpString += "underscore '_' character."
         HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added automatically.  "
-        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
+        HelpString += "Set the option on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
         HelpString += "program will report an error."

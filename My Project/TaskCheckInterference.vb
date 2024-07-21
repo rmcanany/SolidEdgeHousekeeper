@@ -287,7 +287,7 @@ Public Class TaskCheckInterference
         HelpString = "Runs an interference check.  All parts are checked against all others. "
         HelpString += "This can take a long time on large assemblies, "
         HelpString += "so there is a limit to the number of parts to check. "
-        HelpString += "Set it on the **Configuration Tab -- General Page**."
+        HelpString += "Set it on the Options panel."
 
         Return HelpString
     End Function

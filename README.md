@@ -314,42 +314,55 @@ You can interrupt the program before it finishes. As shown above, while processi
 To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on the Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
 
 
-## KNOWN ISSUES
 
-**Not a perfect program**
-*Cause*: Not a perfect programmer.  
-*Possible workaround*: Back up any files before using it.  I mean it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  
+## TASK TAB
 
-**Does not support managed files**  
-*Cause*: Unknown.  
-*Possible workaround*: Process the files in an unmanaged workspace.  
-*Update 10/10/2021* Some users have reported success with BiDM managed files.  
-*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files. 
-
-**Older Solid Edge versions**  
-Some tasks cannot be run on older versions.  
-*Cause*: Probably an API call not available in previous versions.  
-*Possible workaround*: Use the latest version, or avoid use of the task causing problems. 
-
-**May not support multiple installed Solid Edge versions**  
-*Cause*: Unknown.  
-*Possible workaround*: Use the version that was 'silently' installed.
-
-**Pathfinder sometimes blank during Interactive Edit**  
-*Cause*: Unknown.  
-*Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window. 
-
-## TASK DESCRIPTIONS
+The Task Tab is where you choose what operations to perform.
 
 <p align="center">
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
+### Task Controls
+
+To enable a task, click its left-most checkbox.  If it has options, they will appear when the task is selected.  You can hide the options by clicking ![Collapse](Resources/collapse.png) (Collapse).  If you don't want the options to automatically appear, enable `Only show options manually` at the bottom of the Options pane.
+
+When a task is selected, the applicable file types are automatically enabled.  This is indicated by the four other checkboxes on the task's header row.  You can de-select any you don't want to process.
+
+To open the task's help page, click ![Help](Resources/icons8_help_16.png) on the right side of its header row.  There you can learn what the task does and details about any options it has.
+
+### General Controls
+
+The row at the top of the task list has buttons that operate on all tasks.  Click the left-most checkbox to disable all.  Click ![Collapse](Resources/collapse.png) (Collapse All) to hide options for all selected tasks.  
+
+The remaining four buttons toggle file type selection.  In order, they are ![Assembly](Resources/ST9%20-%20asm.png) (Assembly), ![Part](Resources/ST9%20-%20par.png) (Part), ![Sheetmetal](Resources/ST9%20-%20psm.png) (Sheetmetal), and ![Draft](Resources/ST9%20-%20dft.png) (Draft).  
+
+On the far right ![Help](Resources/icons8_help_16.png) brings up general help for the task tab.
+
+### Customizing
+
+You can customize the list.  To do so, click `Edit Task List` at the bottom of the form.  The following dialog will appear.
+
+<p align="center">
+  <img src="My%20Project/media/edit_task_list.png">
+</p>
+
+The left pane shows all available tasks.  The right pane shows the ones currently in use.  To reposition a task in the list, select it and click `Move up` or `Move down`.  To remove one, select it and click `Remove`.  
+
+To add a task, select one from `AVAILABLE TASKS` and click `Add`.  You can have multiple copies of the same task.  This is handy for many situations.  For example, if you have a printer for small drawings and a plotter for large ones, you can place two `Print` tasks on the list and configure them accordingly.
+
+Each task must have a unique name.  Rename one by double-clicking it in the list.  You can rename all of them, for example in your own language, if desired.
+
+The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  You can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
+
+To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any other changes you made, such as your template locations, etc.
+
+Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
+
+## TASK DETAILS
+
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
-
-### Optimize
-Open a document, optimize faces, recognize hole and save in the current version.
 
 ### Open save
 Open a document and save in the current version.
@@ -360,19 +373,19 @@ Loads all assembly occurrences' geometry into memory and does an update. Used ma
 Can run out of memory for very large assemblies.
 
 ### Update material from material table
-Checks to see if the part's material name and properties match any material in a file you specify on the **Configuration Tab -- Templates Page**. 
+Checks to see if the part's material name and properties match any material in a file you specify on the Options panel. 
 
 If the names match, but their properties (e.g., face style) do not, the material is updated. If the names do not match, or no material is assigned, it is reported in the log file.
 
-You can optionally remove any face style overrides. Set the option on the **Configuration Tab -- General Page**. 
+You can optionally remove any face style overrides. Set the option on the Options panel. 
 
 ### Update part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the **Configuration Tab -- General Page**.
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively. That option is on the Options panel.
 
 ### Update physical properties
 Updates mass, volume, etc.  Models with no density are reported in the log file. 
 
-You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the **Configuration Tab -- General Page**. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
+You can optionally control the display of the center of mass symbol. It can either be shown, hidden, or left unchanged. The option is set on the Options panel. To leave the symbol's display unchanged, disable both the `Show` and `Hide` options. Note, controlling the symbol display only works for assembly files at this time. 
 
 Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. The easiest fix I've found is to open the file in SE, change the material, then change it right back. You can verify if it worked by checking for `Mass` in the Variable Table. 
 
@@ -383,7 +396,7 @@ The size is determined using the built-in Solid Edge `RangeBox`. The range box i
 
 ![Overall Size Options](My%20Project/media/overall_size_options.png)
 
-The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the **Configuration Tab -- General Page**. Set the desired variable names there, too. 
+The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is independent of the part's orientation in the file. Set your preference on the Options panel. Set the desired variable names there, too. 
 
 Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
 
@@ -450,13 +463,13 @@ Available functions
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
 ### Edit variables
-Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Variables edit/add/expose` `Edit` button. It is located below the task list on each **Task Tab**.
+Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Edit` button. 
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
 
 The Variable name is required.  There are restrictions on the name.  It cannot start with a number.  It can only contain letters and numbers and the underscore '_' character.
 
-If a variable on the list is not in the file, it can optionally be added automatically.  Set the option on the **Configuration Tab -- General Page**. 
+If a variable on the list is not in the file, it can optionally be added automatically.  Set the option on the Options panel. 
 
 The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
@@ -489,6 +502,13 @@ Also, do not `Close` or `Save As` the file being processed. Housekeeper maintain
 
 One last thing.  Macros interact with Solid Edge through something called the Windows Component Object Model.  That framework appears to have some sort of built-in inactivity detection.  If you let this command sit idle for a period of time, COM reports an error. It doesn't really hurt anything, but Housekeeper stops and restarts SE any time a COM error occurs. I get around it by selecting only a small number of files to work on at a time. 
 
+### Recognize holes
+Finds cylindrical cutouts in an imported model and converts them into hole features. For the command to work correctly, the model must be in a freshly-imported state, with no subsequent modifications performed in Solid Edge. 
+
+As the first step of the conversion process, the Optimize command is run on the imported geometry. While not strictly necessary, it is considered good practice for any imported file. 
+
+The conversion is only possible in Synchronous mode. Ordered files are switched to Sync before the conversion, then switched back. Note, the imported body and the new hole features remain in Sync after the transition. 
+
 ### Update model styles from template
 Updates the styles you select from a template you specify. Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed if possible. It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). 
 
@@ -510,10 +530,10 @@ Face style overrides change a part's appearance in the assembly. This command ca
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 ### Fit view
-Maximizes the window, sets the view orientation for model files, and does a fit. Select the desired orientation on the **Configuration Tab -- General Page**.
+Maximizes the window, sets the view orientation for model files, and does a fit. Select the desired orientation on the Options panel.
 
 ### Check interference
-Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the **Configuration Tab -- General Page**.
+Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the Options panel.
 
 ### Check links
 Checks linked files.  `Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  Only links directly contained in the file are checked.  Links to links are not.
@@ -525,13 +545,13 @@ Checks if the file has any conflicting, underconstrained, or suppressed relation
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
 ### Check material not in material table
-Checks the file's material against the material table. The material table is chosen on the **Configuration Tab -- Templates Page**. 
+Checks the file's material against the material table. The material table is chosen on the Options panel. 
 
 ### Check missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
 
 ### Check part number does not match filename
-Checks if the file name contains the part number. The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
+Checks if the file name contains the part number. The part number is drawn from a property you specify on the Options panel. It only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 
 ![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)
 
@@ -548,7 +568,7 @@ Checks draft files for various problems.  The options are:
 `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 
 ### Run external program
-Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the **Task Tab** below the task list. 
+Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the Options panel. 
 
 If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
@@ -588,17 +608,42 @@ You can optionally include a watermark image on the drawing output file.  For th
 When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on file with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
 
 ### Print
-Print settings are accessed on the **Configuration Tab -- Printing Page**.
+Print settings are accessed on the Options panel. 
 
 ![Printer_Setup](My%20Project/media/printer_setup.png)
 
-The dropdown should list all installed printers. You can configure up to two of them, `Printer1` and `Printer2`. `Printer1` is the default.  It prints everything not assigned to `Printer2`. 
+The dropdown should list all installed printers. 
 
-`Printer2` prints any sheet on the drawing whose size is listed in the Sheet selection textbox. Click the `Set` button to select the sheet sizes. 
+Click `Select sheet sizes` button to assign sheet sizes to the selected printer. 
 
-Enable/disable a printer using the checkbox next to its name. If you need to print only certain sizes of drawings, you can disable `Printer1` and enable `Printer2` with the desired sheet sizes set. 
+For multiple printers, use `Edit task list` to add one or more, then set assigned sheet sizes accordingly. 
 
 This command may not work with PDF printers. Try the Save As PDF command instead. 
+
+
+## KNOWN ISSUES
+
+**The program is not perfect**
+*Cause*: The programmer is not perfect.
+*Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  Back up any files before using it.  
+
+**Does not support managed files**
+*Cause*: Unknown.
+*Possible workaround*: Process the files in an unmanaged workspace.
+*Update 10/10/2021* Some users have reported success with BiDM managed files.
+*Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
+
+**Some tasks cannot run on older Solid Edge versions**
+*Cause*: Probably an API call Not available in previous versions.
+*Possible workaround*: Use the latest version, or avoid use of the task causing problems.
+
+**May not support multiple installed Solid Edge versions**
+*Cause*: Unknown.
+*Possible workaround*: Use the version that was 'silently' installed.
+
+**Pathfinder sometimes blank during Interactive Edit**
+*Cause*: Unknown.
+*Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window.
 
 
 ## CODE ORGANIZATION

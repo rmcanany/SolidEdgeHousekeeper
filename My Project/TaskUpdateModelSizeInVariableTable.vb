@@ -564,7 +564,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         HelpString += vbCrLf + vbCrLf + "![Overall Size Options](My%20Project/media/overall_size_options.png)"
         HelpString += vbCrLf + vbCrLf + "The size can be reported as `XYZ`, or `MinMidMax`, or both. "
         HelpString += "`MinMidMax` is independent of the part's orientation in the file. "
-        HelpString += "Set your preference on the **Configuration Tab -- General Page**. "
+        HelpString += "Set your preference on the Options panel. "
         HelpString += "Set the desired variable names there, too. "
         HelpString += vbCrLf + vbCrLf + "Note that the values are non-associative copies. "
         HelpString += "Any change to the model will require rerunning this command to update the variable table. "

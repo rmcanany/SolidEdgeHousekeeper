@@ -99,7 +99,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         If PropertyName = "" Then
             ExitStatus = 1
-            ErrorMessageList.Add("Part number property name blank on the Configuration Tab -- General Page")
+            ErrorMessageList.Add("Missing part number property name")
         End If
 
         If ExitStatus = 0 Then
@@ -329,7 +329,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks if the file name contains the part number. "
-        HelpString += "The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. "
+        HelpString += "The part number is drawn from a property you specify on the Options panel. "
         HelpString += "It only checks that the part number appears somewhere in the file name. "
         HelpString += "If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, "
         HelpString += "you will get a match. "

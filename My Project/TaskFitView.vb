@@ -302,7 +302,7 @@ Public Class TaskFitView
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Maximizes the window, sets the view orientation for model files, and does a fit. "
-        HelpString += "Select the desired orientation on the **Configuration Tab -- General Page**."
+        HelpString += "Select the desired orientation on the Options panel."
 
         Return HelpString
     End Function
