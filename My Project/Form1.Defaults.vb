@@ -554,7 +554,7 @@ Partial Class Form1
             ReadmeOut.Add(msg)
             msg = "- *Cause*: Unknown."
             ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window."
+            msg = "- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window."
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 

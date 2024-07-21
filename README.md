@@ -516,9 +516,13 @@ As the first step of the conversion process, the Optimize command is run on the 
 The conversion is only possible in Synchronous mode. Ordered files are switched to Sync before the conversion, then switched back. Note, the imported body and the new hole features remain in Sync after the transition. 
 
 ### Update model styles from template
-Updates the styles you select from a template you specify. Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed if possible. It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). 
+Updates the styles you select from a template you specify. 
 
-Styles are updated/added as described, but no mapping takes place. For example, if the template has a dimension style ANSI(in), and the file uses ANSI(inch), the dimensions will not be updated. A workaround is to create the target style in the template and modify it in that file as needed. 
+![Update Styles](My%20Project/media/update_model_styles_from_template.png)
+
+Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed if possible. It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). 
+
+Styles are updated/added as described, but no mapping takes place. For example, if the template has a dimension style ANSI(in), and the file instead uses ANSI(inch), the dimensions will not be updated. A workaround is to create the target style in the template and modify it in that file as needed. 
 
 The active view style of the file is changed to match the one active in the template. Note, it must be a named style.  Overrides are ignored. To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`.
 
@@ -527,7 +531,7 @@ The active view style of the file is changed to match the one active in the temp
 ### Update drawing styles from template
 Updates styles and/or background sheets from a template you specify. 
 
-These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
+These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
 
 ### Remove face style overrides
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
@@ -592,7 +596,7 @@ You can create nested subdirectories if desired. Simply use the `\` in the formu
 
 As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the **Property Filter** section in this Readme file. 
 
-It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
+It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 
 Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. The `DXF Flat` option saves the flat pattern of the sheet metal file. 
 
@@ -653,7 +657,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 
 **Pathfinder sometimes blank during Interactive Edit**
 - *Cause*: Unknown.
-- *Possible workaround*: Refresh the screen by minimizing And maximizing the Solid Edge window.
+- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window.
 
 
 ## CODE ORGANIZATION

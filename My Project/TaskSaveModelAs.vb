@@ -1170,7 +1170,7 @@ Public Class TaskSaveModelAs
         HelpString += vbCrLf + vbCrLf + "As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, refer to the **Property Filter** section in this Readme file. "
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
-        HelpString += "If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. "
+        HelpString += "If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. "
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
