@@ -32,6 +32,8 @@ You can interrupt the program before it finishes. While processing, the Cancel b
 
 If you are unsure about what something does or how it works, look for this ![Folder](Resources/icons8_help_16.png).  Clicking that will take you directly to the Help topic for the item in question.
 
+Oh, one last thing.  This is not a perfect program.  We have run it on thousands of our files, but none of yours.  Back up any files before using it.
+
 ## NEXT STEPS
 
 When you're ready to learn more, try the [<ins>**README**</ins>](https://github.com/rmcanany/solidedgehousekeeper#readme).  It goes in depth on pretty much every aspect of the program.  If you have a specific topic in mind, click ![Table of Contents](My%20Project/media/table_of_contents_icon.png) at the top of the page.  It will open the table of contents to help you quickly find what you need.
