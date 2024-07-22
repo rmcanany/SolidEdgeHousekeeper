@@ -30,7 +30,7 @@ When processing is complete, if any errors are found, a log file will open showi
 
 You can interrupt the program before it finishes. While processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
-If you are unsure about what something does or how it works, look for this ![Folder](Resources/icons8_help_16.png).  Clicking that will take you directly to the Help topic for the item in question.
+If you are unsure about what something does or how it works, click ![Folder](Resources/icons8_help_16.png).  It will open the item's Help topic in your browser.
 
 Oh, one last thing.  This is not a perfect program.  We have run it on thousands of our files, but none of yours.  Back up any files before using it.
 
