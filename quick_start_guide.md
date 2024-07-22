@@ -32,7 +32,7 @@ You can interrupt the program before it finishes. While processing, the Cancel b
 
 If you are unsure about what something does or how it works, click ![Folder](Resources/icons8_help_16.png).  It will open the item's Help topic in your browser.
 
-Oh, one last thing.  This is not a perfect program.  We have run it on thousands of our files, but none of yours.  It processes a large number of files in a short amount of time.  It can do damage at the same rate.  *Back up any files before using it.*
+Oh, one last thing.  This is not a perfect program.  It processes a large number of files in a short amount of time.  It can do damage at the same rate.  We have run it on thousands of our files, but none of yours.  *Back up any files before using it.*
 
 ## NEXT STEPS
 
