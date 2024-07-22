@@ -129,7 +129,7 @@ If you *do* specify one or more folders, there are two options for performing *w
 
 **Bottom Up**
 
-Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\\BIG_SERVER\all_parts\`), where the number of files in the folder(s) far exceed the number of files in the assembly. The program gets links by recursion, then finds draft files with *where used*. If your draft files have the same name as the model they depict, click that option and the program will bypass *where used*. 
+Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\\BIG_SERVER\all_parts\`), where the number of files in the folder(s) far exceed the number of files in the assembly. The program gets links by recursion, then finds draft files with *where used*. If your draft files have the same name as the model they depict, click that option and the program will find drawings directly, bypassing the often time-consuming *where used* operation. 
 
 A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), which tells the program if the specified folder is on an indexed drive. 
 
@@ -205,7 +205,7 @@ After processing, you can choose to change the Status back to the old value, or 
 
 If you want simply to change the Status on a batch of files, choose the `Open/Save` Task for each document type.
 
-If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Document Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Design Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
 
 ### Filtering
 

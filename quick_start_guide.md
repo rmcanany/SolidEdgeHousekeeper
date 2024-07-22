@@ -24,7 +24,7 @@ Select which files to process on the **Home Tab**.  Select what to do on the **T
   <img src="My%20Project/media/home_tab_done.png">
 </p>
 
-There are lots (and lots) of ways to select files.  To keep it simple we'll only mention two.  To select a single folder, click ![Folder](Resources/icons8_Folder_16.png).  To select a folder and sub folders, click ![Folders](Resources/icons8_folder_tree_16.png).  To clear the list, click ![Remove All](Resources/icons8_trash_16.png).
+There are lots of ways to select files.  To keep it simple we'll only mention two.  To select a single folder, click ![Folder](Resources/icons8_Folder_16.png).  To select a folder and sub folders, click ![Folders](Resources/icons8_folder_tree_16.png).  To clear the list, click ![Remove All](Resources/icons8_trash_16.png).
 
 When processing is complete, if any errors are found, a log file will open showing each error and the file in which it occurred. 
 
@@ -38,9 +38,9 @@ Oh, one last thing.  This is not a perfect program.  We have run it on thousands
 
 Once you've mastered the basics, getting good at the following features can make you much more productive.
 
-- [<ins>**File Selection**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper?tab=readme-ov-file#file-selection-and-filtering)  Shows how to select files by top level assembly, by list, drag and drop, and more.
-- [<ins>**Filtering**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper?tab=readme-ov-file#filtering)  Explains how to refine the list using property, file type or file wildcard filters.
-- [<ins>**Tasks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper?tab=readme-ov-file#task-tab)  Provides details on the task interface, including how to customize it for your own needs.
+- [<ins>**File Selection**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#file-selection-and-filtering)  Shows how to select files by top level assembly, by list, drag and drop, and more.
+- [<ins>**Filtering**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering)  Explains how to refine the list using property, file type or file wildcard filters.
+- [<ins>**Tasks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#task-tab)  Provides details on the task interface, including how to customize it for your own needs.
 
 If you have some other topic in mind, click ![Table of Contents](My%20Project/media/table_of_contents_icon.png) at the top of the [<ins>**README**</ins>](https://github.com/rmcanany/solidedgehousekeeper#readme) page.  It will open the table of contents to help you quickly find what you need.
 
