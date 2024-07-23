@@ -67,6 +67,7 @@ I don't know how I didn't think of this before.  Luckily Chris did!
 
 Before updating the flat pattern, this command first regenerates the flat *model*.  That is the under-the-hood parent geometry of the flat pattern.  If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry.  This is a fix for that situation.
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-flat-pattern) for details.
 
 ### Break Part Copy Links
 Contributed by **@ChrisNC** Thank you!
@@ -75,14 +76,16 @@ This command removes external Part Copy dependencies from a file, keeping the ge
 
 In a future version, I may add options for other types of links to break.  If you have ideas for that, please let me know.
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-part-copy-links) for details.
 
 ### Recognize Holes
 Contributed by **@ZaPpInG** Thank you!
 
-Have you ever had the feeling that doing this tiresome, repetetive thing one more time is going to make you scream?  Our newest contributor did.  And he did something about it.  He taught himself VB.net and the Solid Edge API (in *one week*!!) to automate just such a job.
+Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?  Our newest contributor did.  And he did something about it.  He taught himself VB.net and the Solid Edge API (in *one week*!!) to automate just such a job.
 
 The job is to recognize holes in freshly imported parts.  He has tentative plans to add more capability.  Stay tuned!
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#recognize-holes) for details.
 
 ### Edit Interactively
 
@@ -115,6 +118,7 @@ Consolidated several commands into one.  Each is now presented as a separate opt
 
 Several other commands were similarly consolidated, `Check drawings` and `Update drawing styles from template`, for example.
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#check-relationships) for details.
 
 ### Update model styles from template
 
@@ -122,11 +126,13 @@ Fixed an issue where only face styles and the active view style were updated.  N
 
 Any style in the template, but not in the model, is added.  Any in the model, but not the template, are optionally deleted if possible.  It is not possible to remove ones Solid Edge thinks are in use (even if they aren't). 
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-model-styles-from-template) for details.
 
 ### Save Model As
 
 Added an option, for image files, to change the view style before saving.  (Thank you **@tempod**!)
 
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
 
 ### Readme
 
