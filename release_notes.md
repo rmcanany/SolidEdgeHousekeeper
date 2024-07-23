@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2024.2 Enhancements/Fixes
 
-We'll get to the highlights in a minute, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!  Thank you both!
+We'll get to the highlights in a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!  Thank you both!
 
 ### New Task Page
 Concept by **@Francesco Arfilli** Thank you!
@@ -26,13 +26,14 @@ He's at it *again*!  More streamlined, better organized, and more colorful than 
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
-See all those blue circles?  Click one and it takes you directly to the Help page for that command.
+See the blue circles everywhere?  Those are context-sensitive help icons.  Click one and see what happens! 
 
-Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove the ones you don't use.  Change colors to your preference.
+Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove ones you don't use.  Change colors to your preference.  Change the names of any or all -- even in your own language if you want.
 
-Add one or more of any task and configure each how you need.  For example:
-- Add a second Print task and configure it to send large sheets to the plotter (Thank you **@n0minus38**!).  
-- Add a second Save As so you can generate *.stp and *.jt files on one pass (Thank you **@Robin BIoemberg**!).
+Those things are all great, but the biggest improvement is the ability to add copies of any task to the list.  Each copy is separately configurable.  With this you can, for example:
+- Create a second `Print` task and configure it to send large sheets to the plotter (Thank you **@n0minus38**!).  
+- Add multiple `Update drawings from template` tasks, so each of your clients get their own custom drawing border.
+- Put in another `Save As` so you can generate `*.stp` and `*.jt` files in one pass (Thank you **@Robin BIoemberg**!).
 
 <p align="center">
   <img src="My%20Project/media/edit_task_list.png">
@@ -44,7 +45,7 @@ See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHouseke
 ### Edit Properties
 Contributed by **@Francesco Arfilli** Thank you!
 
-He *still* wasn't done!  Francesco has implemented a new Expression Editor for more complex find/replace jobs.  He also added an option to edit properties without opening Solid Edge.
+He *still* wasn't done!  For this release, Francesco implemented a new Expression Editor for more complex find/replace jobs.  He also added an option to edit properties without opening Solid Edge.
 
 #### Expression Editor
 
