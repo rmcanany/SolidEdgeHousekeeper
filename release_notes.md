@@ -15,7 +15,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2024.2 Enhancements/Fixes
 
-We'll get right to the highlights, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!  Thank you both!
+We'll get to the highlights in a minute, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!  Thank you both!
 
 ### New Task Page
 Concept by **@Francesco Arfilli** Thank you!
@@ -28,7 +28,7 @@ He's at it *again*!  More streamlined, better organized, and more colorful than 
 
 See all those blue circles?  Click one and it takes you directly to the Help page for that command.
 
-Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove the ones you don't use.  
+Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove the ones you don't use.  Change colors to your preference.
 
 Add one or more of any task and configure each how you need.  For example:
 - Add a second Print task and configure it to send large sheets to the plotter (Thank you **@n0minus38**!).  
@@ -48,13 +48,13 @@ He *still* wasn't done!  Francesco has implemented a new Expression Editor for m
 
 #### Expression Editor
 
-An `expression` is similar to a `formula` in Excel. Expressions enable more complex manipulations of the replacement text. You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  You can test your expression interactively. You can save them for reuse.
+An `expression` is similar to a `formula` in Excel. Expressions enable more complex manipulations of the replacement text. You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  You can test your expression interactively. You can save it for reuse.
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
 #### Direct Edit
 
-This is *blazingly* fast; it can process a large batch of files before Solid Edge can even get its shoes on.  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
+This is *blazingly* fast.  It can run a monster batch of files before Solid Edge even gets its shoes on.  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 
@@ -64,7 +64,7 @@ Contributed by **@ChrisNC** Thank you!
 
 I don't know how I didn't think of this before.  Luckily Chris did!
 
-Before updating the flat pattern, this command first regenerates the flat *model*.  That is the under-the-hood parent of the flat pattern.  If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry.  This is a fix for that situation.
+Before updating the flat pattern, this command first regenerates the flat *model*.  That is the under-the-hood parent geometry of the flat pattern.  If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry.  This is a fix for that situation.
 
 
 ### Break Part Copy Links
@@ -89,24 +89,26 @@ Added options to use a countdown timer and/or start a command.
 
 ![Edit Interactively](My%20Project/media/edit_interactively_2.png)
 
-The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.
+The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete before moving on.  Just click one of the buttons at the bottom of the dialog to open the next file.
 
-The start command feature launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files, and no automation is available.  For example, activating the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos**!). 
+The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files, and no automation is available.  For example, activating the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos**!). 
 
-The list has commands we though might be useful.  You can customize it.  How to do so is covered in the command's help page. 
+The list has commands we though might be useful.  You can customize it.  There are hundreds of commands available.  Customization is covered in the command's help page. 
+
+I can't envision a case where you would use both options at the same time, but there's nothing in the code to keep you from trying it.
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-interactively) for details.
 
 ### Quick Start Guide
 
-Added a guide for new users.  (Thank you **@gir.isi**, **@bshand**, **@BrianVR74** and **@Amial_From_France**!)
+Added a guide for new and infrequent users.  (Thank you **@gir.isi**, **@bshand**, **@BrianVR74**, and **@Amial_From_France**!)  It's not nearly as detailed as the README, but it will get you up and running much more quickly.
 
 View the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).
 
 
 ### Check Relationships
 
-Consolidated several commands into one.  Each is now presented as an option.
+Consolidated several commands into one.  Each is now presented as a separate option.
 
 ![Check Relationships](My%20Project/media/check_relationships.png)
 
@@ -115,9 +117,9 @@ Several other commands were similarly consolidated, `Check drawings` and `Update
 
 ### Update model styles from template
 
-Fixed an issue where only face styles and the active view style were updated.  Now all styles are updated.  (Thank you **@tempod**!)
+Fixed an issue where only face styles and the active view style were updated.  Now all styles are updated (Thank you **@tempod**!).  As before, the view style active in the template becomes the view style active in the model.
 
-Any style in the template, but not in the model, is added.  Any in the model, but not the template, are optionally deleted.  If possible, that is.  It is not possible to remove ones Solid Edge thinks are in use (even if they aren't). 
+Any style in the template, but not in the model, is added.  Any in the model, but not the template, are optionally deleted if possible.  It is not possible to remove ones Solid Edge thinks are in use (even if they aren't). 
 
 
 ### Save Model As
