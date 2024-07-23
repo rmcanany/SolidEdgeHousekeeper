@@ -12,7 +12,7 @@
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347 
 
 **Helpful feedback and bug reports:**
-@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303
+@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay101, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -21,7 +21,8 @@
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
-If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  It's not nearly as detailed as this README, but you will be up and running much more quickly.
+If this is your first time here, you may want to check out the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).  It's not nearly as detailed as this README, but it will get you up and running much more quickly.
+
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -415,7 +416,9 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 Checks drawing views one by one, and updates them if needed.
 
 ### Update flat pattern
-Regenerates missing flat models by activating flat environment. 
+Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 
+
+Before updating the flat pattern, this command first regenerates the flat *model*. That is the under-the-hood parent geometry of the flat pattern. If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
 
 ### Break part copy links
 Break design and/or construction part copy links
@@ -506,7 +509,9 @@ The countdown timer lets you run hands-free. This can be handy for doing a quick
 
 The `Start command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog.  
 
-The dropdown list contains commands that we thought might be useful.  You can customize the list.  Instructions to do so are in the file `EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. That file also shows how to find commands and their corresponding ID numbers. Many commands are available.  It's worth checking out. 
+The dropdown list contains commands that we thought might be useful.  The first entry on the list, `Manual entry` is a special case.  It instructs the program to execute the command id entered in the textboxes below the dropdown. If you don't want a command to start for a given file type, enter `0` in the textbox. 
+
+You can customize the list.  Instructions to do so are in the file `EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. Note, you have to run this command one time to create the file. That file also shows how to find commands and their corresponding ID numbers. Hundreds of commands are available.  It's worth checking out. 
 
 Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. If you used the `Start command` option, you need to close any dialog opened in the process. 
 

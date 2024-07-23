@@ -183,7 +183,7 @@ Public Class Form1
         End If
 
         If ListViewFilesOutOfDate Then
-            msg += "    Update the file list" + Chr(13)
+            msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
         End If
 
         If RadioButtonTLABottomUp.Checked Then
@@ -1924,7 +1924,7 @@ Public Class Form1
 
         Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
 
-        Dim HelpURL = String.Format("{0}#task-descriptions", VersionSpecificReadme)
+        Dim HelpURL = String.Format("{0}#task-tab", VersionSpecificReadme)
 
         System.Diagnostics.Process.Start(HelpURL)
     End Sub

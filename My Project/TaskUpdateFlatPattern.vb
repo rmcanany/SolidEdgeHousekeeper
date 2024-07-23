@@ -162,7 +162,14 @@ Public Class TaskUpdateFlatPattern
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Regenerates missing flat models by activating flat environment. "
+
+        HelpString = "Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. "
+
+        HelpString += vbCrLf + vbCrLf + "Before updating the flat pattern, this command first regenerates the flat *model*. "
+        HelpString += "That is the under-the-hood parent geometry of the flat pattern. "
+        HelpString += "If you have a highly-automated model-to-laser pipeline, "
+        HelpString += "you may have noticed that sometimes an exported flat model contains no geometry. "
+        HelpString += "This is a fix for that situation."
 
         Return HelpString
     End Function

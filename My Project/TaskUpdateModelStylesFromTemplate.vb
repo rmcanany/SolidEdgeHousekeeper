@@ -1309,13 +1309,17 @@ Public Class TaskUpdateModelStylesFromTemplate
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Updates the styles you select from a template you specify. "
+
         HelpString += vbCrLf + vbCrLf + "![Update Styles](My%20Project/media/update_model_styles_from_template.png)"
+
         HelpString += vbCrLf + vbCrLf + "Styles present in the template, but not in the file, are added. "
         HelpString += "Styles present in the file, but not in the template, can optionally be removed if possible. "
         HelpString += "It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). "
+
         HelpString += vbCrLf + vbCrLf + "Styles are updated/added as described, but no mapping takes place. "
         HelpString += "For example, if the template has a dimension style ANSI(in), and the file instead uses ANSI(inch), the dimensions will not be updated. "
         HelpString += "A workaround is to create the target style in the template and modify it in that file as needed. "
+
         HelpString += vbCrLf + vbCrLf + "The active view style of the file is changed to match the one active in the template. "
         HelpString += "Note, it must be a named style.  Overrides are ignored. "
         HelpString += "To create a named style from an override, open the template in Solid Edge, activate the `View Overrides` dialog, and click `Save As`."

@@ -24,7 +24,11 @@ Select which files to process on the **Home Tab**.  Select what to do on the **T
   <img src="My%20Project/media/home_tab_done.png">
 </p>
 
-There are lots of ways to select files.  To keep it simple we'll only mention two.  To select a single folder, click ![Folder](Resources/icons8_Folder_16.png).  To select a folder and sub folders, click ![Folders](Resources/icons8_folder_tree_16.png).  To clear the list, click ![Remove All](Resources/icons8_trash_16.png).
+The basic steps to select files is as follows.  (See **Next Steps** below for more ways to do it).  
+- *Either* select a single folder by clicking ![Folder](Resources/icons8_Folder_16.png).  
+- *Or* select a folder and sub folders by clicking ![Folders](Resources/icons8_folder_tree_16.png).  
+- Populate the list by clicking ![Update](Resources/Synch_16.png) (it should be orange).  
+- Clear the list by clicking ![Remove All](Resources/icons8_trash_16.png).
 
 When processing is complete, if any errors are found, a log file will open showing each error and the file in which it occurred. 
 
