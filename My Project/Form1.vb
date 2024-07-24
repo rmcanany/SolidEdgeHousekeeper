@@ -1966,6 +1966,20 @@ Public Class Form1
         UseCurrentSession = CheckBoxUseCurrentSession.Checked
     End Sub
 
+    Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
+        ' Help button on the file list toolstrip
+        ' https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-2024.2.md#file-selection-and-filtering
+
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Me.Version)
+
+        Dim s As String = "file-selection-and-filtering"
+
+        Dim HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, s)
+
+        System.Diagnostics.Process.Start(HelpURL)
+
+    End Sub
+
     ' Commands I can never remember
 
     ' System.Windows.Forms.Application.DoEvents()

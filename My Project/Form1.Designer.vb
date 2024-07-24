@@ -187,6 +187,8 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_Help = New System.Windows.Forms.ToolStripButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -367,7 +369,7 @@ Partial Class Form1
         'ToolStrip_List
         '
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
         Me.ToolStrip_List.Location = New System.Drawing.Point(2, 2)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -542,10 +544,10 @@ Partial Class Form1
         Me.TabPageTasks.Controls.Add(Me.TaskPanel)
         Me.TabPageTasks.Controls.Add(Me.TaskFooterPanel)
         Me.TabPageTasks.Controls.Add(Me.TaskHeaderPanel)
-        Me.TabPageTasks.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageTasks.Location = New System.Drawing.Point(4, 25)
         Me.TabPageTasks.Name = "TabPageTasks"
         Me.TabPageTasks.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTasks.Size = New System.Drawing.Size(551, 648)
+        Me.TabPageTasks.Size = New System.Drawing.Size(551, 647)
         Me.TabPageTasks.TabIndex = 7
         Me.TabPageTasks.Text = "Tasks"
         Me.TabPageTasks.UseVisualStyleBackColor = True
@@ -556,7 +558,7 @@ Partial Class Form1
         Me.TaskPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskPanel.Location = New System.Drawing.Point(3, 37)
         Me.TaskPanel.Name = "TaskPanel"
-        Me.TaskPanel.Size = New System.Drawing.Size(545, 562)
+        Me.TaskPanel.Size = New System.Drawing.Size(545, 561)
         Me.TaskPanel.TabIndex = 2
         '
         'TaskFooterPanel
@@ -564,7 +566,7 @@ Partial Class Form1
         Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSkyBlue
         Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 599)
+        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 598)
         Me.TaskFooterPanel.Name = "TaskFooterPanel"
         Me.TaskFooterPanel.Size = New System.Drawing.Size(545, 46)
         Me.TaskFooterPanel.TabIndex = 1
@@ -719,11 +721,11 @@ Partial Class Form1
         Me.TabPageConfiguration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TabPageConfiguration.Controls.Add(Me.TabControl2)
         Me.TabPageConfiguration.ImageKey = "Tools"
-        Me.TabPageConfiguration.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageConfiguration.Location = New System.Drawing.Point(4, 25)
         Me.TabPageConfiguration.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageConfiguration.Name = "TabPageConfiguration"
         Me.TabPageConfiguration.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 648)
+        Me.TabPageConfiguration.Size = New System.Drawing.Size(551, 647)
         Me.TabPageConfiguration.TabIndex = 5
         Me.TabPageConfiguration.Text = "Configuration"
         '
@@ -923,11 +925,11 @@ Partial Class Form1
         Me.TabPageStatus.Controls.Add(Me.RadioButtonReadOnlyRevert)
         Me.TabPageStatus.Controls.Add(Me.CheckBoxProcessReadOnly)
         Me.TabPageStatus.ImageKey = "folder"
-        Me.TabPageStatus.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageStatus.Location = New System.Drawing.Point(4, 25)
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageStatus.Name = "TabPageStatus"
         Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageStatus.Size = New System.Drawing.Size(532, 789)
         Me.TabPageStatus.TabIndex = 3
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
@@ -1616,11 +1618,11 @@ Partial Class Form1
         Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
         Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
         Me.TabPageSorting.ImageKey = "list"
-        Me.TabPageSorting.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageSorting.Size = New System.Drawing.Size(532, 789)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -1715,11 +1717,11 @@ Partial Class Form1
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxBackgroundProcessing)
         Me.TabPageGeneral.Controls.Add(Me.CheckBoxRememberTasks)
         Me.TabPageGeneral.ImageKey = "config"
-        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 25)
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 789)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
@@ -1834,11 +1836,11 @@ Partial Class Form1
         Me.TabPageHelp.Controls.Add(Me.LinkLabelGitHubReadme)
         Me.TabPageHelp.Controls.Add(Me.PictureBoxTableOfContents)
         Me.TabPageHelp.ImageKey = "Help"
-        Me.TabPageHelp.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageHelp.Location = New System.Drawing.Point(4, 25)
         Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPageHelp.Name = "TabPageHelp"
         Me.TabPageHelp.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageHelp.Size = New System.Drawing.Size(551, 648)
+        Me.TabPageHelp.Size = New System.Drawing.Size(551, 647)
         Me.TabPageHelp.TabIndex = 6
         Me.TabPageHelp.Text = "Help"
         '
@@ -2026,6 +2028,21 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(6, 25)
+        '
+        'BT_Help
+        '
+        Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_Help.Name = "BT_Help"
+        Me.BT_Help.Size = New System.Drawing.Size(23, 22)
+        Me.BT_Help.Text = "ToolStripButton2"
+        Me.BT_Help.ToolTipText = "Help"
         '
         'Form1
         '
@@ -2250,4 +2267,6 @@ Partial Class Form1
     Friend WithEvents TaskHeaderToggleDraftButton As Button
     Friend WithEvents TaskHeaderHelpButton As Button
     Friend WithEvents TaskHeaderNameLabel As Label
+    Friend WithEvents ToolStripSeparator9 As ToolStripSeparator
+    Friend WithEvents BT_Help As ToolStripButton
 End Class
