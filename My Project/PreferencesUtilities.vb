@@ -27,8 +27,13 @@ Public Class PreferencesUtilities
         Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
 
+    Public Function GetSavedExpressionsFilename() As String
+        Dim SavedExpressionsFilename = String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
+        Return SavedExpressionsFilename
+    End Function
+
     Public Sub CreateNCalcSavedExpressions()
-        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", GetPreferencesDirectory)
+        Dim SavedExpressionsFilename = GetSavedExpressionsFilename()
 
         If Not FileIO.FileSystem.FileExists(SavedExpressionsFilename) Then
             Dim Outlist As New List(Of String)
@@ -74,6 +79,11 @@ Public Class PreferencesUtilities
         End If
     End Sub
 
+    Public Function GetEditInteractivelyCommandsFilename() As String
+        Dim EditInteractivelyCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
+        Return EditInteractivelyCommandsFilename
+    End Function
+
     Public Sub CreateEditInteractivelyCommands()
 
         'Description                CCA    CCP    CCS    CCD
@@ -93,7 +103,7 @@ Public Class PreferencesUtilities
         'Sheet setup                                     10002
         'View Backgrounds                               10211
 
-        Dim EditInteractivelyCommandsFilename = String.Format("{0}\EditInteractivelyCommands.txt", GetPreferencesDirectory)
+        Dim EditInteractivelyCommandsFilename = GetEditInteractivelyCommandsFilename()
 
         If Not FileIO.FileSystem.FileExists(EditInteractivelyCommandsFilename) Then
 

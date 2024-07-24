@@ -28,7 +28,11 @@ The basic steps to select files is as follows.  (See **Next Steps** below for mo
 - *Either* select a single folder by clicking ![Folder](Resources/icons8_Folder_16.png).  
 - *Or* select a folder and sub folders by clicking ![Folders](Resources/icons8_folder_tree_16.png).  
 - Populate the list by clicking ![Update](Resources/Synch_16.png) (it should be orange).  
-- Clear the list by clicking ![Remove All](Resources/icons8_trash_16.png).
+- To start over, clear the list by clicking ![Remove All](Resources/icons8_trash_16.png).
+
+The basic steps to configure a task are as follows.
+- Click the left-most checkbox to enable a task.
+- 
 
 When processing is complete, if any errors are found, a log file will open showing each error and the file in which it occurred. 
 

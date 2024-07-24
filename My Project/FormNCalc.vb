@@ -149,7 +149,7 @@ Public Class FormNCalc
         Dim PU As New PreferencesUtilities
         Dim PreferencesDirectory = PU.GetPreferencesDirectory()
 
-        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", PreferencesDirectory)
+        Dim SavedExpressionsFilename = PU.GetSavedExpressionsFilename()
 
         Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
         Dim SavedExpressions = SR.ReadToEnd
@@ -271,7 +271,7 @@ Public Class FormNCalc
         Dim PU As New PreferencesUtilities
         Dim PreferencesDirectory = PU.GetPreferencesDirectory()
 
-        Dim SavedExpressionsFilename = String.Format("{0}\SavedExpressions.txt", PreferencesDirectory)
+        Dim SavedExpressionsFilename = PU.GetSavedExpressionsFilename()
 
         IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
 
@@ -298,7 +298,9 @@ Public Class FormNCalc
 
         Next
 
-        IO.File.WriteAllText(Application.StartupPath() & "\SavedExpressions.txt", tmpExpressionsText)
+        Dim PU As New PreferencesUtilities
+
+        IO.File.WriteAllText(PU.GetSavedExpressionsFilename, tmpExpressionsText)
 
         TextEditorFormula.Clear()
         CurrentExpression = ""

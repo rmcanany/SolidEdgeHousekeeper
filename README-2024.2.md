@@ -511,7 +511,7 @@ The `Start command` option launches a command when the file opens.  This can hel
 
 The dropdown list contains commands that we thought might be useful.  The first entry on the list, `Manual entry` is a special case.  It instructs the program to execute the command id entered in the textboxes below the dropdown. If you don't want a command to start for a given file type, enter `0` in the textbox. 
 
-You can customize the list.  Instructions to do so are in the file `EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. Note, you have to run this command one time to create the file. That file also shows how to find commands and their corresponding ID numbers. Hundreds of commands are available.  It's worth checking out. 
+You can customize the list.  Instructions to do so are in the file `interactive_edit_commands.txt` in the Housekeeper `Preferences` directory. Note, you have to run this command one time to create the file. That file also shows how to find commands and their corresponding ID numbers. Hundreds of commands are available.  It's worth checking out. 
 
 Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. If you used the `Start command` option, you need to close any dialog opened in the process. 
 

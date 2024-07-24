@@ -89,7 +89,7 @@ Public Class TaskEditInteractively
 
         Dim PU As New PreferencesUtilities
 
-        Dim EditInteractivelyCommandsFilename = String.Format("{0}\EditInteractivelyCommands.txt", PU.GetPreferencesDirectory)
+        Dim EditInteractivelyCommandsFilename = PU.GetEditInteractivelyCommandsFilename()
 
         If Not FileIO.FileSystem.FileExists(EditInteractivelyCommandsFilename) Then
             PU.CreateEditInteractivelyCommands()
@@ -621,7 +621,7 @@ Public Class TaskEditInteractively
         HelpString += "If you don't want a command to start for a given file type, enter `0` in the textbox. "
 
         HelpString += vbCrLf + vbCrLf + "You can customize the list.  Instructions to do so are in the file "
-        HelpString += "`EditInteractivelyCommands.txt` in the Housekeeper `Preferences` directory. "
+        HelpString += "`interactive_edit_commands.txt` in the Housekeeper `Preferences` directory. "
         HelpString += "Note, you have to run this command one time to create the file. "
         HelpString += "That file also shows how to find commands and their corresponding ID numbers. "
         HelpString += "Hundreds of commands are available.  It's worth checking out. "
