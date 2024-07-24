@@ -6,7 +6,6 @@ Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports System.IO
 Imports System.Text.RegularExpressions
-Imports System.Windows.Shapes
 
 Public Class TaskEditProperties
     Inherits Task

@@ -1,4 +1,4 @@
-﻿Option Explicit On
+﻿Option Strict On
 
 Imports Newtonsoft.Json
 

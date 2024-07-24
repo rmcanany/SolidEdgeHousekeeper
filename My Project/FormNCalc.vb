@@ -1,10 +1,7 @@
 ﻿Option Strict On
 
 Imports FastColoredTextBoxNS
-'Imports ICSharpCode.TextEditor.Util
 Imports PanoramicData.NCalcExtensions
-Imports SolidEdgePart
-Imports System.IO
 Imports System.Text.RegularExpressions
 
 Public Class FormNCalc

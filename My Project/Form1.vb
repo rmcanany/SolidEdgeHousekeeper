@@ -1,10 +1,8 @@
 ﻿Option Strict On
 
 Imports System.Runtime.InteropServices
-Imports Antlr.Runtime
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
-Imports SolidEdgePart
 
 Public Class Form1
 

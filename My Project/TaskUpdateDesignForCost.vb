@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgeConstants
-Imports SolidEdgeFramework
 
 Public Class TaskUpdateDesignForCost
 

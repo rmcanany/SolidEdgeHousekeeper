@@ -1,10 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgePart
-
-
-
-'Imports SolidEdgeCommunity.Extensions
-'Imports SolidEdgePart
 
 Public Class TaskRecognizeHoles
     Inherits Task

@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports SolidEdgeConstants
+'Imports SolidEdgeConstants
 
 Public Class TaskCheckInterference
 
@@ -89,8 +89,8 @@ Public Class TaskCheckInterference
         Dim i As Integer
         Dim NumInterferences As Object = Nothing
         Occurrences = tmpSEDoc.Occurrences
-        Dim IgnoreT As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
-        Dim IgnoreD As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
+        Dim IgnoreT As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
+        Dim IgnoreD As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
         Dim NumOccurrences As Integer
         'Dim NumOccurrencesLimit As Integer
 

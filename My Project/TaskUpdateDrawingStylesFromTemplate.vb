@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgeDraft
 
 Public Class TaskUpdateDrawingStylesFromTemplate
 

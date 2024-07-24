@@ -1,5 +1,5 @@
 ﻿Option Strict On
-Imports SolidEdgePart
+
 
 Public Class FeatureDoctor
 
@@ -18,7 +18,7 @@ Public Class FeatureDoctor
             Dim ModelingModeType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
         Of SolidEdgePart.ModelingModeConstants)(Feature, "ModelingModeType")
 
-            If ModelingModeType = ModelingModeConstants.seModelingModeOrdered Then
+            If ModelingModeType = SolidEdgePart.ModelingModeConstants.seModelingModeOrdered Then
                 Return True
             Else
                 Return False

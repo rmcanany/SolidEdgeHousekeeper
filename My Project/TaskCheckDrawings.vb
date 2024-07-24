@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgeDraft
-Imports SolidEdgeFrameworkSupport
 
 Public Class TaskCheckDrawings
 

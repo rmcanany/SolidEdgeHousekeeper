@@ -1,12 +1,4 @@
 ﻿Option Strict On
-Imports System.Windows.Shapes
-Imports SolidEdgeFramework
-
-
-'Imports Microsoft.WindowsAPICodePack.Dialogs
-'Imports SolidEdgeAssembly
-'Imports SolidEdgeFramework
-'Imports SolidEdgePart
 
 Public Class TaskUpdateModelStylesFromTemplate
     Inherits Task

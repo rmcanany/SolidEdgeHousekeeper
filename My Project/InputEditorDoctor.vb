@@ -1,6 +1,5 @@
 ﻿Option Strict On
-Imports System.Security.AccessControl
-Imports System.Windows.Forms.VisualStyles
+
 Imports Newtonsoft.Json
 
 Public Class InputEditorDoctor

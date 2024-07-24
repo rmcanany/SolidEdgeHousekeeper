@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-'Imports SolidEdgeAssembly
-
 Public Class TaskActivateAndUpdateAll
     Inherits Task
 

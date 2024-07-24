@@ -1,7 +1,4 @@
 ﻿Option Strict On
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgeAssembly
-Imports SolidEdgePart
 
 Public Class TaskCheckLinks
 
@@ -124,7 +121,7 @@ Public Class TaskCheckLinks
             ' The Select Case section simply builds a list of files to check.
             Select Case DocType
                 Case "asm"
-                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, AssemblyDocument)
+                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
                     Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
                     Dim Occurrence As SolidEdgeAssembly.Occurrence
@@ -137,12 +134,12 @@ Public Class TaskCheckLinks
                     Next
 
                 Case = "par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
 
                     Models = tmpSEDoc.Models
 
                 Case = "psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SheetMetalDocument)
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
 
                     Models = tmpSEDoc.Models
 

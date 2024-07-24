@@ -1,4 +1,5 @@
-﻿Imports System.Windows.Controls
+﻿Option Strict On
+
 
 Public Class PrinterDoctor
 

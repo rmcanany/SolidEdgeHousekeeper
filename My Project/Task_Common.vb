@@ -2,19 +2,12 @@
 
 Imports System.IO
 Imports System.Reflection
-Imports System.Security.AccessControl
-Imports System.Security.Cryptography
 Imports System.Text.RegularExpressions
-Imports System.Windows
-Imports System.Windows.Forms.PropertyGridInternal
 Imports ExcelDataReader
-'Imports Microsoft.WindowsAPICodePack
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports PanoramicData.NCalcExtensions
-Imports Shell32
-Imports SolidEdgePart
 
 Public Class Task_Common
 

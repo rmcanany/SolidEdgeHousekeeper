@@ -1,9 +1,5 @@
 ﻿Option Strict On
 
-'Imports System.Security.Cryptography
-'Imports SolidEdgeConstants
-'Imports SolidEdgeFramework
-
 Public Class TaskUpdateModelSizeInVariableTable
     Inherits Task
 

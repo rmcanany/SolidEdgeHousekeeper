@@ -1,9 +1,4 @@
 ﻿Option Strict On
-Imports System.Reflection
-'Imports Microsoft.WindowsAPICodePack.Dialogs
-'Imports SolidEdgeAssembly
-'Imports SolidEdgeFramework
-'Imports SolidEdgePart
 
 Public Class TaskEditInteractively
 

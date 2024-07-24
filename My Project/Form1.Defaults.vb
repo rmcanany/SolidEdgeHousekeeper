@@ -1,6 +1,4 @@
 Option Strict On
-Imports System.Security.Cryptography
-Imports System.Threading
 
 Partial Class Form1
 

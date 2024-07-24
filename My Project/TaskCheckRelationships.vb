@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgePart
 
 Public Class TaskCheckRelationships
     Inherits Task
@@ -181,13 +179,13 @@ Public Class TaskCheckRelationships
                     Next
 
                 Case = "par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
                     Models = tmpSEDoc.Models
                     Sketches = tmpSEDoc.Sketches
                     ProfileSets = tmpSEDoc.ProfileSets
 
                 Case = "psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SheetMetalDocument)
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                     Models = tmpSEDoc.Models
                     Sketches = tmpSEDoc.Sketches
                     ProfileSets = tmpSEDoc.ProfileSets
