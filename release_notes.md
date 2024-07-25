@@ -9,13 +9,13 @@
 
 Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
+Please note, the program has been tested on thousands of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
 ## V2024.2 Enhancements/Fixes
 
-We'll get to the highlights in a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!  Thank you both!
+We'll get to the highlights in a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
 
 ### New Task Page
 Concept by **@Francesco Arfilli** Thank you!
@@ -26,7 +26,7 @@ He's at it *again*!  More streamlined, better organized, and more colorful than 
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
-See the blue circles everywhere?  Those are context-sensitive help icons.  Click one and see what happens! 
+See the blue circular icons everywhere?  Those are context-sensitive help buttons.  Click one and see what happens! 
 
 Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove ones you don't use.  Change colors to your preference.  Change the names of any or all -- even in your own language if you want.
 
@@ -55,7 +55,7 @@ An `expression` is similar to a `formula` in Excel. Expressions enable more comp
 
 #### Direct Edit
 
-This is *blazingly* fast.  It can run a monster batch of files before Solid Edge even gets its shoes on.  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
+This is *blazingly* fast.  It can run a monster batch of parts before Solid Edge even gets its shoes on!  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 
@@ -69,19 +69,23 @@ Before updating the flat pattern, this command first regenerates the flat *model
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-flat-pattern) for details.
 
-### Break Part Copy Links
+### Break Links
 Contributed by **@ChrisNC** Thank you!
 
-This command removes external Part Copy dependencies from a file, keeping the geometry intact.  You can remove design and/or construction links.
+This command removes external links from a file.  You can optionally remove `Part Copy` design and construction links, `Excel` variable and dimension formula links, `Draft model` drawing view links, or `All interpart` links.
 
-In a future version, I may add options for other types of links to break.  If you have ideas for that, please let me know.
+This is irreversible, so you know, think about it.  
 
-See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-part-copy-links) for details.
+For drawing views in particular, there are important things to know about model Property text (that you might be using, say, in your title block).  Please visit the link below for information on that.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-links) for details.
 
 ### Recognize Holes
 Contributed by **@ZaPpInG** Thank you!
 
-Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?  Our newest contributor did.  And he did something about it.  He taught himself VB.net and the Solid Edge API (in *one week*!!) to automate just such a job.
+Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?  
+
+Our newest contributor did, and he did something about it.  He taught himself VB.net and the Solid Edge API (in *two weeks*!!) to automate just such a job.
 
 The job is to recognize holes in freshly imported parts.  He has tentative plans to add more capability.  Stay tuned!
 
@@ -93,13 +97,13 @@ Added options to use a countdown timer and/or start a command.
 
 ![Edit Interactively](My%20Project/media/edit_interactively_2.png)
 
-The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete before moving on.  Just click one of the buttons at the bottom of the dialog to open the next file.
+The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete.  Just click one of the buttons at the bottom of the dialog to move on to the next file.
 
-The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files, and no automation is available.  For example, activating the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos**!). 
+The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos**!). 
 
 The list has commands we though might be useful.  You can customize it.  There are hundreds of commands available.  Customization is covered in the command's help page. 
 
-I can't envision a case where you would use both options at the same time, but there's nothing in the code to keep you from trying it.
+I can't envision a case where you would use both options at the same time, but there's nothing to keep you from trying it.
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-interactively) for details.
 
@@ -136,7 +140,7 @@ See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHouseke
 
 ### Readme
 
-Added version-specific Readme files to the repo.  This addresses an issue where, because the documentation is auto-generated, the Readme "gets ahead" of the currently released version.  (Thank you **@bshand** and many others!)
+Added version-specific Readme files to the repo.  This addresses an issue where, because the documentation is auto-generated, the Readme "gets ahead" of the currently released version. All context-sensitive help buttons now incorporate this feature. 
 
 
 ## V2024.1 Enhancements/Fixes

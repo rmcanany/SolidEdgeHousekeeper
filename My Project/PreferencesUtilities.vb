@@ -268,7 +268,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskUpdateDesignForCost)
         TaskList.Add(New TaskUpdateDrawingViews)
         TaskList.Add(New TaskUpdateFlatPattern)
-        TaskList.Add(New TaskBreakPartCopyLinks)
+        TaskList.Add(New TaskBreakLinks)
 
         ' Edit
         TaskList.Add(New TaskEditProperties)

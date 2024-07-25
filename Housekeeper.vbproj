@@ -266,7 +266,7 @@
     </Compile>
     <Compile Include="My Project\Task.vb" />
     <Compile Include="My Project\TaskActivateAndUpdateAll.vb" />
-    <Compile Include="My Project\TaskBreakPartCopyLinks.vb" />
+    <Compile Include="My Project\TaskBreakLinks.vb" />
     <Compile Include="My Project\TaskCheckDrawingPartsList.vb" />
     <Compile Include="My Project\TaskCheckDrawings.vb" />
     <Compile Include="My Project\TaskCheckFlatPattern.vb" />
@@ -315,6 +315,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormEditInteractively.resx">
       <DependentUpon>FormEditInteractively.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormEditTaskList.resx">
       <DependentUpon>FormEditTaskList.vb</DependentUpon>
@@ -322,9 +323,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormEditTaskListChangeColor.resx">
       <DependentUpon>FormEditTaskListChangeColor.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormNCalc.resx">
       <DependentUpon>FormNCalc.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormPropertyFilter.resx">
       <DependentUpon>FormPropertyFilter.vb</DependentUpon>
