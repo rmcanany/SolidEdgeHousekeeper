@@ -249,6 +249,8 @@ Public Class TaskBreakLinks
                 Try
                     DrawingView.Drop()
                 Catch ex2 As Exception
+                    'exitstatus = 1
+                    'Errormessagelist.add("something")
                 End Try
             Next
         Next
