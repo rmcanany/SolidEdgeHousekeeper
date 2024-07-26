@@ -420,8 +420,22 @@ Updates flat patterns. If the update was not successful, or no flat patterns wer
 
 Before updating the flat pattern, this command first regenerates the flat *model*. That is the under-the-hood parent geometry of the flat pattern. If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
 
-### Break part copy links
-Break design and/or construction part copy links
+### Break links
+Breaks external links to a file.  This is irreversible, so you know, think about it. 
+
+Several options are available.  They are explained below. 
+
+`Break part copy design links` and `Break part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
+
+`Break Excel links` removes Excel references from `Variable` and `Dimension` formulas. In both cases, the value remains as it was before the link was removed.
+
+`Break all interpart links` is the sledgehammer option. It removes the links cited above.  It also removes `Paste Links` in the variable table. There could well be others. 
+
+`Break draft model links` converts drawing view to 2D, removing external references in the process. In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
+
+![Title Block](My%20Project/media/title_block.png)
+
+Luckily, Solid Edge has the ability to take care of that. That's in the program, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, let me know. I can try to address those in a future release. 
 
 ### Edit properties
 Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. To activate the editor click the `Edit` button in the options panel. 

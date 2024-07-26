@@ -27,18 +27,18 @@ Select which files to process on the **Home Tab**.  Select what to do on the **T
 The basic steps to select files is as follows.  (See **Next Steps** below for more ways to do it).  
 - *Either* select a single folder by clicking ![Folder](Resources/icons8_Folder_16.png).  
 - *Or* select a folder and sub folders by clicking ![Folders](Resources/icons8_folder_tree_16.png).  
-- Populate the list by clicking ![Update](Resources/Synch_16.png) (it should be orange).  
+- Populate the list by clicking ![Update](Resources/Synch_16.png) (it should be colored orange).  
 - To start over, clear the list by clicking ![Remove All](Resources/icons8_trash_16.png).
 
 The basic steps to configure a task are as follows.
 - Click the left-most checkbox to enable a task.
-- 
+- Select the desired file type(s).  These are the checkboxes to the right of the `Enable` button.  In order, they select `Assembly`, `Part`, `Sheetmetal`, and `Draft`. If a file type is not applicable for a task, its checkbox is disabled.
+- If there any options, set those as desired.
+- If you are unsure of what the command does, or how it works, click the right-most blue icon.  It will take you directly to the help topic for that command.
 
 When processing is complete, if any errors are found, a log file will open showing each error and the file in which it occurred. 
 
 You can interrupt the program before it finishes. While processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
-
-If you are unsure about what something does or how it works, click ![Folder](Resources/icons8_help_16.png).  It will open the item's Help topic in your browser.
 
 Oh, one last thing.  This is not a perfect program.  It processes a large number of files in a short amount of time.  It can do damage at the same rate.  We have run it on thousands of our files, but none of yours.  *Back up any files before using it.*
 
