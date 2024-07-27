@@ -241,7 +241,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
 
-        ' MEASURED
+
+        ' MEASURED  (Nomenclature defined in ~\SolidEdgeHousekeeper\reference\create_drawing_of_flat_pattern.dft)
 
         ' Sheet
         Dim SX, SY As Double
