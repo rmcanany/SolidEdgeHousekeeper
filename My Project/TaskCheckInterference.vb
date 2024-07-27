@@ -184,17 +184,6 @@ Public Class TaskCheckInterference
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
-        Me.NumOccurrencesLimit = CInt(TextBox.Text)
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

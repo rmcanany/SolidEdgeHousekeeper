@@ -35,7 +35,7 @@ Public Class FormEditInteractively
     Private Sub FormEditInteractively_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         AlwaysOnTopTimer = New Windows.Forms.Timer()
-        AlwaysOnTopTimer.Interval = 1000
+        AlwaysOnTopTimer.Interval = 100
         AlwaysOnTopTimer.Start()
 
         If Me.UseCountdownTimer Then

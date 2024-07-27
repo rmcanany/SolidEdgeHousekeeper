@@ -299,6 +299,7 @@ Public Class PreferencesUtilities
         TaskList.Add(New TaskRunExternalProgram)
         TaskList.Add(New TaskSaveModelAs)
         TaskList.Add(New TaskSaveDrawingAs)
+        TaskList.Add(New TaskCreateDrawingOfFlatPattern)
         TaskList.Add(New TaskPrint)
 
         For Each Task As Task In TaskList

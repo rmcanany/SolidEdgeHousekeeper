@@ -131,10 +131,6 @@ Public Class TaskSaveDrawingAs
         Dim TC As New Task_Common
         Dim DocType As String = TC.GetDocType(SEDoc)
 
-        ' Configuration("ComboBoxSaveAsAssemblyFileType") format examples
-        ' IGES (*.igs)
-        ' Parasolid text (*.x_b)
-        ' Copy (*.asm)
         If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
             NewExtension = Me.NewFileTypeName
             NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid text (*.xt)" -> ".xt)"
@@ -203,9 +199,6 @@ Public Class TaskSaveDrawingAs
         Dim FCD As New FilenameCharmapDoctor()
 
         OldFullFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
-        'If OldFullFilename.Contains("!") Then
-        '    OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
-        'End If
 
         OldDirectoryName = System.IO.Path.GetDirectoryName(OldFullFilename)
         OldFilenameWOExt = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)
@@ -695,12 +688,6 @@ Public Class TaskSaveDrawingAs
                 If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
                     Me.NewDir = tmpFolderDialog.FileName
 
-                    'Ctrl = FindTLPControl(Me.TLPOptions, "TextBox", "NewDir")
-                    'If Ctrl IsNot Nothing Then
-                    '    TextBox = CType(Ctrl, TextBox)
-                    '    TextBox.Text = Me.NewDir
-                    'End If
-
                     TextBox = CType(ControlsDict(ControlNames.NewDir.ToString), TextBox)
                     TextBox.Text = Me.NewDir
 
@@ -735,10 +722,6 @@ Public Class TaskSaveDrawingAs
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim CheckBox = CType(sender, CheckBox)
         Dim Name = CheckBox.Name
-
-        'Dim Visibility As Boolean
-        'Dim CtrlTypeNames As List(Of String)
-        'Dim CtrlNames As List(Of String)
 
         Select Case Name
             Case ControlNames.SaveInOriginalDirectory.ToString

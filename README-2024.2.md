@@ -644,6 +644,13 @@ You can optionally include a watermark image on the drawing output file.  For th
 
 When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The first saves all sheets to one file.  The second saves each sheet to a separate file, using the format `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix on files with only one sheet.  The option is called `Suppress sheet suffix on 1-page drawings`.  To save sheets to separate `dxf` or `dwg` files, set the Save As Options in Solid Edge for those file types before running this command. 
 
+### Create drawing of flat pattern
+Creates a drawing of a flat pattern using the template you specify. If the file does not contain a flat pattern, the command reports an error. It does not check if the flat pattern is up to date. For that, run the `Check flat pattern` and/or `Update flat pattern` commands before running this one. 
+
+The command attempts to place the flat pattern centered on the sheet. It rotates it if needed to match the available space. It scales it to entirely fill the sheet in one direction. That's not the scale you ultimately want, but is the starting point for the `Scale factor`. With that you control the final size. If you want it to end up at `90%`, enter `0.9`. For half size, enter `0.5`, etc. 
+
+You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the same name is already on disk, select how to proceed with the `Overwrite existing` checkbox. You can save the drawing to the original directory, or choose another one. Each file type can be saved to its own directory. 
+
 ### Print
 Prints drawings. 
 

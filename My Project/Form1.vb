@@ -2002,6 +2002,8 @@ Public Class Form1
     ' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
     ' C:\project\part.par -> part.par
 
+    ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+
     ' System.Threading.Thread.Sleep(100)
 
     ' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
