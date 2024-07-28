@@ -26,7 +26,7 @@ He's at it *again*!  More streamlined, better organized, and more colorful than 
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
-See the blue circular icons everywhere?  Those are context-sensitive help buttons.  Click one and see what happens! 
+See the little blue icons everywhere?  Those are context-sensitive help buttons.  Click one and see what happens! 
 
 Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove ones you don't use.  Change colors to your preference.  Change the names of any or all -- even in your own language if you want.
 
@@ -72,7 +72,7 @@ See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHouseke
 ### Break Links
 Contributed by **@ChrisNC** Thank you!
 
-This command removes external links from a file.  You can optionally remove `Part Copy` design and construction links, `Excel` variable and dimension formula links, `Draft model` drawing view links, or `All interpart` links.
+This command removes external links from a file.  You can optionally remove `Part Copy` design and construction links, `Excel` variable and dimension formula links, `Draft model` drawing view links (Thank you **@BrianVR74**!), or `All interpart` links.
 
 This is irreversible, so you know, think about it.  
 
@@ -106,7 +106,10 @@ Added options to use a countdown timer and/or start a command.
 
 The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete.  Just click one of the buttons at the bottom of the dialog to move on to the next file.
 
-The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos**!). 
+The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files.  A couple of examples:
+
+- Enable the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos** and **@BrianVR74**!). 
+- Cycle through assembly `display configurations` to make sure they are all set correctly.
 
 The list has commands we though might be useful.  You can customize it.  There are hundreds of commands available.  Customization is covered in the command's help page. 
 
@@ -116,7 +119,7 @@ See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHouseke
 
 ### Quick Start Guide
 
-Added a guide for new and infrequent users.  (Thank you **@gir.isi**, **@bshand**, **@BrianVR74**, and **@Amial_From_France**!)  It's not nearly as detailed as the README, but it will get you up and running much more quickly.
+Added a guide for new and infrequent users.  (Thank you **@gir.isi**, **@BrianVR74**, **@Amial_From_France** and many others!)  It's not nearly as detailed as the README, but it will get you up and running much more quickly.
 
 View the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).
 
