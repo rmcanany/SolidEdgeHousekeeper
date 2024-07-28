@@ -573,15 +573,21 @@ Public Class TaskBreakLinks
         HelpString += "In both cases, the value remains as it was before the link was removed."
 
         HelpString += vbCrLf + vbCrLf + "`Break all interpart links` is the sledgehammer option. "
-        HelpString += "It removes the links cited above.  It also removes `Paste Links` in the variable table. "
-        HelpString += "There could well be others. "
+        HelpString += "It removes the links cited above. "
+        HelpString += "It also removes `included links` in profiles and `pasted links` in the variable table. "
+        HelpString += "It might do more.  The complete API documentation (below) is, uh, short on details. "
+
+        HelpString += vbCrLf + vbCrLf + "![Break all interpart links](My%20Project/media/break_all_interpart_links_documentation.png)"
+
 
         HelpString += vbCrLf + vbCrLf + "`Break draft model links` converts drawing view to 2D, "
         HelpString += "removing external references in the process. "
         HelpString += "In testing it quickly became apparent that this operation "
         HelpString += "also converts Property text to blank lines in Callouts. "
+
         HelpString += vbCrLf + vbCrLf + "![Title Block](My%20Project/media/title_block.png)"
-        HelpString += vbCrLf + vbCrLf + "Luckily, Solid Edge has the ability to take care of that. "
+
+        HelpString += vbCrLf + vbCrLf + "Luckily, Solid Edge can take care of that. "
         HelpString += "That's in the program, but only for Callouts. "
         HelpString += "If you have TextBoxes, Blocks, or other objects that use Property text, let me know. "
         HelpString += "I can try to address those in a future release. "
