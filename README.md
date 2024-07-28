@@ -521,7 +521,11 @@ You can optionally set a countdown timer and/or start a command.
 
 ![Edit Interactively Options](My%20Project/media/edit_interactively.png)
 
+**Countdown Timer**
+
 The countdown timer lets you run hands-free. This can be handy for doing a quick inspection of a batch of files, for example. If something catches your eye, you can pause the timer.  There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  
+
+**Start Command**
 
 The `Start command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example: 
 
@@ -532,7 +536,9 @@ The dropdown list contains commands that we thought might be useful.  The first 
 
 You can customize the list.  Instructions to do so are in the file `interactive_edit_commands.txt` in the Housekeeper `Preferences` directory. It also shows how to find commands and their corresponding ID numbers. Hundreds of commands are available.  It's worth checking out. Note, the file is created the first time you run Housekeeper. It won't be there prior to that. 
 
-Some rules for interactive editing apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. If you used the `Start command` option, you need to close any dialog opened in the process. 
+**Rules for Interactive Editing**
+
+Some rules for this command apply. It is important to leave Solid Edge in the state you found it when the file was opened. For example, if you open another file, such as a drawing, you need to close it. If you add or modify a feature, you need to click Finish. If you used the `Start command` option, you need to close any dialog opened in the process. 
 
 Also, do not `Close` or `Save As` the file being processed. Housekeeper maintains a `reference` to the file. Those two commands cause the reference to be lost, resulting in an error. 
 

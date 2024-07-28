@@ -623,11 +623,13 @@ Public Class TaskEditInteractively
 
         HelpString += vbCrLf + vbCrLf + "![Edit Interactively Options](My%20Project/media/edit_interactively.png)"
 
+        HelpString += vbCrLf + vbCrLf + "**Countdown Timer**"
         HelpString += vbCrLf + vbCrLf + "The countdown timer lets you run hands-free. "
         HelpString += "This can be handy for doing a quick inspection of a batch of files, for example. "
         HelpString += "If something catches your eye, you can pause the timer.  "
         HelpString += "There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  "
 
+        HelpString += vbCrLf + vbCrLf + "**Start Command**"
         HelpString += vbCrLf + vbCrLf + "The `Start command` option launches a command when the file opens.  "
         HelpString += "This can help keep you on track when you have a small chore to complete on a bunch of files.  "
         HelpString += "For example: "
@@ -646,7 +648,8 @@ Public Class TaskEditInteractively
         HelpString += "Note, the file is created the first time you run Housekeeper. "
         HelpString += "It won't be there prior to that. "
 
-        HelpString += vbCrLf + vbCrLf + "Some rules for interactive editing apply. "
+        HelpString += vbCrLf + vbCrLf + "**Rules for Interactive Editing**"
+        HelpString += vbCrLf + vbCrLf + "Some rules for this command apply. "
         HelpString += "It is important to leave Solid Edge in the state you found it when the file was opened. "
         HelpString += "For example, if you open another file, such as a drawing, you need to close it. "
         HelpString += "If you add or modify a feature, you need to click Finish. "
