@@ -523,7 +523,10 @@ You can optionally set a countdown timer and/or start a command.
 
 The countdown timer lets you run hands-free. This can be handy for doing a quick inspection of a batch of files, for example. If something catches your eye, you can pause the timer.  There is an option, `Save file after timeout`, that tells Housekeeper how to proceed if the timer runs to completion.  
 
-The `Start command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example, activating the `Update file on save` option on the `Physical Properties` dialog.  
+The `Start command` option launches a command when the file opens.  This can help keep you on track when you have a small chore to complete on a bunch of files.  For example: 
+
+- Enable the `Update file on save` option on the `Physical Properties` dialog. 
+- Cycle through assembly `display configurations` to make sure they are all set correctly. 
 
 The dropdown list contains commands that we thought might be useful.  The first entry on the list, `Manual entry` is a special case.  It instructs the program to execute the command id entered in the textboxes below the dropdown. If you don't want a command to start for a given file type, enter `0` in the textbox. 
 

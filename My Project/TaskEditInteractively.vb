@@ -630,7 +630,9 @@ Public Class TaskEditInteractively
 
         HelpString += vbCrLf + vbCrLf + "The `Start command` option launches a command when the file opens.  "
         HelpString += "This can help keep you on track when you have a small chore to complete on a bunch of files.  "
-        HelpString += "For example, activating the `Update file on save` option on the `Physical Properties` dialog.  "
+        HelpString += "For example: "
+        HelpString += vbCrLf + vbCrLf + "- Enable the `Update file on save` option on the `Physical Properties` dialog. "
+        HelpString += vbCrLf + "- Cycle through assembly `display configurations` to make sure they are all set correctly. "
 
         HelpString += vbCrLf + vbCrLf + "The dropdown list contains commands that we thought might be useful.  "
         HelpString += "The first entry on the list, `Manual entry` is a special case.  "
