@@ -562,8 +562,7 @@ Public Class TaskBreakLinks
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Breaks external links to a file.  This is irreversible, so you know, think about it. "
-
-        HelpString += vbCrLf + vbCrLf + "Several options are available.  They are explained below. "
+        HelpString += "Several options are available.  They are explained below. "
 
         HelpString += vbCrLf + vbCrLf + "`Break part copy design links` and `Break part copy construction links` "
         HelpString += "remove links created with the `Part Copy` command. "
@@ -580,7 +579,7 @@ Public Class TaskBreakLinks
         HelpString += vbCrLf + vbCrLf + "![Break all interpart links](My%20Project/media/break_all_interpart_links_documentation.png)"
 
 
-        HelpString += vbCrLf + vbCrLf + "`Break draft model links` converts drawing view to 2D, "
+        HelpString += vbCrLf + vbCrLf + "`Break draft model links` converts drawing views to 2D, "
         HelpString += "removing external references in the process. "
         HelpString += "In testing it quickly became apparent that this operation "
         HelpString += "also converts Property text to blank lines in Callouts. "

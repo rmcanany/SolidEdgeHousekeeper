@@ -641,7 +641,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         HelpString += "enter `0.9`. For half size, enter `0.5`, etc. "
 
         HelpString += vbCrLf + vbCrLf + "You can save the drawing as a `*.dft` or `*.pdf` or both. "
-        HelpString += "If a file with the same name already exists, choose how to proceed with the `Overwrite existing` checkbox. "
+        HelpString += "If a file with the same name already exists, "
+        HelpString += "the `Overwrite existing` checkbox tells the program how to proceed. "
         HelpString += "You can save the drawing to the original directory, or choose another one. "
         HelpString += "Each file type can be saved to a different directory. "
 

@@ -421,9 +421,7 @@ Updates flat patterns. If the update was not successful, or no flat patterns wer
 Before updating the flat pattern, this command first regenerates the flat *model*. That is the under-the-hood parent geometry of the flat pattern. If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
 
 ### Break links
-Breaks external links to a file.  This is irreversible, so you know, think about it. 
-
-Several options are available.  They are explained below. 
+Breaks external links to a file.  This is irreversible, so you know, think about it. Several options are available.  They are explained below. 
 
 `Break part copy design links` and `Break part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
 
@@ -433,7 +431,7 @@ Several options are available.  They are explained below.
 
 ![Break all interpart links](My%20Project/media/break_all_interpart_links_documentation.png)
 
-`Break draft model links` converts drawing view to 2D, removing external references in the process. In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
+`Break draft model links` converts drawing views to 2D, removing external references in the process. In testing it quickly became apparent that this operation also converts Property text to blank lines in Callouts. 
 
 ![Title Block](My%20Project/media/title_block.png)
 
@@ -651,7 +649,7 @@ Creates a drawing of a flat pattern using the template you specify. If the file 
 
 The command attempts to place the flat pattern centered on the sheet. It rotates it if needed to match the available space. It scales it to entirely fill the sheet in one direction. That's not the scale you ultimately want, but is the starting point for the `Scale factor`. With that you control the final size. If you want it to take up 90% of the available space, enter `0.9`. For half size, enter `0.5`, etc. 
 
-You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the same name already exists, choose how to proceed with the `Overwrite existing` checkbox. You can save the drawing to the original directory, or choose another one. Each file type can be saved to a different directory. 
+You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the same name already exists, the `Overwrite existing` checkbox tells the program how to proceed. You can save the drawing to the original directory, or choose another one. Each file type can be saved to a different directory. 
 
 ### Print
 Prints drawings. 
