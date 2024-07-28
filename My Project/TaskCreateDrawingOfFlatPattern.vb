@@ -637,12 +637,13 @@ Public Class TaskCreateDrawingOfFlatPattern
         HelpString += "It scales it to entirely fill the sheet in one direction. "
         HelpString += "That's not the scale you ultimately want, but is the starting point for the `Scale factor`. "
         HelpString += "With that you control the final size. "
-        HelpString += "If you want it to end up at `90%`, enter `0.9`. For half size, enter `0.5`, etc. "
+        HelpString += "If you want it to take up 90% of the available space, "
+        HelpString += "enter `0.9`. For half size, enter `0.5`, etc. "
 
         HelpString += vbCrLf + vbCrLf + "You can save the drawing as a `*.dft` or `*.pdf` or both. "
-        HelpString += "If a file with the same name is already on disk, select how to proceed with the `Overwrite existing` checkbox. "
+        HelpString += "If a file with the same name already exists, choose how to proceed with the `Overwrite existing` checkbox. "
         HelpString += "You can save the drawing to the original directory, or choose another one. "
-        HelpString += "Each file type can be saved to its own directory. "
+        HelpString += "Each file type can be saved to a different directory. "
 
         Return HelpString
     End Function

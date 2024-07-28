@@ -80,10 +80,17 @@ For drawing views in particular, there are important things to know about model 
 
 See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-links) for details.
 
+### Create drawing of flat pattern
+Contributed by **@ChrisNC** Thank you!
+
+Creates a `*.dft` or `*.pdf` of a flat pattern using the template you specify.  The drawing is centered on the sheet; it is scaled and rotated to fit the available space.  You can save the drawing in the original directory, or in another you specify.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#create-drawing-of-flat-pattern) for details.
+
 ### Recognize Holes
 Contributed by **@ZaPpInG** Thank you!
 
-Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?  
+Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?!
 
 Our newest contributor did, and he did something about it.  He taught himself VB.net and the Solid Edge API (in *two weeks*!!) to automate just such a job.
 
