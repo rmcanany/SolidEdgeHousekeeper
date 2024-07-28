@@ -515,7 +515,9 @@ Brings up files one at a time for manual processing. A dialog box lets you tell 
 
 ![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)
 
-As shown below, you choose where the dialog box is placed on the screen. The `X` and `Y` values are the number of pixels from the left and top of the screen, respectively. You can optionally set a countdown timer and/or start a command. 
+You choose the dialog's starting position. `X` and `Y` are the number of pixels from the left and top of the screen, respectively. If you move the dialog, it remembers the location for subsequent files. It doesn't remember between runs, unfortunately. That turns out to be surprisingly complicated. 
+
+You can optionally set a countdown timer and/or start a command. 
 
 ![Edit Interactively Options](My%20Project/media/edit_interactively.png)
 

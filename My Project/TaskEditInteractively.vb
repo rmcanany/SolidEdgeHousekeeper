@@ -194,9 +194,27 @@ Public Class TaskEditInteractively
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
+
+            Me.FormX = FEI.Left
+            Me.FormY = FEI.Top
+            'Can't do this because the task runs on a different thread.
+            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
+            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+
         ElseIf Result = DialogResult.No Then
-            ' Nothing to do here
+
+            Me.FormX = FEI.Left
+            Me.FormY = FEI.Top
+            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
+            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+
         ElseIf Result = DialogResult.Abort Then
+
+            Me.FormX = FEI.Left
+            Me.FormY = FEI.Top
+            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
+            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+
             ExitStatus = 99
             ErrorMessageList.Add("Operation was cancelled.")
         End If
@@ -208,6 +226,7 @@ Public Class TaskEditInteractively
 
 
     End Function
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -585,7 +604,6 @@ Public Class TaskEditInteractively
     End Sub
 
 
-
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Brings up files one at a time for manual processing. "
@@ -595,9 +613,13 @@ Public Class TaskEditInteractively
 
         HelpString += vbCrLf + vbCrLf + "![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)"
 
-        HelpString += vbCrLf + vbCrLf + "As shown below, you choose where the dialog box is placed on the screen. "
-        HelpString += "The `X` and `Y` values are the number of pixels from the left and top of the screen, respectively. "
-        HelpString += "You can optionally set a countdown timer and/or start a command. "
+        HelpString += vbCrLf + vbCrLf + "You choose the dialog's starting position. "
+        HelpString += "`X` and `Y` are the number of pixels from the left and top of the screen, respectively. "
+        HelpString += "If you move the dialog, it remembers the location for subsequent files. "
+        HelpString += "It doesn't remember between runs, unfortunately. "
+        HelpString += "That turns out to be surprisingly complicated. "
+
+        HelpString += vbCrLf + vbCrLf + "You can optionally set a countdown timer and/or start a command. "
 
         HelpString += vbCrLf + vbCrLf + "![Edit Interactively Options](My%20Project/media/edit_interactively.png)"
 
