@@ -556,7 +556,9 @@ Updates the styles you select from a template you specify.
 
 ![Update Styles](My%20Project/media/update_model_styles_from_template.png)
 
-Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed if possible. It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). 
+Using the checkboxes provided, you can update all styles, or select which ones to update individually. 
+
+Styles present in the template, but not in the file, are added. Styles present in the file, but not in the template, can optionally be removed, if possible. Set the option `Remove styles not in template` as needed. It is not possible to remove a style if Solid Edge thinks it is in use (even if it isn't). 
 
 Styles are updated/added as described, but no mapping takes place. For example, if the template has a dimension style ANSI(in), and the file instead uses ANSI(inch), the dimensions will not be updated. A workaround is to create the target style in the template and modify it in that file as needed. 
 
