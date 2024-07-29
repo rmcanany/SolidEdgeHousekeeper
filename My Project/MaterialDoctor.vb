@@ -1,5 +1,4 @@
 ﻿Option Strict On
-'Imports SolidEdgePart
 
 Public Class MaterialDoctor
 

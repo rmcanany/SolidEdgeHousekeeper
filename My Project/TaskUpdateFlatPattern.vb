@@ -1,9 +1,6 @@
 ﻿Option Strict On
 
-Imports SolidEdgeCommunity.Extensions
-Imports SolidEdgeConstants
-
-Public Class TaskRegenerateFlatModel
+Public Class TaskUpdateFlatPattern
 
     Inherits Task
 
@@ -20,16 +17,14 @@ Public Class TaskRegenerateFlatModel
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckFlatPattern
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+
         ' Options
-    End Sub
-
-    Public Sub New(Task As TaskRegenerateFlatModel)
-
-        'Options
 
     End Sub
+
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -53,6 +48,14 @@ Public Class TaskRegenerateFlatModel
 
     End Function
 
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -65,7 +68,7 @@ Public Class TaskRegenerateFlatModel
 
         Dim TC As New Task_Common
         Dim DocType = TC.GetDocType(SEDoc)
-        
+
         ' Get FlatpatternModels collection to check if flat patterns exist
         Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Select Case DocType
@@ -80,27 +83,43 @@ Public Class TaskRegenerateFlatModel
             Case Else
                 MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
         End Select
-        
+
         If Not SEApp.Visible Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot regenerate flat model in background mode")
         End If
-        
+
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
         End If
-        
+
         ' Active flat environment to regenerate flat model then save part if no errors
         If ExitStatus = 0 And FlatpatternModels.Count > 0 Then
-            SEDoc.Activate
+            SEDoc.Activate()
             SEApp.DoIdle()
-            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalToolsSelectTool)
+            SEApp.StartCommand(CType(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalToolsSelectTool, SolidEdgeFramework.SolidEdgeCommandConstants))
             SEApp.DoIdle()
-            SEApp.StartCommand(SheetMetalCommandConstants.SheetMetalModelFlatPattern)
+            SEApp.StartCommand(CType(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalModelFlatPattern, SolidEdgeFramework.SolidEdgeCommandConstants))
             SEApp.DoIdle()
             SEDoc.Save()
             SEApp.DoIdle()
+        End If
+
+        If ExitStatus = 0 Then
+            If FlatpatternModels.Count > 0 Then
+                For Each FPM As SolidEdgePart.FlatPatternModel In FlatpatternModels
+                    FPM.Update()
+                    SEApp.DoIdle()
+                    If Not FPM.IsUpToDate Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Unable to update flat pattern")
+                    End If
+                Next
+            Else
+                ExitStatus = 1
+                ErrorMessageList.Add("No flat patterns found")
+            End If
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -108,22 +127,6 @@ Public Class TaskRegenerateFlatModel
 
     End Function
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Return Me.TLPTask
-    End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -159,8 +162,14 @@ Public Class TaskRegenerateFlatModel
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Regenerates missing flat models by activating flat environment. "
-        HelpString += "Requires running in foreground. "
+
+        HelpString = "Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. "
+
+        HelpString += vbCrLf + vbCrLf + "Before updating the flat pattern, this command first regenerates the flat *model*. "
+        HelpString += "That is the under-the-hood parent geometry of the flat pattern. "
+        HelpString += "If you have a highly-automated model-to-laser pipeline, "
+        HelpString += "you may have noticed that sometimes an exported flat model contains no geometry. "
+        HelpString += "This is a fix for that situation."
 
         Return HelpString
     End Function

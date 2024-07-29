@@ -27,19 +27,15 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateMaterialFromMaterialTable
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
-    End Sub
-
-    Public Sub New(Task As TaskUpdateMaterialFromMaterialTable)
-
-        'Options
-        Me.ActiveMaterialLibrary = Task.ActiveMaterialLibrary
-        Me.RemoveFaceStyleOverrides = Task.RemoveFaceStyleOverrides
     End Sub
 
 
@@ -60,6 +56,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -103,28 +107,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -132,18 +115,18 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -151,7 +134,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -159,7 +142,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -168,21 +151,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.ActiveMaterialLibrary.ToString), TextBox)
-        Me.ActiveMaterialLibrary = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox)
-        Me.RemoveFaceStyleOverrides = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -234,7 +202,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -281,17 +249,15 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Sub
 
 
-
-
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks to see if the part's material name and properties match any material "
-        HelpString += "in a file you specify on the **Configuration Tab -- Templates Page**. "
+        HelpString += "in a file you specify on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "If the names match, "
-        HelpString += "but their properties (e.g., face style) do not, the material is updated. "
-        HelpString += "If the names do not match, or no material is assigned, it is reported in the log file."
+        HelpString += "but their properties (e.g., density, face style, etc.) do not, the material is updated. "
+        HelpString += "If no match is found, or no material is assigned, it is reported in the log file."
         HelpString += vbCrLf + vbCrLf + "You can optionally remove any face style overrides. "
-        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
+        HelpString += "Set the option on the Options panel. "
 
         Return HelpString
     End Function

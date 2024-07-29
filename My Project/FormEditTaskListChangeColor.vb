@@ -15,7 +15,7 @@ Public Class FormEditTaskListChangeColor
         Me.ColorHue = ComboBoxColor.Text
 
         Try
-            Me.ColorSaturation = CDbl(TextBoxColorSaturation.Text)
+            Me.ColorSaturation = CDbl(NumericUpDownSaturation.Value)
             If (Me.ColorSaturation < 0) Or (Me.ColorSaturation > 1) Then
                 Proceed = False
                 s = String.Format("{0}{1}{2}", s, "Saturation must be a number between 0 and 1", vbCrLf)
@@ -26,7 +26,7 @@ Public Class FormEditTaskListChangeColor
         End Try
 
         Try
-            Me.ColorBrightness = CDbl(TextBoxColorBrightness.Text)
+            Me.ColorBrightness = CDbl(NumericUpDownBrightness.Value)
             If (Me.ColorBrightness < 0) Or (Me.ColorBrightness > 1) Then
                 Proceed = False
                 s = String.Format("{0}{1}{2}", s, "Brightness must be a number between 0 and 1", vbCrLf)
@@ -49,13 +49,13 @@ Public Class FormEditTaskListChangeColor
     End Sub
 
     Private Sub FormEditTaskListChangeColor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White".Split(" "c).ToList
+        Dim ColorHueList As List(Of String) = "Red Green Blue Cyan Magenta Yellow White Orange Purple".Split(" "c).ToList
         For Each s As String In ColorHueList
             ComboBoxColor.Items.Add(s)
         Next
         ComboBoxColor.Text = Me.ColorHue
-        TextBoxColorSaturation.Text = CStr(Me.ColorSaturation)
-        TextBoxColorBrightness.Text = CStr(Me.ColorBrightness)
+        NumericUpDownSaturation.Value = CDec(Me.ColorSaturation)
+        NumericUpDownBrightness.Value = CDec(Me.ColorBrightness)
     End Sub
 
     Private Sub ComboBoxColor_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxColor.SelectedIndexChanged
@@ -98,6 +98,14 @@ Public Class FormEditTaskListChangeColor
                 R = 255
                 G = 255
                 B = 255
+            Case "Orange"
+                R = 255
+                G = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                B = CInt(255 * (1 - Me.ColorSaturation))
+            Case "Purple"
+                R = CInt(127 + 127 * (1 - Me.ColorSaturation))
+                G = CInt(255 * (1 - Me.ColorSaturation))
+                B = 255
         End Select
 
         R = CInt(R * Me.ColorBrightness)
@@ -111,17 +119,18 @@ Public Class FormEditTaskListChangeColor
         ButtonColor.BackColor = Color.FromArgb(R, G, B)
     End Sub
 
-    Private Sub TextBoxColorSaturation_LostFocus(sender As Object, e As EventArgs) Handles TextBoxColorSaturation.LostFocus
+
+    Private Sub NumericUpDownSaturation_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDownSaturation.ValueChanged
         Try
-            Me.ColorSaturation = CDbl(TextBoxColorSaturation.Text)
+            Me.ColorSaturation = CDbl(NumericUpDownSaturation.Value)
             UpdateColor()
         Catch ex As Exception
         End Try
     End Sub
 
-    Private Sub TextBoxColorBrightness_LostFocus(sender As Object, e As EventArgs) Handles TextBoxColorBrightness.LostFocus
+    Private Sub NumericUpDownBrightness_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDownBrightness.ValueChanged
         Try
-            Me.ColorBrightness = CDbl(TextBoxColorBrightness.Text)
+            Me.ColorBrightness = CDbl(NumericUpDownBrightness.Value)
             UpdateColor()
         Catch ex As Exception
         End Try

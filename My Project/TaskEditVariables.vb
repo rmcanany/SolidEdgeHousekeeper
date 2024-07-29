@@ -28,19 +28,16 @@ Public Class TaskEditVariables
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
         Me.Category = "Edit"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.JSONDict = ""
         Me.AutoAddMissingVariable = False
-    End Sub
 
-    Public Sub New(Task As TaskEditVariables)
-
-        ' Options
-        Me.JSONDict = Task.JSONDict
-        Me.AutoAddMissingVariable = Task.AutoAddMissingVariable
     End Sub
 
     Public Overrides Function Process(
@@ -60,6 +57,14 @@ Public Class TaskEditVariables
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -256,28 +261,7 @@ Public Class TaskEditVariables
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -285,18 +269,18 @@ Public Class TaskEditVariables
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
+        Button = FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -304,7 +288,7 @@ Public Class TaskEditVariables
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.AutoAddMissingVariable.ToString, "Add any variable not already in the file")
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoAddMissingVariable.ToString, "Add any variable not already in the file")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -312,7 +296,7 @@ Public Class TaskEditVariables
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox
@@ -393,7 +377,7 @@ Public Class TaskEditVariables
                 ' Workaround
                 Dim FileType = "asm"
 
-                VariableInputEditor.ShowInputEditor(FileType)
+                VariableInputEditor.ShowDialog()
 
                 If VariableInputEditor.DialogResult = DialogResult.OK Then
                     Me.JSONDict = VariableInputEditor.JSONDict
@@ -419,7 +403,7 @@ Public Class TaskEditVariables
                 Me.AutoAddMissingVariable = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -445,27 +429,31 @@ Public Class TaskEditVariables
         Dim HelpString As String
 
         HelpString = "Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. "
-        HelpString += "Access the form using the `Variables edit/add/expose` `Edit` button. "
-        HelpString += "It is located below the task list on each **Task Tab**."
+        HelpString += "Access the form using the `Edit` button. "
+
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
+
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
         HelpString += "underscore '_' character."
+
         HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added automatically.  "
-        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
+        HelpString += "Set the option on the Options panel. "
+
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
         HelpString += "program will report an error."
+
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
+
         HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time.  "
         HelpString += "The delete button, also at the top of the form, removes selected rows.  "
-        HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs.  "
-        HelpString += "Set the `Copy To` CheckBoxes as desired."
+
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "is a representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
 
         Return HelpString

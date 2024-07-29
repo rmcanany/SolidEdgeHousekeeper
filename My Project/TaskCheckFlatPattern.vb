@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgeConstants
 
 Public Class TaskCheckFlatPattern
 
@@ -18,16 +17,19 @@ Public Class TaskCheckFlatPattern
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckFlatPattern
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+
         ' Options
-    End Sub
-
-    Public Sub New(Task As TaskCheckFlatPattern)
-
-        'Options
 
     End Sub
+
+    'Public Sub New(Task As TaskCheckFlatPattern)
+
+    '    'Options
+
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -50,7 +52,13 @@ Public Class TaskCheckFlatPattern
         Return ErrorMessage
 
     End Function
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -90,7 +98,7 @@ Public Class TaskCheckFlatPattern
                 Next
             Else
                 ExitStatus = 1
-                ErrorMessageList.Add("Flat pattern is missing")
+                ErrorMessageList.Add("No flat patterns found")
             End If
         End If
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -98,22 +106,22 @@ Public Class TaskCheckFlatPattern
 
     End Function
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

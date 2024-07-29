@@ -1,6 +1,5 @@
 ﻿Option Strict On
-Imports System.Security.AccessControl
-Imports System.Windows.Forms.VisualStyles
+
 Imports Newtonsoft.Json
 
 Public Class InputEditorDoctor
@@ -81,7 +80,10 @@ Public Class InputEditorDoctor
                     If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                         TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                     End If
-                    TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    'TextBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    TextBox.Dock = DockStyle.Fill
+                    TextBox.Margin = New Padding(3, 1, 3, 1)
+                    'TextBox.Multiline = True
                     'AddHandler TextBox.TextChanged, AddressOf TextBox_TextChanged
 
                     TableLayoutPanel.Controls.Add(TextBox, ColumnIndex, RowIndex)
@@ -89,9 +91,10 @@ Public Class InputEditorDoctor
                 ElseIf ControlType = "ComboBox" Then
                     ComboBox = New ComboBox
                     ComboBox.Name = String.Format("ComboBox{0}{1}", RowIndex, ColumnName)
-                    ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
-                    'ComboBox.Size = New Size(100, 20)
-                    ComboBox.DropDownStyle = ComboBoxStyle.DropDownList
+                    'ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
+                    ComboBox.Dock = DockStyle.Fill
+                    ComboBox.Margin = New Padding(3, 1, 3, 1)
+                    ComboBox.DropDownStyle = If(ComboBox.Name.EndsWith("PropertySet"), ComboBoxStyle.DropDownList, ComboBoxStyle.Simple)
                     ComboBox.TabStop = False
 
                     TableLayoutPanel.Controls.Add(ComboBox, ColumnIndex, RowIndex)
@@ -197,6 +200,7 @@ Public Class InputEditorDoctor
                         DirectCast(Control, TextBox).Text = ""
                     ElseIf Control.GetType Is GetType(ComboBox) Then
                         DirectCast(Control, ComboBox).Text = "System"
+                        If DirectCast(Control, ComboBox).Text <> "System" Then DirectCast(Control, ComboBox).Text = ""
                     ElseIf Control.GetType Is GetType(CheckBox) Then
                         DirectCast(Control, CheckBox).Checked = False
                     End If
@@ -213,7 +217,7 @@ Public Class InputEditorDoctor
         Dim PopulatedRowList As New List(Of Integer)
         Dim SourceCheckBox As CheckBox
         Dim TargetCheckBox As CheckBox
-        Dim TextBox As TextBox
+        Dim TextBox As ComboBox
         Dim SourceTextBox As TextBox
         Dim TargetTextBox As TextBox
         Dim SourceComboBox As ComboBox
@@ -228,7 +232,7 @@ Public Class InputEditorDoctor
 
         ' Find which rows are blank and which are populated.
         For RowIndex = 1 To TableLayoutPanel.RowCount - 1
-            TextBox = CType(TableLayoutPanel.GetControlFromPosition(VariableColumnIndex, RowIndex), TextBox)
+            TextBox = CType(TableLayoutPanel.GetControlFromPosition(VariableColumnIndex, RowIndex), ComboBox)
             Dim s As String = TextBox.Text
             If TextBox.Text.Trim = "" Then
                 BlankRowList.Add(RowIndex)
@@ -417,6 +421,7 @@ Public Class InputEditorDoctor
                         SourceComboBox = CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex, SourceRowIndex), ComboBox)
                         TargetComboBox.Text = SourceComboBox.Text
                         SourceComboBox.Text = OldTargetRow(ColumnIndex)("ControlState")
+                        If OldTargetRow(ColumnIndex)("ControlState") = "" Then SourceComboBox.SelectedItem = Nothing
 
                     End If
 
@@ -659,7 +664,12 @@ Public Class InputEditorDoctor
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             TextBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                         Else
-                            TextBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                TextBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            Else
+                                TextBox.Text = ""
+                            End If
+
                         End If
 
                     ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox" Then
@@ -669,18 +679,48 @@ Public Class InputEditorDoctor
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             CheckBox.Checked = CBool(ColumnsDict(ColumnIndex)("DefaultValue"))
                         Else
-                            CheckBox.Checked = CBool(TableValuesDict(RowIndex)(ColumnName))
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                CheckBox.Checked = CBool(TableValuesDict(RowIndex)(ColumnName))
+                            Else
+                                CheckBox.Checked = False
+                            End If
+
                         End If
 
                     ElseIf ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" Then
                         ControlName = TableLayoutPanel.GetControlFromPosition(ColumnIndex, RowIndex).Name
                         ComboBox = CType(ControlsDict(ControlName), ComboBox)
-                        ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                        If TableValuesDict.ContainsKey(RowIndex) Then
+                            ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                        Else
+                            If ComboBox.Items.Count > 0 Then
+                                ComboBox.SelectedItem = ComboBox.Items(0)
+                            Else
+                                ComboBox.SelectedItem = Nothing
+                            End If
+                        End If
+
+                        'If ComboBox.Name.EndsWith("PropertyName") Then
+                        '    Try
+                        '        FormPropertyInputEditor.SetCombo(CType(TableLayoutPanel.GetControlFromPosition(ColumnIndex - 1, RowIndex), ComboBox))
+                        '    Catch ex As Exception
+
+                        '    End Try
+
+                        'End If
 
                         If CBool(ColumnsDict(ColumnIndex)("PopulateWithDefault")) Then
                             ComboBox.Text = ColumnsDict(ColumnIndex)("DefaultValue")
                         Else
-                            ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            If TableValuesDict.ContainsKey(RowIndex) Then
+                                ComboBox.Text = TableValuesDict(RowIndex)(ColumnName)
+                            Else
+                                If ComboBox.Items.Count > 0 Then
+                                    ComboBox.SelectedItem = ComboBox.Items(0)
+                                Else
+                                    ComboBox.SelectedItem = Nothing
+                                End If
+                            End If
                         End If
                     Else
                         MsgBox(String.Format("Control type '{0}' not implemented", ColumnsDict(ColumnIndex)("ColumnControl")))

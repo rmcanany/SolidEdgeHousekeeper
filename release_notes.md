@@ -1,11 +1,157 @@
-﻿![Logo](My%20Project/media/logo.png)
+﻿<div class="center">
+  <p align=center>
+  <img src="My%20Project/media/logo.png" width=50%;>
+  <p align=center>
+  <span class="description">Robert McAnany 2024</span>
+</div>
+
 # Release Notes
 
 Solid Edge Housekeeper is a utility for finding annoying little errors in your project.  It is free and open source and you can find it [<ins>**Here**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#readme).
 
-Please note, the program has been tested on many of our files, but none of yours.  Do not run it on production work without testing on backups first.
+Please note, the program has been tested on thousands of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
+Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+
+## V2024.2 Enhancements/Fixes
+
+We'll get to the highlights in a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
+
+### New Task Page
+Concept by **@Francesco Arfilli** Thank you!
+
+He's at it *again*!  More streamlined, better organized, and more colorful than ever!  Consolided four tabs into one.  Placed all options at your fingertips.  Dramatically reduced clutter.  You're going to love it!
+
+<p align="center">
+  <img src="My%20Project/media/sheetmetal_done.png">
+</p>
+
+See the little blue icons everywhere?  Those are context-sensitive help buttons.  Click one and see what happens! 
+
+Oh, and he wasn't done!  You can even *customize* the list.  Rearrange tasks according to how you work.  Remove ones you don't use.  Change colors to your preference.  Change the names of any or all -- even in your own language if you want.
+
+Those things are all great, but the biggest improvement is the ability to add copies of any task to the list.  Each copy is separately configurable.  With this you can, for example:
+- Create a second `Print` task and configure it to send large sheets to the plotter (Thank you **@n0minus38**!).  
+- Add multiple `Update drawings from template` tasks, so each of your clients get their own custom drawing border.
+- Put in another `Save As` so you can generate `*.stp` and `*.jt` files in one pass (Thank you **@Robin BIoemberg**!).
+
+<p align="center">
+  <img src="My%20Project/media/edit_task_list.png">
+</p>
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#task-tab) for details.
+
+
+### Edit Properties
+Contributed by **@Francesco Arfilli** Thank you!
+
+He *still* wasn't done!  For this release, Francesco implemented a new Expression Editor for more complex find/replace jobs.  He also added an option to edit properties without opening Solid Edge.
+
+#### Expression Editor
+
+An `expression` is similar to a `formula` in Excel. Expressions enable more complex manipulations of the replacement text. You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  You can test your expression interactively. You can save it for reuse.
+
+![Expression Editor](My%20Project/media/expression_editor.png)
+
+#### Direct Edit
+
+This is *blazingly* fast.  It can run a monster batch of parts before Solid Edge even gets its shoes on!  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
+
+
+### Update Flat Pattern
+Contributed by **@ChrisNC** Thank you!
+
+I don't know how I didn't think of this before.  Luckily Chris did!
+
+Before updating the flat pattern, this command first regenerates the flat *model*.  That is the under-the-hood parent geometry of the flat pattern.  If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry.  This is a fix for that situation.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-flat-pattern) for details.
+
+### Break Links
+Contributed by **@ChrisNC** Thank you!
+
+This command removes external links from a file.  You can optionally remove `Part Copy` design and construction links, `Excel` variable and dimension formula links, `Draft model` drawing view links (Thank you **@BrianVR74**!), or `All interpart` links.
+
+This is irreversible, so you know, think about it.  
+
+For drawing views in particular, there are important things to know about model Property text (that you might be using, say, in your title block).  Please visit the link below for information on that.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-links) for details.
+
+### Create drawing of flat pattern
+Contributed by **@ChrisNC** Thank you!
+
+Creates a `*.dft` or `*.pdf` of a flat pattern using the template you specify.  The drawing is centered on the sheet; it is scaled and rotated to fit the available space.  You can save the drawing in the original directory, or in another you specify.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#create-drawing-of-flat-pattern) for details.
+
+### Recognize Holes
+Contributed by **@ZaPpInG** Thank you!
+
+Have you ever had the feeling that if you do this tiresome, repetetive thing one more time you are going to *scream*?!
+
+Our newest contributor did, and he did something about it.  He taught himself VB.net and the Solid Edge API (in *two weeks*!!) to automate just such a job.
+
+The job is to recognize holes in freshly imported parts.  He has tentative plans to add more capability.  Stay tuned!
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#recognize-holes) for details.
+
+### Edit Interactively
+
+Added options to use a countdown timer and/or start a command.
+
+![Edit Interactively](My%20Project/media/edit_interactively_2.png)
+
+The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete.  Just click one of the buttons at the bottom of the dialog to move on to the next file.
+
+The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files.  A couple of examples:
+
+- Enable the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos** and **@BrianVR74**!). 
+- Cycle through assembly `display configurations` to make sure they are all set correctly.
+
+The list has commands we though might be useful.  You can customize it.  There are hundreds of commands available.  Customization is covered in the command's help page. 
+
+I can't envision a case where you would use both options at the same time, but there's nothing to keep you from trying it.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-interactively) for details.
+
+### Quick Start Guide
+
+Added a guide for new and infrequent users.  (Thank you **@gir.isi**, **@BrianVR74**, **@Amial_From_France** and many others!)  It's not nearly as detailed as the README, but it will get you up and running much more quickly.
+
+View the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/quick_start_guide.md).
+
+
+### Check Relationships
+
+Consolidated several commands into one.  Each is now presented as a separate option.
+
+![Check Relationships](My%20Project/media/check_relationships.png)
+
+Several other commands were similarly consolidated, `Check drawings` and `Update drawing styles from template`, for example.
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#check-relationships) for details.
+
+### Update model styles from template
+
+Fixed an issue where only face styles and the active view style were updated.  Now all styles are updated (Thank you **@tempod**!).  As before, the view style active in the template becomes the view style active in the model.
+
+Any style in the template, but not in the model, is added.  Any in the model, but not the template, are optionally deleted if possible.  It is not possible to remove ones Solid Edge thinks are in use (even if they aren't). 
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-model-styles-from-template) for details.
+
+### Save Model As
+
+Added an option, for image files, to change the view style before saving.  (Thank you **@tempod**!)
+
+See the [<ins>**Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
+
+### Readme
+
+Added version-specific Readme files to the repo.  This addresses an issue where, because the documentation is auto-generated, the Readme "gets ahead" of the currently released version. All context-sensitive help buttons now incorporate this feature. 
+
 
 ## V2024.1 Enhancements/Fixes
 

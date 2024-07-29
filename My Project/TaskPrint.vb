@@ -31,8 +31,6 @@ Public Class TaskPrint
     End Enum
 
 
-    'CONSTRUCTORS
-
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
@@ -46,8 +44,11 @@ Public Class TaskPrint
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskPrint
         Me.Category = "Output"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.PrinterName = ""
@@ -61,23 +62,6 @@ Public Class TaskPrint
         Me.SelectedSheets = New List(Of String)
     End Sub
 
-    Public Sub New(Task As TaskPrint)
-
-        'Options
-        Me.PrinterName = Task.PrinterName
-        Me.Copies = Task.Copies
-        Me.AutoOrient = Task.AutoOrient
-        Me.BestFit = Task.BestFit
-        Me.PrintAsBlack = Task.PrintAsBlack
-        Me.ScaleLineTypes = Task.ScaleLineTypes
-        Me.ScaleLineWidths = Task.ScaleLineWidths
-
-        Me.SelectedSheets = Task.SelectedSheets
-
-    End Sub
-
-
-    'PROCESSING
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -96,6 +80,14 @@ Public Class TaskPrint
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -158,34 +150,7 @@ Public Class TaskPrint
     End Function
 
 
-    'FORM BUILDING
-
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        ' Initializations
-        Dim ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
-        ComboBox.Text = CStr(ComboBox.Items(0))
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -205,13 +170,13 @@ Public Class TaskPrint
 
         Dim OptionList As New List(Of String)
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 10, 100, 200)
+        FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 10, 100, 200)
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.PrinterName.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.PrinterName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
@@ -220,29 +185,29 @@ Public Class TaskPrint
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.Copies.ToString, "1")
+        TextBox = FormatOptionsTextBox(ControlNames.Copies.ToString, "1")
         TextBox.Anchor = AnchorStyles.Left
         TextBox.Width = 100
         TextBox.TextAlign = HorizontalAlignment.Right
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.CopiesLabel.ToString, "Copies")
+        Label = FormatOptionsLabel(ControlNames.CopiesLabel.ToString, "Copies")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.SelectSheets.ToString, "Select Sheets")
+        Button = FormatOptionsButton(ControlNames.SelectSheets.ToString, "Select Sheets")
         Button.AutoSize = False
         Button.Width = 100
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.SelectedSheets.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.SelectedSheets.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -251,7 +216,7 @@ Public Class TaskPrint
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ShowPrintingOptions.ToString, "Show printing options")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ShowPrintingOptions.ToString, "Show printing options")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -269,7 +234,7 @@ Public Class TaskPrint
             CtrlName = s
             CtrlText = GenerateCtrlText(s)
 
-            CheckBox = IU.FormatOptionsCheckBox(CtrlName, CtrlText)
+            CheckBox = FormatOptionsCheckBox(CtrlName, CtrlText)
             AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
             tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
             tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -282,7 +247,7 @@ Public Class TaskPrint
 
         'RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -292,45 +257,6 @@ Public Class TaskPrint
         Return tmpTLPOptions
     End Function
 
-
-    'INITIALIZATION AND START CONDITIONS
-
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox)
-        Me.PrinterName = ComboBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.Copies.ToString), TextBox)
-        Me.Copies = CShort(TextBox.Text)
-
-        TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
-        Me.SelectedSheets = Split(TextBox.Text, " ").ToList
-
-        CheckBox = CType(ControlsDict(ControlNames.ShowPrintingOptions.ToString), CheckBox)
-        Me.ShowPrintingOptions = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoOrient.ToString), CheckBox)
-        Me.AutoOrient = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.BestFit.ToString), CheckBox)
-        Me.BestFit = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.PrintAsBlack.ToString), CheckBox)
-        Me.PrintAsBlack = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.ScaleLineTypes.ToString), CheckBox)
-        Me.ScaleLineTypes = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.ScaleLineWidths.ToString), CheckBox)
-        Me.ScaleLineWidths = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -454,10 +380,6 @@ Public Class TaskPrint
     End Function
 
 
-
-
-    'EVENT HANDLERS
-
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
@@ -521,7 +443,7 @@ Public Class TaskPrint
                 Me.ScaleLineWidths = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -572,20 +494,17 @@ Public Class TaskPrint
     End Sub
 
 
-    'HELP
-
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Print settings are accessed on the **Configuration Tab -- Printing Page**."
-        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/printer_setup.png)"
+        HelpString = "Prints drawings. "
+        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/print.png)"
         HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
-        HelpString += "You can configure up to two of them, `Printer1` and `Printer2`. "
-        HelpString += "`Printer1` is the default.  It prints everything not assigned to `Printer2`. "
-        HelpString += vbCrLf + vbCrLf + "`Printer2` prints any sheet on the drawing whose size is listed in the Sheet selection textbox. "
-        HelpString += "Click the `Set` button to select the sheet sizes. "
-        HelpString += vbCrLf + vbCrLf + "Enable/disable a printer using the checkbox next to its name. "
-        HelpString += "If you need to print only certain sizes of drawings, you can disable `Printer1` "
-        HelpString += "and enable `Printer2` with the desired sheet sizes set. "
+        HelpString += vbCrLf + vbCrLf + "If you use more than one printer, use `Edit task list` to add one or more Print tasks. "
+        HelpString += "Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. "
+        HelpString += vbCrLf + vbCrLf + "You assign sheet sizes to a printer with the `Select Sheets` button. "
+        HelpString += "Print jobs are routed on a per-sheet basis. "
+        HelpString += "So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. "
+        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/sheet_selector.png)"
         HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
         HelpString += "Try the Save As PDF command instead. "
 

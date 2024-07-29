@@ -4,7 +4,7 @@ Public Class FormEditTaskList
 
     Public Property ManuallySelectFileTypes As Boolean
     Public Property TaskList As List(Of Task)
-    Public Property SourceTaskList As List(Of Task)
+    Public Property AvailableTasks As List(Of Task)
 
     Public Sub New()
 
@@ -25,38 +25,76 @@ Public Class FormEditTaskList
         Next
 
         Dim PU As New PreferencesUtilities()
-        Me.SourceTaskList = New List(Of Task)
-        SourceTaskList = PU.BuildTaskListFromScratch()
+        Me.AvailableTasks = New List(Of Task)
+        Me.AvailableTasks = PU.BuildTaskListFromScratch()
 
 
     End Sub
 
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        Me.DialogResult = DialogResult.OK
+
+        Dim DescriptionList As New List(Of String)
+        Dim RepeatsList As New List(Of String)
+
+        For Each Task As Task In Me.TaskList
+            DescriptionList.Add(Task.Description)
+        Next
+
+        DescriptionList.Sort()
+
+        Dim s As String
+        Dim s2 As String
+
+        For i = 1 To DescriptionList.Count - 1
+            s = DescriptionList(i)
+            s2 = DescriptionList(i - 1)
+            If s = s2 Then
+                If Not RepeatsList.Contains(s) Then
+                    RepeatsList.Add(s)
+                End If
+            End If
+        Next
+
+        If RepeatsList.Count = 0 Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            s = String.Format("Task names must be unique{0}", vbCrLf)
+            s = String.Format("{0}Please rename the following:{1}", s, vbCrLf)
+            For Each s2 In RepeatsList
+                s = String.Format("{0}'{1}'{2}", s, s2, vbCrLf)
+            Next
+            MsgBox(s, vbOKOnly)
+        End If
     End Sub
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = DialogResult.Cancel
     End Sub
 
+
     Private Sub FormEditTaskList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         BuildColumns()
 
-        For Each SourceTask As Task In Me.SourceTaskList
+        Dim i As Integer = 0
+
+        For Each SourceTask As Task In Me.AvailableTasks
             DataGridViewSource.Rows.Add({SourceTask.Description})
+            DataGridViewSource.Rows(i).DefaultCellStyle.BackColor = Color.FromArgb(SourceTask.ColorR, SourceTask.ColorG, SourceTask.ColorB)
+            i += 1
         Next
 
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 60
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+        'DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
 
         UpdateDataGridView()
 
     End Sub
 
     Private Sub FormEditTaskList_Resize(sender As Object, e As EventArgs) Handles MyBase.ResizeEnd
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 60
-        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 60
+        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
 
     End Sub
 
@@ -87,21 +125,6 @@ Public Class FormEditTaskList
 
                     DataGridViewTarget.Columns.Add(Col2)
 
-                    'Case "ComboBox"
-                    '    Dim Col As New DataGridViewComboBoxColumn
-                    '    Col.Name = ColumnName
-                    '    Col.HeaderText = ColumnName
-
-                    '    Col.Items.Add("Red")
-                    '    Col.Items.Add("Green")
-                    '    Col.Items.Add("Blue")
-                    '    Col.Items.Add("Cyan")
-                    '    Col.Items.Add("Magenta")
-                    '    Col.Items.Add("Yellow")
-                    '    Col.Items.Add("White")
-
-                    '    DataGridView1.Columns.Add(Col)
-
                 Case Else
                     MsgBox(String.Format("Column type '{0}' not recognized", ColumnType), vbOKOnly)
             End Select
@@ -122,7 +145,7 @@ Public Class FormEditTaskList
             i += 1
         Next
 
-        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 60
+        DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
 
     End Sub
 
@@ -163,33 +186,6 @@ Public Class FormEditTaskList
 
                 DataGridViewTarget.Invalidate()
 
-                'Case 1 ' Tint
-                '    Dim ComboBox As DataGridViewComboBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewComboBoxCell)
-
-                '    If ComboBox.Value IsNot Nothing Then
-                '        Me.TaskList(e.RowIndex).ColorHue = CStr(ComboBox.Value)
-
-                '        DataGridView1.Invalidate()
-                '    End If
-
-                'Case 2 ' Saturation
-                '    Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-                '    Try
-                '        Me.TaskList(e.RowIndex).ColorSaturation = CDbl(TextBox.Value)
-                '    Catch ex As Exception
-                '    End Try
-
-                '    DataGridView1.Invalidate()
-
-                'Case 3 ' Brightness
-                '    Dim TextBox As DataGridViewTextBoxCell = CType(DataGridView1.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
-                '    Try
-                '        Me.TaskList(e.RowIndex).ColorBrightness = CDbl(TextBox.Value)
-                '    Catch ex As Exception
-                '    End Try
-
-                '    DataGridView1.Invalidate()
-
             Case Else
                 MsgBox(String.Format("Column '{0}' not processed", e.ColumnIndex))
 
@@ -217,7 +213,7 @@ Public Class FormEditTaskList
 
                 'SelectedRowIndex = DataGridViewTarget.SelectedRows(0).Index
 
-                For i As Integer = 0 To Form1.TaskList.Count - 1
+                For i As Integer = 0 To Me.TaskList.Count - 1
 
                     Select Case Direction
 
@@ -294,6 +290,7 @@ Public Class FormEditTaskList
                 Me.TaskList(i).ColorR = ChangeColor.ColorR
                 Me.TaskList(i).ColorG = ChangeColor.ColorG
                 Me.TaskList(i).ColorB = ChangeColor.ColorB
+                Me.TaskList(i).ResetTaskColor()
             Next
             UpdateDataGridView()
             'MsgBox("OK")
@@ -358,10 +355,10 @@ Public Class FormEditTaskList
         Next
 
         i = 0
-        For Each Task As Task In Me.SourceTaskList
+        For Each Task As Task In Me.AvailableTasks
             If SelectedRowIndices.Contains(i) Then
                 TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
-                tmpTaskList.Add(PU.GetNewTaskInstance(Task.Name, TaskDescription))
+                tmpTaskList.Add(PU.GetNewTaskInstance(AvailableTasks, Task.Name, TaskDescription))
             End If
             i += 1
         Next

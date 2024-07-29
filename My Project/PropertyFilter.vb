@@ -1,4 +1,5 @@
-﻿Option Strict Off
+﻿Option Strict On
+
 Imports System.Text.RegularExpressions
 
 Public Class PropertyFilter
@@ -280,7 +281,7 @@ Public Class PropertyFilter
             ' The property may not be in every file
             Try
                 Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
-                Prop = Properties.Item(PropertyName)
+                Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
                 TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
                 DocValue = Prop.Value.ToString
                 If TypeName.ToLower = "date" Then
@@ -294,7 +295,7 @@ Public Class PropertyFilter
                 ' The property will be in only one of the SystemPropertySets -- hopefully.
                 Try
                     Properties = CType(PropertySets.Item(SystemPropertySet), DesignManager.Properties)
-                    Prop = Properties.Item(PropertyName)
+                    Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
                     TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
                     DocValue = Prop.Value.ToString
                     If TypeName.ToLower = "date" Then

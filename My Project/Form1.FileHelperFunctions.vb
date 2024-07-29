@@ -415,10 +415,12 @@ Partial Class Form1
         '    LinkDict.Add(Filename, New List(Of String))
         'Next
 
-        DMDocName = DMDoc.FullName
-        If DMDocName.Contains("!") Then
-            DMDocName = DMDocName.Split("!"c)(0)
-        End If
+        Dim TC As New Task_Common
+
+        DMDocName = TC.SplitFOAName(DMDoc.FullName)("Filename")
+        'If DMDocName.Contains("!") Then
+        '    DMDocName = DMDocName.Split("!"c)(0)
+        'End If
 
         If Not LinkDict.Keys.Contains(DMDocName) Then
 
@@ -443,10 +445,10 @@ Partial Class Form1
                     If LinkDocs.Count > 0 Then
                         For Each LinkDoc In LinkDocs
 
-                            LinkDocName = LinkDoc.FullName
-                            If LinkDocName.Contains("!") Then
-                                LinkDocName = LinkDocName.Split("!"c)(0)
-                            End If
+                            LinkDocName = TC.SplitFOAName(LinkDoc.FullName)("Filename")
+                            'If LinkDocName.Contains("!") Then
+                            '    LinkDocName = LinkDocName.Split("!"c)(0)
+                            'End If
 
                             If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
                                 If IO.File.Exists(LinkDocName) Then

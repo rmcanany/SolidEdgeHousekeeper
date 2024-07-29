@@ -457,8 +457,13 @@ Partial Class Form1
     End Sub
 
     Private Sub BuildReadmeFile()
+
         Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim VersionSpecificReadmeFileName = ReadmeFileName.Replace(".md", String.Format("-{0}.md", Me.Version))
+
+        ' StartupPath is hard coded so this doesn't do anything on a user's machine
         Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+
         Dim TaskListHeader As String = "<!-- Start -->"
         Dim Proceed As Boolean = True
         Dim i As Integer
@@ -502,6 +507,56 @@ Partial Class Form1
                 ReadmeOut.Add("")
             Next
 
+            ReadmeOut.Add("")
+            msg = "## KNOWN ISSUES"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**The program is not perfect**"
+            ReadmeOut.Add(msg)
+            msg = "- *Cause*: The programmer is not perfect."
+            ReadmeOut.Add(msg)
+            msg = "- *Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  So, you know, back up any files before using it.  "
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Does not support managed files**"
+            ReadmeOut.Add(msg)
+            msg = "- *Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "- *Possible workaround*: Process the files in an unmanaged workspace."
+            ReadmeOut.Add(msg)
+            msg = "- *Update 10/10/2021* Some users have reported success with BiDM managed files."
+            ReadmeOut.Add(msg)
+            msg = "- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Some tasks cannot run on older Solid Edge versions**"
+            ReadmeOut.Add(msg)
+            msg = "- *Cause*: Probably an API call not available in previous versions."
+            ReadmeOut.Add(msg)
+            msg = "- *Possible workaround*: Use the latest version, or avoid use of the task causing problems."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**May not support multiple installed Solid Edge versions**"
+            ReadmeOut.Add(msg)
+            msg = "- *Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "- *Possible workaround*: Use the version that was 'silently' installed."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "**Pathfinder sometimes blank during Interactive Edit**"
+            ReadmeOut.Add(msg)
+            msg = "- *Cause*: Unknown."
+            ReadmeOut.Add(msg)
+            msg = "- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window."
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+
             msg = ""
             ReadmeOut.Add("")
             msg = "## CODE ORGANIZATION"
@@ -513,7 +568,7 @@ Partial Class Form1
 
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
-
+            IO.File.WriteAllLines(VersionSpecificReadmeFileName, ReadmeOut)
 
         End If
 

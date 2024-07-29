@@ -33,18 +33,20 @@ Partial Class FormSheetSelector
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(21, 400)
+        Me.ButtonOK.Location = New System.Drawing.Point(24, 427)
+        Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(94, 27)
+        Me.ButtonOK.Size = New System.Drawing.Size(110, 29)
         Me.ButtonOK.TabIndex = 0
         Me.ButtonOK.Text = "OK"
         Me.ButtonOK.UseVisualStyleBackColor = True
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(125, 400)
+        Me.ButtonCancel.Location = New System.Drawing.Point(146, 427)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(105, 27)
+        Me.ButtonCancel.Size = New System.Drawing.Size(122, 29)
         Me.ButtonCancel.TabIndex = 1
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
@@ -53,17 +55,19 @@ Partial Class FormSheetSelector
         '
         Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Location = New System.Drawing.Point(12, 14)
+        Me.CheckedListBox1.Location = New System.Drawing.Point(14, 15)
+        Me.CheckedListBox1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(215, 276)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(250, 292)
         Me.CheckedListBox1.TabIndex = 2
         '
         'RadioButtonAnsi
         '
         Me.RadioButtonAnsi.AutoSize = True
-        Me.RadioButtonAnsi.Location = New System.Drawing.Point(10, 300)
+        Me.RadioButtonAnsi.Location = New System.Drawing.Point(12, 320)
+        Me.RadioButtonAnsi.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonAnsi.Name = "RadioButtonAnsi"
-        Me.RadioButtonAnsi.Size = New System.Drawing.Size(102, 19)
+        Me.RadioButtonAnsi.Size = New System.Drawing.Size(111, 20)
         Me.RadioButtonAnsi.TabIndex = 3
         Me.RadioButtonAnsi.TabStop = True
         Me.RadioButtonAnsi.Text = "Show ANSI only"
@@ -72,9 +76,10 @@ Partial Class FormSheetSelector
         'RadioButtonIso
         '
         Me.RadioButtonIso.AutoSize = True
-        Me.RadioButtonIso.Location = New System.Drawing.Point(10, 325)
+        Me.RadioButtonIso.Location = New System.Drawing.Point(12, 347)
+        Me.RadioButtonIso.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonIso.Name = "RadioButtonIso"
-        Me.RadioButtonIso.Size = New System.Drawing.Size(95, 19)
+        Me.RadioButtonIso.Size = New System.Drawing.Size(103, 20)
         Me.RadioButtonIso.TabIndex = 4
         Me.RadioButtonIso.TabStop = True
         Me.RadioButtonIso.Text = "Show ISO only"
@@ -83,9 +88,10 @@ Partial Class FormSheetSelector
         'RadioButtonAll
         '
         Me.RadioButtonAll.AutoSize = True
-        Me.RadioButtonAll.Location = New System.Drawing.Point(10, 350)
+        Me.RadioButtonAll.Location = New System.Drawing.Point(12, 373)
+        Me.RadioButtonAll.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonAll.Name = "RadioButtonAll"
-        Me.RadioButtonAll.Size = New System.Drawing.Size(65, 19)
+        Me.RadioButtonAll.Size = New System.Drawing.Size(70, 20)
         Me.RadioButtonAll.TabIndex = 5
         Me.RadioButtonAll.TabStop = True
         Me.RadioButtonAll.Text = "Show all"
@@ -94,18 +100,19 @@ Partial Class FormSheetSelector
         'CheckBoxSelectAll
         '
         Me.CheckBoxSelectAll.AutoSize = True
-        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(10, 375)
+        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(12, 400)
+        Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
-        Me.CheckBoxSelectAll.Size = New System.Drawing.Size(100, 19)
+        Me.CheckBoxSelectAll.Size = New System.Drawing.Size(105, 20)
         Me.CheckBoxSelectAll.TabIndex = 6
         Me.CheckBoxSelectAll.Text = "Select all/none"
         Me.CheckBoxSelectAll.UseVisualStyleBackColor = True
         '
         'FormSheetSelector
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 15.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(247, 443)
+        Me.ClientSize = New System.Drawing.Size(288, 473)
         Me.Controls.Add(Me.CheckBoxSelectAll)
         Me.Controls.Add(Me.RadioButtonAll)
         Me.Controls.Add(Me.RadioButtonIso)
@@ -113,7 +120,8 @@ Partial Class FormSheetSelector
         Me.Controls.Add(Me.CheckedListBox1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormSheetSelector"
         Me.Text = "Sheet Selector"
         Me.ResumeLayout(False)

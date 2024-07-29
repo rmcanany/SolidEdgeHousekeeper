@@ -17,18 +17,19 @@ Public Class TaskCheckMissingDrawing
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMissingDrawing
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
 
         ' Options
 
     End Sub
 
-    Public Sub New(Task As TaskCheckMissingDrawing)
+    'Public Sub New(Task As TaskCheckMissingDrawing)
 
-        'Options
+    '    'Options
 
-    End Sub
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -51,7 +52,13 @@ Public Class TaskCheckMissingDrawing
         Return ErrorMessage
 
     End Function
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -65,11 +72,13 @@ Public Class TaskCheckMissingDrawing
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
-        ModelFilename = SEDoc.FullName
+        Dim TC As New Task_Common
 
-        If ModelFilename.Contains("!") Then
-            ModelFilename = ModelFilename.Split("!"c)(0)
-        End If
+        ModelFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+
+        'If ModelFilename.Contains("!") Then
+        '    ModelFilename = ModelFilename.Split("!"c)(0)
+        'End If
 
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
@@ -83,22 +92,22 @@ Public Class TaskCheckMissingDrawing
         Return ErrorMessage
     End Function
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
+    '    Dim IU As New InterfaceUtilities
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TLPTask.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TLPTask
+    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

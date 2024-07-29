@@ -1,6 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgeDraft
-Imports SolidEdgeFrameworkSupport
 
 Public Class TaskCheckDrawings
 
@@ -32,21 +30,17 @@ Public Class TaskCheckDrawings
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckDrawings
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.DrawingViewsOutOfDate = False
         Me.DetachedDimensionsOrAnnotations = False
         Me.DrawingViewOnBackgroundSheet = False
-    End Sub
 
-    Public Sub New(Task As TaskCheckDrawings)
-
-        'Options
-        Me.DrawingViewsOutOfDate = Task.DrawingViewsOutOfDate
-        Me.DetachedDimensionsOrAnnotations = Task.DetachedDimensionsOrAnnotations
-        Me.DrawingViewOnBackgroundSheet = Task.DrawingViewOnBackgroundSheet
     End Sub
 
     Public Overrides Function Process(
@@ -66,6 +60,14 @@ Public Class TaskCheckDrawings
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -212,52 +214,19 @@ Public Class TaskCheckDrawings
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        ' Initialize by double-toggling checkboxes
-        Dim CheckBox As CheckBox
-        CheckBox = CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox)
-        CheckBox.Checked = Not CheckBox.Checked
-        CheckBox.Checked = Not CheckBox.Checked
-        CheckBox = CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox)
-        CheckBox.Checked = Not CheckBox.Checked
-        CheckBox.Checked = Not CheckBox.Checked
-        CheckBox = CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox)
-        CheckBox.Checked = Not CheckBox.Checked
-        CheckBox.Checked = Not CheckBox.Checked
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.DrawingViewsOutOfDate.ToString, "Check for out of date drawing views")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewsOutOfDate.ToString, "Check for out of date drawing views")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -265,7 +234,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.DetachedDimensionsOrAnnotations.ToString, "Check for detatched dimensions or annotations")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DetachedDimensionsOrAnnotations.ToString, "Check for detatched dimensions or annotations")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -273,7 +242,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.DrawingViewOnBackgroundSheet.ToString, "Check for drawing views on background sheet")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewOnBackgroundSheet.ToString, "Check for drawing views on background sheet")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -281,7 +250,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -366,7 +335,7 @@ Public Class TaskCheckDrawings
                 Me.DrawingViewOnBackgroundSheet = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

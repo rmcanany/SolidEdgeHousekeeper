@@ -1,12 +1,10 @@
 ﻿Option Strict On
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgeDraft
 
 Public Class TaskUpdateDrawingStylesFromTemplate
 
     Inherits Task
 
-    'Public Property DraftTemplate As String
+    Public Property DraftTemplate As String
     Public Property UpdateBorder As Boolean
     Public Property UpdateStyles As Boolean
 
@@ -31,21 +29,16 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateDrawingStylesFromTemplate
         Me.Category = "Restyle"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.DraftTemplate = ""
         Me.UpdateBorder = False
         Me.UpdateStyles = False
-    End Sub
-
-    Public Sub New(Task As TaskUpdateDrawingStylesFromTemplate)
-
-        'Options
-        Me.DraftTemplate = Task.DraftTemplate
-        Me.UpdateBorder = Task.UpdateBorder
-        Me.UpdateStyles = Task.UpdateStyles
 
     End Sub
 
@@ -67,6 +60,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -138,7 +139,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         If Me.UpdateStyles Then
 
-            ' ############  DimensionStyles ############
+            ' ############ DimensionStyles ############
             Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
             DocDimensionStyles = CType(tmpSEDoc.DimensionStyles, SolidEdgeFrameworkSupport.DimensionStyles)
 
@@ -174,6 +175,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
+            ' ############ DrawingViewStyles ############
             Dim DocDrawingViewStyles As SolidEdgeFrameworkSupport.DrawingViewStyles
             DocDrawingViewStyles = CType(tmpSEDoc.DrawingViewStyles, SolidEdgeFrameworkSupport.DrawingViewStyles)
 
@@ -209,8 +211,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ LinearStyles ############
             Dim DocLinearStyles As SolidEdgeFramework.LinearStyles
             DocLinearStyles = CType(tmpSEDoc.LinearStyles, SolidEdgeFramework.LinearStyles)
 
@@ -246,10 +247,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
-
-
+            ' ############ TableStyles ############
             Dim DocTableStyles As SolidEdgeFrameworkSupport.TableStyles
             DocTableStyles = CType(tmpSEDoc.TableStyles, SolidEdgeFrameworkSupport.TableStyles)
 
@@ -291,8 +289,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ TextCharStyles ############
             Dim DocTextCharStyles As SolidEdgeFramework.TextCharStyles
             DocTextCharStyles = CType(tmpSEDoc.TextCharStyles, SolidEdgeFramework.TextCharStyles)
 
@@ -328,8 +325,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
 
 
-
-
+            ' ############ TextStyles ############
             Dim DocTextStyles As SolidEdgeFramework.TextStyles
             DocTextStyles = CType(tmpSEDoc.TextStyles, SolidEdgeFramework.TextStyles)
 
@@ -364,10 +360,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             TemplateStyleNames.Clear()
             MissingStyles = ""
         End If
-
-
-
-
 
 
         SETemplateDoc.Close()
@@ -407,28 +399,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -436,18 +407,18 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim TextBox As TextBox
         Dim Button As Button
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.DraftTemplate.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.DraftTemplate.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -455,7 +426,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UpdateBorder.ToString, "Update drawing border")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateBorder.ToString, "Update drawing border")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -463,7 +434,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UpdateStyles.ToString, "Update styles")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateStyles.ToString, "Update styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -471,7 +442,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -480,24 +451,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox)
-        Me.DraftTemplate = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateBorder.ToString), CheckBox)
-        Me.UpdateBorder = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateStyles.ToString), CheckBox)
-        Me.UpdateStyles = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -581,7 +534,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Select Case Name
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case ControlNames.UpdateBorder.ToString
                 Me.UpdateBorder = Checkbox.Checked
@@ -610,15 +563,13 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     End Sub
 
-
-
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Updates styles and/or background sheets from a template you specify on the **Configuration Tab -- Templates Page**. "
+        HelpString = "Updates styles and/or background sheets from a template you specify. "
         HelpString += vbCrLf + vbCrLf
-        HelpString += "These styles are processed: DimensionStyles, DrawingViewStyles, LinearStyles, TableStyles, TextCharStyles, TextStyles. "
-        HelpString += "These are not: FillStyles, HatchPatternStyles, SmartFrame2dStyles. "
-        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated. "
+        HelpString += "These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. "
+        HelpString += "These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. "
+        HelpString += "The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. "
         HelpString += "If you need one or more of those styles updated, please ask on the Forum. "
 
         Return HelpString

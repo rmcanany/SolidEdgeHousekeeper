@@ -1,7 +1,4 @@
 ﻿Option Strict On
-Imports Microsoft.WindowsAPICodePack.Dialogs
-Imports SolidEdgeAssembly
-Imports SolidEdgePart
 
 Public Class TaskCheckLinks
 
@@ -31,21 +28,17 @@ Public Class TaskCheckLinks
         Me.Image = My.Resources.TaskCheckLinks
         Me.RequiresSourceDirectories = True
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.CheckMissingLinks = False
         Me.CheckMisplacedLinks = False
         Me.SourceDirectories = New List(Of String)
-    End Sub
 
-    Public Sub New(Task As TaskCheckLinks)
-
-        ' Options
-        Me.CheckMissingLinks = Task.CheckMissingLinks
-        Me.CheckMisplacedLinks = Task.CheckMisplacedLinks
-        Me.SourceDirectories = Task.SourceDirectories
     End Sub
 
 
@@ -66,6 +59,14 @@ Public Class TaskCheckLinks
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -120,7 +121,7 @@ Public Class TaskCheckLinks
             ' The Select Case section simply builds a list of files to check.
             Select Case DocType
                 Case "asm"
-                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, AssemblyDocument)
+                    Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
                     Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
                     Dim Occurrence As SolidEdgeAssembly.Occurrence
@@ -133,12 +134,12 @@ Public Class TaskCheckLinks
                     Next
 
                 Case = "par"
-                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, PartDocument)
+                    Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
 
                     Models = tmpSEDoc.Models
 
                 Case = "psm"
-                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SheetMetalDocument)
+                    Dim tmpSEDoc As SolidEdgePart.SheetMetalDocument = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
 
                     Models = tmpSEDoc.Models
 
@@ -247,40 +248,19 @@ Public Class TaskCheckLinks
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CheckMissingLinks.ToString, "Check missing links")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckMissingLinks.ToString, "Check missing links")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -288,7 +268,7 @@ Public Class TaskCheckLinks
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CheckMisplacedLinks.ToString, "Check misplaced links")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckMisplacedLinks.ToString, "Check misplaced links")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -296,7 +276,7 @@ Public Class TaskCheckLinks
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -381,7 +361,7 @@ Public Class TaskCheckLinks
                 Me.CheckMisplacedLinks = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

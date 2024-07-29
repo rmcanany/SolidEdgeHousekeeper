@@ -30,22 +30,16 @@ Public Class TaskFitView
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskFitView
         Me.Category = "Restyle"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.Isometric = False
         Me.Dimetric = False
         Me.Trimetric = False
-
-    End Sub
-
-    Public Sub New(Task As TaskFitView)
-
-        ' Options
-        Me.Isometric = Task.Isometric
-        Me.Dimetric = Task.Dimetric
-        Me.Trimetric = Task.Trimetric
 
     End Sub
 
@@ -67,6 +61,14 @@ Public Class TaskFitView
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -151,57 +153,33 @@ Public Class TaskFitView
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        ' Initialize
-        CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Checked = True
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -209,7 +187,7 @@ Public Class TaskFitView
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -295,23 +273,23 @@ Public Class TaskFitView
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
                 If Me.Isometric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Dimetric.ToString
                 Me.Dimetric = Checkbox.Checked
                 If Me.Dimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Trimetric.ToString
                 Me.Trimetric = Checkbox.Checked
                 If Me.Trimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -324,7 +302,7 @@ Public Class TaskFitView
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Maximizes the window, sets the view orientation for model files, and does a fit. "
-        HelpString += "Select the desired orientation on the **Configuration Tab -- General Page**."
+        HelpString += "Select the desired orientation on the Options panel."
 
         Return HelpString
     End Function

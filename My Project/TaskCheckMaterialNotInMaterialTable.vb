@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-Imports Microsoft.WindowsAPICodePack.Dialogs
-
 Public Class TaskCheckMaterialNotInMaterialTable
 
     Inherits Task
@@ -27,15 +25,13 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
 
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
+
         ' Options
-    End Sub
-
-    Public Sub New(Task As TaskCheckMaterialNotInMaterialTable)
-
-        'Options
 
     End Sub
 
@@ -56,6 +52,14 @@ Public Class TaskCheckMaterialNotInMaterialTable
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -85,28 +89,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -114,18 +97,18 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim TextBox As TextBox
         Dim Button As Button
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.MaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MaterialLibrary.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -133,7 +116,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -229,7 +212,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Select Case Name
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -256,7 +239,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks the file's material against the material table. "
-        HelpString += "The material table is chosen on the **Configuration Tab -- Templates Page**. "
+        HelpString += "The material table is chosen on the Options panel. "
 
         Return HelpString
     End Function

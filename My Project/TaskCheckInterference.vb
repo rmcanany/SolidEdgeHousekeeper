@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports SolidEdgeConstants
+'Imports SolidEdgeConstants
 
 Public Class TaskCheckInterference
 
@@ -28,18 +28,17 @@ Public Class TaskCheckInterference
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckInterference
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.NumOccurrencesLimit = 1000
+
     End Sub
 
-    Public Sub New(Task As TaskCheckInterference)
-
-        'Options
-        Me.NumOccurrencesLimit = Task.NumOccurrencesLimit
-    End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -58,6 +57,14 @@ Public Class TaskCheckInterference
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -82,8 +89,8 @@ Public Class TaskCheckInterference
         Dim i As Integer
         Dim NumInterferences As Object = Nothing
         Occurrences = tmpSEDoc.Occurrences
-        Dim IgnoreT As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
-        Dim IgnoreD As InterferenceOptionsConstants = InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
+        Dim IgnoreT As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
+        Dim IgnoreD As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
         Dim NumOccurrences As Integer
         'Dim NumOccurrencesLimit As Integer
 
@@ -136,32 +143,8 @@ Public Class TaskCheckInterference
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
 
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        ' Initializations
-        Dim TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
-        If TextBox.Text = "" Then TextBox.Text = CStr(Me.NumOccurrencesLimit)
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -170,28 +153,28 @@ Public Class TaskCheckInterference
         Dim TextBox As TextBox
         Dim Label As Label
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.NumOccurrencesLimit.ToString, "")
-        TextBox.Width = 50
+        TextBox = FormatOptionsTextBox(ControlNames.NumOccurrencesLimit.ToString, "")
+        TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
         TextBox.Text = "1000"
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.NumOccurrencesLimitLabel.ToString, "Maximum number of occurrences to process")
+        Label = FormatOptionsLabel(ControlNames.NumOccurrencesLimitLabel.ToString, "Max number occurrences to process")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -201,17 +184,6 @@ Public Class TaskCheckInterference
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.NumOccurrencesLimit.ToString), TextBox)
-        Me.NumOccurrencesLimit = CInt(TextBox.Text)
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -270,7 +242,7 @@ Public Class TaskCheckInterference
         Select Case Name
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -304,7 +276,7 @@ Public Class TaskCheckInterference
         HelpString = "Runs an interference check.  All parts are checked against all others. "
         HelpString += "This can take a long time on large assemblies, "
         HelpString += "so there is a limit to the number of parts to check. "
-        HelpString += "Set it on the **Configuration Tab -- General Page**."
+        HelpString += "Set it on the Options panel."
 
         Return HelpString
     End Function

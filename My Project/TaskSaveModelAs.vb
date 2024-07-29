@@ -17,6 +17,9 @@ Public Class TaskSaveModelAs
     Public Property Isometric As Boolean
     Public Property Dimetric As Boolean
     Public Property Trimetric As Boolean
+    Public Property ChangeViewStyle As Boolean
+    Public Property ViewStyleName As String
+
 
 
     Enum ControlNames
@@ -33,6 +36,9 @@ Public Class TaskSaveModelAs
         Isometric
         Dimetric
         Trimetric
+        ChangeViewStyle
+        ViewStyleName
+        ViewStyleNameLabel
         HideOptions
     End Enum
 
@@ -50,8 +56,11 @@ Public Class TaskSaveModelAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.NewFileTypeName = ""
@@ -65,26 +74,10 @@ Public Class TaskSaveModelAs
         Me.Isometric = False
         Me.Dimetric = False
         Me.Trimetric = False
+        Me.ChangeViewStyle = False
+        Me.ViewStyleName = ""
 
     End Sub
-
-    Public Sub New(Task As TaskSaveModelAs)
-
-        'Options
-        Me.NewFileTypeName = Task.NewFileTypeName
-        Me.SaveInOriginalDirectory = Task.SaveInOriginalDirectory
-        Me.NewDir = Task.NewDir
-        Me.UseSubdirectoryFormula = Task.UseSubdirectoryFormula
-        Me.Formula = Task.Formula
-        Me.CropImage = Task.CropImage
-        Me.HideConstructions = Task.HideConstructions
-        Me.FitView = Task.FitView
-        Me.Isometric = Task.Isometric
-        Me.Dimetric = Task.Dimetric
-        Me.Trimetric = Task.Trimetric
-
-    End Sub
-
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -103,6 +96,14 @@ Public Class TaskSaveModelAs
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -343,11 +344,10 @@ Public Class TaskSaveModelAs
         Dim TC As New Task_Common
         Dim FCD As New FilenameCharmapDoctor()
 
-        OldFullFilename = SEDoc.FullName
-
-        If OldFullFilename.Contains("!") Then
-            OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
-        End If
+        OldFullFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        'If OldFullFilename.Contains("!") Then
+        '    OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
+        'End If
 
         OldDirectoryName = System.IO.Path.GetDirectoryName(OldFullFilename)
         OldFilenameWOExt = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)
@@ -369,7 +369,7 @@ Public Class TaskSaveModelAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Me.Formula, ValidFilenameRequired:=True)
+                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
@@ -558,6 +558,41 @@ Public Class TaskSaveModelAs
         Window = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
         View = Window.View
 
+        If Me.ChangeViewStyle Then
+
+            Try
+                Dim ViewStyles As SolidEdgeFramework.ViewStyles = Nothing
+                Dim ViewStyle As SolidEdgeFramework.ViewStyle = Nothing
+
+                Select Case TC.GetDocType(SEDoc)
+                    Case "asm"
+                        Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                        ViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                    Case "par"
+                        Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+                        ViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                    Case "psm"
+                        Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+                        ViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
+                End Select
+
+                For Each VS As SolidEdgeFramework.ViewStyle In ViewStyles
+                    If VS.StyleName = ViewStyleName Then
+                        ViewStyle = VS
+                        Exit For
+                    End If
+                Next
+
+                View.ViewStyle = ViewStyle
+                View.Update()
+                SEApp.DoIdle()
+
+            Catch ex As Exception
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Error changing to view style '{0}'", ViewStyleName))
+            End Try
+        End If
+
         If Not NewExtension = ".png" Then
             View.SaveAsImage(NewFilename)
         Else
@@ -576,6 +611,7 @@ Public Class TaskSaveModelAs
             End If
         End If
 
+        ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
 
@@ -699,28 +735,7 @@ Public Class TaskSaveModelAs
 
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -733,26 +748,26 @@ Public Class TaskSaveModelAs
         Dim ControlWidth As Integer = 150
         Dim NewFileTypeLabelText = "(Sheetmetal only: PDF, DXF)"
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 7, 75, 75)
+        FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 7, 75, 75)
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.NewFileTypeName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(ComboBox, 2)
         ControlsDict(ComboBox.Name) = ComboBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
+        Label = FormatOptionsLabel(ControlNames.NewFileTypeLabel.ToString, NewFileTypeLabelText)
         tmpTLPOptions.Controls.Add(Label, 2, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
+        CheckBox = FormatOptionsCheckBox(ControlNames.SaveInOriginalDirectory.ToString, "Save in original directory")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -760,12 +775,12 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
+        Button = FormatOptionsButton(ControlNames.BrowseNewDir.ToString, "Directory")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.NewDir.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -774,7 +789,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseSubdirectoryFormula.ToString, "Use subdirectory formula")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -782,9 +797,9 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.Formula.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(TextBox, 3)
         TextBox.Visible = False
@@ -792,7 +807,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.CropImage.ToString, "Crop image to model size")
+        CheckBox = FormatOptionsCheckBox(ControlNames.CropImage.ToString, "Crop image to model size")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -801,7 +816,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideConstructions.ToString, "Hide constructions")
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideConstructions.ToString, "Hide constructions")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -810,7 +825,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.FitView.ToString, "Fit view")
+        CheckBox = FormatOptionsCheckBox(ControlNames.FitView.ToString, "Fit view")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -819,7 +834,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Isometric.ToString, "Isometric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -828,7 +843,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Dimetric.ToString, "Dimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -837,7 +852,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
+        CheckBox = FormatOptionsCheckBox(ControlNames.Trimetric.ToString, "Trimetric")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
@@ -846,7 +861,32 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.ChangeViewStyle.ToString, "Change view style")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 3)
+        CheckBox.Visible = False
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        Label = FormatOptionsLabel(ControlNames.ViewStyleNameLabel.ToString, "Style name")
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        Label.Visible = False
+        ControlsDict(Label.Name) = Label
+
+        TextBox = FormatOptionsTextBox(ControlNames.ViewStyleName.ToString, "")
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
+        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
+        tmpTLPOptions.SetColumnSpan(TextBox, 2)
+        TextBox.Visible = False
+        ControlsDict(TextBox.Name) = TextBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -855,34 +895,6 @@ Public Class TaskSaveModelAs
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox)
-        Me.NewFileTypeName = ComboBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.SaveInOriginalDirectory.ToString), CheckBox)
-        Me.SaveInOriginalDirectory = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.NewDir.ToString), TextBox)
-        Me.NewDir = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
-        Me.UseSubdirectoryFormula = CheckBox.Checked
-
-        TextBox = CType(ControlsDict(ControlNames.Formula.ToString), TextBox)
-        Me.Formula = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.CropImage.ToString), CheckBox)
-        Me.CropImage = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -937,7 +949,8 @@ Public Class TaskSaveModelAs
                 ErrorMessageList.Add(String.Format("{0}Enter a subdirectory formula", Indent))
             End If
 
-            If Me.FitView Then
+            'ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.FitView And Me.FitView
+            If Me.FitView And ImageFileTypeNames.Contains(Me.NewFileTypeName) Then
                 If Not (Me.Isometric Or Me.Dimetric Or Me.Trimetric) Then
                     If Not ErrorMessageList.Contains(Me.Description) Then
                         ErrorMessageList.Add(Me.Description)
@@ -947,6 +960,16 @@ Public Class TaskSaveModelAs
 
                 End If
 
+            End If
+
+            If Me.ChangeViewStyle And ImageFileTypeNames.Contains(Me.NewFileTypeName) Then
+                If Me.ViewStyleName = "" Then
+                    If Not ErrorMessageList.Contains(Me.Description) Then
+                        ErrorMessageList.Add(Me.Description)
+                    End If
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("{0}Enter a view style name", Indent))
+                End If
             End If
 
         End If
@@ -1029,23 +1052,29 @@ Public Class TaskSaveModelAs
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
                 If Me.Isometric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Dimetric.ToString
                 Me.Dimetric = Checkbox.Checked
                 If Me.Dimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.Trimetric.ToString
                 Me.Trimetric = Checkbox.Checked
                 If Me.Trimetric Then
-                    HandleMutuallyExclusiveCheckBoxes(Me.TLPOptions, Checkbox, ParticipatingCheckBoxes)
+                    HandleMutuallyExclusiveCheckBoxes(Me.TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
+            Case ControlNames.ChangeViewStyle.ToString
+                Me.ChangeViewStyle = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Visible = Me.ChangeViewStyle
+                CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label).Visible = Me.ChangeViewStyle
+
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -1057,6 +1086,8 @@ Public Class TaskSaveModelAs
         Dim ComboBox = CType(sender, ComboBox)
         Dim Name = ComboBox.Name
         Dim CheckBox As CheckBox = Nothing
+        Dim TextBox As TextBox = Nothing
+        Dim Label As Label = Nothing
 
         Select Case Name
             Case ControlNames.NewFileTypeName.ToString
@@ -1080,6 +1111,19 @@ Public Class TaskSaveModelAs
                 CheckBox = CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox)
                 CheckBox.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.FitView
 
+                CheckBox = CType(ControlsDict(ControlNames.ChangeViewStyle.ToString), CheckBox)
+                CheckBox.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName)
+
+                TextBox = CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox)
+                TextBox.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.ChangeViewStyle
+
+                Label = CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label)
+                Label.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.ChangeViewStyle
+
+
+
+
+
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
 
@@ -1094,8 +1138,12 @@ Public Class TaskSaveModelAs
         Select Case Name
             Case ControlNames.Formula.ToString
                 Me.Formula = TextBox.Text
+
             Case ControlNames.NewDir.ToString
                 Me.NewDir = TextBox.Text
+
+            Case ControlNames.ViewStyleName.ToString
+                Me.ViewStyleName = TextBox.Text
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -1107,49 +1155,38 @@ Public Class TaskSaveModelAs
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
-        HelpString += vbCrLf + vbCrLf + "Select the file type using the `Save As` combobox. "
+
+        HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_model_as.png)"
+
+        HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
-        HelpString += "These controls are on the **Task Tab** below the task list. "
-        HelpString += vbCrLf + vbCrLf + "Images can be saved with the aspect ratio of the model, rather than the window. "
-        HelpString += "The option is called `Save as image -- crop to model size`. "
-        HelpString += "It is located on the **Configuration Tab -- General Page**. "
+
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: "
         HelpString += vbCrLf + "`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. "
-        HelpString += "You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: "
+        HelpString += vbCrLf + "You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: "
         HelpString += vbCrLf + "`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. "
+
         HelpString += vbCrLf + vbCrLf + "As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "For more information, see the **Property Filter** section above. "
+        HelpString += "For more information, refer to the **Property Filter** section in this Readme file. "
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
-        HelpString += "If that happens, a replacement is read from filename_charmap.txt in the Preferences directory in the Housekeeper root folder. "
+        HelpString += "If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. "
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
         HelpString += "The file is created the first time you run Housekeeper.  For details, see the header comments in that file. "
 
-        HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (\*.dxf)` and `PDF Drawing (\*.pdf)`. "
-        HelpString += vbCrLf + vbCrLf + "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
+        HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
+        HelpString += "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
         HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
         HelpString += "The drawing must have the same name as the model, and be in the same directory. "
-        HelpString += "A more flexible option may be to use the Draft `Save As`, "
+        HelpString += "A more flexible option may be to use `Save Drawing As` command, "
         HelpString += "using a `Property Filter` if needed. "
 
-        HelpString = vbCrLf + vbCrLf + "For Draft files you can "
-        HelpString += "optionally include a watermark image on the output.  For the watermark, "
-        HelpString += "set X/W and Y/H to position the image, and Scale to change its size. "
-        HelpString += "The X/W and Y/H values are fractions of the sheet's "
-        HelpString += "width and height, respectively. "
-        HelpString += "So, (`0,0`) means lower left, (`0.5,0.5`) means centered, etc. "
-        HelpString += "Note some file formats may not support bitmap output."
-        HelpString += vbCrLf + vbCrLf + "Also for Draft files, the option `Use subdirectory formula` can use an Index Reference designator "
-        HelpString += "to select a model file contained in the draft file. "
-        HelpString += "This is similar to Property Text in a Callout, "
-        HelpString += "for example, `%{System.Material|R1}`. "
-        HelpString += "To refer to properties of the draft file itself, do not specify a designator, "
-        HelpString += "for example, `%{Custom.Last Revision Date}`. "
-        HelpString += vbCrLf + vbCrLf + "When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. "
-        HelpString += "The first saves all sheets to one file.  The second saves each sheet to a separate file, "
-        HelpString += "called `<Filename>-<Sheetname>.pdf`.  You can optionally suppress the `Sheetname` suffix"
-        HelpString += "on file with only one sheet.  Set the option on the **Configuration Tab -- Open/Save Page**."
-        HelpString += "To save sheets to separate `dxf` or `dwg` files, refer to the Save As Options in Solid Edge. "
+        HelpString += vbCrLf + vbCrLf + "For image file formats there are additional options. "
+        HelpString += "You can hide constructions and/or fit the view.  For Fit, choose an orientation, either `Isometric`, `Dimetric`, or `Trimetric`. "
+        HelpString += "You can also crop images to the aspect ratio of the model, rather than the window. "
+        HelpString += "The option is called `Crop image to model size`. "
+        HelpString += "On tall skinny parts cropping works a little *too* well.  You might need to resort to Photoshop for those. "
+        HelpString += "Finally, you can change the view style by selecting that option and entering its name in the textbox provided. "
 
 
         Return HelpString

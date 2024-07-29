@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-Imports SolidEdgeAssembly
-
 Public Class TaskActivateAndUpdateAll
     Inherits Task
 
@@ -18,12 +16,14 @@ Public Class TaskActivateAndUpdateAll
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskActivateAndUpdateAll
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+
     End Sub
 
-    Public Sub New(Task As TaskActivateAndUpdateAll)
-    End Sub
+    'Public Sub New(Task As TaskActivateAndUpdateAll)
+    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -47,6 +47,14 @@ Public Class TaskActivateAndUpdateAll
 
     End Function
 
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -62,7 +70,7 @@ Public Class TaskActivateAndUpdateAll
 
         If TC.GetDocType(SEDoc) = "asm" Then
             Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
-            tmpSEDoc = CType(SEDoc, AssemblyDocument)
+            tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 
             tmpSEDoc.ActivateAll()
             tmpSEDoc.UpdateAll()
@@ -82,22 +90,22 @@ Public Class TaskActivateAndUpdateAll
         Return ErrorMessage
     End Function
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
+    'Public Overrides Function GetTaskControl(TLPParent As ExTableLayoutPanel) As UCTaskControl
 
-        Dim IU As New InterfaceUtilities
+    '    ControlsDict = New Dictionary(Of String, Control)
 
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+    '    Me.TaskControl = New UCTaskControl(Me)
 
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
+    '    For Each Control As Control In Me.TaskControl.Controls
+    '        If ControlsDict.Keys.Contains(Control.Name) Then
+    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
+    '        End If
+    '        ControlsDict(Control.Name) = Control
+    '    Next
 
-        Return Me.TLPTask
-    End Function
+    '    Return Me.TaskControl
+
+    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

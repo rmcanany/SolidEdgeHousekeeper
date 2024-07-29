@@ -16,14 +16,9 @@ Public Class TaskOpenSave
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskOpenSave
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
 
-        ' Options
-
-    End Sub
-
-    Public Sub New(Task As TaskOpenSave)
+        GenerateTaskControl()
 
         ' Options
 
@@ -52,6 +47,14 @@ Public Class TaskOpenSave
 
     End Function
 
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -74,23 +77,6 @@ Public Class TaskOpenSave
         Return ErrorMessage
     End Function
 
-
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Return Me.TLPTask
-    End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -127,7 +113,7 @@ Public Class TaskOpenSave
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Open a document and save in the current version."
+        HelpString = "Opens a document and saves in the current version."
 
         Return HelpString
     End Function

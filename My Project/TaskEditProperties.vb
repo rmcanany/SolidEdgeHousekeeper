@@ -1,6 +1,10 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
+Imports OpenMcdf
+Imports OpenMcdf.Extensions
+Imports OpenMcdf.Extensions.OLEProperties
+Imports System.IO
 Imports System.Text.RegularExpressions
 
 Public Class TaskEditProperties
@@ -11,7 +15,7 @@ Public Class TaskEditProperties
     Public Property AutoUpdateMaterial As Boolean
     Public Property ActiveMaterialLibrary As String
     Public Property RemoveFaceStyleOverrides As Boolean
-
+    Public Property StructuredStorageEdit As Boolean
 
     Enum ControlNames
         Edit
@@ -21,6 +25,7 @@ Public Class TaskEditProperties
         Browse
         ActiveMaterialLibrary
         RemoveFaceStyleOverrides
+        StructuredStorageEdit
         HideOptions
     End Enum
 
@@ -36,10 +41,13 @@ Public Class TaskEditProperties
         Me.AppliesToDraft = True
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
-        Me.Image = My.Resources.TaskEditProperties
+        Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.JSONDict = ""
@@ -47,14 +55,10 @@ Public Class TaskEditProperties
         Me.AutoUpdateMaterial = False
         Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
-    End Sub
+        Me.StructuredStorageEdit = False
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True
 
-    Public Sub New(Task As TaskEditProperties)
-
-        ' Options
-        Me.JSONDict = Task.JSONDict
-        Me.AutoAddMissingProperty = Task.AutoAddMissingProperty
-        Me.AutoUpdateMaterial = Task.AutoUpdateMaterial
     End Sub
 
     Public Overrides Function Process(
@@ -79,7 +83,17 @@ Public Class TaskEditProperties
 
     End Function
 
-    Private Function ProcessInternal(
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = ProcessInternal(FileName)
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -108,7 +122,6 @@ Public Class TaskEditProperties
         Dim ReplaceSearchType As String = ""
 
         Dim PropertyFound As Boolean = False
-        'Dim AutoAddMissingProperty As Boolean = Configuration("CheckBoxAutoAddMissingProperty").ToLower = "true"
 
         Dim Proceed As Boolean = True
         Dim s As String
@@ -122,13 +135,10 @@ Public Class TaskEditProperties
         PropertiesToEdit = Me.JSONDict
 
         Dim DocType As String = TC.GetDocType(SEDoc)
-        'If DocType = "asm" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditAssembly")
-        'If DocType = "par" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditPart")
-        'If DocType = "psm" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditSheetmetal")
-        'If DocType = "dft" Then PropertiesToEdit = Configuration("TextBoxPropertiesEditDraft")
+
+        Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
 
         If Not PropertiesToEdit = "" Then
-            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
 
             'PropertiesToEditDict format
             '{"1":{
@@ -141,13 +151,110 @@ Public Class TaskEditProperties
             '    "Replace_PT":"True",
             '    "Replace_RX":"False",
             '    "ReplaceString":"Aluminum 6061-T6"},
+            '{"2":{
             ' ...
             '}
+
+            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
 
         Else
             ExitStatus = 1
             ErrorMessageList.Add("No properties provided")
         End If
+
+        If ExitStatus = 0 Then
+
+            Dim IsFOA As Boolean = False
+            If DocType = "asm" Then
+                tmpAsmDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                IsFOA = tmpAsmDoc.IsFileFamilyByDocument
+            End If
+
+            If (DocType = "asm") And (IsFOA) Then
+                Dim Members As SolidEdgeAssembly.AssemblyFamilyMembers = tmpAsmDoc.AssemblyFamilyMembers
+                If Not Members.GlobalEditMode Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Cannot process FOA with 'Apply edits to all members' disabled")
+                Else
+                    For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
+                        Members.ActivateMember(Member.MemberName)
+                        SEApp.DoIdle()
+                        SupplementalErrorMessage = DoFindReplace(SEApp, CType(tmpAsmDoc, SolidEdgeFramework.SolidEdgeDocument), PropertiesToEditDict)
+                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    Next
+                End If
+            Else
+                SupplementalErrorMessage = DoFindReplace(SEApp, SEDoc, PropertiesToEditDict)
+                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            End If
+
+        End If
+
+        If ExitStatus = 0 Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
+
+        ' Structured Storage
+        ' https://github.com/ironfede/openmcdf
+
+        ' Convert glob to regex 
+        ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
+        ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
+        ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim PropertySetName As String = ""
+        Dim PropertyName As String = ""
+        Dim FindString As String = ""
+        Dim ReplaceString As String = ""
+        Dim FindSearchType As String = ""
+        Dim ReplaceSearchType As String = ""
+
+        Dim PropertyFound As Boolean = False
+
+        Dim Proceed As Boolean = True
+        Dim s As String
+
+        Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim PropertiesToEdit As String = ""
+        Dim RowIndexString As String
+
+        Dim TC As New Task_Common
+
+        PropertiesToEdit = Me.JSONDict
+
+        If Not PropertiesToEdit = "" Then
+            PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
+        Else
+            ExitStatus = 1
+            ErrorMessageList.Add("No properties provided")
+        End If
+
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
 
         For Each RowIndexString In PropertiesToEditDict.Keys
 
@@ -168,13 +275,15 @@ Public Class TaskEditProperties
 
             If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
                 ReplaceSearchType = "PT"
-            Else
+            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
                 ReplaceSearchType = "RX"
+            Else
+                ReplaceSearchType = "EX"
             End If
 
             If Proceed Then
                 Try
-                    FindString = TC.SubstitutePropertyFormula(SEDoc, FindString, ValidFilenameRequired:=False)
+                    FindString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -183,7 +292,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, ReplaceString, ValidFilenameRequired:=False)
+                    ReplaceString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -191,6 +300,260 @@ Public Class TaskEditProperties
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
             End If
+
+            'Direct properties editing doesn't support linked files |Rx sintax: " & PropertyName
+            If Proceed Then
+                If FindString.StartsWith("[ERROR]") Then
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Direct edit doesn't support links in Find text '{0}' for property '{1}'", FindString.Replace("[ERROR]", ""), PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End If
+                If ReplaceString.StartsWith("[ERROR]") Then
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Direct edit doesn't support links in Replace text '{0}' for property '{1}'", ReplaceString.Replace("[ERROR]", ""), PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End If
+            End If
+
+            If Proceed Then
+
+                Try
+
+                    '######## get the property here
+                    If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+                        dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    End If
+
+                    If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                        dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    End If
+
+                    If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+                        dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+                    End If
+
+                    If PropertySetName = "Custom" Then
+                        dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                        co = dsiStream.AsOLEPropertiesContainer
+
+                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                        If IsNothing(OLEProp) Then
+
+                            Dim userProperties = co.UserDefinedProperties
+                            Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                            userProperties.PropertyNames(newPropertyId) = PropertyName
+                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                            OLEProp.Value = " "
+                            userProperties.AddProperty(OLEProp)
+
+                        End If
+
+                    End If
+
+                    'If PropertySetName = "Project" Then
+                    '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+                    'End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If IsNothing(OLEProp) Then
+                Proceed = False
+                ExitStatus = 1
+                s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            End If
+
+            If Proceed Then
+
+                Try
+
+                    '####### set the property here
+                    If FindSearchType = "PT" Then
+                        OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                    Else
+                        If FindSearchType = "WC" Then
+                            FindString = TC.GlobToRegex(FindString)
+                        End If
+                        If ReplaceSearchType = "PT" Then
+                            ' ReplaceString = Regex.Escape(ReplaceString)
+                        End If
+
+                        OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+
+                Try
+
+                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< @Francesco
+                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< Pretty sure we don't want the check for "Custom"
+                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< It doesn't match what you added for the EditInSolidEdge case
+                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< Also, it will trigger a formula substitution which almost certainly won't find 'DeleteProperty'
+
+                    '############ delete the property here
+                    'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+                    '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                    'End If
+                    If ReplaceString.ToLower = "%{DeleteProperty}".ToLower Then
+                        co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+            End If
+
+            If Proceed Then
+                Try
+
+                    '############ save the properties here (!)
+                    If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
+                        co.Save(dsiStream)
+                    End If
+
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = "Problem accessing or saving Property."
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+            End If
+
+        Next
+
+        '############ save the properties here (!)
+        If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
+            cf.Commit()
+        Else
+            'ExitStatus = 1
+            's = "Project properties are ReadOnly (Writeable in next release)"
+            'If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+        End If
+        cf.Close()
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+    End Function
+
+
+    Private Function DoFindReplace(
+        SEApp As SolidEdgeFramework.Application,
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertiesToEditDict As Dictionary(Of String, Dictionary(Of String, String))
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+        Dim Properties As SolidEdgeFramework.Properties = Nothing
+        Dim Prop As SolidEdgeFramework.Property = Nothing
+
+        Dim PropertySetName As String = ""
+        Dim PropertyName As String = ""
+        Dim FindString As String = ""
+        Dim ReplaceString As String = ""
+        Dim FindSearchType As String = ""
+        Dim ReplaceSearchType As String = ""
+
+        Dim PropertyFound As Boolean = False
+
+        Dim Proceed As Boolean = True
+        Dim s As String
+
+        Dim TC As New Task_Common
+
+        For Each RowIndexString In PropertiesToEditDict.Keys
+
+            Proceed = True
+
+            ' ####################### Get names and find/replace strings #######################
+
+            PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+            PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
+
+            ' ####################### Get search types #######################
+
+            If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
+                FindSearchType = "PT"
+            ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
+                FindSearchType = "WC"
+            Else
+                FindSearchType = "RX"
+            End If
+
+            If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
+                ReplaceSearchType = "PT"
+            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
+                ReplaceSearchType = "RX"
+            Else
+                ReplaceSearchType = "EX"
+            End If
+
+            ' ####################### Do formula substitution #######################
+
+            If Proceed Then
+                Try
+                    FindString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False)
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+
+                Try
+                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End Try
+            End If
+
+            ' ####################### Get the property object from the file #######################
 
             If Proceed Then
                 Try
@@ -201,6 +564,7 @@ Public Class TaskEditProperties
                         s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                     End If
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -210,9 +574,14 @@ Public Class TaskEditProperties
 
             End If
 
-            If Proceed Then
+            ' ####################### Do the replacement. #######################
 
+            If Proceed Then
                 Try
+                    If ReplaceSearchType = "EX" Then
+
+                    End If
+
                     If FindSearchType = "PT" Then
                         Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
                     Else
@@ -227,6 +596,7 @@ Public Class TaskEditProperties
 
                     End If
                     ' Properties.Save()
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -236,23 +606,29 @@ Public Class TaskEditProperties
 
             End If
 
-            If Proceed Then
+            ' ####################### Delete the property if needed. #######################
 
+            If Proceed Then
                 Try
+
                     If ReplaceString = "%{DeleteProperty}" Then
                         Prop.Delete()
                     End If
+
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to delete property value '{0}'.  This command only works on custom properties.", PropertyName)
+                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
             End If
 
+            ' ####################### Save the properties #######################
+
             If Proceed Then
                 Try
+
                     PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
                     For Each Properties In PropertySets
                         Properties.Save()
@@ -275,7 +651,8 @@ Public Class TaskEditProperties
                 End Try
             End If
 
-            ' If the changed property was System.Material, need to update properties from the material table.
+            ' ####################### For System.Material, update density, face style etc if needed #######################
+
             If Proceed Then
                 PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
                 PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
@@ -284,11 +661,11 @@ Public Class TaskEditProperties
 
                     If Me.AutoUpdateMaterial Then
 
-                        Select Case DocType
+                        Select Case TC.GetDocType(SEDoc)
                             Case "par", "psm"
                                 Dim MaterialDoctor As New MaterialDoctor
                                 SupplementalErrorMessage = MaterialDoctor.UpdateMaterialFromMaterialTable(
-                                    SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
+                                        SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
 
                                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
@@ -303,41 +680,13 @@ Public Class TaskEditProperties
 
         Next
 
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
-        End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -345,18 +694,18 @@ Public Class TaskEditProperties
         Dim Button As Button
         Dim TextBox As TextBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
         RowIndex = 0
 
-        Button = IU.FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
+        Button = FormatOptionsButton(ControlNames.Edit.ToString, "Edit")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -364,7 +713,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.AutoAddMissingProperty.ToString, "Add any property not already in the file")
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoAddMissingProperty.ToString, "Add any property not already in the file")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -372,7 +721,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.AutoUpdateMaterial.ToString, "For System.Material, also update density, face style, etc.")
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Edit properties outside of Solid Edge")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -380,13 +729,21 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        Button = IU.FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoUpdateMaterial.ToString, "For Material, update density, face style, etc.")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
         Button.Visible = False
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -395,7 +752,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -404,7 +761,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox
@@ -414,24 +771,6 @@ Public Class TaskEditProperties
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
-        Me.JSONDict = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox)
-        Me.AutoAddMissingProperty = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoUpdateMaterial.ToString), CheckBox)
-        Me.AutoUpdateMaterial = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -471,6 +810,15 @@ Public Class TaskEditProperties
                     ErrorMessageList.Add(String.Format("{0}Select a valid material table", Indent))
                 End If
 
+                If Not Me.SolidEdgeRequired Then
+                    If Not ErrorMessageList.Contains(Me.Description) Then
+                        ErrorMessageList.Add(Me.Description)
+                    End If
+                    ExitStatus = 1
+                    Dim s = String.Format("{0}'Material update' incompatible with 'Edit outside SE'.", Indent)
+                    ErrorMessageList.Add(s)
+
+                End If
 
             End If
 
@@ -489,7 +837,6 @@ Public Class TaskEditProperties
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
-        'Dim Ctrl As Control
         Dim TextBox As TextBox
 
         Select Case Name
@@ -501,14 +848,11 @@ Public Class TaskEditProperties
                 ' Workaround
                 Dim FileType = "asm"
 
-                PropertyInputEditor.ShowInputEditor(FileType)
+                PropertyInputEditor.ShowDialog()
 
                 If PropertyInputEditor.DialogResult = DialogResult.OK Then
-                    'Me.JSONDict = PropertyInputEditor.JSONDict
-
                     TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
                     TextBox.Text = PropertyInputEditor.JSONDict
-
                 End If
 
             Case ControlNames.Browse.ToString
@@ -556,8 +900,13 @@ Public Class TaskEditProperties
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
+
             Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -588,43 +937,108 @@ Public Class TaskEditProperties
 
         HelpString = "Searches for text in a specified property and replaces it if found. "
         HelpString += "The property, search text, and replacement text are entered on the Input Editor. "
-        HelpString += "Activate the editor using the `Property find/replace` `Edit` button on the **Task Tab** below the task list. "
-        HelpString += ""
+        HelpString += "To activate the editor click the `Edit` button in the options panel. "
+
         HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_input_editor.png)"
-        HelpString += ""
+
+        HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
+
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "For more information, see the **Property Filter** section above. "
-        HelpString += vbCrLf + vbCrLf + "There are three search modes, `PT`, `WC`, and `RX`. "
+        HelpString += "For more information, see the **Property Filter** section in this README file. "
+
+        HelpString += vbCrLf + vbCrLf + "There are four search modes, `PT`, `WC`, `RX`, and `EX`. "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
-        HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB Like syntax. "
+        HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
-        HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
-        HelpString += "For example, say the search is `aluminum`, "
-        HelpString += "the replacement is `ALUMINUM`, "
-        HelpString += "and the property value is `Aluminum 6061-T6`. "
-        HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
-        ' HelpString += vbCrLf + vbCrLf + "![Property Formula](My%20Project/media/property_formula.png)"
-        HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
-        HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
-        HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
-        HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
-        HelpString += "you can optionally have it added automatically. "
-        HelpString += "This option is set on the **Configuration Tab -- General Page**. "
-        HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
-        HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, there is an option "
-        HelpString += "to automatically update the part's material properties (density, face styles, etc.). "
-        HelpString += "Set the option on the **Configuration Tab -- General Page**. "
+        HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
+
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time. "
         HelpString += "The delete button, also at the top of the form, removes selected rows. "
-        HelpString += vbCrLf + vbCrLf + "You can copy the settings on the form to other tabs. "
-        HelpString += "Set the `Copy To` CheckBoxes as desired."
+
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a `Dictionary` representation of the table settings in `JSON` format. "
+        HelpString += "is a representation of the table settings in `JSON` format. "
         HelpString += "You can edit it if you want, but the form is probably easier to use. "
+
+        HelpString += vbCrLf + vbCrLf + "**Case Sensitivity**"
+
+        HelpString += vbCrLf + vbCrLf + "The search *is not* case sensitive, the replacement *is*. "
+        HelpString += "For example, say the search is `aluminum`, "
+        HelpString += "the replacement is `ALUMINUM`, "
+        HelpString += "and the property value in a file is `Aluminum 6061-T6`. "
+        HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
+
+        HelpString += vbCrLf + vbCrLf + "**Property Formula**"
+
+        HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
+        HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
+        HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
+
+        HelpString += vbCrLf + vbCrLf + "**Options**"
+
+        HelpString += vbCrLf + vbCrLf + "If the specified property does not exist in the file, "
+        HelpString += "you can optionally add it by enabling `Add any property not already in file`. "
+        HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
+
+        HelpString += vbCrLf + vbCrLf + "To delete a property, "
+        HelpString += "set the Replace type to `PT` and "
+        HelpString += "enter the special code `%{DeleteProperty}` for the Replace string. "
+        HelpString += "As above, this only works for `Custom` properties. "
+
+        HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, you can "
+        HelpString += "also update the properties associated with the material itself. "
+        HelpString += "Select the option `For material, update density, face styles, etc.`. "
+
+        HelpString += vbCrLf + vbCrLf + "**Expressions**"
+
+        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
+
+        HelpString += vbCrLf + vbCrLf + "An `expression` is similar to a formula in Excel. "
+        HelpString += "Expressions enable more complex manipulations of the `Replace` string. "
+        HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
+
+        HelpString += vbCrLf + vbCrLf + "You can perform string processing, "
+        HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. "
+        HelpString += "Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. "
+        HelpString += "Unlike Excel, multi-line text is allowed, which can make the code more readable. "
+
+        HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` button. "
+        HelpString += "If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
+        HelpString += "You can `Save` or `Save As` your expression with the buttons provided. "
+        HelpString += "Retreive them with the `Saved Expressions` drop-down. "
+        HelpString += "That drop-down comes with a few examples. You can study those to get the hang of it. "
+        HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "
+
+        HelpString += vbCrLf + vbCrLf + "Available functions"
+        HelpString += vbCrLf + vbCrLf + "`concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, "
+        HelpString += "`dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,"
+        HelpString += "`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, "
+        HelpString += "`format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, "
+        HelpString += "`indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, "
+        HelpString += "`isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, "
+        HelpString += "`join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, "
+        HelpString += "`list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, "
+        HelpString += "`nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, "
+        HelpString += "`regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, "
+        HelpString += "`select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, "
+        HelpString += "`startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, "
+        HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
+        HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
+
+        HelpString += vbCrLf + vbCrLf + "**Edit Outside Solid Edge (Experimental)**"
+
+        HelpString += vbCrLf + vbCrLf + "Direct edit using Windows Structured Storage for fast execution. "
+        HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
+
+        HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
+        HelpString += "but do not actually reside in a Structured Storage 'Property Stream'. "
+        HelpString += "As such, they are not accesible using this technique. "
+        HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
+        HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
+        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
 
         Return HelpString
     End Function

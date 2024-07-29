@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports Newtonsoft.Json
 
 Public Class TaskUpdatePhysicalProperties
     Inherits Task
@@ -27,23 +26,18 @@ Public Class TaskUpdatePhysicalProperties
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdatePhysicalProperties
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.HideSymbols = False
         Me.ShowSymbols = False
+
     End Sub
 
-    Public Sub New(Task As TaskUpdatePhysicalProperties)
-
-        ' Options
-        Me.HideSymbols = Task.HideSymbols
-        Me.ShowSymbols = Task.ShowSymbols
-    End Sub
-
-
-    'PROCESSING
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -67,6 +61,14 @@ Public Class TaskUpdatePhysicalProperties
 
     End Function
 
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -81,16 +83,13 @@ Public Class TaskUpdatePhysicalProperties
         Dim Proceed As Boolean
 
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
-        Dim VariableFound As Boolean
 
         Dim MaterialTable As SolidEdgeFramework.MatTable = SEApp.GetMaterialTable()
         Dim PropertyType As SolidEdgeFramework.MatTablePropIndexConstants
         PropertyType = SolidEdgeFramework.MatTablePropIndexConstants.seDensity
-        'Dim PropValue As String = Nothing
         Dim PropValue As Object = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
-
 
         Dim Density As Double
 
@@ -271,56 +270,33 @@ Public Class TaskUpdatePhysicalProperties
     End Function
 
 
-    'FORM BUILDING
-
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.ShowSymbols.ToString, "Show symbols")
+        CheckBox = FormatOptionsCheckBox(ControlNames.ShowSymbols.ToString, "Show symbols")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideSymbols.ToString, "Hide symbols")
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideSymbols.ToString, "Hide symbols")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -330,22 +306,6 @@ Public Class TaskUpdatePhysicalProperties
         Return tmpTLPOptions
     End Function
 
-
-    'ERROR CHECKING
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.ShowSymbols.ToString), CheckBox)
-        Me.ShowSymbols = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideSymbols.ToString), CheckBox)
-        Me.HideSymbols = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -388,8 +348,6 @@ Public Class TaskUpdatePhysicalProperties
     End Function
 
 
-    'EVENT HANDLERS
-
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
@@ -404,7 +362,7 @@ Public Class TaskUpdatePhysicalProperties
                 Me.HideSymbols = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -416,18 +374,19 @@ Public Class TaskUpdatePhysicalProperties
     Private Function GetHelpText() As String
         Dim HelpString As String
 
-        HelpString = "Updates mass, volume, etc.  Models with no density are reported in the log file. "
-        HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the center of mass symbol. "
-        HelpString += "It can either be shown, hidden, or left unchanged. "
-        HelpString += "The option is set on the **Configuration Tab -- General Page**. "
-        HelpString += "To leave the symbol's display unchanged, "
+        HelpString = "Updates mass, volume, etc.  Models with no assigned density are reported in the log file. "
+
+        HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the physical properties symbols. "
+        HelpString += "They can either be shown, hidden, or left unchanged. "
+        HelpString += "To leave their display unchanged, "
         HelpString += "disable both the `Show` and `Hide` options. "
-        HelpString += "Note, controlling the symbol display only works for assembly files at this time. "
+
         HelpString += vbCrLf + vbCrLf + "Occasionally, the physical properties are updated correctly, "
         HelpString += "but the results are not carried over to the Variable Table. "
-        HelpString += "The error is detected and reported in the log file. The easiest fix I've found "
-        HelpString += "is to open the file in SE, change the material, then change it right back. "
-        HelpString += "You can verify if it worked by checking for `Mass` in the Variable Table. "
+        HelpString += "The error is detected and reported in the log file. One fix that often works "
+        HelpString += "is to open the file in SE, change the material, then change it back. "
+        HelpString += "To see if it worked, run `Inspect > Physical Properties`, "
+        HelpString += "then check for `Mass` in the Variable Table. "
 
         Return HelpString
     End Function

@@ -1,9 +1,14 @@
 ﻿Option Strict On
 
+Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
 
 Public Class Form1
+
+    Public Property Version As String = "2024.2"
+
+
     Public SEApp As SolidEdgeFramework.Application
 
     Private DefaultsFilename As String
@@ -36,49 +41,28 @@ Public Class Form1
     Public Property TaskList As List(Of Task)
     Public Property RememberTaskSelections As Boolean
 
+    Public Property SolidEdgeRequired As Integer
 
+    Private Property UseCurrentSession As Boolean = False
 
     'DESCRIPTION
     'Solid Edge Housekeeper
-    'Robert McAnany 2020
+    'Robert McAnany 2020-2024
     '
-    'Portions adapted from code by Jason Newell, Greg Chasteen, Tushar Suradkar, and others.
-    'Most of the rest was copied verbatim from Jason's repo or Tushar's blog.
+    'This section is about the code.  To read how to use it, see the Readme on GitHub.
     '
-    'This description is about the organization of the code.  To read how to use it, see the 
-    'Readme Tab on Form1.
+    'The program performs various tasks on batches of files.  Each task is housed in
+    'its own class, inherited from the superclass, Task.vb.
     '
-    'The program performs various tasks on batches of files.  Each task for each file type is 
-    'contained in a separate Function.  
-    '
-    'The basic flow is Process() -> ProcessFiles() -> ProcessFile().  The ProcessFile() routine 
-    'calls, in turn, each task that has been checked on the form.  The call is handled in the
-    'LaunchTask class, which in turn calls the file type's respective tasks.  These are housed
-    'in AssemblyTasks, PartTasks, etc.
-    '
-    'Error handling is localized in the ProcessFile() routine.  Running hundreds or thousands of 
-    'files in a row can sometimes cause an Application malfunction.  In such cases, ProcessFile() 
-    'retries the tasks.  Most of the time it succeeds on the second attempt.
-    'UPDATE 20200507:  Implementing Jason's IsolatedTask scheme seems to have fixed the Application
-    'malfunctions.  Removed the retry functionality in ProcessFile().
-    '
-    'The mapping between checkboxes and tasks is done in the LabelToAction class.  It creates one 
-    'instance for each file type.  The naming convention is LabelToAction<file type>, e.g., 
-    'LabelToActionAssembly, LabelToActionPart, etc.  
-    '
-    'The main processing is done in this file, Form1.vb.  Some ancillary routines are housed in 
-    'their own Partial Class, Form1.*.vb file.
+    'Creating a new Task
+    '-- It's probably easiest to copy an existing task to use as a template.
+    '-- Choose a category from [Update, Edit, Restyle, Check, Output], or make a new one.
+    '-- Document the task in GetHelpText().  The GitHub Readme is auto-populated with this info.
+    '-- Add the task to the list in PreferencesUtilities.BuildTaskListFromScratch().
+    '    -- The tasks are presented in the UI in the same order as the list.
+    '    -- Place yours in the the appropriate category.
+    '    -- For a new category, also update Task.SetColorFromCategory().
 
-    'To add tasks to the program is a matter of adding the code to the appropriate Tasks class.  
-    'Note, each task has a Public and Private component.  The Public part sets up the IsolatedTask.
-    'The Private part does the actual task processing.  Getting the task to the form's 
-    'CheckedListBoxes is accomplished by adding a corresponding entry in the LabelToAction class 
-    'and updating LaunchTask accordingly.  
-
-    'To add new user-specific input entails first adding the appropriate control to the form.  
-    'The second step would be to add that information to the Configuration dictionary in the 
-    'ReconcileFormChanges routine.  Next would be to modify CheckStartConditions to validate 
-    'any user input.  Finally, the LoadDefaults would need to be updated as required.
 
     Private Sub ProcessAll()
 
@@ -120,7 +104,7 @@ Public Class Form1
 
         TotalAborts = 0
 
-        SEStart()
+        If SolidEdgeRequired > 0 Then SEStart()
 
         StartTime = Now
 
@@ -141,7 +125,7 @@ Public Class Form1
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        SEStop()
+        If SolidEdgeRequired > 0 Then SEStop()
 
         OleMessageFilter.Unregister()
 
@@ -197,7 +181,7 @@ Public Class Form1
         End If
 
         If ListViewFilesOutOfDate Then
-            msg += "    Update the file list" + Chr(13)
+            msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
         End If
 
         If RadioButtonTLABottomUp.Checked Then
@@ -242,21 +226,37 @@ Public Class Form1
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         ErrorMessage(0) = New List(Of String)
         Dim ExitStatus As Integer = 0
-        Dim NoTaskSelected As Boolean = True
+        'Dim NoTaskSelected As Boolean = True
+
+        SolidEdgeRequired = 0
+        Dim SelectedTasksCount As Integer = 0
 
         For Each Task As Task In Me.TaskList
             If Task.IsSelectedTask Then
+                SelectedTasksCount += 1
                 'MsgBox("Update task with info from the form")
-                NoTaskSelected = False
+                'NoTaskSelected = False
                 If Task.RequiresSourceDirectories Then
                     Dim FLU As New FileListUtilities(Me.ListViewFiles)
                     Task.SourceDirectories = FLU.GetSourceDirectories()
                 End If
+
+                ' True returns -1 upon conversion
+                SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
+
                 ErrorMessage = Task.CheckStartConditions(ErrorMessage)
             End If
         Next
 
-        If NoTaskSelected Then
+        If SolidEdgeRequired <> 0 Then
+            If SelectedTasksCount <> SolidEdgeRequired Then
+                msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
+                ExitStatus += 1
+            End If
+        End If
+
+
+        If SelectedTasksCount = 0 Then
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
         End If
 
@@ -274,7 +274,7 @@ Public Class Form1
         If (Len(SaveMsg) <> 0) And CheckBoxWarnSave.Checked Then
             Dim s As String = "The following options require the original file to be saved." + Chr(13)
             s += "Please verify you have a backup before continuing."
-            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- Open/Save Page."
+            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
             SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
         Else
             SaveMsg = ""
@@ -425,7 +425,7 @@ Public Class Form1
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
-        If CheckBoxProcessReadOnly.Checked Then
+        If CheckBoxProcessReadOnly.Checked And SolidEdgeRequired > 0 Then
 
             OldStatus = TC.GetStatus(DMApp, Path)
 
@@ -442,31 +442,39 @@ Public Class Form1
             SEApp.DoIdle()
         End If
 
+        '############### Here its assumed that a task always need the file opened in Solid Edge
+        '############### This prevent the ability to process file with tasks that don't need Solid Edge
+        '############### A new option should be inserted to prevent this situation
+
+        'Dim PropList = TC.GetFileProperties(Path)
 
         Try
-            If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
-                SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+            If SolidEdgeRequired > 0 Then
+                If (CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
+                    SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
-                ' Here is the same functionality without using the SolidEdgeCommunity dependency
-                ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
-                ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
-                ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+                    ' Here is the same functionality without using the SolidEdgeCommunity dependency
+                    ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
+                    ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
+                    ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
 
-            Else
-                SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                SEDoc.Activate()
-
-                ' Maximize the window in the application
-                If Filetype = "Draft" Then
-                    ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                    ActiveSheetWindow.WindowState = 2
                 Else
-                    ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
-                    ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                    SEDoc.Activate()
+
+                    ' Maximize the window in the application
+                    If Filetype = "Draft" Then
+                        ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                        ActiveSheetWindow.WindowState = 2
+                    Else
+                        ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                        ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                    End If
                 End If
+
+                SEApp.DoIdle()
             End If
 
-            SEApp.DoIdle()
 
             For Each Task As Task In Me.TaskList
                 If Task.IsSelectedTask Then
@@ -477,7 +485,11 @@ Public Class Form1
 
                     If tf Then
 
-                        ErrorMessage = Task.Process(SEDoc, Configuration, SEApp)
+                        If SolidEdgeRequired > 0 Then
+                            ErrorMessage = Task.Process(SEDoc, Configuration, SEApp)
+                        Else
+                            ErrorMessage = Task.Process(Path)
+                        End If
 
                         ExitStatus = ErrorMessage.Keys(0)
 
@@ -493,87 +505,89 @@ Public Class Form1
                 End If
             Next
 
-            SEDoc.Close(False)
-            SEApp.DoIdle()
+            If SolidEdgeRequired > 0 Then
+                SEDoc.Close(False)
+                SEApp.DoIdle()
 
+                ' Deal with Document Status
+                If CheckBoxProcessReadOnly.Checked Then
+                    If RadioButtonReadOnlyRevert.Checked Then
+                        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                            StatusChangeSuccessful = TC.SetStatus(DMApp, Path, OldStatus)
+                            If Not StatusChangeSuccessful Then
+                                ErrorMessagesCombined(
+                                String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+                                ) = New List(Of String) From {""}
+                            End If
+                        End If
+                    End If
 
-            ' Deal with Document Status
-            If CheckBoxProcessReadOnly.Checked Then
-                If RadioButtonReadOnlyRevert.Checked Then
-                    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                        StatusChangeSuccessful = TC.SetStatus(DMApp, Path, OldStatus)
+                    If RadioButtonReadOnlyChange.Checked Then
+                        Dim NewStatus As SolidEdgeConstants.DocumentStatus
+
+                        Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
+                        StatusChangedCheckedRadioButtons = GetStatusChangeRadioButtons(True)
+
+                        Dim FromStatus As String = ""
+                        Dim ToStatus As String = ""
+
+                        ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                            FromStatus = "RadioButtonStatusAto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+                            FromStatus = "RadioButtonStatusBto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+                            FromStatus = "RadioButtonStatusIRto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+                            FromStatus = "RadioButtonStatusIWto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+                            FromStatus = "RadioButtonStatusOto"
+                        End If
+                        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+                            FromStatus = "RadioButtonStatusRto"
+                        End If
+
+                        For Each RB As RadioButton In StatusChangedCheckedRadioButtons
+                            If RB.Name.Contains(FromStatus) Then
+                                ToStatus = RB.Name.Replace(FromStatus, "")
+                            End If
+                        Next
+
+                        If ToStatus = "A" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                        End If
+                        If ToStatus = "B" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                        End If
+                        If ToStatus = "IR" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
+                        End If
+                        If ToStatus = "IW" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
+                        End If
+                        If ToStatus = "O" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                        End If
+                        If ToStatus = "R" Then
+                            NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                        End If
+
+                        StatusChangeSuccessful = TC.SetStatus(DMApp, Path, NewStatus)
                         If Not StatusChangeSuccessful Then
                             ErrorMessagesCombined(
-                            String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
-                            ) = New List(Of String) From {""}
+                                String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
+                                ) = New List(Of String) From {""}
                         End If
-                    End If
-                End If
 
-                If RadioButtonReadOnlyChange.Checked Then
-                    Dim NewStatus As SolidEdgeConstants.DocumentStatus
-
-                    Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
-                    StatusChangedCheckedRadioButtons = GetStatusChangeRadioButtons(True)
-
-                    Dim FromStatus As String = ""
-                    Dim ToStatus As String = ""
-
-                    ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                        FromStatus = "RadioButtonStatusAto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-                        FromStatus = "RadioButtonStatusBto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-                        FromStatus = "RadioButtonStatusIRto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-                        FromStatus = "RadioButtonStatusIWto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-                        FromStatus = "RadioButtonStatusOto"
-                    End If
-                    If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-                        FromStatus = "RadioButtonStatusRto"
                     End If
 
-                    For Each RB As RadioButton In StatusChangedCheckedRadioButtons
-                        If RB.Name.Contains(FromStatus) Then
-                            ToStatus = RB.Name.Replace(FromStatus, "")
-                        End If
-                    Next
-
-                    If ToStatus = "A" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-                    End If
-                    If ToStatus = "B" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-                    End If
-                    If ToStatus = "IR" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
-                    End If
-                    If ToStatus = "IW" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
-                    End If
-                    If ToStatus = "O" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-                    End If
-                    If ToStatus = "R" Then
-                        NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
-                    End If
-
-                    StatusChangeSuccessful = TC.SetStatus(DMApp, Path, NewStatus)
-                    If Not StatusChangeSuccessful Then
-                        ErrorMessagesCombined(
-                            String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
-                            ) = New List(Of String) From {""}
-                    End If
+                    'DMApp.Quit()
 
                 End If
-
-                'DMApp.Quit()
 
             End If
 
@@ -587,8 +601,10 @@ Public Class Form1
                 StopProcess = True
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
-                SEStop()
-                SEStart()
+                If SolidEdgeRequired > 0 Then
+                    SEStop()
+                    SEStart()
+                End If
             End If
             ErrorMessagesCombined("Error processing file") = AbortList
         End Try
@@ -603,8 +619,10 @@ Public Class Form1
 
         Dim PU As New PreferencesUtilities()
 
-        PU.CreatePreferencesFolder()
+        PU.CreatePreferencesDirectory()
         PU.CreateFilenameCharmap()
+        PU.CreateNCalcSavedExpressions()
+        PU.CreateEditInteractivelyCommands()
 
         PopulateCheckedListBoxes()
         LoadDefaults()
@@ -633,12 +651,19 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
+        ' Help Tab LinkLabel
         LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
         Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
         Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
-        LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, "https://github.com/rmcanany/SolidEdgeHousekeeper#readme")
 
-        Me.Text = "Solid Edge Housekeeper 2024.2"
+        Dim Version = Me.Version
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+        Dim HelpURL = String.Format("{0}#readme", VersionSpecificReadme)
+
+        LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, HelpURL)
+
+        ' Form title
+        Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
         new_CheckBoxFileSearch.Checked = False
         new_ComboBoxFileSearch.Enabled = False
@@ -660,11 +685,25 @@ Public Class Form1
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
 
+        'Me.SuspendLayout()
+
         Me.TaskList = PU.GetTaskList
 
-        Dim IU As New InterfaceUtilities
+        'Me.ResumeLayout()
 
-        IU.BuildTaskPage(Me.TaskList, TabPageTasks)
+        Dim tmpTaskPanel As Panel = Nothing
+
+        For Each c As Control In TabPageTasks.Controls
+            If c.Name = "TaskPanel" Then
+                tmpTaskPanel = CType(c, Panel)
+                Exit For
+            End If
+        Next
+
+        For i = TaskList.Count - 1 To 0 Step -1
+            Dim Task = TaskList(i)
+            tmpTaskPanel.Controls.Add(Task.TaskControl)
+        Next
 
     End Sub
 
@@ -1714,8 +1753,230 @@ Public Class Form1
 
     End Sub
 
+    Private Sub TaskHeaderEnableButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderEnableButton.Click
+        For Each Task As Task In Me.TaskList
+            Task.TaskControl.CBEnabled.Checked = False
+        Next
+    End Sub
+
+    Private Sub TaskHeaderCollapseButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderCollapseButton.Click
+        For Each Task As Task In Me.TaskList
+            If Task.HasOptions Then
+                Task.TaskControl.CBExpand.Checked = False
+            End If
+        Next
+    End Sub
+
+    Private Sub TaskHeaderToggleAssemblyButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleAssemblyButton.Click
+
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToAssembly Then
+                    If Not Task.IsSelectedAssembly Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToAssembly Then
+                    Task.TaskControl.CBAssembly.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderTogglePartButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderTogglePartButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToPart Then
+                    If Not Task.IsSelectedPart Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToPart Then
+                    Task.TaskControl.CBPart.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderToggleSheetmetalButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleSheetmetalButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToSheetmetal Then
+                    If Not Task.IsSelectedSheetmetal Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToSheetmetal Then
+                    Task.TaskControl.CBSheetmetal.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TaskHeaderToggleDraftButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderToggleDraftButton.Click
+        ' If all already checked, uncheck all.  Otherwise check all.
+
+        Dim AllChecked As Boolean = True
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToDraft Then
+                    If Not Task.IsSelectedDraft Then
+                        AllChecked = False
+                        Exit For
+                    End If
+                End If
+            End If
+        Next
+
+        For Each Task As Task In Me.TaskList
+            If Task.IsSelectedTask Then
+                If Task.AppliesToDraft Then
+                    Task.TaskControl.CBDraft.Checked = Not AllChecked
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
+        'MsgBox("Not currently implemented", vbOKOnly)
+        Dim ETL As New FormEditTaskList()
+        Dim DialogResult As DialogResult
+        Dim tmpTasks As New List(Of Task)
+
+        DialogResult = ETL.ShowDialog()
+
+        If DialogResult = DialogResult.OK Then
+            Me.TaskList = ETL.TaskList
+
+            'Dim s As String = ""
+
+            's = "Restart Housekeeper for your changes to take effect."
+            's = String.Format("{0}{1}", s, vbCrLf)
+            's = String.Format("{0}{1}{2}", s, "Once restarted, any new Tasks can be configured as needed.", vbCrLf)
+
+            ''For Each Task As Task In Me.TaskList
+            ''    s = String.Format("{0}{1}{2}", s, Task.Description, vbCrLf)
+            ''Next
+            'MsgBox(s, vbOKOnly)
+
+            Dim tmpTaskPanel As Panel = Nothing
+
+            For Each c As Control In TabPageTasks.Controls
+                If c.Name = "TaskPanel" Then
+                    tmpTaskPanel = CType(c, Panel)
+                    Exit For
+                End If
+            Next
+
+            tmpTaskPanel.Controls.Clear()
+
+            For i = TaskList.Count - 1 To 0 Step -1
+                Dim Task = TaskList(i)
+                tmpTaskPanel.Controls.Add(Task.TaskControl)
+            Next
 
 
+        End If
+
+    End Sub
+
+    Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click
+        'Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-tab"
+
+        Dim Version = Me.Version
+
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+
+        Dim HelpURL = String.Format("{0}#task-tab", VersionSpecificReadme)
+
+        System.Diagnostics.Process.Start(HelpURL)
+    End Sub
+
+    Private Sub TaskPanel_Scroll(sender As Object, e As ScrollEventArgs) Handles TaskPanel.Scroll
+        ' https://stackoverflow.com/questions/32246132/winforms-layered-controls-with-background-images-cause-tearing-while-scrolling
+        '    If (e.Type == ScrollEventType.First) Then {
+        '        LockWindowUpdate(this.Handle);
+        '    }
+        '    Else {
+        '        LockWindowUpdate(IntPtr.Zero);
+        '        panel1.Update();
+        '        If (e.Type! = ScrollEventType.Last) Then LockWindowUpdate(this.Handle);
+        '    }
+        '}
+
+        '[DllImport("user32.dll", SetLastError = true)]
+        'Private Static extern bool LockWindowUpdate(IntPtr hWnd);
+
+
+        If e.Type = ScrollEventType.First Then
+            LockWindowUpdate(Me.Handle)
+        Else
+            LockWindowUpdate(IntPtr.Zero)
+            TaskPanel.Update()
+            'If Not e.Type = ScrollEventType.Last Then
+            '    LockWindowUpdate(Me.Handle)
+            'End If
+        End If
+
+
+    End Sub
+
+    <DllImport("user32.dll", SetLastError:=True)>
+    Private Shared Function LockWindowUpdate(ByVal hWnd As IntPtr) As Boolean
+    End Function
+
+    Private Sub CheckBoxUseCurrentSession_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseCurrentSession.CheckedChanged
+        UseCurrentSession = CheckBoxUseCurrentSession.Checked
+    End Sub
+
+    Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
+        ' Help button on the file list toolstrip
+        ' https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-2024.2.md#file-selection-and-filtering
+
+        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Me.Version)
+
+        Dim s As String = "file-selection-and-filtering"
+
+        Dim HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, s)
+
+        System.Diagnostics.Process.Start(HelpURL)
+
+    End Sub
 
     ' Commands I can never remember
 
@@ -1741,6 +2002,8 @@ Public Class Form1
     ' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
     ' C:\project\part.par -> part.par
 
+    ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+
     ' System.Threading.Thread.Sleep(100)
 
     ' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
@@ -1756,5 +2019,17 @@ Public Class Form1
     ' Iterate through an Enum
     ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
 
+    'Protected Overrides ReadOnly Property CreateParams As CreateParams
+    '    Get
+    '        Const WS_EX_COMPOSITED As Integer = &H2000000
+    '        Dim cp = MyBase.CreateParams
+    '        cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
+    '        Return cp
+    '    End Get
+    'End Property
+
+
 
 End Class
+
+

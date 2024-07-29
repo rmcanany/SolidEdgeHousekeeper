@@ -30,19 +30,16 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
         Me.Category = "Check"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.PropertySet = ""
         Me.PropertyName = ""
-    End Sub
 
-    Public Sub New(Task As TaskCheckPartNumberDoesNotMatchFilename)
-
-        ' Options
-        Me.PropertySet = Task.PropertySet
-        Me.PropertyName = Task.PropertyName
     End Sub
 
     Public Overrides Function Process(
@@ -67,6 +64,14 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
     End Function
 
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -83,18 +88,18 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim PartNumberFound As Boolean
         Dim Filename As String
 
-        Filename = SEDoc.FullName
-        If Filename.Contains("!") Then
-            Filename = Filename.Split("!"c)(0)
-        End If
+        Dim TC As New Task_Common
+
+        Filename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        'If Filename.Contains("!") Then
+        '    Filename = Filename.Split("!"c)(0)
+        'End If
 
         Filename = System.IO.Path.GetFileName(Filename)  ' Removes path
 
-        Dim TC As New Task_Common
-
         If PropertyName = "" Then
             ExitStatus = 1
-            ErrorMessageList.Add("Part number property name blank on the Configuration Tab -- General Page")
+            ErrorMessageList.Add("Missing part number property name")
         End If
 
         If ExitStatus = 0 Then
@@ -170,32 +175,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        ' Initializations
-        Dim ComboBox = CType(ControlsDict(ControlNames.PropertySet.ToString), ComboBox)
-        ComboBox.Text = CStr(ComboBox.Items(0))
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
@@ -204,40 +184,40 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim ComboBoxItems As List(Of String) = Split("System Custom", " ").ToList
         Dim TextBox As TextBox
         Dim Label As Label
-        Dim ControlWidth As Integer = 175
+        Dim ControlWidth As Integer = 125
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
         RowIndex = 0
 
-        ComboBox = IU.FormatOptionsComboBox(ControlNames.PropertySet.ToString, ComboBoxItems, "DropDownList")
+        ComboBox = FormatOptionsComboBox(ControlNames.PropertySet.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Width = ControlWidth
         AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
         tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
         ControlsDict(ComboBox.Name) = ComboBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.PropertySetLabel.ToString, "Part number property set")
+        Label = FormatOptionsLabel(ControlNames.PropertySetLabel.ToString, "Part number prop set")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        TextBox = IU.FormatOptionsTextBox(ControlNames.PropertyName.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.PropertyName.ToString, "")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        AddHandler TextBox.GotFocus, AddressOf Task_EventHandler.TextBox_GotFocus
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = IU.FormatOptionsLabel(ControlNames.PropertyNameLabel.ToString, "Part number property name")
+        Label = FormatOptionsLabel(ControlNames.PropertyNameLabel.ToString, "Part number prop name")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -247,21 +227,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim ComboBox As ComboBox
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        ComboBox = CType(ControlsDict(ControlNames.PropertySet.ToString), ComboBox)
-        Me.PropertySet = ComboBox.Text
-
-        TextBox = CType(ControlsDict(ControlNames.PropertyName.ToString), TextBox)
-        Me.PropertyName = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -323,7 +288,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Select Case Name
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -349,11 +314,13 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks if the file name contains the part number. "
-        HelpString += "The part number is drawn from a property you specify on the **Configuration Tab -- General Page**. "
-        HelpString += "It only checks that the part number appears somewhere in the file name. "
+        HelpString += "Enter the property name that holds part number on the Options panel. "
+        HelpString += "A `Property set`, either `System` or `Custom`, is required. "
+        HelpString += "For more information, see the **Property Filter** section in this README file. "
+
+        HelpString += vbCrLf + vbCrLf + "The command only checks that the part number appears somewhere in the file name. "
         HelpString += "If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, "
         HelpString += "you will get a match. "
-        HelpString += vbCrLf + vbCrLf + "![part_number_matches_file_name](My%20Project/media/part_number_matches_file_name.png)"
 
         Return HelpString
     End Function

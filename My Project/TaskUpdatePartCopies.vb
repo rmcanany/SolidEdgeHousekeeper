@@ -24,17 +24,15 @@ Public Class TaskUpdatePartCopies
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdatePartCopies
         Me.Category = "Update"
-
         SetColorFromCategory(Me)
+
+        GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
         Me.UpdateParents = False
-    End Sub
 
-    Public Sub New(Task As TaskUpdatePartCopies)
-
-        'Options
-        Me.UpdateParents = Task.UpdateParents
     End Sub
 
 
@@ -55,6 +53,14 @@ Public Class TaskUpdatePartCopies
                                    SEDoc,
                                    Configuration,
                                    SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Return ErrorMessage
 
@@ -160,40 +166,19 @@ Public Class TaskUpdatePartCopies
     End Function
 
 
-    Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-        ControlsDict = New Dictionary(Of String, Control)
-
-        Dim IU As New InterfaceUtilities
-
-        Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-        Me.TLPOptions = BuildTLPOptions()
-
-        For Each Control As Control In Me.TLPTask.Controls
-            If ControlsDict.Keys.Contains(Control.Name) Then
-                MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-            End If
-            ControlsDict(Control.Name) = Control
-        Next
-
-        Me.TLPTask.Controls.Add(TLPOptions, Me.TLPTask.ColumnCount - 2, 1)
-
-        Return Me.TLPTask
-    End Function
-
-    Private Function BuildTLPOptions() As ExTableLayoutPanel
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
 
-        Dim IU As New InterfaceUtilities
+        'Dim IU As New InterfaceUtilities
 
-        IU.FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
 
         RowIndex = 0
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.UpdateParents.ToString, "Update parent documents")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateParents.ToString, "Update parent documents")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -201,7 +186,7 @@ Public Class TaskUpdatePartCopies
 
         RowIndex += 1
 
-        CheckBox = IU.FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -210,17 +195,6 @@ Public Class TaskUpdatePartCopies
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.UpdateParents.ToString), CheckBox)
-        Me.UpdateParents = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -255,7 +229,6 @@ Public Class TaskUpdatePartCopies
     End Function
 
 
-
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
@@ -266,7 +239,7 @@ Public Class TaskUpdatePartCopies
                 Me.UpdateParents = Checkbox.Checked
 
             Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TLPTask, Me.TLPOptions, Checkbox)
+                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -279,8 +252,8 @@ Public Class TaskUpdatePartCopies
         Dim HelpString As String
         HelpString = "In conjuction with `Assembly Activate and update all`, "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings. "
-        HelpString += "You can optionally update the parent files recursively. "
-        HelpString += "That option is on the **Configuration Tab -- General Page**."
+        HelpString += "You can optionally update the parent files recursively "
+        HelpString += "by enabling `Update parent documents` on the Options panel."
 
         Return HelpString
     End Function

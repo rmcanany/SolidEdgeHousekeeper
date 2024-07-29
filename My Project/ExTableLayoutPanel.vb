@@ -28,6 +28,7 @@ Public Class ExTableLayoutPanel
     Protected Overrides Sub OnCreateControl()
         MyBase.OnCreateControl()
         Me.SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.CacheText, True)
+        'Me.SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.CacheText Or ControlStyles.AllPaintingInWmPaint, True)
     End Sub
 
     Protected Overrides ReadOnly Property CreateParams As CreateParams

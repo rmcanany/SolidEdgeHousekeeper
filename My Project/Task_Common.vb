@@ -4,6 +4,10 @@ Imports System.IO
 Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ExcelDataReader
+Imports OpenMcdf
+Imports OpenMcdf.Extensions
+Imports OpenMcdf.Extensions.OLEProperties
+Imports PanoramicData.NCalcExtensions
 
 Public Class Task_Common
 
@@ -42,10 +46,40 @@ Public Class Task_Common
 
         Try
             Dim fi As New IO.FileInfo(fileName)
+            Dim i = 1
         Catch ex As Exception
             Return False
         End Try
         Return True
+
+    End Function
+
+    Public Function GetFileProperties(Filename As String) As List(Of String)
+        ' Gets the properties using Windows functionality
+
+        Dim PropList As New List(Of String)
+        Dim ValList As New List(Of String)
+
+        Dim shell As New Shell32.Shell
+        Dim Directory As Shell32.Folder
+
+        Directory = shell.NameSpace(System.IO.Path.GetDirectoryName(Filename))
+
+        Dim n = 1000
+        For Each s In Directory.Items
+            If Directory.GetDetailsOf(s, 0) = Path.GetFileName(Filename) Then
+                For i = 0 To n
+                    Dim Val = Directory.GetDetailsOf(s, i)
+                    If Not Val = "" Then
+                        Dim Key = Directory.GetDetailsOf(Directory.Items, i)
+                        ValList.Add(String.Format("{0}: {1}", Key, Val))
+                    End If
+                Next
+                Exit For
+            End If
+        Next
+
+        Return ValList
 
     End Function
 
@@ -183,35 +217,37 @@ Public Class Task_Common
         ' If the type is not recognized, the empty string is returned.
         Dim DocType As String = ""
 
-        Select Case SEDoc.Type
+        If Not IsNothing(SEDoc) Then
+            Select Case SEDoc.Type
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igWeldmentAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igWeldmentAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncAssemblyDocument
-                DocType = "asm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncAssemblyDocument
+                    DocType = "asm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igPartDocument
-                DocType = "par"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igPartDocument
+                    DocType = "par"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncPartDocument
-                DocType = "par"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncPartDocument
+                    DocType = "par"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
-                DocType = "psm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSheetMetalDocument
+                    DocType = "psm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncSheetMetalDocument
-                DocType = "psm"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igSyncSheetMetalDocument
+                    DocType = "psm"
 
-            Case Is = SolidEdgeFramework.DocumentTypeConstants.igDraftDocument
-                DocType = "dft"
+                Case Is = SolidEdgeFramework.DocumentTypeConstants.igDraftDocument
+                    DocType = "dft"
 
-            Case Else
-                MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
-        End Select
+                Case Else
+                    MsgBox(String.Format("{0} DocType '{1}' not recognized", "Task_Common", SEDoc.Type.ToString))
+            End Select
+        End If
 
         Return DocType
     End Function
@@ -301,6 +337,104 @@ Public Class Task_Common
                     Catch ex As Exception
                     End Try
 
+                    If PropertySetName = "System" And PropertySet.Name = "SummaryInformation" Then
+
+                        Select Case PropertyName
+                            Case = "Title"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Subject"
+                                FoundProp = PropertySet.Item(2)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Author"
+                                FoundProp = PropertySet.Item(3)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Keywords"
+                                FoundProp = PropertySet.Item(4)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Comments"
+                                FoundProp = PropertySet.Item(5)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "DocumentSummaryInformation" Then
+
+                        Select Case PropertyName
+
+                            Case = "Category"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Company"
+                                FoundProp = PropertySet.Item(11)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Manager"
+                                FoundProp = PropertySet.Item(10)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "ProjectInformation" Then
+
+                        Select Case PropertyName
+
+                            Case = "Document Number"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Revision"
+                                FoundProp = PropertySet.Item(2)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Project Name"
+                                FoundProp = PropertySet.Item(3)
+                                PropertyFound = True
+                                Exit For
+
+                        End Select
+
+                    End If
+
+                    If PropertySetName = "System" And PropertySet.Name = "MechanicalModeling" Then
+
+                        Select Case PropertyName
+
+                            Case = "Material"
+                                FoundProp = PropertySet.Item(1)
+                                PropertyFound = True
+                                Exit For
+
+                            Case = "Sheet Metal Gage"
+                                If GetDocType(SEDoc) = "psm" Then
+                                    FoundProp = PropertySet.Item(2)
+                                    PropertyFound = True
+                                    Exit For
+                                End If
+
+                        End Select
+
+                    End If
+
                 Next
 
                 If PropertyFound Then
@@ -326,6 +460,78 @@ Public Class Task_Common
 
 
         Return FoundProp
+
+    End Function
+
+    Public Function GetOLEPropValue(
+        cf As CompoundFile,
+        PropertySetName As String,
+        PropertyName As String,
+        AddProp As Boolean
+        ) As String
+
+        GetOLEPropValue = ""
+
+        Dim Proceed As Boolean = True
+
+        Dim OLEProp As OLEProperty = Nothing
+
+        Try
+
+            If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            End If
+
+            If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            End If
+
+            If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+            End If
+
+            If PropertySetName.ToLower = "custom" Then
+                Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+
+                OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+            End If
+
+        Catch ex As Exception
+
+            Proceed = False
+
+        End Try
+
+        If Proceed Then
+
+            If Not IsNothing(OLEProp) Then
+
+                Return OLEProp.Value.ToString
+
+            Else
+
+                If AddProp Then
+                    Try
+                        'TBD Add property here
+                    Catch ex As Exception
+                        Proceed = False
+                    End Try
+
+                End If
+
+            End If
+
+        End If
 
     End Function
 
@@ -756,8 +962,11 @@ Public Class Task_Common
 
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal cf As CompoundFile,
+        ByVal FullName As String,
         ByVal Instring As String,
-        ValidFilenameRequired As Boolean
+        ValidFilenameRequired As Boolean,
+        Optional Expression As Boolean = False
         ) As String
 
         ' Replaces property formulas in a string
@@ -767,21 +976,14 @@ Public Class Task_Common
         Dim tf As Boolean
         Dim Proceed As Boolean = True
 
-        Dim PropertySet As String
-        Dim PropertyName As String
+        Dim PropertySet As String = ""
+        Dim PropertyName As String = ""
+
         Dim FoundProp As SolidEdgeFramework.Property
 
         Dim DocValues As New List(Of String)
-        'Dim DocValue As String
 
-        'Dim StartPositions As New List(Of Integer)
-        'Dim StartPosition As Integer
-        'Dim EndPositions As New List(Of Integer)
-        'Dim EndPosition As Integer
-        'Dim Length As Integer
         Dim i As Integer
-        'Dim msg As String
-
 
         Dim Formulas As New List(Of String)
         Dim Formula As String
@@ -794,8 +996,11 @@ Public Class Task_Common
 
         Dim FCD As New FilenameCharmapDoctor
 
+        FullName = SplitFOAName(FullName)("Filename")
+
         tf = Instring.Contains("%{System")
         tf = tf Or Instring.Contains("%{Custom")
+        tf = tf Or Instring.Contains("%{Project")
 
         If Not tf Then
             Outstring = Instring
@@ -816,37 +1021,50 @@ Public Class Task_Common
                 Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
                 Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
                 i = Formula.IndexOf(".")  ' First occurrence
-                PropertySet = Formula.Substring(0, i)    ' "Custom"
-                PropertyName = Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                Dim tmpFormula = Formula.Split(CType(".", Char))
+                If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
+                If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+
+                'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
-                    i = PropertyName.IndexOf("|")
-                    ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
-                    PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
+                    If Not IsNothing(SEDoc) Then
+                        i = PropertyName.IndexOf("|")
+                        ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
+                        PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
+                    Else
+                        Return "[ERROR]" & PropertyName
+                    End If
                 Else
                     ModelIdx = 0
                 End If
 
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
 
+                Dim tmpValue As String = ""
+
                 If PropertyName.ToLower = "File Name".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileName(SEDoc.FullName))  ' C:\project\part.par -> part.par
+                    tmpValue = System.IO.Path.GetFileName(FullName)  ' C:\project\part.par -> part.par
                 ElseIf PropertyName.ToLower = "File Name (full path)".ToLower Then
-                    DocValues.Add(SEDoc.FullName)
+                    tmpValue = FullName
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
-                    DocValues.Add(System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))  ' C:\project\part.par -> part
+                    tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
                 Else
-                    FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
-                    If Not FoundProp Is Nothing Then
-                        If ValidFilenameRequired Then
-                            DocValues.Add(FCD.SubstituteIllegalCharacters(CStr(FoundProp.Value)))
-                        Else
-                            DocValues.Add(CStr(FoundProp.Value))
-                        End If
+
+                    If Not IsNothing(SEDoc) Then
+                        FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
+                        If Not FoundProp Is Nothing Then tmpValue = FoundProp.Value.ToString
                     Else
-                        DocValues.Add("")
+                        tmpValue = GetOLEPropValue(cf, PropertySet, PropertyName, False)
+                    End If
+
+                    If ValidFilenameRequired Then
+                        tmpValue = FCD.SubstituteIllegalCharacters(tmpValue)
                     End If
 
                 End If
+
+                DocValues.Add(tmpValue)
 
             Next
         End If
@@ -857,6 +1075,23 @@ Public Class Task_Common
             For i = 0 To DocValues.Count - 1
                 Outstring = Outstring.Replace(Formulas(i), DocValues(i))
             Next
+
+        End If
+
+        If Expression Then
+
+            Dim nCalcExpression As New ExtendedExpression(Outstring)
+
+            Try
+                Dim A = nCalcExpression.Evaluate()
+
+                Outstring = A.ToString
+
+            Catch ex As Exception
+
+                Outstring = ex.Message.Replace(vbCrLf, "-")
+
+            End Try
 
         End If
 
