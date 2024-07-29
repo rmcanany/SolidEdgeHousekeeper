@@ -7,6 +7,8 @@ Public Class TaskCreateDrawingOfFlatPattern
 
     Public Property DraftTemplate As String
     Public Property ScaleFactor As Double
+    Public Property XOffset As Double
+    Public Property YOffset As Double
     Public Property OverwriteExisting As Boolean
     Public Property SaveDraft As Boolean
     Public Property SaveInOriginalDirectoryDraft As Boolean
@@ -21,6 +23,10 @@ Public Class TaskCreateDrawingOfFlatPattern
         DraftTemplate
         ScaleFactor
         ScaleFactorLabel
+        XOffset
+        XOffsetLabel
+        YOffset
+        YOffsetLabel
         OverwriteExisting
         SaveDraft
         SaveInOriginalDirectoryDraft
@@ -55,6 +61,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         ' Options
         Me.DraftTemplate = ""
         Me.ScaleFactor = 1
+        Me.XOffset = 0
+        Me.YOffset = 0
         Me.OverwriteExisting = False
         Me.SaveDraft = False
         Me.SaveInOriginalDirectoryDraft = False
@@ -297,9 +305,8 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         ' Target origin position on the sheet
         Dim SXT, SYT As Double
-        SXT = SX / 2
-        SYT = SY / 2
-        SYT = 1.05 * SYT  ' Move up slightly to account for the title block
+        SXT = (SX / 2) + XOffset
+        SYT = (SY / 2) + YOffset
 
         If (Math.Abs(DX) > 0.001) Or (Math.Abs(DY) > 0.001) Then
             SXT += DX
@@ -360,6 +367,36 @@ Public Class TaskCreateDrawingOfFlatPattern
         ControlsDict(TextBox.Name) = TextBox
 
         Label = FormatOptionsLabel(ControlNames.ScaleFactorLabel.ToString, "Scale factor (0-1)")
+        tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
+        ControlsDict(Label.Name) = Label
+
+        RowIndex += 1
+        
+        TextBox = FormatOptionsTextBox(ControlNames.XOffset.ToString, "")
+        TextBox.Width = 40
+        TextBox.TextAlign = HorizontalAlignment.Right
+        TextBox.Text = "0"
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
+        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
+        ControlsDict(TextBox.Name) = TextBox
+
+        Label = FormatOptionsLabel(ControlNames.XOffsetLabel.ToString, "X Offset (0 = centered)")
+        tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
+        ControlsDict(Label.Name) = Label
+
+        RowIndex += 1
+        
+        TextBox = FormatOptionsTextBox(ControlNames.YOffset.ToString, "")
+        TextBox.Width = 40
+        TextBox.TextAlign = HorizontalAlignment.Right
+        TextBox.Text = "0"
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
+        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
+        ControlsDict(TextBox.Name) = TextBox
+
+        Label = FormatOptionsLabel(ControlNames.YOffsetLabel.ToString, "Y Offset (0 = centered)")
         tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
         ControlsDict(Label.Name) = Label
 
@@ -488,7 +525,6 @@ Public Class TaskCreateDrawingOfFlatPattern
                 ErrorMessageList.Add(String.Format("{0}Enter a valid scale factor", Indent))
             End Try
 
-
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
@@ -611,6 +647,18 @@ Public Class TaskCreateDrawingOfFlatPattern
                     Me.ScaleFactor = CDbl(TextBox.Text)
                 Catch ex As Exception
                 End Try
+                
+            Case ControlNames.XOffset.ToString
+                Try
+                    Me.XOffset = CDbl(TextBox.Text)
+                Catch ex As Exception
+                End Try
+                
+            Case ControlNames.YOffset.ToString
+                Try
+                    Me.YOffset = CDbl(TextBox.Text)
+                Catch ex As Exception
+                End Try
 
             Case ControlNames.NewDirDraft.ToString
                 Me.NewDirDraft = TextBox.Text
@@ -641,6 +689,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         HelpString += "With that you control the final size. "
         HelpString += "If you want it to take up 90% of the available space, "
         HelpString += "enter `0.9`. For half size, enter `0.5`, etc. "
+        HelpString += "X and Y offset will offset the drawing by the specified values from center, "
+        HelpString += "+Y will offset up, -Y will offset down. +X will offset right, -X will offset left."
 
         HelpString += vbCrLf + vbCrLf + "You can save the drawing as a `*.dft` or `*.pdf` or both. "
         HelpString += "If a file with the same name already exists, "
