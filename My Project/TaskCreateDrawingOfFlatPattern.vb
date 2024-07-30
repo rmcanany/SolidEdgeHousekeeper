@@ -7,6 +7,7 @@ Public Class TaskCreateDrawingOfFlatPattern
 
     Public Property DraftTemplate As String
     Public Property ScaleFactor As Double
+    Public Property OffsetUnits As String
     Public Property XOffset As Double
     Public Property YOffset As Double
     Public Property OverwriteExisting As Boolean
@@ -23,6 +24,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         DraftTemplate
         ScaleFactor
         ScaleFactorLabel
+        OffsetUnitsIn
+        OffsetUnitsMM
         XOffset
         XOffsetLabel
         YOffset
@@ -61,6 +64,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         ' Options
         Me.DraftTemplate = ""
         Me.ScaleFactor = 1
+        Me.OffsetUnits = ""
         Me.XOffset = 0
         Me.YOffset = 0
         Me.OverwriteExisting = False
@@ -222,17 +226,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         End If
 
 
-        'If SEDoc.ReadOnly Then
-        '    ExitStatus = 1
-        '    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        'Else
-        '    If ExitStatus = 0 Then
-        '        SEDoc.Save()
-        '        SEApp.DoIdle()
-        '    End If
-        'End If
-
-
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
@@ -305,8 +298,13 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         ' Target origin position on the sheet
         Dim SXT, SYT As Double
-        SXT = (SX / 2) + XOffset
-        SYT = (SY / 2) + YOffset
+        If OffsetUnits = "in" Then
+            SXT = (SX / 2) + XOffset * 25.4 / 1000
+            SYT = (SY / 2) + YOffset * 25.4 / 1000
+        Else
+            SXT = (SX / 2) + XOffset / 1000
+            SYT = (SY / 2) + YOffset / 1000
+        End If
 
         If (Math.Abs(DX) > 0.001) Or (Math.Abs(DY) > 0.001) Then
             SXT += DX
@@ -371,7 +369,23 @@ Public Class TaskCreateDrawingOfFlatPattern
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
-        
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.OffsetUnitsIn.ToString, "Offset units inch")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.OffsetUnitsMM.ToString, "Offset units mm")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         TextBox = FormatOptionsTextBox(ControlNames.XOffset.ToString, "")
         TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
@@ -508,6 +522,14 @@ Public Class TaskCreateDrawingOfFlatPattern
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to create", Indent))
             End If
 
+            If Me.OffsetUnits = "" Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Select a offset unit", Indent))
+            End If
+
             Try
                 Me.ScaleFactor = CDbl(ControlsDict(ControlNames.ScaleFactor.ToString).Text)
                 If Not ((Me.ScaleFactor > 0) And (Me.ScaleFactor <= 1)) Then
@@ -525,6 +547,26 @@ Public Class TaskCreateDrawingOfFlatPattern
                 ErrorMessageList.Add(String.Format("{0}Enter a valid scale factor", Indent))
             End Try
 
+            Try
+                Me.XOffset = CDbl(ControlsDict(ControlNames.XOffset.ToString).Text)
+            Catch ex As Exception
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Enter a valid XOffset", Indent))
+            End Try
+
+            Try
+                Me.YOffset = CDbl(ControlsDict(ControlNames.YOffset.ToString).Text)
+            Catch ex As Exception
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Enter a valid YOffset", Indent))
+            End Try
+
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
@@ -540,9 +582,26 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
 
+        Dim ParticipatingCheckBoxes As New List(Of CheckBox)
+        ParticipatingCheckBoxes.Add(CType(ControlsDict(ControlNames.OffsetUnitsIn.ToString), CheckBox))
+        ParticipatingCheckBoxes.Add(CType(ControlsDict(ControlNames.OffsetUnitsMM.ToString), CheckBox))
+
+
         Select Case Name
             Case ControlNames.OverwriteExisting.ToString
                 Me.OverwriteExisting = Checkbox.Checked
+
+            Case ControlNames.OffsetUnitsIn.ToString
+                If Checkbox.Checked Then
+                    Me.OffsetUnits = "in"
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
+                End If
+
+            Case ControlNames.OffsetUnitsMM.ToString
+                If Checkbox.Checked Then
+                    Me.OffsetUnits = "mm"
+                    HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
+                End If
 
             Case ControlNames.SaveDraft.ToString
                 Me.SaveDraft = Checkbox.Checked
