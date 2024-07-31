@@ -845,12 +845,10 @@ Public Class TaskEditProperties
 
                 PropertyInputEditor.JSONDict = Me.JSONDict
 
-                ' Workaround
-                Dim FileType = "asm"
-
                 PropertyInputEditor.ShowDialog()
 
                 If PropertyInputEditor.DialogResult = DialogResult.OK Then
+                    ' Me.JSONDict is updated when the TextBox changes.
                     TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
                     TextBox.Text = PropertyInputEditor.JSONDict
                 End If

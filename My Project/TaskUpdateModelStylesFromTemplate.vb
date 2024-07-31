@@ -25,6 +25,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         PartTemplate
         BrowseSheetmetal
         SheetmetalTemplate
+        UpdateAll
         UpdateDimensionStyles
         UpdateFaceStyles
         UpdateLinearStyles
@@ -436,7 +437,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TC.CopyProperties(TemplateViewStyle, NewViewStyle)
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error applying ViewStyle '{0}'", TemplateViewStyle.StyleName))
+                    ErrorMessageList.Add(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
                 End Try
 
                 'Update skybox
@@ -529,7 +530,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TC.CopyProperties(TemplateTextStyle, NewTextStyle)
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+                    ErrorMessageList.Add(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
                 End Try
             End If
 
@@ -605,7 +606,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+                    ErrorMessageList.Add(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
                 End Try
             End If
 
@@ -680,7 +681,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+                    ErrorMessageList.Add(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
                 End Try
             End If
 
@@ -755,7 +756,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+                    ErrorMessageList.Add(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
                 End Try
             End If
 
@@ -1058,6 +1059,14 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateAll.ToString, "Update all styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.UpdateDimensionStyles.ToString, "Update dimension styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -1243,6 +1252,37 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         Select Case Name
 
+            Case ControlNames.UpdateAll.ToString
+
+                If Checkbox.Checked Then
+                    Me.UpdateDimensionStyles = True
+                    Me.UpdateFaceStyles = True
+                    Me.UpdateLinearStyles = True
+                    Me.UpdateTextCharStyles = True
+                    Me.UpdateTextStyles = True
+                    Me.UpdateViewStyles = True
+                    Me.UpdateBaseStyles = True
+
+                    CType(ControlsDict(ControlNames.UpdateDimensionStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateLinearStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateTextCharStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateTextStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateViewStyles.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.UpdateBaseStyles.ToString), CheckBox).Checked = True
+
+                End If
+
+                CType(ControlsDict(ControlNames.UpdateDimensionStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateLinearStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateTextCharStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateTextStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateViewStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.UpdateBaseStyles.ToString), CheckBox).Visible = Not Checkbox.Checked
+
+
+
             Case ControlNames.UpdateDimensionStyles.ToString
                 Me.UpdateDimensionStyles = Checkbox.Checked
 
@@ -1304,9 +1344,12 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         HelpString += vbCrLf + vbCrLf + "![Update Styles](My%20Project/media/update_model_styles_from_template.png)"
 
+        HelpString += vbCrLf + vbCrLf + "Using the checkboxes provided, you can update all styles, or select which ones to update individually. "
+
         HelpString += vbCrLf + vbCrLf + "Styles present in the template, but not in the file, are added. "
-        HelpString += "Styles present in the file, but not in the template, can optionally be removed if possible. "
-        HelpString += "It is not possible to remove them if Solid Edge thinks they are in use (even if they aren't). "
+        HelpString += "Styles present in the file, but not in the template, can optionally be removed, if possible. "
+        HelpString += "Set the option `Remove styles not in template` as needed. "
+        HelpString += "It is not possible to remove a style if Solid Edge thinks it is in use (even if it isn't). "
 
         HelpString += vbCrLf + vbCrLf + "Styles are updated/added as described, but no mapping takes place. "
         HelpString += "For example, if the template has a dimension style ANSI(in), and the file instead uses ANSI(inch), the dimensions will not be updated. "

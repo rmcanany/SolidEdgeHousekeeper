@@ -54,6 +54,46 @@ Public Class Task_Common
 
     End Function
 
+    Public Function tmpGetSEProperties(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As Dictionary(Of String, List(Of String))
+        Dim PropDict As New Dictionary(Of String, List(Of String))
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Dim PropertySet As SolidEdgeFramework.Properties
+        Dim Prop As SolidEdgeFramework.Property
+
+        Dim s As String
+        Dim s1 As String
+
+        For i = 1 To PropertySets.Count
+            PropertySet = PropertySets.Item(i)
+            s = String.Format("Item {0} [{1}]", i, PropertySet.Name)
+            PropDict(s) = New List(Of String)
+
+            For j = 1 To PropertySet.Count
+                Prop = PropertySet.Item(j)
+                s1 = String.Format("Item {0} [{1}]", j, Prop.Name)
+                PropDict(s).Add(s1)
+            Next
+        Next
+
+        Dim DocType As String = GetDocType(SEDoc)
+
+        Dim PU As New PreferencesUtilities
+
+        Dim PreferencesDir As String = PU.GetPreferencesDirectory()
+        Dim OutFilename As String = String.Format("{0}/PropDict_{1}.txt", PreferencesDir, DocType)
+        Dim OutList As New List(Of String)
+
+        For Each s In PropDict.Keys
+            For Each s1 In PropDict(s)
+                OutList.Add(String.Format("{0},{1}", s, s1))
+            Next
+        Next
+
+        IO.File.WriteAllLines(OutFilename, OutList)
+
+        Return PropDict
+    End Function
     Public Function GetFileProperties(Filename As String) As List(Of String)
         ' Gets the properties using Windows functionality
 
@@ -65,13 +105,13 @@ Public Class Task_Common
 
         Directory = shell.NameSpace(System.IO.Path.GetDirectoryName(Filename))
 
-        Dim n = 1000
+        Dim n = 10000
         For Each s In Directory.Items
             If Directory.GetDetailsOf(s, 0) = Path.GetFileName(Filename) Then
                 For i = 0 To n
                     Dim Val = Directory.GetDetailsOf(s, i)
-                    If Not Val = "" Then
-                        Dim Key = Directory.GetDetailsOf(Directory.Items, i)
+                    Dim Key = Directory.GetDetailsOf(Directory.Items, i)
+                    If Not (Key = "" And Val = "") Then
                         ValList.Add(String.Format("{0}: {1}", Key, Val))
                     End If
                 Next
