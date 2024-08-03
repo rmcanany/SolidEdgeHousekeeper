@@ -4,7 +4,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Inherits Task
 
-    Public Property DraftTemplate As String
     Public Property UpdateBorder As Boolean
     Public Property UpdateStyles As Boolean
 
@@ -29,6 +28,8 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateDrawingStylesFromTemplate
         Me.Category = "Restyle"
+        Me.RequiresDraftTemplate = True
+        Me.DraftTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -36,7 +37,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.DraftTemplate = ""
         Me.UpdateBorder = False
         Me.UpdateStyles = False
 
@@ -562,6 +562,12 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         End Select
 
     End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
+    End Sub
+
 
     Private Function GetHelpText() As String
         Dim HelpString As String

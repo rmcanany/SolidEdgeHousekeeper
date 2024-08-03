@@ -138,22 +138,6 @@ Public Class PropertyFilter
 
             DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
 
-            '' TODO Remove PropertySet 'path' and 'filename'
-            'If PropertySet.ToLower = "filename" Then
-            '    DocValue = System.IO.Path.GetFileName(FoundFile)
-            'ElseIf PropertySet.ToLower = "path" Then
-            '    DocValue = FoundFile
-            'Else
-            '    If Extension = ".dft" Then
-            '        ' DocValue = Value
-            '        ' Continue For
-            '        DocValue = "-3.1415962535879"
-            '    Else
-            '        DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
-            '    End If
-            '    'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
-            'End If
-
             tf2 = DoComparison(Comparison, Value, DocValue)
 
             VariableTruthValues.Add(Variable, tf2.ToString)

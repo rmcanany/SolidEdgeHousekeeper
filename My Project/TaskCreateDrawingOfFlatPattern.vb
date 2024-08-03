@@ -5,7 +5,6 @@ Imports Microsoft.WindowsAPICodePack.Dialogs
 Public Class TaskCreateDrawingOfFlatPattern
     Inherits Task
 
-    Public Property DraftTemplate As String
     Public Property ScaleFactor As Double
     Public Property OffsetUnits As String
     Public Property XOffset As Double
@@ -55,6 +54,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
+        Me.RequiresDraftTemplate = True
+        Me.DraftTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -62,7 +63,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.DraftTemplate = ""
         Me.ScaleFactor = 1
         Me.OffsetUnits = ""
         Me.XOffset = 0
@@ -335,8 +335,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim Button As Button
         Dim TextBox As TextBox
         Dim Label As Label
-
-        'Dim IU As New InterfaceUtilities
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 3)
 
@@ -730,6 +728,18 @@ Public Class TaskCreateDrawingOfFlatPattern
         End Select
 
     End Sub
+
+    Public Sub SetDraftTemplate(DraftTemplate As String)
+        ' Should update the property as well as the textbox
+        CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Text = DraftTemplate
+
+    End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
+    End Sub
+
 
     Private Function GetHelpText() As String
         Dim HelpString As String

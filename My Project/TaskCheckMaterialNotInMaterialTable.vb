@@ -4,11 +4,10 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
     Inherits Task
 
-    Public Property MaterialLibrary As String
 
     Enum ControlNames
         Browse
-        MaterialLibrary
+        MaterialTable
         HideOptions
     End Enum
 
@@ -25,6 +24,8 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
         Me.Category = "Check"
+        Me.RequiresMaterialTable = True
+        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -79,7 +80,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Select Case DocType
             Case = "par", "psm"
                 Dim MaterialDoctor As New MaterialDoctor
-                ErrorMessage = MaterialDoctor.MaterialNotInMaterialTable(SEDoc, Me.MaterialLibrary, SEApp)
+                ErrorMessage = MaterialDoctor.MaterialNotInMaterialTable(SEDoc, Me.MaterialTable, SEApp)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
@@ -108,7 +109,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = FormatOptionsTextBox(ControlNames.MaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MaterialTable.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -130,8 +131,8 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim CheckBox As CheckBox
         Dim TextBox As TextBox
 
-        TextBox = CType(ControlsDict(ControlNames.MaterialLibrary.ToString), TextBox)
-        Me.MaterialLibrary = TextBox.Text
+        TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
+        Me.MaterialTable = TextBox.Text
 
         CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
@@ -159,7 +160,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
-            If Not FileIO.FileSystem.FileExists(Me.MaterialLibrary) Then
+            If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -192,10 +193,10 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 tmpFileDialog.Filter = "mtl files|*.mtl"
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
-                    Me.MaterialLibrary = tmpFileDialog.FileName
+                    Me.MaterialTable = tmpFileDialog.FileName
 
-                    TextBox = CType(ControlsDict(ControlNames.MaterialLibrary.ToString), TextBox)
-                    TextBox.Text = Me.MaterialLibrary
+                    TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
+                    TextBox.Text = Me.MaterialTable
                 End If
 
             Case Else
@@ -226,13 +227,18 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Select Case Name
 
-            Case ControlNames.MaterialLibrary.ToString
-                Me.MaterialLibrary = TextBox.Text
+            Case ControlNames.MaterialTable.ToString
+                Me.MaterialTable = TextBox.Text
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
+    End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
     End Sub
 
 

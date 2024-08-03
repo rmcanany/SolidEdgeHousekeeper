@@ -11,7 +11,7 @@ Public Class PreferencesUtilities
     End Function
 
     Public Function GetPreferencesDirectory() As String
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim StartupPath As String = GetStartupDirectory()
         Dim PreferencesDirectory = "Preferences"
         Return String.Format("{0}\{1}", StartupPath, PreferencesDirectory)
     End Function
@@ -28,11 +28,10 @@ Public Class PreferencesUtilities
     End Sub
 
     Public Function GetSavedExpressionsFilename() As String
-        Dim SavedExpressionsFilename = String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
-        Return SavedExpressionsFilename
+        Return String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
     End Function
 
-    Public Sub CreateNCalcSavedExpressions()
+    Public Sub CreateSavedExpressions()
         Dim SavedExpressionsFilename = GetSavedExpressionsFilename()
 
         If Not FileIO.FileSystem.FileExists(SavedExpressionsFilename) Then
@@ -79,12 +78,12 @@ Public Class PreferencesUtilities
         End If
     End Sub
 
-    Public Function GetEditInteractivelyCommandsFilename() As String
-        Dim EditInteractivelyCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
-        Return EditInteractivelyCommandsFilename
+    Public Function GetInteractiveEditCommandsFilename() As String
+        Dim InteractiveEditCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
+        Return InteractiveEditCommandsFilename
     End Function
 
-    Public Sub CreateEditInteractivelyCommands()
+    Public Sub CreateInteractiveEditCommands()
 
         'Description                CCA    CCP    CCS    CCD
         'Display cfgs               32826			
@@ -103,9 +102,9 @@ Public Class PreferencesUtilities
         'Sheet setup                                     10002
         'View Backgrounds                               10211
 
-        Dim EditInteractivelyCommandsFilename = GetEditInteractivelyCommandsFilename()
+        Dim InteractiveEditCommandsFilename = GetInteractiveEditCommandsFilename()
 
-        If Not FileIO.FileSystem.FileExists(EditInteractivelyCommandsFilename) Then
+        If Not FileIO.FileSystem.FileExists(InteractiveEditCommandsFilename) Then
 
             Dim Outlist As New List(Of String)
 
@@ -152,34 +151,110 @@ Public Class PreferencesUtilities
             Outlist.Add("Sheet setup, 0, 0, 0, 10002")
             Outlist.Add("View backgrounds, 0, 0, 0, 10211")
 
-            IO.File.WriteAllLines(EditInteractivelyCommandsFilename, Outlist)
+            IO.File.WriteAllLines(InteractiveEditCommandsFilename, Outlist)
         End If
 
 
     End Sub
-    Private Function GetTaskListPath(CheckExisting As Boolean) As String
-        Dim Filename = "tasklist.json"
-        Dim TaskListPath = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+
+    Public Function GetTemplatePropertyDictFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\template_property_dict.json", GetPreferencesDirectory)
 
         If CheckExisting Then
-            If FileIO.FileSystem.FileExists(TaskListPath) Then
-                Return TaskListPath
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
             Else
                 Return ""
             End If
         Else
-            Return TaskListPath
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveTemplatePropertyDict(TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String)))
+        Dim JSONString As String
+        Dim Filename = GetTemplatePropertyDictFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(TemplatePropertyDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetTemplatePropertyDict() As Dictionary(Of String, Dictionary(Of String, String))
+        Dim TemplatePropertyDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim JSONString As String
+        Dim Filename = GetTemplatePropertyDictFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
+        End If
+
+        Return TemplatePropertyDict
+    End Function
+
+
+    Public Function GetTemplatePropertyListFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\template_property_list.txt", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveTemplatePropertyList(TemplatePropertyList As List(Of String))
+        Dim JSONString As String
+        Dim Filename = GetTemplatePropertyListFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(TemplatePropertyList)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetTemplatePropertyList() As List(Of String)
+        Dim TemplatePropertyList As New List(Of String)
+        Dim JSONString As String
+        Dim Filename = GetTemplatePropertyListFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            TemplatePropertyList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+        End If
+
+        Return TemplatePropertyList
+    End Function
+
+
+    Private Function GetTaskListFilename(CheckExisting As Boolean) As String
+        Dim Filename = "tasklist.json"
+        Dim TaskListFilename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(TaskListFilename) Then
+                Return TaskListFilename
+            Else
+                Return ""
+            End If
+        Else
+            Return TaskListFilename
         End If
     End Function
 
     Public Sub SaveTaskList(TaskList As List(Of Task))
 
-        Dim Filename As String = GetTaskListPath(CheckExisting:=False)
-
         Dim tmpJSONDict As New Dictionary(Of String, String)
         Dim JSONString As String
 
-        Dim Outfile = GetTaskListPath(CheckExisting:=False)
+        Dim Outfile = GetTaskListFilename(CheckExisting:=False)
 
         For Each Task As Task In TaskList
             ' To allow copies of a given Task, the Key Task.Description rather than Task.Name
@@ -203,7 +278,7 @@ Public Class PreferencesUtilities
         Dim TaskDescription As String
         Dim TaskName As String
 
-        Dim Filename As String = GetTaskListPath(CheckExisting:=True)
+        Dim Filename As String = GetTaskListFilename(CheckExisting:=True)
 
         Dim AvailableTasks = BuildTaskListFromScratch()
 

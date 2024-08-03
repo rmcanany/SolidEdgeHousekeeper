@@ -4,12 +4,11 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
     Inherits Task
 
-    Public Property ActiveMaterialLibrary As String
     Public Property RemoveFaceStyleOverrides As Boolean
 
     Enum ControlNames
         Browse
-        ActiveMaterialLibrary
+        MaterialTable
         RemoveFaceStyleOverrides
         HideOptions
     End Enum
@@ -27,6 +26,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateMaterialFromMaterialTable
         Me.Category = "Update"
+        Me.RequiresMaterialTable = True
+        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -34,7 +35,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
     End Sub
 
@@ -86,7 +86,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Select Case DocType
             Case = "par", "psm"
                 Dim MD As New MaterialDoctor
-                SupplementalErrorMessage = MD.UpdateMaterialFromMaterialTable(SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
+                SupplementalErrorMessage = MD.UpdateMaterialFromMaterialTable(SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
             Case Else
@@ -126,7 +126,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MaterialTable.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -173,7 +173,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
-            If Not FileIO.FileSystem.FileExists(Me.ActiveMaterialLibrary) Then
+            If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -222,9 +222,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 tmpFileDialog.Filter = "Material Documents|*.mtl"
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
-                    Me.ActiveMaterialLibrary = tmpFileDialog.FileName
-                    TextBox = CType(ControlsDict(ControlNames.ActiveMaterialLibrary.ToString), TextBox)
-                    TextBox.Text = Me.ActiveMaterialLibrary
+                    Me.MaterialTable = tmpFileDialog.FileName
+                    TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
+                    TextBox.Text = Me.MaterialTable
                 End If
 
             Case Else
@@ -239,13 +239,18 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim Name = TextBox.Name
 
         Select Case Name
-            Case ControlNames.ActiveMaterialLibrary.ToString '"ExternalProgram"
-                Me.ActiveMaterialLibrary = TextBox.Text
+            Case ControlNames.MaterialTable.ToString '"ExternalProgram"
+                Me.MaterialTable = TextBox.Text
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
 
+    End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
     End Sub
 
 

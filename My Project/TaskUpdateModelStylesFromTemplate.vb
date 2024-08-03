@@ -3,9 +3,6 @@
 Public Class TaskUpdateModelStylesFromTemplate
     Inherits Task
 
-    Public Property AssemblyTemplate As String
-    Public Property PartTemplate As String
-    Public Property SheetmetalTemplate As String
     Public Property UpdateDimensionStyles As Boolean
     Public Property UpdateFaceStyles As Boolean
     Public Property UpdateLinearStyles As Boolean
@@ -50,6 +47,12 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskUpdateModelStylesFromTemplate
         Me.Category = "Restyle"
+        Me.RequiresAssemblyTemplate = True
+        Me.RequiresPartTemplate = True
+        Me.RequiresSheetmetalTemplate = True
+        Me.AssemblyTemplate = ""
+        Me.PartTemplate = ""
+        Me.SheetmetalTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -57,9 +60,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.AssemblyTemplate = ""
-        Me.PartTemplate = ""
-        Me.SheetmetalTemplate = ""
         Me.UpdateDimensionStyles = False
         Me.UpdateFaceStyles = False
         Me.UpdateLinearStyles = False
@@ -1335,6 +1335,13 @@ Public Class TaskUpdateModelStylesFromTemplate
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
+    End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.AssemblyTemplate.ToString).Text = Me.AssemblyTemplate
+        ControlsDict(ControlNames.PartTemplate.ToString).Text = Me.PartTemplate
+        ControlsDict(ControlNames.SheetmetalTemplate.ToString).Text = Me.SheetmetalTemplate
     End Sub
 
 

@@ -59,11 +59,17 @@ Public MustInherit Class Task
     Public Property ColorG As Integer
     Public Property ColorB As Integer
 
-    'Public Property AssemblyTemplate As String
-    'Public Property PartTemplate As String
-    'Public Property SheetmetalTemplate As String
-    'Public Property DraftTemplate As String
-    'Public Property MaterialTable As String
+    Public Property RequiresAssemblyTemplate As Boolean = False
+    Public Property RequiresPartTemplate As Boolean = False
+    Public Property RequiresSheetmetalTemplate As Boolean = False
+    Public Property RequiresDraftTemplate As Boolean = False
+    Public Property RequiresMaterialTable As Boolean = False
+    Public Property AssemblyTemplate As String = ""
+    Public Property PartTemplate As String = ""
+    Public Property SheetmetalTemplate As String = ""
+    Public Property DraftTemplate As String = ""
+    Public Property MaterialTable As String = ""
+
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
 
@@ -356,6 +362,9 @@ Public MustInherit Class Task
 
     End Sub
 
+    Public Overridable Sub ReconcileProps()
+
+    End Sub
 
 
     'FORM STATE
