@@ -123,6 +123,355 @@ Public Class Task_Common
 
     End Function
 
+    Public Function PropLocalizedToEnglish(PropertySetName As String,
+                                           ItemNumber As Integer,
+                                           DocType As String) As String
+
+        ' ###### There is a comment contained in each Case statement.               ###### 
+        ' ###### It shows the English name for each file type in order.             ###### 
+        ' ###### The order is par, psm, asm, dft.                                   ###### 
+        ' ###### For example, the following entry is for MechanicalModeling Item 2  ###### 
+        ' ###### 'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []         ###### 
+        ' ###### It says that item's property name for a .par is Face Style,        ###### 
+        ' ###### .psm: Sheet Metal Gage, .asm: Bead Material, .dft: (not present),  ###### 
+
+        Dim EnglishName As String = ""
+
+        Select Case PropertySetName
+
+            Case "SummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item  [Title] [Title] [Title] [Title] 
+                        EnglishName = "Title"
+                    Case 2
+                        'Item 2 [Subject] [Subject] [Subject] [Subject] 
+                        EnglishName = "Subject"
+                    Case 3
+                        'Item 3 [Author] [Author] [Author] [Author] 
+                        EnglishName = "Author"
+                    Case 4
+                        'Item 4 [Keywords] [Keywords] [Keywords] [Keywords] 
+                        EnglishName = "Keywords"
+                    Case 5
+                        'Item 5 [Comments] [Comments] [Comments] [Comments] 
+                        EnglishName = "Comments"
+                    Case 6
+                        'Item 6 [Template] [Template] [Template] [Template] 
+                        EnglishName = "Template"
+                    Case 7
+                        'Item 7 [Last Author] [Last Author] [Last Author] [Last Author] 
+                        EnglishName = "Last Author"
+                    Case 8
+                        'Item 8 [Revision Number] [Revision Number] [Revision Number] [Revision Number] 
+                        EnglishName = "Revision Number"
+                    Case 9
+                        'Item 9 [Total Editing Time] [Total Editing Time] [Total Editing Time] [Total Editing Time] 
+                        EnglishName = "Total Editing Time"
+                    Case 10
+                        'Item 10 [Last Print Date] [Last Print Date] [Last Print Date] [Last Print Date] 
+                        EnglishName = "Last Print Date"
+                    Case 11
+                        'Item 11 [Origination Date] [Origination Date] [Origination Date] [Origination Date] 
+                        EnglishName = "Origination Date"
+                    Case 12
+                        'Item 12 [Last Save Date] [Last Save Date] [Last Save Date] [Last Save Date] 
+                        EnglishName = "Last Save Date"
+                    Case 13
+                        'Item 13 [Number of pages] [Number of pages] [Number of pages] [Number of pages] 
+                        EnglishName = "Number of pages"
+                    Case 14
+                        'Item 14 [Number of words] [Number of words] [Number of words] [Number of words] 
+                        EnglishName = "Number of words"
+                    Case 15
+                        'Item 15 [Number of characters] [Number of characters] [Number of characters] [Number of characters] 
+                        EnglishName = "Number of characters"
+                    Case 16
+                        'Item 16 [Application Name] [Application Name] [Application Name] [Application Name] 
+                        EnglishName = "Application Name"
+                    Case 17
+                        'Item 17 [Security] [Security] [Security] [Security] 
+                        EnglishName = "Security"
+                End Select
+
+            Case "ExtendedSummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] 
+                        EnglishName = "Name of Saving Application"
+                    Case 2
+                        'Item 2 [DocumentID] [DocumentID] [DocumentID] [DocumentID] 
+                        EnglishName = "DocumentID"
+                    Case 3
+                        'Item 3 [Status] [Status] [Status] [Status] 
+                        EnglishName = "Status"
+                    Case 4
+                        'Item 4 [Username] [Username] [Username] [Username] 
+                        EnglishName = "Username"
+                    Case 5
+                        'Item 5 [CreationLocale] [CreationLocale] [CreationLocale] [CreationLocale] 
+                        EnglishName = "CreationLocale"
+                    Case 6
+                        'Item 6 [Hardware] [Hardware] [StatusChangeDate] [StatusChangeDate]
+                        Select Case DocType
+                            Case "par", "psm"
+                                EnglishName = "Hardware"
+                            Case "asm", "dft"
+                                EnglishName = "StatusChangeDate"
+                        End Select
+                    Case 7
+                        'Item 7 [] [StatusChangeDate] [StatusChangeDate] [] 
+                        Select Case DocType
+                            Case "par", "psm"
+                                EnglishName = "StatusChangeDate"
+                            Case "asm", "dft"
+                                EnglishName = ""
+                        End Select
+                End Select
+
+            Case "DocumentSummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Category] [Category] [Category] [Category]
+                        EnglishName = "Category"
+                    Case 2
+                        'Item 2 [Presentation Format] [Presentation Format] [Presentation Format] [Presentation Format]
+                        EnglishName = "Presentation Format"
+                    Case 3
+                        'Item 3 [Byte Count] [Byte Count] [Byte Count] [Byte Count]
+                        EnglishName = "Byte Count"
+                    Case 4
+                        'Item 4 [Lines] [Lines] [Lines] [Lines]
+                        EnglishName = "Lines"
+                    Case 5
+                        'Item 5 [Paragraphs] [Paragraphs] [Paragraphs] [Paragraphs]
+                        EnglishName = "Paragraphs"
+                    Case 6
+                        'Item 6 [Slides] [Slides] [Slides] [Slides]
+                        EnglishName = "Slides"
+                    Case 7
+                        'Item 7 [Notes] [Notes] [Notes] [Notes]
+                        EnglishName = "Notes"
+                    Case 8
+                        'Item 8 [Hidden Objects] [Hidden Objects] [Hidden Objects] [Hidden Objects]
+                        EnglishName = "Hidden Objects"
+                    Case 9
+                        'Item 9 [Multimedia Clips] [Multimedia Clips] [Multimedia Clips] [Multimedia Clips]
+                        EnglishName = "Multimedia Clips"
+                    Case 10
+                        'Item 10 [Manager] [Manager] [Manager] [Manager]
+                        EnglishName = "Manager"
+                    Case 11
+                        'Item 11 [Company] [Company] [Company] [Company]
+                        EnglishName = "Company"
+
+                End Select
+
+            Case "ProjectInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Document Number] [Document Number] [Document Number] [Document Number] 
+                        EnglishName = "Document Number"
+                    Case 2
+                        'Item 2 [Revision] [Revision] [Revision] [Revision] 
+                        EnglishName = "Revision"
+                    Case 3
+                        'Item 3 [Project Name] [Project Name] [Project Name] [Project Name] 
+                        EnglishName = "Project Name"
+
+                End Select
+
+            Case "MechanicalModeling"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Material] [Material] [Material] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Material"
+                            Case "psm"
+                                EnglishName = "Material"
+                            Case "asm"
+                                EnglishName = "Material"
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 2
+                        'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Face Style"
+                            Case "psm"
+                                EnglishName = "Sheet Metal Gage"
+                            Case "asm"
+                                EnglishName = "Bead Material"
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 3
+                        'Item 3 [Fill Style] [Face Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Fill Style"
+                            Case "psm"
+                                EnglishName = "Face Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 4
+                        'Item 4 [Virtual Style] [Fill Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Virtual Style"
+                            Case "psm"
+                                EnglishName = "Fill Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 5
+                        'Item 5 [Coef. of Thermal Exp] [Virtual Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Coef. of Thermal Exp"
+                            Case "psm"
+                                EnglishName = "Virtual Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 6
+                        'Item 6 [Thermal Conductivity] [Coef. of Thermal Exp] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Thermal Conductivity"
+                            Case "psm"
+                                EnglishName = "Coef. of Thermal Exp"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 7
+                        'Item 7 [Specific Heat] [Thermal Conductivity] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Specific Heat"
+                            Case "psm"
+                                EnglishName = "Thermal Conductivity"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 8
+                        'Item 8 [Modulus of Elasticity] [Specific Heat] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Modulus of Elasticity"
+                            Case "psm"
+                                EnglishName = "Specific Heat"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 9
+                        'Item 9 [Poisson's Ratio] [Modulus of Elasticity] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Poisson's Ratio"
+                            Case "psm"
+                                EnglishName = "Modulus of Elasticity"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 10
+                        'Item 10 [Yield Stress] [Poisson's Ratio] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Yield Stress"
+                            Case "psm"
+                                EnglishName = "Poisson's Ratio"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 11
+                        'Item 11 [Ultimate Stress] [Yield Stress] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Ultimate Stress"
+                            Case "psm"
+                                EnglishName = "Yield Stress"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 12
+                        'Item 12 [Elongation] [Ultimate Stress] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Elongation"
+                            Case "psm"
+                                EnglishName = "Ultimate Stress"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 13
+                        'Item 13 [Grouping] [Elongation] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Grouping"
+                            Case "psm"
+                                EnglishName = "Elongation"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 14
+                        'Item 14 [LibraryName] [Grouping] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "LibraryName"
+                            Case "psm"
+                                EnglishName = "Grouping"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 15
+                        'Item 15 [] [LibraryName] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = ""
+                            Case "psm"
+                                EnglishName = "LibraryName"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+
+                End Select
+
+        End Select
+
+
+
+        Return EnglishName
+    End Function
     Public Sub FindLinked(DMDoc As DesignManager.Document)
 
         Dim Filename As String

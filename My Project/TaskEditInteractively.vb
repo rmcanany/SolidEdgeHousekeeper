@@ -84,10 +84,10 @@ Public Class TaskEditInteractively
 
         Dim PU As New PreferencesUtilities
 
-        Dim EditInteractivelyCommandsFilename = PU.GetEditInteractivelyCommandsFilename()
+        Dim EditInteractivelyCommandsFilename = PU.GetInteractiveEditCommandsFilename()
 
         If Not FileIO.FileSystem.FileExists(EditInteractivelyCommandsFilename) Then
-            PU.CreateEditInteractivelyCommands()
+            PU.CreateInteractiveEditCommands()
         End If
 
         Dim CommandList As String()

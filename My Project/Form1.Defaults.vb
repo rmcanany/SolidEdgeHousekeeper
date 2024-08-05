@@ -85,6 +85,7 @@ Partial Class Form1
         tf = tf Or TypeOf Ctrl Is TabControl
         tf = tf Or TypeOf Ctrl Is TabPage
         tf = tf Or TypeOf Ctrl Is GroupBox
+        tf = tf Or TypeOf Ctrl Is ExTableLayoutPanel
         'tf = Ctrl.HasChildren
 
         If tf Then
@@ -253,7 +254,10 @@ Partial Class Form1
     Private Sub LoadDefaults()
         'See format example in SaveDefaults()
 
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim PU As New PreferencesUtilities
+
+        Dim StartupPath As String = PU.GetStartupDirectory()
+        Dim PreferencesPath As String = PU.GetPreferencesDirectory()
         Dim Defaults As String() = Nothing
         Dim Key As String
         Dim Value As String
@@ -265,7 +269,8 @@ Partial Class Form1
 
         Dim KVPairList As New List(Of String)
 
-        DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
+        'DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
+        DefaultsFilename = String.Format("{0}/defaults.txt", PreferencesPath)
 
         'CreateFilenameCharmap()
 

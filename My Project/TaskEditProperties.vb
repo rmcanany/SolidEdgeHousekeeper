@@ -13,7 +13,6 @@ Public Class TaskEditProperties
     Public Property JSONDict As String
     Public Property AutoAddMissingProperty As Boolean
     Public Property AutoUpdateMaterial As Boolean
-    Public Property ActiveMaterialLibrary As String
     Public Property RemoveFaceStyleOverrides As Boolean
     Public Property StructuredStorageEdit As Boolean
 
@@ -23,7 +22,7 @@ Public Class TaskEditProperties
         AutoAddMissingProperty
         AutoUpdateMaterial
         Browse
-        ActiveMaterialLibrary
+        MaterialTable
         RemoveFaceStyleOverrides
         StructuredStorageEdit
         HideOptions
@@ -43,6 +42,8 @@ Public Class TaskEditProperties
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
+        Me.RequiresMaterialTable = True
+        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -53,7 +54,6 @@ Public Class TaskEditProperties
         Me.JSONDict = ""
         Me.AutoAddMissingProperty = False
         Me.AutoUpdateMaterial = False
-        Me.ActiveMaterialLibrary = ""
         Me.RemoveFaceStyleOverrides = False
         Me.StructuredStorageEdit = False
         'Me.SolidEdgeRequired = False
@@ -124,11 +124,9 @@ Public Class TaskEditProperties
         Dim PropertyFound As Boolean = False
 
         Dim Proceed As Boolean = True
-        Dim s As String
 
         Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim PropertiesToEdit As String = ""
-        Dim RowIndexString As String
 
         Dim TC As New Task_Common
 
@@ -665,7 +663,7 @@ Public Class TaskEditProperties
                             Case "par", "psm"
                                 Dim MaterialDoctor As New MaterialDoctor
                                 SupplementalErrorMessage = MaterialDoctor.UpdateMaterialFromMaterialTable(
-                                        SEDoc, Me.ActiveMaterialLibrary, Me.RemoveFaceStyleOverrides, SEApp)
+                                        SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
 
                                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
@@ -743,7 +741,7 @@ Public Class TaskEditProperties
         ControlsDict(Button.Name) = Button
         Button.Visible = False
 
-        TextBox = FormatOptionsTextBox(ControlNames.ActiveMaterialLibrary.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.MaterialTable.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -802,7 +800,7 @@ Public Class TaskEditProperties
             End If
 
             If Me.AutoUpdateMaterial Then
-                If Not FileIO.FileSystem.FileExists(Me.ActiveMaterialLibrary) Then
+                If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
                     If Not ErrorMessageList.Contains(Me.Description) Then
                         ErrorMessageList.Add(Me.Description)
                     End If
@@ -859,9 +857,9 @@ Public Class TaskEditProperties
                 tmpFileDialog.Filter = "Material Documents|*.mtl"
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
-                    Me.ActiveMaterialLibrary = tmpFileDialog.FileName
-                    TextBox = CType(ControlsDict(ControlNames.ActiveMaterialLibrary.ToString), TextBox)
-                    TextBox.Text = Me.ActiveMaterialLibrary
+                    Me.MaterialTable = tmpFileDialog.FileName
+                    TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
+                    TextBox.Text = Me.MaterialTable
                 End If
 
             Case Else
@@ -889,7 +887,7 @@ Public Class TaskEditProperties
                 Button = CType(ControlsDict(ControlNames.Browse.ToString), Button)
                 Button.Visible = Me.AutoUpdateMaterial
 
-                TextBox = CType(ControlsDict(ControlNames.ActiveMaterialLibrary.ToString), TextBox)
+                TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
                 TextBox.Visible = Me.AutoUpdateMaterial
 
                 CheckBox2 = CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox)
@@ -920,13 +918,18 @@ Public Class TaskEditProperties
             Case ControlNames.JSONDict.ToString
                 Me.JSONDict = TextBox.Text
 
-            Case ControlNames.ActiveMaterialLibrary.ToString
-                Me.ActiveMaterialLibrary = TextBox.Text
+            Case ControlNames.MaterialTable.ToString
+                Me.MaterialTable = TextBox.Text
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
 
+    End Sub
+
+
+    Public Overrides Sub ReconcileProps()
+        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
     End Sub
 
 

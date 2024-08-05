@@ -45,6 +45,19 @@ Public Class Form1
 
     Private Property UseCurrentSession As Boolean = False
 
+    Public Property AssemblyTemplate As String
+    Public Property PartTemplate As String
+    Public Property SheetmetalTemplate As String
+    Public Property DraftTemplate As String
+    Public Property MaterialTable As String
+
+    Public Property UseTemplateProperties As Boolean
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property TemplatePropertyList As List(Of String)
+
+
+
+
     'DESCRIPTION
     'Solid Edge Housekeeper
     'Robert McAnany 2020-2024
@@ -77,6 +90,8 @@ Public Class Form1
 
         Dim PU As New PreferencesUtilities
         PU.SaveTaskList(Me.TaskList)
+        PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+        PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
 
         ErrorMessage = CheckStartConditions()
 
@@ -621,8 +636,8 @@ Public Class Form1
 
         PU.CreatePreferencesDirectory()
         PU.CreateFilenameCharmap()
-        PU.CreateNCalcSavedExpressions()
-        PU.CreateEditInteractivelyCommands()
+        PU.CreateSavedExpressions()
+        PU.CreateInteractiveEditCommands()
 
         PopulateCheckedListBoxes()
         LoadDefaults()
@@ -685,11 +700,7 @@ Public Class Form1
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
 
-        'Me.SuspendLayout()
-
         Me.TaskList = PU.GetTaskList
-
-        'Me.ResumeLayout()
 
         Dim tmpTaskPanel As Panel = Nothing
 
@@ -704,6 +715,9 @@ Public Class Form1
             Dim Task = TaskList(i)
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
+
+        Me.TemplatePropertyDict = PU.GetTemplatePropertyDict()
+        Me.TemplatePropertyList = PU.GetTemplatePropertyList
 
     End Sub
 
@@ -777,6 +791,8 @@ Public Class Form1
 
             Dim PU As New PreferencesUtilities
             PU.SaveTaskList(Me.TaskList)
+            PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+            PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
             End
         End If
     End Sub
@@ -787,6 +803,8 @@ Public Class Form1
 
         Dim PU As New PreferencesUtilities
         PU.SaveTaskList(Me.TaskList)
+        PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+        PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
         End
     End Sub
 
@@ -1977,6 +1995,244 @@ Public Class Form1
         System.Diagnostics.Process.Start(HelpURL)
 
     End Sub
+
+    Private Sub ButtonAssemblyTemplate_Click(sender As Object, e As EventArgs) Handles ButtonAssemblyTemplate.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select an assembly template"
+        tmpFileDialog.Filter = "Assembly Template|*.asm"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.AssemblyTemplate = tmpFileDialog.FileName
+            TextBoxAssemblyTemplate.Text = Me.AssemblyTemplate
+        End If
+
+    End Sub
+
+    Private Sub ButtonPartTemplate_Click(sender As Object, e As EventArgs) Handles ButtonPartTemplate.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a part template"
+        tmpFileDialog.Filter = "Part Template|*.par"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.PartTemplate = tmpFileDialog.FileName
+            TextBoxPartTemplate.Text = Me.PartTemplate
+        End If
+
+    End Sub
+
+    Private Sub ButtonSheetmetalTemplate_Click(sender As Object, e As EventArgs) Handles ButtonSheetmetalTemplate.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a sheetmetal template"
+        tmpFileDialog.Filter = "Sheetmetal Template|*.psm"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.SheetmetalTemplate = tmpFileDialog.FileName
+            TextBoxSheetmetalTemplate.Text = Me.SheetmetalTemplate
+        End If
+
+    End Sub
+
+    Private Sub ButtonDraftTemplate_Click(sender As Object, e As EventArgs) Handles ButtonDraftTemplate.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a draft template"
+        tmpFileDialog.Filter = "Draft Template|*.dft"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.DraftTemplate = tmpFileDialog.FileName
+            TextBoxDraftTemplate.Text = Me.DraftTemplate
+        End If
+
+    End Sub
+
+    Private Sub ButtonMaterialTable_Click(sender As Object, e As EventArgs) Handles ButtonMaterialTable.Click
+
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a material table"
+        tmpFileDialog.Filter = "Material Table|*.mtl"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.MaterialTable = tmpFileDialog.FileName
+            TextBoxMaterialTable.Text = Me.MaterialTable
+        End If
+
+    End Sub
+
+    Private Sub CheckBoxUseTemplateProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseTemplateProperties.CheckedChanged
+        Dim CheckBox As CheckBox = CType(sender, CheckBox)
+        Me.UseTemplateProperties = CheckBox.Checked
+
+        ButtonUseTemplateProperties.Enabled = CheckBox.Checked
+    End Sub
+
+    Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
+        For Each Task As Task In Me.TaskList
+            If Task.RequiresAssemblyTemplate Then
+                Task.AssemblyTemplate = Me.AssemblyTemplate
+            End If
+            If Task.RequiresPartTemplate Then
+                Task.PartTemplate = Me.PartTemplate
+            End If
+            If Task.RequiresSheetmetalTemplate Then
+                Task.SheetmetalTemplate = Me.SheetmetalTemplate
+            End If
+            If Task.RequiresDraftTemplate Then
+                Task.DraftTemplate = Me.DraftTemplate
+            End If
+            If Task.RequiresMaterialTable Then
+                Task.MaterialTable = Me.MaterialTable
+            End If
+
+            Task.ReconcileProps()
+        Next
+    End Sub
+
+    Private Sub ButtonUseTemplateProperties_Click(sender As Object, e As EventArgs) Handles ButtonUseTemplateProperties.Click
+        '{
+        '"Titolo":{
+        '    "PropertySet":"SummaryInformation"
+        '    "AsmPropItemNumber":"1"
+        '    "ParPropItemNumber":"1"
+        '    "PsmPropItemNumber":"1"
+        '    "DftPropItemNumber":"1"
+        '    "EnglishName":"Title"},
+        '"Oggetto":{
+        '    "PropertySet":"SummaryInformation"
+        '    "AsmPropItemNumber":"2"
+        '    "ParPropItemNumber":"2"
+        '    "PsmPropItemNumber":"2"
+        '    "DftPropItemNumber":"2"
+        '    "EnglishName":"Subject"},
+        ' ...
+        '}
+
+        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim Templates As List(Of String) = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
+        Dim TemplateDocTypes As List(Of String) = {"asm", "par", "psm", "dft"}.ToList
+
+        Dim DMApp = New DesignManager.Application
+        DMApp.Visible = 1
+        Dim PropertySets As DesignManager.PropertySets
+        Dim PropertySet As DesignManager.Properties
+        Dim PropertySetName As String
+        Dim Prop As DesignManager.Property
+        Dim PropName As String
+        Dim DocType As String
+
+        Dim TC As New Task_Common
+
+        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+
+        Dim tf As Boolean
+
+        Dim n As Integer = 0
+
+        For Each Template As String In Templates
+            tf = Not Template = ""
+            tf = tf And FileIO.FileSystem.FileExists(Template)
+            If tf Then
+                DocType = TemplateDocTypes(n)
+                PropertySets.Open(Template, True)
+                For i = 0 To PropertySets.Count - 1
+                    Try
+                        PropertySet = CType(PropertySets.Item(i), DesignManager.Properties)
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+                    PropertySetName = PropertySet.Name
+                    For j = 0 To PropertySet.Count - 1
+                        Try
+                            Prop = CType(PropertySet.Item(j), DesignManager.Property)
+                            PropName = Prop.Name
+                            If Not TemplatePropertyDict.Keys.Contains(PropName) Then
+                                TemplatePropertyDict(PropName) = New Dictionary(Of String, String)
+                                TemplatePropertyDict(PropName)("PropertySet") = PropertySetName
+                                TemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
+                                TemplatePropertyDict(PropName)("ParPropItemNumber") = ""
+                                TemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
+                                TemplatePropertyDict(PropName)("DftPropItemNumber") = ""
+                                Dim s As String = TC.PropLocalizedToEnglish(PropertySetName, j + 1, DocType)
+                                If s = "" Then s = PropName
+                                TemplatePropertyDict(PropName)("EnglishName") = s
+                            End If
+
+                            Select Case DocType
+                                Case "asm"
+                                    TemplatePropertyDict(PropName)("AsmPropItemNumber") = CStr(j + 1)
+                                Case "par"
+                                    TemplatePropertyDict(PropName)("ParPropItemNumber") = CStr(j + 1)
+                                Case "psm"
+                                    TemplatePropertyDict(PropName)("PsmPropItemNumber") = CStr(j + 1)
+                                Case "dft"
+                                    TemplatePropertyDict(PropName)("DftPropItemNumber") = CStr(j + 1)
+                            End Select
+
+                        Catch ex As Exception
+                            MsgBox(DocType + " " + PropertySetName + " " + CStr(i) + " " + CStr(j) + Chr(13) + ex.ToString)
+                        End Try
+                    Next
+                Next
+
+            End If
+            n += 1
+        Next
+
+        DMApp.Quit()
+
+        'Check consistency
+        For Each Key As String In TemplatePropertyDict.Keys
+            If Not Key = TemplatePropertyDict(Key)("EnglishName") Then
+                MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, TemplatePropertyDict(Key)("EnglishName")))
+            End If
+        Next
+
+    End Sub
+
+    Private Sub TextBoxAssemblyTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxAssemblyTemplate.TextChanged
+        Dim TextBox As TextBox = CType(sender, TextBox)
+        Me.AssemblyTemplate = TextBox.Text
+    End Sub
+
+    Private Sub TextBoxPartTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartTemplate.TextChanged
+        Dim TextBox As TextBox = CType(sender, TextBox)
+        Me.PartTemplate = TextBox.Text
+    End Sub
+
+    Private Sub TextBoxSheetmetalTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSheetmetalTemplate.TextChanged
+        Dim TextBox As TextBox = CType(sender, TextBox)
+        Me.SheetmetalTemplate = TextBox.Text
+    End Sub
+
+    Private Sub TextBoxDraftTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxDraftTemplate.TextChanged
+        Dim TextBox As TextBox = CType(sender, TextBox)
+        Me.DraftTemplate = TextBox.Text
+    End Sub
+
+    Private Sub TextBoxMaterialTable_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMaterialTable.TextChanged
+        Dim TextBox As TextBox = CType(sender, TextBox)
+        Me.MaterialTable = TextBox.Text
+    End Sub
+
+    Private Sub ButtonCustomizeTemplatePropertyDict_Click(sender As Object, e As EventArgs) Handles ButtonCustomizeTemplatePropertyDict.Click
+
+        If Me.TemplatePropertyList Is Nothing Then
+            Me.TemplatePropertyList = New List(Of String)
+        End If
+
+        Dim FPLC As New FormPropertyListCustomize
+
+        Dim Result As DialogResult = FPLC.ShowDialog()
+
+        If Result = DialogResult.OK Then
+            Me.TemplatePropertyList = FPLC.TemplatePropertyList
+        End If
+
+    End Sub
+
 
     ' Commands I can never remember
 
