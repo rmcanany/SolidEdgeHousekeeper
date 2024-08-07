@@ -254,10 +254,10 @@ Partial Class Form1
     Private Sub LoadDefaults()
         'See format example in SaveDefaults()
 
-        Dim PU As New PreferencesUtilities
+        Dim UP As New UtilsPreferences
 
-        Dim StartupPath As String = PU.GetStartupDirectory()
-        Dim PreferencesPath As String = PU.GetPreferencesDirectory()
+        Dim StartupPath As String = UP.GetStartupDirectory()
+        Dim PreferencesPath As String = UP.GetPreferencesDirectory()
         Dim Defaults As String() = Nothing
         Dim Key As String
         Dim Value As String
@@ -503,8 +503,8 @@ Partial Class Form1
             ReadmeOut.Add(TaskListHeader)
             ReadmeOut.Add("")
 
-            Dim PU As New PreferencesUtilities
-            Dim tmpTaskList = PU.BuildTaskListFromScratch
+            Dim UP As New UtilsPreferences
+            Dim tmpTaskList = UP.BuildTaskListFromScratch
 
             For Each Task As Task In tmpTaskList
                 ReadmeOut.Add(String.Format("### {0}", Task.Description))

@@ -324,7 +324,7 @@ Public Class FormPropertyListCustomize
         Dim i As Integer
         'Dim TaskDescription As String
 
-        Dim PU As New PreferencesUtilities
+        Dim PU As New UtilsPreferences
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
             s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)

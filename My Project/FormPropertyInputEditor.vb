@@ -7,462 +7,297 @@ Public Class FormPropertyInputEditor
     Private InputEditorDoctor As New InputEditorDoctor
     Private ProcessCheckBoxEvents As Boolean
     Private FileType As String
-    Public Property JSONDict As String
 
-    'TableValuesDict format
-    '{"Material":{
-    '    "PropertySet":"System",
-    '    "PropertyName":"Material",
-    '    "Find_PT":"True",
-    '    "Find_WC":"False",
-    '    "Find_RX":"False",
-    '    "FindString":"Aluminum",
-    '    "Replace_PT":"True",
-    '    "Replace_RX":"False",
-    '    "ReplaceString":"Aluminum 6061-T6"},
-    ' ...
+    Public Property JSONString As String
+    '{"0":
+    '    {"PropertySet":"Custom",
+    '     "PropertyName":"hmk_Part_Number",
+    '     "FindSearch":"PT",
+    '     "FindString":"a",
+    '     "ReplaceSearch":"PT",
+    '     "ReplaceString":"b"},
+    ' "1":
+    '...
     '}
+
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property TemplatePropertyList As List(Of String)
+    Public Property UCList As List(Of UCPropertyInput)
+    Public Property HelpURL As String
+    Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+
+
     Dim t As Timer = New Timer()
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        Me.TemplatePropertyDict = Form1.TemplatePropertyDict
+        Me.TemplatePropertyList = Form1.TemplatePropertyList
+        Me.UCList = New List(Of UCPropertyInput)
+
+    End Sub
+
+
+    Private Function CheckInputs() As Boolean
+        Dim InputsOK As Boolean = True
+        Dim s As String = ""
+        Dim indent As String = "    "
+
+        For Each UC As UCPropertyInput In UCList
+
+            ' Ignore any with no PropertyName
+            If Not UC.PropertyName = "" Then
+                If UC.PropertySet = "" Then
+                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
+                If UC.FindSearch = "" Then
+                    s = String.Format("{0}{1}Select a Find Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
+                If Not UC.FindSearch = "X" Then
+                    If UC.ReplaceSearch = "" Then
+                        s = String.Format("{0}{1}Select a Replace Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                    End If
+                End If
+            End If
+
+        Next
+
+        If Not s = "" Then
+            InputsOK = False
+            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            MsgBox(s, vbOKOnly)
+        End If
+
+        Return InputsOK
+    End Function
+
+    Private Function CreateJSONDict() As Dictionary(Of String, Dictionary(Of String, String))
+        Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim i = 0
+
+        For Each UC As UCPropertyInput In UCList
+            If Not UC.PropertyName = "" Then
+                Dim d = New Dictionary(Of String, String)
+                d("PropertySet") = UC.PropertySet
+                d("PropertyName") = UC.PropertyName
+                d("FindSearch") = UC.FindSearch
+                d("FindString") = UC.FindString
+                d("ReplaceSearch") = UC.ReplaceSearch
+                d("ReplaceString") = UC.ReplaceString
+
+                JSONDict(CStr(i)) = d
+
+                i += 1
+            End If
+        Next
+
+        Return JSONDict
+    End Function
+
+    Public Sub PopulateUCList(JSONDict As Dictionary(Of String, Dictionary(Of String, String)))
+        Dim NewUC As UCPropertyInput
+
+        Me.UCList.Clear()
+
+        For Each Key As String In JSONDict.Keys
+            NewUC = New UCPropertyInput(Me)
+            NewUC.PropertySet = JSONDict(Key)("PropertySet")
+            NewUC.PropertyName = JSONDict(Key)("PropertyName")
+            NewUC.FindSearch = JSONDict(Key)("FindSearch")
+            NewUC.FindString = JSONDict(Key)("FindString")
+            NewUC.ReplaceSearch = JSONDict(Key)("ReplaceSearch")
+            NewUC.ReplaceString = JSONDict(Key)("ReplaceString")
+
+            NewUC.ReconcileFormWithProps()
+
+            NewUC.Dock = DockStyle.Fill
+
+            UCList.Add(NewUC)
+        Next
+
+    End Sub
+
+    Public Sub PopulateForm()
+
+        Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
+            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
+        End If
+
+        PopulateUCList(JSONDict)
+
+        UpdateForm()
+
+    End Sub
+
+    Private Sub UpdateForm()
+        ExTableLayoutPanelSearches.Controls.Clear()
+        ExTableLayoutPanelSearches.RowStyles.Clear()
+
+        ' Shouldn't need this, but it doesn't work without it.
+        ExTableLayoutPanelSearches.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+
+        ' Not true, but it doesn't work without it.
+        ExTableLayoutPanelSearches.RowCount = 1
+
+        Dim NeedANewRow As Boolean = True
+
+        For Each UC As UCPropertyInput In UCList
+            ExTableLayoutPanelSearches.RowCount += 1
+            ExTableLayoutPanelSearches.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+            ExTableLayoutPanelSearches.Controls.Add(UC)
+            If UC.PropertyName = "" Then
+                NeedANewRow = False
+            End If
+        Next
+
+        If NeedANewRow Then
+            AddRow()
+        End If
+
+    End Sub
+
+    Public Sub AddRow()
+        Dim NewUC As New UCPropertyInput(Me)
+        NewUC.Dock = DockStyle.Fill
+        Me.UCList.Add(NewUC)
+
+        ExTableLayoutPanelSearches.RowCount += 1
+        ExTableLayoutPanelSearches.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
+        ExTableLayoutPanelSearches.Controls.Add(NewUC)
+
+    End Sub
+
+    Private Sub MoveRow(Direction As String)
+        Dim SelectedRow As Integer = GetSelectedRow()
+        Dim tmpUCList As New List(Of UCPropertyInput)
+        Dim tf As Boolean
+
+        tf = Direction.ToLower = "up"
+        tf = tf Or Direction.ToLower = "down"
+        If Not tf Then
+            MsgBox(String.Format("Unrecognized direction '{0}'", Direction), vbOKOnly)
+            Exit Sub
+        End If
+
+        'Can't move up from the top
+        tf = (SelectedRow = 0) And (Direction = "up")
+
+        'Can't move down from the bottom
+        Dim Bottom = UCList.Count - 1
+        tf = tf Or ((SelectedRow = Bottom) And (Direction = "down"))
+
+        If Not tf Then
+            For i As Integer = 0 To Me.UCList.Count - 1
+
+                Select Case Direction
+
+                    Case "up"
+                        If i = SelectedRow - 1 Then
+                            tmpUCList.Add(Me.UCList(i + 1))
+                        ElseIf i = SelectedRow Then
+                            tmpUCList.Add(Me.UCList(i - 1))
+                        Else
+                            tmpUCList.Add(Me.UCList(i))
+                        End If
+
+                    Case "down"
+                        If i = SelectedRow Then
+                            tmpUCList.Add(Me.UCList(i + 1))
+                        ElseIf i = SelectedRow + 1 Then
+                            tmpUCList.Add(Me.UCList(i - 1))
+                        Else
+                            tmpUCList.Add(Me.UCList(i))
+                        End If
+
+                    Case Else
+                        MsgBox(String.Format("Direction '{0}' not recognized", Direction))
+                End Select
+
+            Next
+
+            Me.UCList = tmpUCList
+
+        End If
+
+        UpdateForm()
+
+    End Sub
+
+    Public Sub UCChanged(ChangedUC As UCPropertyInput)
+
+        Dim NeedANewRow As Boolean = True
+
+        For Each UC As UCPropertyInput In UCList
+            If ChangedUC.Selected Then
+                If UC IsNot ChangedUC Then
+                    UC.CheckBoxSelect.Checked = False
+                End If
+            End If
+            If UC.PropertyName = "" Then
+                NeedANewRow = False
+            End If
+        Next
+
+        If NeedANewRow Then
+            AddRow()
+        End If
+
+    End Sub
+
+    Private Function GetSelectedRow() As Integer
+        Dim SelectedRow As Integer = -1
+
+        Dim i = 0
+        For Each UC As UCPropertyInput In UCList
+            If UC.Selected Then
+                If UC.Selected Then SelectedRow = i
+                Exit For
+            End If
+            i += 1
+        Next
+
+        Return SelectedRow
+    End Function
 
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        PopulateForm()
+
         t.Interval = 1500
         AddHandler t.Tick, AddressOf HandleTimerTick
 
-        BuildColumnsDict()
+        Dim UP As New UtilsPreferences
+        Me.SavedSettingsDict = UP.GetEditPropertiesSavedSettings()
 
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.PopulateControls(TableLayoutPanel1, ColumnsDict)
-        ProcessCheckBoxEvents = True
-
-        InputEditorDoctor.SetHeaderRowColor(TableLayoutPanel1, ProcessAllRows:=False)
-
-        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
-        Dim CheckBoxName As String
-        CheckBoxDict = InputEditorDoctor.GetCheckBoxes(TableLayoutPanel1)
-        For Each CheckBoxName In CheckBoxDict.Keys
-            AddHandler CheckBoxDict(CheckBoxName).CheckedChanged, AddressOf CheckBox_CheckedChanged
+        ComboBoxSavedSettings.Items.Add("")
+        For Each Key As String In Me.SavedSettingsDict.Keys
+            ComboBoxSavedSettings.Items.Add(Key)
         Next
 
-        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
-        Dim ComboBoxName As String
-        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
-        For Each ComboBoxName In ComboBoxDict.Keys
-            If ComboBoxName.EndsWith("PropertySet") Then
-                ComboBoxDict(ComboBoxName).Items.Add("System")
-                'ComboBoxDict(ComboBoxName).Items.Add("Project")
-                ComboBoxDict(ComboBoxName).Items.Add("Custom")
-                ComboBoxDict(ComboBoxName).Text = ComboBoxDict(ComboBoxName).Items(0).ToString
-                AddHandler ComboBoxDict(ComboBoxName).SelectedValueChanged, AddressOf ComboBox_TextChanged
-            End If
-        Next
-
-        TextBoxJSON.Text = Me.JSONDict
-
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.RestoreTableValues(TableLayoutPanel1, ColumnsDict, TextBoxJSON.Text)
-        ProcessCheckBoxEvents = True
-
-        ReconcileFormControls()
-
-    End Sub
-
-    Private Sub BuildColumnsDict()
-
-        '{ColumnIndex: {
-        '    ColumnControl: "CheckBox" | "TextBox" | "ComboBox",
-        '    ColumnName: String,
-        '    ...
-        '    }
-        '}
-
-        Dim ColumnName As String
-        Dim ColumnIndex As Integer
-
-        ColumnIndex = 0
-        ColumnName = "Select"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(True)
-
-        ColumnIndex += 1
-        ColumnName = "PropertySet"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
-        ColumnsDict(ColumnIndex)("DefaultValue") = ""
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "PropertyName"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "ComboBox" '"TextBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(False)
-        ColumnsDict(ColumnIndex)("DefaultValue") = ""
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Find_PT"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(True)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Find_WC"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Find_RX"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "FindString"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = ""
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Replace_PT"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(True)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Replace_RX"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "Replace_EX"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "CheckBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = CStr(False)
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-        ColumnIndex += 1
-        ColumnName = "ReplaceString"
-        ColumnsDict(ColumnIndex) = New Dictionary(Of String, String)
-        ColumnsDict(ColumnIndex)("ColumnControl") = "TextBox"
-        ColumnsDict(ColumnIndex)("ColumnName") = ColumnName
-        ColumnsDict(ColumnIndex)("AllowBlank") = CStr(True)
-        ColumnsDict(ColumnIndex)("DefaultValue") = ""
-        ColumnsDict(ColumnIndex)("PopulateWithDefault") = CStr(False)
-
-    End Sub
-
-
-    Private Sub ComboBox_TextChanged(sender As System.Object, e As System.EventArgs)
-
-        If ProcessCheckBoxEvents Then
-
-            Dim ComboBox As ComboBox = DirectCast(sender, ComboBox)
-
-            SetCombo(ComboBox, False)
-
-            'Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
-            'ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
-            'Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
-
-            'If ComboBox.Text = "System" Then
-            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            '    tmpComboBox.Items.Clear()
-            '    tmpComboBox.Items.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"}) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
-            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
-
-            'ElseIf ComboBox.Text = "Project" Then
-            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            '    tmpComboBox.Items.Clear()
-            '    tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
-            '    tmpComboBox.SelectedItem = tmpComboBox.Items(0)
-
-            'ElseIf ComboBox.Text = "Custom" Then
-            '    tmpComboBox.Items.Clear()
-            '    tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
-            '    tmpComboBox.Text = ""
-
-            'End If
-
-        End If
-
-    End Sub
-
-    Public Sub SetCombo(ComboBox As ComboBox, keepvalue As Boolean)
-
-        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
-        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
-        Dim tmpComboBox As ComboBox = ComboBoxDict(ComboBox.Name.Replace("PropertySet", "PropertyName"))
-        Dim tmpValue As String = tmpComboBox.Text
-
-        If ComboBox.Text = "System" Then
-
-            tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            tmpComboBox.Items.Clear()
-            tmpComboBox.Items.AddRange({"", "Title", "Subject", "Author", "Keywords", "Comments", "Category", "Company", "Manager",
-                                       "Document Number", "Revision", "Project Name", "Material", "Sheet Metal Gage"})
-            If Not keepvalue Then
-                tmpComboBox.SelectedItem = Nothing
-            Else
-                tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
-            End If
-
-            'ElseIf ComboBox.Text = "Material" Then
-
-            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            '    tmpComboBox.Items.Clear()
-            '    tmpComboBox.Items.AddRange({"Material", "Coef. ofThermal Exp", "Thermal Conductivity", "Specific Heat", "Modulus of Elasticity"}......) ', "Category", "Company", "Manager"}) <-- are in different stream, TBD
-            '    If Not keepvalue Then
-            '        tmpComboBox.SelectedItem = tmpComboBox.Items(0)
-            '    Else
-            '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
-            '    End If
-
-            'ElseIf ComboBox.Text = "Project" Then
-            '    tmpComboBox.DropDownStyle = ComboBoxStyle.DropDownList
-            '    tmpComboBox.Items.Clear()
-            '    tmpComboBox.Items.AddRange({"Document Number", "Revision", "Project Name"})
-            '    If Not keepvalue Then
-            '        tmpComboBox.SelectedItem = Nothing
-            '    Else
-            '        tmpComboBox.SelectedIndex = tmpComboBox.Items.IndexOf(tmpValue)
-            '    End If
-
-        ElseIf ComboBox.Text = "Custom" Then
-            tmpComboBox.Items.Clear()
-            tmpComboBox.DropDownStyle = ComboBoxStyle.Simple
-            If Not keepvalue Then
-                tmpComboBox.Text = ""
-            Else
-                tmpComboBox.Text = tmpValue
-            End If
-
-        End If
-
-    End Sub
-
-    Private Sub CheckBox_CheckedChanged(sender As System.Object, e As System.EventArgs)
-        Dim CheckBox As CheckBox = DirectCast(sender, CheckBox)
-        Dim tf As Boolean
-        Dim s As String = ""
-        Dim RowIndexString As String = ""
-        Dim FindOrReplace As String = ""
-        Dim SearchType As String = ""
-        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
-
-        If CheckBox.Name.Contains("Select") Then ReconcileFormControls()
-
-        If ProcessCheckBoxEvents Then
-            CheckBoxDict = InputEditorDoctor.GetCheckBoxes(TableLayoutPanel1)
-
-
-            ' Make sure only one checkbox is checked.
-            tf = CheckBox.Name.Contains("Find_")
-            tf = tf Or CheckBox.Name.Contains("Replace_")
-
-            ' Extract info from CheckBox name.
-            If tf Then
-                ' CheckBox naming convention "CheckBox1Find_PT", "CheckBox3Replace_RX", ...
-
-                s = CheckBox.Name.Replace("CheckBox", "")  ' "CheckBox1Find_PT" -> "1Find_PT"
-                RowIndexString = s(0)
-
-                s = s.Replace(RowIndexString, "")  ' "1Find_PT" -> "Find_PT"
-                FindOrReplace = s.Split("_"c)(0)  ' "Find_PT" -> "Find"
-                SearchType = s.Split("_"c)(1)  ' "Find_PT" -> "PT"
-
-            End If
-
-            If tf And CheckBox.Checked Then
-                If FindOrReplace = "Find" Then
-                    If SearchType = "PT" Then
-                        CheckBoxDict(CheckBox.Name.Replace("PT", "WC")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("PT", "RX")).Checked = False
-                    End If
-
-                    If SearchType = "WC" Then
-                        CheckBoxDict(CheckBox.Name.Replace("WC", "PT")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("WC", "RX")).Checked = False
-                    End If
-
-                    If SearchType = "RX" Then
-                        CheckBoxDict(CheckBox.Name.Replace("RX", "PT")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("RX", "WC")).Checked = False
-                    End If
-                End If
-
-                If FindOrReplace = "Replace" Then
-                    If SearchType = "PT" Then
-                        CheckBoxDict(CheckBox.Name.Replace("PT", "RX")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("PT", "EX")).Checked = False
-                    End If
-
-                    If SearchType = "RX" Then
-                        CheckBoxDict(CheckBox.Name.Replace("RX", "PT")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("RX", "EX")).Checked = False
-                    End If
-
-                    If SearchType = "EX" Then
-                        CheckBoxDict(CheckBox.Name.Replace("EX", "PT")).Checked = False
-                        CheckBoxDict(CheckBox.Name.Replace("EX", "RX")).Checked = False
-                    End If
-
-                End If
-            End If
-
-            If tf And (Not CheckBox.Checked) Then
-                If FindOrReplace = "Find" Then
-                    tf = CheckBoxDict(String.Format("CheckBox{0}Find_PT", RowIndexString)).Checked
-                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Find_WC", RowIndexString)).Checked
-                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Find_RX", RowIndexString)).Checked
-                    If Not tf Then
-                        CheckBoxDict(String.Format("CheckBox{0}Find_PT", RowIndexString)).Checked = True
-                    End If
-                End If
-
-                If FindOrReplace = "Replace" Then
-                    tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked
-                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndexString)).Checked
-                    tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndexString)).Checked
-                    If Not tf Then
-                        CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndexString)).Checked = True
-                    End If
-                End If
-            End If
-
-        End If
-
-    End Sub
-
-    Private Sub ReconcileFormControls()
-        Dim CheckBoxDict As New Dictionary(Of String, CheckBox)
-        Dim RowIndex As Integer
-        Dim tf As Boolean
-        Dim SelectedRowIndices As New List(Of Integer)
-
-        CheckBoxDict = InputEditorDoctor.GetCheckBoxes(TableLayoutPanel1)
-
-        For RowIndex = 1 To TableLayoutPanel1.RowCount - 1
-            tf = CheckBoxDict(String.Format("CheckBox{0}Find_PT", RowIndex)).Checked
-            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Find_WC", RowIndex)).Checked
-            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Find_RX", RowIndex)).Checked
-            If Not tf Then
-                CheckBoxDict(String.Format("CheckBox{0}Find_PT", RowIndex)).Checked = True
-            End If
-
-            tf = CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked
-            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_RX", RowIndex)).Checked
-            tf = tf Or CheckBoxDict(String.Format("CheckBox{0}Replace_EX", RowIndex)).Checked
-            If Not tf Then
-                CheckBoxDict(String.Format("CheckBox{0}Replace_PT", RowIndex)).Checked = True
-            End If
-
-        Next
-
-        Dim ComboBoxDict As New Dictionary(Of String, ComboBox)
-        Dim ComboBoxName As String
-        ComboBoxDict = InputEditorDoctor.GetComboBoxes(TableLayoutPanel1)
-        For Each ComboBoxName In ComboBoxDict.Keys
-            If ComboBoxName.EndsWith("PropertySet") Then
-
-                SetCombo(ComboBoxDict(ComboBoxName), True)
-
-            End If
-        Next
-
-        SelectedRowIndices = InputEditorDoctor.GetSelectedRowIndices(TableLayoutPanel1)
-
-        ButtonClearSelected.Enabled = False
-        ButtonMoveSelectedDown.Enabled = False
-        ButtonMoveSelectedUp.Enabled = False
-
-        If SelectedRowIndices.Count = 1 Then
-            ButtonClearSelected.Enabled = True
-            ButtonMoveSelectedDown.Enabled = True
-            ButtonMoveSelectedUp.Enabled = True
-        ElseIf SelectedRowIndices.Count > 1 Then
-            ButtonClearSelected.Enabled = True
-        End If
-
-    End Sub
-
-    Private Sub TableLayoutPanel1_CellPaint(sender As Object, e As TableLayoutCellPaintEventArgs) Handles TableLayoutPanel1.CellPaint
-        ' https://stackoverflow.com/questions/34064499/how-to-set-cell-color-in-tablelayoutpanel-dynamically
-        If e.Row = 0 Then
-            e.Graphics.FillRectangle(InputEditorDoctor.BrushColor, e.CellBounds)
-        End If
-    End Sub
-
-    Private Sub ButtonClearSelected_Click(sender As Object, e As EventArgs) Handles ButtonClearSelected.Click
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.ClearSelected(TableLayoutPanel1)
-        ProcessCheckBoxEvents = True
-
-        CheckBoxSelectAll.Checked = False
-
-        ReconcileFormControls()
-    End Sub
-
-    Private Sub ButtonMoveSelectedUp_Click(sender As Object, e As EventArgs) Handles ButtonMoveSelectedUp.Click
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.MoveSelected(TableLayoutPanel1, ColumnsDict, "Up")
-        ProcessCheckBoxEvents = True
-
-        ReconcileFormControls()
-    End Sub
-
-    Private Sub ButtonMoveSelectedDown_Click(sender As Object, e As EventArgs) Handles ButtonMoveSelectedDown.Click
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.MoveSelected(TableLayoutPanel1, ColumnsDict, "Down")
-        ProcessCheckBoxEvents = True
-
-        ReconcileFormControls()
-    End Sub
-
-    Private Sub CheckBoxSelectAll_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelectAll.CheckedChanged
-        ProcessCheckBoxEvents = False
-        InputEditorDoctor.ProcessCheckBoxSelectAll(TableLayoutPanel1, CheckBoxSelectAll)
-        ProcessCheckBoxEvents = True
-
-        ReconcileFormControls()
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        Dim TableValuesDict As New Dictionary(Of Integer, Dictionary(Of String, String))
 
-        TableValuesDict = InputEditorDoctor.GetTableValues(TableLayoutPanel1, ColumnsDict)
-        TextBoxJSON.Text = JsonConvert.SerializeObject(TableValuesDict)
+        If CheckInputs() Then
+            Dim UP As New UtilsPreferences
+            UP.SaveEditPropertiesSavedSettings(Me.SavedSettingsDict)
 
-        Me.DialogResult = DialogResult.OK
+            Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
+
+            JSONDict = CreateJSONDict()
+            Me.JSONString = JsonConvert.SerializeObject(JSONDict)
+
+            Me.DialogResult = DialogResult.OK
+        End If
+
     End Sub
 
 
@@ -470,25 +305,6 @@ Public Class FormPropertyInputEditor
         Me.DialogResult = DialogResult.Cancel
     End Sub
 
-    Private Sub TextBoxJSON_TextChanged(sender As Object, e As EventArgs) Handles TextBoxJSON.TextChanged
-        Me.JSONDict = TextBoxJSON.Text
-    End Sub
-
-    Private Sub ButtonNCalc_Click(sender As Object, e As EventArgs) Handles ButtonNCalc.Click
-
-        Dim tmp As New FormNCalc
-        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
-        'tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
-        tmp.ShowDialog()
-        Dim A = tmp.Formula.Replace(vbCrLf, "")
-        A = A.Split(CType("\\", Char)).First
-
-        If A <> "" Then
-            Clipboard.SetText(A)
-            MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
-        End If
-
-    End Sub
 
     Sub MessageTimeOut(sMessage As String, sTitle As String, iSeconds As Integer)
 
@@ -523,9 +339,105 @@ Public Class FormPropertyInputEditor
             item.Close()
         Next
 
-        T.Stop()
+        t.Stop()
 
     End Sub
 
+    Private Sub ToolStripButtonHelp_Click(sender As Object, e As EventArgs) Handles ToolStripButtonHelp.Click
+        System.Diagnostics.Process.Start(Me.HelpURL)
+    End Sub
 
+    Private Sub ToolStripButtonExpressionEditor_Click(sender As Object, e As EventArgs) Handles ToolStripButtonExpressionEditor.Click
+
+        Dim tmp As New FormNCalc
+        tmp.TextEditorFormula.Language = FastColoredTextBoxNS.Language.SQL
+        'tmp.TextEditorNCalc.Text = "'%{System.Title}' + '-' + toString(cast(substring('%{System.Comments}', lastIndexOf('%{System.Comments}', 'L=')+2, length('%{System.Comments}') - lastIndexOf('%{System.Comments}', ' ')),'System.Int32'),'D4') + '-' + substring('%{System.Comments}', lastIndexOf('%{System.Comments}', ' ')+1)"
+        tmp.ShowDialog()
+        Dim A = tmp.Formula.Replace(vbCrLf, "")
+        A = A.Split(CType("\\", Char)).First
+
+        If A <> "" Then
+            Clipboard.SetText(A)
+            MessageTimeOut("Expression copied in clipboard", "Expression editor", 1)
+        End If
+
+    End Sub
+
+    Private Sub ToolStripButtonDeleteRow_Click(sender As Object, e As EventArgs) Handles ToolStripButtonDeleteRow.Click
+        Dim SelectedRow = GetSelectedRow()
+        Dim tmpUCList As New List(Of UCPropertyInput)
+
+        If SelectedRow = -1 Then
+            MsgBox("No row is selected.  Select one by enabling its checkbox.")
+        Else
+            For i = 0 To UCList.Count - 1
+                If Not i = SelectedRow Then
+                    tmpUCList.Add(UCList(i))
+                End If
+            Next
+
+            UCList = tmpUCList
+
+            UpdateForm()
+        End If
+
+    End Sub
+
+    Private Sub ToolStripButtonUp_Click(sender As Object, e As EventArgs) Handles ToolStripButtonUp.Click
+        MoveRow("up")
+    End Sub
+
+    Private Sub ToolStripButtonDown_Click(sender As Object, e As EventArgs) Handles ToolStripButtonDown.Click
+        MoveRow("down")
+    End Sub
+
+    Private Sub ButtonSaveSettings_Click(sender As Object, e As EventArgs) Handles ButtonSaveSettings.Click
+        Dim Name As String = ComboBoxSavedSettings.Text
+        Dim Proceed As Boolean = True
+
+        If Name = "" Then
+            Proceed = False
+            MsgBox("Enter a name for these settings", vbOKOnly)
+        End If
+
+        If Proceed And ComboBoxSavedSettings.Items.Contains(Name) Then
+            Dim Result = MsgBox(String.Format("Name '{0}' already exists.  Do you want to replace it?", Name), vbYesNo)
+            If Result = vbNo Then
+                Proceed = False
+            End If
+        End If
+
+        If Proceed Then
+            Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
+            JSONDict = CreateJSONDict()
+
+            SavedSettingsDict(Name) = JSONDict
+
+            If Not ComboBoxSavedSettings.Items.Contains(Name) Then
+                ComboBoxSavedSettings.Items.Add(Name)
+            End If
+
+        End If
+    End Sub
+
+    Private Sub ComboBoxSavedSettings_Click(sender As Object, e As EventArgs) Handles ComboBoxSavedSettings.SelectedIndexChanged
+        Dim Name As String = ComboBoxSavedSettings.Text
+        If SavedSettingsDict.Keys.Contains(Name) Then
+
+            PopulateUCList(SavedSettingsDict(Name))
+
+            UpdateForm()
+
+        End If
+
+    End Sub
+
+    Private Sub ButtonDeleteSetting_Click(sender As Object, e As EventArgs) Handles ButtonDeleteSetting.Click
+        Dim Name As String = ComboBoxSavedSettings.Text
+        If SavedSettingsDict.Keys.Contains(Name) Then
+            SavedSettingsDict.Remove(Name)
+        End If
+        ComboBoxSavedSettings.Items.Remove(Name)
+        ComboBoxSavedSettings.Text = ""
+    End Sub
 End Class

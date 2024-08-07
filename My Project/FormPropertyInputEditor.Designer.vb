@@ -24,359 +24,51 @@ Partial Class FormPropertyInputEditor
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPropertyInputEditor))
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
-        Me.ButtonClearSelected = New System.Windows.Forms.Button()
-        Me.ButtonMoveSelectedUp = New System.Windows.Forms.Button()
-        Me.ButtonMoveSelectedDown = New System.Windows.Forms.Button()
-        Me.CheckBoxSelectAll = New System.Windows.Forms.CheckBox()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
-        Me.TextBoxJSON = New System.Windows.Forms.TextBox()
-        Me.Label14 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ButtonNCalc = New System.Windows.Forms.Button()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.TableLayoutPanel3.SuspendLayout()
-        Me.TableLayoutPanel4.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
+        Me.ToolStripEditProperties = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ComboBoxSavedSettings = New System.Windows.Forms.ToolStripComboBox()
+        Me.ButtonSaveSettings = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonDeleteSetting = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButtonUp = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButtonDown = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButtonDeleteRow = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButtonExpressionEditor = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripButtonHelp = New System.Windows.Forms.ToolStripButton()
+        Me.PanelHeader = New System.Windows.Forms.Panel()
+        Me.PanelSearches = New System.Windows.Forms.Panel()
+        Me.PanelFooter = New System.Windows.Forms.Panel()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.ExTableLayoutPanelSearches = New Housekeeper.ExTableLayoutPanel()
+        Me.UcPropertyInput1 = New Housekeeper.UCPropertyInput()
+        Me.ExTableLayoutPanelHeader = New Housekeeper.ExTableLayoutPanel()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.ToolStripEditProperties.SuspendLayout()
+        Me.PanelHeader.SuspendLayout()
+        Me.PanelSearches.SuspendLayout()
+        Me.PanelFooter.SuspendLayout()
+        Me.ExTableLayoutPanelSearches.SuspendLayout()
+        Me.ExTableLayoutPanelHeader.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 11
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Label5, 5, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label7, 9, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel3, 7, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel4, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TableLayoutPanel2, 3, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 2, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label1, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(10, 11)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 9
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(815, 277)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
-        Me.Label5.BackColor = System.Drawing.SystemColors.Control
-        Me.Label5.Location = New System.Drawing.Point(395, 44)
-        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label5.Size = New System.Drawing.Size(64, 20)
-        Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Find string"
-        '
-        'Label7
-        '
-        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoSize = True
-        Me.Label7.BackColor = System.Drawing.SystemColors.Control
-        Me.Label7.Location = New System.Drawing.Point(631, 44)
-        Me.Label7.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label7.Size = New System.Drawing.Size(86, 20)
-        Me.Label7.TabIndex = 6
-        Me.Label7.Text = "Replace string"
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel3.BackColor = System.Drawing.SystemColors.Control
-        Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel1.SetColumnSpan(Me.TableLayoutPanel3, 3)
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.Controls.Add(Me.Label12, 0, 1)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label4, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label10, 0, 1)
-        Me.TableLayoutPanel3.Controls.Add(Me.Label11, 1, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(520, 4)
-        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(4)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 2
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(103, 56)
-        Me.TableLayoutPanel3.TabIndex = 8
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label12.Location = New System.Drawing.Point(38, 28)
-        Me.Label12.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(26, 28)
-        Me.Label12.TabIndex = 3
-        Me.Label12.Text = "RX"
-        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label12, "Replace with a Regular Expression")
-        '
-        'Label4
-        '
-        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label4.AutoSize = True
-        Me.TableLayoutPanel3.SetColumnSpan(Me.Label4, 3)
-        Me.Label4.Location = New System.Drawing.Point(21, 6)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(61, 15)
-        Me.Label4.TabIndex = 0
-        Me.Label4.Text = "Replace *"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label10.Location = New System.Drawing.Point(4, 28)
-        Me.Label10.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(26, 28)
-        Me.Label10.TabIndex = 1
-        Me.Label10.Text = "PT"
-        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label10, "Replace with Plain Text")
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label11.Location = New System.Drawing.Point(72, 28)
-        Me.Label11.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(27, 28)
-        Me.Label11.TabIndex = 2
-        Me.Label11.Text = "EX"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label11, "Replace with an Expression")
-        '
-        'TableLayoutPanel4
-        '
-        Me.TableLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.TableLayoutPanel4.BackColor = System.Drawing.SystemColors.Control
-        Me.TableLayoutPanel4.ColumnCount = 2
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonClearSelected, 0, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedUp, 1, 0)
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonMoveSelectedDown, 1, 1)
-        Me.TableLayoutPanel4.Controls.Add(Me.CheckBoxSelectAll, 0, 1)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(3, 5)
-        Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
-        Me.TableLayoutPanel4.RowCount = 2
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(74, 53)
-        Me.TableLayoutPanel4.TabIndex = 9
-        '
-        'ButtonClearSelected
-        '
-        Me.ButtonClearSelected.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonClearSelected.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonClearSelected.FlatAppearance.BorderColor = System.Drawing.Color.Silver
-        Me.ButtonClearSelected.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonClearSelected.ForeColor = System.Drawing.Color.Transparent
-        Me.ButtonClearSelected.Image = Global.Housekeeper.My.Resources.Resources.Cancel
-        Me.ButtonClearSelected.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonClearSelected.Name = "ButtonClearSelected"
-        Me.ButtonClearSelected.Size = New System.Drawing.Size(31, 20)
-        Me.ButtonClearSelected.TabIndex = 10
-        Me.ToolTip1.SetToolTip(Me.ButtonClearSelected, "Clear selected")
-        Me.ButtonClearSelected.UseVisualStyleBackColor = True
-        '
-        'ButtonMoveSelectedUp
-        '
-        Me.ButtonMoveSelectedUp.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonMoveSelectedUp.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonMoveSelectedUp.FlatAppearance.BorderColor = System.Drawing.Color.Silver
-        Me.ButtonMoveSelectedUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonMoveSelectedUp.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedUp.Image = Global.Housekeeper.My.Resources.Resources.up
-        Me.ButtonMoveSelectedUp.Location = New System.Drawing.Point(40, 3)
-        Me.ButtonMoveSelectedUp.Name = "ButtonMoveSelectedUp"
-        Me.ButtonMoveSelectedUp.Size = New System.Drawing.Size(31, 20)
-        Me.ButtonMoveSelectedUp.TabIndex = 11
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedUp, "Move selected up")
-        Me.ButtonMoveSelectedUp.UseVisualStyleBackColor = True
-        '
-        'ButtonMoveSelectedDown
-        '
-        Me.ButtonMoveSelectedDown.BackColor = System.Drawing.SystemColors.Control
-        Me.ButtonMoveSelectedDown.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonMoveSelectedDown.FlatAppearance.BorderColor = System.Drawing.Color.Silver
-        Me.ButtonMoveSelectedDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonMoveSelectedDown.ForeColor = System.Drawing.Color.White
-        Me.ButtonMoveSelectedDown.Image = Global.Housekeeper.My.Resources.Resources.down
-        Me.ButtonMoveSelectedDown.Location = New System.Drawing.Point(40, 29)
-        Me.ButtonMoveSelectedDown.Name = "ButtonMoveSelectedDown"
-        Me.ButtonMoveSelectedDown.Size = New System.Drawing.Size(31, 21)
-        Me.ButtonMoveSelectedDown.TabIndex = 12
-        Me.ToolTip1.SetToolTip(Me.ButtonMoveSelectedDown, "Move selected down")
-        Me.ButtonMoveSelectedDown.UseVisualStyleBackColor = True
-        '
-        'CheckBoxSelectAll
-        '
-        Me.CheckBoxSelectAll.AutoSize = True
-        Me.CheckBoxSelectAll.BackColor = System.Drawing.SystemColors.Control
-        Me.CheckBoxSelectAll.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxSelectAll.Location = New System.Drawing.Point(12, 31)
-        Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(12, 5, 3, 3)
-        Me.CheckBoxSelectAll.Name = "CheckBoxSelectAll"
-        Me.CheckBoxSelectAll.Size = New System.Drawing.Size(22, 19)
-        Me.CheckBoxSelectAll.TabIndex = 1
-        Me.CheckBoxSelectAll.UseVisualStyleBackColor = False
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel2.BackColor = System.Drawing.SystemColors.Control
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel1.SetColumnSpan(Me.TableLayoutPanel2, 3)
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label9, 2, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 1, 1)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(284, 4)
-        Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(4)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 2
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(103, 56)
-        Me.TableLayoutPanel2.TabIndex = 7
-        '
-        'Label3
-        '
-        Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label3.AutoSize = True
-        Me.TableLayoutPanel2.SetColumnSpan(Me.Label3, 3)
-        Me.Label3.Location = New System.Drawing.Point(12, 6)
-        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(79, 15)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Find search *"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(4, 28)
-        Me.Label6.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(26, 28)
-        Me.Label6.TabIndex = 1
-        Me.Label6.Text = "PT"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label6, "Search using Plain Text")
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label8.Location = New System.Drawing.Point(38, 28)
-        Me.Label8.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(26, 28)
-        Me.Label8.TabIndex = 2
-        Me.Label8.Text = "WC"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label8, "Search using a Wildcard")
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label9.Location = New System.Drawing.Point(72, 28)
-        Me.Label9.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(27, 28)
-        Me.Label9.TabIndex = 3
-        Me.Label9.Text = "RX"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.ToolTip1.SetToolTip(Me.Label9, "Search using a Regular Expression")
-        '
-        'Label2
-        '
-        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label2.AutoSize = True
-        Me.Label2.BackColor = System.Drawing.SystemColors.Control
-        Me.Label2.Location = New System.Drawing.Point(164, 44)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label2.Size = New System.Drawing.Size(87, 20)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Property name"
-        '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.BackColor = System.Drawing.SystemColors.Control
-        Me.Label1.Location = New System.Drawing.Point(84, 44)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Padding = New System.Windows.Forms.Padding(0, 0, 0, 5)
-        Me.Label1.Size = New System.Drawing.Size(71, 20)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Property set"
         '
         'ButtonOK
         '
-        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(636, 352)
+        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonOK.Location = New System.Drawing.Point(564, 327)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 25)
         Me.ButtonOK.TabIndex = 6
@@ -385,100 +77,380 @@ Partial Class FormPropertyInputEditor
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(736, 352)
+        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonCancel.Location = New System.Drawing.Point(664, 327)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 25)
         Me.ButtonCancel.TabIndex = 7
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
         '
-        'TextBoxJSON
+        'ToolStripEditProperties
         '
-        Me.TextBoxJSON.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ToolStripEditProperties.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ToolStripButtonHelp})
+        Me.ToolStripEditProperties.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStripEditProperties.Name = "ToolStripEditProperties"
+        Me.ToolStripEditProperties.Size = New System.Drawing.Size(759, 25)
+        Me.ToolStripEditProperties.TabIndex = 13
+        Me.ToolStripEditProperties.Text = "ToolStrip1"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
+        '
+        'ComboBoxSavedSettings
+        '
+        Me.ComboBoxSavedSettings.Name = "ComboBoxSavedSettings"
+        Me.ComboBoxSavedSettings.Size = New System.Drawing.Size(150, 25)
+        Me.ComboBoxSavedSettings.Sorted = True
+        Me.ComboBoxSavedSettings.ToolTipText = "Saved Searches"
+        '
+        'ButtonSaveSettings
+        '
+        Me.ButtonSaveSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonSaveSettings.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.ButtonSaveSettings.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonSaveSettings.Name = "ButtonSaveSettings"
+        Me.ButtonSaveSettings.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonSaveSettings.Text = "ToolStripButton1"
+        Me.ButtonSaveSettings.ToolTipText = "Save Search"
+        '
+        'ButtonDeleteSetting
+        '
+        Me.ButtonDeleteSetting.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonDeleteSetting.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonDeleteSetting.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonDeleteSetting.Name = "ButtonDeleteSetting"
+        Me.ButtonDeleteSetting.Size = New System.Drawing.Size(23, 22)
+        Me.ButtonDeleteSetting.Text = "ToolStripButtonDeleteSearch"
+        '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(83, 22)
+        Me.ToolStripLabel1.Text = "Saved Settings"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButtonUp
+        '
+        Me.ToolStripButtonUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonUp.Image = Global.Housekeeper.My.Resources.Resources.up
+        Me.ToolStripButtonUp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonUp.Name = "ToolStripButtonUp"
+        Me.ToolStripButtonUp.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonUp.Text = "ToolStripButton2"
+        Me.ToolStripButtonUp.ToolTipText = "Move Selected Up"
+        '
+        'ToolStripButtonDown
+        '
+        Me.ToolStripButtonDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonDown.Image = Global.Housekeeper.My.Resources.Resources.down
+        Me.ToolStripButtonDown.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonDown.Name = "ToolStripButtonDown"
+        Me.ToolStripButtonDown.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonDown.Text = "ToolStripButton3"
+        Me.ToolStripButtonDown.ToolTipText = "Move Selected Down"
+        '
+        'ToolStripButtonDeleteRow
+        '
+        Me.ToolStripButtonDeleteRow.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonDeleteRow.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ToolStripButtonDeleteRow.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonDeleteRow.Name = "ToolStripButtonDeleteRow"
+        Me.ToolStripButtonDeleteRow.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonDeleteRow.Text = "ToolStripButton4"
+        Me.ToolStripButtonDeleteRow.ToolTipText = "Delete Selected"
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(60, 22)
+        Me.ToolStripLabel2.Text = "Row Tools"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButtonExpressionEditor
+        '
+        Me.ToolStripButtonExpressionEditor.Image = Global.Housekeeper.My.Resources.Resources.fx
+        Me.ToolStripButtonExpressionEditor.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ToolStripButtonExpressionEditor.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonExpressionEditor.Name = "ToolStripButtonExpressionEditor"
+        Me.ToolStripButtonExpressionEditor.Size = New System.Drawing.Size(117, 22)
+        Me.ToolStripButtonExpressionEditor.Text = "Expression Editor"
+        Me.ToolStripButtonExpressionEditor.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 25)
+        '
+        'ToolStripButtonHelp
+        '
+        Me.ToolStripButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ToolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonHelp.Name = "ToolStripButtonHelp"
+        Me.ToolStripButtonHelp.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonHelp.Text = "ToolStripButton1"
+        Me.ToolStripButtonHelp.ToolTipText = "Help"
+        '
+        'PanelHeader
+        '
+        Me.PanelHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxJSON.Enabled = False
-        Me.TextBoxJSON.Location = New System.Drawing.Point(10, 352)
-        Me.TextBoxJSON.Name = "TextBoxJSON"
-        Me.TextBoxJSON.Size = New System.Drawing.Size(604, 21)
-        Me.TextBoxJSON.TabIndex = 8
+        Me.PanelHeader.Controls.Add(Me.ExTableLayoutPanelHeader)
+        Me.PanelHeader.Location = New System.Drawing.Point(5, 30)
+        Me.PanelHeader.Name = "PanelHeader"
+        Me.PanelHeader.Size = New System.Drawing.Size(750, 35)
+        Me.PanelHeader.TabIndex = 14
         '
-        'Label14
+        'PanelSearches
         '
-        Me.Label14.AutoSize = True
-        Me.Label14.Location = New System.Drawing.Point(10, 322)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(413, 15)
-        Me.Label14.TabIndex = 9
-        Me.Label14.Text = "* Search legend:    PT: Plain Text    WC: Wildcard    RX: Regular Expression"
+        Me.PanelSearches.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelSearches.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.PanelSearches.Controls.Add(Me.ExTableLayoutPanelSearches)
+        Me.PanelSearches.Location = New System.Drawing.Point(5, 65)
+        Me.PanelSearches.Name = "PanelSearches"
+        Me.PanelSearches.Size = New System.Drawing.Size(750, 200)
+        Me.PanelSearches.TabIndex = 15
         '
-        'ButtonNCalc
+        'PanelFooter
         '
-        Me.ButtonNCalc.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonNCalc.Image = Global.Housekeeper.My.Resources.Resources.fx
-        Me.ButtonNCalc.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.ButtonNCalc.Location = New System.Drawing.Point(697, 301)
-        Me.ButtonNCalc.Name = "ButtonNCalc"
-        Me.ButtonNCalc.Size = New System.Drawing.Size(130, 27)
-        Me.ButtonNCalc.TabIndex = 10
-        Me.ButtonNCalc.Text = "Expression editor"
-        Me.ButtonNCalc.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.ButtonNCalc.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.ButtonNCalc.UseVisualStyleBackColor = True
+        Me.PanelFooter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelFooter.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.PanelFooter.Controls.Add(Me.Label22)
+        Me.PanelFooter.Controls.Add(Me.Label21)
+        Me.PanelFooter.Controls.Add(Me.Label20)
+        Me.PanelFooter.Location = New System.Drawing.Point(5, 265)
+        Me.PanelFooter.Name = "PanelFooter"
+        Me.PanelFooter.Size = New System.Drawing.Size(750, 50)
+        Me.PanelFooter.TabIndex = 16
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(110, 25)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(440, 15)
+        Me.Label22.TabIndex = 2
+        Me.Label22.Text = "RS: Replace Search   PT: Plain Text    RX: Regular Expression    EX: Expression"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(110, 5)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(549, 15)
+        Me.Label21.TabIndex = 1
+        Me.Label21.Text = "FS: Find Search           PT: Plain Text    WC: Wildcard                       RX" &
+    ": Regular Expression    X: Delete"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(20, 5)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(65, 15)
+        Me.Label20.TabIndex = 0
+        Me.Label20.Text = "* LEGEND"
+        '
+        'ExTableLayoutPanelSearches
+        '
+        Me.ExTableLayoutPanelSearches.AutoScroll = True
+        Me.ExTableLayoutPanelSearches.ColumnCount = 1
+        Me.ExTableLayoutPanelSearches.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanelSearches.Controls.Add(Me.UcPropertyInput1, 0, 0)
+        Me.ExTableLayoutPanelSearches.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanelSearches.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanelSearches.Name = "ExTableLayoutPanelSearches"
+        Me.ExTableLayoutPanelSearches.RowCount = 2
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanelSearches.Size = New System.Drawing.Size(750, 200)
+        Me.ExTableLayoutPanelSearches.TabIndex = 11
+        Me.ExTableLayoutPanelSearches.Task = Nothing
+        '
+        'UcPropertyInput1
+        '
+        Me.UcPropertyInput1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcPropertyInput1.FindSearch = ""
+        Me.UcPropertyInput1.FindString = ""
+        Me.UcPropertyInput1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UcPropertyInput1.Location = New System.Drawing.Point(4, 4)
+        Me.UcPropertyInput1.Margin = New System.Windows.Forms.Padding(4)
+        Me.UcPropertyInput1.Name = "UcPropertyInput1"
+        Me.UcPropertyInput1.NotifyPropertyEditor = True
+        Me.UcPropertyInput1.PropertyEditor = Nothing
+        Me.UcPropertyInput1.PropertyName = ""
+        Me.UcPropertyInput1.PropertySet = ""
+        Me.UcPropertyInput1.ReplaceSearch = ""
+        Me.UcPropertyInput1.ReplaceString = ""
+        Me.UcPropertyInput1.Selected = False
+        Me.UcPropertyInput1.Size = New System.Drawing.Size(742, 27)
+        Me.UcPropertyInput1.TabIndex = 0
+        Me.UcPropertyInput1.TemplatePropertyDict = Nothing
+        Me.UcPropertyInput1.TemplatePropertyList = Nothing
+        '
+        'ExTableLayoutPanelHeader
+        '
+        Me.ExTableLayoutPanelHeader.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.ExTableLayoutPanelHeader.ColumnCount = 7
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanelHeader.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.0!))
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label13, 1, 0)
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label15, 2, 0)
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label16, 3, 0)
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label17, 4, 0)
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label18, 5, 0)
+        Me.ExTableLayoutPanelHeader.Controls.Add(Me.Label19, 6, 0)
+        Me.ExTableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanelHeader.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanelHeader.Name = "ExTableLayoutPanelHeader"
+        Me.ExTableLayoutPanelHeader.RowCount = 1
+        Me.ExTableLayoutPanelHeader.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelHeader.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelHeader.Size = New System.Drawing.Size(750, 35)
+        Me.ExTableLayoutPanelHeader.TabIndex = 12
+        Me.ExTableLayoutPanelHeader.Task = Nothing
+        '
+        'Label13
+        '
+        Me.Label13.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(38, 10)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(73, 15)
+        Me.Label13.TabIndex = 0
+        Me.Label13.Text = "Property Set"
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(138, 10)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(89, 15)
+        Me.Label15.TabIndex = 1
+        Me.Label15.Text = "Property Name"
+        '
+        'Label16
+        '
+        Me.Label16.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(288, 10)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(27, 15)
+        Me.Label16.TabIndex = 2
+        Me.Label16.Text = "FS*"
+        '
+        'Label17
+        '
+        Me.Label17.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(338, 10)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(57, 15)
+        Me.Label17.TabIndex = 3
+        Me.Label17.Text = "Find Text"
+        '
+        'Label18
+        '
+        Me.Label18.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(465, 10)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(29, 15)
+        Me.Label18.TabIndex = 4
+        Me.Label18.Text = "RS*"
+        '
+        'Label19
+        '
+        Me.Label19.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(515, 10)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(79, 15)
+        Me.Label19.TabIndex = 5
+        Me.Label19.Text = "Replace Text"
         '
         'FormPropertyInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(834, 385)
-        Me.Controls.Add(Me.ButtonNCalc)
-        Me.Controls.Add(Me.Label14)
-        Me.Controls.Add(Me.TextBoxJSON)
+        Me.ClientSize = New System.Drawing.Size(759, 361)
+        Me.Controls.Add(Me.PanelFooter)
+        Me.Controls.Add(Me.PanelSearches)
+        Me.Controls.Add(Me.PanelHeader)
+        Me.Controls.Add(Me.ToolStripEditProperties)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyInputEditor"
         Me.Text = "Property Input Editor"
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
-        Me.TableLayoutPanel3.ResumeLayout(False)
-        Me.TableLayoutPanel3.PerformLayout()
-        Me.TableLayoutPanel4.ResumeLayout(False)
-        Me.TableLayoutPanel4.PerformLayout()
-        Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.TableLayoutPanel2.PerformLayout()
+        Me.ToolStripEditProperties.ResumeLayout(False)
+        Me.ToolStripEditProperties.PerformLayout()
+        Me.PanelHeader.ResumeLayout(False)
+        Me.PanelSearches.ResumeLayout(False)
+        Me.PanelFooter.ResumeLayout(False)
+        Me.PanelFooter.PerformLayout()
+        Me.ExTableLayoutPanelSearches.ResumeLayout(False)
+        Me.ExTableLayoutPanelHeader.ResumeLayout(False)
+        Me.ExTableLayoutPanelHeader.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents Label5 As Label
-    Friend WithEvents Label7 As Label
-    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
-    Friend WithEvents Label3 As Label
-    Friend WithEvents Label6 As Label
-    Friend WithEvents Label8 As Label
-    Friend WithEvents Label9 As Label
-    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
-    Friend WithEvents Label4 As Label
-    Friend WithEvents Label10 As Label
-    Friend WithEvents Label11 As Label
-    Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
-    Friend WithEvents CheckBoxSelectAll As CheckBox
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
-    Friend WithEvents TextBoxJSON As TextBox
-    Friend WithEvents Label14 As Label
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents ButtonClearSelected As Button
-    Friend WithEvents ButtonMoveSelectedDown As Button
-    Friend WithEvents ButtonMoveSelectedUp As Button
-    Friend WithEvents ButtonNCalc As Button
-    Friend WithEvents Label12 As Label
+    Friend WithEvents ExTableLayoutPanelSearches As ExTableLayoutPanel
+    Friend WithEvents UcPropertyInput1 As UCPropertyInput
+    Friend WithEvents ExTableLayoutPanelHeader As ExTableLayoutPanel
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Label15 As Label
+    Friend WithEvents Label16 As Label
+    Friend WithEvents Label17 As Label
+    Friend WithEvents Label18 As Label
+    Friend WithEvents Label19 As Label
+    Friend WithEvents ToolStripEditProperties As ToolStrip
+    Friend WithEvents ButtonSaveSettings As ToolStripButton
+    Friend WithEvents ComboBoxSavedSettings As ToolStripComboBox
+    Friend WithEvents ToolStripButtonUp As ToolStripButton
+    Friend WithEvents ToolStripButtonDown As ToolStripButton
+    Friend WithEvents ToolStripButtonDeleteRow As ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ToolStripButtonHelp As ToolStripButton
+    Friend WithEvents ToolStripLabel1 As ToolStripLabel
+    Friend WithEvents ToolStripButtonExpressionEditor As ToolStripButton
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents PanelHeader As Panel
+    Friend WithEvents PanelSearches As Panel
+    Friend WithEvents PanelFooter As Panel
+    Friend WithEvents Label22 As Label
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Label20 As Label
+    Friend WithEvents ButtonDeleteSetting As ToolStripButton
+    Friend WithEvents ToolStripLabel2 As ToolStripLabel
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
 End Class

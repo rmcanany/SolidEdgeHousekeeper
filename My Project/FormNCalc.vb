@@ -143,10 +143,10 @@ Public Class FormNCalc
         TextEditorFormula.WordWrap = True
         TextEditorResults.WordWrap = True
 
-        Dim PU As New PreferencesUtilities
-        Dim PreferencesDirectory = PU.GetPreferencesDirectory()
+        Dim UP As New UtilsPreferences
+        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
 
-        Dim SavedExpressionsFilename = PU.GetSavedExpressionsFilename()
+        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
 
         Dim SR As IO.StreamReader = IO.File.OpenText(SavedExpressionsFilename)
         Dim SavedExpressions = SR.ReadToEnd
@@ -265,10 +265,10 @@ Public Class FormNCalc
 
         Next
 
-        Dim PU As New PreferencesUtilities
-        Dim PreferencesDirectory = PU.GetPreferencesDirectory()
+        Dim UP As New UtilsPreferences
+        Dim PreferencesDirectory = UP.GetPreferencesDirectory()
 
-        Dim SavedExpressionsFilename = PU.GetSavedExpressionsFilename()
+        Dim SavedExpressionsFilename = UP.GetSavedExpressionsFilename()
 
         IO.File.WriteAllText(SavedExpressionsFilename, tmpExpressionsText)
 
@@ -295,9 +295,9 @@ Public Class FormNCalc
 
         Next
 
-        Dim PU As New PreferencesUtilities
+        Dim UP As New UtilsPreferences
 
-        IO.File.WriteAllText(PU.GetSavedExpressionsFilename, tmpExpressionsText)
+        IO.File.WriteAllText(UP.GetSavedExpressionsFilename, tmpExpressionsText)
 
         TextEditorFormula.Clear()
         CurrentExpression = ""

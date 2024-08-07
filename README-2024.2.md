@@ -453,7 +453,7 @@ There are four search modes, `PT`, `WC`, `RX`, and `EX`.
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
 
-The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes selected rows. 
+The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes the selected row. 
 
 Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
 
@@ -469,7 +469,7 @@ In addition to plain text and pattern matching, you can also use a property form
 
 If the specified property does not exist in the file, you can optionally add it by enabling `Add any property not already in file`. Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. 
 
-To delete a property, set the Replace type to `PT` and enter the special code `%{DeleteProperty}` for the Replace string. As above, this only works for `Custom` properties. 
+To delete a property, set the Find Search to `X`. As above, this only works for `Custom` properties. 
 
 If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
 

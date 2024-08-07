@@ -156,6 +156,23 @@ Partial Class Form1
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.TabPageTemplates = New System.Windows.Forms.TabPage()
+        Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
+        Me.ButtonAssemblyTemplate = New System.Windows.Forms.Button()
+        Me.TextBoxAssemblyTemplate = New System.Windows.Forms.TextBox()
+        Me.ButtonPartTemplate = New System.Windows.Forms.Button()
+        Me.TextBoxPartTemplate = New System.Windows.Forms.TextBox()
+        Me.ButtonSheetmetalTemplate = New System.Windows.Forms.Button()
+        Me.TextBoxSheetmetalTemplate = New System.Windows.Forms.TextBox()
+        Me.ButtonDraftTemplate = New System.Windows.Forms.Button()
+        Me.TextBoxDraftTemplate = New System.Windows.Forms.TextBox()
+        Me.ButtonMaterialTable = New System.Windows.Forms.Button()
+        Me.TextBoxMaterialTable = New System.Windows.Forms.TextBox()
+        Me.LabelCustomizeTemplatePropertyDict = New System.Windows.Forms.Label()
+        Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
+        Me.ButtonCopyToTasks = New System.Windows.Forms.Button()
+        Me.LabelCopyToTasks = New System.Windows.Forms.Label()
+        Me.CheckBoxUseTemplateProperties = New System.Windows.Forms.CheckBox()
+        Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
@@ -190,23 +207,6 @@ Partial Class Form1
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
-        Me.ButtonAssemblyTemplate = New System.Windows.Forms.Button()
-        Me.TextBoxAssemblyTemplate = New System.Windows.Forms.TextBox()
-        Me.ButtonPartTemplate = New System.Windows.Forms.Button()
-        Me.TextBoxPartTemplate = New System.Windows.Forms.TextBox()
-        Me.ButtonSheetmetalTemplate = New System.Windows.Forms.Button()
-        Me.TextBoxSheetmetalTemplate = New System.Windows.Forms.TextBox()
-        Me.ButtonDraftTemplate = New System.Windows.Forms.Button()
-        Me.TextBoxDraftTemplate = New System.Windows.Forms.TextBox()
-        Me.ButtonMaterialTable = New System.Windows.Forms.Button()
-        Me.TextBoxMaterialTable = New System.Windows.Forms.TextBox()
-        Me.LabelCustomizeTemplatePropertyDict = New System.Windows.Forms.Label()
-        Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
-        Me.ButtonCopyToTasks = New System.Windows.Forms.Button()
-        Me.LabelCopyToTasks = New System.Windows.Forms.Label()
-        Me.CheckBoxUseTemplateProperties = New System.Windows.Forms.CheckBox()
-        Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -227,12 +227,12 @@ Partial Class Form1
         Me.GroupBoxStatusInA.SuspendLayout()
         Me.TabPageSorting.SuspendLayout()
         Me.TabPageTemplates.SuspendLayout()
+        Me.ExTableLayoutPanel1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.TabPageHelp.SuspendLayout()
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
-        Me.ExTableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -593,7 +593,7 @@ Partial Class Form1
         Me.TaskPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskPanel.Location = New System.Drawing.Point(3, 37)
         Me.TaskPanel.Name = "TaskPanel"
-        Me.TaskPanel.Size = New System.Drawing.Size(545, 563)
+        Me.TaskPanel.Size = New System.Drawing.Size(545, 561)
         Me.TaskPanel.TabIndex = 2
         '
         'TaskFooterPanel
@@ -601,7 +601,7 @@ Partial Class Form1
         Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSkyBlue
         Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 600)
+        Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 598)
         Me.TaskFooterPanel.Name = "TaskFooterPanel"
         Me.TaskFooterPanel.Size = New System.Drawing.Size(545, 46)
         Me.TaskFooterPanel.TabIndex = 1
@@ -1751,6 +1751,195 @@ Partial Class Form1
         Me.TabPageTemplates.Text = "Templates"
         Me.TabPageTemplates.UseVisualStyleBackColor = True
         '
+        'ExTableLayoutPanel1
+        '
+        Me.ExTableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ExTableLayoutPanel1.ColumnCount = 2
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonAssemblyTemplate, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxAssemblyTemplate, 1, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonPartTemplate, 0, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxPartTemplate, 1, 1)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSheetmetalTemplate, 0, 2)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxSheetmetalTemplate, 1, 2)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonDraftTemplate, 0, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxDraftTemplate, 1, 3)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonMaterialTable, 0, 4)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 4)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 7)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizeTemplatePropertyDict, 0, 7)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCopyToTasks, 0, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCopyToTasks, 1, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxUseTemplateProperties, 1, 6)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUseTemplateProperties, 0, 6)
+        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
+        Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
+        Me.ExTableLayoutPanel1.RowCount = 8
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(520, 256)
+        Me.ExTableLayoutPanel1.TabIndex = 0
+        Me.ExTableLayoutPanel1.Task = Nothing
+        '
+        'ButtonAssemblyTemplate
+        '
+        Me.ButtonAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonAssemblyTemplate.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonAssemblyTemplate.Name = "ButtonAssemblyTemplate"
+        Me.ButtonAssemblyTemplate.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonAssemblyTemplate.TabIndex = 0
+        Me.ButtonAssemblyTemplate.Text = "Assembly"
+        Me.ButtonAssemblyTemplate.UseVisualStyleBackColor = True
+        '
+        'TextBoxAssemblyTemplate
+        '
+        Me.TextBoxAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 3)
+        Me.TextBoxAssemblyTemplate.Name = "TextBoxAssemblyTemplate"
+        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxAssemblyTemplate.TabIndex = 1
+        '
+        'ButtonPartTemplate
+        '
+        Me.ButtonPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonPartTemplate.Location = New System.Drawing.Point(3, 33)
+        Me.ButtonPartTemplate.Name = "ButtonPartTemplate"
+        Me.ButtonPartTemplate.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonPartTemplate.TabIndex = 2
+        Me.ButtonPartTemplate.Text = "Part"
+        Me.ButtonPartTemplate.UseVisualStyleBackColor = True
+        '
+        'TextBoxPartTemplate
+        '
+        Me.TextBoxPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 33)
+        Me.TextBoxPartTemplate.Name = "TextBoxPartTemplate"
+        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxPartTemplate.TabIndex = 3
+        '
+        'ButtonSheetmetalTemplate
+        '
+        Me.ButtonSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonSheetmetalTemplate.Location = New System.Drawing.Point(3, 63)
+        Me.ButtonSheetmetalTemplate.Name = "ButtonSheetmetalTemplate"
+        Me.ButtonSheetmetalTemplate.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonSheetmetalTemplate.TabIndex = 4
+        Me.ButtonSheetmetalTemplate.Text = "Sheetmetal"
+        Me.ButtonSheetmetalTemplate.UseVisualStyleBackColor = True
+        '
+        'TextBoxSheetmetalTemplate
+        '
+        Me.TextBoxSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 63)
+        Me.TextBoxSheetmetalTemplate.Name = "TextBoxSheetmetalTemplate"
+        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxSheetmetalTemplate.TabIndex = 5
+        '
+        'ButtonDraftTemplate
+        '
+        Me.ButtonDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonDraftTemplate.Location = New System.Drawing.Point(3, 93)
+        Me.ButtonDraftTemplate.Name = "ButtonDraftTemplate"
+        Me.ButtonDraftTemplate.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonDraftTemplate.TabIndex = 6
+        Me.ButtonDraftTemplate.Text = "Draft"
+        Me.ButtonDraftTemplate.UseVisualStyleBackColor = True
+        '
+        'TextBoxDraftTemplate
+        '
+        Me.TextBoxDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 93)
+        Me.TextBoxDraftTemplate.Name = "TextBoxDraftTemplate"
+        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxDraftTemplate.TabIndex = 7
+        '
+        'ButtonMaterialTable
+        '
+        Me.ButtonMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonMaterialTable.Location = New System.Drawing.Point(3, 123)
+        Me.ButtonMaterialTable.Name = "ButtonMaterialTable"
+        Me.ButtonMaterialTable.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonMaterialTable.TabIndex = 9
+        Me.ButtonMaterialTable.Text = "Material Table"
+        Me.ButtonMaterialTable.UseVisualStyleBackColor = True
+        '
+        'TextBoxMaterialTable
+        '
+        Me.TextBoxMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 123)
+        Me.TextBoxMaterialTable.Name = "TextBoxMaterialTable"
+        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxMaterialTable.TabIndex = 10
+        '
+        'LabelCustomizeTemplatePropertyDict
+        '
+        Me.LabelCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelCustomizeTemplatePropertyDict.AutoSize = True
+        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 225)
+        Me.LabelCustomizeTemplatePropertyDict.Name = "LabelCustomizeTemplatePropertyDict"
+        Me.LabelCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(285, 16)
+        Me.LabelCustomizeTemplatePropertyDict.TabIndex = 12
+        Me.LabelCustomizeTemplatePropertyDict.Text = "Customize selection and order of template properties"
+        '
+        'ButtonCustomizeTemplatePropertyDict
+        '
+        Me.ButtonCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ButtonCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(3, 218)
+        Me.ButtonCustomizeTemplatePropertyDict.Name = "ButtonCustomizeTemplatePropertyDict"
+        Me.ButtonCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(94, 29)
+        Me.ButtonCustomizeTemplatePropertyDict.TabIndex = 11
+        Me.ButtonCustomizeTemplatePropertyDict.Text = "Customize"
+        Me.ButtonCustomizeTemplatePropertyDict.UseVisualStyleBackColor = True
+        '
+        'ButtonCopyToTasks
+        '
+        Me.ButtonCopyToTasks.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonCopyToTasks.Location = New System.Drawing.Point(3, 153)
+        Me.ButtonCopyToTasks.Name = "ButtonCopyToTasks"
+        Me.ButtonCopyToTasks.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonCopyToTasks.TabIndex = 13
+        Me.ButtonCopyToTasks.Text = "Copy"
+        Me.ButtonCopyToTasks.UseVisualStyleBackColor = True
+        '
+        'LabelCopyToTasks
+        '
+        Me.LabelCopyToTasks.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelCopyToTasks.AutoSize = True
+        Me.LabelCopyToTasks.Location = New System.Drawing.Point(103, 157)
+        Me.LabelCopyToTasks.Name = "LabelCopyToTasks"
+        Me.LabelCopyToTasks.Size = New System.Drawing.Size(252, 16)
+        Me.LabelCopyToTasks.TabIndex = 14
+        Me.LabelCopyToTasks.Text = "Copy template locations to tasks that require it"
+        '
+        'CheckBoxUseTemplateProperties
+        '
+        Me.CheckBoxUseTemplateProperties.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxUseTemplateProperties.AutoSize = True
+        Me.CheckBoxUseTemplateProperties.Location = New System.Drawing.Point(103, 185)
+        Me.CheckBoxUseTemplateProperties.Name = "CheckBoxUseTemplateProperties"
+        Me.CheckBoxUseTemplateProperties.Size = New System.Drawing.Size(252, 20)
+        Me.CheckBoxUseTemplateProperties.TabIndex = 8
+        Me.CheckBoxUseTemplateProperties.Text = "Use template properties in property dialogs"
+        Me.CheckBoxUseTemplateProperties.UseVisualStyleBackColor = True
+        '
+        'ButtonUseTemplateProperties
+        '
+        Me.ButtonUseTemplateProperties.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonUseTemplateProperties.Location = New System.Drawing.Point(3, 183)
+        Me.ButtonUseTemplateProperties.Name = "ButtonUseTemplateProperties"
+        Me.ButtonUseTemplateProperties.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonUseTemplateProperties.TabIndex = 15
+        Me.ButtonUseTemplateProperties.Text = "Update"
+        Me.ButtonUseTemplateProperties.UseVisualStyleBackColor = True
+        '
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
@@ -2076,195 +2265,6 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'ExTableLayoutPanel1
-        '
-        Me.ExTableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ExTableLayoutPanel1.ColumnCount = 2
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
-        Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonAssemblyTemplate, 0, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxAssemblyTemplate, 1, 0)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonPartTemplate, 0, 1)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxPartTemplate, 1, 1)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSheetmetalTemplate, 0, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxSheetmetalTemplate, 1, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonDraftTemplate, 0, 3)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxDraftTemplate, 1, 3)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonMaterialTable, 0, 4)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 4)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 7)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizeTemplatePropertyDict, 0, 7)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCopyToTasks, 0, 5)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCopyToTasks, 1, 5)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxUseTemplateProperties, 1, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUseTemplateProperties, 0, 6)
-        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
-        Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 8
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(520, 256)
-        Me.ExTableLayoutPanel1.TabIndex = 0
-        Me.ExTableLayoutPanel1.Task = Nothing
-        '
-        'ButtonAssemblyTemplate
-        '
-        Me.ButtonAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonAssemblyTemplate.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonAssemblyTemplate.Name = "ButtonAssemblyTemplate"
-        Me.ButtonAssemblyTemplate.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonAssemblyTemplate.TabIndex = 0
-        Me.ButtonAssemblyTemplate.Text = "Assembly"
-        Me.ButtonAssemblyTemplate.UseVisualStyleBackColor = True
-        '
-        'TextBoxAssemblyTemplate
-        '
-        Me.TextBoxAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 3)
-        Me.TextBoxAssemblyTemplate.Name = "TextBoxAssemblyTemplate"
-        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(414, 23)
-        Me.TextBoxAssemblyTemplate.TabIndex = 1
-        '
-        'ButtonPartTemplate
-        '
-        Me.ButtonPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonPartTemplate.Location = New System.Drawing.Point(3, 33)
-        Me.ButtonPartTemplate.Name = "ButtonPartTemplate"
-        Me.ButtonPartTemplate.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonPartTemplate.TabIndex = 2
-        Me.ButtonPartTemplate.Text = "Part"
-        Me.ButtonPartTemplate.UseVisualStyleBackColor = True
-        '
-        'TextBoxPartTemplate
-        '
-        Me.TextBoxPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 33)
-        Me.TextBoxPartTemplate.Name = "TextBoxPartTemplate"
-        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(414, 23)
-        Me.TextBoxPartTemplate.TabIndex = 3
-        '
-        'ButtonSheetmetalTemplate
-        '
-        Me.ButtonSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonSheetmetalTemplate.Location = New System.Drawing.Point(3, 63)
-        Me.ButtonSheetmetalTemplate.Name = "ButtonSheetmetalTemplate"
-        Me.ButtonSheetmetalTemplate.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonSheetmetalTemplate.TabIndex = 4
-        Me.ButtonSheetmetalTemplate.Text = "Sheetmetal"
-        Me.ButtonSheetmetalTemplate.UseVisualStyleBackColor = True
-        '
-        'TextBoxSheetmetalTemplate
-        '
-        Me.TextBoxSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 63)
-        Me.TextBoxSheetmetalTemplate.Name = "TextBoxSheetmetalTemplate"
-        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(414, 23)
-        Me.TextBoxSheetmetalTemplate.TabIndex = 5
-        '
-        'ButtonDraftTemplate
-        '
-        Me.ButtonDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonDraftTemplate.Location = New System.Drawing.Point(3, 93)
-        Me.ButtonDraftTemplate.Name = "ButtonDraftTemplate"
-        Me.ButtonDraftTemplate.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonDraftTemplate.TabIndex = 6
-        Me.ButtonDraftTemplate.Text = "Draft"
-        Me.ButtonDraftTemplate.UseVisualStyleBackColor = True
-        '
-        'TextBoxDraftTemplate
-        '
-        Me.TextBoxDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 93)
-        Me.TextBoxDraftTemplate.Name = "TextBoxDraftTemplate"
-        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(414, 23)
-        Me.TextBoxDraftTemplate.TabIndex = 7
-        '
-        'ButtonMaterialTable
-        '
-        Me.ButtonMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonMaterialTable.Location = New System.Drawing.Point(3, 123)
-        Me.ButtonMaterialTable.Name = "ButtonMaterialTable"
-        Me.ButtonMaterialTable.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonMaterialTable.TabIndex = 9
-        Me.ButtonMaterialTable.Text = "Material Table"
-        Me.ButtonMaterialTable.UseVisualStyleBackColor = True
-        '
-        'TextBoxMaterialTable
-        '
-        Me.TextBoxMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 123)
-        Me.TextBoxMaterialTable.Name = "TextBoxMaterialTable"
-        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(414, 23)
-        Me.TextBoxMaterialTable.TabIndex = 10
-        '
-        'LabelCustomizeTemplatePropertyDict
-        '
-        Me.LabelCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelCustomizeTemplatePropertyDict.AutoSize = True
-        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 225)
-        Me.LabelCustomizeTemplatePropertyDict.Name = "LabelCustomizeTemplatePropertyDict"
-        Me.LabelCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(285, 16)
-        Me.LabelCustomizeTemplatePropertyDict.TabIndex = 12
-        Me.LabelCustomizeTemplatePropertyDict.Text = "Customize selection and order of template properties"
-        '
-        'ButtonCustomizeTemplatePropertyDict
-        '
-        Me.ButtonCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(3, 218)
-        Me.ButtonCustomizeTemplatePropertyDict.Name = "ButtonCustomizeTemplatePropertyDict"
-        Me.ButtonCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(94, 29)
-        Me.ButtonCustomizeTemplatePropertyDict.TabIndex = 11
-        Me.ButtonCustomizeTemplatePropertyDict.Text = "Customize"
-        Me.ButtonCustomizeTemplatePropertyDict.UseVisualStyleBackColor = True
-        '
-        'ButtonCopyToTasks
-        '
-        Me.ButtonCopyToTasks.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonCopyToTasks.Location = New System.Drawing.Point(3, 153)
-        Me.ButtonCopyToTasks.Name = "ButtonCopyToTasks"
-        Me.ButtonCopyToTasks.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonCopyToTasks.TabIndex = 13
-        Me.ButtonCopyToTasks.Text = "Copy"
-        Me.ButtonCopyToTasks.UseVisualStyleBackColor = True
-        '
-        'LabelCopyToTasks
-        '
-        Me.LabelCopyToTasks.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelCopyToTasks.AutoSize = True
-        Me.LabelCopyToTasks.Location = New System.Drawing.Point(103, 157)
-        Me.LabelCopyToTasks.Name = "LabelCopyToTasks"
-        Me.LabelCopyToTasks.Size = New System.Drawing.Size(252, 16)
-        Me.LabelCopyToTasks.TabIndex = 14
-        Me.LabelCopyToTasks.Text = "Copy template locations to tasks that require it"
-        '
-        'CheckBoxUseTemplateProperties
-        '
-        Me.CheckBoxUseTemplateProperties.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxUseTemplateProperties.AutoSize = True
-        Me.CheckBoxUseTemplateProperties.Location = New System.Drawing.Point(103, 185)
-        Me.CheckBoxUseTemplateProperties.Name = "CheckBoxUseTemplateProperties"
-        Me.CheckBoxUseTemplateProperties.Size = New System.Drawing.Size(252, 20)
-        Me.CheckBoxUseTemplateProperties.TabIndex = 8
-        Me.CheckBoxUseTemplateProperties.Text = "Use template properties in property dialogs"
-        Me.CheckBoxUseTemplateProperties.UseVisualStyleBackColor = True
-        '
-        'ButtonUseTemplateProperties
-        '
-        Me.ButtonUseTemplateProperties.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonUseTemplateProperties.Location = New System.Drawing.Point(3, 183)
-        Me.ButtonUseTemplateProperties.Name = "ButtonUseTemplateProperties"
-        Me.ButtonUseTemplateProperties.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonUseTemplateProperties.TabIndex = 15
-        Me.ButtonUseTemplateProperties.Text = "Update"
-        Me.ButtonUseTemplateProperties.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
@@ -2313,6 +2313,8 @@ Partial Class Form1
         Me.TabPageSorting.ResumeLayout(False)
         Me.TabPageSorting.PerformLayout()
         Me.TabPageTemplates.ResumeLayout(False)
+        Me.ExTableLayoutPanel1.ResumeLayout(False)
+        Me.ExTableLayoutPanel1.PerformLayout()
         Me.TabPageGeneral.ResumeLayout(False)
         Me.TabPageGeneral.PerformLayout()
         Me.TabPageHelp.ResumeLayout(False)
@@ -2321,8 +2323,6 @@ Partial Class Form1
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
-        Me.ExTableLayoutPanel1.ResumeLayout(False)
-        Me.ExTableLayoutPanel1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

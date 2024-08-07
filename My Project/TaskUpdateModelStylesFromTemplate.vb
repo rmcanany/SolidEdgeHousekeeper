@@ -1338,7 +1338,7 @@ Public Class TaskUpdateModelStylesFromTemplate
     End Sub
 
 
-    Public Overrides Sub ReconcileProps()
+    Public Overrides Sub ReconcileFormWithProps()
         ControlsDict(ControlNames.AssemblyTemplate.ToString).Text = Me.AssemblyTemplate
         ControlsDict(ControlNames.PartTemplate.ToString).Text = Me.PartTemplate
         ControlsDict(ControlNames.SheetmetalTemplate.ToString).Text = Me.SheetmetalTemplate

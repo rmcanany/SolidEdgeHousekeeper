@@ -362,7 +362,7 @@ Public MustInherit Class Task
 
     End Sub
 
-    Public Overridable Sub ReconcileProps()
+    Public Overridable Sub ReconcileFormWithProps()
 
     End Sub
 

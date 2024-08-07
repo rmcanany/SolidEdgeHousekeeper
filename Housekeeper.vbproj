@@ -263,7 +263,7 @@
     <Compile Include="My Project\IsolatedTaskProxy.vb" />
     <Compile Include="My Project\MaterialDoctor.vb" />
     <Compile Include="My Project\OccurrenceGetter.vb" />
-    <Compile Include="My Project\PreferencesUtilities.vb" />
+    <Compile Include="My Project\UtilsPreferences.vb" />
     <Compile Include="My Project\PrinterDoctor.vb" />
     <Compile Include="My Project\PropertyFilter.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -314,6 +314,12 @@
     <Compile Include="My Project\TaskUpdatePhysicalProperties.vb" />
     <Compile Include="My Project\Task_Common.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
+    <Compile Include="My Project\UCPropertyInput.Designer.vb">
+      <DependentUpon>UCPropertyInput.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\UCPropertyInput.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="My Project\UCTaskControl.Designer.vb">
       <DependentUpon>UCTaskControl.vb</DependentUpon>
     </Compile>
@@ -369,6 +375,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\UCPropertyInput.resx">
+      <DependentUpon>UCPropertyInput.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\UCTaskControl.resx">
       <DependentUpon>UCTaskControl.vb</DependentUpon>

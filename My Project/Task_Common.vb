@@ -78,9 +78,9 @@ Public Class Task_Common
 
         Dim DocType As String = GetDocType(SEDoc)
 
-        Dim PU As New PreferencesUtilities
+        Dim UP As New UtilsPreferences
 
-        Dim PreferencesDir As String = PU.GetPreferencesDirectory()
+        Dim PreferencesDir As String = UP.GetPreferencesDirectory()
         Dim OutFilename As String = String.Format("{0}/PropDict_{1}.txt", PreferencesDir, DocType)
         Dim OutList As New List(Of String)
 

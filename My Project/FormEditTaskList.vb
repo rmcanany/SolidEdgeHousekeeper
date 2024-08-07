@@ -24,9 +24,9 @@ Public Class FormEditTaskList
             Me.TaskList.Add(Task)
         Next
 
-        Dim PU As New PreferencesUtilities()
+        Dim UP As New UtilsPreferences()
         Me.AvailableTasks = New List(Of Task)
-        Me.AvailableTasks = PU.BuildTaskListFromScratch()
+        Me.AvailableTasks = UP.BuildTaskListFromScratch()
 
 
     End Sub
@@ -335,7 +335,7 @@ Public Class FormEditTaskList
         Dim i As Integer
         Dim TaskDescription As String
 
-        Dim PU As New PreferencesUtilities
+        Dim UP As New UtilsPreferences
 
         If DataGridViewSource.SelectedRows.Count = 0 Then
             s = String.Format("{0}{1}{2}", s, "No rows are selected.  Click in the column to the left ", vbCrLf)
@@ -358,7 +358,7 @@ Public Class FormEditTaskList
         For Each Task As Task In Me.AvailableTasks
             If SelectedRowIndices.Contains(i) Then
                 TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
-                tmpTaskList.Add(PU.GetNewTaskInstance(AvailableTasks, Task.Name, TaskDescription))
+                tmpTaskList.Add(UP.GetNewTaskInstance(AvailableTasks, Task.Name, TaskDescription))
             End If
             i += 1
         Next

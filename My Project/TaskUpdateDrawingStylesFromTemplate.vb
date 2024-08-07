@@ -564,7 +564,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     End Sub
 
 
-    Public Overrides Sub ReconcileProps()
+    Public Overrides Sub ReconcileFormWithProps()
         ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
     End Sub
 

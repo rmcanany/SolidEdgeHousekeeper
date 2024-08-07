@@ -3,7 +3,7 @@
 Imports Newtonsoft.Json
 
 
-Public Class PreferencesUtilities
+Public Class UtilsPreferences
 
     Public Function GetStartupDirectory() As String
         Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
@@ -194,6 +194,49 @@ Public Class PreferencesUtilities
 
         Return TemplatePropertyDict
     End Function
+
+
+    Public Function GetEditPropertiesSavedSettingsFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\edit_properties_saved_settings.json", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveEditPropertiesSavedSettings(
+        EditPropertiesSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
+
+        Dim JSONString As String
+        Dim Filename = GetEditPropertiesSavedSettingsFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(EditPropertiesSavedSettingsDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetEditPropertiesSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim EditPropertiesSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim JSONString As String
+        Dim Filename = GetEditPropertiesSavedSettingsFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            EditPropertiesSavedSettingsDict = JsonConvert.DeserializeObject(
+                Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
+        End If
+
+        Return EditPropertiesSavedSettingsDict
+    End Function
+
+
 
 
     Public Function GetTemplatePropertyListFilename(CheckExisting As Boolean) As String

@@ -10,7 +10,7 @@ Imports System.Text.RegularExpressions
 Public Class TaskEditProperties
     Inherits Task
 
-    Public Property JSONDict As String
+    Public Property JSONString As String
     Public Property AutoAddMissingProperty As Boolean
     Public Property AutoUpdateMaterial As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
@@ -18,7 +18,7 @@ Public Class TaskEditProperties
 
     Enum ControlNames
         Edit
-        JSONDict
+        JSONString
         AutoAddMissingProperty
         AutoUpdateMaterial
         Browse
@@ -51,13 +51,13 @@ Public Class TaskEditProperties
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.JSONDict = ""
+        Me.JSONString = ""
         Me.AutoAddMissingProperty = False
         Me.AutoUpdateMaterial = False
         Me.RemoveFaceStyleOverrides = False
         Me.StructuredStorageEdit = False
         'Me.SolidEdgeRequired = False
-        Me.SolidEdgeRequired = True
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
     End Sub
 
@@ -130,7 +130,7 @@ Public Class TaskEditProperties
 
         Dim TC As New Task_Common
 
-        PropertiesToEdit = Me.JSONDict
+        PropertiesToEdit = Me.JSONString
 
         Dim DocType As String = TC.GetDocType(SEDoc)
 
@@ -138,19 +138,15 @@ Public Class TaskEditProperties
 
         If Not PropertiesToEdit = "" Then
 
-            'PropertiesToEditDict format
-            '{"1":{
-            '    "PropertySet":"System",
-            '    "PropertyName":"Material",
-            '    "Find_PT":"True",
-            '    "Find_WC":"False",
-            '    "Find_RX":"False",
-            '    "FindString":"Aluminum",
-            '    "Replace_PT":"True",
-            '    "Replace_RX":"False",
-            '    "ReplaceString":"Aluminum 6061-T6"},
-            '{"2":{
-            ' ...
+            '{"0":
+            '    {"PropertySet":"Custom",
+            '     "PropertyName":"hmk_Part_Number",
+            '     "FindSearch":"PT",
+            '     "FindString":"a",
+            '     "ReplaceSearch":"PT",
+            '     "ReplaceString":"b"},
+            ' "1":
+            '...
             '}
 
             PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
@@ -237,7 +233,7 @@ Public Class TaskEditProperties
 
         Dim TC As New Task_Common
 
-        PropertiesToEdit = Me.JSONDict
+        PropertiesToEdit = Me.JSONString
 
         If Not PropertiesToEdit = "" Then
             PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
@@ -260,24 +256,26 @@ Public Class TaskEditProperties
 
             PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
             PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
             FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
             ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-            If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
-                FindSearchType = "PT"
-            ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
+            'If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
+            '    FindSearchType = "PT"
+            'ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
+            '    FindSearchType = "WC"
+            'Else
+            '    FindSearchType = "RX"
+            'End If
 
-            If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
-                ReplaceSearchType = "PT"
-            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
-                ReplaceSearchType = "RX"
-            Else
-                ReplaceSearchType = "EX"
-            End If
+            'If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
+            '    ReplaceSearchType = "PT"
+            'ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
+            '    ReplaceSearchType = "RX"
+            'Else
+            '    ReplaceSearchType = "EX"
+            'End If
 
             If Proceed Then
                 Try
@@ -413,17 +411,11 @@ Public Class TaskEditProperties
             If Proceed Then
 
                 Try
-
-                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< @Francesco
-                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< Pretty sure we don't want the check for "Custom"
-                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< It doesn't match what you added for the EditInSolidEdge case
-                    ' <<<<<<<<<<<<<<<<<<<<<<<<<<< Also, it will trigger a formula substitution which almost certainly won't find 'DeleteProperty'
-
                     '############ delete the property here
                     'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
                     '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
                     'End If
-                    If ReplaceString.ToLower = "%{DeleteProperty}".ToLower Then
+                    If FindSearchType = "X" Then
                         co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
                     End If
 
@@ -508,26 +500,28 @@ Public Class TaskEditProperties
 
             PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
             PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
             FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
             ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-            ' ####################### Get search types #######################
+            '' ####################### Get search types #######################
 
-            If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
-                FindSearchType = "PT"
-            ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
-                FindSearchType = "WC"
-            Else
-                FindSearchType = "RX"
-            End If
+            'If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
+            '    FindSearchType = "PT"
+            'ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
+            '    FindSearchType = "WC"
+            'Else
+            '    FindSearchType = "RX"
+            'End If
 
-            If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
-                ReplaceSearchType = "PT"
-            ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
-                ReplaceSearchType = "RX"
-            Else
-                ReplaceSearchType = "EX"
-            End If
+            'If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
+            '    ReplaceSearchType = "PT"
+            'ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
+            '    ReplaceSearchType = "RX"
+            'Else
+            '    ReplaceSearchType = "EX"
+            'End If
 
             ' ####################### Do formula substitution #######################
 
@@ -609,7 +603,7 @@ Public Class TaskEditProperties
             If Proceed Then
                 Try
 
-                    If ReplaceString = "%{DeleteProperty}" Then
+                    If FindSearchType = "X" Then
                         Prop.Delete()
                     End If
 
@@ -703,7 +697,7 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.JSONString.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -791,7 +785,7 @@ Public Class TaskEditProperties
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
-            If (Me.JSONDict = "") Or (Me.JSONDict = "{}") Then
+            If (Me.JSONString = "") Or (Me.JSONString = "{}") Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -839,16 +833,17 @@ Public Class TaskEditProperties
 
         Select Case Name
             Case ControlNames.Edit.ToString '"Edit"
-                Dim PropertyInputEditor As New FormPropertyInputEditor
+                Dim FPIE As New FormPropertyInputEditor
 
-                PropertyInputEditor.JSONDict = Me.JSONDict
+                FPIE.JSONString = Me.JSONString
+                FPIE.HelpURL = Me.HelpURL
 
-                PropertyInputEditor.ShowDialog()
+                FPIE.ShowDialog()
 
-                If PropertyInputEditor.DialogResult = DialogResult.OK Then
+                If FPIE.DialogResult = DialogResult.OK Then
                     ' Me.JSONDict is updated when the TextBox changes.
-                    TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
-                    TextBox.Text = PropertyInputEditor.JSONDict
+                    TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
+                    TextBox.Text = FPIE.JSONString
                 End If
 
             Case ControlNames.Browse.ToString
@@ -915,8 +910,8 @@ Public Class TaskEditProperties
         Dim Name = TextBox.Name
 
         Select Case Name
-            Case ControlNames.JSONDict.ToString
-                Me.JSONDict = TextBox.Text
+            Case ControlNames.JSONString.ToString
+                Me.JSONString = TextBox.Text
 
             Case ControlNames.MaterialTable.ToString
                 Me.MaterialTable = TextBox.Text
@@ -928,7 +923,7 @@ Public Class TaskEditProperties
     End Sub
 
 
-    Public Overrides Sub ReconcileProps()
+    Public Overrides Sub ReconcileFormWithProps()
         ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
     End Sub
 
@@ -958,7 +953,7 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
         HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
         HelpString += "at the top of the form.  Only one row can be moved at a time. "
-        HelpString += "The delete button, also at the top of the form, removes selected rows. "
+        HelpString += "The delete button, also at the top of the form, removes the selected row. "
 
         HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
         HelpString += "is a representation of the table settings in `JSON` format. "
@@ -985,8 +980,7 @@ Public Class TaskEditProperties
         HelpString += "Note, this only works for `Custom` properties.  Adding `System` properties is not allowed. "
 
         HelpString += vbCrLf + vbCrLf + "To delete a property, "
-        HelpString += "set the Replace type to `PT` and "
-        HelpString += "enter the special code `%{DeleteProperty}` for the Replace string. "
+        HelpString += "set the Find Search to `X`. "
         HelpString += "As above, this only works for `Custom` properties. "
 
         HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, you can "

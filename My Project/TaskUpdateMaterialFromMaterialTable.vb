@@ -249,7 +249,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Sub
 
 
-    Public Overrides Sub ReconcileProps()
+    Public Overrides Sub ReconcileFormWithProps()
         ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
     End Sub
 

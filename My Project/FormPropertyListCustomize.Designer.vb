@@ -212,6 +212,7 @@ Partial Class FormPropertyListCustomize
         '
         'CheckBoxSortSourceList
         '
+        Me.CheckBoxSortSourceList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSortSourceList.AutoSize = True
         Me.CheckBoxSortSourceList.Location = New System.Drawing.Point(18, 324)
         Me.CheckBoxSortSourceList.Name = "CheckBoxSortSourceList"

@@ -88,10 +88,10 @@ Public Class Form1
         ReconcileFormChanges()
         SaveDefaults()
 
-        Dim PU As New PreferencesUtilities
-        PU.SaveTaskList(Me.TaskList)
-        PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-        PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
+        Dim UP As New UtilsPreferences
+        UP.SaveTaskList(Me.TaskList)
+        UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+        UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
 
         ErrorMessage = CheckStartConditions()
 
@@ -632,12 +632,12 @@ Public Class Form1
 
     Private Sub Startup()
 
-        Dim PU As New PreferencesUtilities()
+        Dim UP As New UtilsPreferences()
 
-        PU.CreatePreferencesDirectory()
-        PU.CreateFilenameCharmap()
-        PU.CreateSavedExpressions()
-        PU.CreateInteractiveEditCommands()
+        UP.CreatePreferencesDirectory()
+        UP.CreateFilenameCharmap()
+        UP.CreateSavedExpressions()
+        UP.CreateInteractiveEditCommands()
 
         PopulateCheckedListBoxes()
         LoadDefaults()
@@ -700,7 +700,7 @@ Public Class Form1
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
 
-        Me.TaskList = PU.GetTaskList
+        Me.TaskList = UP.GetTaskList
 
         Dim tmpTaskPanel As Panel = Nothing
 
@@ -716,8 +716,8 @@ Public Class Form1
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
-        Me.TemplatePropertyDict = PU.GetTemplatePropertyDict()
-        Me.TemplatePropertyList = PU.GetTemplatePropertyList
+        Me.TemplatePropertyDict = UP.GetTemplatePropertyDict()
+        Me.TemplatePropertyList = UP.GetTemplatePropertyList
 
     End Sub
 
@@ -789,10 +789,10 @@ Public Class Form1
             ReconcileFormChanges()
             SaveDefaults()
 
-            Dim PU As New PreferencesUtilities
-            PU.SaveTaskList(Me.TaskList)
-            PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-            PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
+            Dim UP As New UtilsPreferences
+            UP.SaveTaskList(Me.TaskList)
+            UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+            UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
             End
         End If
     End Sub
@@ -801,10 +801,10 @@ Public Class Form1
         ReconcileFormChanges()
         SaveDefaults()
 
-        Dim PU As New PreferencesUtilities
-        PU.SaveTaskList(Me.TaskList)
-        PU.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-        PU.SaveTemplatePropertyList(Me.TemplatePropertyList)
+        Dim UP As New UtilsPreferences
+        UP.SaveTaskList(Me.TaskList)
+        UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+        UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
         End
     End Sub
 
@@ -2086,7 +2086,7 @@ Public Class Form1
                 Task.MaterialTable = Me.MaterialTable
             End If
 
-            Task.ReconcileProps()
+            Task.ReconcileFormWithProps()
         Next
     End Sub
 
@@ -2108,6 +2108,10 @@ Public Class Form1
         '    "EnglishName":"Subject"},
         ' ...
         '}
+
+        Me.Cursor = Cursors.WaitCursor
+
+
 
         Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
 
@@ -2189,6 +2193,8 @@ Public Class Form1
                 MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, TemplatePropertyDict(Key)("EnglishName")))
             End If
         Next
+
+        Me.Cursor = Cursors.Default
 
     End Sub
 
@@ -2283,6 +2289,9 @@ Public Class Form1
     '        Return cp
     '    End Get
     'End Property
+
+    'Me.Cursor = Cursors.WaitCursor
+    'Me.Cursor = Cursors.Default
 
 
 
