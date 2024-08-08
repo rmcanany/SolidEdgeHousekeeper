@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class UCPropertyInput
+Partial Class UCEditProperties
     Inherits System.Windows.Forms.UserControl
 
     'UserControl overrides dispose to clean up the component list.
@@ -133,14 +133,14 @@ Partial Class UCPropertyInput
         Me.TextBoxReplaceString.Size = New System.Drawing.Size(190, 23)
         Me.TextBoxReplaceString.TabIndex = 6
         '
-        'UCPropertyInput
+        'UCEditProperties
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
-        Me.Name = "UCPropertyInput"
+        Me.Name = "UCEditProperties"
         Me.Size = New System.Drawing.Size(700, 30)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()

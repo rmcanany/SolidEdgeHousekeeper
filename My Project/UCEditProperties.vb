@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Public Class UCPropertyInput
+Public Class UCEditProperties
 
     Public Property PropertyEditor As FormPropertyInputEditor
     Public Property Selected As Boolean

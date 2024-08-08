@@ -237,6 +237,48 @@ Public Class UtilsPreferences
     End Function
 
 
+    Public Function GetEditVariablesSavedSettingsFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\edit_variables_saved_settings.json", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveEditVariablesSavedSettings(
+        EditVariablesSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
+
+        Dim JSONString As String
+        Dim Filename = GetEditVariablesSavedSettingsFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(EditVariablesSavedSettingsDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetEditVariablesSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim EditVariablesSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim JSONString As String
+        Dim Filename = GetEditVariablesSavedSettingsFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            EditVariablesSavedSettingsDict = JsonConvert.DeserializeObject(
+                Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
+        End If
+
+        Return EditVariablesSavedSettingsDict
+    End Function
+
+
+
 
 
     Public Function GetTemplatePropertyListFilename(CheckExisting As Boolean) As String

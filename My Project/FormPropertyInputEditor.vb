@@ -20,11 +20,11 @@ Public Class FormPropertyInputEditor
     '...
     '}
 
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property TemplatePropertyList As List(Of String)
-    Public Property UCList As List(Of UCPropertyInput)
+    Public Property UCList As List(Of UCEditProperties)
     Public Property HelpURL As String
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property TemplatePropertyList As List(Of String)
 
 
     Dim t As Timer = New Timer()
@@ -37,7 +37,7 @@ Public Class FormPropertyInputEditor
         ' Add any initialization after the InitializeComponent() call.
         Me.TemplatePropertyDict = Form1.TemplatePropertyDict
         Me.TemplatePropertyList = Form1.TemplatePropertyList
-        Me.UCList = New List(Of UCPropertyInput)
+        Me.UCList = New List(Of UCEditProperties)
 
     End Sub
 
@@ -47,7 +47,7 @@ Public Class FormPropertyInputEditor
         Dim s As String = ""
         Dim indent As String = "    "
 
-        For Each UC As UCPropertyInput In UCList
+        For Each UC As UCEditProperties In UCList
 
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
@@ -80,7 +80,7 @@ Public Class FormPropertyInputEditor
 
         Dim i = 0
 
-        For Each UC As UCPropertyInput In UCList
+        For Each UC As UCEditProperties In UCList
             If Not UC.PropertyName = "" Then
                 Dim d = New Dictionary(Of String, String)
                 d("PropertySet") = UC.PropertySet
@@ -100,12 +100,12 @@ Public Class FormPropertyInputEditor
     End Function
 
     Public Sub PopulateUCList(JSONDict As Dictionary(Of String, Dictionary(Of String, String)))
-        Dim NewUC As UCPropertyInput
+        Dim NewUC As UCEditProperties
 
         Me.UCList.Clear()
 
         For Each Key As String In JSONDict.Keys
-            NewUC = New UCPropertyInput(Me)
+            NewUC = New UCEditProperties(Me)
             NewUC.PropertySet = JSONDict(Key)("PropertySet")
             NewUC.PropertyName = JSONDict(Key)("PropertyName")
             NewUC.FindSearch = JSONDict(Key)("FindSearch")
@@ -148,7 +148,7 @@ Public Class FormPropertyInputEditor
 
         Dim NeedANewRow As Boolean = True
 
-        For Each UC As UCPropertyInput In UCList
+        For Each UC As UCEditProperties In UCList
             ExTableLayoutPanelSearches.RowCount += 1
             ExTableLayoutPanelSearches.RowStyles.Add(New RowStyle(SizeType.Absolute, 35))
             ExTableLayoutPanelSearches.Controls.Add(UC)
@@ -164,7 +164,7 @@ Public Class FormPropertyInputEditor
     End Sub
 
     Public Sub AddRow()
-        Dim NewUC As New UCPropertyInput(Me)
+        Dim NewUC As New UCEditProperties(Me)
         NewUC.Dock = DockStyle.Fill
         Me.UCList.Add(NewUC)
 
@@ -176,7 +176,7 @@ Public Class FormPropertyInputEditor
 
     Private Sub MoveRow(Direction As String)
         Dim SelectedRow As Integer = GetSelectedRow()
-        Dim tmpUCList As New List(Of UCPropertyInput)
+        Dim tmpUCList As New List(Of UCEditProperties)
         Dim tf As Boolean
 
         tf = Direction.ToLower = "up"
@@ -191,7 +191,7 @@ Public Class FormPropertyInputEditor
 
         'Can't move down from the bottom
         Dim Bottom = UCList.Count - 1
-        tf = tf Or ((SelectedRow = Bottom) And (Direction = "down"))
+        tf = tf Or ((SelectedRow >= Bottom) And (Direction = "down"))
 
         If Not tf Then
             For i As Integer = 0 To Me.UCList.Count - 1
@@ -230,11 +230,26 @@ Public Class FormPropertyInputEditor
 
     End Sub
 
-    Public Sub UCChanged(ChangedUC As UCPropertyInput)
+    Private Function GetSelectedRow() As Integer
+        Dim SelectedRow As Integer = -1
+
+        Dim i = 0
+        For Each UC As UCEditProperties In UCList
+            If UC.Selected Then
+                If UC.Selected Then SelectedRow = i
+                Exit For
+            End If
+            i += 1
+        Next
+
+        Return SelectedRow
+    End Function
+
+    Public Sub UCChanged(ChangedUC As UCEditProperties)
 
         Dim NeedANewRow As Boolean = True
 
-        For Each UC As UCPropertyInput In UCList
+        For Each UC As UCEditProperties In UCList
             If ChangedUC.Selected Then
                 If UC IsNot ChangedUC Then
                     UC.CheckBoxSelect.Checked = False
@@ -250,21 +265,6 @@ Public Class FormPropertyInputEditor
         End If
 
     End Sub
-
-    Private Function GetSelectedRow() As Integer
-        Dim SelectedRow As Integer = -1
-
-        Dim i = 0
-        For Each UC As UCPropertyInput In UCList
-            If UC.Selected Then
-                If UC.Selected Then SelectedRow = i
-                Exit For
-            End If
-            i += 1
-        Next
-
-        Return SelectedRow
-    End Function
 
 
     Private Sub FormPropertyInputEditor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -365,7 +365,7 @@ Public Class FormPropertyInputEditor
 
     Private Sub ToolStripButtonDeleteRow_Click(sender As Object, e As EventArgs) Handles ToolStripButtonDeleteRow.Click
         Dim SelectedRow = GetSelectedRow()
-        Dim tmpUCList As New List(Of UCPropertyInput)
+        Dim tmpUCList As New List(Of UCEditProperties)
 
         If SelectedRow = -1 Then
             MsgBox("No row is selected.  Select one by enabling its checkbox.")

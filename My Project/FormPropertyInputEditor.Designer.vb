@@ -43,13 +43,6 @@ Partial Class FormPropertyInputEditor
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
-        Me.PanelSearches = New System.Windows.Forms.Panel()
-        Me.PanelFooter = New System.Windows.Forms.Panel()
-        Me.Label22 = New System.Windows.Forms.Label()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.ExTableLayoutPanelSearches = New Housekeeper.ExTableLayoutPanel()
-        Me.UcPropertyInput1 = New Housekeeper.UCPropertyInput()
         Me.ExTableLayoutPanelHeader = New Housekeeper.ExTableLayoutPanel()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
@@ -57,12 +50,19 @@ Partial Class FormPropertyInputEditor
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
+        Me.PanelSearches = New System.Windows.Forms.Panel()
+        Me.ExTableLayoutPanelSearches = New Housekeeper.ExTableLayoutPanel()
+        Me.UcPropertyInput1 = New Housekeeper.UCEditProperties()
+        Me.PanelFooter = New System.Windows.Forms.Panel()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
         Me.ToolStripEditProperties.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
-        Me.PanelSearches.SuspendLayout()
-        Me.PanelFooter.SuspendLayout()
-        Me.ExTableLayoutPanelSearches.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
+        Me.PanelSearches.SuspendLayout()
+        Me.ExTableLayoutPanelSearches.SuspendLayout()
+        Me.PanelFooter.SuspendLayout()
         Me.SuspendLayout()
         '
         'ButtonOK
@@ -213,97 +213,6 @@ Partial Class FormPropertyInputEditor
         Me.PanelHeader.Size = New System.Drawing.Size(750, 35)
         Me.PanelHeader.TabIndex = 14
         '
-        'PanelSearches
-        '
-        Me.PanelSearches.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelSearches.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.PanelSearches.Controls.Add(Me.ExTableLayoutPanelSearches)
-        Me.PanelSearches.Location = New System.Drawing.Point(5, 65)
-        Me.PanelSearches.Name = "PanelSearches"
-        Me.PanelSearches.Size = New System.Drawing.Size(750, 200)
-        Me.PanelSearches.TabIndex = 15
-        '
-        'PanelFooter
-        '
-        Me.PanelFooter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelFooter.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.PanelFooter.Controls.Add(Me.Label22)
-        Me.PanelFooter.Controls.Add(Me.Label21)
-        Me.PanelFooter.Controls.Add(Me.Label20)
-        Me.PanelFooter.Location = New System.Drawing.Point(5, 265)
-        Me.PanelFooter.Name = "PanelFooter"
-        Me.PanelFooter.Size = New System.Drawing.Size(750, 50)
-        Me.PanelFooter.TabIndex = 16
-        '
-        'Label22
-        '
-        Me.Label22.AutoSize = True
-        Me.Label22.Location = New System.Drawing.Point(110, 25)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(440, 15)
-        Me.Label22.TabIndex = 2
-        Me.Label22.Text = "RS: Replace Search   PT: Plain Text    RX: Regular Expression    EX: Expression"
-        '
-        'Label21
-        '
-        Me.Label21.AutoSize = True
-        Me.Label21.Location = New System.Drawing.Point(110, 5)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(549, 15)
-        Me.Label21.TabIndex = 1
-        Me.Label21.Text = "FS: Find Search           PT: Plain Text    WC: Wildcard                       RX" &
-    ": Regular Expression    X: Delete"
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(20, 5)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(65, 15)
-        Me.Label20.TabIndex = 0
-        Me.Label20.Text = "* LEGEND"
-        '
-        'ExTableLayoutPanelSearches
-        '
-        Me.ExTableLayoutPanelSearches.AutoScroll = True
-        Me.ExTableLayoutPanelSearches.ColumnCount = 1
-        Me.ExTableLayoutPanelSearches.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanelSearches.Controls.Add(Me.UcPropertyInput1, 0, 0)
-        Me.ExTableLayoutPanelSearches.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanelSearches.Location = New System.Drawing.Point(0, 0)
-        Me.ExTableLayoutPanelSearches.Name = "ExTableLayoutPanelSearches"
-        Me.ExTableLayoutPanelSearches.RowCount = 2
-        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanelSearches.Size = New System.Drawing.Size(750, 200)
-        Me.ExTableLayoutPanelSearches.TabIndex = 11
-        Me.ExTableLayoutPanelSearches.Task = Nothing
-        '
-        'UcPropertyInput1
-        '
-        Me.UcPropertyInput1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcPropertyInput1.FindSearch = ""
-        Me.UcPropertyInput1.FindString = ""
-        Me.UcPropertyInput1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UcPropertyInput1.Location = New System.Drawing.Point(4, 4)
-        Me.UcPropertyInput1.Margin = New System.Windows.Forms.Padding(4)
-        Me.UcPropertyInput1.Name = "UcPropertyInput1"
-        Me.UcPropertyInput1.NotifyPropertyEditor = True
-        Me.UcPropertyInput1.PropertyEditor = Nothing
-        Me.UcPropertyInput1.PropertyName = ""
-        Me.UcPropertyInput1.PropertySet = ""
-        Me.UcPropertyInput1.ReplaceSearch = ""
-        Me.UcPropertyInput1.ReplaceString = ""
-        Me.UcPropertyInput1.Selected = False
-        Me.UcPropertyInput1.Size = New System.Drawing.Size(742, 27)
-        Me.UcPropertyInput1.TabIndex = 0
-        Me.UcPropertyInput1.TemplatePropertyDict = Nothing
-        Me.UcPropertyInput1.TemplatePropertyList = Nothing
-        '
         'ExTableLayoutPanelHeader
         '
         Me.ExTableLayoutPanelHeader.BackColor = System.Drawing.Color.LightSteelBlue
@@ -391,6 +300,97 @@ Partial Class FormPropertyInputEditor
         Me.Label19.TabIndex = 5
         Me.Label19.Text = "Replace Text"
         '
+        'PanelSearches
+        '
+        Me.PanelSearches.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelSearches.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.PanelSearches.Controls.Add(Me.ExTableLayoutPanelSearches)
+        Me.PanelSearches.Location = New System.Drawing.Point(5, 65)
+        Me.PanelSearches.Name = "PanelSearches"
+        Me.PanelSearches.Size = New System.Drawing.Size(750, 200)
+        Me.PanelSearches.TabIndex = 15
+        '
+        'ExTableLayoutPanelSearches
+        '
+        Me.ExTableLayoutPanelSearches.AutoScroll = True
+        Me.ExTableLayoutPanelSearches.ColumnCount = 1
+        Me.ExTableLayoutPanelSearches.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanelSearches.Controls.Add(Me.UcPropertyInput1, 0, 0)
+        Me.ExTableLayoutPanelSearches.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanelSearches.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanelSearches.Name = "ExTableLayoutPanelSearches"
+        Me.ExTableLayoutPanelSearches.RowCount = 2
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelSearches.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanelSearches.Size = New System.Drawing.Size(750, 200)
+        Me.ExTableLayoutPanelSearches.TabIndex = 11
+        Me.ExTableLayoutPanelSearches.Task = Nothing
+        '
+        'UcPropertyInput1
+        '
+        Me.UcPropertyInput1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcPropertyInput1.FindSearch = ""
+        Me.UcPropertyInput1.FindString = ""
+        Me.UcPropertyInput1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UcPropertyInput1.Location = New System.Drawing.Point(4, 4)
+        Me.UcPropertyInput1.Margin = New System.Windows.Forms.Padding(4)
+        Me.UcPropertyInput1.Name = "UcPropertyInput1"
+        Me.UcPropertyInput1.NotifyPropertyEditor = True
+        Me.UcPropertyInput1.PropertyEditor = Nothing
+        Me.UcPropertyInput1.PropertyName = ""
+        Me.UcPropertyInput1.PropertySet = ""
+        Me.UcPropertyInput1.ReplaceSearch = ""
+        Me.UcPropertyInput1.ReplaceString = ""
+        Me.UcPropertyInput1.Selected = False
+        Me.UcPropertyInput1.Size = New System.Drawing.Size(742, 27)
+        Me.UcPropertyInput1.TabIndex = 0
+        Me.UcPropertyInput1.TemplatePropertyDict = Nothing
+        Me.UcPropertyInput1.TemplatePropertyList = Nothing
+        '
+        'PanelFooter
+        '
+        Me.PanelFooter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelFooter.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.PanelFooter.Controls.Add(Me.Label22)
+        Me.PanelFooter.Controls.Add(Me.Label21)
+        Me.PanelFooter.Controls.Add(Me.Label20)
+        Me.PanelFooter.Location = New System.Drawing.Point(5, 265)
+        Me.PanelFooter.Name = "PanelFooter"
+        Me.PanelFooter.Size = New System.Drawing.Size(750, 50)
+        Me.PanelFooter.TabIndex = 16
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = True
+        Me.Label22.Location = New System.Drawing.Point(110, 25)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(440, 15)
+        Me.Label22.TabIndex = 2
+        Me.Label22.Text = "RS: Replace Search   PT: Plain Text    RX: Regular Expression    EX: Expression"
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.Location = New System.Drawing.Point(110, 5)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(549, 15)
+        Me.Label21.TabIndex = 1
+        Me.Label21.Text = "FS: Find Search           PT: Plain Text    WC: Wildcard                       RX" &
+    ": Regular Expression    X: Delete"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(20, 5)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(65, 15)
+        Me.Label20.TabIndex = 0
+        Me.Label20.Text = "* LEGEND"
+        '
         'FormPropertyInputEditor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -410,12 +410,12 @@ Partial Class FormPropertyInputEditor
         Me.ToolStripEditProperties.ResumeLayout(False)
         Me.ToolStripEditProperties.PerformLayout()
         Me.PanelHeader.ResumeLayout(False)
-        Me.PanelSearches.ResumeLayout(False)
-        Me.PanelFooter.ResumeLayout(False)
-        Me.PanelFooter.PerformLayout()
-        Me.ExTableLayoutPanelSearches.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.PerformLayout()
+        Me.PanelSearches.ResumeLayout(False)
+        Me.ExTableLayoutPanelSearches.ResumeLayout(False)
+        Me.PanelFooter.ResumeLayout(False)
+        Me.PanelFooter.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -424,7 +424,7 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ExTableLayoutPanelSearches As ExTableLayoutPanel
-    Friend WithEvents UcPropertyInput1 As UCPropertyInput
+    Friend WithEvents UcPropertyInput1 As UCEditProperties
     Friend WithEvents ExTableLayoutPanelHeader As ExTableLayoutPanel
     Friend WithEvents Label13 As Label
     Friend WithEvents Label15 As Label

@@ -4,13 +4,13 @@ Imports Newtonsoft.Json
 Public Class TaskEditVariables
     Inherits Task
 
-    Public Property JSONDict As String
+    Public Property JSONString As String
     Public Property AutoAddMissingVariable As Boolean
     'Private Property ControlsDict As Dictionary(Of String, Control)
 
     Enum ControlNames
         Edit
-        JSONDict
+        JSONString
         AutoAddMissingVariable
         HideOptions
     End Enum
@@ -35,7 +35,7 @@ Public Class TaskEditVariables
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
-        Me.JSONDict = ""
+        Me.JSONString = ""
         Me.AutoAddMissingVariable = False
 
     End Sub
@@ -112,7 +112,7 @@ Public Class TaskEditVariables
 
         DocType = TC.GetDocType(SEDoc)
 
-        VariablesToEdit = Me.JSONDict
+        VariablesToEdit = Me.JSONString
 
         If Not VariablesToEdit = "" Then
             tmpVariablesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(VariablesToEdit)
@@ -280,7 +280,7 @@ Public Class TaskEditVariables
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
 
-        TextBox = FormatOptionsTextBox(ControlNames.JSONDict.ToString, "")
+        TextBox = FormatOptionsTextBox(ControlNames.JSONString.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
@@ -311,8 +311,8 @@ Public Class TaskEditVariables
         Dim CheckBox As CheckBox
         Dim TextBox As TextBox
 
-        TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
-        Me.JSONDict = TextBox.Text
+        TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
+        Me.JSONString = TextBox.Text
 
         CheckBox = CType(ControlsDict(ControlNames.AutoAddMissingVariable.ToString), CheckBox)
         Me.AutoAddMissingVariable = CheckBox.Checked
@@ -343,7 +343,7 @@ Public Class TaskEditVariables
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
-            If (Me.JSONDict = "") Or (Me.JSONDict = "{}") Then
+            If (Me.JSONString = "") Or (Me.JSONString = "{}") Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -372,18 +372,19 @@ Public Class TaskEditVariables
             Case ControlNames.Edit.ToString
                 Dim VariableInputEditor As New FormVariableInputEditor
 
-                VariableInputEditor.JSONDict = Me.JSONDict
+                VariableInputEditor.JSONString = Me.JSONString
+                VariableInputEditor.HelpURL = Me.HelpURL
 
-                ' Workaround
-                Dim FileType = "asm"
+                '' Workaround
+                'Dim FileType = "asm"
 
                 VariableInputEditor.ShowDialog()
 
                 If VariableInputEditor.DialogResult = DialogResult.OK Then
-                    Me.JSONDict = VariableInputEditor.JSONDict
+                    Me.JSONString = VariableInputEditor.JSONString
 
-                    TextBox = CType(ControlsDict(ControlNames.JSONDict.ToString), TextBox)
-                    TextBox.Text = Me.JSONDict
+                    TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
+                    TextBox.Text = Me.JSONString
                 End If
 
             Case Else
@@ -416,8 +417,8 @@ Public Class TaskEditVariables
         Dim Name = TextBox.Name
 
         Select Case Name
-            Case ControlNames.JSONDict.ToString
-                Me.JSONDict = TextBox.Text
+            Case ControlNames.JSONString.ToString
+                Me.JSONString = TextBox.Text
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
