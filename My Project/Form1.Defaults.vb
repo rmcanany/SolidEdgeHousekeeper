@@ -562,6 +562,28 @@ Partial Class Form1
             ReadmeOut.Add("")
 
 
+            ReadmeOut.Add("")
+            msg = "## OPEN SOURCE PACKAGES"
+            ReadmeOut.Add(msg)
+            ReadmeOut.Add("")
+
+            msg = "This project uses these awesome open source packages."
+            ReadmeOut.Add(msg)
+            msg = "- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)"
+            ReadmeOut.Add(msg)
+            msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
+            ReadmeOut.Add(msg)
+            msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
+            ReadmeOut.Add(msg)
+            msg = "- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)"
+            ReadmeOut.Add(msg)
+            msg = "- Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)"
+            ReadmeOut.Add(msg)
+            msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
+            ReadmeOut.Add(msg)
+            msg = "- Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)"
+            ReadmeOut.Add(msg)
+
             msg = ""
             ReadmeOut.Add("")
             msg = "## CODE ORGANIZATION"

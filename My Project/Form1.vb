@@ -2111,25 +2111,20 @@ Public Class Form1
 
         Me.Cursor = Cursors.WaitCursor
 
-
-
         Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
 
         Dim Templates As List(Of String) = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
         Dim TemplateDocTypes As List(Of String) = {"asm", "par", "psm", "dft"}.ToList
 
-        Dim DMApp = New DesignManager.Application
-        DMApp.Visible = 1
-        Dim PropertySets As DesignManager.PropertySets
-        Dim PropertySet As DesignManager.Properties
+        Dim PropertySets As SolidEdgeFileProperties.PropertySets
+        Dim PropertySet As SolidEdgeFileProperties.Properties
+        Dim Prop As SolidEdgeFileProperties.Property
+        PropertySets = New SolidEdgeFileProperties.PropertySets
         Dim PropertySetName As String
-        Dim Prop As DesignManager.Property
         Dim PropName As String
         Dim DocType As String
 
         Dim TC As New Task_Common
-
-        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
 
         Dim tf As Boolean
 
@@ -2143,14 +2138,14 @@ Public Class Form1
                 PropertySets.Open(Template, True)
                 For i = 0 To PropertySets.Count - 1
                     Try
-                        PropertySet = CType(PropertySets.Item(i), DesignManager.Properties)
+                        PropertySet = CType(PropertySets.Item(i), SolidEdgeFileProperties.Properties)
                     Catch ex As Exception
                         Continue For
                     End Try
                     PropertySetName = PropertySet.Name
                     For j = 0 To PropertySet.Count - 1
                         Try
-                            Prop = CType(PropertySet.Item(j), DesignManager.Property)
+                            Prop = CType(PropertySet.Item(j), SolidEdgeFileProperties.Property)
                             PropName = Prop.Name
                             If Not TemplatePropertyDict.Keys.Contains(PropName) Then
                                 TemplatePropertyDict(PropName) = New Dictionary(Of String, String)
@@ -2181,18 +2176,18 @@ Public Class Form1
                     Next
                 Next
 
+                PropertySets.Close()
+
             End If
             n += 1
         Next
 
-        DMApp.Quit()
-
-        'Check consistency
-        For Each Key As String In TemplatePropertyDict.Keys
-            If Not Key = TemplatePropertyDict(Key)("EnglishName") Then
-                MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, TemplatePropertyDict(Key)("EnglishName")))
-            End If
-        Next
+        ''Check consistency -- only works when running non-localized
+        'For Each Key As String In TemplatePropertyDict.Keys
+        '    If Not Key = TemplatePropertyDict(Key)("EnglishName") Then
+        '        MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, TemplatePropertyDict(Key)("EnglishName")))
+        '    End If
+        'Next
 
         Me.Cursor = Cursors.Default
 
@@ -2280,15 +2275,6 @@ Public Class Form1
 
     ' Iterate through an Enum
     ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
-
-    'Protected Overrides ReadOnly Property CreateParams As CreateParams
-    '    Get
-    '        Const WS_EX_COMPOSITED As Integer = &H2000000
-    '        Dim cp = MyBase.CreateParams
-    '        cp.ExStyle = cp.ExStyle Or WS_EX_COMPOSITED
-    '        Return cp
-    '    End Get
-    'End Property
 
     'Me.Cursor = Cursors.WaitCursor
     'Me.Cursor = Cursors.Default

@@ -707,6 +707,17 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 - *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window.
 
 
+## OPEN SOURCE PACKAGES
+
+This project uses these awesome open source packages.
+- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)
+- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
+- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)
+- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)
+- Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)
+- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)
+- Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)
+
 ## CODE ORGANIZATION
 
 Processing starts in Form1.vb.  A short description of the code's organization can be found there.
