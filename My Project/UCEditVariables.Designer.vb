@@ -48,7 +48,9 @@ Partial Class UCEditVariables
         Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxExpose, 4, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxExposeName, 5, 0)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        'Me.ExTableLayoutPanel1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
         Me.ExTableLayoutPanel1.RowCount = 1
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -60,11 +62,11 @@ Partial Class UCEditVariables
         '
         Me.CheckBoxSelect.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxSelect.AutoSize = True
-        Me.CheckBoxSelect.Location = New System.Drawing.Point(4, 6)
+        Me.CheckBoxSelect.Location = New System.Drawing.Point(4, 5)
         Me.CheckBoxSelect.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxSelect.Name = "CheckBoxSelect"
         Me.CheckBoxSelect.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxSelect.Size = New System.Drawing.Size(22, 17)
+        Me.CheckBoxSelect.Size = New System.Drawing.Size(22, 20)
         Me.CheckBoxSelect.TabIndex = 0
         Me.CheckBoxSelect.TabStop = False
         Me.CheckBoxSelect.Text = "CheckBox1"
@@ -72,10 +74,9 @@ Partial Class UCEditVariables
         '
         'TextBoxVariableName
         '
-        Me.TextBoxVariableName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxVariableName.Location = New System.Drawing.Point(33, 3)
         Me.TextBoxVariableName.Name = "TextBoxVariableName"
-        Me.TextBoxVariableName.Size = New System.Drawing.Size(154, 20)
+        Me.TextBoxVariableName.Size = New System.Drawing.Size(154, 23)
         Me.TextBoxVariableName.TabIndex = 1
         '
         'TextBoxFormula
@@ -83,7 +84,7 @@ Partial Class UCEditVariables
         Me.TextBoxFormula.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxFormula.Location = New System.Drawing.Point(193, 3)
         Me.TextBoxFormula.Name = "TextBoxFormula"
-        Me.TextBoxFormula.Size = New System.Drawing.Size(154, 20)
+        Me.TextBoxFormula.Size = New System.Drawing.Size(154, 23)
         Me.TextBoxFormula.TabIndex = 2
         '
         'ComboBoxUnitType
@@ -93,18 +94,18 @@ Partial Class UCEditVariables
         Me.ComboBoxUnitType.FormattingEnabled = True
         Me.ComboBoxUnitType.Location = New System.Drawing.Point(353, 3)
         Me.ComboBoxUnitType.Name = "ComboBoxUnitType"
-        Me.ComboBoxUnitType.Size = New System.Drawing.Size(154, 21)
+        Me.ComboBoxUnitType.Size = New System.Drawing.Size(154, 24)
         Me.ComboBoxUnitType.TabIndex = 3
         '
         'CheckBoxExpose
         '
         Me.CheckBoxExpose.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxExpose.AutoSize = True
-        Me.CheckBoxExpose.Location = New System.Drawing.Point(514, 6)
+        Me.CheckBoxExpose.Location = New System.Drawing.Point(514, 5)
         Me.CheckBoxExpose.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxExpose.Name = "CheckBoxExpose"
         Me.CheckBoxExpose.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 17)
+        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 20)
         Me.CheckBoxExpose.TabIndex = 4
         Me.CheckBoxExpose.Text = "CheckBox2"
         Me.CheckBoxExpose.UseVisualStyleBackColor = True
@@ -114,7 +115,7 @@ Partial Class UCEditVariables
         Me.TextBoxExposeName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxExposeName.Location = New System.Drawing.Point(543, 3)
         Me.TextBoxExposeName.Name = "TextBoxExposeName"
-        Me.TextBoxExposeName.Size = New System.Drawing.Size(154, 20)
+        Me.TextBoxExposeName.Size = New System.Drawing.Size(154, 23)
         Me.TextBoxExposeName.TabIndex = 5
         '
         'UCEditVariables
@@ -122,6 +123,7 @@ Partial Class UCEditVariables
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ExTableLayoutPanel1)
+        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCEditVariables"
         Me.Size = New System.Drawing.Size(700, 30)

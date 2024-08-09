@@ -939,8 +939,17 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
 
+        HelpString += vbCrLf + vbCrLf + "You can pre-populate property choices from your templates. "
+        HelpString += "That is done on the **Configuration Tab -- Templates Page**. "
+        HelpString += "Enable `Use template properties in property dialogs` and click `Update`. "
+        HelpString += "There are a lot of properties.  Choose which to display with the `Customize` button. "
+        HelpString += "You don't have to use a property from the list.  Simply type in the name in the `Property Name` field. "
+
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "For more information, see the **Property Filter** section in this README file. "
+        HelpString += "If you pre-populate properties, the program will set the correct choice automatically. "
+        HelpString += "For more information about `Property sets`, see the "
+        HelpString += "**Property Filter** "
+        HelpString += "section in this README file. "
 
         HelpString += vbCrLf + vbCrLf + "There are four search modes, `PT`, `WC`, `RX`, and `EX`. "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
@@ -951,13 +960,14 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
 
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
-        HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
-        HelpString += "at the top of the form.  Only one row can be moved at a time. "
-        HelpString += "The delete button, also at the top of the form, removes the selected row. "
+        HelpString += "To change the order select a row and click the `Up` or `Down` button "
+        HelpString += "on the toolbar `Row Tools` group. "
+        HelpString += "The `Delete` button removes the selected row. "
 
-        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a representation of the table settings in `JSON` format. "
-        HelpString += "You can edit it if you want, but the form is probably easier to use. "
+        HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
+        HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "
+        HelpString += "To retrieve a setting, click the down arrow and select the one desired. "
+        HelpString += "To remove a setting, select it and click `Delete`. "
 
         HelpString += vbCrLf + vbCrLf + "**Case Sensitivity**"
 

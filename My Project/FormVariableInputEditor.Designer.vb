@@ -175,6 +175,7 @@ Partial Class FormVariableInputEditor
         Me.PanelVariables.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelVariables.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.PanelVariables.Controls.Add(Me.ExTableLayoutPanelVariables)
         Me.PanelVariables.Location = New System.Drawing.Point(5, 65)
         Me.PanelVariables.Name = "PanelVariables"
@@ -183,10 +184,11 @@ Partial Class FormVariableInputEditor
         '
         'ExTableLayoutPanelVariables
         '
+        Me.ExTableLayoutPanelVariables.AutoScroll = True
         Me.ExTableLayoutPanelVariables.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ExTableLayoutPanelVariables.ColumnCount = 1
         Me.ExTableLayoutPanelVariables.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanelVariables.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        'Me.ExTableLayoutPanelVariables.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanelVariables.Controls.Add(Me.UcEditVariables1, 0, 0)
         Me.ExTableLayoutPanelVariables.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanelVariables.Location = New System.Drawing.Point(0, 0)
@@ -194,6 +196,7 @@ Partial Class FormVariableInputEditor
         Me.ExTableLayoutPanelVariables.RowCount = 2
         Me.ExTableLayoutPanelVariables.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
         Me.ExTableLayoutPanelVariables.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelVariables.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanelVariables.Size = New System.Drawing.Size(750, 200)
         Me.ExTableLayoutPanelVariables.TabIndex = 0
         Me.ExTableLayoutPanelVariables.Task = Nothing

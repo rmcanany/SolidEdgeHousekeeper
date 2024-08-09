@@ -444,7 +444,9 @@ Searches for text in a specified property and replaces it if found. The property
 
 **Using the Input Editor**
 
-A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
+You can pre-populate property choices from your templates. That is done on the **Configuration Tab -- Templates Page**. Enable `Use template properties in property dialogs` and click `Update`. There are a lot of properties.  Choose which to display with the `Customize` button. You don't have to use a property from the list.  Simply type in the name in the `Property Name` field. 
+
+A `Property set`, either `System` or `Custom`, is required. If you pre-populate properties, the program will set the correct choice automatically. For more information about `Property sets`, see the **Property Filter** section in this README file. 
 
 There are four search modes, `PT`, `WC`, `RX`, and `EX`. 
 
@@ -453,9 +455,9 @@ There are four search modes, `PT`, `WC`, `RX`, and `EX`.
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
 
-The properties are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time. The delete button, also at the top of the form, removes the selected row. 
+The properties are processed in the order in the table. To change the order select a row and click the `Up` or `Down` button on the toolbar `Row Tools` group. The `Delete` button removes the selected row. 
 
-Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select the one desired. To remove a setting, select it and click `Delete`. 
 
 **Case Sensitivity**
 
@@ -500,15 +502,15 @@ Adds, changes, and/or exposes variables.  The information is entered on the Inpu
 
 The Variable name is required.  There are restrictions on the name.  It cannot start with a number.  It can only contain letters and numbers and the underscore '_' character.
 
-If a variable on the list is not in the file, it can optionally be added automatically.  Set the option on the Options panel. 
+If a variable on the list is not in the file, it can optionally be added.  Set the option on the Options panel. 
 
 The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
-The variables are processed in the order in the table. You can change the order by selecting a row and using the Up/Down buttons at the top of the form.  Only one row can be moved at a time.  The delete button, also at the top of the form, removes selected rows.  
+The variables are processed in the order in the table. To change the order select a row and click the `Up` or `Down` button on the toolbar `Row Tools` group. The `Delete` button removes the selected row. 
 
-Note the textbox adjacent to the `Edit` button is a representation of the table settings in `JSON` format. You can edit it if you want, but the form is probably easier to use. 
+You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting click the down arrow and select the one desired. To delete a setting select it and click `Delete`. 
 
 ### Edit interactively
 Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. You can save the file or not, or choose to abort.  Aborting stops processing and returns you to the Housekeeper main form.  

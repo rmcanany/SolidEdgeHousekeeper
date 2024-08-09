@@ -438,7 +438,7 @@ Public Class TaskEditVariables
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
         HelpString += "underscore '_' character."
 
-        HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added automatically.  "
+        HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added.  "
         HelpString += "Set the option on the Options panel. "
 
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
@@ -449,13 +449,14 @@ Public Class TaskEditVariables
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
 
         HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
-        HelpString += "You can change the order by selecting a row and using the Up/Down buttons "
-        HelpString += "at the top of the form.  Only one row can be moved at a time.  "
-        HelpString += "The delete button, also at the top of the form, removes selected rows.  "
+        HelpString += "To change the order select a row and click the `Up` or `Down` button "
+        HelpString += "on the toolbar `Row Tools` group. "
+        HelpString += "The `Delete` button removes the selected row. "
 
-        HelpString += vbCrLf + vbCrLf + "Note the textbox adjacent to the `Edit` button "
-        HelpString += "is a representation of the table settings in `JSON` format. "
-        HelpString += "You can edit it if you want, but the form is probably easier to use. "
+        HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
+        HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "
+        HelpString += "To retrieve a setting click the down arrow and select the one desired. "
+        HelpString += "To delete a setting select it and click `Delete`. "
 
         Return HelpString
     End Function
