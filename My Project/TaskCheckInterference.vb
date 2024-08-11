@@ -99,9 +99,9 @@ Public Class TaskCheckInterference
         For i = 1 To Occurrences.Count
             SetList.Add(Occurrences.Item(i))
         Next
-        Dim OG As New OccurrenceGetter(tmpSEDoc, False)
+        Dim UO As New UtilsOccurrences(tmpSEDoc, False)
 
-        NumOccurrences = OG.AllOccurrences.Count + OG.AllSubOccurrences.Count
+        NumOccurrences = UO.AllOccurrences.Count + UO.AllSubOccurrences.Count
 
         'NumOccurrencesLimit = CInt(Configuration("TextBoxCheckInterferenceMaxOccurrences"))
 

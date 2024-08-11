@@ -66,8 +66,8 @@ Public Class TaskUpdateFlatPattern
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         ' Get FlatpatternModels collection to check if flat patterns exist
         Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing

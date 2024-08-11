@@ -1,13 +1,13 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
-Imports SolidEdgeConstants
+'Imports SolidEdgeConstants
 
 Public Class FormVariableInputEditor
-    Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
-    Private InputEditorDoctor As New InputEditorDoctor
-    Private ProcessCheckBoxEvents As Boolean
-    Private FileType As String
+    'Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
+    'Private InputEditorDoctor As New InputEditorDoctor
+    'Private ProcessCheckBoxEvents As Boolean
+    'Private FileType As String
     'Public Property JSONDict As String
     'Public Property UseNewTaskTab As Boolean
     Public Property JSONString As String

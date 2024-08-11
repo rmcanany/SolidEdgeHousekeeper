@@ -65,10 +65,10 @@ Public Class TaskActivateAndUpdateAll
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
 
-        If TC.GetDocType(SEDoc) = "asm" Then
+        If UC.GetDocType(SEDoc) = "asm" Then
             Dim tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
             tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
 

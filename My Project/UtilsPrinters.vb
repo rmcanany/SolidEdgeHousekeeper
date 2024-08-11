@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
 
-Public Class PrinterDoctor
+Public Class UtilsPrinters
 
     Public Function GetInstalledPrinterNames() As List(Of String)
         Dim PrinterList As New List(Of String)

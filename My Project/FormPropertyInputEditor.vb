@@ -3,10 +3,10 @@
 Imports Newtonsoft.Json
 
 Public Class FormPropertyInputEditor
-    Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
-    Private InputEditorDoctor As New InputEditorDoctor
-    Private ProcessCheckBoxEvents As Boolean
-    Private FileType As String
+    'Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))
+    'Private InputEditorDoctor As New InputEditorDoctor
+    'Private ProcessCheckBoxEvents As Boolean
+    'Private FileType As String
 
     Public Property JSONString As String
     '{"0":

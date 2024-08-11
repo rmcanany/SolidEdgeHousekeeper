@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Public Class FileListUtilities
+Public Class UtilsFileList
     Public Property ListViewFiles As ListView
 
     Public Sub New(ListViewFiles As ListView)

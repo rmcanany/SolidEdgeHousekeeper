@@ -80,9 +80,9 @@ Public Class TaskRemoveFaceStyleOverrides
 
         'Dim IgnoreIncludeInReports As Boolean = Configuration("CheckBoxTLAIgnoreIncludeInReports").ToLower = "true"
 
-        Dim OccurrenceGetter As New OccurrenceGetter(tmpSEDoc, True)
+        Dim UO As New UtilsOccurrences(tmpSEDoc, True)
 
-        For Each Occurrence In OccurrenceGetter.AllOccurrences
+        For Each Occurrence In UO.AllOccurrences
 
             ' Fails at 'Occurrence.FaceStyle IsNot Nothing' on some files.  Reason not known.
             Try
@@ -94,7 +94,7 @@ Public Class TaskRemoveFaceStyleOverrides
             End Try
         Next
 
-        For Each SubOccurrence In OccurrenceGetter.AllSubOccurrences
+        For Each SubOccurrence In UO.AllSubOccurrences
 
             ' Fails at 'Occurrence.FaceStyle IsNot Nothing' on some files.  Reason not known.
             Try

@@ -84,8 +84,8 @@ Public Class TaskHideConstructions
         Dim Constructions As SolidEdgePart.Constructions = Nothing
         Dim CoordinateSystems As SolidEdgePart.CoordinateSystems = Nothing
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
         Dim Profile As SolidEdgePart.Profile
 
         Select Case DocType

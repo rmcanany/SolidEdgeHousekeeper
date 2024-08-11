@@ -155,9 +155,9 @@ Public Class TaskBreakLinks
 
         Dim FileChanged As Boolean = True
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Select Case TC.GetDocType(SEDoc)
+        Select Case UC.GetDocType(SEDoc)
 
             Case "par"
                 Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
@@ -190,20 +190,20 @@ Public Class TaskBreakLinks
 
         Dim FileChanged As Boolean = True
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Select Case TC.GetDocType(SEDoc)
+        Select Case UC.GetDocType(SEDoc)
 
             Case "dft"
                 Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
                 Dim Sheets As List(Of SolidEdgeDraft.Sheet)
 
                 Try
-                    Sheets = TC.GetSheets(tmpSEDoc, "Background")
+                    Sheets = UC.GetSheets(tmpSEDoc, "Background")
                     ProcessCallouts(Sheets)
                     ProcessDrawingViews(Sheets)
 
-                    Sheets = TC.GetSheets(tmpSEDoc, "Working")
+                    Sheets = UC.GetSheets(tmpSEDoc, "Working")
                     ProcessCallouts(Sheets)
                     ProcessDrawingViews(Sheets)
 
@@ -269,9 +269,9 @@ Public Class TaskBreakLinks
 
         Dim FileChanged As Boolean = False
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Dim Variables = TC.GetDocVariables(SEDoc)
+        Dim Variables = UC.GetDocVariables(SEDoc)
         Dim Variable As SolidEdgeFramework.variable
 
         For Each VariableName As String In Variables.Keys
@@ -282,7 +282,7 @@ Public Class TaskBreakLinks
             End If
         Next
 
-        Dim Dimensions = TC.GetDocDimensions(SEDoc)
+        Dim Dimensions = UC.GetDocDimensions(SEDoc)
         Dim Dimension As SolidEdgeFrameworkSupport.Dimension
 
         For Each DimensionName As String In Dimensions.Keys
@@ -315,8 +315,8 @@ Public Class TaskBreakLinks
         'Dim CopyConstruction As SolidEdgePart.CopyConstruction
         Dim FileChanged As Boolean = False
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "par"
@@ -381,8 +381,8 @@ Public Class TaskBreakLinks
         Dim FileChanged As Boolean = False
 
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "par"

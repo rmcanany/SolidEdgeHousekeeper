@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
 
-Public Class FeatureDoctor
+Public Class UtilsFeatures
 
     Public Function GetName(Feature As Object) As String
 

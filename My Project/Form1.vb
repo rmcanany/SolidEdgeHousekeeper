@@ -3,6 +3,7 @@
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports SolidEdgeCommunity
+Imports SolidEdgeConstants
 
 Public Class Form1
 
@@ -34,16 +35,18 @@ Public Class Form1
 
     Private Configuration As New Dictionary(Of String, String)
 
-    Private FormPropertyFilter As New FormPropertyFilter()
-    Public Shared PropertyFilterFormula As String
-    Public Shared PropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
+    'Private FormPropertyFilter As FormPropertyFilter
+    'Public Shared PropertyFilterFormula As String
+    Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Public Property TaskList As List(Of Task)
     Public Property RememberTaskSelections As Boolean
 
     Public Property SolidEdgeRequired As Integer
 
-    Private Property UseCurrentSession As Boolean = False
+    Public Property UseCurrentSession As Boolean = False
+    Public Property NoUpdateMRU As Boolean
+    Public Property RunInBackground As Boolean
 
     Public Property AssemblyTemplate As String
     Public Property PartTemplate As String
@@ -119,7 +122,12 @@ Public Class Form1
 
         TotalAborts = 0
 
-        If SolidEdgeRequired > 0 Then SEStart()
+        Dim USEA = New UtilsSEApp
+
+        If SolidEdgeRequired > 0 Then
+            USEA.SEStart(Me.RunInBackground, Me.UseCurrentSession, Me.NoUpdateMRU)
+            SEApp = USEA.SEApp
+        End If
 
         StartTime = Now
 
@@ -140,7 +148,11 @@ Public Class Form1
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        If SolidEdgeRequired > 0 Then SEStop()
+        If SolidEdgeRequired > 0 Then
+            'Dim USEA = New UtilsSEApp
+            USEA.SEStop(Me.UseCurrentSession)
+            SEApp = Nothing
+        End If
 
         OleMessageFilter.Unregister()
 
@@ -183,15 +195,22 @@ Public Class Form1
         Dim indent As String = "    "
         Dim SaveMsg As String = ""
 
+        Dim USEA = New UtilsSEApp
+
         ReconcileFormChanges()
 
-        If Not CheckBoxUseCurrentSession.Checked Then
-            If SEIsRunning() Then
+        'If Not CheckBoxUseCurrentSession.Checked Then
+        '    If USEA.SEIsRunning() Then
+        '        msg += "    Close Solid Edge" + Chr(13)
+        '    End If
+        'End If
+        If Not Me.UseCurrentSession Then
+            If USEA.SEIsRunning() Then
                 msg += "    Close Solid Edge" + Chr(13)
             End If
         End If
 
-        If DMIsRunning() Then
+        If USEA.DMIsRunning() Then
             msg += "    Close Design Manager" + Chr(13)
         End If
 
@@ -252,8 +271,8 @@ Public Class Form1
                 'MsgBox("Update task with info from the form")
                 'NoTaskSelected = False
                 If Task.RequiresSourceDirectories Then
-                    Dim FLU As New FileListUtilities(Me.ListViewFiles)
-                    Task.SourceDirectories = FLU.GetSourceDirectories()
+                    Dim UFL As New UtilsFileList(Me.ListViewFiles)
+                    Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
 
                 ' True returns -1 upon conversion
@@ -426,7 +445,7 @@ Public Class Form1
         Dim ActiveWindow As SolidEdgeFramework.Window
         Dim ActiveSheetWindow As SolidEdgeDraft.SheetWindow
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tf As Boolean
 
@@ -442,14 +461,14 @@ Public Class Form1
 
         If CheckBoxProcessReadOnly.Checked And SolidEdgeRequired > 0 Then
 
-            OldStatus = TC.GetStatus(DMApp, Path)
+            OldStatus = UC.GetStatus(DMApp, Path)
 
             '' For some reason if OldStatus is igAvailable, OldStatus = Nothing is True
             'If OldStatus = Nothing Then
             '    ErrorMessagesCombined("Unable to read document Status") = New List(Of String) From {""}
             'End If
 
-            StatusChangeSuccessful = TC.SetStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+            StatusChangeSuccessful = UC.SetStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
             If Not StatusChangeSuccessful Then
                 ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
             End If
@@ -528,7 +547,7 @@ Public Class Form1
                 If CheckBoxProcessReadOnly.Checked Then
                     If RadioButtonReadOnlyRevert.Checked Then
                         If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                            StatusChangeSuccessful = TC.SetStatus(DMApp, Path, OldStatus)
+                            StatusChangeSuccessful = UC.SetStatus(DMApp, Path, OldStatus)
                             If Not StatusChangeSuccessful Then
                                 ErrorMessagesCombined(
                                 String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
@@ -591,7 +610,7 @@ Public Class Form1
                             NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
                         End If
 
-                        StatusChangeSuccessful = TC.SetStatus(DMApp, Path, NewStatus)
+                        StatusChangeSuccessful = UC.SetStatus(DMApp, Path, NewStatus)
                         If Not StatusChangeSuccessful Then
                             ErrorMessagesCombined(
                                 String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
@@ -617,8 +636,13 @@ Public Class Form1
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
                 If SolidEdgeRequired > 0 Then
-                    SEStop()
-                    SEStart()
+                    Dim USEA = New UtilsSEApp
+
+                    USEA.SEStop(Me.UseCurrentSession)
+                    SEApp = Nothing
+
+                    USEA.SEStart(Me.RunInBackground, Me.UseCurrentSession, Me.NoUpdateMRU)
+                    SEApp = USEA.SEApp
                 End If
             End If
             ErrorMessagesCombined("Error processing file") = AbortList
@@ -718,6 +742,9 @@ Public Class Form1
 
         Me.TemplatePropertyDict = UP.GetTemplatePropertyDict()
         Me.TemplatePropertyList = UP.GetTemplatePropertyList
+
+        Me.PropertyFilterDict = UP.GetPropertyFilterDict
+
 
     End Sub
 
@@ -830,10 +857,14 @@ Public Class Form1
 
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
 
-        FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
-        FormPropertyFilter.GetPropertyFilter()
+        'FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
+        Dim FPF As New FormPropertyFilter
+        FPF.PropertyFilterDict = Me.PropertyFilterDict
+        FPF.ShowDialog()
 
-        If FormPropertyFilter.DialogResult = DialogResult.OK Then
+        If FPF.DialogResult = DialogResult.OK Then
+            Me.PropertyFilterDict = FPF.PropertyFilterDict
+
             ListViewFilesOutOfDate = True
             BT_Update.BackColor = Color.Orange
         End If
@@ -862,9 +893,15 @@ Public Class Form1
             new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
             new_ButtonPropertyFilter.Enabled = True
 
-            If PropertyFilterFormula = "" Then
-                FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
-                FormPropertyFilter.GetPropertyFilter()
+            Dim FPF As New FormPropertyFilter
+            FPF.PropertyFilterDict = Me.PropertyFilterDict
+            FPF.ShowDialog()
+
+            If FPF.DialogResult = DialogResult.OK Then
+                Me.PropertyFilterDict = FPF.PropertyFilterDict
+
+                ListViewFilesOutOfDate = True
+                BT_Update.BackColor = Color.Orange
             End If
 
         Else
@@ -1458,7 +1495,7 @@ Public Class Form1
 
     Private Sub ListViewFiles_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragDrop
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
 
@@ -1495,7 +1532,7 @@ Public Class Form1
             Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             For Each FileName As String In Filenames
 
-                If TC.FilenameIsOK(FileName) Then
+                If UC.FilenameIsOK(FileName) Then
 
                     If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
 
@@ -1558,17 +1595,17 @@ Public Class Form1
         Dim DMApp As New DesignManager.Application
         Dim DMDoc As DesignManager.Document
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each item As ListViewItem In ListViewFiles.SelectedItems
 
             DMDoc = CType(DMApp.Open(item.Name), DesignManager.Document)
 
-            TC.tmpList = New Collection
-            TC.FindLinked(DMDoc)
+            UC.tmpList = New Collection
+            UC.FindLinked(DMDoc)
 
-            For Each FoundFile In TC.tmpList
-                If TC.FilenameIsOK(FoundFile.ToString) Then
+            For Each FoundFile In UC.tmpList
+                If UC.FilenameIsOK(FoundFile.ToString) Then
 
                     If IO.File.Exists(FoundFile.ToString) Then
 
@@ -1592,7 +1629,7 @@ Public Class Form1
 
         Next
 
-        TC.tmpList = Nothing
+        UC.tmpList = Nothing
 
         DMApp.Quit()
 
@@ -2124,7 +2161,7 @@ Public Class Form1
         Dim PropName As String
         Dim DocType As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tf As Boolean
 
@@ -2154,7 +2191,7 @@ Public Class Form1
                                 TemplatePropertyDict(PropName)("ParPropItemNumber") = ""
                                 TemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
                                 TemplatePropertyDict(PropName)("DftPropItemNumber") = ""
-                                Dim s As String = TC.PropLocalizedToEnglish(PropertySetName, j + 1, DocType)
+                                Dim s As String = UC.PropLocalizedToEnglish(PropertySetName, j + 1, DocType)
                                 If s = "" Then s = PropName
                                 TemplatePropertyDict(PropName)("EnglishName") = s
                             End If
@@ -2233,6 +2270,15 @@ Public Class Form1
         End If
 
     End Sub
+
+    Private Sub CheckBoxNoUpdateMRU_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxNoUpdateMRU.CheckedChanged
+        Me.NoUpdateMRU = CheckBoxNoUpdateMRU.Checked
+    End Sub
+
+    Private Sub CheckBoxBackgroundProcessing_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxBackgroundProcessing.CheckedChanged
+        Me.RunInBackground = CheckBoxBackgroundProcessing.Checked
+    End Sub
+
 
 
     ' Commands I can never remember

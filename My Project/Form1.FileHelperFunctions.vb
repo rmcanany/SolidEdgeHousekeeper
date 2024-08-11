@@ -13,7 +13,7 @@ Partial Class Form1
         Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
         Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         ListViewFilesOutOfDate = False
         BT_Update.BackColor = Color.FromName("Control")
@@ -58,7 +58,7 @@ Partial Class Form1
 
                 Case = "excel"
                     If FileIO.FileSystem.FileExists(Source.Name) Then
-                        FoundFiles = TC.ReadExcel(Source.Name)
+                        FoundFiles = UC.ReadExcel(Source.Name)
                     End If
 
                 Case = "DragDrop"
@@ -147,7 +147,7 @@ Partial Class Form1
         If Not FoundFiles Is Nothing Then
             Dim tmpFoundFiles As New List(Of String)
             For Each item In FoundFiles
-                tf = TC.FilenameIsOK(item)
+                tf = UC.FilenameIsOK(item)
                 tf = tf And IO.File.Exists(item)
                 tf = tf And Not tmpFoundFiles.Contains(item)
                 ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
@@ -184,8 +184,8 @@ Partial Class Form1
             ' Filter by properties
             If new_CheckBoxEnablePropertyFilter.Checked Then
                 System.Threading.Thread.Sleep(1000)
-                Dim PropertyFilter As New PropertyFilter(Me)
-                FoundFiles = PropertyFilter.PropertyFilter(FoundFiles, PropertyFilterDict, PropertyFilterFormula)
+                Dim UPF As New UtilsPropertyFilters(Me)
+                FoundFiles = UPF.PropertyFilter(FoundFiles, PropertyFilterDict)
             End If
 
             If RadioButtonListSortAlphabetical.Checked Then
@@ -209,7 +209,7 @@ Partial Class Form1
                 TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
                 System.Windows.Forms.Application.DoEvents()
 
-                If TC.FilenameIsOK(FoundFile) Then
+                If UC.FilenameIsOK(FoundFile) Then
 
                     If IO.File.Exists(FoundFile) Then
 
@@ -415,9 +415,9 @@ Partial Class Form1
         '    LinkDict.Add(Filename, New List(Of String))
         'Next
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        DMDocName = TC.SplitFOAName(DMDoc.FullName)("Filename")
+        DMDocName = UC.SplitFOAName(DMDoc.FullName)("Filename")
         'If DMDocName.Contains("!") Then
         '    DMDocName = DMDocName.Split("!"c)(0)
         'End If
@@ -445,7 +445,7 @@ Partial Class Form1
                     If LinkDocs.Count > 0 Then
                         For Each LinkDoc In LinkDocs
 
-                            LinkDocName = TC.SplitFOAName(LinkDoc.FullName)("Filename")
+                            LinkDocName = UC.SplitFOAName(LinkDoc.FullName)("Filename")
                             'If LinkDocName.Contains("!") Then
                             '    LinkDocName = LinkDocName.Split("!"c)(0)
                             'End If

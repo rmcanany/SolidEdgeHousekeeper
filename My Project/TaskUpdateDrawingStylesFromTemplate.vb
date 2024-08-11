@@ -93,7 +93,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         'Dim SupplementalExitStatus As Integer = 0
         'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -107,14 +107,14 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         If Me.UpdateBorder Then
             Dim TemplateSheetNames As New List(Of String)
 
-            For Each Sheet In TC.GetSheets(SETemplateDoc, "Background")
+            For Each Sheet In UC.GetSheets(SETemplateDoc, "Background")
                 TemplateSheetNames.Add(Sheet.Name)
             Next
 
             'SETemplateDoc.Close()
             'SEApp.DoIdle()
 
-            For Each Sheet In TC.GetSheets(tmpSEDoc, "Background")
+            For Each Sheet In UC.GetSheets(tmpSEDoc, "Background")
                 If TemplateSheetNames.Contains(Sheet.Name) Then
                     Sheet.ReplaceBackground(DraftTemplate, Sheet.Name)
                 Else
@@ -156,7 +156,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateDimensionStyle.Name = DocDimensionStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                            UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
@@ -192,7 +192,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateDrawingViewStyle.Name = DocDrawingViewStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle)
+                            UC.CopyProperties(TemplateDrawingViewStyle, DocDrawingViewStyle)
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
@@ -228,7 +228,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateLinearStyle.Name = DocLinearStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                            UC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
@@ -264,7 +264,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateTableStyle.Name = DocTableStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateTableStyle, DocTableStyle)
+                            UC.CopyProperties(TemplateTableStyle, DocTableStyle)
                             '#### added because CopyProperties didn't work in old SE Release, to be verified if still needed
                             For c = 0 To 6
                                 DocTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants)) = TemplateTableStyle.LineColor(CType(c, SolidEdgeFrameworkSupport.TableStyleLineTypeConstants))
@@ -306,7 +306,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateTextCharStyle.Name = DocTextCharStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                            UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
@@ -342,7 +342,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                     End If
                     If TemplateTextStyle.Name = DocTextStyle.Name Then
                         Try
-                            TC.CopyProperties(TemplateTextStyle, DocTextStyle)
+                            UC.CopyProperties(TemplateTextStyle, DocTextStyle)
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))

@@ -228,21 +228,31 @@ This is a powerful tool with a lot of options. These are detailed below.
   <img src="My%20Project/media/property_filter.png">
 </p>
 
-Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains Steel`, where `Material` is the **Property**, `contains` is the **Comparison**, and `Steel` is the **Value**.
+Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
 
-Up to six Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted as desired.
+Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted as desired.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
+
+Most people use a limited number of properties.  You can set which ones are available in the drop-down list.  That is done on the **Configuration Tab -- Templates Page**.
+
+<p align="center">
+  <img src="My%20Project/media/customize_property_list.png">
+</p>
+
+The **Available Properties** are populated by enabling `Use template properties in property dialogs` and clicking `Update`.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
 
 **Property Set**
 
 In addition to entering the `Property name`, you must also select the `Property set`, either `System` or `Custom`.
 
-`System` properties are in every Solid Edge file. They include `Material`, `Project`, etc. Note, at this time, they must be in English.
+`System` properties are in every Solid Edge file. They include `Material`, `Project`, etc. Some are in English only, others are localized.
 
 `Custom` properties are ones that you create, probably in a template. Solid Edge also creates some Custom properties for you. These include `Exposed Variables` and output from the `Inspect > Physical Properties` command. The custom property names can be in any language. (In theory, at least -- not tested at this time. Not sure about the Solid Edge entries either.)
 
+If you made a customized property list, the `Property Set` will be populated automatically.  Unless you added it manually that is, in that case you'll have to select the appropriate one.
+
 **Comparison**
 
-Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self explanatory.
+Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
 
 `Contains` means the Value can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
@@ -256,13 +266,11 @@ Internally the [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-u
 
 Each Condition is assigned a variable name, (`A`, `B`, `...`). The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
-![Property Filter Detail](My%20Project/media/property_filter_detail.png)
-
 In the image above, sticking with the default formula means you would get all parts in project 7481 made out of Stainless and engineered by Fred, i.e., `A AND B AND C`.
 
 **Editing the Formula**
 
-You can optionally change the formula. Click the Edit button and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
+You can optionally change the formula. Click the `Edit Formula` button and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
 **Dates and Numbers**
@@ -283,7 +291,7 @@ There is a number associated with each Status value. You have to use that instea
 
 Here is the way to get all `Available` files: `System.Status is_exactly 0`
 
-For *everything but* `Available` try: `System.Status > 0`
+For *everything but* `Available` you could use: `System.Status > 0`
 
 Here's the list:
 
@@ -298,7 +306,7 @@ As mentioned above, this is a situation where the option `Include Draft file mod
 
 **Saved Settings**
 
-The filters are saved in `property_filters.txt` in the same directory as `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. You can manually edit the file, however, note that the field delimiter is the TAB character. This was done so that the property name and value fields could contain spaces.
+The filters are saved in `property_filter_saved_settings.json` in the `Preferences` directory under the root directory of `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. 
 
 #### 2. Wildcard Filter
 
@@ -455,9 +463,9 @@ There are four search modes, `PT`, `WC`, `RX`, and `EX`.
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
 
-The properties are processed in the order in the table. To change the order select a row and click the `Up` or `Down` button on the toolbar `Row Tools` group. The `Delete` button removes the selected row. 
+The properties are processed in the order in the table. To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected row. 
 
-You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select the one desired. To remove a setting, select it and click `Delete`. 
+You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select it. To remove a setting, select it and click `Delete`. 
 
 **Case Sensitivity**
 
@@ -500,17 +508,17 @@ Adds, changes, and/or exposes variables.  The information is entered on the Inpu
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
 
-The Variable name is required.  There are restrictions on the name.  It cannot start with a number.  It can only contain letters and numbers and the underscore '_' character.
+The Variable name is required.  There are restrictions on the name.  It cannot start with a number.  It can only contain letters and numbers and the underscore `_` character.
 
-If a variable on the list is not in the file, it can optionally be added.  Set the option on the Options panel. 
+If a variable on the list is not in the file, it can optionally be added.  Set the behavior on the Options panel. 
 
 The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
-The variables are processed in the order in the table. To change the order select a row and click the `Up` or `Down` button on the toolbar `Row Tools` group. The `Delete` button removes the selected row. 
+The variables are processed in the order in the table. To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected row. 
 
-You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting click the down arrow and select the one desired. To delete a setting select it and click `Delete`. 
+You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select it. To remove a setting, select it and click `Delete`. 
 
 ### Edit interactively
 Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. You can save the file or not, or choose to abort.  Aborting stops processing and returns you to the Housekeeper main form.  

@@ -84,8 +84,8 @@ Public Class TaskFitView
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "asm"

@@ -110,7 +110,7 @@ Public Class TaskPrint
         Dim SheetSetup As SolidEdgeDraft.SheetSetup
         Dim PaperSizeConstant As SolidEdgeDraft.PaperSizeConstants
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -125,7 +125,7 @@ Public Class TaskPrint
         DraftPrinter.ScaleLineWidths = Me.ScaleLineWidths
 
 
-        Sheets = TC.GetSheets(tmpSEDoc, "Working")
+        Sheets = UC.GetSheets(tmpSEDoc, "Working")
         For Each Sheet In Sheets
             SheetSetup = Sheet.SheetSetup
             PaperSizeConstant = SheetSetup.SheetSizeOption

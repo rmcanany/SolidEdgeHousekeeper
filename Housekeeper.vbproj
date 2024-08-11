@@ -136,6 +136,9 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.PowerShell.5.ReferenceAssemblies.1.1.0\lib\net4\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
@@ -174,9 +177,15 @@
     <Compile Include="My Project\ExTableLayoutPanel.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="My Project\FeatureDoctor.vb" />
-    <Compile Include="My Project\FileListUtilities.vb" />
-    <Compile Include="My Project\FilenameCharmapDoctor.vb" />
+    <Compile Include="My Project\FormTextPrompt.Designer.vb">
+      <DependentUpon>FormTextPrompt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormTextPrompt.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\UtilsFeatures.vb" />
+    <Compile Include="My Project\UtilsFileList.vb" />
+    <Compile Include="My Project\UtilsFilenameCharmap.vb" />
     <Compile Include="My Project\Form1.ApplicationHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -190,9 +199,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\Form1.LogFile.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="My Project\Form1.PrinterHelperFunctions.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\Form1.vb">
@@ -258,20 +264,26 @@
     <Compile Include="My Project\FormVariableInputEditor.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\InputEditorDoctor.vb" />
     <Compile Include="My Project\IsolatedTask.vb" />
     <Compile Include="My Project\IsolatedTaskProxy.vb" />
-    <Compile Include="My Project\MaterialDoctor.vb" />
-    <Compile Include="My Project\OccurrenceGetter.vb" />
+    <Compile Include="My Project\UtilsMaterials.vb" />
+    <Compile Include="My Project\UtilsOccurrences.vb" />
     <Compile Include="My Project\UCEditVariables.Designer.vb">
       <DependentUpon>UCEditVariables.vb</DependentUpon>
     </Compile>
     <Compile Include="My Project\UCEditVariables.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="My Project\UCPropertyFilter.Designer.vb">
+      <DependentUpon>UCPropertyFilter.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\UCPropertyFilter.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="My Project\UtilsPowerShell.vb" />
     <Compile Include="My Project\UtilsPreferences.vb" />
-    <Compile Include="My Project\PrinterDoctor.vb" />
-    <Compile Include="My Project\PropertyFilter.vb" />
+    <Compile Include="My Project\UtilsPrinters.vb" />
+    <Compile Include="My Project\UtilsPropertyFilters.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -318,7 +330,7 @@
     <Compile Include="My Project\TaskUpdateModelStylesFromTemplate.vb" />
     <Compile Include="My Project\TaskUpdatePartCopies.vb" />
     <Compile Include="My Project\TaskUpdatePhysicalProperties.vb" />
-    <Compile Include="My Project\Task_Common.vb" />
+    <Compile Include="My Project\UtilsCommon.vb" />
     <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
     <Compile Include="My Project\UCEditProperties.Designer.vb">
       <DependentUpon>UCEditProperties.vb</DependentUpon>
@@ -332,6 +344,7 @@
     <Compile Include="My Project\UCTaskControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="My Project\UtilsSEApp.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Form1.resx">
@@ -387,6 +400,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\UCEditVariables.resx">
       <DependentUpon>UCEditVariables.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\UCPropertyFilter.resx">
+      <DependentUpon>UCPropertyFilter.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\UCTaskControl.resx">
       <DependentUpon>UCTaskControl.vb</DependentUpon>

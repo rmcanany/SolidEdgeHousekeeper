@@ -70,8 +70,8 @@ Public Class TaskRecognizeHoles
 
         Dim WasOrdered As Boolean = False
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         If SEDoc.ReadOnly Then
             Proceed = False

@@ -86,7 +86,7 @@ Public Class TaskUpdateDrawingViews
 
         Dim s As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -132,7 +132,7 @@ Public Class TaskUpdateDrawingViews
 
         ' Check drawing views.
         'For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
-        For Each Sheet In TC.GetSheets(tmpSEDoc, "Working")
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
             DrawingViews = Sheet.DrawingViews
             For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                 If Not DrawingView.IsUpToDate Then

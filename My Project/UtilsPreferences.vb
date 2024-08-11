@@ -24,7 +24,7 @@ Public Class UtilsPreferences
     End Sub
 
     Public Sub CreateFilenameCharmap()
-        Dim FCD As New FilenameCharmapDoctor()  ' Creates the file filename_charmap.txt if it does not exist.
+        Dim UFC As New UtilsFilenameCharmap()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
 
     Public Function GetSavedExpressionsFilename() As String
@@ -100,7 +100,7 @@ Public Class UtilsPreferences
         'Property manager           50005  50005  50005	
         'Replace part               32808
         'Sheet setup                                     10002
-        'View Backgrounds                               10211
+        'View Backgrounds                                10211
 
         Dim InteractiveEditCommandsFilename = GetInteractiveEditCommandsFilename()
 
@@ -222,6 +222,45 @@ Public Class UtilsPreferences
 
     End Sub
 
+
+    Public Function GetPropertyFilterDictFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\property_filter_dict.json", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SavePropertyFilterDict(PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
+        Dim JSONString As String
+        Dim Filename = GetPropertyFilterDictFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(PropertyFilterDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetPropertyFilterDict() As Dictionary(Of String, Dictionary(Of String, String))
+        Dim PropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
+        Dim JSONString As String
+        Dim Filename = GetPropertyFilterDictFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
+        End If
+
+        Return PropertyFilterDict
+    End Function
+
+
     Public Function GetEditPropertiesSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
         Dim EditPropertiesSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
         Dim JSONString As String
@@ -234,6 +273,47 @@ Public Class UtilsPreferences
         End If
 
         Return EditPropertiesSavedSettingsDict
+    End Function
+
+
+    Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
+        Dim Filename = String.Format("{0}\property_filter_saved_settings.json", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SavePropertyFilterSavedSettings(
+        PropertyFilterSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
+
+        Dim JSONString As String
+        Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=False)
+
+        JSONString = JsonConvert.SerializeObject(PropertyFilterSavedSettingsDict)
+        IO.File.WriteAllText(Filename, JSONString)
+
+    End Sub
+
+    Public Function GetPropertyFilterSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim PropertyFilterSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+        Dim JSONString As String
+        Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+            PropertyFilterSavedSettingsDict = JsonConvert.DeserializeObject(
+                Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
+        End If
+
+        Return PropertyFilterSavedSettingsDict
     End Function
 
 

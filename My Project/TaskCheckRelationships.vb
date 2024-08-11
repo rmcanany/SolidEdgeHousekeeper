@@ -87,10 +87,10 @@ Public Class TaskCheckRelationships
 
         Dim RefPlanesWithUnderconstrainedProfiles As New List(Of SolidEdgePart.RefPlane)
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
-        Dim FeatureDoctor As New FeatureDoctor
+        Dim UF As New UtilsFeatures
 
         Dim ListIndex As Integer
 
@@ -248,7 +248,7 @@ Public Class TaskCheckRelationships
         Dim Status As SolidEdgePart.FeatureStatusConstants
         Dim RefPlane As SolidEdgePart.RefPlane
 
-        Dim FeatureDoctor As New FeatureDoctor
+        Dim UF As New UtilsFeatures
 
         If (Models IsNot Nothing) Then
 
@@ -262,23 +262,23 @@ Public Class TaskCheckRelationships
                 For Each Model In Models
                     Features = Model.Features
                     For Each Feature In Features
-                        If FeatureDoctor.IsOrdered(Feature) Then
-                            Dim Name = FeatureDoctor.GetName(Feature)
-                            FeatureTypeConstant = FeatureDoctor.GetFeatureType(Feature)
+                        If UF.IsOrdered(Feature) Then
+                            Dim Name = UF.GetName(Feature)
+                            FeatureTypeConstant = UF.GetFeatureType(Feature)
                             If FeatureTypeConstant = Nothing Then
                                 Continue For
                             End If
                             s = String.Format("SolidEdgePart.{0}", Name)
 
                             'https://stackoverflow.com/questions/15252266/ctype-in-vb-net-with-dynamic-second-parameter-type
-                            Dim FeatureType As Type = FeatureDoctor.GetTypeFromFeature(Feature)
+                            Dim FeatureType As Type = UF.GetTypeFromFeature(Feature)
                             If FeatureType Is Nothing Then
                                 Continue For
                             End If
 
                             Dim _Feature = CTypeDynamic(Feature, FeatureType)
-                            Status = FeatureDoctor.GetStatus(_Feature)
-                            Dim _FeatureName = FeatureDoctor.GetName(_Feature)
+                            Status = UF.GetStatus(_Feature)
+                            Dim _FeatureName = UF.GetName(_Feature)
 
                             If CheckItem = "Failed relationships" Then
                                 tf = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed)
@@ -293,11 +293,11 @@ Public Class TaskCheckRelationships
                                 'RefPlane = Nothing
                                 ' UserDefinedPatterns (eg Hole Pattern) are different
                                 If FeatureTypeConstant = SolidEdgePart.FeatureTypeConstants.igUserDefinedPatternFeatureObject Then
-                                    RefPlane = FeatureDoctor.GetPatternPlane(_Feature)
+                                    RefPlane = UF.GetPatternPlane(_Feature)
                                 Else
                                     ' Some features do not have a profile
                                     Try
-                                        Profile = FeatureDoctor.GetProfile(_Feature)
+                                        Profile = UF.GetProfile(_Feature)
                                         If Profile Is Nothing Then
                                             Continue For
                                         End If

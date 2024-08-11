@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Public Class MaterialDoctor
+Public Class UtilsMaterials
 
     Public Function MaterialNotInMaterialTable(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -30,8 +30,8 @@ Public Class MaterialDoctor
 
         Dim Models As SolidEdgePart.Models = Nothing
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "par"
@@ -119,8 +119,8 @@ Public Class MaterialDoctor
 
         MatTable = SEApp.GetMaterialTable()
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "par"
@@ -315,8 +315,8 @@ Public Class MaterialDoctor
         Dim FaceStyle As SolidEdgeFramework.FaceStyle
 
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "par"
@@ -372,8 +372,8 @@ Public Class MaterialDoctor
 
         Dim Models As SolidEdgePart.Models = Nothing
 
-        Dim TC As New Task_Common
-        Dim DocType = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "par"

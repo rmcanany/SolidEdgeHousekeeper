@@ -128,11 +128,11 @@ Public Class TaskEditProperties
         Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim PropertiesToEdit As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         PropertiesToEdit = Me.JSONString
 
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Dim tmpAsmDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
 
@@ -231,7 +231,7 @@ Public Class TaskEditProperties
         Dim PropertiesToEdit As String = ""
         Dim RowIndexString As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         PropertiesToEdit = Me.JSONString
 
@@ -279,7 +279,7 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    FindString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
+                    FindString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -288,7 +288,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+                    ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -389,7 +389,7 @@ Public Class TaskEditProperties
                         OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
                     Else
                         If FindSearchType = "WC" Then
-                            FindString = TC.GlobToRegex(FindString)
+                            FindString = UC.GlobToRegex(FindString)
                         End If
                         If ReplaceSearchType = "PT" Then
                             ' ReplaceString = Regex.Escape(ReplaceString)
@@ -490,7 +490,7 @@ Public Class TaskEditProperties
         Dim Proceed As Boolean = True
         Dim s As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each RowIndexString In PropertiesToEditDict.Keys
 
@@ -527,7 +527,7 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    FindString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False)
+                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -536,7 +536,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -549,7 +549,7 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    Prop = TC.GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
+                    Prop = UC.GetProp(SEDoc, PropertySetName, PropertyName, 0, AutoAddMissingProperty)
                     If Prop Is Nothing Then
                         Proceed = False
                         ExitStatus = 1
@@ -578,7 +578,7 @@ Public Class TaskEditProperties
                         Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
                     Else
                         If FindSearchType = "WC" Then
-                            FindString = TC.GlobToRegex(FindString)
+                            FindString = UC.GlobToRegex(FindString)
                         End If
                         If ReplaceSearchType = "PT" Then
                             ' ReplaceString = Regex.Escape(ReplaceString)
@@ -653,10 +653,10 @@ Public Class TaskEditProperties
 
                     If Me.AutoUpdateMaterial Then
 
-                        Select Case TC.GetDocType(SEDoc)
+                        Select Case UC.GetDocType(SEDoc)
                             Case "par", "psm"
-                                Dim MaterialDoctor As New MaterialDoctor
-                                SupplementalErrorMessage = MaterialDoctor.UpdateMaterialFromMaterialTable(
+                                Dim UM As New UtilsMaterials
+                                SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
                                         SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
 
                                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
@@ -960,13 +960,12 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
 
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
-        HelpString += "To change the order select a row and click the `Up` or `Down` button "
-        HelpString += "on the toolbar `Row Tools` group. "
+        HelpString += "To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
         HelpString += "The `Delete` button removes the selected row. "
 
         HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
         HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "
-        HelpString += "To retrieve a setting, click the down arrow and select the one desired. "
+        HelpString += "To retrieve a setting, click the down arrow and select it. "
         HelpString += "To remove a setting, select it and click `Delete`. "
 
         HelpString += vbCrLf + vbCrLf + "**Case Sensitivity**"

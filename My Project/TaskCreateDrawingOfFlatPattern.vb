@@ -123,9 +123,9 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
         Dim FlatPattern As SolidEdgePart.FlatPattern
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Select Case TC.GetDocType(SEDoc)
+        Select Case UC.GetDocType(SEDoc)
             Case "par"
                 Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
                 FlatPatternModels = tmpSEDoc.FlatPatternModels
@@ -154,7 +154,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             Dim ModelLink As SolidEdgeDraft.ModelLink = ModelLinks.Add(SEDoc.FullName)
             SEApp.DoIdle()
 
-            Dim Sheets As List(Of SolidEdgeDraft.Sheet) = TC.GetSheets(DraftDoc, "Working")
+            Dim Sheets As List(Of SolidEdgeDraft.Sheet) = UC.GetSheets(DraftDoc, "Working")
             Dim Sheet As SolidEdgeDraft.Sheet = Sheets(0)
 
             Dim DrawingViews As SolidEdgeDraft.DrawingViews = Sheet.DrawingViews

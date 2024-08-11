@@ -105,9 +105,9 @@ Public Class TaskUpdatePhysicalProperties
         'For parts and sheet metals its called just "UpdateOnFileSave"
 
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "asm"
@@ -135,7 +135,7 @@ Public Class TaskUpdatePhysicalProperties
                         SEApp.DoIdle()
 
                         ' Try again for assemblies whose parts have also been updated
-                        If Not TC.IsVariablePresent(SEDoc, "Mass") Then
+                        If Not UC.IsVariablePresent(SEDoc, "Mass") Then
                             SEDoc.Save()
                             SEApp.DoIdle()
                             ParFileNamesWithoutDensityArray = {""}
@@ -251,7 +251,7 @@ Public Class TaskUpdatePhysicalProperties
         End If
 
         If Proceed Then
-            If Not TC.IsVariablePresent(SEDoc, "Mass") Then
+            If Not UC.IsVariablePresent(SEDoc, "Mass") Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
             End If

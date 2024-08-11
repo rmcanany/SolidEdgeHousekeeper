@@ -107,8 +107,8 @@ Public Class TaskCheckLinks
         Dim CheckOptions As List(Of Boolean) = {Me.CheckMissingLinks, Me.CheckMisplacedLinks}.ToList
 
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         For ListIndex = 0 To CheckItems.Count - 1
 

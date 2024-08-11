@@ -9,7 +9,7 @@ Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports PanoramicData.NCalcExtensions
 
-Public Class Task_Common
+Public Class UtilsCommon
 
     Public tmpList As Collection
 
@@ -546,7 +546,7 @@ Public Class Task_Common
             Dim Model As SolidEdgePart.Model
             Dim Body As SolidEdgeGeometry.Body
 
-            Dim FeatureDoctor As New FeatureDoctor
+            Dim UF As New UtilsFeatures
             Dim PointsList As New List(Of Double)
             Dim tmpPointsList As New List(Of Double)
             Dim Point As Double
@@ -560,7 +560,7 @@ Public Class Task_Common
                     ' Some Models do not have a Body
                     Try
                         Body = CType(Model.Body, SolidEdgeGeometry.Body)
-                        tmpPointsList = FeatureDoctor.GetBodyRange(Body)
+                        tmpPointsList = UF.GetBodyRange(Body)
                         If PointsList.Count = 0 Then
                             For Each Point In tmpPointsList
                                 PointsList.Add(Point)
@@ -1383,7 +1383,7 @@ Public Class Task_Common
 
         Dim ModelIdx As Integer
 
-        Dim FCD As New FilenameCharmapDoctor
+        Dim UFC As New UtilsFilenameCharmap
 
         FullName = SplitFOAName(FullName)("Filename")
 
@@ -1448,7 +1448,7 @@ Public Class Task_Common
                     End If
 
                     If ValidFilenameRequired Then
-                        tmpValue = FCD.SubstituteIllegalCharacters(tmpValue)
+                        tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
                     End If
 
                 End If

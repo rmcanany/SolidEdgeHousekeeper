@@ -132,8 +132,8 @@ Public Class TaskSaveModelAs
 
         Dim Proceed As Boolean = True
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         ' Configuration("ComboBoxSaveAsAssemblyFileType") format examples
         ' IGES (*.igs)
@@ -341,10 +341,10 @@ Public Class TaskSaveModelAs
 
         Dim SplitDict As New Dictionary(Of String, String)
 
-        Dim TC As New Task_Common
-        Dim FCD As New FilenameCharmapDoctor()
+        Dim UC As New UtilsCommon
+        Dim UFC As New UtilsFilenameCharmap()
 
-        OldFullFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        OldFullFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
         'If OldFullFilename.Contains("!") Then
         '    OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
         'End If
@@ -369,7 +369,7 @@ Public Class TaskSaveModelAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
@@ -380,7 +380,7 @@ Public Class TaskSaveModelAs
         End If
 
         s = System.IO.Path.GetFileNameWithoutExtension(NewFilename)
-        NewFilename = NewFilename.Replace(s, FCD.SubstituteIllegalCharacters(s))
+        NewFilename = NewFilename.Replace(s, UFC.SubstituteIllegalCharacters(s))
 
         Return NewFilename
     End Function
@@ -538,7 +538,7 @@ Public Class TaskSaveModelAs
         Dim Window As SolidEdgeFramework.Window
         Dim View As SolidEdgeFramework.View
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         If Me.HideConstructions Then
             Dim TaskHideConstructions As New TaskHideConstructions
@@ -564,7 +564,7 @@ Public Class TaskSaveModelAs
                 Dim ViewStyles As SolidEdgeFramework.ViewStyles = Nothing
                 Dim ViewStyle As SolidEdgeFramework.ViewStyle = Nothing
 
-                Select Case TC.GetDocType(SEDoc)
+                Select Case UC.GetDocType(SEDoc)
                     Case "asm"
                         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
                         ViewStyles = CType(tmpSEDoc.ViewStyles, SolidEdgeFramework.ViewStyles)
@@ -596,7 +596,7 @@ Public Class TaskSaveModelAs
         If Not NewExtension = ".png" Then
             View.SaveAsImage(NewFilename)
         Else
-            ExitMessage = TC.SaveAsPNG(View, NewFilename)
+            ExitMessage = UC.SaveAsPNG(View, NewFilename)
             If Not ExitMessage = "" Then
                 ExitStatus = 1
                 ErrorMessageList.Add(ExitMessage)
@@ -669,11 +669,11 @@ Public Class TaskSaveModelAs
 
         Dim WindowAspectRatio As Double = WindowH / WindowW
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim Range As New List(Of Double)
 
-        Range = TC.GetDocRange(SEDoc)
+        Range = UC.GetDocRange(SEDoc)
         ModelX = Range(0)
         ModelY = Range(1)
         ModelZ = Range(2)

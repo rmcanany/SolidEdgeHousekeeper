@@ -113,7 +113,7 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim AsmTemplateDoc As SolidEdgeAssembly.AssemblyDocument = Nothing
         Dim ParTemplateDoc As SolidEdgePart.PartDocument = Nothing
@@ -146,7 +146,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         ' DimensionStyles, FaceStyles,
         ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
 
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "asm"
@@ -384,7 +384,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each TemplateViewStyle As SolidEdgeFramework.ViewStyle In TemplateViewStyles
             If Not TemplateStyleNames.Contains(TemplateViewStyle.StyleName) Then
@@ -400,7 +400,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 If TemplateViewStyle.StyleName = DocViewStyle.StyleName Then
                     TemplateStyleInDoc = True
                     Try
-                        TC.CopyProperties(TemplateViewStyle, DocViewStyle)
+                        UC.CopyProperties(TemplateViewStyle, DocViewStyle)
 
                     Catch ex As Exception
                         ExitStatus = 1
@@ -434,7 +434,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewViewStyle = DocViewStyles.Add(TemplateViewStyle.StyleName, "")
                 Try
-                    TC.CopyProperties(TemplateViewStyle, NewViewStyle)
+                    UC.CopyProperties(TemplateViewStyle, NewViewStyle)
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
@@ -496,7 +496,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each TemplateTextStyle As SolidEdgeFramework.TextStyle In TemplateTextStyles
             If Not TemplateStyleNames.Contains(TemplateTextStyle.Name) Then
@@ -513,7 +513,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        TC.CopyProperties(TemplateTextStyle, DocTextStyle)
+                        UC.CopyProperties(TemplateTextStyle, DocTextStyle)
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
@@ -527,7 +527,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewTextStyle = DocTextStyles.Add(TemplateTextStyle.Name, "")
                 Try
-                    TC.CopyProperties(TemplateTextStyle, NewTextStyle)
+                    UC.CopyProperties(TemplateTextStyle, NewTextStyle)
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
@@ -571,7 +571,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each TemplateTextCharStyle As SolidEdgeFramework.TextCharStyle In TemplateTextCharStyles
             If Not TemplateStyleNames.Contains(TemplateTextCharStyle.Name) Then
@@ -588,7 +588,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        TC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
+                        UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
@@ -603,7 +603,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewTextCharStyle = DocTextCharStyles.Add(TemplateTextCharStyle.Name, "")
                 Try
-                    TC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
+                    UC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
@@ -647,7 +647,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each TemplateLinearStyle As SolidEdgeFramework.LinearStyle In TemplateLinearStyles
             If Not TemplateStyleNames.Contains(TemplateLinearStyle.Name) Then
@@ -664,7 +664,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        TC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
+                        UC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
@@ -678,7 +678,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewLinearStyle = DocLinearStyles.Add(TemplateLinearStyle.Name, "")
                 Try
-                    TC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
+                    UC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
@@ -722,7 +722,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         For Each TemplateDimensionStyle As SolidEdgeFrameworkSupport.DimensionStyle In TemplateDimensionStyles
             If Not TemplateStyleNames.Contains(TemplateDimensionStyle.Name) Then
@@ -739,7 +739,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     TemplateStyleInDoc = True
 
                     Try
-                        TC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
+                        UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
@@ -753,7 +753,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 ' Add it
                 Dim NewDimensionStyle = DocDimensionStyles.Add(TemplateDimensionStyle.Name, "")
                 Try
-                    TC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
+                    UC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
@@ -825,9 +825,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim WeldbeadBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
         Dim PartBaseStyle As SolidEdgeFramework.FaceStyle = Nothing
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "asm"
@@ -912,9 +912,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim FaceStyle As SolidEdgeFramework.FaceStyle
         Dim Name As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "asm"

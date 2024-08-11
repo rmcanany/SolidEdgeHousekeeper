@@ -2,7 +2,7 @@
 
 Imports System.Text.RegularExpressions
 
-Public Class PropertyFilter
+Public Class UtilsPropertyFilters
     Private _mainInstance As Form1
 
     Public Sub New(mainInstance As Form1)
@@ -10,15 +10,26 @@ Public Class PropertyFilter
     End Sub
 
     Public Function PropertyFilter(FoundFiles As IReadOnlyCollection(Of String),
-                PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
-                PropertyFilterFormula As String) As IReadOnlyCollection(Of String)
+                PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+                ) As IReadOnlyCollection(Of String)
 
         ' PropertyFilterFormula is a string containing the desired boolean expression
         ' e.g., " A AND ( B OR C ) "
         ' Each variable is separated by whitespace from any parenthesis character or operator
 
-        ' PropertyFilterDict is a Dictionary whose keys are the forumla variables: "A", "B", ...
-        ' Sub keys are "PropertyString", "Comparison", and "Value"
+        ' PropertyFilterDict format:
+        '{"0":
+        '    {"Variable":"A",
+        '     "PropertySet":"Custom",
+        '     "PropertyName":"hmk_Part_Number",
+        '     "Comparison":"contains",
+        '     "Value":"aluminum",
+        '     "Formula":"A AND B"},
+        ' "1":
+        '...
+        '}
+
+        Dim PropertyFilterFormula As String = PropertyFilterDict("0")("Formula")
 
         Dim LocalFoundFiles As New List(Of String)
         Dim FilteredFiles As New List(Of String)
@@ -130,11 +141,12 @@ Public Class PropertyFilter
         PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
         PropertySets.Open(FoundFile, True)
 
-        For Each Variable In PropertyFilterDict.Keys
-            PropertySet = ParsePropertyString(PropertyFilterDict(Variable)("PropertyString"), "PropertySet")
-            PropertyName = ParsePropertyString(PropertyFilterDict(Variable)("PropertyString"), "PropertyName")
-            Comparison = PropertyFilterDict(Variable)("Comparison")
-            Value = PropertyFilterDict(Variable)("Value")
+        For Each Key As String In PropertyFilterDict.Keys
+            Variable = PropertyFilterDict(Key)("Variable")
+            PropertySet = PropertyFilterDict(Key)("PropertySet")
+            PropertyName = PropertyFilterDict(Key)("PropertyName")
+            Comparison = PropertyFilterDict(Key)("Comparison")
+            Value = PropertyFilterDict(Key)("Value")
 
             DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
 
@@ -296,41 +308,74 @@ Public Class PropertyFilter
         Return DocValue
     End Function
 
-    Shared Function ParsePropertyString(PropertyString As String, Element As String) As String
-        Dim Result As String
-        Dim PropertyStringList As List(Of String)
+    'Shared Function ParsePropertyString(PropertyString As String, Element As String) As String
+    '    Dim Result As String
+    '    Dim PropertyStringList As List(Of String)
 
-        PropertyStringList = PropertyString.Split("."c).ToList
+    '    PropertyStringList = PropertyString.Split("."c).ToList
 
-        If Element = "PropertySet" Then
-            Result = PropertyStringList(0)
+    '    If Element = "PropertySet" Then
+    '        Result = PropertyStringList(0)
+    '    Else
+    '        PropertyStringList.RemoveAt(0)
+
+    '        Result = PropertyStringList(0)
+    '        For i = 1 To PropertyStringList.Count - 1
+    '            Result += String.Format(".{0}", PropertyStringList(i))
+    '        Next
+
+    '    End If
+
+    '    Return Result
+    'End Function
+
+    Shared Function EvaluateBoolean(Formula As String) As Boolean
+        Dim tf As Boolean
+
+        Dim UPS As New UtilsPowerShell
+        Dim Result As String = UPS.RunScript(FormulaToPSSyntax(Formula))
+
+        If Result.ToLower.Contains("true") Then
+            tf = True
         Else
-            PropertyStringList.RemoveAt(0)
-
-            Result = PropertyStringList(0)
-            For i = 1 To PropertyStringList.Count - 1
-                Result += String.Format(".{0}", PropertyStringList(i))
-            Next
-
+            tf = False
         End If
 
-        Return Result
+        Return tf
+
+        '' https://stackoverflow.com/questions/49005926/conversion-from-string-to-boolean-vb-net
+        'Dim sc As New MSScriptControl.ScriptControl
+        ''SET LANGUAGE TO VBSCRIPT
+        'sc.Language = "VBSCRIPT"
+        ''ATTEMPT MATH
+        'Try
+        '    Return Convert.ToBoolean(sc.Eval(formula))
+        'Catch ex As Exception
+        '    'SHOW THAT IT WAS INVALID
+        '    MsgBox(String.Format("Unable to evaluate boolean expression: {0}", formula))
+        '    Return (False)
+        'End Try
     End Function
 
-    Shared Function EvaluateBoolean(formula As String) As Boolean
-        ' https://stackoverflow.com/questions/49005926/conversion-from-string-to-boolean-vb-net
-        Dim sc As New MSScriptControl.ScriptControl
-        'SET LANGUAGE TO VBSCRIPT
-        sc.Language = "VBSCRIPT"
-        'ATTEMPT MATH
-        Try
-            Return Convert.ToBoolean(sc.Eval(formula))
-        Catch ex As Exception
-            'SHOW THAT IT WAS INVALID
-            MsgBox(String.Format("Unable to evaluate boolean expression: {0}", formula))
-            Return (False)
-        End Try
+    Shared Function FormulaToPSSyntax(Formula As String) As String
+        Dim s As String = Formula.ToUpper.Trim
+        Dim s1 As String = ""
+
+        s = String.Format(" {0}", s)
+        s = s.Replace("TRUE", "$TRUE")
+        s = s.Replace("FALSE", "$FALSE")
+
+        s1 = s(0)
+
+        For i = 1 To Len(s) - 1
+            If s(i - 1) = " " Then
+                If (Asc(s(i)) >= 65) And (Asc(s(i)) <= 90) Then
+                    s1 = String.Format("{0}-", s1)
+                End If
+            End If
+            s1 = String.Format("{0}{1}", s1, s(i))
+        Next
+
+        Return s1.Trim
     End Function
-
-
 End Class

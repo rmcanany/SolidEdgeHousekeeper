@@ -88,9 +88,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim PartNumberFound As Boolean
         Dim Filename As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
-        Filename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        Filename = UC.SplitFOAName(SEDoc.FullName)("Filename")
         'If Filename.Contains("!") Then
         '    Filename = Filename.Split("!"c)(0)
         'End If
@@ -103,12 +103,12 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End If
 
         If ExitStatus = 0 Then
-            Dim DocType As String = TC.GetDocType(SEDoc)
+            Dim DocType As String = UC.GetDocType(SEDoc)
 
             Select Case DocType
                 Case = "asm", "par", "psm"
 
-                    Prop = TC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                    Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
                     If Prop Is Nothing Then
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",

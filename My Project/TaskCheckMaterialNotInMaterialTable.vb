@@ -74,13 +74,13 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "par", "psm"
-                Dim MaterialDoctor As New MaterialDoctor
-                ErrorMessage = MaterialDoctor.MaterialNotInMaterialTable(SEDoc, Me.MaterialTable, SEApp)
+                Dim UM As New UtilsMaterials
+                ErrorMessage = UM.MaterialNotInMaterialTable(SEDoc, Me.MaterialTable, SEApp)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select

@@ -112,11 +112,11 @@ Public Class TaskUpdateModelSizeInVariableTable
         Dim Formula As String
         Dim i As Integer
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         ' Generates an exception on some Model Bodies
         Try
-            Range = TC.GetDocRange(SEDoc)
+            Range = UC.GetDocRange(SEDoc)
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add("Unable to obtain stock size")
@@ -136,7 +136,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 i = 0
                 For Each VariableName In VariableNames
                     Formula = String.Format("{0} m", Range(i))
-                    If Not TC.IsVariablePresent(SEDoc, VariableName) Then
+                    If Not UC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.
@@ -172,7 +172,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                 i = 0
                 For Each VariableName In VariableNames
                     Formula = String.Format("{0} m", Range(i))
-                    If Not TC.IsVariablePresent(SEDoc, VariableName) Then
+                    If Not UC.IsVariablePresent(SEDoc, VariableName) Then
                         ' Add it
                         Try
                             ' Pretty sure this must be a variable, not a dimension.

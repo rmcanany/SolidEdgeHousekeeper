@@ -165,7 +165,7 @@ Public Class TaskEditInteractively
 
         SEApp.DisplayAlerts = True
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim FEI As New FormEditInteractively
 
@@ -178,7 +178,7 @@ Public Class TaskEditInteractively
         FEI.CommandIDPart = Me.CommandIDPart
         FEI.CommandIDSheetmetal = Me.CommandIDSheetmetal
         FEI.CommandIDDraft = Me.CommandIDDraft
-        FEI.Filetype = TC.GetDocType(SEDoc)
+        FEI.Filetype = UC.GetDocType(SEDoc)
         FEI.SEApp = SEApp
         FEI.SaveAfterTimeout = Me.SaveAfterTimeout
 

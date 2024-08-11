@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Public Class OccurrenceGetter
+Public Class UtilsOccurrences
     ' https://community.sw.siemens.com/s/question/0D54O000061xsxUSAQ/sorting-through-occurrences
     ' https://community.sw.siemens.com/s/question/0D54O00007OeUiYSAV/activate-all-parts-even-hidden-in-assembly-reaching-occsubocc-document-requires-activation
 

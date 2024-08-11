@@ -104,13 +104,13 @@ Public Class TaskEditVariables
 
         Dim DocType As String
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         'Dim Proceed As Boolean = True
         Dim tf As Boolean
         'Dim s As String
 
-        DocType = TC.GetDocType(SEDoc)
+        DocType = UC.GetDocType(SEDoc)
 
         VariablesToEdit = Me.JSONString
 
@@ -148,13 +148,13 @@ Public Class TaskEditVariables
         If ExitStatus = 0 Then
             Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
 
-            DocDimensionDict = TC.GetDocDimensions(SEDoc)
+            DocDimensionDict = UC.GetDocDimensions(SEDoc)
             If DocDimensionDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access dimensions")
             End If
 
-            DocVariableDict = TC.GetDocVariables(SEDoc)
+            DocVariableDict = UC.GetDocVariables(SEDoc)
             If DocVariableDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access variables")
@@ -169,7 +169,7 @@ Public Class TaskEditVariables
             For Each RowIndex In VariablesToEditDict.Keys
                 Dim VariableName As String = VariablesToEditDict(RowIndex)("VariableName").Trim
                 Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
-                Dim UnitType As SolidEdgeConstants.UnitTypeConstants = TC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
+                Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"
                 Dim ExposeName As String = VariablesToEditDict(RowIndex)("ExposeName").Trim
 
@@ -436,10 +436,10 @@ Public Class TaskEditVariables
 
         HelpString += vbCrLf + vbCrLf + "The Variable name is required.  There are restrictions on the name.  "
         HelpString += "It cannot start with a number.  It can only contain letters and numbers and the "
-        HelpString += "underscore '_' character."
+        HelpString += "underscore `_` character."
 
         HelpString += vbCrLf + vbCrLf + "If a variable on the list is not in the file, it can optionally be added.  "
-        HelpString += "Set the option on the Options panel. "
+        HelpString += "Set the behavior on the Options panel. "
 
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
@@ -449,14 +449,13 @@ Public Class TaskEditVariables
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
 
         HelpString += vbCrLf + vbCrLf + "The variables are processed in the order in the table. "
-        HelpString += "To change the order select a row and click the `Up` or `Down` button "
-        HelpString += "on the toolbar `Row Tools` group. "
+        HelpString += "To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
         HelpString += "The `Delete` button removes the selected row. "
 
         HelpString += vbCrLf + vbCrLf + "You can save a setup for future use. "
         HelpString += "In the toolbar `Saved Settings` group, enter the name and click `Save`. "
-        HelpString += "To retrieve a setting click the down arrow and select the one desired. "
-        HelpString += "To delete a setting select it and click `Delete`. "
+        HelpString += "To retrieve a setting, click the down arrow and select it. "
+        HelpString += "To remove a setting, select it and click `Delete`. "
 
         Return HelpString
     End Function

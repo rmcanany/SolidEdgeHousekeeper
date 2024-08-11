@@ -128,8 +128,8 @@ Public Class TaskSaveDrawingAs
 
         Dim Proceed As Boolean = True
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
             NewExtension = Me.NewFileTypeName
@@ -195,10 +195,10 @@ Public Class TaskSaveDrawingAs
 
         Dim SplitDict As New Dictionary(Of String, String)
 
-        Dim TC As New Task_Common
-        Dim FCD As New FilenameCharmapDoctor()
+        Dim UC As New UtilsCommon
+        Dim UFC As New UtilsFilenameCharmap()
 
-        OldFullFilename = TC.SplitFOAName(SEDoc.FullName)("Filename")
+        OldFullFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
 
         OldDirectoryName = System.IO.Path.GetDirectoryName(OldFullFilename)
         OldFilenameWOExt = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)
@@ -220,7 +220,7 @@ Public Class TaskSaveDrawingAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = TC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
@@ -231,7 +231,7 @@ Public Class TaskSaveDrawingAs
         End If
 
         s = System.IO.Path.GetFileNameWithoutExtension(NewFilename)
-        NewFilename = NewFilename.Replace(s, FCD.SubstituteIllegalCharacters(s))
+        NewFilename = NewFilename.Replace(s, UFC.SubstituteIllegalCharacters(s))
 
         Return NewFilename
     End Function
@@ -332,18 +332,18 @@ Public Class TaskSaveDrawingAs
                     SEApp.GetGlobalParameter(SaveAsPDFOptions, PreviousSetting)
                     SEApp.SetGlobalParameter(SaveAsPDFOptions, 0)
 
-                    Dim TC As New Task_Common
-                    SheetList = TC.GetSheets(SEDoc, "Working")
+                    Dim UC As New UtilsCommon
+                    SheetList = UC.GetSheets(SEDoc, "Working")
 
                     tmpNewFilename = NewFilename
 
-                    Dim FCD As New FilenameCharmapDoctor
+                    Dim UFC As New UtilsFilenameCharmap
 
                     For Each Sheet In SheetList
                         Sheet.Activate()
 
                         SheetName = String.Format("-{0}", Sheet.Name)
-                        SheetName = FCD.SubstituteIllegalCharacters(SheetName)
+                        SheetName = UFC.SubstituteIllegalCharacters(SheetName)
                         If Me.PDFPerSheetSuppressSheetname Then
                             If SheetList.Count = 1 Then
                                 SheetName = ""

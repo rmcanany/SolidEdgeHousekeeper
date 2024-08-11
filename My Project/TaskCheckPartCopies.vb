@@ -74,8 +74,8 @@ Public Class TaskCheckPartCopies
         Dim CopiedParts As SolidEdgePart.CopiedParts
         Dim CopiedPart As SolidEdgePart.CopiedPart
 
-        Dim TC As New Task_Common
-        Dim DocType As String = TC.GetDocType(SEDoc)
+        Dim UC As New UtilsCommon
+        Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case = "par"

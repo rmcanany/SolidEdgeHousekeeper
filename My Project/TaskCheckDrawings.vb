@@ -89,7 +89,7 @@ Public Class TaskCheckDrawings
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
 
 
-        Dim TC As New Task_Common
+        Dim UC As New UtilsCommon
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -115,7 +115,7 @@ Public Class TaskCheckDrawings
             End Try
 
             ' Check drawing views.
-            For Each Sheet In TC.GetSheets(tmpSEDoc, "Working")
+            For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
 
                 DrawingViews = Sheet.DrawingViews
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
@@ -152,7 +152,7 @@ Public Class TaskCheckDrawings
             Dim ParentSheet As SolidEdgeDraft.Sheet
 
             ' Check callouts.  Callouts are 'Balloons' in Solid Edge.
-            For Each Sheet In TC.GetSheets(tmpSEDoc, "Working")
+            For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
                 Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
                 For Each Balloon In Balloons
                     'Doesn't always work
@@ -170,7 +170,7 @@ Public Class TaskCheckDrawings
             Next Sheet
 
             ' Check dimensions.
-            DocDimensionDict = TC.GetDocDimensions(SEDoc)
+            DocDimensionDict = UC.GetDocDimensions(SEDoc)
             If DocDimensionDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access dimensions")
@@ -197,7 +197,7 @@ Public Class TaskCheckDrawings
 
         If DrawingViewOnBackgroundSheet Then
             Dim BackgroundSheet As SolidEdgeDraft.Sheet
-            For Each BackgroundSheet In TC.GetSheets(tmpSEDoc, "Background")
+            For Each BackgroundSheet In UC.GetSheets(tmpSEDoc, "Background")
                 If BackgroundSheet.DrawingViews.Count > 0 Then
                     ExitStatus = 1
                     s = String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name)
