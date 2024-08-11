@@ -248,7 +248,7 @@ In addition to entering the `Property name`, you must also select the `Property 
 
 `Custom` properties are ones that you create, probably in a template. Solid Edge also creates some Custom properties for you. These include `Exposed Variables` and output from the `Inspect > Physical Properties` command. The custom property names can be in any language. (In theory, at least -- not tested at this time. Not sure about the Solid Edge entries either.)
 
-If you made a customized property list, the `Property Set` will be populated automatically.  Unless you added it manually that is, in that case you'll have to select the appropriate one.
+If you made a customized property list, the `Property Set` will be populated automatically.  Unless you added it manually, that is, in which case you'll have to select the appropriate one.
 
 **Comparison**
 
