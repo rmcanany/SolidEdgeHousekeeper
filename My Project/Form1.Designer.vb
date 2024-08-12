@@ -174,15 +174,18 @@ Partial Class Form1
         Me.CheckBoxUseTemplateProperties = New System.Windows.Forms.CheckBox()
         Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
-        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
+        Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
         Me.CheckBoxWarnSave = New System.Windows.Forms.CheckBox()
-        Me.LabelFontSize = New System.Windows.Forms.Label()
-        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
         Me.CheckBoxPropertyFilterFollowDraftLinks = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxNoUpdateMRU = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBackgroundProcessing = New System.Windows.Forms.CheckBox()
+        Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
+        Me.TextBoxFontSize = New System.Windows.Forms.TextBox()
+        Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
         Me.TabPageHelp = New System.Windows.Forms.TabPage()
         Me.LabelReadmeNavigation2 = New System.Windows.Forms.Label()
         Me.LabelReadmeNavigation1 = New System.Windows.Forms.Label()
@@ -229,6 +232,8 @@ Partial Class Form1
         Me.TabPageTemplates.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
+        Me.ExTableLayoutPanel2.SuspendLayout()
+        Me.ExTableLayoutPanel3.SuspendLayout()
         Me.TabPageHelp.SuspendLayout()
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -598,7 +603,7 @@ Partial Class Form1
         '
         'TaskFooterPanel
         '
-        Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSkyBlue
+        Me.TaskFooterPanel.BackColor = System.Drawing.Color.LightSteelBlue
         Me.TaskFooterPanel.Controls.Add(Me.EditTaskListButton)
         Me.TaskFooterPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.TaskFooterPanel.Location = New System.Drawing.Point(3, 598)
@@ -626,7 +631,7 @@ Partial Class Form1
         '
         'TableLayoutPanel2
         '
-        Me.TableLayoutPanel2.BackColor = System.Drawing.Color.LightSkyBlue
+        Me.TableLayoutPanel2.BackColor = System.Drawing.Color.LightSteelBlue
         Me.TableLayoutPanel2.ColumnCount = 9
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -1943,15 +1948,7 @@ Partial Class Form1
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxPropertyFilterCheckDraftFile)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxUseCurrentSession)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxNoUpdateMRU)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxWarnSave)
-        Me.TabPageGeneral.Controls.Add(Me.LabelFontSize)
-        Me.TabPageGeneral.Controls.Add(Me.TextBoxFontSize)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxPropertyFilterFollowDraftLinks)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxBackgroundProcessing)
-        Me.TabPageGeneral.Controls.Add(Me.CheckBoxRememberTasks)
+        Me.TabPageGeneral.Controls.Add(Me.ExTableLayoutPanel2)
         Me.TabPageGeneral.ImageKey = "config"
         Me.TabPageGeneral.Location = New System.Drawing.Point(4, 25)
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -1962,105 +1959,181 @@ Partial Class Form1
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
         '
-        'CheckBoxPropertyFilterCheckDraftFile
+        'ExTableLayoutPanel2
         '
-        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
-        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(6, 300)
-        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
-        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(301, 20)
-        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 73
-        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Include the Draft file itself in search"
-        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
+        Me.ExTableLayoutPanel2.ColumnCount = 1
+        Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 0)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterCheckDraftFile, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnSave, 0, 1)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterFollowDraftLinks, 0, 6)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 2)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxBackgroundProcessing, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 3)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 4)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 8)
+        Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
+        Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
+        Me.ExTableLayoutPanel2.RowCount = 10
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(524, 783)
+        Me.ExTableLayoutPanel2.TabIndex = 74
+        Me.ExTableLayoutPanel2.Task = Nothing
         '
         'CheckBoxUseCurrentSession
         '
+        Me.CheckBoxUseCurrentSession.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxUseCurrentSession.AutoSize = True
-        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(7, 6)
+        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 5)
         Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
-        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(226, 20)
+        Me.CheckBoxUseCurrentSession.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(231, 20)
         Me.CheckBoxUseCurrentSession.TabIndex = 72
         Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
         Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
         '
-        'CheckBoxNoUpdateMRU
+        'CheckBoxPropertyFilterCheckDraftFile
         '
-        Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(7, 89)
-        Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
-        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(311, 20)
-        Me.CheckBoxNoUpdateMRU.TabIndex = 71
-        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
-        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
+        Me.CheckBoxPropertyFilterCheckDraftFile.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
+        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(3, 215)
+        Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
+        Me.CheckBoxPropertyFilterCheckDraftFile.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(306, 20)
+        Me.CheckBoxPropertyFilterCheckDraftFile.TabIndex = 73
+        Me.CheckBoxPropertyFilterCheckDraftFile.Text = "Property Filter -- Include the Draft file itself in search"
+        Me.CheckBoxPropertyFilterCheckDraftFile.UseVisualStyleBackColor = True
         '
         'CheckBoxWarnSave
         '
+        Me.CheckBoxWarnSave.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(7, 48)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(4, 35)
         Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(186, 20)
+        Me.CheckBoxWarnSave.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(191, 20)
         Me.CheckBoxWarnSave.TabIndex = 70
         Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
         Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
+        'CheckBoxPropertyFilterFollowDraftLinks
+        '
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
+        Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(4, 185)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(356, 20)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.TabIndex = 52
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Text = "Property Filter -- Include Draft file model documents in search"
+        Me.CheckBoxPropertyFilterFollowDraftLinks.UseVisualStyleBackColor = True
+        '
+        'CheckBoxNoUpdateMRU
+        '
+        Me.CheckBoxNoUpdateMRU.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxNoUpdateMRU.AutoSize = True
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(4, 65)
+        Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
+        Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(316, 20)
+        Me.CheckBoxNoUpdateMRU.TabIndex = 71
+        Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
+        Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
+        '
+        'CheckBoxBackgroundProcessing
+        '
+        Me.CheckBoxBackgroundProcessing.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxBackgroundProcessing.AutoSize = True
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(4, 155)
+        Me.CheckBoxBackgroundProcessing.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
+        Me.CheckBoxBackgroundProcessing.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(253, 20)
+        Me.CheckBoxBackgroundProcessing.TabIndex = 49
+        Me.CheckBoxBackgroundProcessing.Text = "Process tasks in background (no graphics)"
+        Me.CheckBoxBackgroundProcessing.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel3
+        '
+        Me.ExTableLayoutPanel3.ColumnCount = 2
+        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel3.Controls.Add(Me.TextBoxFontSize, 0, 0)
+        Me.ExTableLayoutPanel3.Controls.Add(Me.LabelFontSize, 1, 0)
+        Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 93)
+        Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
+        Me.ExTableLayoutPanel3.RowCount = 1
+        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(518, 24)
+        Me.ExTableLayoutPanel3.TabIndex = 73
+        Me.ExTableLayoutPanel3.Task = Nothing
+        '
+        'TextBoxFontSize
+        '
+        Me.TextBoxFontSize.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(4, 3)
+        Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextBoxFontSize.Name = "TextBoxFontSize"
+        Me.TextBoxFontSize.Size = New System.Drawing.Size(42, 23)
+        Me.TextBoxFontSize.TabIndex = 54
+        Me.TextBoxFontSize.Text = "8"
+        '
         'LabelFontSize
         '
+        Me.LabelFontSize.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(59, 133)
+        Me.LabelFontSize.Location = New System.Drawing.Point(54, 4)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(90, 16)
         Me.LabelFontSize.TabIndex = 55
         Me.LabelFontSize.Text = "File list font size"
         '
-        'TextBoxFontSize
-        '
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(7, 130)
-        Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TextBoxFontSize.Name = "TextBoxFontSize"
-        Me.TextBoxFontSize.Size = New System.Drawing.Size(44, 23)
-        Me.TextBoxFontSize.TabIndex = 54
-        Me.TextBoxFontSize.Text = "8"
-        '
-        'CheckBoxPropertyFilterFollowDraftLinks
-        '
-        Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
-        Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(7, 255)
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(351, 20)
-        Me.CheckBoxPropertyFilterFollowDraftLinks.TabIndex = 52
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Text = "Property Filter -- Include Draft file model documents in search"
-        Me.CheckBoxPropertyFilterFollowDraftLinks.UseVisualStyleBackColor = True
-        '
-        'CheckBoxBackgroundProcessing
-        '
-        Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(7, 214)
-        Me.CheckBoxBackgroundProcessing.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
-        Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(248, 20)
-        Me.CheckBoxBackgroundProcessing.TabIndex = 49
-        Me.CheckBoxBackgroundProcessing.Text = "Process tasks in background (no graphics)"
-        Me.CheckBoxBackgroundProcessing.UseVisualStyleBackColor = True
-        '
         'CheckBoxRememberTasks
         '
+        Me.CheckBoxRememberTasks.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(7, 173)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(2, 125)
         Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
-        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(251, 20)
+        Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(256, 20)
         Me.CheckBoxRememberTasks.TabIndex = 48
         Me.CheckBoxRememberTasks.Text = "Remember selected tasks between sessions"
         Me.CheckBoxRememberTasks.UseVisualStyleBackColor = True
+        '
+        'CheckBoxCheckForNewerVersion
+        '
+        Me.CheckBoxCheckForNewerVersion.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxCheckForNewerVersion.AutoSize = True
+        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 245)
+        Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
+        Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(211, 20)
+        Me.CheckBoxCheckForNewerVersion.TabIndex = 74
+        Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
+        Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
         '
         'TabPageHelp
         '
@@ -2316,7 +2389,10 @@ Partial Class Form1
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
         Me.TabPageGeneral.ResumeLayout(False)
-        Me.TabPageGeneral.PerformLayout()
+        Me.ExTableLayoutPanel2.ResumeLayout(False)
+        Me.ExTableLayoutPanel2.PerformLayout()
+        Me.ExTableLayoutPanel3.ResumeLayout(False)
+        Me.ExTableLayoutPanel3.PerformLayout()
         Me.TabPageHelp.ResumeLayout(False)
         Me.TabPageHelp.PerformLayout()
         CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2511,4 +2587,7 @@ Partial Class Form1
     Friend WithEvents ButtonCopyToTasks As Button
     Friend WithEvents LabelCopyToTasks As Label
     Friend WithEvents ButtonUseTemplateProperties As Button
+    Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
+    Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
+    Friend WithEvents CheckBoxCheckForNewerVersion As CheckBox
 End Class

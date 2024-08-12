@@ -50,7 +50,7 @@ He *still* wasn't done!  For this release, Francesco implemented a new Expressio
 
 #### Expression Editor
 
-An `expression` is similar to a `formula` in Excel. Expressions enable more complex manipulations of the replacement text. You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  You can test your expression interactively. You can save it for reuse.
+An `expression` is similar to a `formula` in Excel. You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  You can test your expression interactively. You can save it for reuse.
 
 ![Expression Editor](My%20Project/media/expression_editor.png)
 
@@ -66,7 +66,7 @@ Contributed by **@ChrisNC** Thank you!
 
 I don't know how I didn't think of this before.  Luckily Chris did!
 
-Before updating the flat pattern, this command first regenerates the flat *model*.  That is the parent geometry of the flat pattern.  If you have an automated model-to-laser workflow, you may have noticed that sometimes exported files contains no geometry.  This is a fix for that situation.
+Before updating the flat pattern, this command first regenerates the flat *model*.  That is the parent geometry of the flat pattern.  If you have an automated model-to-laser workflow, you may have noticed that sometimes exported files contain no geometry.  This is a fix for that situation.
 
 See the [<ins>**Update Flat Pattern Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-flat-pattern) for details.
 
@@ -77,7 +77,7 @@ This command removes external links from a file.  You can optionally remove `Par
 
 This is irreversible, so you know, think about it.  
 
-For drawing views in particular, there are important things to know about model properties (like ones driving your title block, for example).  Please visit the link below for information on that.
+For drawing views in particular, there are important things to know about model properties (like ones driving your title block, for example).  Please visit the link for information on that.
 
 See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-links) for details.
 
@@ -118,6 +118,20 @@ I can't envision a case where you would use both options at the same time, but t
 
 See the [<ins>**Edit Interactively Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-interactively) for details.
 
+### Property Filter
+
+Added the ability to select properties defined in your templates.  Also implemented in-line editing, replacing the previous input field.
+
+![Property Filter](My%20Project/media/property_filter.png)
+
+The template properties are populated on the **Configuration Tab -- Templates Page**.
+
+![Customize Property List](My%20Project/media/customize_property_list.png)
+
+This functionality was also added to the `Edit Properties` command.  That command, and `Edit Variables` also now have the option to save settings for reuse.
+
+See the [<ins>**Property Filter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering) for details.
+
 ### Quick Start Guide
 
 Added a guide for new and infrequent users.  (Thank you **@gir.isi**, **@BrianVR74**, **@Amial_From_France** and many others!)  It's not nearly as detailed as the README, but it will get you up and running much more quickly.
@@ -148,6 +162,12 @@ See the [<ins>**Update Model Styles from Template Help Topic**</ins>](https://gi
 Added an option, for image files, to change the view style before saving.  (Thank you **@tempod**!)
 
 See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
+
+### New Version Check
+
+Added an option to automatically check for updates on GitHub.  If a newer version is found, a dialog informs you.  It also provides links to the release notes, installation instructions, and downloads page.  
+
+The option is disabled by default.  Enable it on the **Configuration Tab -- General Page**.
 
 ### Readme
 

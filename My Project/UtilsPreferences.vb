@@ -589,4 +589,57 @@ Public Class UtilsPreferences
         End If
     End Sub
 
+    Public Sub CheckForNewerVersion(CurrentVersion As String)
+        ' Version example '2024.2'
+        ' tag_name example '"tag_name":"v2024.1"'
+
+        Dim tf As Boolean
+        Dim s As String = ""
+        Dim NewList As New List(Of String)
+
+        Dim CurrentYear As Integer
+        Dim NewYear As Integer
+        Dim CurrentIdx As Integer
+        Dim NewIdx As Integer
+
+        Dim DoubleQuote As Char = Chr(34)
+
+        Dim WC As New System.Net.WebClient
+
+        CurrentYear = CInt(CurrentVersion.Split(CChar("."))(0))
+        CurrentIdx = CInt(CurrentVersion.Split(CChar("."))(1))
+
+        WC.Headers.Add("User-Agent: Other")
+
+        s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+
+        NewList = s.Split(CChar(",")).ToList
+
+        For Each s In NewList
+            If s.Contains("tag_name") Then
+                Exit For
+            End If
+        Next
+
+        s = s.ToLower
+        s = s.Replace(DoubleQuote, "")  ' '"tag_name":"v2024.1"' -> 'tag_name:v2024.1'
+        s = s.Split(CChar(":"))(1)      ' 'tag_name:v2024.1' -> 'v2024.1'
+        s = s.Replace("v", "")  ' 'v2024.1' -> '2024.1'
+
+        Dim NewVersion As String = s
+
+        NewYear = CInt(s.Split(CChar("."))(0))
+        NewIdx = CInt(s.Split(CChar("."))(1))
+
+        tf = NewYear > CurrentYear
+        tf = tf Or (NewYear = CurrentYear) And (NewIdx > CurrentIdx)
+
+        If tf Then
+            Dim FNVA As New FormNewVersionAvailable(CurrentVersion, NewVersion)
+            FNVA.ShowDialog()
+        End If
+
+
+    End Sub
+
 End Class

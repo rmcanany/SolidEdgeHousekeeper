@@ -2,12 +2,15 @@
 
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports Newtonsoft.Json
 Imports SolidEdgeCommunity
-Imports SolidEdgeConstants
+'Imports SolidEdgeConstants
+
 
 Public Class Form1
 
     Public Property Version As String = "2024.2"
+    Public Property CheckForNewerVersion As Boolean
 
 
     Public SEApp As SolidEdgeFramework.Application
@@ -690,16 +693,16 @@ Public Class Form1
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        ' Help Tab LinkLabel
-        LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
-        Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
-        Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
-
         Dim Version = Me.Version
         Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
         Dim HelpURL = String.Format("{0}#readme", VersionSpecificReadme)
 
+        ' Help Tab LinkLabel
+        LinkLabelGitHubReadme.Text = "Help is now hosted on GitHub"
+        Dim StartIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 6
+        Dim EndIdx As Integer = Len(LinkLabelGitHubReadme.Text) - 1
         LinkLabelGitHubReadme.Links.Add(StartIdx, EndIdx, HelpURL)
+
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -745,6 +748,10 @@ Public Class Form1
 
         Me.PropertyFilterDict = UP.GetPropertyFilterDict
 
+        'UP.CheckForNewerVersion(Me.Version)
+        If Me.CheckForNewerVersion Then
+            UP.CheckForNewerVersion(Me.Version)
+        End If
 
     End Sub
 
@@ -2277,6 +2284,10 @@ Public Class Form1
 
     Private Sub CheckBoxBackgroundProcessing_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxBackgroundProcessing.CheckedChanged
         Me.RunInBackground = CheckBoxBackgroundProcessing.Checked
+    End Sub
+
+    Private Sub CheckBoxCheckForNewerVersion_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxCheckForNewerVersion.CheckedChanged
+        Me.CheckForNewerVersion = CheckBoxCheckForNewerVersion.Checked
     End Sub
 
 
