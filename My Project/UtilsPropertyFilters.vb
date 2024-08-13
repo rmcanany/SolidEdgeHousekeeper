@@ -79,7 +79,7 @@ Public Class UtilsPropertyFilters
         Return FilteredFiles
     End Function
 
-    Shared Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
+    Public Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
                 PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
                 PropertyFilterFormula As String) As Boolean
 
@@ -120,7 +120,7 @@ Public Class UtilsPropertyFilters
 
     End Function
 
-    Shared Function ProcessProperties(FoundFile As String,
+    Public Function ProcessProperties(FoundFile As String,
         DMApp As DesignManager.Application,
         PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
         PropertyFilterFormula As String,
@@ -166,7 +166,7 @@ Public Class UtilsPropertyFilters
 
     End Function
 
-    Shared Function DoSubstitution(Formula As String, VariableTruthValues As Dictionary(Of String, String)) As String
+    Public Function DoSubstitution(Formula As String, VariableTruthValues As Dictionary(Of String, String)) As String
         Dim Result As String
         Dim Variable As String
         Dim var As String
@@ -183,7 +183,7 @@ Public Class UtilsPropertyFilters
         Return Result
     End Function
 
-    Shared Function DoComparison(Comparison As String, Value As String, DocValue As String) As Boolean
+    Public Function DoComparison(Comparison As String, Value As String, DocValue As String) As Boolean
         Dim tf As Boolean = False
 
         If Comparison = "contains" Then
@@ -213,7 +213,7 @@ Public Class UtilsPropertyFilters
         Return tf
     End Function
 
-    Shared Function TextToDouble(Text As String) As Double
+    Public Function TextToDouble(Text As String) As Double
         Dim DoubleNumber As Double
 
         Dim Units As New List(Of String)
@@ -254,7 +254,7 @@ Public Class UtilsPropertyFilters
 
     End Function
 
-    Shared Function SearchProperties(PropertySets As DesignManager.PropertySets,
+    Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
                                       PropertySet As String,
                                       PropertyName As String) As String
         Dim DocValue As String = ""
@@ -329,17 +329,22 @@ Public Class UtilsPropertyFilters
     '    Return Result
     'End Function
 
-    Shared Function EvaluateBoolean(Formula As String) As Boolean
+    Public Function EvaluateBoolean(Formula As String) As Boolean
         Dim tf As Boolean
 
         Dim UPS As New UtilsPowerShell
-        Dim Result As String = UPS.RunScript(FormulaToPSSyntax(Formula))
 
-        If Result.ToLower.Contains("true") Then
-            tf = True
-        Else
+        Try
+            Dim Result As String = UPS.RunScript(FormulaToPSSyntax(Formula))
+
+            If Result.ToLower.Contains("true") Then
+                tf = True
+            Else
+                tf = False
+            End If
+        Catch ex As Exception
             tf = False
-        End If
+        End Try
 
         Return tf
 
@@ -357,7 +362,7 @@ Public Class UtilsPropertyFilters
         'End Try
     End Function
 
-    Shared Function FormulaToPSSyntax(Formula As String) As String
+    Public Function FormulaToPSSyntax(Formula As String) As String
         Dim s As String = Formula.ToUpper.Trim
         Dim s1 As String = ""
 

@@ -76,61 +76,36 @@ Partial Class Form1
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
+        Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
+        Me.LabelTLAListOptions = New System.Windows.Forms.Label()
         Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxWarnBareTLA = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAAutoIncludeTLF = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxWarnBareTLA = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxTLAReportUnrelatedFiles = New System.Windows.Forms.CheckBox()
+        Me.LabelTLASearchOptions = New System.Windows.Forms.Label()
+        Me.RadioButtonTLABottomUp = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonTLATopDown = New System.Windows.Forms.RadioButton()
+        Me.ExTableLayoutPanel5 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonFastSearchScopeFilename = New System.Windows.Forms.Button()
         Me.TextBoxFastSearchScopeFilename = New System.Windows.Forms.TextBox()
-        Me.LabelFastSearchScopeFilename = New System.Windows.Forms.Label()
-        Me.CheckBoxTLAReportUnrelatedFiles = New System.Windows.Forms.CheckBox()
-        Me.RadioButtonTLATopDown = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonTLABottomUp = New System.Windows.Forms.RadioButton()
         Me.TabPageStatus = New System.Windows.Forms.TabPage()
+        Me.ExTableLayoutPanel6 = New Housekeeper.ExTableLayoutPanel()
+        Me.CheckBoxProcessReadOnly = New System.Windows.Forms.CheckBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.LabelStatusInBaselined = New System.Windows.Forms.Label()
         Me.LabelStatusAfter = New System.Windows.Forms.Label()
+        Me.LabelStatusInAvailable = New System.Windows.Forms.Label()
         Me.LabelStatusBefore = New System.Windows.Forms.Label()
+        Me.LabelStatusInInReview = New System.Windows.Forms.Label()
         Me.LabelStatusOutReleased = New System.Windows.Forms.Label()
+        Me.LabelStatusInInWork = New System.Windows.Forms.Label()
         Me.LabelStatusOutObsolete = New System.Windows.Forms.Label()
+        Me.LabelStatusInObsolete = New System.Windows.Forms.Label()
         Me.LabelStatusOutIW = New System.Windows.Forms.Label()
+        Me.LabelStatusInReleased = New System.Windows.Forms.Label()
         Me.LabelStatusOutInReview = New System.Windows.Forms.Label()
-        Me.LabelStatusOutBaselined = New System.Windows.Forms.Label()
-        Me.LabelStatusOutAvailable = New System.Windows.Forms.Label()
-        Me.GroupBoxStatusInR = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusRtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusRtoA = New System.Windows.Forms.RadioButton()
-        Me.GroupBoxStatusInO = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusOtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
-        Me.GroupBoxStatusInIW = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusIWtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIWtoA = New System.Windows.Forms.RadioButton()
-        Me.GroupBoxStatusInIR = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusIRtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusIRtoA = New System.Windows.Forms.RadioButton()
-        Me.GroupBoxStatusInB = New System.Windows.Forms.GroupBox()
-        Me.RadioButtonStatusBtoR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoO = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoIW = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoIR = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoB = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonStatusBtoA = New System.Windows.Forms.RadioButton()
         Me.GroupBoxStatusInA = New System.Windows.Forms.GroupBox()
         Me.RadioButtonStatusAtoR = New System.Windows.Forms.RadioButton()
         Me.RadioButtonStatusAtoO = New System.Windows.Forms.RadioButton()
@@ -138,23 +113,55 @@ Partial Class Form1
         Me.RadioButtonStatusAtoIR = New System.Windows.Forms.RadioButton()
         Me.RadioButtonStatusAtoB = New System.Windows.Forms.RadioButton()
         Me.RadioButtonStatusAtoA = New System.Windows.Forms.RadioButton()
-        Me.LabelStatusInReleased = New System.Windows.Forms.Label()
-        Me.LabelStatusInObsolete = New System.Windows.Forms.Label()
-        Me.LabelStatusInInWork = New System.Windows.Forms.Label()
-        Me.LabelStatusInInReview = New System.Windows.Forms.Label()
-        Me.LabelStatusInBaselined = New System.Windows.Forms.Label()
-        Me.LabelStatusInAvailable = New System.Windows.Forms.Label()
-        Me.RadioButtonReadOnlyChange = New System.Windows.Forms.RadioButton()
+        Me.LabelStatusOutBaselined = New System.Windows.Forms.Label()
+        Me.GroupBoxStatusInB = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusBtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusBtoA = New System.Windows.Forms.RadioButton()
+        Me.LabelStatusOutAvailable = New System.Windows.Forms.Label()
+        Me.GroupBoxStatusInIR = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusIRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIRtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInR = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusRtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusRtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInIW = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusIWtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusIWtoA = New System.Windows.Forms.RadioButton()
+        Me.GroupBoxStatusInO = New System.Windows.Forms.GroupBox()
+        Me.RadioButtonStatusOtoR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoO = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIW = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoIR = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoB = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
         Me.RadioButtonReadOnlyRevert = New System.Windows.Forms.RadioButton()
-        Me.CheckBoxProcessReadOnly = New System.Windows.Forms.CheckBox()
+        Me.RadioButtonReadOnlyChange = New System.Windows.Forms.RadioButton()
         Me.TabPageSorting = New System.Windows.Forms.TabPage()
-        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
-        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
+        Me.ExTableLayoutPanel7 = New Housekeeper.ExTableLayoutPanel()
+        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
+        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortRandomSample = New System.Windows.Forms.RadioButton()
         Me.CheckBoxListIncludeNoDependencies = New System.Windows.Forms.CheckBox()
-        Me.RadioButtonListSortDependency = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
-        Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
+        Me.ExTableLayoutPanel8 = New Housekeeper.ExTableLayoutPanel()
+        Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
+        Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
         Me.TabPageTemplates = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonAssemblyTemplate = New System.Windows.Forms.Button()
@@ -221,14 +228,20 @@ Partial Class Form1
         Me.TabPageConfiguration.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPageTopLevelAssy.SuspendLayout()
+        Me.ExTableLayoutPanel4.SuspendLayout()
+        Me.ExTableLayoutPanel5.SuspendLayout()
         Me.TabPageStatus.SuspendLayout()
-        Me.GroupBoxStatusInR.SuspendLayout()
-        Me.GroupBoxStatusInO.SuspendLayout()
-        Me.GroupBoxStatusInIW.SuspendLayout()
-        Me.GroupBoxStatusInIR.SuspendLayout()
-        Me.GroupBoxStatusInB.SuspendLayout()
+        Me.ExTableLayoutPanel6.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.GroupBoxStatusInA.SuspendLayout()
+        Me.GroupBoxStatusInB.SuspendLayout()
+        Me.GroupBoxStatusInIR.SuspendLayout()
+        Me.GroupBoxStatusInR.SuspendLayout()
+        Me.GroupBoxStatusInIW.SuspendLayout()
+        Me.GroupBoxStatusInO.SuspendLayout()
         Me.TabPageSorting.SuspendLayout()
+        Me.ExTableLayoutPanel7.SuspendLayout()
+        Me.ExTableLayoutPanel8.SuspendLayout()
         Me.TabPageTemplates.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
@@ -789,17 +802,7 @@ Partial Class Form1
         '
         'TabPageTopLevelAssy
         '
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAIncludePartCopies)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxDraftAndModelSameName)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxWarnBareTLA)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.ButtonFastSearchScopeFilename)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.TextBoxFastSearchScopeFilename)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.LabelFastSearchScopeFilename)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.RadioButtonTLATopDown)
-        Me.TabPageTopLevelAssy.Controls.Add(Me.RadioButtonTLABottomUp)
+        Me.TabPageTopLevelAssy.Controls.Add(Me.ExTableLayoutPanel4)
         Me.TabPageTopLevelAssy.ImageKey = "asm"
         Me.TabPageTopLevelAssy.Location = New System.Drawing.Point(4, 25)
         Me.TabPageTopLevelAssy.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -810,161 +813,207 @@ Partial Class Form1
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
         '
+        'ExTableLayoutPanel4
+        '
+        Me.ExTableLayoutPanel4.ColumnCount = 1
+        Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLAListOptions, 0, 0)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports, 0, 10)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF, 0, 1)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxDraftAndModelSameName, 0, 8)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIncludePartCopies, 0, 3)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxWarnBareTLA, 0, 2)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAReportUnrelatedFiles, 0, 4)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLASearchOptions, 0, 5)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLABottomUp, 0, 7)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLATopDown, 0, 6)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel5, 0, 9)
+        Me.ExTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel4.Location = New System.Drawing.Point(4, 3)
+        Me.ExTableLayoutPanel4.Name = "ExTableLayoutPanel4"
+        Me.ExTableLayoutPanel4.RowCount = 12
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(524, 783)
+        Me.ExTableLayoutPanel4.TabIndex = 22
+        Me.ExTableLayoutPanel4.Task = Nothing
+        '
+        'LabelTLAListOptions
+        '
+        Me.LabelTLAListOptions.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelTLAListOptions.AutoSize = True
+        Me.LabelTLAListOptions.Location = New System.Drawing.Point(3, 12)
+        Me.LabelTLAListOptions.Name = "LabelTLAListOptions"
+        Me.LabelTLAListOptions.Size = New System.Drawing.Size(82, 16)
+        Me.LabelTLAListOptions.TabIndex = 0
+        Me.LabelTLAListOptions.Text = "LIST OPTIONS"
+        '
         'CheckBoxTLAIgnoreIncludeInReports
         '
+        Me.CheckBoxTLAIgnoreIncludeInReports.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxTLAIgnoreIncludeInReports.AutoSize = True
         Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
         Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
-        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(10, 285)
-        Me.CheckBoxTLAIgnoreIncludeInReports.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(3, 335)
         Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
-        Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(261, 20)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(266, 20)
         Me.CheckBoxTLAIgnoreIncludeInReports.TabIndex = 21
         Me.CheckBoxTLAIgnoreIncludeInReports.Text = "Ignore occurrence's IncludeInReports setting"
         Me.CheckBoxTLAIgnoreIncludeInReports.UseVisualStyleBackColor = True
         Me.CheckBoxTLAIgnoreIncludeInReports.Visible = False
         '
+        'CheckBoxTLAAutoIncludeTLF
+        '
+        Me.CheckBoxTLAAutoIncludeTLF.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
+        Me.CheckBoxTLAAutoIncludeTLF.Checked = True
+        Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(3, 45)
+        Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
+        Me.CheckBoxTLAAutoIncludeTLF.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(372, 20)
+        Me.CheckBoxTLAAutoIncludeTLF.TabIndex = 17
+        Me.CheckBoxTLAAutoIncludeTLF.Text = "Automatically include the folder if a top-level assembly is chosen"
+        Me.CheckBoxTLAAutoIncludeTLF.UseVisualStyleBackColor = True
+        '
+        'CheckBoxDraftAndModelSameName
+        '
+        Me.CheckBoxDraftAndModelSameName.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxDraftAndModelSameName.AutoSize = True
+        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(3, 265)
+        Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
+        Me.CheckBoxDraftAndModelSameName.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(325, 20)
+        Me.CheckBoxDraftAndModelSameName.TabIndex = 19
+        Me.CheckBoxDraftAndModelSameName.Text = "Draft and model have same name and are in same folder"
+        Me.CheckBoxDraftAndModelSameName.UseVisualStyleBackColor = True
+        '
         'CheckBoxTLAIncludePartCopies
         '
+        Me.CheckBoxTLAIncludePartCopies.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxTLAIncludePartCopies.AutoSize = True
-        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(10, 64)
-        Me.CheckBoxTLAIncludePartCopies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxTLAIncludePartCopies.Location = New System.Drawing.Point(3, 105)
         Me.CheckBoxTLAIncludePartCopies.Name = "CheckBoxTLAIncludePartCopies"
-        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(496, 20)
+        Me.CheckBoxTLAIncludePartCopies.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxTLAIncludePartCopies.Size = New System.Drawing.Size(501, 20)
         Me.CheckBoxTLAIncludePartCopies.TabIndex = 20
         Me.CheckBoxTLAIncludePartCopies.Text = "Include parents of all part copies in search results, even if they are not in the" &
     " top level assy"
         Me.CheckBoxTLAIncludePartCopies.UseVisualStyleBackColor = True
         '
-        'CheckBoxDraftAndModelSameName
-        '
-        Me.CheckBoxDraftAndModelSameName.AutoSize = True
-        Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(10, 199)
-        Me.CheckBoxDraftAndModelSameName.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
-        Me.CheckBoxDraftAndModelSameName.Size = New System.Drawing.Size(320, 20)
-        Me.CheckBoxDraftAndModelSameName.TabIndex = 19
-        Me.CheckBoxDraftAndModelSameName.Text = "Draft and model have same name and are in same folder"
-        Me.CheckBoxDraftAndModelSameName.UseVisualStyleBackColor = True
-        '
         'CheckBoxWarnBareTLA
         '
+        Me.CheckBoxWarnBareTLA.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxWarnBareTLA.AutoSize = True
         Me.CheckBoxWarnBareTLA.Checked = True
         Me.CheckBoxWarnBareTLA.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(10, 35)
-        Me.CheckBoxWarnBareTLA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxWarnBareTLA.Location = New System.Drawing.Point(3, 75)
         Me.CheckBoxWarnBareTLA.Name = "CheckBoxWarnBareTLA"
-        Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(413, 20)
+        Me.CheckBoxWarnBareTLA.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxWarnBareTLA.Size = New System.Drawing.Size(418, 20)
         Me.CheckBoxWarnBareTLA.TabIndex = 18
         Me.CheckBoxWarnBareTLA.Text = "Warn me if a top-level assembly does not have a top-level folder specified"
         Me.CheckBoxWarnBareTLA.UseVisualStyleBackColor = True
         '
-        'CheckBoxTLAAutoIncludeTLF
-        '
-        Me.CheckBoxTLAAutoIncludeTLF.AutoSize = True
-        Me.CheckBoxTLAAutoIncludeTLF.Checked = True
-        Me.CheckBoxTLAAutoIncludeTLF.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAAutoIncludeTLF.Location = New System.Drawing.Point(10, 6)
-        Me.CheckBoxTLAAutoIncludeTLF.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxTLAAutoIncludeTLF.Name = "CheckBoxTLAAutoIncludeTLF"
-        Me.CheckBoxTLAAutoIncludeTLF.Size = New System.Drawing.Size(367, 20)
-        Me.CheckBoxTLAAutoIncludeTLF.TabIndex = 17
-        Me.CheckBoxTLAAutoIncludeTLF.Text = "Automatically include the folder if a top-level assembly is chosen"
-        Me.CheckBoxTLAAutoIncludeTLF.UseVisualStyleBackColor = True
-        '
-        'ButtonFastSearchScopeFilename
-        '
-        Me.ButtonFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(431, 244)
-        Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
-        Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(88, 29)
-        Me.ButtonFastSearchScopeFilename.TabIndex = 16
-        Me.ButtonFastSearchScopeFilename.Text = "Browse"
-        Me.ButtonFastSearchScopeFilename.UseVisualStyleBackColor = True
-        '
-        'TextBoxFastSearchScopeFilename
-        '
-        Me.TextBoxFastSearchScopeFilename.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(10, 246)
-        Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(406, 23)
-        Me.TextBoxFastSearchScopeFilename.TabIndex = 15
-        '
-        'LabelFastSearchScopeFilename
-        '
-        Me.LabelFastSearchScopeFilename.AutoSize = True
-        Me.LabelFastSearchScopeFilename.Location = New System.Drawing.Point(7, 227)
-        Me.LabelFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelFastSearchScopeFilename.Name = "LabelFastSearchScopeFilename"
-        Me.LabelFastSearchScopeFilename.Size = New System.Drawing.Size(153, 16)
-        Me.LabelFastSearchScopeFilename.TabIndex = 14
-        Me.LabelFastSearchScopeFilename.Text = "Fast Search Scope Filename"
-        '
         'CheckBoxTLAReportUnrelatedFiles
         '
+        Me.CheckBoxTLAReportUnrelatedFiles.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxTLAReportUnrelatedFiles.AutoSize = True
-        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(10, 91)
-        Me.CheckBoxTLAReportUnrelatedFiles.Margin = New System.Windows.Forms.Padding(2)
+        Me.CheckBoxTLAReportUnrelatedFiles.Location = New System.Drawing.Point(3, 135)
         Me.CheckBoxTLAReportUnrelatedFiles.Name = "CheckBoxTLAReportUnrelatedFiles"
-        Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(251, 20)
+        Me.CheckBoxTLAReportUnrelatedFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxTLAReportUnrelatedFiles.Size = New System.Drawing.Size(256, 20)
         Me.CheckBoxTLAReportUnrelatedFiles.TabIndex = 13
         Me.CheckBoxTLAReportUnrelatedFiles.Text = "Report files unrelated to top level assembly"
         Me.CheckBoxTLAReportUnrelatedFiles.UseVisualStyleBackColor = True
         '
-        'RadioButtonTLATopDown
+        'LabelTLASearchOptions
         '
-        Me.RadioButtonTLATopDown.AutoSize = True
-        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(10, 146)
-        Me.RadioButtonTLATopDown.Margin = New System.Windows.Forms.Padding(2)
-        Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
-        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(350, 20)
-        Me.RadioButtonTLATopDown.TabIndex = 12
-        Me.RadioButtonTLATopDown.Text = "Top Down Search -- Best for self-contained project directories"
-        Me.RadioButtonTLATopDown.UseVisualStyleBackColor = True
+        Me.LabelTLASearchOptions.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelTLASearchOptions.AutoSize = True
+        Me.LabelTLASearchOptions.Location = New System.Drawing.Point(3, 172)
+        Me.LabelTLASearchOptions.Name = "LabelTLASearchOptions"
+        Me.LabelTLASearchOptions.Size = New System.Drawing.Size(104, 16)
+        Me.LabelTLASearchOptions.TabIndex = 21
+        Me.LabelTLASearchOptions.Text = "SEARCH OPTIONS"
         '
         'RadioButtonTLABottomUp
         '
+        Me.RadioButtonTLABottomUp.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonTLABottomUp.AutoSize = True
         Me.RadioButtonTLABottomUp.Checked = True
-        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(10, 172)
-        Me.RadioButtonTLABottomUp.Margin = New System.Windows.Forms.Padding(2)
+        Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(3, 235)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
-        Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(323, 20)
+        Me.RadioButtonTLABottomUp.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(328, 20)
         Me.RadioButtonTLABottomUp.TabIndex = 11
         Me.RadioButtonTLABottomUp.TabStop = True
         Me.RadioButtonTLABottomUp.Text = "Bottom Up Search -- Best for general purpose directories"
         Me.RadioButtonTLABottomUp.UseVisualStyleBackColor = True
         '
+        'RadioButtonTLATopDown
+        '
+        Me.RadioButtonTLATopDown.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.RadioButtonTLATopDown.AutoSize = True
+        Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 205)
+        Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
+        Me.RadioButtonTLATopDown.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(355, 20)
+        Me.RadioButtonTLATopDown.TabIndex = 12
+        Me.RadioButtonTLATopDown.Text = "Top Down Search -- Best for self-contained project directories"
+        Me.RadioButtonTLATopDown.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel5
+        '
+        Me.ExTableLayoutPanel5.ColumnCount = 2
+        Me.ExTableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.ExTableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel5.Controls.Add(Me.ButtonFastSearchScopeFilename, 0, 0)
+        Me.ExTableLayoutPanel5.Controls.Add(Me.TextBoxFastSearchScopeFilename, 1, 0)
+        Me.ExTableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel5.Location = New System.Drawing.Point(3, 293)
+        Me.ExTableLayoutPanel5.Name = "ExTableLayoutPanel5"
+        Me.ExTableLayoutPanel5.RowCount = 1
+        Me.ExTableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel5.Size = New System.Drawing.Size(518, 34)
+        Me.ExTableLayoutPanel5.TabIndex = 22
+        Me.ExTableLayoutPanel5.Task = Nothing
+        '
+        'ButtonFastSearchScopeFilename
+        '
+        Me.ButtonFastSearchScopeFilename.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonFastSearchScopeFilename.Location = New System.Drawing.Point(2, 2)
+        Me.ButtonFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonFastSearchScopeFilename.Name = "ButtonFastSearchScopeFilename"
+        Me.ButtonFastSearchScopeFilename.Size = New System.Drawing.Size(146, 30)
+        Me.ButtonFastSearchScopeFilename.TabIndex = 16
+        Me.ButtonFastSearchScopeFilename.Text = "FastSearchScope.txt"
+        Me.ButtonFastSearchScopeFilename.UseVisualStyleBackColor = True
+        '
+        'TextBoxFastSearchScopeFilename
+        '
+        Me.TextBoxFastSearchScopeFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(152, 5)
+        Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(364, 23)
+        Me.TextBoxFastSearchScopeFilename.TabIndex = 15
+        '
         'TabPageStatus
         '
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusAfter)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusBefore)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutReleased)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutObsolete)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutIW)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutInReview)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutBaselined)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusOutAvailable)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInR)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInO)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInIW)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInIR)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInB)
-        Me.TabPageStatus.Controls.Add(Me.GroupBoxStatusInA)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInReleased)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInObsolete)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInInWork)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInInReview)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInBaselined)
-        Me.TabPageStatus.Controls.Add(Me.LabelStatusInAvailable)
-        Me.TabPageStatus.Controls.Add(Me.RadioButtonReadOnlyChange)
-        Me.TabPageStatus.Controls.Add(Me.RadioButtonReadOnlyRevert)
-        Me.TabPageStatus.Controls.Add(Me.CheckBoxProcessReadOnly)
+        Me.TabPageStatus.Controls.Add(Me.ExTableLayoutPanel6)
         Me.TabPageStatus.ImageKey = "folder"
         Me.TabPageStatus.Location = New System.Drawing.Point(4, 25)
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -975,500 +1024,185 @@ Partial Class Form1
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
         '
+        'ExTableLayoutPanel6
+        '
+        Me.ExTableLayoutPanel6.ColumnCount = 1
+        Me.ExTableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxProcessReadOnly, 0, 0)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.Panel1, 0, 3)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonReadOnlyRevert, 0, 1)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonReadOnlyChange, 0, 2)
+        Me.ExTableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel6.Location = New System.Drawing.Point(4, 3)
+        Me.ExTableLayoutPanel6.Name = "ExTableLayoutPanel6"
+        Me.ExTableLayoutPanel6.RowCount = 5
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(524, 783)
+        Me.ExTableLayoutPanel6.TabIndex = 97
+        Me.ExTableLayoutPanel6.Task = Nothing
+        '
+        'CheckBoxProcessReadOnly
+        '
+        Me.CheckBoxProcessReadOnly.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxProcessReadOnly.AutoSize = True
+        Me.CheckBoxProcessReadOnly.Location = New System.Drawing.Point(3, 5)
+        Me.CheckBoxProcessReadOnly.Name = "CheckBoxProcessReadOnly"
+        Me.CheckBoxProcessReadOnly.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxProcessReadOnly.Size = New System.Drawing.Size(323, 20)
+        Me.CheckBoxProcessReadOnly.TabIndex = 73
+        Me.CheckBoxProcessReadOnly.Text = "Process files as Available regardless of document Status"
+        Me.CheckBoxProcessReadOnly.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.LabelStatusInBaselined)
+        Me.Panel1.Controls.Add(Me.LabelStatusAfter)
+        Me.Panel1.Controls.Add(Me.LabelStatusInAvailable)
+        Me.Panel1.Controls.Add(Me.LabelStatusBefore)
+        Me.Panel1.Controls.Add(Me.LabelStatusInInReview)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutReleased)
+        Me.Panel1.Controls.Add(Me.LabelStatusInInWork)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutObsolete)
+        Me.Panel1.Controls.Add(Me.LabelStatusInObsolete)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutIW)
+        Me.Panel1.Controls.Add(Me.LabelStatusInReleased)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutInReview)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInA)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutBaselined)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInB)
+        Me.Panel1.Controls.Add(Me.LabelStatusOutAvailable)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInIR)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInR)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInIW)
+        Me.Panel1.Controls.Add(Me.GroupBoxStatusInO)
+        Me.Panel1.Location = New System.Drawing.Point(3, 85)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(307, 275)
+        Me.Panel1.TabIndex = 96
+        '
+        'LabelStatusInBaselined
+        '
+        Me.LabelStatusInBaselined.AutoSize = True
+        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(25, 95)
+        Me.LabelStatusInBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInBaselined.Name = "LabelStatusInBaselined"
+        Me.LabelStatusInBaselined.Size = New System.Drawing.Size(75, 16)
+        Me.LabelStatusInBaselined.TabIndex = 77
+        Me.LabelStatusInBaselined.Text = "Baselined (B)"
+        '
         'LabelStatusAfter
         '
         Me.LabelStatusAfter.AutoSize = True
-        Me.LabelStatusAfter.Location = New System.Drawing.Point(258, 134)
+        Me.LabelStatusAfter.Location = New System.Drawing.Point(142, 7)
         Me.LabelStatusAfter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusAfter.Name = "LabelStatusAfter"
         Me.LabelStatusAfter.Size = New System.Drawing.Size(83, 16)
         Me.LabelStatusAfter.TabIndex = 95
         Me.LabelStatusAfter.Text = "STATUS AFTER"
         '
+        'LabelStatusInAvailable
+        '
+        Me.LabelStatusInAvailable.AutoSize = True
+        Me.LabelStatusInAvailable.Location = New System.Drawing.Point(26, 61)
+        Me.LabelStatusInAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInAvailable.Name = "LabelStatusInAvailable"
+        Me.LabelStatusInAvailable.Size = New System.Drawing.Size(74, 16)
+        Me.LabelStatusInAvailable.TabIndex = 76
+        Me.LabelStatusInAvailable.Text = "Available (A)"
+        '
         'LabelStatusBefore
         '
         Me.LabelStatusBefore.AutoSize = True
-        Me.LabelStatusBefore.Location = New System.Drawing.Point(110, 169)
+        Me.LabelStatusBefore.Location = New System.Drawing.Point(9, 35)
         Me.LabelStatusBefore.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusBefore.Name = "LabelStatusBefore"
         Me.LabelStatusBefore.Size = New System.Drawing.Size(91, 16)
         Me.LabelStatusBefore.TabIndex = 94
         Me.LabelStatusBefore.Text = "STATUS BEFORE"
         '
+        'LabelStatusInInReview
+        '
+        Me.LabelStatusInInReview.AutoSize = True
+        Me.LabelStatusInInReview.Location = New System.Drawing.Point(22, 130)
+        Me.LabelStatusInInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInInReview.Name = "LabelStatusInInReview"
+        Me.LabelStatusInInReview.Size = New System.Drawing.Size(78, 16)
+        Me.LabelStatusInInReview.TabIndex = 78
+        Me.LabelStatusInInReview.Text = "In Review (IR)"
+        '
         'LabelStatusOutReleased
         '
         Me.LabelStatusOutReleased.AutoSize = True
-        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(380, 169)
+        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(264, 27)
         Me.LabelStatusOutReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutReleased.Name = "LabelStatusOutReleased"
         Me.LabelStatusOutReleased.Size = New System.Drawing.Size(14, 16)
         Me.LabelStatusOutReleased.TabIndex = 93
         Me.LabelStatusOutReleased.Text = "R"
         '
+        'LabelStatusInInWork
+        '
+        Me.LabelStatusInInWork.AutoSize = True
+        Me.LabelStatusInInWork.Location = New System.Drawing.Point(24, 165)
+        Me.LabelStatusInInWork.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInInWork.Name = "LabelStatusInInWork"
+        Me.LabelStatusInInWork.Size = New System.Drawing.Size(76, 16)
+        Me.LabelStatusInInWork.TabIndex = 79
+        Me.LabelStatusInInWork.Text = "In Work  (IW)"
+        '
         'LabelStatusOutObsolete
         '
         Me.LabelStatusOutObsolete.AutoSize = True
-        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(351, 169)
+        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(235, 27)
         Me.LabelStatusOutObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutObsolete.Name = "LabelStatusOutObsolete"
         Me.LabelStatusOutObsolete.Size = New System.Drawing.Size(16, 16)
         Me.LabelStatusOutObsolete.TabIndex = 92
         Me.LabelStatusOutObsolete.Text = "O"
         '
+        'LabelStatusInObsolete
+        '
+        Me.LabelStatusInObsolete.AutoSize = True
+        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(26, 199)
+        Me.LabelStatusInObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInObsolete.Name = "LabelStatusInObsolete"
+        Me.LabelStatusInObsolete.Size = New System.Drawing.Size(74, 16)
+        Me.LabelStatusInObsolete.TabIndex = 80
+        Me.LabelStatusInObsolete.Text = "Obsolete (O)"
+        '
         'LabelStatusOutIW
         '
         Me.LabelStatusOutIW.AutoSize = True
-        Me.LabelStatusOutIW.Location = New System.Drawing.Point(321, 169)
+        Me.LabelStatusOutIW.Location = New System.Drawing.Point(205, 27)
         Me.LabelStatusOutIW.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutIW.Name = "LabelStatusOutIW"
         Me.LabelStatusOutIW.Size = New System.Drawing.Size(21, 16)
         Me.LabelStatusOutIW.TabIndex = 91
         Me.LabelStatusOutIW.Text = "IW"
         '
+        'LabelStatusInReleased
+        '
+        Me.LabelStatusInReleased.AutoSize = True
+        Me.LabelStatusInReleased.Location = New System.Drawing.Point(29, 235)
+        Me.LabelStatusInReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusInReleased.Name = "LabelStatusInReleased"
+        Me.LabelStatusInReleased.Size = New System.Drawing.Size(71, 16)
+        Me.LabelStatusInReleased.TabIndex = 81
+        Me.LabelStatusInReleased.Text = "Released (R)"
+        '
         'LabelStatusOutInReview
         '
         Me.LabelStatusOutInReview.AutoSize = True
-        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(290, 169)
+        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(174, 27)
         Me.LabelStatusOutInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutInReview.Name = "LabelStatusOutInReview"
         Me.LabelStatusOutInReview.Size = New System.Drawing.Size(17, 16)
         Me.LabelStatusOutInReview.TabIndex = 90
         Me.LabelStatusOutInReview.Text = "IR"
-        '
-        'LabelStatusOutBaselined
-        '
-        Me.LabelStatusOutBaselined.AutoSize = True
-        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(263, 169)
-        Me.LabelStatusOutBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusOutBaselined.Name = "LabelStatusOutBaselined"
-        Me.LabelStatusOutBaselined.Size = New System.Drawing.Size(14, 16)
-        Me.LabelStatusOutBaselined.TabIndex = 89
-        Me.LabelStatusOutBaselined.Text = "B"
-        '
-        'LabelStatusOutAvailable
-        '
-        Me.LabelStatusOutAvailable.AutoSize = True
-        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(234, 169)
-        Me.LabelStatusOutAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusOutAvailable.Name = "LabelStatusOutAvailable"
-        Me.LabelStatusOutAvailable.Size = New System.Drawing.Size(15, 16)
-        Me.LabelStatusOutAvailable.TabIndex = 88
-        Me.LabelStatusOutAvailable.Text = "A"
-        '
-        'GroupBoxStatusInR
-        '
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoR)
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoO)
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIW)
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIR)
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoB)
-        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoA)
-        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(234, 364)
-        Me.GroupBoxStatusInR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInR.Name = "GroupBoxStatusInR"
-        Me.GroupBoxStatusInR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInR.Size = New System.Drawing.Size(175, 35)
-        Me.GroupBoxStatusInR.TabIndex = 87
-        Me.GroupBoxStatusInR.TabStop = False
-        '
-        'RadioButtonStatusRtoR
-        '
-        Me.RadioButtonStatusRtoR.AutoSize = True
-        Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
-        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoR.TabIndex = 5
-        Me.RadioButtonStatusRtoR.TabStop = True
-        Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoO
-        '
-        Me.RadioButtonStatusRtoO.AutoSize = True
-        Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
-        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoO.TabIndex = 4
-        Me.RadioButtonStatusRtoO.TabStop = True
-        Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoIW
-        '
-        Me.RadioButtonStatusRtoIW.AutoSize = True
-        Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
-        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoIW.TabIndex = 3
-        Me.RadioButtonStatusRtoIW.TabStop = True
-        Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoIR
-        '
-        Me.RadioButtonStatusRtoIR.AutoSize = True
-        Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
-        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoIR.TabIndex = 2
-        Me.RadioButtonStatusRtoIR.TabStop = True
-        Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoB
-        '
-        Me.RadioButtonStatusRtoB.AutoSize = True
-        Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
-        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoB.TabIndex = 1
-        Me.RadioButtonStatusRtoB.TabStop = True
-        Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusRtoA
-        '
-        Me.RadioButtonStatusRtoA.AutoSize = True
-        Me.RadioButtonStatusRtoA.Checked = True
-        Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
-        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusRtoA.TabIndex = 0
-        Me.RadioButtonStatusRtoA.TabStop = True
-        Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
-        '
-        'GroupBoxStatusInO
-        '
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoR)
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoO)
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIW)
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIR)
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoB)
-        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoA)
-        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(234, 330)
-        Me.GroupBoxStatusInO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInO.Name = "GroupBoxStatusInO"
-        Me.GroupBoxStatusInO.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInO.Size = New System.Drawing.Size(175, 35)
-        Me.GroupBoxStatusInO.TabIndex = 86
-        Me.GroupBoxStatusInO.TabStop = False
-        '
-        'RadioButtonStatusOtoR
-        '
-        Me.RadioButtonStatusOtoR.AutoSize = True
-        Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusOtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
-        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoR.TabIndex = 5
-        Me.RadioButtonStatusOtoR.TabStop = True
-        Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoO
-        '
-        Me.RadioButtonStatusOtoO.AutoSize = True
-        Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusOtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
-        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoO.TabIndex = 4
-        Me.RadioButtonStatusOtoO.TabStop = True
-        Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoIW
-        '
-        Me.RadioButtonStatusOtoIW.AutoSize = True
-        Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusOtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
-        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoIW.TabIndex = 3
-        Me.RadioButtonStatusOtoIW.TabStop = True
-        Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoIR
-        '
-        Me.RadioButtonStatusOtoIR.AutoSize = True
-        Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusOtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
-        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoIR.TabIndex = 2
-        Me.RadioButtonStatusOtoIR.TabStop = True
-        Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoB
-        '
-        Me.RadioButtonStatusOtoB.AutoSize = True
-        Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusOtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
-        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoB.TabIndex = 1
-        Me.RadioButtonStatusOtoB.TabStop = True
-        Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusOtoA
-        '
-        Me.RadioButtonStatusOtoA.AutoSize = True
-        Me.RadioButtonStatusOtoA.Checked = True
-        Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusOtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
-        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusOtoA.TabIndex = 0
-        Me.RadioButtonStatusOtoA.TabStop = True
-        Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
-        '
-        'GroupBoxStatusInIW
-        '
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoR)
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoO)
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIW)
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIR)
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoB)
-        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoA)
-        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(234, 294)
-        Me.GroupBoxStatusInIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIW.Name = "GroupBoxStatusInIW"
-        Me.GroupBoxStatusInIW.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIW.Size = New System.Drawing.Size(175, 35)
-        Me.GroupBoxStatusInIW.TabIndex = 85
-        Me.GroupBoxStatusInIW.TabStop = False
-        '
-        'RadioButtonStatusIWtoR
-        '
-        Me.RadioButtonStatusIWtoR.AutoSize = True
-        Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusIWtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
-        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoR.TabIndex = 5
-        Me.RadioButtonStatusIWtoR.TabStop = True
-        Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoO
-        '
-        Me.RadioButtonStatusIWtoO.AutoSize = True
-        Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusIWtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
-        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoO.TabIndex = 4
-        Me.RadioButtonStatusIWtoO.TabStop = True
-        Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoIW
-        '
-        Me.RadioButtonStatusIWtoIW.AutoSize = True
-        Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusIWtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
-        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoIW.TabIndex = 3
-        Me.RadioButtonStatusIWtoIW.TabStop = True
-        Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoIR
-        '
-        Me.RadioButtonStatusIWtoIR.AutoSize = True
-        Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusIWtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
-        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoIR.TabIndex = 2
-        Me.RadioButtonStatusIWtoIR.TabStop = True
-        Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoB
-        '
-        Me.RadioButtonStatusIWtoB.AutoSize = True
-        Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusIWtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
-        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoB.TabIndex = 1
-        Me.RadioButtonStatusIWtoB.TabStop = True
-        Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIWtoA
-        '
-        Me.RadioButtonStatusIWtoA.AutoSize = True
-        Me.RadioButtonStatusIWtoA.Checked = True
-        Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusIWtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
-        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIWtoA.TabIndex = 0
-        Me.RadioButtonStatusIWtoA.TabStop = True
-        Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
-        '
-        'GroupBoxStatusInIR
-        '
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoR)
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoO)
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIW)
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIR)
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoB)
-        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoA)
-        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(234, 259)
-        Me.GroupBoxStatusInIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIR.Name = "GroupBoxStatusInIR"
-        Me.GroupBoxStatusInIR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIR.Size = New System.Drawing.Size(175, 35)
-        Me.GroupBoxStatusInIR.TabIndex = 84
-        Me.GroupBoxStatusInIR.TabStop = False
-        '
-        'RadioButtonStatusIRtoR
-        '
-        Me.RadioButtonStatusIRtoR.AutoSize = True
-        Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusIRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
-        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoR.TabIndex = 5
-        Me.RadioButtonStatusIRtoR.TabStop = True
-        Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoO
-        '
-        Me.RadioButtonStatusIRtoO.AutoSize = True
-        Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusIRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
-        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoO.TabIndex = 4
-        Me.RadioButtonStatusIRtoO.TabStop = True
-        Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoIW
-        '
-        Me.RadioButtonStatusIRtoIW.AutoSize = True
-        Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusIRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
-        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoIW.TabIndex = 3
-        Me.RadioButtonStatusIRtoIW.TabStop = True
-        Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoIR
-        '
-        Me.RadioButtonStatusIRtoIR.AutoSize = True
-        Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusIRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
-        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoIR.TabIndex = 2
-        Me.RadioButtonStatusIRtoIR.TabStop = True
-        Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoB
-        '
-        Me.RadioButtonStatusIRtoB.AutoSize = True
-        Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusIRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
-        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoB.TabIndex = 1
-        Me.RadioButtonStatusIRtoB.TabStop = True
-        Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusIRtoA
-        '
-        Me.RadioButtonStatusIRtoA.AutoSize = True
-        Me.RadioButtonStatusIRtoA.Checked = True
-        Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusIRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
-        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusIRtoA.TabIndex = 0
-        Me.RadioButtonStatusIRtoA.TabStop = True
-        Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
-        '
-        'GroupBoxStatusInB
-        '
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoR)
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoO)
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIW)
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIR)
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoB)
-        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoA)
-        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(234, 225)
-        Me.GroupBoxStatusInB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInB.Name = "GroupBoxStatusInB"
-        Me.GroupBoxStatusInB.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInB.Size = New System.Drawing.Size(175, 35)
-        Me.GroupBoxStatusInB.TabIndex = 83
-        Me.GroupBoxStatusInB.TabStop = False
-        '
-        'RadioButtonStatusBtoR
-        '
-        Me.RadioButtonStatusBtoR.AutoSize = True
-        Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(146, 15)
-        Me.RadioButtonStatusBtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
-        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoR.TabIndex = 5
-        Me.RadioButtonStatusBtoR.TabStop = True
-        Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoO
-        '
-        Me.RadioButtonStatusBtoO.AutoSize = True
-        Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(117, 15)
-        Me.RadioButtonStatusBtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
-        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoO.TabIndex = 4
-        Me.RadioButtonStatusBtoO.TabStop = True
-        Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoIW
-        '
-        Me.RadioButtonStatusBtoIW.AutoSize = True
-        Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(88, 15)
-        Me.RadioButtonStatusBtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
-        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoIW.TabIndex = 3
-        Me.RadioButtonStatusBtoIW.TabStop = True
-        Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoIR
-        '
-        Me.RadioButtonStatusBtoIR.AutoSize = True
-        Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(58, 15)
-        Me.RadioButtonStatusBtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
-        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoIR.TabIndex = 2
-        Me.RadioButtonStatusBtoIR.TabStop = True
-        Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoB
-        '
-        Me.RadioButtonStatusBtoB.AutoSize = True
-        Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(29, 15)
-        Me.RadioButtonStatusBtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
-        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoB.TabIndex = 1
-        Me.RadioButtonStatusBtoB.TabStop = True
-        Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
-        '
-        'RadioButtonStatusBtoA
-        '
-        Me.RadioButtonStatusBtoA.AutoSize = True
-        Me.RadioButtonStatusBtoA.Checked = True
-        Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 15)
-        Me.RadioButtonStatusBtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
-        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(14, 13)
-        Me.RadioButtonStatusBtoA.TabIndex = 0
-        Me.RadioButtonStatusBtoA.TabStop = True
-        Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
         '
         'GroupBoxStatusInA
         '
@@ -1478,7 +1212,7 @@ Partial Class Form1
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoIR)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoB)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoA)
-        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(234, 190)
+        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(118, 48)
         Me.GroupBoxStatusInA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInA.Name = "GroupBoxStatusInA"
         Me.GroupBoxStatusInA.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -1553,111 +1287,471 @@ Partial Class Form1
         Me.RadioButtonStatusAtoA.TabStop = True
         Me.RadioButtonStatusAtoA.UseVisualStyleBackColor = True
         '
-        'LabelStatusInReleased
+        'LabelStatusOutBaselined
         '
-        Me.LabelStatusInReleased.AutoSize = True
-        Me.LabelStatusInReleased.Location = New System.Drawing.Point(135, 377)
-        Me.LabelStatusInReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInReleased.Name = "LabelStatusInReleased"
-        Me.LabelStatusInReleased.Size = New System.Drawing.Size(71, 16)
-        Me.LabelStatusInReleased.TabIndex = 81
-        Me.LabelStatusInReleased.Text = "Released (R)"
+        Me.LabelStatusOutBaselined.AutoSize = True
+        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(147, 27)
+        Me.LabelStatusOutBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusOutBaselined.Name = "LabelStatusOutBaselined"
+        Me.LabelStatusOutBaselined.Size = New System.Drawing.Size(14, 16)
+        Me.LabelStatusOutBaselined.TabIndex = 89
+        Me.LabelStatusOutBaselined.Text = "B"
         '
-        'LabelStatusInObsolete
+        'GroupBoxStatusInB
         '
-        Me.LabelStatusInObsolete.AutoSize = True
-        Me.LabelStatusInObsolete.Location = New System.Drawing.Point(139, 341)
-        Me.LabelStatusInObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInObsolete.Name = "LabelStatusInObsolete"
-        Me.LabelStatusInObsolete.Size = New System.Drawing.Size(74, 16)
-        Me.LabelStatusInObsolete.TabIndex = 80
-        Me.LabelStatusInObsolete.Text = "Obsolete (O)"
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoR)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoO)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIW)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIR)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoB)
+        Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoA)
+        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(118, 83)
+        Me.GroupBoxStatusInB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInB.Name = "GroupBoxStatusInB"
+        Me.GroupBoxStatusInB.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInB.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInB.TabIndex = 83
+        Me.GroupBoxStatusInB.TabStop = False
         '
-        'LabelStatusInInWork
+        'RadioButtonStatusBtoR
         '
-        Me.LabelStatusInInWork.AutoSize = True
-        Me.LabelStatusInInWork.Location = New System.Drawing.Point(139, 307)
-        Me.LabelStatusInInWork.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInInWork.Name = "LabelStatusInInWork"
-        Me.LabelStatusInInWork.Size = New System.Drawing.Size(76, 16)
-        Me.LabelStatusInInWork.TabIndex = 79
-        Me.LabelStatusInInWork.Text = "In Work  (IW)"
+        Me.RadioButtonStatusBtoR.AutoSize = True
+        Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusBtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
+        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoR.TabIndex = 5
+        Me.RadioButtonStatusBtoR.TabStop = True
+        Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
         '
-        'LabelStatusInInReview
+        'RadioButtonStatusBtoO
         '
-        Me.LabelStatusInInReview.AutoSize = True
-        Me.LabelStatusInInReview.Location = New System.Drawing.Point(132, 272)
-        Me.LabelStatusInInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInInReview.Name = "LabelStatusInInReview"
-        Me.LabelStatusInInReview.Size = New System.Drawing.Size(78, 16)
-        Me.LabelStatusInInReview.TabIndex = 78
-        Me.LabelStatusInInReview.Text = "In Review (IR)"
+        Me.RadioButtonStatusBtoO.AutoSize = True
+        Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusBtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
+        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoO.TabIndex = 4
+        Me.RadioButtonStatusBtoO.TabStop = True
+        Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
         '
-        'LabelStatusInBaselined
+        'RadioButtonStatusBtoIW
         '
-        Me.LabelStatusInBaselined.AutoSize = True
-        Me.LabelStatusInBaselined.Location = New System.Drawing.Point(134, 237)
-        Me.LabelStatusInBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInBaselined.Name = "LabelStatusInBaselined"
-        Me.LabelStatusInBaselined.Size = New System.Drawing.Size(75, 16)
-        Me.LabelStatusInBaselined.TabIndex = 77
-        Me.LabelStatusInBaselined.Text = "Baselined (B)"
+        Me.RadioButtonStatusBtoIW.AutoSize = True
+        Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusBtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
+        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIW.TabIndex = 3
+        Me.RadioButtonStatusBtoIW.TabStop = True
+        Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
         '
-        'LabelStatusInAvailable
+        'RadioButtonStatusBtoIR
         '
-        Me.LabelStatusInAvailable.AutoSize = True
-        Me.LabelStatusInAvailable.Location = New System.Drawing.Point(141, 203)
-        Me.LabelStatusInAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelStatusInAvailable.Name = "LabelStatusInAvailable"
-        Me.LabelStatusInAvailable.Size = New System.Drawing.Size(74, 16)
-        Me.LabelStatusInAvailable.TabIndex = 76
-        Me.LabelStatusInAvailable.Text = "Available (A)"
+        Me.RadioButtonStatusBtoIR.AutoSize = True
+        Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusBtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
+        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIR.TabIndex = 2
+        Me.RadioButtonStatusBtoIR.TabStop = True
+        Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
         '
-        'RadioButtonReadOnlyChange
+        'RadioButtonStatusBtoB
         '
-        Me.RadioButtonReadOnlyChange.AutoSize = True
-        Me.RadioButtonReadOnlyChange.Location = New System.Drawing.Point(30, 84)
-        Me.RadioButtonReadOnlyChange.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonReadOnlyChange.Name = "RadioButtonReadOnlyChange"
-        Me.RadioButtonReadOnlyChange.Size = New System.Drawing.Size(187, 20)
-        Me.RadioButtonReadOnlyChange.TabIndex = 75
-        Me.RadioButtonReadOnlyChange.TabStop = True
-        Me.RadioButtonReadOnlyChange.Text = "Change status after processing"
-        Me.RadioButtonReadOnlyChange.UseVisualStyleBackColor = True
+        Me.RadioButtonStatusBtoB.AutoSize = True
+        Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusBtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
+        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoB.TabIndex = 1
+        Me.RadioButtonStatusBtoB.TabStop = True
+        Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusBtoA
+        '
+        Me.RadioButtonStatusBtoA.AutoSize = True
+        Me.RadioButtonStatusBtoA.Checked = True
+        Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusBtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
+        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoA.TabIndex = 0
+        Me.RadioButtonStatusBtoA.TabStop = True
+        Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
+        '
+        'LabelStatusOutAvailable
+        '
+        Me.LabelStatusOutAvailable.AutoSize = True
+        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(118, 27)
+        Me.LabelStatusOutAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelStatusOutAvailable.Name = "LabelStatusOutAvailable"
+        Me.LabelStatusOutAvailable.Size = New System.Drawing.Size(15, 16)
+        Me.LabelStatusOutAvailable.TabIndex = 88
+        Me.LabelStatusOutAvailable.Text = "A"
+        '
+        'GroupBoxStatusInIR
+        '
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoR)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoO)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIW)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIR)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoB)
+        Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoA)
+        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(118, 117)
+        Me.GroupBoxStatusInIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInIR.Name = "GroupBoxStatusInIR"
+        Me.GroupBoxStatusInIR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInIR.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInIR.TabIndex = 84
+        Me.GroupBoxStatusInIR.TabStop = False
+        '
+        'RadioButtonStatusIRtoR
+        '
+        Me.RadioButtonStatusIRtoR.AutoSize = True
+        Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusIRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
+        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoR.TabIndex = 5
+        Me.RadioButtonStatusIRtoR.TabStop = True
+        Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoO
+        '
+        Me.RadioButtonStatusIRtoO.AutoSize = True
+        Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusIRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
+        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoO.TabIndex = 4
+        Me.RadioButtonStatusIRtoO.TabStop = True
+        Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIW
+        '
+        Me.RadioButtonStatusIRtoIW.AutoSize = True
+        Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusIRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
+        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIW.TabIndex = 3
+        Me.RadioButtonStatusIRtoIW.TabStop = True
+        Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoIR
+        '
+        Me.RadioButtonStatusIRtoIR.AutoSize = True
+        Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusIRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
+        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIR.TabIndex = 2
+        Me.RadioButtonStatusIRtoIR.TabStop = True
+        Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoB
+        '
+        Me.RadioButtonStatusIRtoB.AutoSize = True
+        Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusIRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
+        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoB.TabIndex = 1
+        Me.RadioButtonStatusIRtoB.TabStop = True
+        Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIRtoA
+        '
+        Me.RadioButtonStatusIRtoA.AutoSize = True
+        Me.RadioButtonStatusIRtoA.Checked = True
+        Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusIRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
+        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoA.TabIndex = 0
+        Me.RadioButtonStatusIRtoA.TabStop = True
+        Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInR
+        '
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoR)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoO)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIW)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIR)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoB)
+        Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoA)
+        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(118, 222)
+        Me.GroupBoxStatusInR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInR.Name = "GroupBoxStatusInR"
+        Me.GroupBoxStatusInR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInR.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInR.TabIndex = 87
+        Me.GroupBoxStatusInR.TabStop = False
+        '
+        'RadioButtonStatusRtoR
+        '
+        Me.RadioButtonStatusRtoR.AutoSize = True
+        Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
+        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoR.TabIndex = 5
+        Me.RadioButtonStatusRtoR.TabStop = True
+        Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoO
+        '
+        Me.RadioButtonStatusRtoO.AutoSize = True
+        Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
+        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoO.TabIndex = 4
+        Me.RadioButtonStatusRtoO.TabStop = True
+        Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIW
+        '
+        Me.RadioButtonStatusRtoIW.AutoSize = True
+        Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
+        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIW.TabIndex = 3
+        Me.RadioButtonStatusRtoIW.TabStop = True
+        Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoIR
+        '
+        Me.RadioButtonStatusRtoIR.AutoSize = True
+        Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
+        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIR.TabIndex = 2
+        Me.RadioButtonStatusRtoIR.TabStop = True
+        Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoB
+        '
+        Me.RadioButtonStatusRtoB.AutoSize = True
+        Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
+        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoB.TabIndex = 1
+        Me.RadioButtonStatusRtoB.TabStop = True
+        Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusRtoA
+        '
+        Me.RadioButtonStatusRtoA.AutoSize = True
+        Me.RadioButtonStatusRtoA.Checked = True
+        Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
+        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoA.TabIndex = 0
+        Me.RadioButtonStatusRtoA.TabStop = True
+        Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInIW
+        '
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoR)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoO)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIW)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIR)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoB)
+        Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoA)
+        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(118, 152)
+        Me.GroupBoxStatusInIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInIW.Name = "GroupBoxStatusInIW"
+        Me.GroupBoxStatusInIW.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInIW.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInIW.TabIndex = 85
+        Me.GroupBoxStatusInIW.TabStop = False
+        '
+        'RadioButtonStatusIWtoR
+        '
+        Me.RadioButtonStatusIWtoR.AutoSize = True
+        Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusIWtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
+        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoR.TabIndex = 5
+        Me.RadioButtonStatusIWtoR.TabStop = True
+        Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoO
+        '
+        Me.RadioButtonStatusIWtoO.AutoSize = True
+        Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusIWtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
+        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoO.TabIndex = 4
+        Me.RadioButtonStatusIWtoO.TabStop = True
+        Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIW
+        '
+        Me.RadioButtonStatusIWtoIW.AutoSize = True
+        Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusIWtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
+        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIW.TabIndex = 3
+        Me.RadioButtonStatusIWtoIW.TabStop = True
+        Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoIR
+        '
+        Me.RadioButtonStatusIWtoIR.AutoSize = True
+        Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusIWtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
+        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIR.TabIndex = 2
+        Me.RadioButtonStatusIWtoIR.TabStop = True
+        Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoB
+        '
+        Me.RadioButtonStatusIWtoB.AutoSize = True
+        Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusIWtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
+        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoB.TabIndex = 1
+        Me.RadioButtonStatusIWtoB.TabStop = True
+        Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusIWtoA
+        '
+        Me.RadioButtonStatusIWtoA.AutoSize = True
+        Me.RadioButtonStatusIWtoA.Checked = True
+        Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusIWtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
+        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoA.TabIndex = 0
+        Me.RadioButtonStatusIWtoA.TabStop = True
+        Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
+        '
+        'GroupBoxStatusInO
+        '
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoR)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoO)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIW)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIR)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoB)
+        Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoA)
+        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(118, 188)
+        Me.GroupBoxStatusInO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInO.Name = "GroupBoxStatusInO"
+        Me.GroupBoxStatusInO.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.GroupBoxStatusInO.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInO.TabIndex = 86
+        Me.GroupBoxStatusInO.TabStop = False
+        '
+        'RadioButtonStatusOtoR
+        '
+        Me.RadioButtonStatusOtoR.AutoSize = True
+        Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(146, 15)
+        Me.RadioButtonStatusOtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
+        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoR.TabIndex = 5
+        Me.RadioButtonStatusOtoR.TabStop = True
+        Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoO
+        '
+        Me.RadioButtonStatusOtoO.AutoSize = True
+        Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(117, 15)
+        Me.RadioButtonStatusOtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
+        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoO.TabIndex = 4
+        Me.RadioButtonStatusOtoO.TabStop = True
+        Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIW
+        '
+        Me.RadioButtonStatusOtoIW.AutoSize = True
+        Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(88, 15)
+        Me.RadioButtonStatusOtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
+        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIW.TabIndex = 3
+        Me.RadioButtonStatusOtoIW.TabStop = True
+        Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoIR
+        '
+        Me.RadioButtonStatusOtoIR.AutoSize = True
+        Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(58, 15)
+        Me.RadioButtonStatusOtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
+        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIR.TabIndex = 2
+        Me.RadioButtonStatusOtoIR.TabStop = True
+        Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoB
+        '
+        Me.RadioButtonStatusOtoB.AutoSize = True
+        Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(29, 15)
+        Me.RadioButtonStatusOtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
+        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoB.TabIndex = 1
+        Me.RadioButtonStatusOtoB.TabStop = True
+        Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
+        '
+        'RadioButtonStatusOtoA
+        '
+        Me.RadioButtonStatusOtoA.AutoSize = True
+        Me.RadioButtonStatusOtoA.Checked = True
+        Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 15)
+        Me.RadioButtonStatusOtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
+        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoA.TabIndex = 0
+        Me.RadioButtonStatusOtoA.TabStop = True
+        Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
         '
         'RadioButtonReadOnlyRevert
         '
+        Me.RadioButtonReadOnlyRevert.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonReadOnlyRevert.AutoSize = True
         Me.RadioButtonReadOnlyRevert.Checked = True
-        Me.RadioButtonReadOnlyRevert.Location = New System.Drawing.Point(30, 49)
-        Me.RadioButtonReadOnlyRevert.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonReadOnlyRevert.Location = New System.Drawing.Point(3, 33)
         Me.RadioButtonReadOnlyRevert.Name = "RadioButtonReadOnlyRevert"
-        Me.RadioButtonReadOnlyRevert.Size = New System.Drawing.Size(241, 20)
+        Me.RadioButtonReadOnlyRevert.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonReadOnlyRevert.Size = New System.Drawing.Size(246, 20)
         Me.RadioButtonReadOnlyRevert.TabIndex = 74
         Me.RadioButtonReadOnlyRevert.TabStop = True
         Me.RadioButtonReadOnlyRevert.Text = "Revert to previous status after processing"
         Me.RadioButtonReadOnlyRevert.UseVisualStyleBackColor = True
         '
-        'CheckBoxProcessReadOnly
+        'RadioButtonReadOnlyChange
         '
-        Me.CheckBoxProcessReadOnly.AutoSize = True
-        Me.CheckBoxProcessReadOnly.Location = New System.Drawing.Point(10, 14)
-        Me.CheckBoxProcessReadOnly.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.CheckBoxProcessReadOnly.Name = "CheckBoxProcessReadOnly"
-        Me.CheckBoxProcessReadOnly.Size = New System.Drawing.Size(318, 20)
-        Me.CheckBoxProcessReadOnly.TabIndex = 73
-        Me.CheckBoxProcessReadOnly.Text = "Process files as Available regardless of document Status"
-        Me.CheckBoxProcessReadOnly.UseVisualStyleBackColor = True
+        Me.RadioButtonReadOnlyChange.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.RadioButtonReadOnlyChange.AutoSize = True
+        Me.RadioButtonReadOnlyChange.Location = New System.Drawing.Point(3, 59)
+        Me.RadioButtonReadOnlyChange.Name = "RadioButtonReadOnlyChange"
+        Me.RadioButtonReadOnlyChange.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonReadOnlyChange.Size = New System.Drawing.Size(192, 20)
+        Me.RadioButtonReadOnlyChange.TabIndex = 75
+        Me.RadioButtonReadOnlyChange.TabStop = True
+        Me.RadioButtonReadOnlyChange.Text = "Change status after processing"
+        Me.RadioButtonReadOnlyChange.UseVisualStyleBackColor = True
         '
         'TabPageSorting
         '
-        Me.TabPageSorting.Controls.Add(Me.TextBoxRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.LabelRandomSampleFraction)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortRandomSample)
-        Me.TabPageSorting.Controls.Add(Me.CheckBoxListIncludeNoDependencies)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortDependency)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortAlphabetical)
-        Me.TabPageSorting.Controls.Add(Me.RadioButtonListSortNone)
+        Me.TabPageSorting.Controls.Add(Me.ExTableLayoutPanel7)
         Me.TabPageSorting.ImageKey = "list"
         Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -1668,32 +1762,77 @@ Partial Class Form1
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
         '
-        'TextBoxRandomSampleFraction
+        'ExTableLayoutPanel7
         '
-        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(236, 142)
-        Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
-        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(116, 23)
-        Me.TextBoxRandomSampleFraction.TabIndex = 55
-        Me.TextBoxRandomSampleFraction.Text = "0.1"
+        Me.ExTableLayoutPanel7.ColumnCount = 1
+        Me.ExTableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonListSortNone, 0, 0)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonListSortAlphabetical, 0, 1)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonListSortDependency, 0, 2)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonListSortRandomSample, 0, 4)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.CheckBoxListIncludeNoDependencies, 0, 3)
+        Me.ExTableLayoutPanel7.Controls.Add(Me.ExTableLayoutPanel8, 0, 5)
+        Me.ExTableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel7.Location = New System.Drawing.Point(4, 3)
+        Me.ExTableLayoutPanel7.Name = "ExTableLayoutPanel7"
+        Me.ExTableLayoutPanel7.RowCount = 7
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(524, 783)
+        Me.ExTableLayoutPanel7.TabIndex = 56
+        Me.ExTableLayoutPanel7.Task = Nothing
         '
-        'LabelRandomSampleFraction
+        'RadioButtonListSortNone
         '
-        Me.LabelRandomSampleFraction.AutoSize = True
-        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(135, 146)
-        Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
-        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
-        Me.LabelRandomSampleFraction.TabIndex = 54
-        Me.LabelRandomSampleFraction.Text = "Sample fraction"
+        Me.RadioButtonListSortNone.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.RadioButtonListSortNone.AutoSize = True
+        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(3, 5)
+        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
+        Me.RadioButtonListSortNone.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(78, 20)
+        Me.RadioButtonListSortNone.TabIndex = 49
+        Me.RadioButtonListSortNone.Text = "Unsorted"
+        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortAlphabetical
+        '
+        Me.RadioButtonListSortAlphabetical.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.RadioButtonListSortAlphabetical.AutoSize = True
+        Me.RadioButtonListSortAlphabetical.Checked = True
+        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(3, 35)
+        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
+        Me.RadioButtonListSortAlphabetical.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(176, 20)
+        Me.RadioButtonListSortAlphabetical.TabIndex = 50
+        Me.RadioButtonListSortAlphabetical.TabStop = True
+        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
+        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        '
+        'RadioButtonListSortDependency
+        '
+        Me.RadioButtonListSortDependency.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.RadioButtonListSortDependency.AutoSize = True
+        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(3, 65)
+        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
+        Me.RadioButtonListSortDependency.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(177, 20)
+        Me.RadioButtonListSortDependency.TabIndex = 51
+        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
+        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
         '
         'RadioButtonListSortRandomSample
         '
+        Me.RadioButtonListSortRandomSample.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonListSortRandomSample.AutoSize = True
-        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(10, 143)
-        Me.RadioButtonListSortRandomSample.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.RadioButtonListSortRandomSample.Location = New System.Drawing.Point(3, 125)
         Me.RadioButtonListSortRandomSample.Name = "RadioButtonListSortRandomSample"
-        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(109, 20)
+        Me.RadioButtonListSortRandomSample.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.RadioButtonListSortRandomSample.Size = New System.Drawing.Size(114, 20)
         Me.RadioButtonListSortRandomSample.TabIndex = 53
         Me.RadioButtonListSortRandomSample.TabStop = True
         Me.RadioButtonListSortRandomSample.Text = "Random sample"
@@ -1701,49 +1840,52 @@ Partial Class Form1
         '
         'CheckBoxListIncludeNoDependencies
         '
+        Me.CheckBoxListIncludeNoDependencies.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxListIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(10, 110)
-        Me.CheckBoxListIncludeNoDependencies.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxListIncludeNoDependencies.Location = New System.Drawing.Point(3, 95)
         Me.CheckBoxListIncludeNoDependencies.Name = "CheckBoxListIncludeNoDependencies"
-        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(350, 20)
+        Me.CheckBoxListIncludeNoDependencies.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxListIncludeNoDependencies.Size = New System.Drawing.Size(355, 20)
         Me.CheckBoxListIncludeNoDependencies.TabIndex = 52
         Me.CheckBoxListIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
         Me.CheckBoxListIncludeNoDependencies.UseVisualStyleBackColor = True
         '
-        'RadioButtonListSortDependency
+        'ExTableLayoutPanel8
         '
-        Me.RadioButtonListSortDependency.AutoSize = True
-        Me.RadioButtonListSortDependency.Location = New System.Drawing.Point(10, 78)
-        Me.RadioButtonListSortDependency.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortDependency.Name = "RadioButtonListSortDependency"
-        Me.RadioButtonListSortDependency.Size = New System.Drawing.Size(172, 20)
-        Me.RadioButtonListSortDependency.TabIndex = 51
-        Me.RadioButtonListSortDependency.Text = "Sorted in dependency order"
-        Me.RadioButtonListSortDependency.UseVisualStyleBackColor = True
+        Me.ExTableLayoutPanel8.ColumnCount = 2
+        Me.ExTableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel8.Controls.Add(Me.TextBoxRandomSampleFraction, 0, 0)
+        Me.ExTableLayoutPanel8.Controls.Add(Me.LabelRandomSampleFraction, 1, 0)
+        Me.ExTableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel8.Location = New System.Drawing.Point(3, 153)
+        Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
+        Me.ExTableLayoutPanel8.RowCount = 1
+        Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(518, 34)
+        Me.ExTableLayoutPanel8.TabIndex = 54
+        Me.ExTableLayoutPanel8.Task = Nothing
         '
-        'RadioButtonListSortAlphabetical
+        'TextBoxRandomSampleFraction
         '
-        Me.RadioButtonListSortAlphabetical.AutoSize = True
-        Me.RadioButtonListSortAlphabetical.Checked = True
-        Me.RadioButtonListSortAlphabetical.Location = New System.Drawing.Point(10, 45)
-        Me.RadioButtonListSortAlphabetical.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortAlphabetical.Name = "RadioButtonListSortAlphabetical"
-        Me.RadioButtonListSortAlphabetical.Size = New System.Drawing.Size(171, 20)
-        Me.RadioButtonListSortAlphabetical.TabIndex = 50
-        Me.RadioButtonListSortAlphabetical.TabStop = True
-        Me.RadioButtonListSortAlphabetical.Text = "Sorted in alphabetical order"
-        Me.RadioButtonListSortAlphabetical.UseVisualStyleBackColor = True
+        Me.TextBoxRandomSampleFraction.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxRandomSampleFraction.Location = New System.Drawing.Point(4, 5)
+        Me.TextBoxRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextBoxRandomSampleFraction.Name = "TextBoxRandomSampleFraction"
+        Me.TextBoxRandomSampleFraction.Size = New System.Drawing.Size(42, 23)
+        Me.TextBoxRandomSampleFraction.TabIndex = 55
+        Me.TextBoxRandomSampleFraction.Text = "0.1"
         '
-        'RadioButtonListSortNone
+        'LabelRandomSampleFraction
         '
-        Me.RadioButtonListSortNone.AutoSize = True
-        Me.RadioButtonListSortNone.Location = New System.Drawing.Point(10, 12)
-        Me.RadioButtonListSortNone.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.RadioButtonListSortNone.Name = "RadioButtonListSortNone"
-        Me.RadioButtonListSortNone.Size = New System.Drawing.Size(73, 20)
-        Me.RadioButtonListSortNone.TabIndex = 49
-        Me.RadioButtonListSortNone.Text = "Unsorted"
-        Me.RadioButtonListSortNone.UseVisualStyleBackColor = True
+        Me.LabelRandomSampleFraction.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelRandomSampleFraction.AutoSize = True
+        Me.LabelRandomSampleFraction.Location = New System.Drawing.Point(54, 9)
+        Me.LabelRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelRandomSampleFraction.Name = "LabelRandomSampleFraction"
+        Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
+        Me.LabelRandomSampleFraction.TabIndex = 54
+        Me.LabelRandomSampleFraction.Text = "Sample fraction"
         '
         'TabPageTemplates
         '
@@ -1930,7 +2072,8 @@ Partial Class Form1
         Me.CheckBoxUseTemplateProperties.AutoSize = True
         Me.CheckBoxUseTemplateProperties.Location = New System.Drawing.Point(103, 185)
         Me.CheckBoxUseTemplateProperties.Name = "CheckBoxUseTemplateProperties"
-        Me.CheckBoxUseTemplateProperties.Size = New System.Drawing.Size(252, 20)
+        Me.CheckBoxUseTemplateProperties.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxUseTemplateProperties.Size = New System.Drawing.Size(257, 20)
         Me.CheckBoxUseTemplateProperties.TabIndex = 8
         Me.CheckBoxUseTemplateProperties.Text = "Use template properties in property dialogs"
         Me.CheckBoxUseTemplateProperties.UseVisualStyleBackColor = True
@@ -1979,7 +2122,7 @@ Partial Class Form1
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2006,7 +2149,7 @@ Partial Class Form1
         '
         Me.CheckBoxPropertyFilterCheckDraftFile.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxPropertyFilterCheckDraftFile.AutoSize = True
-        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(3, 215)
+        Me.CheckBoxPropertyFilterCheckDraftFile.Location = New System.Drawing.Point(3, 225)
         Me.CheckBoxPropertyFilterCheckDraftFile.Name = "CheckBoxPropertyFilterCheckDraftFile"
         Me.CheckBoxPropertyFilterCheckDraftFile.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterCheckDraftFile.Size = New System.Drawing.Size(306, 20)
@@ -2020,8 +2163,7 @@ Partial Class Form1
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(4, 35)
-        Me.CheckBoxWarnSave.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 35)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxWarnSave.Size = New System.Drawing.Size(191, 20)
@@ -2035,8 +2177,7 @@ Partial Class Form1
         Me.CheckBoxPropertyFilterFollowDraftLinks.AutoSize = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.Checked = True
         Me.CheckBoxPropertyFilterFollowDraftLinks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(4, 185)
-        Me.CheckBoxPropertyFilterFollowDraftLinks.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxPropertyFilterFollowDraftLinks.Location = New System.Drawing.Point(3, 195)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Name = "CheckBoxPropertyFilterFollowDraftLinks"
         Me.CheckBoxPropertyFilterFollowDraftLinks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterFollowDraftLinks.Size = New System.Drawing.Size(356, 20)
@@ -2048,8 +2189,7 @@ Partial Class Form1
         '
         Me.CheckBoxNoUpdateMRU.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(4, 65)
-        Me.CheckBoxNoUpdateMRU.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 65)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(316, 20)
@@ -2061,8 +2201,7 @@ Partial Class Form1
         '
         Me.CheckBoxBackgroundProcessing.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxBackgroundProcessing.AutoSize = True
-        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(4, 155)
-        Me.CheckBoxBackgroundProcessing.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.CheckBoxBackgroundProcessing.Location = New System.Drawing.Point(3, 165)
         Me.CheckBoxBackgroundProcessing.Name = "CheckBoxBackgroundProcessing"
         Me.CheckBoxBackgroundProcessing.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxBackgroundProcessing.Size = New System.Drawing.Size(253, 20)
@@ -2083,14 +2222,14 @@ Partial Class Form1
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(518, 24)
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(518, 34)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
         '
         'TextBoxFontSize
         '
-        Me.TextBoxFontSize.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxFontSize.Location = New System.Drawing.Point(4, 3)
+        Me.TextBoxFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFontSize.Location = New System.Drawing.Point(4, 5)
         Me.TextBoxFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxFontSize.Name = "TextBoxFontSize"
         Me.TextBoxFontSize.Size = New System.Drawing.Size(42, 23)
@@ -2101,7 +2240,7 @@ Partial Class Form1
         '
         Me.LabelFontSize.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(54, 4)
+        Me.LabelFontSize.Location = New System.Drawing.Point(54, 9)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
         Me.LabelFontSize.Size = New System.Drawing.Size(90, 16)
@@ -2114,8 +2253,7 @@ Partial Class Form1
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Checked = True
         Me.CheckBoxRememberTasks.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(2, 125)
-        Me.CheckBoxRememberTasks.Margin = New System.Windows.Forms.Padding(2)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 135)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(256, 20)
@@ -2127,7 +2265,7 @@ Partial Class Form1
         '
         Me.CheckBoxCheckForNewerVersion.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxCheckForNewerVersion.AutoSize = True
-        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 245)
+        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 255)
         Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
         Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(211, 20)
@@ -2368,23 +2506,32 @@ Partial Class Form1
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPageTopLevelAssy.ResumeLayout(False)
-        Me.TabPageTopLevelAssy.PerformLayout()
+        Me.ExTableLayoutPanel4.ResumeLayout(False)
+        Me.ExTableLayoutPanel4.PerformLayout()
+        Me.ExTableLayoutPanel5.ResumeLayout(False)
+        Me.ExTableLayoutPanel5.PerformLayout()
         Me.TabPageStatus.ResumeLayout(False)
-        Me.TabPageStatus.PerformLayout()
-        Me.GroupBoxStatusInR.ResumeLayout(False)
-        Me.GroupBoxStatusInR.PerformLayout()
-        Me.GroupBoxStatusInO.ResumeLayout(False)
-        Me.GroupBoxStatusInO.PerformLayout()
-        Me.GroupBoxStatusInIW.ResumeLayout(False)
-        Me.GroupBoxStatusInIW.PerformLayout()
-        Me.GroupBoxStatusInIR.ResumeLayout(False)
-        Me.GroupBoxStatusInIR.PerformLayout()
-        Me.GroupBoxStatusInB.ResumeLayout(False)
-        Me.GroupBoxStatusInB.PerformLayout()
+        Me.ExTableLayoutPanel6.ResumeLayout(False)
+        Me.ExTableLayoutPanel6.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.GroupBoxStatusInA.ResumeLayout(False)
         Me.GroupBoxStatusInA.PerformLayout()
+        Me.GroupBoxStatusInB.ResumeLayout(False)
+        Me.GroupBoxStatusInB.PerformLayout()
+        Me.GroupBoxStatusInIR.ResumeLayout(False)
+        Me.GroupBoxStatusInIR.PerformLayout()
+        Me.GroupBoxStatusInR.ResumeLayout(False)
+        Me.GroupBoxStatusInR.PerformLayout()
+        Me.GroupBoxStatusInIW.ResumeLayout(False)
+        Me.GroupBoxStatusInIW.PerformLayout()
+        Me.GroupBoxStatusInO.ResumeLayout(False)
+        Me.GroupBoxStatusInO.PerformLayout()
         Me.TabPageSorting.ResumeLayout(False)
-        Me.TabPageSorting.PerformLayout()
+        Me.ExTableLayoutPanel7.ResumeLayout(False)
+        Me.ExTableLayoutPanel7.PerformLayout()
+        Me.ExTableLayoutPanel8.ResumeLayout(False)
+        Me.ExTableLayoutPanel8.PerformLayout()
         Me.TabPageTemplates.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
@@ -2470,7 +2617,6 @@ Partial Class Form1
     Friend WithEvents CheckBoxTLAAutoIncludeTLF As CheckBox
     Friend WithEvents ButtonFastSearchScopeFilename As Button
     Friend WithEvents TextBoxFastSearchScopeFilename As TextBox
-    Friend WithEvents LabelFastSearchScopeFilename As Label
     Friend WithEvents CheckBoxTLAReportUnrelatedFiles As CheckBox
     Friend WithEvents RadioButtonTLATopDown As RadioButton
     Friend WithEvents RadioButtonTLABottomUp As RadioButton
@@ -2590,4 +2736,12 @@ Partial Class Form1
     Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
     Friend WithEvents CheckBoxCheckForNewerVersion As CheckBox
+    Friend WithEvents ExTableLayoutPanel4 As ExTableLayoutPanel
+    Friend WithEvents LabelTLAListOptions As Label
+    Friend WithEvents LabelTLASearchOptions As Label
+    Friend WithEvents ExTableLayoutPanel5 As ExTableLayoutPanel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents ExTableLayoutPanel6 As ExTableLayoutPanel
+    Friend WithEvents ExTableLayoutPanel7 As ExTableLayoutPanel
+    Friend WithEvents ExTableLayoutPanel8 As ExTableLayoutPanel
 End Class

@@ -78,7 +78,7 @@ Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (sometimes hidden under the As
 
 The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
 
-If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in the Preferences folder. They are `defaults.txt`, `property_filters.txt`, and `filename_charmap.txt`. If you haven't used Property Filter, `property_filters.txt` won't be there. Versions prior to 0.1.10 won't have `filename_charmap.txt` either. Older versions had a file `printer_settings.dat`, which is no longer used.  You can safely delete it if you want.
+If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in Housekeeper's Preferences folder. There is one exception.  Starting with v2024.2, property filters are stored in a `*.json` format.  The old `*.txt` format is no longer used.
 
 
 ## OPERATION
@@ -273,6 +273,15 @@ In the image above, sticking with the default formula means you would get all pa
 You can optionally change the formula. Click the `Edit Formula` button and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
+**One More Thing About the Formula**
+
+I don't know where else to put this, so I'll put it here.  Prior to Housekeeper V2024.2, the formula was evaluated using the .NET built-in VBScript engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
+
+The program now uses PowerShell to do the evaluation.  The communication code is built into .NET, but PowerShell itself has to be installed separately.  On recent versions of Windows (maybe back to Win7, not sure) PowerShell comes bundled with the OS, so it shouldn't be an issue.
+
+
+
+
 **Dates and Numbers**
 
 Dates and numbers are converted to their native format when possible. This is done to obtain commonsense results for `<` and `>`. Note the conversion is attempted even if the property type is `TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
@@ -373,6 +382,67 @@ The tasks are color-coded.  Change the color by selecting the task, right-clicki
 To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any other changes you made, such as your template locations, etc.
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
+
+## CONFIGURATION TAB
+
+Global options for the program are set here.  The use of the options are discussed elsewhere in this README.  They are described here for completeness.
+
+### Top Level Assembly Page
+
+<p align="center">
+  <img src="My%20Project/media/configuration_tab_top_level_assembly_page.png">
+</p>
+
+**LIST OPTIONS**
+
+- `Automatically include the folder if a top-level assembly is chosen`
+ Adds the folder in which the assembly resides to the `Top level folders` search group.  
+If your files are arranged in a heirarchical manner, with the top level assembly at the top of the folder structure, this is usually a good choice.  
+If you have a flat or category-based folder structure, it probably isn't.
+- `Warn me if a top-level assembly does not have a top-level folder specified`
+The program does not require a top-level folder.  In that case, however, it only finds files within the assembly file and its subassemblies.  That means it can't find draft files.  This option alerts you to that situation.
+- `Include parents of all part copies in search results, even if they are not in the top level assembly`
+This is for the case where a part may have a 'master' part from which it is derived, and the 'master' part itself is not in the assembly.  
+- `Report files unrelated to the top level assembly`
+Finds files with no links to the top-level assembly.  It is a way to find 'dead wood' in a assembly's folder structure.  Mostly intended for self-contained project folder structures.
+
+**SEARCH OPTIONS**
+
+These are covered extensively under the File Selection section, Top Level Assembly topic.  Please refer to that section for details.
+
+### Status Page
+
+This controls how Document Status is handled.
+
+<p align="center">
+  <img src="My%20Project/media/configuration_tab_status_page.png">
+</p>
+
+- `Process files as Available regardless of document status`
+
+
+
+
+### Sorting Page
+
+<p align="center">
+  <img src="My%20Project/media/configuration_tab_sorting_page.png">
+</p>
+
+
+### Templates Page
+
+<p align="center">
+  <img src="My%20Project/media/configuration_tab_templates_page.png">
+</p>
+
+
+### General Page
+
+<p align="center">
+  <img src="My%20Project/media/configuration_tab_general_page.png">
+</p>
+
 
 ## TASK DETAILS
 
