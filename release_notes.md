@@ -84,7 +84,7 @@ See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 ### Create drawing of flat pattern
 Contributed by **@ChrisNC** Thank you!
 
-Creates a `*.dft` or `*.pdf` of a flat pattern using the template you specify.  The drawing is centered on the sheet; it is scaled and rotated to fit the available space.  You can save the drawing in the original directory, or in another you specify.
+Creates a `*.dft` or `*.pdf` of a flat pattern using the template you specify.  The drawing is centered, with optional offsets, on the sheet; it is scaled and rotated to fit the available space.  You can save the drawing in the original directory, or in another you specify.
 
 See the [<ins>**Create Drawing of Flat Pattern Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#create-drawing-of-flat-pattern) for details.
 

@@ -1978,15 +1978,15 @@ Public Class Form1
     End Sub
 
     Private Sub TaskHeaderHelpButton_Click(sender As Object, e As EventArgs) Handles TaskHeaderHelpButton.Click
-        'Dim HelpURL = "https://github.com/rmcanany/SolidEdgeHousekeeper#task-tab"
 
-        Dim Version = Me.Version
+        Dim Tag As String = "task-tab"
 
-        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+        Dim UP As New UtilsPreferences
 
-        Dim HelpURL = String.Format("{0}#task-tab", VersionSpecificReadme)
+        Dim HelpURL = UP.GenerateVersionURL(Tag)
 
         System.Diagnostics.Process.Start(HelpURL)
+
     End Sub
 
     Private Sub TaskPanel_Scroll(sender As Object, e As ScrollEventArgs) Handles TaskPanel.Scroll
@@ -2027,14 +2027,12 @@ Public Class Form1
     End Sub
 
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
-        ' Help button on the file list toolstrip
-        ' https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-2024.2.md#file-selection-and-filtering
 
-        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Me.Version)
+        Dim Tag As String = "file-selection-and-filtering"
 
-        Dim s As String = "file-selection-and-filtering"
+        Dim UP As New UtilsPreferences
 
-        Dim HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, s)
+        Dim HelpURL = UP.GenerateVersionURL(Tag)
 
         System.Diagnostics.Process.Start(HelpURL)
 

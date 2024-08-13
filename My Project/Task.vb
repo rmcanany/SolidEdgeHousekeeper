@@ -301,24 +301,23 @@ Public MustInherit Class Task
     End Function
 
     Public Function GenerateHelpURL(tmpLabelText As String) As String
-        Dim s As String
+        Dim Tag As String
         Dim tmpHelpURL As String
 
         ' Example address
         ' https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-2024.2.md#open-save
 
-        s = tmpLabelText         '  'Open save'
-        s = s.Replace("/", "")   '  'Open save' -> 'Open save'
-        s = s.Replace(" ", "-")  '  'Open save' -> 'Open-save'
-        s = s.ToLower            '  'Open-save' -> 'open-save'
+        Tag = tmpLabelText         '  'Open save'
+        Tag = Tag.Replace("/", "")   '  'Open save' -> 'Open save'
+        Tag = Tag.Replace(" ", "-")  '  'Open save' -> 'Open-save'
+        Tag = Tag.ToLower            '  'Open-save' -> 'open-save'
 
-        Dim Version = Form1.Version
+        Dim UP As New UtilsPreferences
 
-        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
-
-        tmpHelpURL = String.Format("{0}#{1}", VersionSpecificReadme, s)
+        tmpHelpURL = UP.GenerateVersionURL(Tag)
 
         Return tmpHelpURL
+
     End Function
 
     Public Sub HandleHideOptionsChange(

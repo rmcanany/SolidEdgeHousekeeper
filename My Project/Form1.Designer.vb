@@ -76,6 +76,34 @@ Partial Class Form1
         Me.TabPageConfiguration = New System.Windows.Forms.TabPage()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
+        Me.TabPageStatus = New System.Windows.Forms.TabPage()
+        Me.TabPageSorting = New System.Windows.Forms.TabPage()
+        Me.TabPageTemplates = New System.Windows.Forms.TabPage()
+        Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.TabPageHelp = New System.Windows.Forms.TabPage()
+        Me.LabelReadmeNavigation2 = New System.Windows.Forms.Label()
+        Me.LabelReadmeNavigation1 = New System.Windows.Forms.Label()
+        Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
+        Me.PictureBoxTableOfContents = New System.Windows.Forms.PictureBox()
+        Me.TextBoxStatus = New System.Windows.Forms.TextBox()
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.LabelTimeRemaining = New System.Windows.Forms.Label()
+        Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.ButtonProcess = New System.Windows.Forms.Button()
+        Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_FindLinks = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
         Me.LabelTLAListOptions = New System.Windows.Forms.Label()
         Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
@@ -90,7 +118,6 @@ Partial Class Form1
         Me.ExTableLayoutPanel5 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonFastSearchScopeFilename = New System.Windows.Forms.Button()
         Me.TextBoxFastSearchScopeFilename = New System.Windows.Forms.TextBox()
-        Me.TabPageStatus = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel6 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxProcessReadOnly = New System.Windows.Forms.CheckBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -152,7 +179,6 @@ Partial Class Form1
         Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
         Me.RadioButtonReadOnlyRevert = New System.Windows.Forms.RadioButton()
         Me.RadioButtonReadOnlyChange = New System.Windows.Forms.RadioButton()
-        Me.TabPageSorting = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel7 = New Housekeeper.ExTableLayoutPanel()
         Me.RadioButtonListSortNone = New System.Windows.Forms.RadioButton()
         Me.RadioButtonListSortAlphabetical = New System.Windows.Forms.RadioButton()
@@ -162,7 +188,6 @@ Partial Class Form1
         Me.ExTableLayoutPanel8 = New Housekeeper.ExTableLayoutPanel()
         Me.TextBoxRandomSampleFraction = New System.Windows.Forms.TextBox()
         Me.LabelRandomSampleFraction = New System.Windows.Forms.Label()
-        Me.TabPageTemplates = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonAssemblyTemplate = New System.Windows.Forms.Button()
         Me.TextBoxAssemblyTemplate = New System.Windows.Forms.TextBox()
@@ -180,7 +205,6 @@ Partial Class Form1
         Me.LabelCopyToTasks = New System.Windows.Forms.Label()
         Me.CheckBoxUseTemplateProperties = New System.Windows.Forms.CheckBox()
         Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
-        Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
         Me.CheckBoxPropertyFilterCheckDraftFile = New System.Windows.Forms.CheckBox()
@@ -193,30 +217,6 @@ Partial Class Form1
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
-        Me.TabPageHelp = New System.Windows.Forms.TabPage()
-        Me.LabelReadmeNavigation2 = New System.Windows.Forms.Label()
-        Me.LabelReadmeNavigation1 = New System.Windows.Forms.Label()
-        Me.LinkLabelGitHubReadme = New System.Windows.Forms.LinkLabel()
-        Me.PictureBoxTableOfContents = New System.Windows.Forms.PictureBox()
-        Me.TextBoxStatus = New System.Windows.Forms.TextBox()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.LabelTimeRemaining = New System.Windows.Forms.Label()
-        Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.ButtonProcess = New System.Windows.Forms.Button()
-        Me.ButtonCancel = New System.Windows.Forms.Button()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.Menu_ListViewFile = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.BT_Open = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BT_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_FindLinks = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
-        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -228,9 +228,16 @@ Partial Class Form1
         Me.TabPageConfiguration.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPageTopLevelAssy.SuspendLayout()
+        Me.TabPageStatus.SuspendLayout()
+        Me.TabPageSorting.SuspendLayout()
+        Me.TabPageTemplates.SuspendLayout()
+        Me.TabPageGeneral.SuspendLayout()
+        Me.TabPageHelp.SuspendLayout()
+        CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.Menu_ListViewFile.SuspendLayout()
         Me.ExTableLayoutPanel4.SuspendLayout()
         Me.ExTableLayoutPanel5.SuspendLayout()
-        Me.TabPageStatus.SuspendLayout()
         Me.ExTableLayoutPanel6.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.GroupBoxStatusInA.SuspendLayout()
@@ -239,18 +246,11 @@ Partial Class Form1
         Me.GroupBoxStatusInR.SuspendLayout()
         Me.GroupBoxStatusInIW.SuspendLayout()
         Me.GroupBoxStatusInO.SuspendLayout()
-        Me.TabPageSorting.SuspendLayout()
         Me.ExTableLayoutPanel7.SuspendLayout()
         Me.ExTableLayoutPanel8.SuspendLayout()
-        Me.TabPageTemplates.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
-        Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
-        Me.TabPageHelp.SuspendLayout()
-        CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TableLayoutPanel1.SuspendLayout()
-        Me.Menu_ListViewFile.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -813,6 +813,260 @@ Partial Class Form1
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
         '
+        'TabPageStatus
+        '
+        Me.TabPageStatus.Controls.Add(Me.ExTableLayoutPanel6)
+        Me.TabPageStatus.ImageKey = "folder"
+        Me.TabPageStatus.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageStatus.Name = "TabPageStatus"
+        Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageStatus.Size = New System.Drawing.Size(532, 789)
+        Me.TabPageStatus.TabIndex = 3
+        Me.TabPageStatus.Text = "Status"
+        Me.TabPageStatus.UseVisualStyleBackColor = True
+        '
+        'TabPageSorting
+        '
+        Me.TabPageSorting.Controls.Add(Me.ExTableLayoutPanel7)
+        Me.TabPageSorting.ImageKey = "list"
+        Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageSorting.Name = "TabPageSorting"
+        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageSorting.Size = New System.Drawing.Size(532, 789)
+        Me.TabPageSorting.TabIndex = 4
+        Me.TabPageSorting.Text = "Sorting"
+        Me.TabPageSorting.UseVisualStyleBackColor = True
+        '
+        'TabPageTemplates
+        '
+        Me.TabPageTemplates.Controls.Add(Me.ExTableLayoutPanel1)
+        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageTemplates.Name = "TabPageTemplates"
+        Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(532, 789)
+        Me.TabPageTemplates.TabIndex = 7
+        Me.TabPageTemplates.Text = "Templates"
+        Me.TabPageTemplates.UseVisualStyleBackColor = True
+        '
+        'TabPageGeneral
+        '
+        Me.TabPageGeneral.AutoScroll = True
+        Me.TabPageGeneral.Controls.Add(Me.ExTableLayoutPanel2)
+        Me.TabPageGeneral.ImageKey = "config"
+        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageGeneral.Name = "TabPageGeneral"
+        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 789)
+        Me.TabPageGeneral.TabIndex = 6
+        Me.TabPageGeneral.Text = "General"
+        Me.TabPageGeneral.UseVisualStyleBackColor = True
+        '
+        'TabPageHelp
+        '
+        Me.TabPageHelp.AutoScroll = True
+        Me.TabPageHelp.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageHelp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation2)
+        Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation1)
+        Me.TabPageHelp.Controls.Add(Me.LinkLabelGitHubReadme)
+        Me.TabPageHelp.Controls.Add(Me.PictureBoxTableOfContents)
+        Me.TabPageHelp.ImageKey = "Help"
+        Me.TabPageHelp.Location = New System.Drawing.Point(4, 25)
+        Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
+        Me.TabPageHelp.Name = "TabPageHelp"
+        Me.TabPageHelp.Padding = New System.Windows.Forms.Padding(2)
+        Me.TabPageHelp.Size = New System.Drawing.Size(551, 647)
+        Me.TabPageHelp.TabIndex = 6
+        Me.TabPageHelp.Text = "Help"
+        '
+        'LabelReadmeNavigation2
+        '
+        Me.LabelReadmeNavigation2.AutoSize = True
+        Me.LabelReadmeNavigation2.Location = New System.Drawing.Point(18, 119)
+        Me.LabelReadmeNavigation2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelReadmeNavigation2.Name = "LabelReadmeNavigation2"
+        Me.LabelReadmeNavigation2.Size = New System.Drawing.Size(162, 16)
+        Me.LabelReadmeNavigation2.TabIndex = 6
+        Me.LabelReadmeNavigation2.Text = "as shown in the image below."
+        '
+        'LabelReadmeNavigation1
+        '
+        Me.LabelReadmeNavigation1.AutoSize = True
+        Me.LabelReadmeNavigation1.Location = New System.Drawing.Point(18, 98)
+        Me.LabelReadmeNavigation1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelReadmeNavigation1.Name = "LabelReadmeNavigation1"
+        Me.LabelReadmeNavigation1.Size = New System.Drawing.Size(424, 16)
+        Me.LabelReadmeNavigation1.TabIndex = 2
+        Me.LabelReadmeNavigation1.Text = "Access the Table of Contents on GitHub by clicking the icon left of README.md"
+        '
+        'LinkLabelGitHubReadme
+        '
+        Me.LinkLabelGitHubReadme.AutoSize = True
+        Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(18, 35)
+        Me.LinkLabelGitHubReadme.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
+        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(180, 16)
+        Me.LinkLabelGitHubReadme.TabIndex = 1
+        Me.LinkLabelGitHubReadme.TabStop = True
+        Me.LinkLabelGitHubReadme.Text = "text populated in Form1.Startup()"
+        '
+        'PictureBoxTableOfContents
+        '
+        Me.PictureBoxTableOfContents.Image = Global.Housekeeper.My.Resources.Resources.table_of_contents
+        Me.PictureBoxTableOfContents.Location = New System.Drawing.Point(18, 161)
+        Me.PictureBoxTableOfContents.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.PictureBoxTableOfContents.Name = "PictureBoxTableOfContents"
+        Me.PictureBoxTableOfContents.Size = New System.Drawing.Size(364, 394)
+        Me.PictureBoxTableOfContents.TabIndex = 5
+        Me.PictureBoxTableOfContents.TabStop = False
+        '
+        'TextBoxStatus
+        '
+        Me.TextBoxStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.TableLayoutPanel1.SetColumnSpan(Me.TextBoxStatus, 3)
+        Me.TextBoxStatus.Location = New System.Drawing.Point(2, 9)
+        Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBoxStatus.Name = "TextBoxStatus"
+        Me.TextBoxStatus.Size = New System.Drawing.Size(555, 23)
+        Me.TextBoxStatus.TabIndex = 1
+        Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
+    ""
+        Me.ToolTip1.SetToolTip(Me.TextBoxStatus, "Status")
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
+        'ToolTip1
+        '
+        Me.ToolTip1.ShowAlways = True
+        '
+        'LabelTimeRemaining
+        '
+        Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LabelTimeRemaining.AutoSize = True
+        Me.LabelTimeRemaining.Location = New System.Drawing.Point(12, 722)
+        Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
+        Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 16)
+        Me.LabelTimeRemaining.TabIndex = 4
+        '
+        'PrintDialog1
+        '
+        Me.PrintDialog1.UseEXDialog = True
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 3
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.ButtonProcess, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 676)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(559, 76)
+        Me.TableLayoutPanel1.TabIndex = 5
+        '
+        'ButtonProcess
+        '
+        Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonProcess.Image = Global.Housekeeper.My.Resources.Resources.Play
+        Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ButtonProcess.Location = New System.Drawing.Point(327, 36)
+        Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonProcess.Name = "ButtonProcess"
+        Me.ButtonProcess.Size = New System.Drawing.Size(113, 38)
+        Me.ButtonProcess.TabIndex = 3
+        Me.ButtonProcess.Text = "Process"
+        Me.ButtonProcess.UseVisualStyleBackColor = True
+        '
+        'ButtonCancel
+        '
+        Me.ButtonCancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.ButtonCancel.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.ButtonCancel.Location = New System.Drawing.Point(444, 36)
+        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
+        Me.ButtonCancel.Name = "ButtonCancel"
+        Me.ButtonCancel.Size = New System.Drawing.Size(113, 38)
+        Me.ButtonCancel.TabIndex = 2
+        Me.ButtonCancel.Text = "Cancel"
+        Me.ButtonCancel.UseVisualStyleBackColor = True
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 23)
+        '
+        'Menu_ListViewFile
+        '
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove})
+        Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(165, 126)
+        '
+        'BT_Open
+        '
+        Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
+        Me.BT_Open.Name = "BT_Open"
+        Me.BT_Open.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Open.Text = "Open"
+        '
+        'BT_OpenFolder
+        '
+        Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
+        Me.BT_OpenFolder.Name = "BT_OpenFolder"
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(164, 22)
+        Me.BT_OpenFolder.Text = "Open folder"
+        '
+        'ToolStripSeparator8
+        '
+        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(161, 6)
+        '
+        'BT_FindLinks
+        '
+        Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
+        Me.BT_FindLinks.Name = "BT_FindLinks"
+        Me.BT_FindLinks.Size = New System.Drawing.Size(164, 22)
+        Me.BT_FindLinks.Text = "Find linked files"
+        '
+        'BT_ProcessSelected
+        '
+        Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
+        Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
+        Me.BT_ProcessSelected.Size = New System.Drawing.Size(164, 22)
+        Me.BT_ProcessSelected.Text = "Process selected"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(161, 6)
+        '
+        'BT_Remove
+        '
+        Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
+        Me.BT_Remove.Name = "BT_Remove"
+        Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Remove.Text = "Remove from list"
+        '
+        'NotifyIcon1
+        '
+        Me.NotifyIcon1.Text = "NotifyIcon1"
+        Me.NotifyIcon1.Visible = True
+        '
         'ExTableLayoutPanel4
         '
         Me.ExTableLayoutPanel4.ColumnCount = 1
@@ -1010,19 +1264,6 @@ Partial Class Form1
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(364, 23)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 15
-        '
-        'TabPageStatus
-        '
-        Me.TabPageStatus.Controls.Add(Me.ExTableLayoutPanel6)
-        Me.TabPageStatus.ImageKey = "folder"
-        Me.TabPageStatus.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Name = "TabPageStatus"
-        Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(532, 789)
-        Me.TabPageStatus.TabIndex = 3
-        Me.TabPageStatus.Text = "Status"
-        Me.TabPageStatus.UseVisualStyleBackColor = True
         '
         'ExTableLayoutPanel6
         '
@@ -1749,19 +1990,6 @@ Partial Class Form1
         Me.RadioButtonReadOnlyChange.Text = "Change status after processing"
         Me.RadioButtonReadOnlyChange.UseVisualStyleBackColor = True
         '
-        'TabPageSorting
-        '
-        Me.TabPageSorting.Controls.Add(Me.ExTableLayoutPanel7)
-        Me.TabPageSorting.ImageKey = "list"
-        Me.TabPageSorting.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Name = "TabPageSorting"
-        Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(532, 789)
-        Me.TabPageSorting.TabIndex = 4
-        Me.TabPageSorting.Text = "Sorting"
-        Me.TabPageSorting.UseVisualStyleBackColor = True
-        '
         'ExTableLayoutPanel7
         '
         Me.ExTableLayoutPanel7.ColumnCount = 1
@@ -1886,17 +2114,6 @@ Partial Class Form1
         Me.LabelRandomSampleFraction.Size = New System.Drawing.Size(90, 16)
         Me.LabelRandomSampleFraction.TabIndex = 54
         Me.LabelRandomSampleFraction.Text = "Sample fraction"
-        '
-        'TabPageTemplates
-        '
-        Me.TabPageTemplates.Controls.Add(Me.ExTableLayoutPanel1)
-        Me.TabPageTemplates.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageTemplates.Name = "TabPageTemplates"
-        Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(532, 789)
-        Me.TabPageTemplates.TabIndex = 7
-        Me.TabPageTemplates.Text = "Templates"
-        Me.TabPageTemplates.UseVisualStyleBackColor = True
         '
         'ExTableLayoutPanel1
         '
@@ -2088,20 +2305,6 @@ Partial Class Form1
         Me.ButtonUseTemplateProperties.Text = "Update"
         Me.ButtonUseTemplateProperties.UseVisualStyleBackColor = True
         '
-        'TabPageGeneral
-        '
-        Me.TabPageGeneral.AutoScroll = True
-        Me.TabPageGeneral.Controls.Add(Me.ExTableLayoutPanel2)
-        Me.TabPageGeneral.ImageKey = "config"
-        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Name = "TabPageGeneral"
-        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 789)
-        Me.TabPageGeneral.TabIndex = 6
-        Me.TabPageGeneral.Text = "General"
-        Me.TabPageGeneral.UseVisualStyleBackColor = True
-        '
         'ExTableLayoutPanel2
         '
         Me.ExTableLayoutPanel2.ColumnCount = 1
@@ -2221,7 +2424,7 @@ Partial Class Form1
         Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(518, 34)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
@@ -2273,209 +2476,6 @@ Partial Class Form1
         Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
         Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
         '
-        'TabPageHelp
-        '
-        Me.TabPageHelp.AutoScroll = True
-        Me.TabPageHelp.BackColor = System.Drawing.SystemColors.Control
-        Me.TabPageHelp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation2)
-        Me.TabPageHelp.Controls.Add(Me.LabelReadmeNavigation1)
-        Me.TabPageHelp.Controls.Add(Me.LinkLabelGitHubReadme)
-        Me.TabPageHelp.Controls.Add(Me.PictureBoxTableOfContents)
-        Me.TabPageHelp.ImageKey = "Help"
-        Me.TabPageHelp.Location = New System.Drawing.Point(4, 25)
-        Me.TabPageHelp.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPageHelp.Name = "TabPageHelp"
-        Me.TabPageHelp.Padding = New System.Windows.Forms.Padding(2)
-        Me.TabPageHelp.Size = New System.Drawing.Size(551, 647)
-        Me.TabPageHelp.TabIndex = 6
-        Me.TabPageHelp.Text = "Help"
-        '
-        'LabelReadmeNavigation2
-        '
-        Me.LabelReadmeNavigation2.AutoSize = True
-        Me.LabelReadmeNavigation2.Location = New System.Drawing.Point(18, 119)
-        Me.LabelReadmeNavigation2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelReadmeNavigation2.Name = "LabelReadmeNavigation2"
-        Me.LabelReadmeNavigation2.Size = New System.Drawing.Size(162, 16)
-        Me.LabelReadmeNavigation2.TabIndex = 6
-        Me.LabelReadmeNavigation2.Text = "as shown in the image below."
-        '
-        'LabelReadmeNavigation1
-        '
-        Me.LabelReadmeNavigation1.AutoSize = True
-        Me.LabelReadmeNavigation1.Location = New System.Drawing.Point(18, 98)
-        Me.LabelReadmeNavigation1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LabelReadmeNavigation1.Name = "LabelReadmeNavigation1"
-        Me.LabelReadmeNavigation1.Size = New System.Drawing.Size(424, 16)
-        Me.LabelReadmeNavigation1.TabIndex = 2
-        Me.LabelReadmeNavigation1.Text = "Access the Table of Contents on GitHub by clicking the icon left of README.md"
-        '
-        'LinkLabelGitHubReadme
-        '
-        Me.LinkLabelGitHubReadme.AutoSize = True
-        Me.LinkLabelGitHubReadme.Location = New System.Drawing.Point(18, 35)
-        Me.LinkLabelGitHubReadme.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.LinkLabelGitHubReadme.Name = "LinkLabelGitHubReadme"
-        Me.LinkLabelGitHubReadme.Size = New System.Drawing.Size(180, 16)
-        Me.LinkLabelGitHubReadme.TabIndex = 1
-        Me.LinkLabelGitHubReadme.TabStop = True
-        Me.LinkLabelGitHubReadme.Text = "text populated in Form1.Startup()"
-        '
-        'PictureBoxTableOfContents
-        '
-        Me.PictureBoxTableOfContents.Image = Global.Housekeeper.My.Resources.Resources.table_of_contents
-        Me.PictureBoxTableOfContents.Location = New System.Drawing.Point(18, 161)
-        Me.PictureBoxTableOfContents.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.PictureBoxTableOfContents.Name = "PictureBoxTableOfContents"
-        Me.PictureBoxTableOfContents.Size = New System.Drawing.Size(364, 394)
-        Me.PictureBoxTableOfContents.TabIndex = 5
-        Me.PictureBoxTableOfContents.TabStop = False
-        '
-        'TextBoxStatus
-        '
-        Me.TextBoxStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
-        Me.TableLayoutPanel1.SetColumnSpan(Me.TextBoxStatus, 3)
-        Me.TextBoxStatus.Location = New System.Drawing.Point(2, 9)
-        Me.TextBoxStatus.Margin = New System.Windows.Forms.Padding(2)
-        Me.TextBoxStatus.Name = "TextBoxStatus"
-        Me.TextBoxStatus.Size = New System.Drawing.Size(555, 23)
-        Me.TextBoxStatus.TabIndex = 1
-        Me.TextBoxStatus.Text = "Select file(s) to process OR Select none to process all (ESC to clear selections)" &
-    ""
-        Me.ToolTip1.SetToolTip(Me.TextBoxStatus, "Status")
-        '
-        'OpenFileDialog1
-        '
-        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
-        '
-        'ToolTip1
-        '
-        Me.ToolTip1.ShowAlways = True
-        '
-        'LabelTimeRemaining
-        '
-        Me.LabelTimeRemaining.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LabelTimeRemaining.AutoSize = True
-        Me.LabelTimeRemaining.Location = New System.Drawing.Point(12, 722)
-        Me.LabelTimeRemaining.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.LabelTimeRemaining.Name = "LabelTimeRemaining"
-        Me.LabelTimeRemaining.Size = New System.Drawing.Size(0, 16)
-        Me.LabelTimeRemaining.TabIndex = 4
-        '
-        'PrintDialog1
-        '
-        Me.PrintDialog1.UseEXDialog = True
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 3
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.ButtonProcess, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 676)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(559, 76)
-        Me.TableLayoutPanel1.TabIndex = 5
-        '
-        'ButtonProcess
-        '
-        Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonProcess.Image = Global.Housekeeper.My.Resources.Resources.Play
-        Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonProcess.Location = New System.Drawing.Point(327, 36)
-        Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonProcess.Name = "ButtonProcess"
-        Me.ButtonProcess.Size = New System.Drawing.Size(113, 38)
-        Me.ButtonProcess.TabIndex = 3
-        Me.ButtonProcess.Text = "Process"
-        Me.ButtonProcess.UseVisualStyleBackColor = True
-        '
-        'ButtonCancel
-        '
-        Me.ButtonCancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ButtonCancel.Image = Global.Housekeeper.My.Resources.Resources.Close
-        Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonCancel.Location = New System.Drawing.Point(444, 36)
-        Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
-        Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(113, 38)
-        Me.ButtonCancel.TabIndex = 2
-        Me.ButtonCancel.Text = "Cancel"
-        Me.ButtonCancel.UseVisualStyleBackColor = True
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 23)
-        '
-        'Menu_ListViewFile
-        '
-        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove})
-        Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(165, 126)
-        '
-        'BT_Open
-        '
-        Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
-        Me.BT_Open.Name = "BT_Open"
-        Me.BT_Open.Size = New System.Drawing.Size(164, 22)
-        Me.BT_Open.Text = "Open"
-        '
-        'BT_OpenFolder
-        '
-        Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
-        Me.BT_OpenFolder.Name = "BT_OpenFolder"
-        Me.BT_OpenFolder.Size = New System.Drawing.Size(164, 22)
-        Me.BT_OpenFolder.Text = "Open folder"
-        '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(161, 6)
-        '
-        'BT_FindLinks
-        '
-        Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
-        Me.BT_FindLinks.Name = "BT_FindLinks"
-        Me.BT_FindLinks.Size = New System.Drawing.Size(164, 22)
-        Me.BT_FindLinks.Text = "Find linked files"
-        '
-        'BT_ProcessSelected
-        '
-        Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
-        Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
-        Me.BT_ProcessSelected.Size = New System.Drawing.Size(164, 22)
-        Me.BT_ProcessSelected.Text = "Process selected"
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(161, 6)
-        '
-        'BT_Remove
-        '
-        Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
-        Me.BT_Remove.Name = "BT_Remove"
-        Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
-        Me.BT_Remove.Text = "Remove from list"
-        '
-        'NotifyIcon1
-        '
-        Me.NotifyIcon1.Text = "NotifyIcon1"
-        Me.NotifyIcon1.Visible = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
@@ -2506,11 +2506,20 @@ Partial Class Form1
         Me.TabPageConfiguration.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPageTopLevelAssy.ResumeLayout(False)
+        Me.TabPageStatus.ResumeLayout(False)
+        Me.TabPageSorting.ResumeLayout(False)
+        Me.TabPageTemplates.ResumeLayout(False)
+        Me.TabPageGeneral.ResumeLayout(False)
+        Me.TabPageHelp.ResumeLayout(False)
+        Me.TabPageHelp.PerformLayout()
+        CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TableLayoutPanel1.PerformLayout()
+        Me.Menu_ListViewFile.ResumeLayout(False)
         Me.ExTableLayoutPanel4.ResumeLayout(False)
         Me.ExTableLayoutPanel4.PerformLayout()
         Me.ExTableLayoutPanel5.ResumeLayout(False)
         Me.ExTableLayoutPanel5.PerformLayout()
-        Me.TabPageStatus.ResumeLayout(False)
         Me.ExTableLayoutPanel6.ResumeLayout(False)
         Me.ExTableLayoutPanel6.PerformLayout()
         Me.Panel1.ResumeLayout(False)
@@ -2527,25 +2536,16 @@ Partial Class Form1
         Me.GroupBoxStatusInIW.PerformLayout()
         Me.GroupBoxStatusInO.ResumeLayout(False)
         Me.GroupBoxStatusInO.PerformLayout()
-        Me.TabPageSorting.ResumeLayout(False)
         Me.ExTableLayoutPanel7.ResumeLayout(False)
         Me.ExTableLayoutPanel7.PerformLayout()
         Me.ExTableLayoutPanel8.ResumeLayout(False)
         Me.ExTableLayoutPanel8.PerformLayout()
-        Me.TabPageTemplates.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
-        Me.TabPageGeneral.ResumeLayout(False)
         Me.ExTableLayoutPanel2.ResumeLayout(False)
         Me.ExTableLayoutPanel2.PerformLayout()
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel3.PerformLayout()
-        Me.TabPageHelp.ResumeLayout(False)
-        Me.TabPageHelp.PerformLayout()
-        CType(Me.PictureBoxTableOfContents, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TableLayoutPanel1.PerformLayout()
-        Me.Menu_ListViewFile.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
