@@ -609,7 +609,7 @@ Public Class UtilsPreferences
         CurrentYear = CInt(CurrentVersion.Split(CChar("."))(0))
         CurrentIdx = CInt(CurrentVersion.Split(CChar("."))(1))
 
-        WC.Headers.Add("User-Agent: Other")
+        WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
 
         s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
 

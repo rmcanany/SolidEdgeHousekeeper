@@ -118,7 +118,7 @@ Choose this option to select files linked to an assembly. Click ![Assembly](Reso
 
 You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
 
-![Top level assembly options](My%20Project/media/top_level_assy_options.png)
+![Top level assembly options](My%20Project/media/configuration_tab_top_level_assembly_page.png)
 
 A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the **Configuration Tab -- Top Level Assy Page**.
 
@@ -182,7 +182,7 @@ You can limit the search to return only selected types of Solid Edge files. To d
 
 ### Sorting
 
-![File list sorting options](My%20Project/media/file_sort_options.png)
+![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
 You can choose sorting options of `Unsorted`, `Alphabetic`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
 
@@ -200,7 +200,7 @@ If you use the document Status functionality, you know that some settings place 
 
 You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Status Page**.
 
-![File open save options](My%20Project/media/file_open_save_options.png)
+![Document Status](My%20Project/media/configuration_tab_status_page.png)
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
@@ -275,12 +275,11 @@ i.e., `A AND (B OR C)`.
 
 **One More Thing About the Formula**
 
-I don't know where else to put this, so I'll put it here.  Prior to Housekeeper V2024.2, the formula was evaluated using the .NET built-in VBScript engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
+I don't know where else to put this, so I'll put it here.  Prior to Housekeeper V2024.2, the formula was parsed and evaluated using the .NET built-in VBScript engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
 
 The program now uses PowerShell to do the evaluation.  The communication code is built into .NET, but PowerShell itself has to be installed separately.  On recent versions of Windows (maybe back to Win7, not sure) PowerShell comes bundled with the OS, so it shouldn't be an issue.
 
-
-
+If there is an issue, like PowerShell isn't installed, you won't get an error message.  Instead, you'll get no files matching your property search.  If you know that's wrong, please mention it on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There may be other more .NET-native ways of evaluating the formula.
 
 **Dates and Numbers**
 
@@ -385,64 +384,61 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 ## CONFIGURATION TAB
 
-Global options for the program are set here.  The use of the options are discussed elsewhere in this README.  They are described here for completeness.
+Global options for the program are set here on this tab.
 
 ### Top Level Assembly Page
 
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_top_level_assembly_page.png">
-</p>
-
-**LIST OPTIONS**
-
-- `Automatically include the folder if a top-level assembly is chosen`
- Adds the folder in which the assembly resides to the `Top level folders` search group.  
-If your files are arranged in a heirarchical manner, with the top level assembly at the top of the folder structure, this is usually a good choice.  
-If you have a flat or category-based folder structure, it probably isn't.
-- `Warn me if a top-level assembly does not have a top-level folder specified`
-The program does not require a top-level folder.  In that case, however, it only finds files within the assembly file and its subassemblies.  That means it can't find draft files.  This option alerts you to that situation.
-- `Include parents of all part copies in search results, even if they are not in the top level assembly`
-This is for the case where a part may have a 'master' part from which it is derived, and the 'master' part itself is not in the assembly.  
-- `Report files unrelated to the top level assembly`
-Finds files with no links to the top-level assembly.  It is a way to find 'dead wood' in a assembly's folder structure.  Mostly intended for self-contained project folder structures.
-
-**SEARCH OPTIONS**
-
-These are covered extensively under the File Selection section, Top Level Assembly topic.  Please refer to that section for details.
+See the [<ins>**Top Level Assembly**</ins>](#2-select-by-top-level-assembly) section.
 
 ### Status Page
 
-This controls how Document Status is handled.
-
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_status_page.png">
-</p>
-
-- `Process files as Available regardless of document status`
-
-
-
+See the [<ins>**Document Status**</ins>](#document-status-options) section.
 
 ### Sorting Page
 
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_sorting_page.png">
-</p>
-
+See the [<ins>**Sorting**</ins>](#sorting) section.
 
 ### Templates Page
+
+Templates and related tools.
 
 <p align="center">
   <img src="My%20Project/media/configuration_tab_templates_page.png">
 </p>
 
+- `Assembly, Part, Sheetmetal, Draft, Material Table`
+Buttons to let you specify template locations.
+- `Copy template locations to tasks that require it`
+Each Task is configured separately.  If you want all of them to use your main templates, click the `Copy` button.  This action is on-demand, so if your templates change you would have to copy them again.  Each Task retains its settings, so if you change a template in one, it will remember your choice.
+- `Use template properties in property dialogs`
+This is where you pre-populate properties so you can select them without typing.  Enable the option, then click `Update`.  Pre-populated properties also know to which `Property Set` they belong, so that field gets filled in automatically.
+- `Customize selection and order of template properties`
+There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
 
 ### General Page
+
+Everything else.
 
 <p align="center">
   <img src="My%20Project/media/configuration_tab_general_page.png">
 </p>
 
+- `Use current Solid Edge session (if any)`
+Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses this check.
+- `Warn me if file save is required`
+This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It's enabled by default.  I always turn it off.
+- `Do not show processed files in Most Recently Used List`
+This keeps from clogging up the list with files processed in batch.
+- `File list font size`
+This allows you to change the font size of the file list.
+- `Remember selected tasks between sessions`
+When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
+- `Property Filter -- Include Draft file model in search`
+For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+- `Property Filter -- Include the Draft file itself in search`
+For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+- `Check for newer version at startup`
+Uses GitHub's API to get the most recent version and compares it to the running version.  Not everyone wants programs to access outside resources like that, so is disabled by default.  
 
 ## TASK DETAILS
 

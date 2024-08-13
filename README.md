@@ -384,7 +384,7 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 ## CONFIGURATION TAB
 
-Global options for the program are set here.  The use of the options are discussed elsewhere in this README.  They are described here for completeness.
+Global options for the program are set here on this tab.
 
 ### Top Level Assembly Page
 
@@ -396,21 +396,49 @@ See the [<ins>**Document Status**</ins>](#document-status-options) section.
 
 ### Sorting Page
 
-See the [<ins>**Document Status**</ins>](#sorting) section.
+See the [<ins>**Sorting**</ins>](#sorting) section.
 
 ### Templates Page
+
+Templates and related tools.
 
 <p align="center">
   <img src="My%20Project/media/configuration_tab_templates_page.png">
 </p>
 
+- `Assembly, Part, Sheetmetal, Draft, Material Table`
+Buttons to let you specify template locations.
+- `Copy template locations to tasks that require it`
+Each Task is configured separately.  If you want all of them to use your main templates, click the `Copy` button.  This action is on-demand, so if your templates change you would have to copy them again.  Each Task retains its settings, so if you change a template in one, it will remember your choice.
+- `Use template properties in property dialogs`
+This is where you pre-populate properties so you can select them without typing.  Enable the option, then click `Update`.  Pre-populated properties also know to which `Property Set` they belong, so that field gets filled in automatically.
+- `Customize selection and order of template properties`
+There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
 
 ### General Page
+
+Everything else.
 
 <p align="center">
   <img src="My%20Project/media/configuration_tab_general_page.png">
 </p>
 
+- `Use current Solid Edge session (if any)`
+Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses this check.
+- `Warn me if file save is required`
+This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It's enabled by default.  I always turn it off.
+- `Do not show processed files in Most Recently Used List`
+This keeps from clogging up the list with files processed in batch.
+- `File list font size`
+This allows you to change the font size of the file list.
+- `Remember selected tasks between sessions`
+When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
+- `Property Filter -- Include Draft file model in search`
+For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+- `Property Filter -- Include the Draft file itself in search`
+For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+- `Check for newer version at startup`
+Uses GitHub's API to get the most recent version and compares it to the running version.  Not everyone wants programs to access outside resources like that, so is disabled by default.  
 
 ## TASK DETAILS
 
