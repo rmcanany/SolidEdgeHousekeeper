@@ -182,7 +182,7 @@ You can limit the search to return only selected types of Solid Edge files. To d
 
 ### Sorting
 
-![File list sorting options](My%20Project/media/file_sort_options.png)
+![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
 You can choose sorting options of `Unsorted`, `Alphabetic`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
 
@@ -200,7 +200,7 @@ If you use the document Status functionality, you know that some settings place 
 
 You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Status Page**.
 
-![File open save options](My%20Project/media/file_open_save_options.png)
+![Document Status](My%20Project/media/configuration_tab_status_page.png)
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
@@ -388,49 +388,15 @@ Global options for the program are set here.  The use of the options are discuss
 
 ### Top Level Assembly Page
 
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_top_level_assembly_page.png">
-</p>
-
 See the [<ins>**Top Level Assembly**</ins>](#2-select-by-top-level-assembly) section.
-
-
-**LIST OPTIONS**
-
-- `Automatically include the folder if a top-level assembly is chosen`
- Adds the folder in which the assembly resides to the `Top level folders` search group.  
-If your files are arranged in a heirarchical manner, with the top level assembly at the top of the folder structure, this is usually a good choice.  
-If you have a flat or category-based folder structure, it probably isn't.
-- `Warn me if a top-level assembly does not have a top-level folder specified`
-The program does not require a top-level folder.  In that case, however, it only finds files within the assembly file and its subassemblies.  That means it can't find draft files.  This option alerts you to that situation.
-- `Include parents of all part copies in search results, even if they are not in the top level assembly`
-This is for the case where a part may have a 'master' part from which it is derived, and the 'master' part itself is not in the assembly.  
-- `Report files unrelated to the top level assembly`
-Finds files with no links to the top-level assembly.  It is a way to find 'dead wood' in a assembly's folder structure.  Mostly intended for self-contained project folder structures.
-
-**SEARCH OPTIONS**
-
-These are covered extensively under the File Selection section, Top Level Assembly topic.  Please refer to that section for details.
 
 ### Status Page
 
-This controls how Document Status is handled.
-
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_status_page.png">
-</p>
-
-- `Process files as Available regardless of document status`
-
-
-
+See the [<ins>**Document Status**</ins>](#document-status-options) section.
 
 ### Sorting Page
 
-<p align="center">
-  <img src="My%20Project/media/configuration_tab_sorting_page.png">
-</p>
-
+See the [<ins>**Document Status**</ins>](#sorting) section.
 
 ### Templates Page
 
