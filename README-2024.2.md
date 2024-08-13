@@ -424,7 +424,7 @@ Everything else.
 </p>
 
 - `Use current Solid Edge session (if any)`
-Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses this check.
+Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses that check.
 - `Warn me if file save is required`
 This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It's enabled by default.  I always turn it off.
 - `Do not show processed files in Most Recently Used List`
