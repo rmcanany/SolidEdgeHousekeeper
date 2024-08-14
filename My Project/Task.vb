@@ -301,8 +301,8 @@ Public MustInherit Class Task
     End Function
 
     Public Function GenerateHelpURL(tmpLabelText As String) As String
+
         Dim Tag As String
-        Dim tmpHelpURL As String
 
         ' Example address
         ' https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-2024.2.md#open-save
@@ -312,11 +312,11 @@ Public MustInherit Class Task
         Tag = Tag.Replace(" ", "-")  '  'Open save' -> 'Open-save'
         Tag = Tag.ToLower            '  'Open-save' -> 'open-save'
 
-        Dim UP As New UtilsPreferences
+        Dim UD As New UtilsDocumentation
 
-        tmpHelpURL = UP.GenerateVersionURL(Tag)
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
 
-        Return tmpHelpURL
+        Return HelpURL
 
     End Function
 

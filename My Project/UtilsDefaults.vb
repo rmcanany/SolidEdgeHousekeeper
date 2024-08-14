@@ -1,13 +1,22 @@
-Option Strict On
+﻿Option Strict On
 
-Partial Class Form1
+Public Class UtilsDefaults
 
-    Private Function GetConfiguration() As Dictionary(Of String, String)
+    Public Property Form1 As Form1
+    Public Property DefaultsFilename As String
+
+    Public Sub New(_Form1 As Form1)
+
+        Me.Form1 = _Form1
+
+    End Sub
+
+    Public Function GetConfiguration() As Dictionary(Of String, String)
         Dim Configuration As New Dictionary(Of String, String)
         Dim ControlDict As New Dictionary(Of String, Control)
         Dim Ctrl As Control
 
-        ControlDict = RecurseFormControls(Me, ControlDict, False)
+        ControlDict = RecurseFormControls(Me.Form1, ControlDict, False)
 
         For Each Key In ControlDict.Keys
             Ctrl = ControlDict(Key)
@@ -69,7 +78,7 @@ Partial Class Form1
         Return Configuration
     End Function
 
-    Private Function RecurseFormControls(Ctrl As Control,
+    Public Function RecurseFormControls(Ctrl As Control,
                                          ControlDict As Dictionary(Of String, Control),
                                          Exclude As Boolean
                                          ) As Dictionary(Of String, Control)
@@ -78,7 +87,7 @@ Partial Class Form1
         Dim tf As Boolean
         Dim ExcludeControls As New List(Of String)
 
-        ExcludeControls.Add(new_CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(Form1.new_CheckBoxEnablePropertyFilter.Name)
         ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
@@ -107,7 +116,7 @@ Partial Class Form1
         Return ControlDict
     End Function
 
-    Private Sub PopulateTextBox(tb As TextBox, Value As String, StartupPath As String)
+    Public Sub PopulateTextBox(tb As TextBox, Value As String, StartupPath As String)
         Dim tf As Boolean
         Dim AlreadyProcessed As Boolean = False
 
@@ -251,7 +260,7 @@ Partial Class Form1
     End Sub
 
 
-    Private Sub LoadDefaults()
+    Public Sub LoadDefaults()
         'See format example in SaveDefaults()
 
         Dim UP As New UtilsPreferences
@@ -269,14 +278,13 @@ Partial Class Form1
 
         Dim KVPairList As New List(Of String)
 
-        'DefaultsFilename = StartupPath + "\Preferences\" + "defaults.txt"
         DefaultsFilename = String.Format("{0}/defaults.txt", PreferencesPath)
 
         'CreateFilenameCharmap()
 
         PopulateComboBoxes()
 
-        ControlDict = RecurseFormControls(Me, ControlDict, True)
+        ControlDict = RecurseFormControls(Me.Form1, ControlDict, True)
 
         Try
             Defaults = IO.File.ReadAllLines(DefaultsFilename)
@@ -313,7 +321,7 @@ Partial Class Form1
                     'new_ComboBoxFileSearch = new_ComboBoxFileSearchItem.????-???00*.*
 
                     Value = Value.Replace("new_ComboBoxFileSearchItem.", "")
-                    new_ComboBoxFileSearch.Items.Add(Value)
+                    Form1.new_ComboBoxFileSearch.Items.Add(Value)
                     Continue For
                 End If
 
@@ -358,7 +366,7 @@ Partial Class Form1
                     tf = tf Or Key.Contains("Part.")
                     tf = tf Or Key.Contains("Sheetmetal.")
                     tf = tf Or Key.Contains("Draft.")
-                    tf = tf And CheckBoxRememberTasks.Checked
+                    tf = tf And Form1.CheckBoxRememberTasks.Checked
                     If tf Then
                         PopulateCheckboxDefault(KVPair)
                     End If
@@ -369,12 +377,12 @@ Partial Class Form1
             MsgBox("Some form defaults were not restored.  The program will continue.  Please verify settings.")
         End Try
 
-        ReconcileFormChanges()
+        Form1.ReconcileFormChanges()
 
     End Sub
 
 
-    Private Sub SaveDefaults()
+    Public Sub SaveDefaults()
         'Format Example
         'TextBoxInputDirectory=D:\CAD\scripts\test_files
         'TextBoxTemplateAssembly=C:\Program Files\Siemens\Solid Edge 2020\Template\ANSI Inch\ansi inch assembly.asm
@@ -391,7 +399,7 @@ Partial Class Form1
         Dim Key As String
         Dim Ctrl As Control
 
-        ControlDict = RecurseFormControls(Me, ControlDict, True)
+        ControlDict = RecurseFormControls(Form1, ControlDict, True)
 
         For Each Key In ControlDict.Keys
             Ctrl = ControlDict(Key)
@@ -427,19 +435,22 @@ Partial Class Form1
 
         ' The combobox new_ComboBoxFileSearch is not a Control, it is a ToolStripCombobox
         ' It has to be handled separately.
-        If new_ComboBoxFileSearch.Items.Count > 0 Then
-            For i As Integer = 0 To new_ComboBoxFileSearch.Items.Count - 1
-                Dim Value As String = new_ComboBoxFileSearch.Items(i).ToString
+        If Form1.new_ComboBoxFileSearch.Items.Count > 0 Then
+            For i As Integer = 0 To Form1.new_ComboBoxFileSearch.Items.Count - 1
+                Dim Value As String = Form1.new_ComboBoxFileSearch.Items(i).ToString
                 Defaults.Add(String.Format("new_ComboBoxFileSearch=new_ComboBoxFileSearchItem.{0}", Value))
             Next
         End If
 
+        Dim UP As New UtilsPreferences
+        Dim PreferencesPath As String = UP.GetPreferencesDirectory()
+        DefaultsFilename = String.Format("{0}/defaults.txt", PreferencesPath)
 
         IO.File.WriteAllLines(DefaultsFilename, Defaults)
 
     End Sub
 
-    Private Sub PopulateCheckboxDefault(KVPair As String)
+    Public Sub PopulateCheckboxDefault(KVPair As String)
         'See format example in SaveDefaults
 
         Dim KeyAndName As String
@@ -460,147 +471,5 @@ Partial Class Form1
         End If
 
     End Sub
-
-    Private Sub BuildReadmeFile()
-
-        Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
-        'Dim VersionSpecificReadmeFileName = ReadmeFileName.Replace(".md", String.Format("-{0}.md", Me.Version))
-
-        ' StartupPath is hard coded so this doesn't do anything on a user's machine
-        Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
-
-        Dim TaskListHeader As String = "<!-- Start -->"
-        Dim Proceed As Boolean = True
-        Dim i As Integer
-        Dim msg As String
-
-        Dim ReadmeIn As String() = Nothing
-        Dim ReadmeOut As New List(Of String)
-
-
-        ' The readme file is not needed on the user's machine.  
-        ' The startup path is hard coded, hopefully most users won't have this exact location on their machines.  
-        If FileIO.FileSystem.DirectoryExists(StartupPath) Then
-            Try
-                ReadmeIn = IO.File.ReadAllLines(ReadmeFileName)
-            Catch ex As Exception
-                MsgBox(String.Format("Error opening {0}", ReadmeFileName))
-                Proceed = False
-            End Try
-        Else
-            Proceed = False
-        End If
-
-        If Proceed Then
-            For i = 0 To ReadmeIn.Count - 1
-                If Not ReadmeIn(i).Contains(TaskListHeader) Then
-                    ReadmeOut.Add(ReadmeIn(i))
-                Else
-                    Exit For
-                End If
-            Next
-
-            ReadmeOut.Add(TaskListHeader)
-            ReadmeOut.Add("")
-
-            Dim UP As New UtilsPreferences
-            Dim tmpTaskList = UP.BuildTaskListFromScratch
-
-            For Each Task As Task In tmpTaskList
-                ReadmeOut.Add(String.Format("### {0}", Task.Description))
-                ReadmeOut.Add(Task.HelpText)
-                ReadmeOut.Add("")
-            Next
-
-            ReadmeOut.Add("")
-            msg = "## KNOWN ISSUES"
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "**The program is not perfect**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: The programmer is not perfect."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Back up any files before using it.  The program can process a large number of files in a short amount of time.  It can do damage at the same rate.  It has been tested on thousands of our files, but none of yours.  So, you know, back up any files before using it.  "
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "**Does not support managed files**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Process the files in an unmanaged workspace."
-            ReadmeOut.Add(msg)
-            msg = "- *Update 10/10/2021* Some users have reported success with BiDM managed files."
-            ReadmeOut.Add(msg)
-            msg = "- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "**Some tasks cannot run on older Solid Edge versions**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Probably an API call not available in previous versions."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Use the latest version, or avoid use of the task causing problems."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "**May not support multiple installed Solid Edge versions**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Use the version that was 'silently' installed."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "**Pathfinder sometimes blank during Interactive Edit**"
-            ReadmeOut.Add(msg)
-            msg = "- *Cause*: Unknown."
-            ReadmeOut.Add(msg)
-            msg = "- *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-
-            ReadmeOut.Add("")
-            msg = "## OPEN SOURCE PACKAGES"
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-            msg = "This project uses these awesome open source packages."
-            ReadmeOut.Add(msg)
-            msg = "- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)"
-            ReadmeOut.Add(msg)
-            msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
-            ReadmeOut.Add(msg)
-            msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
-            ReadmeOut.Add(msg)
-            msg = "- Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)"
-            ReadmeOut.Add(msg)
-            msg = "- Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)"
-            ReadmeOut.Add(msg)
-            msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
-            ReadmeOut.Add(msg)
-            msg = "- Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)"
-            ReadmeOut.Add(msg)
-
-            msg = ""
-            ReadmeOut.Add("")
-            msg = "## CODE ORGANIZATION"
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-            msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
-            ReadmeOut.Add(msg)
-            ReadmeOut.Add("")
-
-
-            IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
-            'IO.File.WriteAllLines(VersionSpecificReadmeFileName, ReadmeOut)
-
-        End If
-
-
-    End Sub
-
 
 End Class

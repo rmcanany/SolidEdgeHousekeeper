@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
 
-Public Class TopLevelAssemblyUtilities
+Public Class UtilsTopLevelAssembly
     Private _mainInstance As Form1
     ' Private IndexedDrives As New List(Of String)
 

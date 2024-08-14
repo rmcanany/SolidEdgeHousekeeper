@@ -1,8 +1,11 @@
-Option Strict On
+﻿Option Strict On
 
-Partial Class Form1
+Public Class UtilsLogFile
 
-    Private Sub LogfileAppend(
+    Public Property MissingFilesFileName As String
+    Public Property ErrorsOccurred As Boolean
+
+    Public Sub LogfileAppend(
         ByVal Filename As String,
         ByVal ErrorMessagesCombined As Dictionary(Of String, List(Of String))
         )
@@ -35,7 +38,7 @@ Partial Class Form1
         ErrorsOccurred = True
     End Sub
 
-    Private Sub LogfileSetName()
+    Public Sub LogfileSetName()
         Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
         MissingFilesFileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + ".log"
 

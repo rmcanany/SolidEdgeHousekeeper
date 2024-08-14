@@ -189,23 +189,14 @@
     <Compile Include="My Project\FormTextPrompt.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\UtilsDefaults.vb" />
+    <Compile Include="My Project\UtilsDocumentation.vb" />
+    <Compile Include="My Project\UtilsExecute.vb" />
     <Compile Include="My Project\UtilsFeatures.vb" />
     <Compile Include="My Project\UtilsFileList.vb" />
     <Compile Include="My Project\UtilsFilenameCharmap.vb" />
-    <Compile Include="My Project\Form1.ApplicationHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="My Project\Form1.Defaults.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="My Project\Form1.Designer.vb">
       <DependentUpon>Form1.vb</DependentUpon>
-    </Compile>
-    <Compile Include="My Project\Form1.FileHelperFunctions.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="My Project\Form1.LogFile.vb">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\Form1.vb">
       <SubType>Form</SubType>
@@ -272,6 +263,7 @@
     </Compile>
     <Compile Include="My Project\IsolatedTask.vb" />
     <Compile Include="My Project\IsolatedTaskProxy.vb" />
+    <Compile Include="My Project\UtilsLogFile.vb" />
     <Compile Include="My Project\UtilsMaterials.vb" />
     <Compile Include="My Project\UtilsOccurrences.vb" />
     <Compile Include="My Project\UCEditVariables.Designer.vb">
@@ -337,7 +329,7 @@
     <Compile Include="My Project\TaskUpdatePartCopies.vb" />
     <Compile Include="My Project\TaskUpdatePhysicalProperties.vb" />
     <Compile Include="My Project\UtilsCommon.vb" />
-    <Compile Include="My Project\TopLevelAssemblyUtilities.vb" />
+    <Compile Include="My Project\UtilsTopLevelAssembly.vb" />
     <Compile Include="My Project\UCEditProperties.Designer.vb">
       <DependentUpon>UCEditProperties.vb</DependentUpon>
     </Compile>
