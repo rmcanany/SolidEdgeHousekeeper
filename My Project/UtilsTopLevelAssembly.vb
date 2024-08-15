@@ -2,11 +2,11 @@
 
 
 Public Class UtilsTopLevelAssembly
-    Private _mainInstance As Form1
+    Public Property FMain As Form_Main
     ' Private IndexedDrives As New List(Of String)
 
-    Public Sub New(mainInstance As Form1)
-        _mainInstance = mainInstance
+    Public Sub New(_Form_Main As Form_Main)
+        Me.FMain = _Form_Main
     End Sub
 
     Public Function GetLinksTopDown(TopLevelFolders As List(Of String),
@@ -28,7 +28,7 @@ Public Class UtilsTopLevelAssembly
         DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
         'DMApp.Visible = 0
 
-        Form1.Activate()
+        FMain.Activate()
 
         For Each TopLevelFolder In TopLevelFolders
             tmpAllFilenames = GetAllFilenamesTopDown(TopLevelFolder)
@@ -156,7 +156,7 @@ Public Class UtilsTopLevelAssembly
                 End If
                 msg = String.Format("{0}{1}{2}", msg, Filename, vbCrLf)
             Else
-                tf = Form1.CheckBoxTLAIncludePartCopies.Checked
+                tf = FMain.CheckBoxTLAIncludePartCopies.Checked
                 If tf Then
                     For Each LinkedDocsName In LinkedDocsNames
                         LinkDict(Filename)("Contains").Add(LinkedDocsName)
@@ -324,7 +324,7 @@ Public Class UtilsTopLevelAssembly
                 'msg = LinkedDocument.FullName '.Replace(Form1.TextBoxInputDirectory.Text, "")
                 msg = System.IO.Path.GetFileName(LinkedDocument.FullName)
                 msg = "Follow Links " + msg
-                Form1.TextBoxStatus.Text = msg
+                FMain.TextBoxStatus.Text = msg
 
                 ' In case of corrupted file or other problem
                 Try
@@ -352,7 +352,7 @@ Public Class UtilsTopLevelAssembly
         Dim ActiveFileExtensionsList As New List(Of String)
         Dim AllFilenamesDict As New Dictionary(Of String, String)
 
-        Form1.TextBoxStatus.Text = "Getting all filenames."
+        FMain.TextBoxStatus.Text = "Getting all filenames."
 
         ActiveFileExtensionsList.Add("*.asm")
         ActiveFileExtensionsList.Add("*.par")
@@ -367,7 +367,7 @@ Public Class UtilsTopLevelAssembly
             AllFilenamesDict.Add(Filename.ToLower, Filename)
         Next
 
-        Form1.TextBoxStatus.Text = "Done getting all filenames."
+        FMain.TextBoxStatus.Text = "Done getting all filenames."
 
         Return AllFilenamesDict
 
@@ -475,9 +475,9 @@ Public Class UtilsTopLevelAssembly
         'DMApp.Visible = 0
         DMApp.DisplayAlerts = 0
 
-        Form1.Activate()
+        FMain.Activate()
 
-        Form1.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
+        FMain.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
 
         TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
 
@@ -588,7 +588,7 @@ Public Class UtilsTopLevelAssembly
                         End If
                     Next
 
-                    If Form1.CheckBoxTLAIncludePartCopies.Checked Then
+                    If FMain.CheckBoxTLAIncludePartCopies.Checked Then
                         ' tf = System.IO.Path.GetExtension(DMDoc.FullName) <> ".dft"
                         tf = System.IO.Path.GetExtension(Filename) <> ".dft"
                     Else
@@ -733,15 +733,15 @@ Public Class UtilsTopLevelAssembly
         msg = System.IO.Path.GetFileName(Filename)
         msg = String.Format("{0} {1}", Description, msg)
 
-        Form1.TextBoxStatus.Text = msg
+        FMain.TextBoxStatus.Text = msg
     End Sub
 
     Private Function CheckInterruptRequest() As Boolean
         Dim tf As Boolean = False
 
         System.Windows.Forms.Application.DoEvents()
-        If Form1.StopProcess Then
-            Form1.TextBoxStatus.Text = "Processing aborted"
+        If Form_Main.StopProcess Then
+            FMain.TextBoxStatus.Text = "Processing aborted"
             tf = True
         End If
 
@@ -750,7 +750,8 @@ Public Class UtilsTopLevelAssembly
 
     Private Function GetIndexedDrives() As List(Of String)
 
-        Dim SearchScopeFilename As String = _mainInstance.TextBoxFastSearchScopeFilename.Text
+        'Dim SearchScopeFilename As String = _mainInstance.TextBoxFastSearchScopeFilename.Text
+        Dim SearchScopeFilename As String = FMain.TextBoxFastSearchScopeFilename.Text
 
         Dim SearchScope As String() = Nothing
         Dim CommentString As String = "\\ "

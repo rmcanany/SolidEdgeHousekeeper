@@ -35,8 +35,8 @@ Public Class FormPropertyInputEditor
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.TemplatePropertyDict = Form1.TemplatePropertyDict
-        Me.TemplatePropertyList = Form1.TemplatePropertyList
+        Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+        Me.TemplatePropertyList = Form_Main.TemplatePropertyList
         Me.UCList = New List(Of UCEditProperties)
 
     End Sub

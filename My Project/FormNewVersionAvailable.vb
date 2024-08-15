@@ -1,4 +1,6 @@
-﻿Public Class FormNewVersionAvailable
+﻿Option Strict On
+
+Public Class FormNewVersionAvailable
 
     Public Sub New(CurrentVersion As String, NewVersion As String)
 

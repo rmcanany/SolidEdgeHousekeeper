@@ -2,21 +2,23 @@
 
 Public Class UtilsDefaults
 
-    Public Property Form1 As Form1
+    Public Property FMain As Form_Main
     Public Property DefaultsFilename As String
 
-    Public Sub New(_Form1 As Form1)
+    Public Sub New(_Form_Main As Form_Main)
 
-        Me.Form1 = _Form1
+        Me.FMain = _Form_Main
 
     End Sub
 
     Public Function GetConfiguration() As Dictionary(Of String, String)
+
         Dim Configuration As New Dictionary(Of String, String)
         Dim ControlDict As New Dictionary(Of String, Control)
         Dim Ctrl As Control
 
-        ControlDict = RecurseFormControls(Me.Form1, ControlDict, False)
+        ControlDict = RecurseFormControls(FMain, ControlDict, False)
+        'ControlDict = Form1.GetControlDict(False)
 
         For Each Key In ControlDict.Keys
             Ctrl = ControlDict(Key)
@@ -87,7 +89,7 @@ Public Class UtilsDefaults
         Dim tf As Boolean
         Dim ExcludeControls As New List(Of String)
 
-        ExcludeControls.Add(Form1.new_CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(FMain.new_CheckBoxEnablePropertyFilter.Name)
         ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
@@ -284,7 +286,8 @@ Public Class UtilsDefaults
 
         PopulateComboBoxes()
 
-        ControlDict = RecurseFormControls(Me.Form1, ControlDict, True)
+        ControlDict = RecurseFormControls(FMain, ControlDict, True)
+        'ControlDict = Form1.GetControlDict(True)
 
         Try
             Defaults = IO.File.ReadAllLines(DefaultsFilename)
@@ -321,7 +324,7 @@ Public Class UtilsDefaults
                     'new_ComboBoxFileSearch = new_ComboBoxFileSearchItem.????-???00*.*
 
                     Value = Value.Replace("new_ComboBoxFileSearchItem.", "")
-                    Form1.new_ComboBoxFileSearch.Items.Add(Value)
+                    FMain.new_ComboBoxFileSearch.Items.Add(Value)
                     Continue For
                 End If
 
@@ -366,7 +369,7 @@ Public Class UtilsDefaults
                     tf = tf Or Key.Contains("Part.")
                     tf = tf Or Key.Contains("Sheetmetal.")
                     tf = tf Or Key.Contains("Draft.")
-                    tf = tf And Form1.CheckBoxRememberTasks.Checked
+                    tf = tf And FMain.CheckBoxRememberTasks.Checked
                     If tf Then
                         PopulateCheckboxDefault(KVPair)
                     End If
@@ -377,7 +380,7 @@ Public Class UtilsDefaults
             MsgBox("Some form defaults were not restored.  The program will continue.  Please verify settings.")
         End Try
 
-        Form1.ReconcileFormChanges()
+        FMain.ReconcileFormChanges()
 
     End Sub
 
@@ -399,7 +402,8 @@ Public Class UtilsDefaults
         Dim Key As String
         Dim Ctrl As Control
 
-        ControlDict = RecurseFormControls(Form1, ControlDict, True)
+        ControlDict = RecurseFormControls(FMain, ControlDict, True)
+        'ControlDict = Form1.GetControlDict(True)
 
         For Each Key In ControlDict.Keys
             Ctrl = ControlDict(Key)
@@ -435,9 +439,9 @@ Public Class UtilsDefaults
 
         ' The combobox new_ComboBoxFileSearch is not a Control, it is a ToolStripCombobox
         ' It has to be handled separately.
-        If Form1.new_ComboBoxFileSearch.Items.Count > 0 Then
-            For i As Integer = 0 To Form1.new_ComboBoxFileSearch.Items.Count - 1
-                Dim Value As String = Form1.new_ComboBoxFileSearch.Items(i).ToString
+        If FMain.new_ComboBoxFileSearch.Items.Count > 0 Then
+            For i As Integer = 0 To FMain.new_ComboBoxFileSearch.Items.Count - 1
+                Dim Value As String = FMain.new_ComboBoxFileSearch.Items(i).ToString
                 Defaults.Add(String.Format("new_ComboBoxFileSearch=new_ComboBoxFileSearchItem.{0}", Value))
             Next
         End If

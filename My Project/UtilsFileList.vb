@@ -2,17 +2,17 @@
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView
-    Public Property Form1 As Form1
+    Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form1 As Form1, ListViewFiles As ListView)
-        Me.Form1 = _Form1
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListView)
+        Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
     End Sub
 
     Public Sub New_UpdateFileList()
 
-        Form1.Cursor = Cursors.WaitCursor
+        FMain.Cursor = Cursors.WaitCursor
 
         Dim GroupTags As New List(Of String)
         Dim BareTopLevelAssembly As Boolean = False
@@ -24,8 +24,8 @@ Public Class UtilsFileList
         Dim StartTime As DateTime = Now
 
 
-        Form1.TextBoxStatus.Text = "Updating list..."
-        Form1.LabelTimeRemaining.Text = ""
+        FMain.TextBoxStatus.Text = "Updating list..."
+        FMain.LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
 
         ListViewFiles.BeginUpdate()
@@ -43,17 +43,17 @@ Public Class UtilsFileList
             msg = "A top level assembly folder was found with no top level assembly.  "
             msg += "Please add an assembly, or delete the folder(s)."
             ListViewFiles.EndUpdate()
-            Form1.Cursor = Cursors.Default
-            Form1.TextBoxStatus.Text = ""
+            FMain.Cursor = Cursors.Default
+            FMain.TextBoxStatus.Text = ""
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
 
-        If (Form1.RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(Form1.TextBoxFastSearchScopeFilename.Text)) Then
+        If (FMain.RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text)) Then
             msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
             ListViewFiles.EndUpdate()
-            Form1.Cursor = Cursors.Default
-            Form1.TextBoxStatus.Text = ""
+            FMain.Cursor = Cursors.Default
+            FMain.TextBoxStatus.Text = ""
             MsgBox(msg, vbOKOnly)
             Exit Sub
         End If
@@ -61,7 +61,7 @@ Public Class UtilsFileList
         If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
 
             'If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
-            If Form1.CheckBoxWarnBareTLA.Checked Then
+            If FMain.CheckBoxWarnBareTLA.Checked Then
                 msg = "A top-level assembly with no top-level folder detected.  "
                 msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
                 msg += "Click OK to continue, or Cancel to stop." + vbCrLf
@@ -71,8 +71,8 @@ Public Class UtilsFileList
                     BareTopLevelAssembly = True
                 Else
                     ListViewFiles.EndUpdate()
-                    Form1.Cursor = Cursors.Default
-                    Form1.TextBoxStatus.Text = ""
+                    FMain.Cursor = Cursors.Default
+                    FMain.TextBoxStatus.Text = ""
                     Exit Sub
                 End If
             Else
@@ -94,7 +94,7 @@ Public Class UtilsFileList
 
         ListViewFiles.EndUpdate()
 
-        Form1.Cursor = Cursors.Default
+        FMain.Cursor = Cursors.Default
         'If TextBoxStatus.Text = "Updating list..." Then
         '    TextBoxStatus.Text = "No files found"
         'End If
@@ -108,7 +108,7 @@ Public Class UtilsFileList
 
 
         Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-        Form1.TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
+        FMain.TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
 
 
     End Sub
@@ -126,22 +126,22 @@ Public Class UtilsFileList
 
         Dim UC As New UtilsCommon
 
-        Form1.ListViewFilesOutOfDate = False
-        Form1.BT_Update.BackColor = Color.FromName("Control")
+        FMain.ListViewFilesOutOfDate = False
+        FMain.BT_Update.BackColor = Color.FromName("Control")
 
-        Form1.StopProcess = False
-        Form1.ButtonCancel.Text = "Stop"
+        Form_Main.StopProcess = False
+        FMain.ButtonCancel.Text = "Stop"
 
-        If Form1.new_CheckBoxFilterAsm.Checked Then
+        If FMain.new_CheckBoxFilterAsm.Checked Then
             ActiveFileExtensionsList.Add("*.asm")
         End If
-        If Form1.new_CheckBoxFilterPar.Checked Then
+        If FMain.new_CheckBoxFilterPar.Checked Then
             ActiveFileExtensionsList.Add("*.par")
         End If
-        If Form1.new_CheckBoxFilterPsm.Checked Then
+        If FMain.new_CheckBoxFilterPsm.Checked Then
             ActiveFileExtensionsList.Add("*.psm")
         End If
-        If Form1.new_CheckBoxFilterDft.Checked Then
+        If FMain.new_CheckBoxFilterDft.Checked Then
             ActiveFileExtensionsList.Add("*.dft")
         End If
 
@@ -175,7 +175,7 @@ Public Class UtilsFileList
                 Case = "DragDrop"
                     Dim tmpFoundFiles As New List(Of String)
 
-                    For Each tmpItem As ListViewItem In Form1.DragDropCache
+                    For Each tmpItem As ListViewItem In FMain.DragDropCache
                         tmpFoundFiles.Add(tmpItem.Name)
                     Next
                     FoundFiles = tmpFoundFiles
@@ -198,34 +198,34 @@ Public Class UtilsFileList
 
                         Dim tmpFoundFiles As New List(Of String)
 
-                        If Form1.RadioButtonTLABottomUp.Checked Then
-                            Dim UTLA As New UtilsTopLevelAssembly(Me.Form1)
+                        If FMain.RadioButtonTLABottomUp.Checked Then
+                            Dim UTLA As New UtilsTopLevelAssembly(FMain)
 
-                            Form1.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                            FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                             tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           Form1.CheckBoxDraftAndModelSameName.Checked,
-                                                           Form1.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
+                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
 
                         Else
-                            Dim UTLA As New UtilsTopLevelAssembly(Me.Form1)
+                            Dim UTLA As New UtilsTopLevelAssembly(FMain)
                             tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
-                                                       Report:=Form1.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                       Report:=FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
                         End If
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
-                        Form1.TextBoxStatus.Text = ""
+                        FMain.TextBoxStatus.Text = ""
 
                     ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
 
-                        Dim UTLA As New UtilsTopLevelAssembly(Form1)
+                        Dim UTLA As New UtilsTopLevelAssembly(FMain)
 
-                        Form1.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+                        FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
 
                         Dim tmpFoundFiles As New List(Of String)
                         Dim tmpFolders As New List(Of String)
@@ -237,18 +237,18 @@ Public Class UtilsFileList
                         tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           Form1.CheckBoxDraftAndModelSameName.Checked,
-                                                           Form1.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
+                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
 
                         FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
-                        Form1.TextBoxStatus.Text = ""
+                        FMain.TextBoxStatus.Text = ""
 
                     End If
 
                 Case Else
                     FoundFiles = Nothing
-                    Form1.TextBoxStatus.Text = "No files found"
+                    FMain.TextBoxStatus.Text = "No files found"
             End Select
 
 
@@ -278,7 +278,7 @@ Public Class UtilsFileList
 
         ' Dependency sort
         If Not FoundFiles Is Nothing Then
-            If Form1.RadioButtonListSortDependency.Checked Then
+            If FMain.RadioButtonListSortDependency.Checked Then
                 FoundFiles = GetDependencySortedFiles(FoundFiles)
             End If
         End If
@@ -288,27 +288,27 @@ Public Class UtilsFileList
         If Not FoundFiles Is Nothing Then
 
             ' Filter by file wildcard search
-            If Form1.new_CheckBoxFileSearch.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, Form1.new_ComboBoxFileSearch.Text)
+            If FMain.new_CheckBoxFileSearch.Checked Then
+                FoundFiles = FileWildcardSearch(FoundFiles, FMain.new_ComboBoxFileSearch.Text)
             End If
 
             ' Filter by properties
-            If Form1.new_CheckBoxEnablePropertyFilter.Checked Then
+            If FMain.new_CheckBoxEnablePropertyFilter.Checked Then
                 System.Threading.Thread.Sleep(1000)
-                Dim UPF As New UtilsPropertyFilters(Form1)
-                FoundFiles = UPF.PropertyFilter(FoundFiles, Form1.PropertyFilterDict)
+                Dim UPF As New UtilsPropertyFilters(Me.FMain)
+                FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
             End If
 
-            If Form1.RadioButtonListSortAlphabetical.Checked Then
+            If FMain.RadioButtonListSortAlphabetical.Checked Then
                 FoundFiles = SortAlphabetical(FoundFiles)
             End If
 
-            If Form1.RadioButtonListSortRandomSample.Checked Then
+            If FMain.RadioButtonListSortRandomSample.Checked Then
                 Dim Fraction As Double = 0.1
                 Try
-                    Fraction = CDbl(Form1.TextBoxRandomSampleFraction.Text)
+                    Fraction = CDbl(FMain.TextBoxRandomSampleFraction.Text)
                 Catch ex As Exception
-                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", Form1.TextBoxRandomSampleFraction.Text))
+                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", FMain.TextBoxRandomSampleFraction.Text))
                 End Try
                 FoundFiles = SortRandomSample(FoundFiles, Fraction)
             End If
@@ -317,7 +317,7 @@ Public Class UtilsFileList
 
             For Each FoundFile In FoundFiles
 
-                Form1.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
+                FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
                 System.Windows.Forms.Application.DoEvents()
 
                 If UC.FilenameIsOK(FoundFile) Then
@@ -347,15 +347,15 @@ Public Class UtilsFileList
 
             ListViewFiles.EndUpdate()
 
-            Form1.TextBoxStatus.Text = ""
+            FMain.TextBoxStatus.Text = ""
 
         Else
             'TextBoxStatus.Text = "No files found"
         End If
 
 
-        Form1.StopProcess = False
-        Form1.ButtonCancel.Text = "Cancel"
+        Form_Main.StopProcess = False
+        FMain.ButtonCancel.Text = "Cancel"
 
     End Sub
 
@@ -369,7 +369,7 @@ Public Class UtilsFileList
 
         For Each FilePath In FoundFiles
             Filename = System.IO.Path.GetFileName(FilePath)
-            Form1.TextBoxStatus.Text = String.Format("Wildcard Search {0}", Filename)
+            FMain.TextBoxStatus.Text = String.Format("Wildcard Search {0}", Filename)
             If Filename Like WildcardString Then
                 tmpFoundFiles.Add(FilePath)
             End If
@@ -387,7 +387,7 @@ Public Class UtilsFileList
         Dim FileExtension As String = FileWildcard.Replace("*", "")
         Dim Filename As String
 
-        Form1.TextBoxStatus.Text = "Getting files..."
+        FMain.TextBoxStatus.Text = "Getting files..."
 
         If ListViewFiles.SelectedItems.Count > 0 Then
             For i As Integer = 0 To ListViewFiles.SelectedItems.Count - 1
@@ -430,7 +430,7 @@ Public Class UtilsFileList
         Dim AssemblyCount As Integer = 0
         Dim DraftCount As Integer = 0
 
-        For Each Task As Task In Form1.TaskList
+        For Each Task As Task In FMain.TaskList
             If Task.IsSelectedPart Then PartCount += 1
             If Task.IsSelectedSheetmetal Then SheetmetalCount += 1
             If Task.IsSelectedAssembly Then AssemblyCount += 1
@@ -456,12 +456,12 @@ Public Class UtilsFileList
         Dim DMApp As New DesignManager.Application
         DMApp.Visible = 1
 
-        Form1.Activate()
+        FMain.Activate()
 
 
         For Each Filename In Foundfiles
 
-            Form1.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
+            FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
 
             DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
@@ -470,7 +470,7 @@ Public Class UtilsFileList
             tmp_DependencyDict = GetLinks(DMDoc, tmp_DependencyDict, MissingFilesList)
 
             For Each s As String In tmp_DependencyDict.Keys
-                Form1.TextBoxStatus.Text = s
+                FMain.TextBoxStatus.Text = s
                 If Not DependencyDict.Keys.Contains(s) Then
                     DependencyDict.Add(s, tmp_DependencyDict(s))
 
@@ -621,7 +621,7 @@ Public Class UtilsFileList
 
         While OldCount > Count
             For Each Filename In LinkDict.Keys
-                Form1.TextBoxStatus.Text = IO.Path.GetFileName(Filename)
+                FMain.TextBoxStatus.Text = IO.Path.GetFileName(Filename)
                 If LinkDict(Filename).Count = 0 Then
                     Outlist.Add(Filename)
                     Continue For
@@ -686,7 +686,7 @@ Public Class UtilsFileList
 
         End While
 
-        If Not Form1.CheckBoxListIncludeNoDependencies.Checked Then
+        If Not FMain.CheckBoxListIncludeNoDependencies.Checked Then
             For Each Filename In NoDependencies
                 If Outlist.Contains(Filename) Then
                     Outlist.Remove(Filename)

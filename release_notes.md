@@ -58,6 +58,8 @@ An `expression` is similar to a `formula` in Excel. You can perform string proce
 
 This is *blazingly* fast.  It can run a monster batch of parts before Solid Edge even gets its shoes on!  It leverages something called Windows Structured Storage (Thank you **@uk_dave_official**!).  It's experimental for now, but if you get a chance, try it out and let us know what you think!
 
+Oh, did I mention you don't need Solid Edge installed to use this?  Maybe *you-know-who* in Purchasing could get in on the fun for a change!
+
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 
 
@@ -77,7 +79,7 @@ This command removes external links from a file.  You can optionally remove `Par
 
 This is irreversible, so you know, think about it.  
 
-For drawing views in particular, there are important things to know about model properties (like ones driving your title block, for example).  Please visit the link for information on that.
+For drawing views in particular, there are important things to know about model properties (like ones maybe driving your title block, for example).  Please visit the link for information on that.
 
 See the [<ins>**Break Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#break-links) for details.
 
@@ -110,7 +112,7 @@ The countdown timer is handy if you need to quickly review a bunch of files.  If
 The start command option launches a command when the file is opened.  This can help keep you on track when you have a small chore to complete on a bunch of files.  A couple of examples:
 
 - Enable the `Update file on save` option on the `Physical Properties` dialog (Thank you **@Jan Bos** and **@BrianVR74**!). 
-- Cycle through assembly `display configurations` to make sure they are all set correctly.
+- Cycle through assembly `display configurations` to make sure they are all up to date.
 
 The list has commands we though might be useful.  You can customize it.  There are hundreds of commands available.  Customization is covered in the command's help page. 
 
@@ -129,6 +131,10 @@ The template properties are populated on the **Configuration Tab -- Templates Pa
 ![Customize Property List](My%20Project/media/customize_property_list.png)
 
 This functionality was also added to the `Edit Properties` command.  That command, and `Edit Variables` also now have the option to save settings for reuse.
+
+One other change was made to the `Property Filter` specifically -- the formula is now processed internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should be fine because it is a core Windows feature (starting with Win7 maybe, not sure).  
+
+However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
 
 See the [<ins>**Property Filter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering) for details.
 
@@ -165,14 +171,29 @@ See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/So
 
 ### New Version Check
 
-Added an option to automatically check for updates on GitHub.  If a newer version is found, a dialog informs you.  It also provides links to the release notes, installation instructions, and downloads page.  
+Added an option to automatically check for updates on GitHub.  If a newer version is found, a dialog informs you.  It also provides links to the release notes, installation instructions, and download page.  
 
 The option is disabled by default.  Enable it on the **Configuration Tab -- General Page**.
 
+### Use Existing Solid Edge Session
+
+Contributed by **@Francesco Arfilli**  Thank you!
+
+Added an option, on the **Configuration Tab -- General Page**, to run Housekeeper with an already-open SE instance.  Previously, SE had to be closed before starting the program.
+
+The previous behavior was to protect you from crashes I caused, losing any unsaved changes to open files in the process.  That can still happen, but it's less frequent now.  One sure way to crash SE is to try to open a corrupted file, or one saved in a newer version, or one from Academic/Community/Commercial flavor if you're not running the same.
+
+If you're pretty sure you won't run into that, this is a handy option.  It wouldn't hurt my feelings if you went ahead and saved what you have open before starting, though.
+
 ### Readme
 
-Added version-specific Readme files to the repo.  This addresses an issue where, because the documentation is auto-generated, the Readme "gets ahead" of the currently released version. All context-sensitive help buttons now point to the appropriate file. 
+Changed the context-sensitive help to point to a version-specific Readme file in the repo.  This addresses an issue where, because the documentation is auto-generated, the Readme "gets ahead" of the currently released version. 
 
+If you're a URL checker like me, you might notice the link is pointing to a pretty funky address, for example:
+
+https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640#open-save
+
+That long string of seemingly random numbers is GitHub's `Commit Tag`.  It is how you tell them to open a file from a certain point in the past.
 
 ## V2024.1 Enhancements/Fixes
 

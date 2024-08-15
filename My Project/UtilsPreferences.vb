@@ -5,6 +5,12 @@ Imports Newtonsoft.Json
 
 Public Class UtilsPreferences
 
+    Public Property RememberTaskSelections As Boolean
+
+    Public Sub New()
+        Me.RememberTaskSelections = True
+    End Sub
+
     Public Function GetStartupDirectory() As String
         Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
         Return StartupDirectory
@@ -543,7 +549,8 @@ Public Class UtilsPreferences
         TaskList.Add(New TaskPrint)
 
         For Each Task As Task In TaskList
-            Task.RememberTaskSelections = Form1.RememberTaskSelections
+            'Task.RememberTaskSelections = Form1.RememberTaskSelections
+            Task.RememberTaskSelections = Me.RememberTaskSelections
             KnownTasks.Add(Task.Name.ToLower)
         Next
 

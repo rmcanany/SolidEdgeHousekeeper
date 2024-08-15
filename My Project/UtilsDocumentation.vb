@@ -137,7 +137,7 @@ Public Class UtilsDocumentation
             msg = "## CODE ORGANIZATION"
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
-            msg = "Processing starts in Form1.vb.  A short description of the code's organization can be found there."
+            msg = "Processing starts in Form_Main.vb.  A short description of the code's organization can be found there."
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 

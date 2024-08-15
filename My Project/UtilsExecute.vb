@@ -1,46 +1,49 @@
 ﻿Option Strict On
+
 Imports SolidEdgeCommunity
 
 Public Class UtilsExecute
 
-    Public Property Form1 As Form1
+    Public Property FMain As Form_Main
     Public Property FilesToProcessTotal As Integer
     Public Property FilesToProcessCompleted As Integer
-    Public Property StopProcess As Boolean
+    'Public Property StopProcess As Boolean
     Public Property UtilsLogFile As UtilsLogFile
     Public Property TotalAborts As Double
     Public Property TotalAbortsMaximum As Integer = 4
     Public Property SEApp As SolidEdgeFramework.Application
     Public Property StartTime As DateTime
 
+    Public Property TextBoxStatus As TextBox
 
-    Public Sub New(_Form1 As Form1)
-        Me.Form1 = _Form1
+
+    Public Sub New(_Form_Main As Form_Main)
+        Me.FMain = _Form_Main
     End Sub
 
 
     Public Sub ProcessAll()
 
-        Form1.Cursor = Cursors.WaitCursor
+        FMain.Cursor = Cursors.WaitCursor
 
         Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        Form1.ReconcileFormChanges()
-        Dim UD As New UtilsDefaults(Form1)
+        FMain.ReconcileFormChanges()
+        Dim UD As New UtilsDefaults(FMain)
         UD.SaveDefaults()
 
         Dim UP As New UtilsPreferences
-        UP.SaveTaskList(Form1.TaskList)
-        UP.SaveTemplatePropertyDict(Form1.TemplatePropertyDict)
-        UP.SaveTemplatePropertyList(Form1.TemplatePropertyList)
+        UP.SaveTaskList(FMain.TaskList)
+        UP.SaveTemplatePropertyDict(FMain.TemplatePropertyDict)
+        UP.SaveTemplatePropertyList(FMain.TemplatePropertyList)
 
         ErrorMessage = CheckStartConditions()
 
         'Dim LVF = Me.ListViewFiles
         If ErrorMessage <> "" Then
-            Form1.Cursor = Cursors.Default
+            FMain.Cursor = Cursors.Default
             Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKOnly, "Check start conditions")
             If result = MsgBoxResult.Cancel Then
                 Exit Sub
@@ -50,13 +53,13 @@ Public Class UtilsExecute
             End If
         End If
 
-        Dim UFL As New UtilsFileList(Form1, Form1.ListViewFiles)
+        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
 
         FilesToProcessTotal = UFL.GetTotalFilesToProcess()
         FilesToProcessCompleted = 0
 
-        StopProcess = False
-        Form1.ButtonCancel.Text = "Stop"
+        FMain.StopProcess = False
+        FMain.ButtonCancel.Text = "Stop"
 
         OleMessageFilter.Register()
 
@@ -67,9 +70,10 @@ Public Class UtilsExecute
         TotalAborts = 0
 
         Dim USEA = New UtilsSEApp
+        USEA.TextBoxStatus = Me.TextBoxStatus
 
-        If Form1.SolidEdgeRequired > 0 Then
-            USEA.SEStart(Form1.RunInBackground, Form1.UseCurrentSession, Form1.NoUpdateMRU)
+        If FMain.SolidEdgeRequired > 0 Then
+            USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
             SEApp = USEA.SEApp
         End If
 
@@ -80,7 +84,7 @@ Public Class UtilsExecute
         Dim AssemblyCount As Integer = 0
         Dim DraftCount As Integer = 0
 
-        For Each Task As Task In Form1.TaskList
+        For Each Task As Task In FMain.TaskList
             If Task.IsSelectedTask And Task.IsSelectedPart Then PartCount += 1
             If Task.IsSelectedTask And Task.IsSelectedSheetmetal Then SheetmetalCount += 1
             If Task.IsSelectedTask And Task.IsSelectedAssembly Then AssemblyCount += 1
@@ -92,19 +96,19 @@ Public Class UtilsExecute
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
         If DraftCount > 0 Then ProcessFiles("Draft")
 
-        If Form1.SolidEdgeRequired > 0 Then
+        If FMain.SolidEdgeRequired > 0 Then
             'Dim USEA = New UtilsSEApp
-            USEA.SEStop(Form1.UseCurrentSession)
+            USEA.SEStop(FMain.UseCurrentSession)
             SEApp = Nothing
         End If
 
         OleMessageFilter.Unregister()
 
-        If StopProcess Then
+        If FMain.StopProcess Then
             If TotalAborts > TotalAbortsMaximum Then
-                Form1.TextBoxStatus.Text = "The number of file processing errors exceeded maximum.  Stopping."
+                FMain.TextBoxStatus.Text = "The number of file processing errors exceeded maximum.  Stopping."
             Else
-                Form1.TextBoxStatus.Text = "Processing halted by user."
+                FMain.TextBoxStatus.Text = "Processing halted by user."
             End If
         Else
             ElapsedTime = Now.Subtract(StartTime).TotalMinutes
@@ -114,21 +118,21 @@ Public Class UtilsExecute
                 ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
             End If
 
-            Form1.TextBoxStatus.Text = "Finished processing " + FilesToProcessTotal.ToString + " files " + ElapsedTimeText
+            FMain.TextBoxStatus.Text = "Finished processing " + FilesToProcessTotal.ToString + " files " + ElapsedTimeText
         End If
 
-        Form1.LabelTimeRemaining.Text = ""
+        FMain.LabelTimeRemaining.Text = ""
 
-        StopProcess = False
-        Form1.ButtonCancel.Text = "Cancel"
+        FMain.StopProcess = False
+        FMain.ButtonCancel.Text = "Cancel"
 
         If Me.UtilsLogFile.ErrorsOccurred Then
             Process.Start("Notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
         Else
-            Form1.TextBoxStatus.Text = Form1.TextBoxStatus.Text + "  All checks passed."
+            FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
 
-        Form1.Cursor = Cursors.Default
+        FMain.Cursor = Cursors.Default
 
     End Sub
 
@@ -140,15 +144,16 @@ Public Class UtilsExecute
         Dim SaveMsg As String = ""
 
         Dim USEA = New UtilsSEApp
+        USEA.TextBoxStatus = Me.TextBoxStatus
 
-        Form1.ReconcileFormChanges()
+        FMain.ReconcileFormChanges()
 
         'If Not CheckBoxUseCurrentSession.Checked Then
         '    If USEA.SEIsRunning() Then
         '        msg += "    Close Solid Edge" + Chr(13)
         '    End If
         'End If
-        If Not Form1.UseCurrentSession Then
+        If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
                 msg += "    Close Solid Edge" + Chr(13)
             End If
@@ -158,19 +163,19 @@ Public Class UtilsExecute
             msg += "    Close Design Manager" + Chr(13)
         End If
 
-        If Form1.ListViewFilesOutOfDate Then
+        If FMain.ListViewFilesOutOfDate Then
             msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
         End If
 
-        If Form1.RadioButtonTLABottomUp.Checked Then
-            If Not FileIO.FileSystem.FileExists(Form1.TextBoxFastSearchScopeFilename.Text) Then
+        If FMain.RadioButtonTLABottomUp.Checked Then
+            If Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text) Then
                 msg += "    Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)" + Chr(13)
             End If
         End If
 
-        For Each Filename As ListViewItem In Form1.ListViewFiles.Items 'L-istBoxFiles.Items
+        For Each Filename As ListViewItem In FMain.ListViewFiles.Items 'L-istBoxFiles.Items
 
-            Form1.ListViewFiles.BeginUpdate()
+            FMain.ListViewFiles.BeginUpdate()
 
             If Filename.Group.Name <> "Sources" Then
 
@@ -179,24 +184,24 @@ Public Class UtilsExecute
                 If Not FileIO.FileSystem.FileExists(Filename.Name) Then
                     msg += "    File not found, or Path exceeds maximum length" + Chr(13)
                     msg += "    " + CType(Filename.Name, String) + Chr(13)
-                    Form1.ListViewFilesOutOfDate = True
+                    FMain.ListViewFilesOutOfDate = True
                     Exit For
                 End If
 
             End If
 
-            Form1.ListViewFiles.EndUpdate()
+            FMain.ListViewFiles.EndUpdate()
 
         Next
 
-        If Form1.ListViewFilesOutOfDate Then
+        If FMain.ListViewFilesOutOfDate Then
             'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
-        ElseIf Form1.ListViewFiles.Items.Count = 0 Then
+        ElseIf FMain.ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
-        If Form1.new_CheckBoxFileSearch.Checked Then
-            If Form1.new_ComboBoxFileSearch.Text = "" Then
+        If FMain.new_CheckBoxFileSearch.Checked Then
+            If FMain.new_ComboBoxFileSearch.Text = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -206,28 +211,28 @@ Public Class UtilsExecute
         Dim ExitStatus As Integer = 0
         'Dim NoTaskSelected As Boolean = True
 
-        Form1.SolidEdgeRequired = 0
+        FMain.SolidEdgeRequired = 0
         Dim SelectedTasksCount As Integer = 0
 
-        For Each Task As Task In Form1.TaskList
+        For Each Task As Task In FMain.TaskList
             If Task.IsSelectedTask Then
                 SelectedTasksCount += 1
                 'MsgBox("Update task with info from the form")
                 'NoTaskSelected = False
                 If Task.RequiresSourceDirectories Then
-                    Dim UFL As New UtilsFileList(Form1, Form1.ListViewFiles)
+                    Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
                     Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
 
                 ' True returns -1 upon conversion
-                Form1.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
+                FMain.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
 
                 ErrorMessage = Task.CheckStartConditions(ErrorMessage)
             End If
         Next
 
-        If Form1.SolidEdgeRequired <> 0 Then
-            If SelectedTasksCount <> Form1.SolidEdgeRequired Then
+        If FMain.SolidEdgeRequired <> 0 Then
+            If SelectedTasksCount <> FMain.SolidEdgeRequired Then
                 msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
                 ExitStatus += 1
             End If
@@ -249,7 +254,7 @@ Public Class UtilsExecute
             msg = "Please correct the following before continuing" + Chr(13) + msg
         End If
 
-        If (Len(SaveMsg) <> 0) And Form1.CheckBoxWarnSave.Checked Then
+        If (Len(SaveMsg) <> 0) And FMain.CheckBoxWarnSave.Checked Then
             Dim s As String = "The following options require the original file to be saved." + Chr(13)
             s += "Please verify you have a backup before continuing."
             SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
@@ -275,21 +280,21 @@ Public Class UtilsExecute
             RemainingTime = TotalEstimatedTime - ElapsedTime
 
             If ElapsedTime < 60 Then
-                ElapsedTimeString = String.Format("{0} min.", ElapsedTime.ToString("0.0"))
+                ElapsedTimeString = String.Format("{0} m", ElapsedTime.ToString("0.0"))
             Else
-                ElapsedTimeString = String.Format("{0} hr.", (ElapsedTime / 60).ToString("0.0"))
+                ElapsedTimeString = String.Format("{0} h", (ElapsedTime / 60).ToString("0.0"))
             End If
 
             If RemainingTime < 60 Then
-                RemainingTimeString = String.Format("{0} min.", RemainingTime.ToString("0.0"))
+                RemainingTimeString = String.Format("{0} m", RemainingTime.ToString("0.0"))
             Else
-                RemainingTimeString = String.Format("{0} hr.", (RemainingTime / 60).ToString("0.0"))
+                RemainingTimeString = String.Format("{0} h", (RemainingTime / 60).ToString("0.0"))
             End If
 
             If RemainingTime < 0.1 Then
-                Form1.LabelTimeRemaining.Text = ""
+                FMain.LabelTimeRemaining.Text = ""
             Else
-                Form1.LabelTimeRemaining.Text = String.Format("Time elapsed: {0}, Time remaining: {1}", ElapsedTimeString, RemainingTimeString)
+                FMain.LabelTimeRemaining.Text = String.Format("Elapsed {0}, Remaining {1}", ElapsedTimeString, RemainingTimeString)
             End If
 
 
@@ -304,13 +309,13 @@ Public Class UtilsExecute
 
 
         Dim DMApp As DesignManager.Application = Nothing
-        If Form1.CheckBoxProcessReadOnly.Checked Then
+        If FMain.CheckBoxProcessReadOnly.Checked Then
             DMApp = New DesignManager.Application
             DMApp.Visible = 1
             SEApp.Activate()
         End If
 
-        Dim UFL As New UtilsFileList(Form1, Form1.ListViewFiles)
+        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
 
         If Filetype = "Assembly" Then
             FilesToProcess = UFL.GetFileNames("*.asm")
@@ -328,7 +333,7 @@ Public Class UtilsExecute
 
         For Each FileToProcess In FilesToProcess
 
-            For Each tmpItem As ListViewItem In Form1.ListViewFiles.Items
+            For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
                 If tmpItem.Name = FileToProcess Then
                     tmpItem.EnsureVisible()
                     Exit For
@@ -336,9 +341,9 @@ Public Class UtilsExecute
             Next
 
             System.Windows.Forms.Application.DoEvents()
-            If StopProcess Then
-                Form1.TextBoxStatus.Text = "Processing aborted"
-                If Form1.CheckBoxProcessReadOnly.Checked Then
+            If FMain.StopProcess Then
+                FMain.TextBoxStatus.Text = "Processing aborted"
+                If FMain.CheckBoxProcessReadOnly.Checked Then
                     DMApp.Quit()
                 End If
                 Exit Sub
@@ -348,7 +353,7 @@ Public Class UtilsExecute
 
             msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
             msg += System.IO.Path.GetFileName(FileToProcess)
-            Form1.TextBoxStatus.Text = msg
+            FMain.TextBoxStatus.Text = msg
 
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype, DMApp)
 
@@ -358,14 +363,14 @@ Public Class UtilsExecute
                 Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
 
                 Me.UtilsLogFile.LogfileAppend(s, ErrorMessagesCombined)
-                Form1.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
+                FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
             Else
-                Form1.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
+                FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
             End If
 
         Next
 
-        If Form1.CheckBoxProcessReadOnly.Checked Then
+        If FMain.CheckBoxProcessReadOnly.Checked Then
             DMApp.Quit()
         End If
 
@@ -405,7 +410,7 @@ Public Class UtilsExecute
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
-        If Form1.CheckBoxProcessReadOnly.Checked And Form1.SolidEdgeRequired > 0 Then
+        If FMain.CheckBoxProcessReadOnly.Checked And FMain.SolidEdgeRequired > 0 Then
 
             OldStatus = UC.GetStatus(DMApp, Path)
 
@@ -427,8 +432,8 @@ Public Class UtilsExecute
         '############### A new option should be inserted to prevent this situation
 
         Try
-            If Form1.SolidEdgeRequired > 0 Then
-                If (Form1.CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
+            If FMain.SolidEdgeRequired > 0 Then
+                If (FMain.CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
                     SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
                     ' Here is the same functionality without using the SolidEdgeCommunity dependency
@@ -456,7 +461,7 @@ Public Class UtilsExecute
             'Dim PropDict = TC.tmpGetSEProperties(SEDoc)
 
 
-            For Each Task As Task In Form1.TaskList
+            For Each Task As Task In FMain.TaskList
                 If Task.IsSelectedTask Then
                     tf = (Filetype = "Assembly") And (Task.IsSelectedAssembly)
                     tf = tf Or ((Filetype = "Part") And (Task.IsSelectedPart))
@@ -465,8 +470,8 @@ Public Class UtilsExecute
 
                     If tf Then
 
-                        If Form1.SolidEdgeRequired > 0 Then
-                            ErrorMessage = Task.Process(SEDoc, Form1.Configuration, SEApp)
+                        If FMain.SolidEdgeRequired > 0 Then
+                            ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
                         Else
                             ErrorMessage = Task.Process(Path)
                         End If
@@ -477,7 +482,7 @@ Public Class UtilsExecute
                             ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
 
                             If ExitStatus = 99 Then
-                                StopProcess = True
+                                FMain.StopProcess = True
                             End If
 
                         End If
@@ -485,13 +490,13 @@ Public Class UtilsExecute
                 End If
             Next
 
-            If Form1.SolidEdgeRequired > 0 Then
+            If FMain.SolidEdgeRequired > 0 Then
                 SEDoc.Close(False)
                 SEApp.DoIdle()
 
                 ' Deal with Document Status
-                If Form1.CheckBoxProcessReadOnly.Checked Then
-                    If Form1.RadioButtonReadOnlyRevert.Checked Then
+                If FMain.CheckBoxProcessReadOnly.Checked Then
+                    If FMain.RadioButtonReadOnlyRevert.Checked Then
                         If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
                             StatusChangeSuccessful = UC.SetStatus(DMApp, Path, OldStatus)
                             If Not StatusChangeSuccessful Then
@@ -502,11 +507,11 @@ Public Class UtilsExecute
                         End If
                     End If
 
-                    If Form1.RadioButtonReadOnlyChange.Checked Then
+                    If FMain.RadioButtonReadOnlyChange.Checked Then
                         Dim NewStatus As SolidEdgeConstants.DocumentStatus
 
                         Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
-                        StatusChangedCheckedRadioButtons = Form1.GetStatusChangeRadioButtons(True)
+                        StatusChangedCheckedRadioButtons = FMain.GetStatusChangeRadioButtons(True)
 
                         Dim FromStatus As String = ""
                         Dim ToStatus As String = ""
@@ -578,16 +583,17 @@ Public Class UtilsExecute
 
             TotalAborts += 1
             If TotalAborts >= TotalAbortsMaximum Then
-                StopProcess = True
+                FMain.StopProcess = True
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
-                If Form1.SolidEdgeRequired > 0 Then
+                If FMain.SolidEdgeRequired > 0 Then
                     Dim USEA = New UtilsSEApp
+                    USEA.TextBoxStatus = Me.TextBoxStatus
 
-                    USEA.SEStop(Form1.UseCurrentSession)
+                    USEA.SEStop(FMain.UseCurrentSession)
                     SEApp = Nothing
 
-                    USEA.SEStart(Form1.RunInBackground, Form1.UseCurrentSession, Form1.NoUpdateMRU)
+                    USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
                     SEApp = USEA.SEApp
                 End If
             End If

@@ -11,6 +11,8 @@ Public Class FormEditInteractively
     Public Property CommandIDDraft As Integer = 0
     Public Property FormX As Integer = 0
     Public Property FormY As Integer = 0
+    Public Property NewFormX As Integer
+    Public Property NewFormY As Integer
     Public Property SEApp As SolidEdgeFramework.Application = Nothing
     Public Property SaveAfterTimeout As Boolean = False
 
@@ -33,6 +35,8 @@ Public Class FormEditInteractively
     End Sub
 
     Private Sub FormEditInteractively_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Dim tf As Boolean
 
         AlwaysOnTopTimer = New Windows.Forms.Timer()
         AlwaysOnTopTimer.Interval = 100
@@ -73,6 +77,13 @@ Public Class FormEditInteractively
             End Select
         End If
 
+        tf = Not Me.FormX = Me.NewFormX
+        tf = tf Or Not Me.FormY = Me.NewFormY
+        If tf Then
+            Me.Label2.Text = String.Format("New position: X {0}, Y {1}", Me.Left, Me.Top)
+        End If
+
+
     End Sub
 
     Private Sub PauseButton_Click(sender As Object, e As EventArgs) Handles PauseButton.Click
@@ -98,6 +109,7 @@ Public Class FormEditInteractively
                 Me.DialogResult = DialogResult.No
             End If
         End If
+
     End Sub
 
     Private Sub AlwaysOnTopTimer_Tick(sender As System.Object, e As System.EventArgs) Handles AlwaysOnTopTimer.Tick

@@ -6,6 +6,8 @@ Public Class TaskEditInteractively
 
     Public Property FormX As Integer
     Public Property FormY As Integer
+    Public Property NewFormX As Integer
+    Public Property NewFormY As Integer
     Public Property UseCountdownTimer As Boolean
     Public Property PauseTime As Double
     Public Property SaveAfterTimeout As Boolean
@@ -169,8 +171,13 @@ Public Class TaskEditInteractively
 
         Dim FEI As New FormEditInteractively
 
-        FEI.Left = Me.FormX
-        FEI.Top = Me.FormY
+        FEI.FormX = Me.FormX
+        FEI.FormY = Me.FormY
+        FEI.NewFormX = Me.NewFormX
+        FEI.NewFormY = Me.NewFormY
+        FEI.Left = Me.NewFormX
+        FEI.Top = Me.NewFormY
+
         FEI.UseCountdownTimer = Me.UseCountdownTimer
         FEI.PauseTime = Me.PauseTime
         FEI.RunCommands = Me.RunCommands
@@ -184,7 +191,12 @@ Public Class TaskEditInteractively
 
         Dim Result As DialogResult = FEI.ShowDialog()
 
-        'MsgBox(Result.ToString)
+        Me.NewFormX = FEI.Left
+        Me.NewFormY = FEI.Top
+        'Can't do this because the task runs on a different thread.
+        'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
+        'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+
 
         If Result = DialogResult.Yes Then
             If SEDoc.ReadOnly Then
@@ -195,25 +207,10 @@ Public Class TaskEditInteractively
                 SEApp.DoIdle()
             End If
 
-            Me.FormX = FEI.Left
-            Me.FormY = FEI.Top
-            'Can't do this because the task runs on a different thread.
-            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
-            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
-
         ElseIf Result = DialogResult.No Then
-
-            Me.FormX = FEI.Left
-            Me.FormY = FEI.Top
-            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
-            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+            ' Nothing to do here
 
         ElseIf Result = DialogResult.Abort Then
-
-            Me.FormX = FEI.Left
-            Me.FormY = FEI.Top
-            'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
-            'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
 
             ExitStatus = 99
             ErrorMessageList.Add("Operation was cancelled.")
@@ -457,6 +454,8 @@ Public Class TaskEditInteractively
                 If Me.FormX < 0 Or Me.FormY < 0 Then
                     i = CInt("forty-two")
                 End If
+                NewFormX = FormX
+                NewFormY = FormY
             Catch ex As Exception
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
@@ -618,6 +617,9 @@ Public Class TaskEditInteractively
         HelpString += "If you move the dialog, it remembers the location for subsequent files. "
         HelpString += "It doesn't remember between runs, unfortunately. "
         HelpString += "That turns out to be surprisingly complicated. "
+        HelpString += "As a workaround, a change in position is reported on the form. "
+        HelpString += "Once processing is complete, you can enter the reported values in the command options. "
+        HelpString += "Those numbers *are* remembered between runs. "
 
         HelpString += vbCrLf + vbCrLf + "You can optionally set a countdown timer and/or start a command. "
 

@@ -4,7 +4,10 @@ Public Class FormEditTaskList
 
     Public Property ManuallySelectFileTypes As Boolean
     Public Property TaskList As List(Of Task)
+    Public Property OldTaskList As List(Of Task)
     Public Property AvailableTasks As List(Of Task)
+    Public Property RememberTaskSelections As Boolean
+
 
     Public Sub New()
 
@@ -12,22 +15,6 @@ Public Class FormEditTaskList
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.TaskList = New List(Of Task)
-        For Each Task As Task In Form1.TaskList
-            If Task.ColorHue = "" Then Task.ColorHue = "Green"
-            If Task.ColorSaturation = 0 Then Task.ColorSaturation = 0.2
-            If Task.ColorBrightness = 0 Then Task.ColorBrightness = 1
-            If Task.ColorR = 0 Then Task.ColorR = 240
-            If Task.ColorG = 0 Then Task.ColorG = 255
-            If Task.ColorB = 0 Then Task.ColorB = 240
-
-            Me.TaskList.Add(Task)
-        Next
-
-        Dim UP As New UtilsPreferences()
-        Me.AvailableTasks = New List(Of Task)
-        Me.AvailableTasks = UP.BuildTaskListFromScratch()
-
 
     End Sub
 
@@ -74,6 +61,26 @@ Public Class FormEditTaskList
 
 
     Private Sub FormEditTaskList_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Me.TaskList = New List(Of Task)
+        For Each Task As Task In OldTaskList
+            If Task.ColorHue = "" Then Task.ColorHue = "Green"
+            If Task.ColorSaturation = 0 Then Task.ColorSaturation = 0.2
+            If Task.ColorBrightness = 0 Then Task.ColorBrightness = 1
+            If Task.ColorR = 0 Then Task.ColorR = 240
+            If Task.ColorG = 0 Then Task.ColorG = 255
+            If Task.ColorB = 0 Then Task.ColorB = 240
+
+            Me.TaskList.Add(Task)
+        Next
+
+        Dim UP As New UtilsPreferences()
+        UP.RememberTaskSelections = Me.RememberTaskSelections
+
+        Me.AvailableTasks = New List(Of Task)
+        Me.AvailableTasks = UP.BuildTaskListFromScratch()
+
+
 
         BuildColumns()
 

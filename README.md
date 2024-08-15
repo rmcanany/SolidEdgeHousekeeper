@@ -591,7 +591,7 @@ Brings up files one at a time for manual processing. A dialog box lets you tell 
 
 ![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)
 
-You choose the dialog's starting position. `X` and `Y` are the number of pixels from the left and top of the screen, respectively. If you move the dialog, it remembers the location for subsequent files. It doesn't remember between runs, unfortunately. That turns out to be surprisingly complicated. 
+You choose the dialog's starting position. `X` and `Y` are the number of pixels from the left and top of the screen, respectively. If you move the dialog, it remembers the location for subsequent files. It doesn't remember between runs, unfortunately. That turns out to be surprisingly complicated. As a workaround, a change in position is reported on the form. Once processing is complete, you can enter the reported values in the command options. Those numbers *are* remembered between runs. 
 
 You can optionally set a countdown timer and/or start a command. 
 
@@ -796,5 +796,5 @@ This project uses these awesome open source packages.
 
 ## CODE ORGANIZATION
 
-Processing starts in Form1.vb.  A short description of the code's organization can be found there.
+Processing starts in Form_Main.vb.  A short description of the code's organization can be found there.
 

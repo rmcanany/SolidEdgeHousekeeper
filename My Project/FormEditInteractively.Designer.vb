@@ -27,6 +27,7 @@ Partial Class FormEditInteractively
         Me.DoNotSaveButton = New System.Windows.Forms.Button()
         Me.AbortButton = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'PauseButton
@@ -83,11 +84,20 @@ Partial Class FormEditInteractively
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(26, 92)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(0, 16)
+        Me.Label2.TabIndex = 6
+        '
         'FormEditInteractively
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(294, 146)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.AbortButton)
         Me.Controls.Add(Me.DoNotSaveButton)
@@ -109,4 +119,5 @@ Partial Class FormEditInteractively
     Friend WithEvents DoNotSaveButton As Button
     Friend WithEvents AbortButton As Button
     Friend WithEvents Label1 As Label
+    Friend WithEvents Label2 As Label
 End Class

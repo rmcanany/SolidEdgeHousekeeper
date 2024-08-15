@@ -6,13 +6,17 @@ Public Class UtilsSEApp
 
     Public Property SEApp As SolidEdgeFramework.Application
 
+    Public Property TextBoxStatus As TextBox
+
+    Public Sub New()
+
+    End Sub
+
     Public Sub SEStart(RunInBackground As Boolean,
                         UseCurrentSession As Boolean,
                         NoUpdateMRU As Boolean)
-        ' Start Solid Edge.
-        Form1.TextBoxStatus.Text = "Starting Solid Edge..."
 
-        'Dim RunInBackground As Boolean = CheckBoxBackgroundProcessing.Checked
+        TextBoxStatus.Text = "Starting Solid Edge..."
 
         Try
 
@@ -65,7 +69,7 @@ Public Class UtilsSEApp
 
         If Not UseCurrentSession Then
 
-            Form1.TextBoxStatus.Text = "Closing Solid Edge..."
+            TextBoxStatus.Text = "Closing Solid Edge..."
             If (Not (SEApp Is Nothing)) Then
                 Try
                     SEApp.Quit()

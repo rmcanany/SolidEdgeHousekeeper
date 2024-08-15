@@ -3,10 +3,11 @@
 Imports System.Text.RegularExpressions
 
 Public Class UtilsPropertyFilters
-    Private _mainInstance As Form1
 
-    Public Sub New(mainInstance As Form1)
-        _mainInstance = mainInstance
+    Public Property FMain As Form_Main
+
+    Public Sub New(_Form_Main As Form_Main)
+        Me.FMain = _Form_Main
     End Sub
 
     Public Function PropertyFilter(FoundFiles As IReadOnlyCollection(Of String),
@@ -41,7 +42,7 @@ Public Class UtilsPropertyFilters
 
         FilteredFiles = ProcessFiles(LocalFoundFiles, PropertyFilterDict, PropertyFilterFormula)
 
-        Form1.TextBoxStatus.Text = ""
+        FMain.TextBoxStatus.Text = ""
 
         Return FilteredFiles
     End Function
@@ -58,16 +59,17 @@ Public Class UtilsPropertyFilters
         Dim msg As String
 
         DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+        'DMApp.SetGlobalParameter ' not exposed.
 
-        Form1.Activate()
+        FMain.Activate()
 
         For Each FoundFile In FoundFiles
-            If Form1.StopProcess Then
+            If Form_Main.StopProcess Then
                 Exit For
             End If
             'msg = CommonTasks.TruncateFullPath(FoundFile, Nothing)
             msg = System.IO.Path.GetFileName(FoundFile)
-            Form1.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+            FMain.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
             tf = ProcessFile(DMApp, FoundFile, PropertyFilterDict, PropertyFilterFormula)
             If tf Then
                 FilteredFiles.Add(FoundFile)
@@ -92,7 +94,7 @@ Public Class UtilsPropertyFilters
         Dim LinkedDocument As DesignManager.Document
 
         System.Windows.Forms.Application.DoEvents()
-        If Form1.StopProcess Then
+        If Form_Main.StopProcess Then
             Return False
         End If
 
@@ -101,13 +103,13 @@ Public Class UtilsPropertyFilters
             DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
             LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
 
-            If Form1.CheckBoxPropertyFilterCheckDraftFile.Checked Then
+            If FMain.CheckBoxPropertyFilterCheckDraftFile.Checked Then
                 tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
             Else
                 tf = False
             End If
 
-            If Form1.CheckBoxPropertyFilterFollowDraftLinks.Checked Then
+            If FMain.CheckBoxPropertyFilterFollowDraftLinks.Checked Then
                 For Each LinkedDocument In LinkedDocuments
                     tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
                 Next

@@ -88,7 +88,7 @@ Partial Class FormPropertyListCustomize
         '
         'Form1BindingSource
         '
-        Me.Form1BindingSource.DataSource = GetType(Housekeeper.Form1)
+        Me.Form1BindingSource.DataSource = GetType(Housekeeper.Form_Main)
         '
         'ExTableLayoutPanel1
         '

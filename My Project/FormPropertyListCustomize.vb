@@ -14,13 +14,13 @@ Public Class FormPropertyListCustomize
         ' Add any initialization after the InitializeComponent() call.
 
         Me.TemplatePropertyList = New List(Of String)
-        For Each Propname As String In Form1.TemplatePropertyList
+        For Each Propname As String In Form_Main.TemplatePropertyList
             Me.TemplatePropertyList.Add(Propname)
         Next
 
         Me.AvailableProperties = New List(Of String)
-        If Not Form1.TemplatePropertyDict Is Nothing Then
-            For Each Propname As String In Form1.TemplatePropertyDict.Keys
+        If Not Form_Main.TemplatePropertyDict Is Nothing Then
+            For Each Propname As String In Form_Main.TemplatePropertyDict.Keys
                 Me.AvailableProperties.Add(Propname)
             Next
         End If
@@ -387,8 +387,8 @@ Public Class FormPropertyListCustomize
             Me.AvailableProperties.Sort()
         Else
             Me.AvailableProperties.Clear()
-            If Not Form1.TemplatePropertyDict Is Nothing Then
-                For Each Propname As String In Form1.TemplatePropertyDict.Keys
+            If Form_Main.TemplatePropertyDict IsNot Nothing Then
+                For Each Propname As String In Form_Main.TemplatePropertyDict.Keys
                     Me.AvailableProperties.Add(Propname)
                 Next
             End If

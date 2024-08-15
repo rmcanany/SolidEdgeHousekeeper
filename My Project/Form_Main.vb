@@ -3,14 +3,14 @@
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 
-Public Class Form1
+Public Class Form_Main
 
     Public Property Version As String = "2024.2"
     Public Property CheckForNewerVersion As Boolean
 
     Public Property UtilsLogFile As UtilsLogFile
 
-    Public Shared StopProcess As Boolean
+    Public Property StopProcess As Boolean
 
     Public DragDropCache As New List(Of ListViewItem)
     Public DragDropCacheExcluded As New List(Of ListViewItem)
@@ -792,6 +792,49 @@ Public Class Form1
 
     End Sub
 
+    'Public Function GetControlDict(Exclude As Boolean) As Dictionary(Of String, Control)
+    '    Dim ControlDict As New Dictionary(Of String, Control)
+    '    ControlDict = RecurseFormControls(Me, ControlDict, Exclude)
+    '    Return ControlDict
+    'End Function
+
+    'Public Function RecurseFormControls(Ctrl As Control,
+    '                                     ControlDict As Dictionary(Of String, Control),
+    '                                     Exclude As Boolean
+    '                                     ) As Dictionary(Of String, Control)
+
+    '    Dim ChildControl As Control
+    '    Dim tf As Boolean
+    '    Dim ExcludeControls As New List(Of String)
+
+    '    ExcludeControls.Add(Me.new_CheckBoxEnablePropertyFilter.Name)
+    '    ' ExcludeControls.Add(ListViewFiles.Name)
+
+    '    tf = TypeOf Ctrl Is ContainerControl
+    '    tf = tf Or TypeOf Ctrl Is TabControl
+    '    tf = tf Or TypeOf Ctrl Is TabPage
+    '    tf = tf Or TypeOf Ctrl Is GroupBox
+    '    tf = tf Or TypeOf Ctrl Is ExTableLayoutPanel
+    '    'tf = Ctrl.HasChildren
+
+    '    If tf Then
+    '        For Each ChildControl In Ctrl.Controls
+    '            ControlDict = RecurseFormControls(ChildControl, ControlDict, Exclude)
+    '        Next
+    '    Else
+    '        tf = TypeOf Ctrl Is Button  ' Don't need to save buttons or labels.
+    '        tf = tf Or TypeOf Ctrl Is Label
+    '        If Exclude Then
+    '            tf = tf Or ExcludeControls.Contains(Ctrl.Name)
+    '        End If
+
+    '        If Not tf Then
+    '            ControlDict.Add(Ctrl.Name, Ctrl)
+    '        End If
+    '    End If
+
+    '    Return ControlDict
+    'End Function
 
 
     ' **************** CONTROLS ****************
@@ -867,6 +910,8 @@ Public Class Form1
 
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
         Dim UE As New UtilsExecute(Me)
+        UE.TextBoxStatus = Me.TextBoxStatus
+
         UE.ProcessAll()
     End Sub
 
@@ -1575,6 +1620,7 @@ Public Class Form1
 
     Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
         Dim UE As New UtilsExecute(Me)
+        UE.TextBoxStatus = Me.TextBoxStatus
 
         If Not ListViewFiles.SelectedItems.Count = 0 Then UE.ProcessAll()
 
@@ -1928,6 +1974,9 @@ Public Class Form1
     Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
         'MsgBox("Not currently implemented", vbOKOnly)
         Dim ETL As New FormEditTaskList()
+        ETL.RememberTaskSelections = Me.RememberTaskSelections
+        ETL.OldTaskList = Me.TaskList
+
         Dim DialogResult As DialogResult
         Dim tmpTasks As New List(Of Task)
 
@@ -2319,6 +2368,7 @@ Public Class Form1
     'Me.Cursor = Cursors.WaitCursor
     'Me.Cursor = Cursors.Default
 
+    'ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
 
 
 End Class
