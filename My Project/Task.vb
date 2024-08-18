@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports Newtonsoft.Json
+'Imports SolidEdgeFramework
 'Imports SolidEdgeConstants
 
 Public MustInherit Class Task
@@ -21,6 +22,7 @@ Public MustInherit Class Task
             End If
         End Set
     End Property
+
     Public Property HelpText As String
     Public Property RequiresSave As Boolean
     Public Property AppliesToAssembly As Boolean
@@ -33,24 +35,87 @@ Public MustInherit Class Task
     Public Property TaskControl As UCTaskControl
     Public Property TaskOptionsTLP As ExTableLayoutPanel
     Public Property ManualOptionsOnlyString As String = "Only show options manually. Use [+] to show."
+
+    Private _IsSelectedTask As Boolean
     Public Property IsSelectedTask As Boolean
+        Get
+            Return _IsSelectedTask
+        End Get
+        Set(value As Boolean)
+            _IsSelectedTask = value
+            If Me.TaskControl IsNot Nothing Then
+                Me.TaskControl.CBEnabled.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _IsSelectedAssembly As Boolean
     Public Property IsSelectedAssembly As Boolean
+        Get
+            Return _IsSelectedAssembly
+        End Get
+        Set(value As Boolean)
+            _IsSelectedAssembly = value
+            If Me.TaskControl IsNot Nothing Then
+                Me.TaskControl.CBAssembly.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _IsSelectedPart As Boolean
     Public Property IsSelectedPart As Boolean
+        Get
+            Return _IsSelectedPart
+        End Get
+        Set(value As Boolean)
+            _IsSelectedPart = value
+            If Me.TaskControl IsNot Nothing Then
+                Me.TaskControl.CBPart.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _IsSelectedSheetmetal As Boolean
     Public Property IsSelectedSheetmetal As Boolean
+        Get
+            Return _IsSelectedSheetmetal
+        End Get
+        Set(value As Boolean)
+            _IsSelectedSheetmetal = value
+            If Me.TaskControl IsNot Nothing Then
+                Me.TaskControl.CBSheetmetal.Checked = value
+            End If
+        End Set
+    End Property
+
+
+    Private _IsSelectedDraft As Boolean
     Public Property IsSelectedDraft As Boolean
-    Public Property AutoHideOptions As Boolean
+        Get
+            Return _IsSelectedDraft
+        End Get
+        Set(value As Boolean)
+            _IsSelectedDraft = value
+            If Me.TaskControl IsNot Nothing Then
+                Me.TaskControl.CBDraft.Checked = value
+            End If
+        End Set
+    End Property
+
+    'Public Property AutoHideOptions As Boolean
     Public Property IsOptionsHidden As Boolean
-    Public Property RememberTaskSelections As Boolean
-    Public Property Visible As Boolean
+
+    'Public Property RememberTaskSelections As Boolean
+
+    'Public Property Visible As Boolean
+
     Public Property RequiresSourceDirectories As Boolean
     Public Property SourceDirectories As List(Of String)
 
     Public TLPHeader As ExTableLayoutPanel
     Public Property ControlsDict As Dictionary(Of String, Control)
-    Shared Property BaseControlsDict As New Dictionary(Of String, Control)
 
-    'Public Property ManuallySelectFileTypes As Boolean
-    'Public Property Task_EventHandler As Task_EventHandler
+    'Shared Property BaseControlsDict As New Dictionary(Of String, Control)
 
     Public Property ColorHue As String
     Public Property ColorSaturation As Double
@@ -64,11 +129,13 @@ Public MustInherit Class Task
     Public Property RequiresSheetmetalTemplate As Boolean = False
     Public Property RequiresDraftTemplate As Boolean = False
     Public Property RequiresMaterialTable As Boolean = False
-    Public Property AssemblyTemplate As String = ""
-    Public Property PartTemplate As String = ""
-    Public Property SheetmetalTemplate As String = ""
-    Public Property DraftTemplate As String = ""
-    Public Property MaterialTable As String = ""
+
+    'Public Property AssemblyTemplate As String = ""
+    'Public Property PartTemplate As String = ""
+    'Public Property SheetmetalTemplate As String = ""
+    'Public Property DraftTemplate As String = ""
+
+    'Public Property MaterialTable As String = ""
 
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
@@ -320,27 +387,27 @@ Public MustInherit Class Task
 
     End Function
 
-    Public Sub HandleHideOptionsChange(
-        Task As Task,
-        TaskOptionsTLP As ExTableLayoutPanel,
-        HideOptionsCheckbox As CheckBox)
+    'Public Sub HandleHideOptionsChange(
+    '    Task As Task,
+    '    TaskOptionsTLP As ExTableLayoutPanel,
+    '    HideOptionsCheckbox As CheckBox)
 
-        'Dim Button = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
-        'Dim ButtonImage As Bitmap
+    '    'Dim Button = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
+    '    'Dim ButtonImage As Bitmap
 
-        'If HideOptionsCheckbox.Checked Then
-        '    ButtonImage = My.Resources.expand
-        'Else
-        '    ButtonImage = My.Resources.collapse
-        'End If
+    '    'If HideOptionsCheckbox.Checked Then
+    '    '    ButtonImage = My.Resources.expand
+    '    'Else
+    '    '    ButtonImage = My.Resources.collapse
+    '    'End If
 
-        Task.AutoHideOptions = HideOptionsCheckbox.Checked
+    '    Task.AutoHideOptions = HideOptionsCheckbox.Checked
 
-        'Me.TaskOptionsTLP.Visible = Not HideOptionsCheckbox.Checked
+    '    'Me.TaskOptionsTLP.Visible = Not HideOptionsCheckbox.Checked
 
-        'Button.Image = ButtonImage
+    '    'Button.Image = ButtonImage
 
-    End Sub
+    'End Sub
 
     Public Sub HandleMutuallyExclusiveCheckBoxes(
         TLPOptions As ExTableLayoutPanel,
@@ -361,9 +428,13 @@ Public MustInherit Class Task
 
     End Sub
 
-    Public Overridable Sub ReconcileFormWithProps()
+    'Public Overridable Sub ReconcileFormWithProps()
 
-    End Sub
+    'End Sub
+
+    'Public Overridable Sub NotifyAutoHideOptions()
+
+    'End Sub
 
 
     'FORM STATE
@@ -372,65 +443,60 @@ Public MustInherit Class Task
         Dim JSONString As String
 
         Dim tmpJSONDict As New Dictionary(Of String, String)
-        Dim Ctrl As Control
-        Dim CtrlName As String
+        'Dim Ctrl As Control
+        'Dim CtrlName As String
 
-        Dim TaskType As Type = Me.[GetType]()
+        Dim TaskType As Type = Me.GetType()
         Dim PropInfos = New List(Of PropertyInfo)(TaskType.GetProperties())
+
+        Dim IgnoreProps As New List(Of String)
+        IgnoreProps.AddRange({"Description", "HelpText", "RequiresSave", "AppliesToAssembly", "AppliesToPart", "AppliesToSheetmetal"})
+        IgnoreProps.AddRange({"AppliesToDraft", "HasOptions", "HelpURL", "Image", "TaskControl", "TaskOptionsTLP"})
+        IgnoreProps.AddRange({"ManualOptionsOnlyString", "Visible", "RequiresSourceDirectories"})
+        IgnoreProps.AddRange({"SourceDirectories", "ControlsDict", "RequiresAssemblyTemplate", "RequiresPartTemplate"})
+        IgnoreProps.AddRange({"RequiresSheetmetalTemplate", "RequiresDraftTemplate", "RequiresMaterialTable", "Category"})
+        IgnoreProps.AddRange({"SolidEdgeRequired", "Application", "Document", "IsOptionsHidden"})
+
+        Dim s As String = ""
 
         For Each PropInfo As PropertyInfo In PropInfos
 
             Dim PropInfoName As String = PropInfo.Name
 
-            If PropInfoName.StartsWith("Color") Then
-
-                Dim PropTypestring = PropInfo.PropertyType.Name
-
-                Select Case PropTypestring
-                    Case "String"
-                        tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
-                    Case "Double"
-                        tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
-                    Case "Int32"
-                        tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
-                End Select
-
+            If IgnoreProps.Contains(PropInfoName) Then
+                Continue For
             End If
-        Next
 
+            Dim PropTypestring = PropInfo.PropertyType.Name
 
-        For Each CtrlName In ControlsDict.Keys
-            Ctrl = ControlsDict(CtrlName)
+            Select Case PropTypestring.ToLower
+                Case "String".ToLower
+                    tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
+                Case "Double".ToLower
+                    tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
+                Case "Int32".ToLower
+                    tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
+                Case "Boolean".ToLower
+                    tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
 
-            Select Case Ctrl.GetType
-                Case GetType(CheckBox)
-                    Dim c = CType(Ctrl, CheckBox)
-                    tmpJSONDict(CtrlName) = CStr(c.Checked)
-
-                Case GetType(TextBox)
-                    Dim c = CType(Ctrl, TextBox)
-                    tmpJSONDict(CtrlName) = c.Text
-
-                Case GetType(ComboBox)
-                    Dim c = CType(Ctrl, ComboBox)
-                    tmpJSONDict(CtrlName) = c.Text
-
-                Case GetType(Button)
-                    ' Nothing to do here
-
-                Case GetType(Label)
-                    ' Nothing to do here
-
-                Case GetType(ExTableLayoutPanel)
-                    ' Nothing to do here
+                Case "Image".ToLower  ' Nothing to do here and below
+                Case "UCTaskControl".ToLower
+                Case "ExTableLayoutPanel".ToLower
+                Case "List`1".ToLower
+                Case "Dictionary`2".ToLower
+                Case "Application".ToLower
+                Case "SolidEdgeDocument".ToLower
+                Case "Int16".ToLower
 
                 Case Else
-                    MsgBox(String.Format("{0} Control type '{1}' not recognized", "Task", Ctrl.GetType.ToString))
-
+                    s = String.Format("{0}{1}{2}", s, PropTypestring, vbCrLf)
             End Select
 
         Next
 
+        If Not s = "" Then
+            MsgBox(String.Format("In GetFormState(), {2} PropTypestrings not recognized{0}{1}", vbCrLf, s, Me.Name))
+        End If
 
         tmpJSONDict("TaskName") = Me.Name
 
@@ -446,21 +512,16 @@ Public MustInherit Class Task
         '    "ShowCOG":"False",
         '    "HideCOG":"True",
         '    "HideOptions":"False",
-        '    "SelectTask":"True",
-        '    "SelectAssembly":"True",
-        '    "SelectPart":"False",
-        '    "SelectSheetmetal":"False",
-        '    "SelectDraft":"False"
+        '    "IsSelectedTask":"True",
+        '    "IsSelectedAssembly":"True",
+        '    "IsSelectedPart":"False",
+        '    "IsSelectedSheetmetal":"False",
+        '    "IsSelectedDraft":"False"
         '}
 
         Dim tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
-        Dim Ctrl As Control
-        Dim CtrlName As String
-
-        Dim tf As Boolean
-
-        Dim TaskType As Type = Me.[GetType]()
+        Dim TaskType As Type = Me.GetType()
         Dim PropInfos = New List(Of PropertyInfo)(TaskType.GetProperties())
 
         For Each PropInfo As PropertyInfo In PropInfos
@@ -477,6 +538,8 @@ Public MustInherit Class Task
                         PropInfo.SetValue(Me, CDbl(tmpJSONDict(PropInfoName)))
                     Case "Int32"
                         PropInfo.SetValue(Me, CInt(tmpJSONDict(PropInfoName)))
+                    Case "Boolean"
+                        PropInfo.SetValue(Me, CBool(tmpJSONDict(PropInfoName)))
                 End Select
 
             End If
@@ -484,59 +547,6 @@ Public MustInherit Class Task
         Next
 
         Me.ResetTaskColor()
-
-        For Each CtrlName In ControlsDict.Keys
-
-            tf = CtrlName = BaseControlNames.SelectTask.ToString
-            tf = tf Or CtrlName = BaseControlNames.SelectAssembly.ToString
-            tf = tf Or CtrlName = BaseControlNames.SelectPart.ToString
-            tf = tf Or CtrlName = BaseControlNames.SelectSheetmetal.ToString
-            tf = tf Or CtrlName = BaseControlNames.SelectDraft.ToString
-            tf = tf And Not RememberTaskSelections
-
-            If tf Then
-                Continue For
-            End If
-
-            If tmpJSONDict.Keys.Contains(CtrlName) Then
-
-                Ctrl = ControlsDict(CtrlName)
-
-                Select Case Ctrl.GetType
-
-                    Case GetType(CheckBox)
-                        Dim c = CType(Ctrl, CheckBox)
-                        c.Checked = CBool(tmpJSONDict(CtrlName))
-
-                    Case GetType(TextBox)
-                        Dim c = CType(Ctrl, TextBox)
-                        c.Text = tmpJSONDict(CtrlName)
-
-                    Case GetType(ComboBox)
-                        Dim c = CType(Ctrl, ComboBox)
-                        Try
-                            c.Text = tmpJSONDict(CtrlName)
-                        Catch ex As Exception
-                        End Try
-
-                    Case Else
-                        MsgBox(String.Format("{0} Control type '{1}' not recognized", "Task", Ctrl.GetType.ToString))
-
-                End Select
-            End If
-        Next
-
-        'Dim TaskType As Type = Me.[GetType]()
-        'Dim PropInfos As List(Of PropertyInfo) = New List(Of PropertyInfo)(TaskType.GetProperties())
-
-        'For Each PropInfo As PropertyInfo In PropInfos
-        '    Dim propValue As Object = PropInfo.GetValue(Me, Nothing)
-        '    Dim PropTypestring = PropInfo.PropertyType.Name
-        '    If PropTypestring = "String" Then
-
-        '    End If
-        'Next
-
 
     End Sub
 

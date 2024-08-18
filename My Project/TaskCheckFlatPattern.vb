@@ -25,12 +25,6 @@ Public Class TaskCheckFlatPattern
 
     End Sub
 
-    'Public Sub New(Task As TaskCheckFlatPattern)
-
-    '    'Options
-
-    'End Sub
-
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),

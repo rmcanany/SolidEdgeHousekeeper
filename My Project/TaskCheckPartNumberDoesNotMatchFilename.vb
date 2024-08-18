@@ -4,16 +4,53 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
     Inherits Task
 
+    Private _PropertySet As String
     Public Property PropertySet As String
+        Get
+            Return _PropertySet
+        End Get
+        Set(value As String)
+            _PropertySet = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PropertySet.ToString), ComboBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _PropertyName As String
     Public Property PropertyName As String
-    'Private Property ControlsDict As Dictionary(Of String, Control)
+        Get
+            Return _PropertyName
+        End Get
+        Set(value As String)
+            _PropertyName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PropertyName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
 
     Enum ControlNames
         PropertySet
         PropertySetLabel
         PropertyName
         PropertyNameLabel
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -217,7 +254,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -287,8 +324,11 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim Name = Checkbox.Name
 
         Select Case Name
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

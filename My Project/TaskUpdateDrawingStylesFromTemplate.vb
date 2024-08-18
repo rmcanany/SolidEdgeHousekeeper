@@ -4,15 +4,66 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
     Inherits Task
 
+    Private _DraftTemplate As String
+    Public Property DraftTemplate As String
+        Get
+            Return _DraftTemplate
+        End Get
+        Set(value As String)
+            _DraftTemplate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateBorder As Boolean
     Public Property UpdateBorder As Boolean
+        Get
+            Return _UpdateBorder
+        End Get
+        Set(value As Boolean)
+            _UpdateBorder = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateBorder.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateStyles As Boolean
     Public Property UpdateStyles As Boolean
+        Get
+            Return _UpdateStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         Browse
         DraftTemplate
         UpdateBorder
         UpdateStyles
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -29,7 +80,6 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.Image = My.Resources.TaskUpdateDrawingStylesFromTemplate
         Me.Category = "Restyle"
         Me.RequiresDraftTemplate = True
-        Me.DraftTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -37,6 +87,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.DraftTemplate = ""
         Me.UpdateBorder = False
         Me.UpdateStyles = False
 
@@ -442,7 +493,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -533,8 +584,11 @@ Public Class TaskUpdateDrawingStylesFromTemplate
 
         Select Case Name
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case ControlNames.UpdateBorder.ToString
                 Me.UpdateBorder = Checkbox.Checked
@@ -564,9 +618,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
+    'End Sub
 
 
     Private Function GetHelpText() As String

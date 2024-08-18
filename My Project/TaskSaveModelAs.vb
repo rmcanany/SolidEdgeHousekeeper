@@ -5,21 +5,189 @@ Public Class TaskSaveModelAs
 
     Inherits Task
 
-    Public Property NewFileTypeName As String  ' eg, 'Parasolid (*.xt)'
-    Public Property SaveInOriginalDirectory As Boolean
-    Public Property NewDir As String
-    Public Property UseSubdirectoryFormula As Boolean
-    Public Property Formula As String
-    Public Property CropImage As Boolean
-    Public Property ImageFileTypeNames As New List(Of String)
-    Public Property HideConstructions As Boolean
-    Public Property FitView As Boolean
-    Public Property Isometric As Boolean
-    Public Property Dimetric As Boolean
-    Public Property Trimetric As Boolean
-    Public Property ChangeViewStyle As Boolean
-    Public Property ViewStyleName As String
+    Private _NewFileTypeName As String
+    Public Property NewFileTypeName As String
+        Get
+            Return _NewFileTypeName
+        End Get
+        Set(value As String)
+            _NewFileTypeName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox).Text = value
+            End If
+        End Set
+    End Property
 
+    Private _SaveInOriginalDirectory As Boolean
+    Public Property SaveInOriginalDirectory As Boolean
+        Get
+            Return _SaveInOriginalDirectory
+        End Get
+        Set(value As Boolean)
+            _SaveInOriginalDirectory = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveInOriginalDirectory.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _NewDir As String
+    Public Property NewDir As String
+        Get
+            Return _NewDir
+        End Get
+        Set(value As String)
+            _NewDir = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewDir.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _UseSubdirectoryFormula As Boolean
+    Public Property UseSubdirectoryFormula As Boolean
+        Get
+            Return _UseSubdirectoryFormula
+        End Get
+        Set(value As Boolean)
+            _UseSubdirectoryFormula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Formula As String
+    Public Property Formula As String
+        Get
+            Return _Formula
+        End Get
+        Set(value As String)
+            _Formula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _CropImage As Boolean
+    Public Property CropImage As Boolean
+        Get
+            Return _CropImage
+        End Get
+        Set(value As Boolean)
+            _CropImage = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CropImage.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _HideConstructions As Boolean
+    Public Property HideConstructions As Boolean
+        Get
+            Return _HideConstructions
+        End Get
+        Set(value As Boolean)
+            _HideConstructions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.HideConstructions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FitView As Boolean
+    Public Property FitView As Boolean
+        Get
+            Return _FitView
+        End Get
+        Set(value As Boolean)
+            _FitView = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.FitView.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Isometric As Boolean
+    Public Property Isometric As Boolean
+        Get
+            Return _Isometric
+        End Get
+        Set(value As Boolean)
+            _Isometric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Dimetric As Boolean
+    Public Property Dimetric As Boolean
+        Get
+            Return _Dimetric
+        End Get
+        Set(value As Boolean)
+            _Dimetric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Trimetric As Boolean
+    Public Property Trimetric As Boolean
+        Get
+            Return _Trimetric
+        End Get
+        Set(value As Boolean)
+            _Trimetric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ChangeViewStyle As Boolean
+    Public Property ChangeViewStyle As Boolean
+        Get
+            Return _ChangeViewStyle
+        End Get
+        Set(value As Boolean)
+            _ChangeViewStyle = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ChangeViewStyle.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ViewStyleName As String
+    Public Property ViewStyleName As String
+        Get
+            Return _ViewStyleName
+        End Get
+        Set(value As String)
+            _ViewStyleName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Public Property ImageFileTypeNames As New List(Of String)
 
 
     Enum ControlNames
@@ -39,7 +207,7 @@ Public Class TaskSaveModelAs
         ChangeViewStyle
         ViewStyleName
         ViewStyleNameLabel
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -886,7 +1054,7 @@ Public Class TaskSaveModelAs
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -1073,8 +1241,11 @@ Public Class TaskSaveModelAs
                 CType(ControlsDict(ControlNames.ViewStyleName.ToString), TextBox).Visible = Me.ChangeViewStyle
                 CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label).Visible = Me.ChangeViewStyle
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

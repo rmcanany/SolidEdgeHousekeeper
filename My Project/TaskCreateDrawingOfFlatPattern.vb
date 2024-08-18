@@ -5,17 +5,191 @@ Imports Microsoft.WindowsAPICodePack.Dialogs
 Public Class TaskCreateDrawingOfFlatPattern
     Inherits Task
 
+    Private _DraftTemplate As String
+    Public Property DraftTemplate As String
+        Get
+            Return _DraftTemplate
+        End Get
+        Set(value As String)
+            _DraftTemplate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _ScaleFactor As Double
     Public Property ScaleFactor As Double
-    Public Property OffsetUnits As String
+        Get
+            Return _ScaleFactor
+        End Get
+        Set(value As Double)
+            _ScaleFactor = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ScaleFactor.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _OffsetUnitsIn As Boolean
+    Public Property OffsetUnitsIn As Boolean
+        Get
+            Return _OffsetUnitsIn
+        End Get
+        Set(value As Boolean)
+            _OffsetUnitsIn = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.OffsetUnitsIn.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _OffsetUnitsMM As Boolean
+    Public Property OffsetUnitsMM As Boolean
+        Get
+            Return _OffsetUnitsMM
+        End Get
+        Set(value As Boolean)
+            _OffsetUnitsMM = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.OffsetUnitsMM.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _XOffset As Double
     Public Property XOffset As Double
+        Get
+            Return _XOffset
+        End Get
+        Set(value As Double)
+            _XOffset = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.XOffset.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _YOffset As Double
     Public Property YOffset As Double
+        Get
+            Return _YOffset
+        End Get
+        Set(value As Double)
+            _YOffset = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.YOffset.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _OverwriteExisting As Boolean
     Public Property OverwriteExisting As Boolean
+        Get
+            Return _OverwriteExisting
+        End Get
+        Set(value As Boolean)
+            _OverwriteExisting = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.OverwriteExisting.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SaveDraft As Boolean
     Public Property SaveDraft As Boolean
+        Get
+            Return _SaveDraft
+        End Get
+        Set(value As Boolean)
+            _SaveDraft = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveDraft.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SaveInOriginalDirectoryDraft As Boolean
     Public Property SaveInOriginalDirectoryDraft As Boolean
+        Get
+            Return _SaveInOriginalDirectoryDraft
+        End Get
+        Set(value As Boolean)
+            _SaveInOriginalDirectoryDraft = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveInOriginalDirectoryDraft.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _NewDirDraft As String
     Public Property NewDirDraft As String
+        Get
+            Return _NewDirDraft
+        End Get
+        Set(value As String)
+            _NewDirDraft = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewDirDraft.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _SavePDF As Boolean
     Public Property SavePDF As Boolean
+        Get
+            Return _SavePDF
+        End Get
+        Set(value As Boolean)
+            _SavePDF = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SavePDF.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SaveInOriginalDirectoryPDF As Boolean
     Public Property SaveInOriginalDirectoryPDF As Boolean
+        Get
+            Return _SaveInOriginalDirectoryPDF
+        End Get
+        Set(value As Boolean)
+            _SaveInOriginalDirectoryPDF = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveInOriginalDirectoryPDF.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _NewDirPDF As String
     Public Property NewDirPDF As String
+        Get
+            Return _NewDirPDF
+        End Get
+        Set(value As String)
+            _NewDirPDF = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewDirPDF.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Public Property OffsetUnits As String
+
 
 
     Enum ControlNames
@@ -38,7 +212,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         SaveInOriginalDirectoryPDF
         BrowseNewDirPDF
         NewDirPDF
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -55,7 +229,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
         Me.RequiresDraftTemplate = True
-        Me.DraftTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -63,6 +236,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.DraftTemplate = ""
         Me.ScaleFactor = 1
         Me.OffsetUnits = ""
         Me.XOffset = 0
@@ -398,7 +572,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         ControlsDict(Label.Name) = Label
 
         RowIndex += 1
-        
+
         TextBox = FormatOptionsTextBox(ControlNames.YOffset.ToString, "")
         TextBox.Width = 40
         TextBox.TextAlign = HorizontalAlignment.Right
@@ -481,7 +655,7 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -590,12 +764,14 @@ Public Class TaskCreateDrawingOfFlatPattern
                 Me.OverwriteExisting = Checkbox.Checked
 
             Case ControlNames.OffsetUnitsIn.ToString
+                Me.OffsetUnitsIn = Checkbox.Checked
                 If Checkbox.Checked Then
                     Me.OffsetUnits = "in"
                     HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
             Case ControlNames.OffsetUnitsMM.ToString
+                Me.OffsetUnitsMM = Checkbox.Checked
                 If Checkbox.Checked Then
                     Me.OffsetUnits = "mm"
                     HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
@@ -631,8 +807,11 @@ Public Class TaskCreateDrawingOfFlatPattern
                 CType(ControlsDict(ControlNames.BrowseNewDirPDF.ToString), Button).Visible = Not Me.SaveInOriginalDirectoryPDF
                 CType(ControlsDict(ControlNames.NewDirPDF.ToString), TextBox).Visible = Not Me.SaveInOriginalDirectoryPDF
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -700,22 +879,22 @@ Public Class TaskCreateDrawingOfFlatPattern
                 Me.DraftTemplate = TextBox.Text
 
             Case ControlNames.ScaleFactor.ToString
-                Try
-                    Me.ScaleFactor = CDbl(TextBox.Text)
-                Catch ex As Exception
-                End Try
-                
+                'Try
+                '    Me.ScaleFactor = CDbl(TextBox.Text)
+                'Catch ex As Exception
+                'End Try
+
             Case ControlNames.XOffset.ToString
-                Try
-                    Me.XOffset = CDbl(TextBox.Text)
-                Catch ex As Exception
-                End Try
-                
+                'Try
+                '    Me.XOffset = CDbl(TextBox.Text)
+                'Catch ex As Exception
+                'End Try
+
             Case ControlNames.YOffset.ToString
-                Try
-                    Me.YOffset = CDbl(TextBox.Text)
-                Catch ex As Exception
-                End Try
+                'Try
+                '    Me.YOffset = CDbl(TextBox.Text)
+                'Catch ex As Exception
+                'End Try
 
             Case ControlNames.NewDirDraft.ToString
                 Me.NewDirDraft = TextBox.Text
@@ -736,9 +915,9 @@ Public Class TaskCreateDrawingOfFlatPattern
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
+    'End Sub
 
 
     Private Function GetHelpText() As String

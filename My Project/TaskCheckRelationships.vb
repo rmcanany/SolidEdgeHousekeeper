@@ -3,15 +3,65 @@
 Public Class TaskCheckRelationships
     Inherits Task
 
+    Private _CheckFailed As Boolean
     Public Property CheckFailed As Boolean
+        Get
+            Return _CheckFailed
+        End Get
+        Set(value As Boolean)
+            _CheckFailed = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckFailed.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CheckUnderconstrained As Boolean
     Public Property CheckUnderconstrained As Boolean
+        Get
+            Return _CheckUnderconstrained
+        End Get
+        Set(value As Boolean)
+            _CheckUnderconstrained = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckUnderconstrained.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CheckSuppressed As Boolean
     Public Property CheckSuppressed As Boolean
+        Get
+            Return _CheckSuppressed
+        End Get
+        Set(value As Boolean)
+            _CheckSuppressed = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckSuppressed.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         CheckFailed
         CheckUnderconstrained
         CheckSuppressed
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -438,7 +488,7 @@ Public Class TaskCheckRelationships
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -460,7 +510,7 @@ Public Class TaskCheckRelationships
         CheckBox = CType(ControlsDict(ControlNames.CheckSuppressed.ToString), CheckBox)
         Me.CheckSuppressed = CheckBox.Checked
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -522,8 +572,11 @@ Public Class TaskCheckRelationships
             Case ControlNames.CheckSuppressed.ToString
                 Me.CheckSuppressed = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

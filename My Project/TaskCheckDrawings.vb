@@ -4,15 +4,66 @@ Public Class TaskCheckDrawings
 
     Inherits Task
 
+    Private _DrawingViewsOutOfDate As Boolean
     Public Property DrawingViewsOutOfDate As Boolean
+        Get
+            Return _DrawingViewsOutOfDate
+        End Get
+        Set(value As Boolean)
+            _DrawingViewsOutOfDate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DetachedDimensionsOrAnnotations As Boolean
     Public Property DetachedDimensionsOrAnnotations As Boolean
+        Get
+            Return _DetachedDimensionsOrAnnotations
+        End Get
+        Set(value As Boolean)
+            _DetachedDimensionsOrAnnotations = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DrawingViewOnBackgroundSheet As Boolean
     Public Property DrawingViewOnBackgroundSheet As Boolean
+        Get
+            Return _DrawingViewOnBackgroundSheet
+        End Get
+        Set(value As Boolean)
+            _DrawingViewOnBackgroundSheet = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+
 
     Enum ControlNames
         DrawingViewsOutOfDate
         DetachedDimensionsOrAnnotations
         DrawingViewOnBackgroundSheet
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -250,7 +301,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -272,7 +323,7 @@ Public Class TaskCheckDrawings
         CheckBox = CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox)
         Me.DrawingViewOnBackgroundSheet = CheckBox.Checked
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -334,8 +385,11 @@ Public Class TaskCheckDrawings
             Case ControlNames.DrawingViewOnBackgroundSheet.ToString
                 Me.DrawingViewOnBackgroundSheet = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

@@ -3,13 +3,51 @@
 Public Class TaskUpdatePhysicalProperties
     Inherits Task
 
+    Private _HideSymbols As Boolean
     Public Property HideSymbols As Boolean
+        Get
+            Return _HideSymbols
+        End Get
+        Set(value As Boolean)
+            _HideSymbols = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.HideSymbols.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ShowSymbols As Boolean
     Public Property ShowSymbols As Boolean
+        Get
+            Return _ShowSymbols
+        End Get
+        Set(value As Boolean)
+            _ShowSymbols = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ShowSymbols.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
 
     Enum ControlNames
         HideSymbols
         ShowSymbols
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -296,7 +334,7 @@ Public Class TaskUpdatePhysicalProperties
         ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -361,8 +399,11 @@ Public Class TaskUpdatePhysicalProperties
             Case ControlNames.HideSymbols.ToString
                 Me.HideSymbols = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

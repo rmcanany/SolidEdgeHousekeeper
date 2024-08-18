@@ -4,15 +4,126 @@ Public Class TaskPrint
 
     Inherits Task
 
+    Private _PrinterName As String
     Public Property PrinterName As String
+        Get
+            Return _PrinterName
+        End Get
+        Set(value As String)
+            _PrinterName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PrinterName.ToString), ComboBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _Copies As Short
     Public Property Copies As Short
+        Get
+            Return _Copies
+        End Get
+        Set(value As Short)
+            _Copies = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Copies.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _ShowPrintingOptions As Boolean
     Public Property ShowPrintingOptions As Boolean
+        Get
+            Return _ShowPrintingOptions
+        End Get
+        Set(value As Boolean)
+            _ShowPrintingOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ShowPrintingOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoOrient As Boolean
     Public Property AutoOrient As Boolean
+        Get
+            Return _AutoOrient
+        End Get
+        Set(value As Boolean)
+            _AutoOrient = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoOrient.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BestFit As Boolean
     Public Property BestFit As Boolean
+        Get
+            Return _BestFit
+        End Get
+        Set(value As Boolean)
+            _BestFit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BestFit.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _PrintAsBlack As Boolean
     Public Property PrintAsBlack As Boolean
+        Get
+            Return _PrintAsBlack
+        End Get
+        Set(value As Boolean)
+            _PrintAsBlack = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PrintAsBlack.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ScaleLineTypes As Boolean
     Public Property ScaleLineTypes As Boolean
+        Get
+            Return _ScaleLineTypes
+        End Get
+        Set(value As Boolean)
+            _ScaleLineTypes = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ScaleLineTypes.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ScaleLineWidths As Boolean
     Public Property ScaleLineWidths As Boolean
+        Get
+            Return _ScaleLineWidths
+        End Get
+        Set(value As Boolean)
+            _ScaleLineWidths = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ScaleLineWidths.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property SelectedSheets As List(Of String)
+
 
     Enum ControlNames
         PrinterName
@@ -27,7 +138,7 @@ Public Class TaskPrint
         ScaleLineWidths
         SelectSheets
         SelectedSheets
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -247,7 +358,7 @@ Public Class TaskPrint
 
         'RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -442,8 +553,11 @@ Public Class TaskPrint
             Case ControlNames.ScaleLineWidths.ToString
                 Me.ScaleLineWidths = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

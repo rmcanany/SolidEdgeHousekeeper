@@ -4,14 +4,50 @@ Public Class TaskCheckLinks
 
     Inherits Task
 
+    Private _CheckMissingLinks As Boolean
     Public Property CheckMissingLinks As Boolean
+        Get
+            Return _CheckMissingLinks
+        End Get
+        Set(value As Boolean)
+            _CheckMissingLinks = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckMissingLinks.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CheckMisplacedLinks As Boolean
     Public Property CheckMisplacedLinks As Boolean
-    'Public Property SourceDirectories As List(Of String)
+        Get
+            Return _CheckMisplacedLinks
+        End Get
+        Set(value As Boolean)
+            _CheckMisplacedLinks = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckMisplacedLinks.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
 
     Enum ControlNames
         CheckMissingLinks
         CheckMisplacedLinks
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -276,7 +312,7 @@ Public Class TaskCheckLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -295,7 +331,7 @@ Public Class TaskCheckLinks
         CheckBox = CType(ControlsDict(ControlNames.CheckMisplacedLinks.ToString), CheckBox)
         Me.CheckMisplacedLinks = CheckBox.Checked
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -360,8 +396,11 @@ Public Class TaskCheckLinks
             Case ControlNames.CheckMisplacedLinks.ToString
                 Me.CheckMisplacedLinks = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

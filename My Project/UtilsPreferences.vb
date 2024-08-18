@@ -29,9 +29,11 @@ Public Class UtilsPreferences
         End If
     End Sub
 
+
     Public Sub CreateFilenameCharmap()
         Dim UFC As New UtilsFilenameCharmap()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
+
 
     Public Function GetSavedExpressionsFilename() As String
         Return String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
@@ -88,6 +90,7 @@ Public Class UtilsPreferences
         Dim InteractiveEditCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
         Return InteractiveEditCommandsFilename
     End Function
+
 
     Public Sub CreateInteractiveEditCommands()
 
@@ -228,7 +231,6 @@ Public Class UtilsPreferences
 
     End Sub
 
-
     Public Function GetPropertyFilterDictFilename(CheckExisting As Boolean) As String
         Dim Filename = String.Format("{0}\property_filter_dict.json", GetPreferencesDirectory)
 
@@ -243,6 +245,7 @@ Public Class UtilsPreferences
         End If
 
     End Function
+
 
     Public Sub SavePropertyFilterDict(PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
         Dim JSONString As String
@@ -265,7 +268,6 @@ Public Class UtilsPreferences
 
         Return PropertyFilterDict
     End Function
-
 
     Public Function GetEditPropertiesSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
         Dim EditPropertiesSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
@@ -362,9 +364,6 @@ Public Class UtilsPreferences
 
         Return EditVariablesSavedSettingsDict
     End Function
-
-
-
 
 
     Public Function GetTemplatePropertyListFilename(CheckExisting As Boolean) As String
@@ -499,7 +498,6 @@ Public Class UtilsPreferences
         Return tmpTask
     End Function
 
-
     Public Function BuildTaskListFromScratch() As List(Of Task)
         Dim TaskList As New List(Of Task)
         Dim KnownTasks As New List(Of String)
@@ -550,7 +548,7 @@ Public Class UtilsPreferences
 
         For Each Task As Task In TaskList
             'Task.RememberTaskSelections = Form1.RememberTaskSelections
-            Task.RememberTaskSelections = Me.RememberTaskSelections
+            'Task.RememberTaskSelections = Me.RememberTaskSelections
             KnownTasks.Add(Task.Name.ToLower)
         Next
 

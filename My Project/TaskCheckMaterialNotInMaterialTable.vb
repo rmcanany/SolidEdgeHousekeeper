@@ -4,11 +4,39 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
     Inherits Task
 
+    Private _MaterialTable As String
+    Public Property MaterialTable As String
+        Get
+            Return _MaterialTable
+        End Get
+        Set(value As String)
+            _MaterialTable = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+
 
     Enum ControlNames
         Browse
         MaterialTable
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -25,7 +53,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
         Me.Category = "Check"
         Me.RequiresMaterialTable = True
-        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -33,6 +60,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.MaterialTable = ""
 
     End Sub
 
@@ -117,7 +145,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -134,7 +162,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
         Me.MaterialTable = TextBox.Text
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -212,8 +240,11 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Select Case Name
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -237,9 +268,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
+    'End Sub
 
 
     Private Function GetHelpText() As String

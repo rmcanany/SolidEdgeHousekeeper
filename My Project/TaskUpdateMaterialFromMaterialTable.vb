@@ -4,13 +4,52 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
     Inherits Task
 
+    Private _MaterialTable As String
+    Public Property MaterialTable As String
+        Get
+            Return _MaterialTable
+        End Get
+        Set(value As String)
+            _MaterialTable = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _RemoveFaceStyleOverrides As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
+        Get
+            Return _RemoveFaceStyleOverrides
+        End Get
+        Set(value As Boolean)
+            _RemoveFaceStyleOverrides = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         Browse
         MaterialTable
         RemoveFaceStyleOverrides
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -27,7 +66,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.Image = My.Resources.TaskUpdateMaterialFromMaterialTable
         Me.Category = "Update"
         Me.RequiresMaterialTable = True
-        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -35,6 +73,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.MaterialTable = ""
         Me.RemoveFaceStyleOverrides = False
     End Sub
 
@@ -142,7 +181,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -201,8 +240,11 @@ Public Class TaskUpdateMaterialFromMaterialTable
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -249,9 +291,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
+    'End Sub
 
 
     Private Function GetHelpText() As String

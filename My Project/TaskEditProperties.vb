@@ -10,11 +10,99 @@ Imports System.Text.RegularExpressions
 Public Class TaskEditProperties
     Inherits Task
 
+    Private _MaterialTable As String
+    Public Property MaterialTable As String
+        Get
+            Return _MaterialTable
+        End Get
+        Set(value As String)
+            _MaterialTable = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _JSONString As String
     Public Property JSONString As String
+        Get
+            Return _JSONString
+        End Get
+        Set(value As String)
+            _JSONString = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.JSONString.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoAddMissingProperty As Boolean
     Public Property AutoAddMissingProperty As Boolean
+        Get
+            Return _AutoAddMissingProperty
+        End Get
+        Set(value As Boolean)
+            _AutoAddMissingProperty = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoUpdateMaterial As Boolean
     Public Property AutoUpdateMaterial As Boolean
+        Get
+            Return _AutoUpdateMaterial
+        End Get
+        Set(value As Boolean)
+            _AutoUpdateMaterial = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoUpdateMaterial.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RemoveFaceStyleOverrides As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
+        Get
+            Return _RemoveFaceStyleOverrides
+        End Get
+        Set(value As Boolean)
+            _RemoveFaceStyleOverrides = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _StructuredStorageEdit As Boolean
     Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         Edit
@@ -25,7 +113,7 @@ Public Class TaskEditProperties
         MaterialTable
         RemoveFaceStyleOverrides
         StructuredStorageEdit
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -43,7 +131,6 @@ Public Class TaskEditProperties
         Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
-        Me.MaterialTable = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -51,6 +138,7 @@ Public Class TaskEditProperties
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.MaterialTable = ""
         Me.JSONString = ""
         Me.AutoAddMissingProperty = False
         Me.AutoUpdateMaterial = False
@@ -753,7 +841,7 @@ Public Class TaskEditProperties
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         ControlsDict(CheckBox.Name) = CheckBox
@@ -896,8 +984,11 @@ Public Class TaskEditProperties
                 Me.RequiresSave = Not Checkbox.Checked
                 Me.SolidEdgeRequired = Not Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString '"HideOptions"
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -923,9 +1014,9 @@ Public Class TaskEditProperties
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
+    'End Sub
 
 
     Private Function GetHelpText() As String

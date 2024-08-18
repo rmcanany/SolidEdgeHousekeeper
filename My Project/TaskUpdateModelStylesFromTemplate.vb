@@ -3,14 +3,177 @@
 Public Class TaskUpdateModelStylesFromTemplate
     Inherits Task
 
+    Private _AssemblyTemplate As String
+    Public Property AssemblyTemplate As String
+        Get
+            Return _AssemblyTemplate
+        End Get
+        Set(value As String)
+            _AssemblyTemplate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AssemblyTemplate.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _PartTemplate As String
+    Public Property PartTemplate As String
+        Get
+            Return _PartTemplate
+        End Get
+        Set(value As String)
+            _PartTemplate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PartTemplate.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _SheetmetalTemplate As String
+    Public Property SheetmetalTemplate As String
+        Get
+            Return _SheetmetalTemplate
+        End Get
+        Set(value As String)
+            _SheetmetalTemplate = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SheetmetalTemplate.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateAllStyles As Boolean
+    Public Property UpdateAllStyles As Boolean
+        Get
+            Return _UpdateAllStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateAllStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateAllStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateDimensionStyles As Boolean
     Public Property UpdateDimensionStyles As Boolean
+        Get
+            Return _UpdateDimensionStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateDimensionStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateDimensionStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateFaceStyles As Boolean
     Public Property UpdateFaceStyles As Boolean
+        Get
+            Return _UpdateFaceStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateFaceStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateLinearStyles As Boolean
     Public Property UpdateLinearStyles As Boolean
+        Get
+            Return _UpdateLinearStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateLinearStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateLinearStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateTextCharStyles As Boolean
     Public Property UpdateTextCharStyles As Boolean
+        Get
+            Return _UpdateTextCharStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateTextCharStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateTextCharStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateTextStyles As Boolean
     Public Property UpdateTextStyles As Boolean
+        Get
+            Return _UpdateTextStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateTextStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateTextStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateViewStyles As Boolean
     Public Property UpdateViewStyles As Boolean
+        Get
+            Return _UpdateViewStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateViewStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateViewStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateBaseStyles As Boolean
     Public Property UpdateBaseStyles As Boolean
+        Get
+            Return _UpdateBaseStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateBaseStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateBaseStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RemoveNonTemplateStyles As Boolean
     Public Property RemoveNonTemplateStyles As Boolean
+        Get
+            Return _RemoveNonTemplateStyles
+        End Get
+        Set(value As Boolean)
+            _RemoveNonTemplateStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RemoveNonTemplateStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     ' DimensionStyles, FaceStyles,
     ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
@@ -22,7 +185,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         PartTemplate
         BrowseSheetmetal
         SheetmetalTemplate
-        UpdateAll
+        UpdateAllStyles
         UpdateDimensionStyles
         UpdateFaceStyles
         UpdateLinearStyles
@@ -31,7 +194,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         UpdateViewStyles
         UpdateBaseStyles
         RemoveNonTemplateStyles
-        HideOptions
+        AutoHideOptions
     End Enum
 
     Public Sub New()
@@ -50,9 +213,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.RequiresAssemblyTemplate = True
         Me.RequiresPartTemplate = True
         Me.RequiresSheetmetalTemplate = True
-        Me.AssemblyTemplate = ""
-        Me.PartTemplate = ""
-        Me.SheetmetalTemplate = ""
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -60,6 +220,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
+        Me.AssemblyTemplate = ""
+        Me.PartTemplate = ""
+        Me.SheetmetalTemplate = ""
         Me.UpdateDimensionStyles = False
         Me.UpdateFaceStyles = False
         Me.UpdateLinearStyles = False
@@ -1059,7 +1222,7 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateAll.ToString, "Update all styles")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateAllStyles.ToString, "Update all styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1131,7 +1294,7 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -1252,7 +1415,8 @@ Public Class TaskUpdateModelStylesFromTemplate
 
         Select Case Name
 
-            Case ControlNames.UpdateAll.ToString
+            Case ControlNames.UpdateAllStyles.ToString
+                Me.UpdateAllStyles = Checkbox.Checked
 
                 If Checkbox.Checked Then
                     Me.UpdateDimensionStyles = True
@@ -1307,8 +1471,12 @@ Public Class TaskUpdateModelStylesFromTemplate
             Case ControlNames.RemoveNonTemplateStyles.ToString
                 Me.RemoveNonTemplateStyles = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
+                'HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -1338,11 +1506,18 @@ Public Class TaskUpdateModelStylesFromTemplate
     End Sub
 
 
-    Public Overrides Sub ReconcileFormWithProps()
-        ControlsDict(ControlNames.AssemblyTemplate.ToString).Text = Me.AssemblyTemplate
-        ControlsDict(ControlNames.PartTemplate.ToString).Text = Me.PartTemplate
-        ControlsDict(ControlNames.SheetmetalTemplate.ToString).Text = Me.SheetmetalTemplate
-    End Sub
+    'Public Overrides Sub ReconcileFormWithProps()
+    '    ControlsDict(ControlNames.AssemblyTemplate.ToString).Text = Me.AssemblyTemplate
+    '    ControlsDict(ControlNames.PartTemplate.ToString).Text = Me.PartTemplate
+    '    ControlsDict(ControlNames.SheetmetalTemplate.ToString).Text = Me.SheetmetalTemplate
+    'End Sub
+
+    'Public Overrides Sub NotifyAutoHideOptions()
+    '    'MyBase.NotifyAutoHideOptions()
+    '    If Not TaskControl.AutoHideOptions = Me.AutoHideOptions Then
+    '        Me.AutoHideOptions = TaskControl.AutoHideOptions
+    '    End If
+    'End Sub
 
 
     Private Function GetHelpText() As String

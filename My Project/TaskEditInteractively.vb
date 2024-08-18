@@ -4,19 +4,151 @@ Public Class TaskEditInteractively
 
     Inherits Task
 
+    Private _FormX As Integer
     Public Property FormX As Integer
+        Get
+            Return _FormX
+        End Get
+        Set(value As Integer)
+            _FormX = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _FormY As Integer
     Public Property FormY As Integer
+        Get
+            Return _FormY
+        End Get
+        Set(value As Integer)
+            _FormY = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _UseCountdownTimer As Boolean
+    Public Property UseCountdownTimer As Boolean
+        Get
+            Return _UseCountdownTimer
+        End Get
+        Set(value As Boolean)
+            _UseCountdownTimer = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseCountdownTimer.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _PauseTime As Double
+    Public Property PauseTime As Double
+        Get
+            Return _PauseTime
+        End Get
+        Set(value As Double)
+            _PauseTime = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PauseTime.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _SaveAfterTimeout As Boolean
+    Public Property SaveAfterTimeout As Boolean
+        Get
+            Return _SaveAfterTimeout
+        End Get
+        Set(value As Boolean)
+            _SaveAfterTimeout = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveAfterTimeout.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RunCommands As Boolean
+    Public Property RunCommands As Boolean
+        Get
+            Return _RunCommands
+        End Get
+        Set(value As Boolean)
+            _RunCommands = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RunCommands.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CommandIDAssembly As Integer
+    Public Property CommandIDAssembly As Integer
+        Get
+            Return _CommandIDAssembly
+        End Get
+        Set(value As Integer)
+            _CommandIDAssembly = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CommandIDAssembly.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _CommandIDPart As Integer
+    Public Property CommandIDPart As Integer
+        Get
+            Return _CommandIDPart
+        End Get
+        Set(value As Integer)
+            _CommandIDPart = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CommandIDPart.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _CommandIDSheetmetal As Integer
+    Public Property CommandIDSheetmetal As Integer
+        Get
+            Return _CommandIDSheetmetal
+        End Get
+        Set(value As Integer)
+            _CommandIDSheetmetal = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CommandIDSheetmetal.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _CommandIDDraft As Integer
+    Public Property CommandIDDraft As Integer
+        Get
+            Return _CommandIDDraft
+        End Get
+        Set(value As Integer)
+            _CommandIDDraft = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CommandIDDraft.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property NewFormX As Integer
     Public Property NewFormY As Integer
-    Public Property UseCountdownTimer As Boolean
-    Public Property PauseTime As Double
-    Public Property SaveAfterTimeout As Boolean
-    Public Property RunCommands As Boolean
-    Public Property CommandIDAssembly As Integer
-    Public Property CommandIDPart As Integer
-    Public Property CommandIDSheetmetal As Integer
-    Public Property CommandIDDraft As Integer
-
     Private Property CommandDict As Dictionary(Of String, Dictionary(Of String, Integer))
 
     Enum ControlNames
@@ -26,20 +158,20 @@ Public Class TaskEditInteractively
         FormYLabel
         UseCountdownTimer
         UseCountdownTimeLabel
-        CountdownTime
+        PauseTime
         SaveAfterTimeout
         RunCommands
         SelectedCommand
         SelectedCommandLabel
-        StartCommandAssembly
+        CommandIDAssembly
         StartCommandAssemblyLabel
-        StartCommandPart
+        CommandIDPart
         StartCommandPartLabel
-        StartCommandSheetmetal
+        CommandIDSheetmetal
         StartCommandSheetmetalLabel
-        StartCommandDraft
+        CommandIDDraft
         StartCommandDraftLabel
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -280,7 +412,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        TextBox = FormatOptionsTextBox(ControlNames.CountdownTime.ToString, "0")
+        TextBox = FormatOptionsTextBox(ControlNames.PauseTime.ToString, "0")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -328,7 +460,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        TextBox = FormatOptionsTextBox(ControlNames.StartCommandAssembly.ToString, "0")
+        TextBox = FormatOptionsTextBox(ControlNames.CommandIDAssembly.ToString, "0")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -343,7 +475,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        TextBox = FormatOptionsTextBox(ControlNames.StartCommandPart.ToString, "0")
+        TextBox = FormatOptionsTextBox(ControlNames.CommandIDPart.ToString, "0")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -358,7 +490,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        TextBox = FormatOptionsTextBox(ControlNames.StartCommandSheetmetal.ToString, "0")
+        TextBox = FormatOptionsTextBox(ControlNames.CommandIDSheetmetal.ToString, "0")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -373,7 +505,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        TextBox = FormatOptionsTextBox(ControlNames.StartCommandDraft.ToString, "0")
+        TextBox = FormatOptionsTextBox(ControlNames.CommandIDDraft.ToString, "0")
         TextBox.Width = ControlWidth
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
@@ -388,7 +520,7 @@ Public Class TaskEditInteractively
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -488,16 +620,16 @@ Public Class TaskEditInteractively
                 Dim Command = ComboBox.Text
 
                 Me.CommandIDAssembly = CommandDict(Command)("Assembly")
-                CType(ControlsDict(ControlNames.StartCommandAssembly.ToString), TextBox).Text = CStr(Me.CommandIDAssembly)
+                CType(ControlsDict(ControlNames.CommandIDAssembly.ToString), TextBox).Text = CStr(Me.CommandIDAssembly)
 
                 Me.CommandIDPart = CommandDict(Command)("Part")
-                CType(ControlsDict(ControlNames.StartCommandPart.ToString), TextBox).Text = CStr(Me.CommandIDPart)
+                CType(ControlsDict(ControlNames.CommandIDPart.ToString), TextBox).Text = CStr(Me.CommandIDPart)
 
                 Me.CommandIDSheetmetal = CommandDict(Command)("Sheetmetal")
-                CType(ControlsDict(ControlNames.StartCommandSheetmetal.ToString), TextBox).Text = CStr(Me.CommandIDSheetmetal)
+                CType(ControlsDict(ControlNames.CommandIDSheetmetal.ToString), TextBox).Text = CStr(Me.CommandIDSheetmetal)
 
                 Me.CommandIDDraft = CommandDict(Command)("Draft")
-                CType(ControlsDict(ControlNames.StartCommandDraft.ToString), TextBox).Text = CStr(Me.CommandIDDraft)
+                CType(ControlsDict(ControlNames.CommandIDDraft.ToString), TextBox).Text = CStr(Me.CommandIDDraft)
 
 
             Case Else
@@ -511,13 +643,16 @@ Public Class TaskEditInteractively
         Dim Name = Checkbox.Name
 
         Select Case Name
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case ControlNames.UseCountdownTimer.ToString
                 Me.UseCountdownTimer = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.CountdownTime.ToString), TextBox).Visible = Checkbox.Checked
+                CType(ControlsDict(ControlNames.PauseTime.ToString), TextBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.UseCountdownTimeLabel.ToString), Label).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.SaveAfterTimeout.ToString), CheckBox).Visible = Checkbox.Checked
 
@@ -527,16 +662,16 @@ Public Class TaskEditInteractively
                 CType(ControlsDict(ControlNames.SelectedCommand.ToString), ComboBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.SelectedCommandLabel.ToString), Label).Visible = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.StartCommandAssembly.ToString), TextBox).Visible = Checkbox.Checked
+                CType(ControlsDict(ControlNames.CommandIDAssembly.ToString), TextBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.StartCommandAssemblyLabel.ToString), Label).Visible = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.StartCommandPart.ToString), TextBox).Visible = Checkbox.Checked
+                CType(ControlsDict(ControlNames.CommandIDPart.ToString), TextBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.StartCommandPartLabel.ToString), Label).Visible = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.StartCommandSheetmetal.ToString), TextBox).Visible = Checkbox.Checked
+                CType(ControlsDict(ControlNames.CommandIDSheetmetal.ToString), TextBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.StartCommandSheetmetalLabel.ToString), Label).Visible = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.StartCommandDraft.ToString), TextBox).Visible = Checkbox.Checked
+                CType(ControlsDict(ControlNames.CommandIDDraft.ToString), TextBox).Visible = Checkbox.Checked
                 CType(ControlsDict(ControlNames.StartCommandDraftLabel.ToString), Label).Visible = Checkbox.Checked
 
             Case ControlNames.SaveAfterTimeout.ToString
@@ -565,31 +700,31 @@ Public Class TaskEditInteractively
                 Catch ex As Exception
                 End Try
 
-            Case ControlNames.CountdownTime.ToString
+            Case ControlNames.PauseTime.ToString
                 Try
                     Me.PauseTime = CDbl(TextBox.Text)
                 Catch ex As Exception
                 End Try
 
-            Case ControlNames.StartCommandAssembly.ToString
+            Case ControlNames.CommandIDAssembly.ToString
                 Try
                     Me.CommandIDAssembly = CInt(TextBox.Text)
                 Catch ex As Exception
                 End Try
 
-            Case ControlNames.StartCommandPart.ToString
+            Case ControlNames.CommandIDPart.ToString
                 Try
                     Me.CommandIDPart = CInt(TextBox.Text)
                 Catch ex As Exception
                 End Try
 
-            Case ControlNames.StartCommandSheetmetal.ToString
+            Case ControlNames.CommandIDSheetmetal.ToString
                 Try
                     Me.CommandIDSheetmetal = CInt(TextBox.Text)
                 Catch ex As Exception
                 End Try
 
-            Case ControlNames.StartCommandDraft.ToString
+            Case ControlNames.CommandIDDraft.ToString
                 Try
                     Me.CommandIDDraft = CInt(TextBox.Text)
                 Catch ex As Exception

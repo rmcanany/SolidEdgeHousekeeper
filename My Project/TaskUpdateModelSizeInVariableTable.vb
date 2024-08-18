@@ -3,14 +3,124 @@
 Public Class TaskUpdateModelSizeInVariableTable
     Inherits Task
 
+    Private _ReportXYZ As Boolean
     Public Property ReportXYZ As Boolean
+        Get
+            Return _ReportXYZ
+        End Get
+        Set(value As Boolean)
+            _ReportXYZ = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ReportXYZ.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _XVariableName As String
     Public Property XVariableName As String
+        Get
+            Return _XVariableName
+        End Get
+        Set(value As String)
+            _XVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.XVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _YVariableName As String
     Public Property YVariableName As String
+        Get
+            Return _YVariableName
+        End Get
+        Set(value As String)
+            _YVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.YVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _ZVariableName As String
     Public Property ZVariableName As String
+        Get
+            Return _ZVariableName
+        End Get
+        Set(value As String)
+            _ZVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ZVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _ReportMinMidMax As Boolean
     Public Property ReportMinMidMax As Boolean
+        Get
+            Return _ReportMinMidMax
+        End Get
+        Set(value As Boolean)
+            _ReportMinMidMax = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ReportMinMidMax.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _MinVariableName As String
     Public Property MinVariableName As String
+        Get
+            Return _MinVariableName
+        End Get
+        Set(value As String)
+            _MinVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MinVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _MidVariableName As String
     Public Property MidVariableName As String
+        Get
+            Return _MidVariableName
+        End Get
+        Set(value As String)
+            _MidVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MidVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _MaxVariableName As String
     Public Property MaxVariableName As String
+        Get
+            Return _MaxVariableName
+        End Get
+        Set(value As String)
+            _MaxVariableName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.MaxVariableName.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
 
     Enum ControlNames
         ReportXYZ
@@ -21,7 +131,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         MinVariableName
         MidVariableName
         MaxVariableName
-        HideOptions
+        AutoHideOptions
         XVariableLabel
         YVariableLabel
         ZVariableLabel
@@ -364,7 +474,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         RowIndex += 1
 
         ' HideOptions
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -478,8 +588,11 @@ Public Class TaskUpdateModelSizeInVariableTable
                 ControlsDict(ControlNames.MaxVariableLabel.ToString).Visible = Me.ReportMinMidMax
                 ControlsDict(ControlNames.MaxVariableName.ToString).Visible = Me.ReportMinMidMax
 
-            Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString '"HideOptions"
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

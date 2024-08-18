@@ -6,18 +6,164 @@ Public Class TaskSaveDrawingAs
 
     Inherits Task
 
-    Public Property NewFileTypeName As String  ' eg, 'Parasolid (*.xt)'
+    Private _NewFileTypeName As String
+    Public Property NewFileTypeName As String
+        Get
+            Return _NewFileTypeName
+        End Get
+        Set(value As String)
+            _NewFileTypeName = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewFileTypeName.ToString), ComboBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _SaveInOriginalDirectory As Boolean
     Public Property SaveInOriginalDirectory As Boolean
+        Get
+            Return _SaveInOriginalDirectory
+        End Get
+        Set(value As Boolean)
+            _SaveInOriginalDirectory = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveInOriginalDirectory.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _NewDir As String
     Public Property NewDir As String
+        Get
+            Return _NewDir
+        End Get
+        Set(value As String)
+            _NewDir = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.NewDir.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _UseSubdirectoryFormula As Boolean
     Public Property UseSubdirectoryFormula As Boolean
+        Get
+            Return _UseSubdirectoryFormula
+        End Get
+        Set(value As Boolean)
+            _UseSubdirectoryFormula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Formula As String
     Public Property Formula As String
+        Get
+            Return _Formula
+        End Get
+        Set(value As String)
+            _Formula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _AddWatermark As Boolean
     Public Property AddWatermark As Boolean
+        Get
+            Return _AddWatermark
+        End Get
+        Set(value As Boolean)
+            _AddWatermark = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AddWatermark.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _WatermarkFilename As String
     Public Property WatermarkFilename As String
+        Get
+            Return _WatermarkFilename
+        End Get
+        Set(value As String)
+            _WatermarkFilename = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WatermarkFilename.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _WatermarkPositionX As Double
     Public Property WatermarkPositionX As Double
+        Get
+            Return _WatermarkPositionX
+        End Get
+        Set(value As Double)
+            _WatermarkPositionX = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WatermarkPositionX.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _WatermarkPositionY As Double
     Public Property WatermarkPositionY As Double
+        Get
+            Return _WatermarkPositionY
+        End Get
+        Set(value As Double)
+            _WatermarkPositionY = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WatermarkPositionY.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _WatermarkScale As Double
     Public Property WatermarkScale As Double
+        Get
+            Return _WatermarkScale
+        End Get
+        Set(value As Double)
+            _WatermarkScale = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.WatermarkScale.ToString), TextBox).Text = CStr(value)
+            End If
+        End Set
+    End Property
+
+    Private _PDFPerSheetSuppressSheetname As Boolean
     Public Property PDFPerSheetSuppressSheetname As Boolean
+        Get
+            Return _PDFPerSheetSuppressSheetname
+        End Get
+        Set(value As Boolean)
+            _PDFPerSheetSuppressSheetname = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.PDFPerSheetSuppressSheetname.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property PDFPerSheetFileTypeName As String
+
 
     Enum ControlNames
         NewFileTypeName
@@ -37,7 +183,7 @@ Public Class TaskSaveDrawingAs
         WatermarkPositionXLabel
         WatermarkPositionY
         WatermarkPositionYLabel
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -557,7 +703,7 @@ Public Class TaskSaveDrawingAs
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -756,8 +902,11 @@ Public Class TaskSaveDrawingAs
                 CType(ControlsDict(ControlNames.WatermarkPositionY.ToString), TextBox).Visible = Me.AddWatermark
                 CType(ControlsDict(ControlNames.WatermarkPositionYLabel.ToString), Label).Visible = Me.AddWatermark
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, CheckBox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = CheckBox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = CheckBox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

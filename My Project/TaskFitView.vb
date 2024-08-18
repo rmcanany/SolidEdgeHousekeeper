@@ -4,15 +4,65 @@ Public Class TaskFitView
 
     Inherits Task
 
+    Private _Isometric As Boolean
     Public Property Isometric As Boolean
+        Get
+            Return _Isometric
+        End Get
+        Set(value As Boolean)
+            _Isometric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Dimetric As Boolean
     Public Property Dimetric As Boolean
+        Get
+            Return _Dimetric
+        End Get
+        Set(value As Boolean)
+            _Dimetric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Trimetric As Boolean
     Public Property Trimetric As Boolean
+        Get
+            Return _Trimetric
+        End Get
+        Set(value As Boolean)
+            _Trimetric = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         Isometric
         Dimetric
         Trimetric
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -187,7 +237,7 @@ Public Class TaskFitView
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -209,7 +259,7 @@ Public Class TaskFitView
         CheckBox = CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox)
         Me.Trimetric = CheckBox.Checked
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -288,8 +338,11 @@ Public Class TaskFitView
                     HandleMutuallyExclusiveCheckBoxes(TaskOptionsTLP, Checkbox, ParticipatingCheckBoxes)
                 End If
 
-            Case ControlNames.HideOptions.ToString '"HideOptions"
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString '"HideOptions"
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

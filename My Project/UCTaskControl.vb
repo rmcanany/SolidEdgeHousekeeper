@@ -2,7 +2,9 @@
 
 Public Class UCTaskControl
 
-    Public Task As Task
+    Public Property Task As Task
+
+    Public Property AutoHideOptions As Boolean
 
     Public Sub New(Task As Task)
         ' This call is required by the designer.
@@ -71,7 +73,7 @@ Public Class UCTaskControl
         If CBEnabled.Checked Then
             CBEnabled.Image = My.Resources.Checked
             If Task.HasOptions Then
-                If Not Me.Task.AutoHideOptions Then
+                If Not Me.AutoHideOptions Then
                     CBExpand.Checked = True
                 End If
             End If

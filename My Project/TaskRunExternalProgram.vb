@@ -4,15 +4,52 @@ Public Class TaskRunExternalProgram
 
     Inherits Task
 
+    Private _ExternalProgram As String
     Public Property ExternalProgram As String
+        Get
+            Return _ExternalProgram
+        End Get
+        Set(value As String)
+            _ExternalProgram = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ExternalProgram.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _SaveAfterProcessing As Boolean
     Public Property SaveAfterProcessing As Boolean
-    'Private Property ControlsDict As Dictionary(Of String, Control)
+        Get
+            Return _SaveAfterProcessing
+        End Get
+        Set(value As Boolean)
+            _SaveAfterProcessing = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SaveAfterProcessing.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         Browse
         ExternalProgram
         SaveAfterProcessing
-        HideOptions
+        AutoHideOptions
     End Enum
 
 
@@ -180,7 +217,7 @@ Public Class TaskRunExternalProgram
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -200,7 +237,7 @@ Public Class TaskRunExternalProgram
         CheckBox = CType(ControlsDict(ControlNames.SaveAfterProcessing.ToString), CheckBox)
         Me.SaveAfterProcessing = CheckBox.Checked
 
-        CheckBox = CType(ControlsDict(ControlNames.HideOptions.ToString), CheckBox)
+        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
         Me.AutoHideOptions = CheckBox.Checked
 
     End Sub
@@ -254,8 +291,11 @@ Public Class TaskRunExternalProgram
             Case ControlNames.SaveAfterProcessing.ToString
                 Me.SaveAfterProcessing = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

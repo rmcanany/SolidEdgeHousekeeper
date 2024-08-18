@@ -3,11 +3,86 @@
 Public Class TaskBreakLinks
     Inherits Task
 
+    Private _BreakDesignCopies As Boolean
     Public Property BreakDesignCopies As Boolean
+        Get
+            Return _BreakDesignCopies
+        End Get
+        Set(value As Boolean)
+            _BreakDesignCopies = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakDesignCopies.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
+    Private _BreakConstructionCopies As Boolean
     Public Property BreakConstructionCopies As Boolean
+        Get
+            Return _BreakConstructionCopies
+        End Get
+        Set(value As Boolean)
+            _BreakConstructionCopies = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakConstructionCopies.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BreakExcel As Boolean
     Public Property BreakExcel As Boolean
+        Get
+            Return _BreakExcel
+        End Get
+        Set(value As Boolean)
+            _BreakExcel = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakExcel.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BreakInterpartCopies As Boolean
     Public Property BreakInterpartCopies As Boolean
+        Get
+            Return _BreakInterpartCopies
+        End Get
+        Set(value As Boolean)
+            _BreakInterpartCopies = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakInterpartCopies.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _BreakDraftModels As Boolean
     Public Property BreakDraftModels As Boolean
+        Get
+            Return _BreakDraftModels
+        End Get
+        Set(value As Boolean)
+            _BreakDraftModels = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.BreakDraftModels.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+
 
     Enum ControlNames
         BreakDesignCopies
@@ -15,8 +90,9 @@ Public Class TaskBreakLinks
         BreakExcel
         BreakInterpartCopies
         BreakDraftModels
-        HideOptions
+        AutoHideOptions
     End Enum
+
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
@@ -475,7 +551,7 @@ Public Class TaskBreakLinks
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.HideOptions.ToString, ManualOptionsOnlyString)
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -550,8 +626,11 @@ Public Class TaskBreakLinks
             Case ControlNames.BreakDraftModels.ToString
                 Me.BreakDraftModels = Checkbox.Checked
 
-            Case ControlNames.HideOptions.ToString
-                HandleHideOptionsChange(Me, Me.TaskOptionsTLP, Checkbox)
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
