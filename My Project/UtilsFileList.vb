@@ -278,7 +278,7 @@ Public Class UtilsFileList
 
         ' Dependency sort
         If Not FoundFiles Is Nothing Then
-            If FMain.RadioButtonListSortDependency.Checked Then
+            If FMain.RadioButtonSortDependency.Checked Then
                 FoundFiles = GetDependencySortedFiles(FoundFiles)
             End If
         End If
@@ -288,27 +288,27 @@ Public Class UtilsFileList
         If Not FoundFiles Is Nothing Then
 
             ' Filter by file wildcard search
-            If FMain.new_CheckBoxFileSearch.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, FMain.new_ComboBoxFileSearch.Text)
+            If FMain.CheckBoxEnableFileWildcard.Checked Then
+                FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
             End If
 
             ' Filter by properties
-            If FMain.new_CheckBoxEnablePropertyFilter.Checked Then
+            If FMain.CheckBoxEnablePropertyFilter.Checked Then
                 System.Threading.Thread.Sleep(1000)
                 Dim UPF As New UtilsPropertyFilters(Me.FMain)
                 FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
             End If
 
-            If FMain.RadioButtonListSortAlphabetical.Checked Then
+            If FMain.RadioButtonSortAlphabetical.Checked Then
                 FoundFiles = SortAlphabetical(FoundFiles)
             End If
 
-            If FMain.RadioButtonListSortRandomSample.Checked Then
+            If FMain.RadioButtonSortRandomSample.Checked Then
                 Dim Fraction As Double = 0.1
                 Try
-                    Fraction = CDbl(FMain.TextBoxRandomSampleFraction.Text)
+                    Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
                 Catch ex As Exception
-                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", FMain.TextBoxRandomSampleFraction.Text))
+                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", FMain.TextBoxSortRandomSampleFraction.Text))
                 End Try
                 FoundFiles = SortRandomSample(FoundFiles, Fraction)
             End If
@@ -686,7 +686,7 @@ Public Class UtilsFileList
 
         End While
 
-        If Not FMain.CheckBoxListIncludeNoDependencies.Checked Then
+        If Not FMain.CheckBoxSortIncludeNoDependencies.Checked Then
             For Each Filename In NoDependencies
                 If Outlist.Contains(Filename) Then
                     Outlist.Remove(Filename)

@@ -6,7 +6,6 @@ Imports Microsoft.WindowsAPICodePack.Dialogs
 Public Class Form_Main
 
     Public Property Version As String = "2024.2"
-    Public Property CheckForNewerVersion As Boolean
 
     Public Property UtilsLogFile As UtilsLogFile
 
@@ -25,24 +24,669 @@ Public Class Form_Main
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Public Property TaskList As List(Of Task)
-    Public Property RememberTaskSelections As Boolean
 
-    Public Property SolidEdgeRequired As Integer
+    ' ###### TOP LEVEL ASSEMBLY ######
 
-    Public Property UseCurrentSession As Boolean = False
-    Public Property NoUpdateMRU As Boolean
-    Public Property RunInBackground As Boolean
+    Private _TLAAutoIncludeTLF As Boolean
+    Public Property TLAAutoIncludeTLF As Boolean
+        Get
+            Return _TLAAutoIncludeTLF
+        End Get
+        Set(value As Boolean)
+            _TLAAutoIncludeTLF = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxTLAAutoIncludeTLF.Checked = value
+            End If
+        End Set
+    End Property
 
+    Private _WarnBareTLA As Boolean
+    Public Property WarnBareTLA As Boolean
+        Get
+            Return _WarnBareTLA
+        End Get
+        Set(value As Boolean)
+            _WarnBareTLA = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxWarnBareTLA.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _TLAIncludePartCopies As Boolean
+    Public Property TLAIncludePartCopies As Boolean
+        Get
+            Return _TLAIncludePartCopies
+        End Get
+        Set(value As Boolean)
+            _TLAIncludePartCopies = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxTLAIncludePartCopies.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _TLAReportUnrelatedFiles As Boolean
+    Public Property TLAReportUnrelatedFiles As Boolean
+        Get
+            Return _TLAReportUnrelatedFiles
+        End Get
+        Set(value As Boolean)
+            _TLAReportUnrelatedFiles = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxTLAReportUnrelatedFiles.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _TLATopDown As Boolean
+    Public Property TLATopDown As Boolean
+        Get
+            Return _TLATopDown
+        End Get
+        Set(value As Boolean)
+            _TLATopDown = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonTLATopDown.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _TLABottomUp As Boolean
+    Public Property TLABottomUp As Boolean
+        Get
+            Return _TLABottomUp
+        End Get
+        Set(value As Boolean)
+            _TLABottomUp = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonTLABottomUp.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DraftAndModelSameName As Boolean
+    Public Property DraftAndModelSameName As Boolean
+        Get
+            Return _DraftAndModelSameName
+        End Get
+        Set(value As Boolean)
+            _DraftAndModelSameName = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxDraftAndModelSameName.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FastSearchScopeFilename As String
+    Public Property FastSearchScopeFilename As String
+        Get
+            Return _FastSearchScopeFilename
+        End Get
+        Set(value As String)
+            _FastSearchScopeFilename = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxFastSearchScopeFilename.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _TLAIgnoreIncludeInReports As Boolean
+    Public Property TLAIgnoreIncludeInReports As Boolean
+        Get
+            Return _TLAIgnoreIncludeInReports
+        End Get
+        Set(value As Boolean)
+            _TLAIgnoreIncludeInReports = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxTLAIgnoreIncludeInReports.Checked = value
+            End If
+        End Set
+    End Property
+
+    ' ###### DOCUMENT STATUS ######
+
+    Private _ProcessAsAvailable As Boolean
+    Public Property ProcessAsAvailable As Boolean
+        Get
+            Return _ProcessAsAvailable
+        End Get
+        Set(value As Boolean)
+            _ProcessAsAvailable = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxProcessAsAvailable.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ProcessAsAvailableRevert As Boolean
+    Public Property ProcessAsAvailableRevert As Boolean
+        Get
+            Return _ProcessAsAvailableRevert
+        End Get
+        Set(value As Boolean)
+            _ProcessAsAvailableRevert = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonProcessAsAvailableRevert.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _ProcessAsAvailableChange As Boolean
+    Public Property ProcessAsAvailableChange As Boolean
+        Get
+            Return _ProcessAsAvailableChange
+        End Get
+        Set(value As Boolean)
+            _ProcessAsAvailableChange = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonProcessAsAvailableChange.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _StatusAto As String
+    Public Property StatusAto As String
+        Get
+            Return _StatusAto
+        End Get
+        Set(value As String)
+            _StatusAto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusAtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusAtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusAtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusAtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusAtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusAtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+    Private _StatusBto As String
+    Public Property StatusBto As String
+        Get
+            Return _StatusBto
+        End Get
+        Set(value As String)
+            _StatusBto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusBtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusBtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusBtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusBtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusBtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusBtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+    Private _StatusIRto As String
+    Public Property StatusIRto As String
+        Get
+            Return _StatusIRto
+        End Get
+        Set(value As String)
+            _StatusIRto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusIRtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusIRtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusIRtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusIRtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusIRtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusIRtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+    Private _StatusIWto As String
+    Public Property StatusIWto As String
+        Get
+            Return _StatusIWto
+        End Get
+        Set(value As String)
+            _StatusIWto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusIWtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusIWtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusIWtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusIWtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusIWtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusIWtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+    Private _StatusOto As String
+    Public Property StatusOto As String
+        Get
+            Return _StatusOto
+        End Get
+        Set(value As String)
+            _StatusOto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusOtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusOtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusOtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusOtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusOtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusOtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+    Private _StatusRto As String
+    Public Property StatusRto As String
+        Get
+            Return _StatusRto
+        End Get
+        Set(value As String)
+            _StatusRto = value
+            If Me.TabControl1 IsNot Nothing Then
+                Select Case value
+                    Case "A"
+                        RadioButtonStatusRtoA.Checked = True
+                    Case "B"
+                        RadioButtonStatusRtoB.Checked = True
+                    Case "IR"
+                        RadioButtonStatusRtoIR.Checked = True
+                    Case "IW"
+                        RadioButtonStatusRtoIW.Checked = True
+                    Case "O"
+                        RadioButtonStatusRtoO.Checked = True
+                    Case "R"
+                        RadioButtonStatusRtoR.Checked = True
+                End Select
+            End If
+        End Set
+    End Property
+
+
+    ' ###### LIST SORT ######
+
+    Private _SortNone As Boolean
+    Public Property SortNone As Boolean
+        Get
+            Return _SortNone
+        End Get
+        Set(value As Boolean)
+            _SortNone = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonSortNone.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SortAlphabetical As Boolean
+    Public Property SortAlphabetical As Boolean
+        Get
+            Return _SortAlphabetical
+        End Get
+        Set(value As Boolean)
+            _SortAlphabetical = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonSortAlphabetical.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SortDependency As Boolean
+    Public Property SortDependency As Boolean
+        Get
+            Return _SortDependency
+        End Get
+        Set(value As Boolean)
+            _SortDependency = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonSortDependency.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SortIncludeNoDependencies As Boolean
+    Public Property SortIncludeNoDependencies As Boolean
+        Get
+            Return _SortIncludeNoDependencies
+        End Get
+        Set(value As Boolean)
+            _SortIncludeNoDependencies = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxSortIncludeNoDependencies.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SortRandomSample As Boolean
+    Public Property SortRandomSample As Boolean
+        Get
+            Return _SortRandomSample
+        End Get
+        Set(value As Boolean)
+            _SortRandomSample = value
+            If Me.TabControl1 IsNot Nothing Then
+                RadioButtonSortRandomSample.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _SortRandomSampleFraction As String
+    Public Property SortRandomSampleFraction As String
+        Get
+            Return _SortRandomSampleFraction
+        End Get
+        Set(value As String)
+            _SortRandomSampleFraction = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxSortRandomSampleFraction.Text = value
+            End If
+        End Set
+    End Property
+
+
+    ' ###### TEMPLATES ######
+
+    Private _AssemblyTemplate As String
     Public Property AssemblyTemplate As String
-    Public Property PartTemplate As String
-    Public Property SheetmetalTemplate As String
-    Public Property DraftTemplate As String
-    Public Property MaterialTable As String
+        Get
+            Return _AssemblyTemplate
+        End Get
+        Set(value As String)
+            _AssemblyTemplate = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxAssemblyTemplate.Text = value
+            End If
+        End Set
+    End Property
 
+    Private _PartTemplate As String
+    Public Property PartTemplate As String
+        Get
+            Return _PartTemplate
+        End Get
+        Set(value As String)
+            _PartTemplate = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxPartTemplate.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _SheetmetalTemplate As String
+    Public Property SheetmetalTemplate As String
+        Get
+            Return _SheetmetalTemplate
+        End Get
+        Set(value As String)
+            _SheetmetalTemplate = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxSheetmetalTemplate.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _DraftTemplate As String
+    Public Property DraftTemplate As String
+        Get
+            Return _DraftTemplate
+        End Get
+        Set(value As String)
+            _DraftTemplate = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxDraftTemplate.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _MaterialTable As String
+    Public Property MaterialTable As String
+        Get
+            Return _MaterialTable
+        End Get
+        Set(value As String)
+            _MaterialTable = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxMaterialTable.Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _UseTemplateProperties As Boolean
     Public Property UseTemplateProperties As Boolean
+        Get
+            Return _UseTemplateProperties
+        End Get
+        Set(value As Boolean)
+            _UseTemplateProperties = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxUseTemplateProperties.Checked = value
+            End If
+        End Set
+    End Property
+
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
 
+
+    ' ###### GENERAL ######
+
+    Private _UseCurrentSession As Boolean
+    Public Property UseCurrentSession As Boolean
+        Get
+            Return _UseCurrentSession
+        End Get
+        Set(value As Boolean)
+            _UseCurrentSession = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxUseCurrentSession.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _WarnSave As Boolean
+    Public Property WarnSave As Boolean
+        Get
+            Return _WarnSave
+        End Get
+        Set(value As Boolean)
+            _WarnSave = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxWarnSave.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _NoUpdateMRU As Boolean
+    Public Property NoUpdateMRU As Boolean
+        Get
+            Return _NoUpdateMRU
+        End Get
+        Set(value As Boolean)
+            _NoUpdateMRU = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxNoUpdateMRU.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FileListFontSize As String
+    Public Property FileListFontSize As String
+        Get
+            Return _FileListFontSize
+        End Get
+        Set(value As String)
+            _FileListFontSize = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxFileListFontSize.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _RememberTasks As Boolean
+    Public Property RememberTasks As Boolean
+        Get
+            Return _RememberTasks
+        End Get
+        Set(value As Boolean)
+            _RememberTasks = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxRememberTasks.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _RunInBackground As Boolean
+    Public Property RunInBackground As Boolean
+        Get
+            Return _RunInBackground
+        End Get
+        Set(value As Boolean)
+            _RunInBackground = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxRunInBackground.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _PropertyFilterIncludeDraftModel As Boolean
+    Public Property PropertyFilterIncludeDraftModel As Boolean
+        Get
+            Return _PropertyFilterIncludeDraftModel
+        End Get
+        Set(value As Boolean)
+            _PropertyFilterIncludeDraftModel = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxPropertyFilterIncludeDraftModel.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _PropertyFilterIncludeDraftItself As Boolean
+    Public Property PropertyFilterIncludeDraftItself As Boolean
+        Get
+            Return _PropertyFilterIncludeDraftItself
+        End Get
+        Set(value As Boolean)
+            _PropertyFilterIncludeDraftItself = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxPropertyFilterIncludeDraftItself.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _CheckForNewerVersion As Boolean
+    Public Property CheckForNewerVersion As Boolean
+        Get
+            Return _CheckForNewerVersion
+        End Get
+        Set(value As Boolean)
+            _CheckForNewerVersion = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxCheckForNewerVersion.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _WarnNoImportedProperties As Boolean
+    Public Property WarnNoImportedProperties As Boolean
+        Get
+            Return _WarnNoImportedProperties
+        End Get
+        Set(value As Boolean)
+            _WarnNoImportedProperties = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxWarnNoImportedProperties.Checked = value
+            End If
+        End Set
+    End Property
+
+
+
+    '###### HOME TAB ######
+
+    Private _EnablePropertyFilter As Boolean
+    Public Property EnablePropertyFilter As Boolean
+        Get
+            Return _EnablePropertyFilter
+        End Get
+        Set(value As Boolean)
+            _EnablePropertyFilter = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxEnablePropertyFilter.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _EnableFileWildcard As Boolean
+    Public Property EnableFileWildcard As Boolean
+        Get
+            Return _EnableFileWildcard
+        End Get
+        Set(value As Boolean)
+            _EnableFileWildcard = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxEnableFileWildcard.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FileWildcard As String
+    Public Property FileWildcard As String
+        Get
+            Return _FileWildcard
+        End Get
+        Set(value As String)
+            _FileWildcard = value
+            If Me.TabControl1 IsNot Nothing Then
+                ComboBoxFileWildcard.Text = value
+            End If
+        End Set
+    End Property
+
+
+
+
+    Public Property SolidEdgeRequired As Integer
 
 
 
@@ -67,17 +711,22 @@ Public Class Form_Main
 
     Private Sub Startup()
 
+        MsgBox("Fix VersionSpecificReadme")
+
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
-        Dim UDefaults As New UtilsDefaults(Me)
+
+        'Dim UDefaults As New UtilsDefaults(Me)
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
         UP.CreateSavedExpressions()
         UP.CreateInteractiveEditCommands()
 
+        UP.GetFormMainSettings(Me)
+
         PopulateCheckedListBoxes()
-        UDefaults.LoadDefaults()
+        'UDefaults.LoadDefaults()
 
         ReconcileFormChanges()
         UD.BuildReadmeFile()
@@ -106,21 +755,21 @@ Public Class Form_Main
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
-        new_CheckBoxFileSearch.Checked = False
-        new_ComboBoxFileSearch.Enabled = False
-        new_CheckBoxEnablePropertyFilter.Checked = False
-        new_ButtonPropertyFilter.Enabled = False
+        'CheckBoxEnableFileWildcard.Checked = False
+        'ComboBoxFileWildcard.Enabled = False
+        'CheckBoxEnablePropertyFilter.Checked = False
+        'new_ButtonPropertyFilter.Enabled = False
 
-        If RadioButtonListSortDependency.Checked Then
-            CheckBoxListIncludeNoDependencies.Enabled = True
+        If RadioButtonSortDependency.Checked Then
+            CheckBoxSortIncludeNoDependencies.Enabled = True
         Else
-            CheckBoxListIncludeNoDependencies.Enabled = False
+            CheckBoxSortIncludeNoDependencies.Enabled = False
         End If
 
-        If RadioButtonListSortRandomSample.Checked Then
-            TextBoxRandomSampleFraction.Enabled = True
+        If RadioButtonSortRandomSample.Checked Then
+            TextBoxSortRandomSampleFraction.Enabled = True
         Else
-            TextBoxRandomSampleFraction.Enabled = False
+            TextBoxSortRandomSampleFraction.Enabled = False
         End If
 
         ListViewFilesOutOfDate = False
@@ -139,7 +788,7 @@ Public Class Form_Main
 
         For i = TaskList.Count - 1 To 0 Step -1
             Dim Task = TaskList(i)
-            If Not Me.RememberTaskSelections Then
+            If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
                 Task.IsSelectedAssembly = False
                 Task.IsSelectedPart = False
@@ -187,10 +836,10 @@ Public Class Form_Main
 
     Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
 
-        Dim UD As New UtilsDefaults(Me)
+        'Dim UD As New UtilsDefaults(Me)
 
         ' Update configuration
-        Configuration = UD.GetConfiguration()
+        'Configuration = UD.GetConfiguration()
 
         Dim backcolor As New Color
         backcolor = BT_Update.BackColor
@@ -203,14 +852,14 @@ Public Class Form_Main
             BT_Update.BackColor = Color.FromName("Control")
         End If
 
-        If Not CheckBoxProcessReadOnly.Checked Then
+        If Not CheckBoxProcessAsAvailable.Checked Then
             Dim StatusChangeRadioButtons As New List(Of RadioButton)
             Dim RB As RadioButton
 
             StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-            RadioButtonReadOnlyRevert.Enabled = False
-            RadioButtonReadOnlyChange.Enabled = False
+            RadioButtonProcessAsAvailableRevert.Enabled = False
+            RadioButtonProcessAsAvailableChange.Enabled = False
             For Each RB In StatusChangeRadioButtons
                 RB.Enabled = False
             Next
@@ -271,12 +920,15 @@ Public Class Form_Main
         If ButtonCancel.Text = "Stop" Then
             StopProcess = True
         Else
-            Dim UD As New UtilsDefaults(Me)
+            'Dim UD As New UtilsDefaults(Me)
 
-            ReconcileFormChanges()
-            UD.SaveDefaults()
+            'ReconcileFormChanges()
+            'UD.SaveDefaults()
 
             Dim UP As New UtilsPreferences
+
+            UP.SaveFormMainSettings(Me)
+
             UP.SaveTaskList(Me.TaskList)
             UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
             UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
@@ -286,12 +938,15 @@ Public Class Form_Main
 
     Private Sub Form1_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
 
-        Dim UD As New UtilsDefaults(Me)
+        'Dim UD As New UtilsDefaults(Me)
 
-        ReconcileFormChanges()
-        UD.SaveDefaults()
+        'ReconcileFormChanges()
+        'UD.SaveDefaults()
 
         Dim UP As New UtilsPreferences
+
+        UP.SaveFormMainSettings(Me)
+
         UP.SaveTaskList(Me.TaskList)
         UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
         UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
@@ -304,7 +959,7 @@ Public Class Form_Main
         tmpFileDialog.Filter = "Search Scope Documents|*.txt"
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
-            TextBoxFastSearchScopeFilename.Text = tmpFileDialog.FileName
+            Me.FastSearchScopeFilename = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
         ReconcileFormChanges()
@@ -312,15 +967,14 @@ Public Class Form_Main
     End Sub
 
     Private Sub new_ButtonFileSearchDelete_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearchDelete.Click
-        If Not new_ComboBoxFileSearch.Text = "" Then
-            new_ComboBoxFileSearch.Items.Remove(new_ComboBoxFileSearch.Text)
-            new_ComboBoxFileSearch.Text = ""
+        If Not ComboBoxFileWildcard.Text = "" Then
+            ComboBoxFileWildcard.Items.Remove(ComboBoxFileWildcard.Text)
+            ComboBoxFileWildcard.Text = ""
         End If
     End Sub
 
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
 
-        'FormPropertyFilter.SetReadmeFontsize(CInt(TextBoxFontSize.Text))
         Dim FPF As New FormPropertyFilter
         FPF.PropertyFilterDict = Me.PropertyFilterDict
         FPF.ShowDialog()
@@ -352,26 +1006,27 @@ Public Class Form_Main
 
     ' CHECKBOXES
 
-    Private Sub new_CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxEnablePropertyFilter.CheckedChanged
+    Private Sub CheckBoxEnablePropertyFilter_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnablePropertyFilter.CheckedChanged
+        Me.EnablePropertyFilter = CheckBoxEnablePropertyFilter.Checked
 
-        If new_CheckBoxEnablePropertyFilter.Checked Then
+        If CheckBoxEnablePropertyFilter.Checked Then
 
-            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
+            CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
             new_ButtonPropertyFilter.Enabled = True
 
-            Dim FPF As New FormPropertyFilter
-            FPF.PropertyFilterDict = Me.PropertyFilterDict
-            FPF.ShowDialog()
+            'Dim FPF As New FormPropertyFilter
+            'FPF.PropertyFilterDict = Me.PropertyFilterDict
+            'FPF.ShowDialog()
 
-            If FPF.DialogResult = DialogResult.OK Then
-                Me.PropertyFilterDict = FPF.PropertyFilterDict
+            'If FPF.DialogResult = DialogResult.OK Then
+            '    Me.PropertyFilterDict = FPF.PropertyFilterDict
 
-                ListViewFilesOutOfDate = True
-                BT_Update.BackColor = Color.Orange
-            End If
+            '    ListViewFilesOutOfDate = True
+            '    BT_Update.BackColor = Color.Orange
+            'End If
 
         Else
-            new_CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
+            CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
             new_ButtonPropertyFilter.Enabled = False
         End If
 
@@ -382,14 +1037,15 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub new_CheckBoxFileSearch_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFileSearch.CheckedChanged
+    Private Sub CheckBoxEnableFileWildcard_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxEnableFileWildcard.CheckedChanged
+        Me.EnableFileWildcard = CheckBoxEnableFileWildcard.Checked
 
-        If new_CheckBoxFileSearch.Checked Then
-            new_CheckBoxFileSearch.Image = My.Resources.Checked
-            new_ComboBoxFileSearch.Enabled = True
+        If CheckBoxEnableFileWildcard.Checked Then
+            CheckBoxEnableFileWildcard.Image = My.Resources.Checked
+            ComboBoxFileWildcard.Enabled = True
         Else
-            new_CheckBoxFileSearch.Image = My.Resources.Unchecked
-            new_ComboBoxFileSearch.Enabled = False
+            CheckBoxEnableFileWildcard.Image = My.Resources.Unchecked
+            ComboBoxFileWildcard.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True
@@ -420,12 +1076,13 @@ Public Class Form_Main
     End Sub
 
     Private Sub CheckBoxRememberTasks_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRememberTasks.CheckedChanged
-        Dim Checkbox = CType(sender, CheckBox)
-        Me.RememberTaskSelections = Checkbox.Checked
+        Me.RememberTasks = CheckBoxRememberTasks.Checked
         ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxTLAReportUnrelatedFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAReportUnrelatedFiles.CheckedChanged
+        Me.TLAReportUnrelatedFiles = CheckBoxTLAReportUnrelatedFiles.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
@@ -434,23 +1091,6 @@ Public Class Form_Main
 
 
     ' COMBOBOXES
-
-    Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.SelectedIndexChanged
-        ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
-
-        ReconcileFormChanges()
-    End Sub
-
-    Private Sub new_ComboBoxFileSearch_LostFocus(sender As Object, e As EventArgs) Handles new_ComboBoxFileSearch.LostFocus
-
-        Dim Key As String = new_ComboBoxFileSearch.Text
-
-        If Not new_ComboBoxFileSearch.Items.Contains(Key) Then
-            new_ComboBoxFileSearch.Items.Add(new_ComboBoxFileSearch.Text)
-        End If
-
-    End Sub
 
 
     ' LINK LABELS
@@ -462,9 +1102,9 @@ Public Class Form_Main
 
     ' RADIO BUTTONS
     Private Sub RadioButtonTLABottomUp_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLABottomUp.CheckedChanged
-        Dim tf As Boolean
+        Dim tf As Boolean = RadioButtonTLABottomUp.Checked
+        Me.TLABottomUp = tf
 
-        tf = RadioButtonTLABottomUp.Checked
         If tf Then
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
@@ -479,9 +1119,9 @@ Public Class Form_Main
     End Sub
 
     Private Sub RadioButtonTLATopDown_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLATopDown.CheckedChanged
-        Dim tf As Boolean
+        Dim tf As Boolean = RadioButtonTLATopDown.Checked
+        Me.TLATopDown = tf
 
-        tf = RadioButtonTLATopDown.Checked
         If tf Then
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
@@ -501,6 +1141,8 @@ Public Class Form_Main
 
 
     Private Sub TextBoxFastSearchScopeFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFastSearchScopeFilename.TextChanged
+        Me.FastSearchScopeFilename = TextBoxFastSearchScopeFilename.Text
+
         ReconcileFormChanges()
     End Sub
 
@@ -929,7 +1571,7 @@ Public Class Form_Main
     End Sub
 
 
-    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFontSize.KeyDown
+    Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFileListFontSize.KeyDown
 
         If e.KeyCode = Keys.Enter Then
             Me.ActiveControl = Nothing
@@ -939,20 +1581,12 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFontSize.Leave
+    Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFileListFontSize.Leave
 
-        If Not IsNumeric(TextBoxFontSize.Text) Then TextBoxFontSize.Text = "8"
-        If TextBoxFontSize.Text = "0" Then TextBoxFontSize.Text = "8"
-        ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFontSize.Text), FontStyle.Regular)
+        If Not IsNumeric(TextBoxFileListFontSize.Text) Then TextBoxFileListFontSize.Text = "8"
+        If TextBoxFileListFontSize.Text = "0" Then TextBoxFileListFontSize.Text = "8"
+        ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFileListFontSize.Text), FontStyle.Regular)
 
-    End Sub
-
-    Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles new_ComboBoxFileSearch.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            'ApplyFilters()
-            e.Handled = True
-            e.SuppressKeyPress = True
-        End If
     End Sub
 
     Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
@@ -1106,103 +1740,121 @@ Public Class Form_Main
     End Sub
 
     Private Sub CheckBoxTLAIncludePartCopies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAIncludePartCopies.CheckedChanged
+        Me.TLAIncludePartCopies = CheckBoxTLAIncludePartCopies.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
     End Sub
 
     Private Sub CheckBoxDraftAndModelSameName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDraftAndModelSameName.CheckedChanged
+        Me.DraftAndModelSameName = CheckBoxDraftAndModelSameName.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
     End Sub
 
-    Private Sub RadioButtonListSortDependency_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortDependency.CheckedChanged
+    Private Sub RadioButtonSortDependency_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortDependency.CheckedChanged
+        Me.SortDependency = RadioButtonSortDependency.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
-        If RadioButtonListSortDependency.Checked Then
-            CheckBoxListIncludeNoDependencies.Enabled = True
+        If RadioButtonSortDependency.Checked Then
+            CheckBoxSortIncludeNoDependencies.Enabled = True
         Else
-            CheckBoxListIncludeNoDependencies.Enabled = False
+            CheckBoxSortIncludeNoDependencies.Enabled = False
         End If
     End Sub
 
-    Private Sub RadioButtonListSortNone_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortNone.CheckedChanged
+    Private Sub RadioButtonSortNone_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortNone.CheckedChanged
+        Me.SortNone = RadioButtonSortNone.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
     End Sub
 
-    Private Sub RadioButtonListSortAlphabetical_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortAlphabetical.CheckedChanged
+    Private Sub RadioButtonSortAlphabetical_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortAlphabetical.CheckedChanged
+        Me.SortAlphabetical = RadioButtonSortAlphabetical.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
     End Sub
 
-    Private Sub CheckBoxListIncludeNoDependencies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxListIncludeNoDependencies.CheckedChanged
+    Private Sub CheckBoxSortIncludeNoDependencies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSortIncludeNoDependencies.CheckedChanged
+        Me.SortIncludeNoDependencies = CheckBoxSortIncludeNoDependencies.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
     End Sub
 
-    Private Sub RadioButtonListSortRandomSample_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonListSortRandomSample.CheckedChanged
+    Private Sub RadioButtonSortRandomSample_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortRandomSample.CheckedChanged
+        Me.SortRandomSample = RadioButtonSortRandomSample.Checked
+
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
-        If RadioButtonListSortRandomSample.Checked Then
-            TextBoxRandomSampleFraction.Enabled = True
+        If RadioButtonSortRandomSample.Checked Then
+            TextBoxSortRandomSampleFraction.Enabled = True
         Else
-            TextBoxRandomSampleFraction.Enabled = False
+            TextBoxSortRandomSampleFraction.Enabled = False
         End If
     End Sub
 
-    Private Sub TextBoxRandomSampleFraction_LostFocus(sender As Object, e As EventArgs) Handles TextBoxRandomSampleFraction.LostFocus
+    Private Sub TextBoxRandomSampleFraction_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSortRandomSampleFraction.LostFocus
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
 
         Dim Fraction As Double
         Try
-            Fraction = CDbl(TextBoxRandomSampleFraction.Text)
+            Fraction = CDbl(TextBoxSortRandomSampleFraction.Text)
             If Fraction < 0 Or Fraction > 1 Then
                 MsgBox(String.Format("Number '{0}' is not between 0.0 and 1.0", Fraction))
-                TextBoxRandomSampleFraction.Text = "0.1"
+                TextBoxSortRandomSampleFraction.Text = "0.1"
             End If
         Catch ex As Exception
-            MsgBox(String.Format("Cannot convert '{0}' to a decimal number", TextBoxRandomSampleFraction.Text))
-            TextBoxRandomSampleFraction.Text = "0.1"
+            MsgBox(String.Format("Cannot convert '{0}' to a decimal number", TextBoxSortRandomSampleFraction.Text))
+            TextBoxSortRandomSampleFraction.Text = "0.1"
         End Try
     End Sub
 
-    Private Sub CheckBoxProcessReadOnly_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxProcessReadOnly.CheckedChanged
+    Private Sub CheckBoxProcessAsAvailable_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxProcessAsAvailable.CheckedChanged
+        Me.ProcessAsAvailable = CheckBoxProcessAsAvailable.Checked
+
         Dim StatusChangeRadioButtons As New List(Of RadioButton)
         Dim RB As RadioButton
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        If CheckBoxProcessReadOnly.Checked Then
-            RadioButtonReadOnlyRevert.Enabled = True
-            RadioButtonReadOnlyChange.Enabled = True
-            If RadioButtonReadOnlyChange.Checked Then
+        If CheckBoxProcessAsAvailable.Checked Then
+            RadioButtonProcessAsAvailableRevert.Enabled = True
+            RadioButtonProcessAsAvailableChange.Enabled = True
+            If RadioButtonProcessAsAvailableChange.Checked Then
                 For Each RB In StatusChangeRadioButtons
                     RB.Enabled = True
                 Next
             End If
         Else
-            RadioButtonReadOnlyRevert.Enabled = False
-            RadioButtonReadOnlyChange.Enabled = False
+            RadioButtonProcessAsAvailableRevert.Enabled = False
+            RadioButtonProcessAsAvailableChange.Enabled = False
             For Each RB In StatusChangeRadioButtons
                 RB.Enabled = False
             Next
         End If
     End Sub
 
-    Private Sub RadioButtonReadOnlyRevert_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonReadOnlyRevert.CheckedChanged
+    Private Sub RadioButtonProcessAsAvailableRevert_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonProcessAsAvailableRevert.CheckedChanged
+        Me.ProcessAsAvailableRevert = RadioButtonProcessAsAvailableRevert.Checked
+
         Dim StatusChangeRadioButtons As New List(Of RadioButton)
         Dim RB As RadioButton
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        If RadioButtonReadOnlyRevert.Checked Then
+        If RadioButtonProcessAsAvailableRevert.Checked Then
             For Each RB In StatusChangeRadioButtons
                 RB.Enabled = False
             Next
@@ -1274,7 +1926,7 @@ Public Class Form_Main
         Return StatusChangeRadioButtons
     End Function
 
-    Private Sub LabelRandomSampleFraction_Click(sender As Object, e As EventArgs) Handles LabelRandomSampleFraction.Click
+    Private Sub LabelRandomSampleFraction_Click(sender As Object, e As EventArgs) Handles LabelSortRandomSampleFraction.Click
 
     End Sub
 
@@ -1400,7 +2052,7 @@ Public Class Form_Main
     Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
         'MsgBox("Not currently implemented", vbOKOnly)
         Dim ETL As New FormEditTaskList()
-        ETL.RememberTaskSelections = Me.RememberTaskSelections
+        ETL.RememberTaskSelections = Me.RememberTasks
         ETL.OldTaskList = Me.TaskList
 
         Dim DialogResult As DialogResult
@@ -1495,7 +2147,7 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.AssemblyTemplate = tmpFileDialog.FileName
-            TextBoxAssemblyTemplate.Text = Me.AssemblyTemplate
+            'TextBoxAssemblyTemplate.Text = Me.AssemblyTemplate
         End If
 
     End Sub
@@ -1553,10 +2205,9 @@ Public Class Form_Main
     End Sub
 
     Private Sub CheckBoxUseTemplateProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseTemplateProperties.CheckedChanged
-        Dim CheckBox As CheckBox = CType(sender, CheckBox)
-        Me.UseTemplateProperties = CheckBox.Checked
+        Me.UseTemplateProperties = CheckBoxUseTemplateProperties.Checked
 
-        ButtonUseTemplateProperties.Enabled = CheckBox.Checked
+        ButtonUseTemplateProperties.Enabled = Me.UseTemplateProperties
     End Sub
 
     Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
@@ -1722,31 +2373,28 @@ Public Class Form_Main
 
         Me.Cursor = Cursors.Default
 
+        ButtonCustomizeTemplatePropertyDict.PerformClick()
+
     End Sub
 
     Private Sub TextBoxAssemblyTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxAssemblyTemplate.TextChanged
-        Dim TextBox As TextBox = CType(sender, TextBox)
-        Me.AssemblyTemplate = TextBox.Text
+        Me.AssemblyTemplate = TextBoxAssemblyTemplate.Text
     End Sub
 
     Private Sub TextBoxPartTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxPartTemplate.TextChanged
-        Dim TextBox As TextBox = CType(sender, TextBox)
-        Me.PartTemplate = TextBox.Text
+        Me.PartTemplate = TextBoxPartTemplate.Text
     End Sub
 
     Private Sub TextBoxSheetmetalTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSheetmetalTemplate.TextChanged
-        Dim TextBox As TextBox = CType(sender, TextBox)
-        Me.SheetmetalTemplate = TextBox.Text
+        Me.SheetmetalTemplate = TextBoxSheetmetalTemplate.Text
     End Sub
 
     Private Sub TextBoxDraftTemplate_TextChanged(sender As Object, e As EventArgs) Handles TextBoxDraftTemplate.TextChanged
-        Dim TextBox As TextBox = CType(sender, TextBox)
-        Me.DraftTemplate = TextBox.Text
+        Me.DraftTemplate = TextBoxDraftTemplate.Text
     End Sub
 
     Private Sub TextBoxMaterialTable_TextChanged(sender As Object, e As EventArgs) Handles TextBoxMaterialTable.TextChanged
-        Dim TextBox As TextBox = CType(sender, TextBox)
-        Me.MaterialTable = TextBox.Text
+        Me.MaterialTable = TextBoxMaterialTable.Text
     End Sub
 
     Private Sub ButtonCustomizeTemplatePropertyDict_Click(sender As Object, e As EventArgs) Handles ButtonCustomizeTemplatePropertyDict.Click
@@ -1769,8 +2417,8 @@ Public Class Form_Main
         Me.NoUpdateMRU = CheckBoxNoUpdateMRU.Checked
     End Sub
 
-    Private Sub CheckBoxBackgroundProcessing_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxBackgroundProcessing.CheckedChanged
-        Me.RunInBackground = CheckBoxBackgroundProcessing.Checked
+    Private Sub CheckBoxRunInBackground_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRunInBackground.CheckedChanged
+        Me.RunInBackground = CheckBoxRunInBackground.Checked
     End Sub
 
     Private Sub CheckBoxCheckForNewerVersion_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxCheckForNewerVersion.CheckedChanged
@@ -1787,6 +2435,273 @@ Public Class Form_Main
         System.Diagnostics.Process.Start(HelpURL)
 
     End Sub
+
+    Private Sub CheckBoxTLAAutoIncludeTLF_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAAutoIncludeTLF.CheckedChanged
+        Me.TLAAutoIncludeTLF = CheckBoxTLAAutoIncludeTLF.Checked
+    End Sub
+
+    Private Sub CheckBoxWarnBareTLA_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnBareTLA.CheckedChanged
+        Me.WarnBareTLA = CheckBoxWarnBareTLA.Checked
+    End Sub
+
+    Private Sub CheckBoxTLAIgnoreIncludeInReports_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAIgnoreIncludeInReports.CheckedChanged
+        Me.TLAIgnoreIncludeInReports = CheckBoxTLAIgnoreIncludeInReports.Checked
+    End Sub
+
+    Private Sub RadioButtonProcessAsAvailableChange_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonProcessAsAvailableChange.CheckedChanged
+        Me.ProcessAsAvailableChange = RadioButtonProcessAsAvailableChange.Checked
+    End Sub
+
+
+    Private Sub RadioButtonStatusAtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoA.CheckedChanged
+        If RadioButtonStatusAtoA.Checked Then
+            Me.StatusAto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusAtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoB.CheckedChanged
+        If RadioButtonStatusAtoB.Checked Then
+            Me.StatusAto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusAtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIR.CheckedChanged
+        If RadioButtonStatusAtoIR.Checked Then
+            Me.StatusAto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusAtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIW.CheckedChanged
+        If RadioButtonStatusAtoIW.Checked Then
+            Me.StatusAto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusAtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoO.CheckedChanged
+        If RadioButtonStatusAtoO.Checked Then
+            Me.StatusAto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusAtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoR.CheckedChanged
+        If RadioButtonStatusAtoR.Checked Then
+            Me.StatusAto = "R"
+        End If
+    End Sub
+
+    Private Sub RadioButtonStatusBtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoA.CheckedChanged
+        If RadioButtonStatusBtoA.Checked Then
+            Me.StatusBto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusBtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoB.CheckedChanged
+        If RadioButtonStatusBtoB.Checked Then
+            Me.StatusBto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusBtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIR.CheckedChanged
+        If RadioButtonStatusBtoIR.Checked Then
+            Me.StatusBto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusBtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIW.CheckedChanged
+        If RadioButtonStatusBtoIW.Checked Then
+            Me.StatusBto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusBtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoO.CheckedChanged
+        If RadioButtonStatusBtoO.Checked Then
+            Me.StatusBto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusBtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoR.CheckedChanged
+        If RadioButtonStatusBtoR.Checked Then
+            Me.StatusBto = "R"
+        End If
+    End Sub
+
+    Private Sub RadioButtonStatusIRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoA.CheckedChanged
+        If RadioButtonStatusIRtoA.Checked Then
+            Me.StatusIRto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoB.CheckedChanged
+        If RadioButtonStatusIRtoB.Checked Then
+            Me.StatusIRto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIR.CheckedChanged
+        If RadioButtonStatusIRtoIR.Checked Then
+            Me.StatusIRto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIW.CheckedChanged
+        If RadioButtonStatusIRtoIW.Checked Then
+            Me.StatusIRto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoO.CheckedChanged
+        If RadioButtonStatusIRtoO.Checked Then
+            Me.StatusIRto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoR.CheckedChanged
+        If RadioButtonStatusIRtoR.Checked Then
+            Me.StatusIRto = "R"
+        End If
+    End Sub
+
+    Private Sub RadioButtonStatusIWtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoA.CheckedChanged
+        If RadioButtonStatusIWtoA.Checked Then
+            Me.StatusIWto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIWtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoB.CheckedChanged
+        If RadioButtonStatusIWtoB.Checked Then
+            Me.StatusIWto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIWtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIR.CheckedChanged
+        If RadioButtonStatusIWtoIR.Checked Then
+            Me.StatusIWto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIWtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIW.CheckedChanged
+        If RadioButtonStatusIWtoIW.Checked Then
+            Me.StatusIWto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIWtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoO.CheckedChanged
+        If RadioButtonStatusIWtoO.Checked Then
+            Me.StatusIWto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusIWtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoR.CheckedChanged
+        If RadioButtonStatusIWtoR.Checked Then
+            Me.StatusIWto = "R"
+        End If
+    End Sub
+
+    Private Sub RadioButtonStatusOtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoA.CheckedChanged
+        If RadioButtonStatusOtoA.Checked Then
+            Me.StatusOto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusOtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoB.CheckedChanged
+        If RadioButtonStatusOtoB.Checked Then
+            Me.StatusOto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusOtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIR.CheckedChanged
+        If RadioButtonStatusOtoIR.Checked Then
+            Me.StatusOto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusOtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIW.CheckedChanged
+        If RadioButtonStatusOtoIW.Checked Then
+            Me.StatusOto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusOtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoO.CheckedChanged
+        If RadioButtonStatusOtoO.Checked Then
+            Me.StatusOto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusOtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoR.CheckedChanged
+        If RadioButtonStatusOtoR.Checked Then
+            Me.StatusOto = "R"
+        End If
+    End Sub
+
+    Private Sub RadioButtonStatusRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoA.CheckedChanged
+        If RadioButtonStatusRtoA.Checked Then
+            Me.StatusRto = "A"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoB.CheckedChanged
+        If RadioButtonStatusRtoB.Checked Then
+            Me.StatusRto = "B"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIR.CheckedChanged
+        If RadioButtonStatusRtoIR.Checked Then
+            Me.StatusRto = "IR"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIW.CheckedChanged
+        If RadioButtonStatusRtoIW.Checked Then
+            Me.StatusRto = "IW"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoO.CheckedChanged
+        If RadioButtonStatusRtoO.Checked Then
+            Me.StatusRto = "O"
+        End If
+    End Sub
+    Private Sub RadioButtonStatusRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoR.CheckedChanged
+        If RadioButtonStatusRtoR.Checked Then
+            Me.StatusRto = "R"
+        End If
+    End Sub
+
+    Private Sub TextBoxSortRandomSampleFraction_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSortRandomSampleFraction.TextChanged
+        Me.SortRandomSampleFraction = TextBoxSortRandomSampleFraction.Text
+    End Sub
+
+    Private Sub CheckBoxWarnSave_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnSave.CheckedChanged
+        Me.WarnSave = CheckBoxWarnSave.Checked
+
+    End Sub
+
+    Private Sub TextBoxFileListFontSize_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFileListFontSize.TextChanged
+        Me.FileListFontSize = TextBoxFileListFontSize.Text
+    End Sub
+
+    Private Sub CheckBoxPropertyFilterIncludeDraftModel_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftModel.CheckedChanged
+        Me.PropertyFilterIncludeDraftModel = CheckBoxPropertyFilterIncludeDraftModel.Checked
+
+    End Sub
+
+    Private Sub CheckBoxPropertyFilterIncludeDraftItself_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxPropertyFilterIncludeDraftItself.CheckedChanged
+        Me.PropertyFilterIncludeDraftItself = CheckBoxPropertyFilterIncludeDraftItself.Checked
+    End Sub
+
+    'Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.SelectedIndexChanged
+    '    ListViewFilesOutOfDate = True
+    '    BT_Update.BackColor = Color.Orange
+
+    '    ReconcileFormChanges()
+    'End Sub
+
+    'Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBoxFileWildcard.KeyDown
+    '    If e.KeyCode = Keys.Enter Then
+    '        'ApplyFilters()
+    '        e.Handled = True
+    '        e.SuppressKeyPress = True
+    '    End If
+    'End Sub
+
+    Private Sub ComboBoxFileWildcard_TextChanged(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.TextChanged
+        Me.FileWildcard = ComboBoxFileWildcard.Text
+
+        ListViewFilesOutOfDate = True
+        BT_Update.BackColor = Color.Orange
+    End Sub
+
+    Private Sub ComboBoxFileWildcard_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.LostFocus
+
+        Dim Key As String = ComboBoxFileWildcard.Text
+
+        If Not ComboBoxFileWildcard.Items.Contains(Key) Then
+            ComboBoxFileWildcard.Items.Add(ComboBoxFileWildcard.Text)
+        End If
+
+    End Sub
+
+    Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnNoImportedProperties.CheckedChanged
+        Me.WarnNoImportedProperties = CheckBoxWarnNoImportedProperties.Checked
+    End Sub
+
+
+
+
+
+
 
 
 

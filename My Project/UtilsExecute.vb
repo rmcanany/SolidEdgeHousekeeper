@@ -31,13 +31,16 @@ Public Class UtilsExecute
         Dim ElapsedTimeText As String
 
         FMain.ReconcileFormChanges()
-        Dim UD As New UtilsDefaults(FMain)
-        UD.SaveDefaults()
+        'Dim UD As New UtilsDefaults(FMain)
+        'UD.SaveDefaults()
 
         Dim UP As New UtilsPreferences
+        UP.SaveFormMainSettings(FMain)
+
         UP.SaveTaskList(FMain.TaskList)
         UP.SaveTemplatePropertyDict(FMain.TemplatePropertyDict)
         UP.SaveTemplatePropertyList(FMain.TemplatePropertyList)
+
 
         ErrorMessage = CheckStartConditions()
 
@@ -200,8 +203,8 @@ Public Class UtilsExecute
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
-        If FMain.new_CheckBoxFileSearch.Checked Then
-            If FMain.new_ComboBoxFileSearch.Text = "" Then
+        If FMain.CheckBoxEnableFileWildcard.Checked Then
+            If FMain.ComboBoxFileWildcard.Text = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -309,7 +312,7 @@ Public Class UtilsExecute
 
 
         Dim DMApp As DesignManager.Application = Nothing
-        If FMain.CheckBoxProcessReadOnly.Checked Then
+        If FMain.CheckBoxProcessAsAvailable.Checked Then
             DMApp = New DesignManager.Application
             DMApp.Visible = 1
             SEApp.Activate()
@@ -343,7 +346,7 @@ Public Class UtilsExecute
             System.Windows.Forms.Application.DoEvents()
             If FMain.StopProcess Then
                 FMain.TextBoxStatus.Text = "Processing aborted"
-                If FMain.CheckBoxProcessReadOnly.Checked Then
+                If FMain.CheckBoxProcessAsAvailable.Checked Then
                     DMApp.Quit()
                 End If
                 Exit Sub
@@ -370,7 +373,7 @@ Public Class UtilsExecute
 
         Next
 
-        If FMain.CheckBoxProcessReadOnly.Checked Then
+        If FMain.CheckBoxProcessAsAvailable.Checked Then
             DMApp.Quit()
         End If
 
@@ -410,7 +413,7 @@ Public Class UtilsExecute
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
-        If FMain.CheckBoxProcessReadOnly.Checked And FMain.SolidEdgeRequired > 0 Then
+        If FMain.CheckBoxProcessAsAvailable.Checked And FMain.SolidEdgeRequired > 0 Then
 
             OldStatus = UC.GetStatus(DMApp, Path)
 
@@ -433,7 +436,7 @@ Public Class UtilsExecute
 
         Try
             If FMain.SolidEdgeRequired > 0 Then
-                If (FMain.CheckBoxBackgroundProcessing.Checked) And (Not Filetype = "Assembly") Then
+                If (FMain.CheckBoxRunInBackground.Checked) And (Not Filetype = "Assembly") Then
                     SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
                     ' Here is the same functionality without using the SolidEdgeCommunity dependency
@@ -495,8 +498,8 @@ Public Class UtilsExecute
                 SEApp.DoIdle()
 
                 ' Deal with Document Status
-                If FMain.CheckBoxProcessReadOnly.Checked Then
-                    If FMain.RadioButtonReadOnlyRevert.Checked Then
+                If FMain.CheckBoxProcessAsAvailable.Checked Then
+                    If FMain.RadioButtonProcessAsAvailableRevert.Checked Then
                         If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
                             StatusChangeSuccessful = UC.SetStatus(DMApp, Path, OldStatus)
                             If Not StatusChangeSuccessful Then
@@ -507,7 +510,7 @@ Public Class UtilsExecute
                         End If
                     End If
 
-                    If FMain.RadioButtonReadOnlyChange.Checked Then
+                    If FMain.RadioButtonProcessAsAvailableChange.Checked Then
                         Dim NewStatus As SolidEdgeConstants.DocumentStatus
 
                         Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)

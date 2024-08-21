@@ -89,7 +89,7 @@ Public Class UtilsDefaults
         Dim tf As Boolean
         Dim ExcludeControls As New List(Of String)
 
-        ExcludeControls.Add(FMain.new_CheckBoxEnablePropertyFilter.Name)
+        ExcludeControls.Add(FMain.CheckBoxEnablePropertyFilter.Name)
         ' ExcludeControls.Add(ListViewFiles.Name)
 
         tf = TypeOf Ctrl Is ContainerControl
@@ -324,7 +324,7 @@ Public Class UtilsDefaults
                     'new_ComboBoxFileSearch = new_ComboBoxFileSearchItem.????-???00*.*
 
                     Value = Value.Replace("new_ComboBoxFileSearchItem.", "")
-                    FMain.new_ComboBoxFileSearch.Items.Add(Value)
+                    FMain.ComboBoxFileWildcard.Items.Add(Value)
                     Continue For
                 End If
 
@@ -439,9 +439,9 @@ Public Class UtilsDefaults
 
         ' The combobox new_ComboBoxFileSearch is not a Control, it is a ToolStripCombobox
         ' It has to be handled separately.
-        If FMain.new_ComboBoxFileSearch.Items.Count > 0 Then
-            For i As Integer = 0 To FMain.new_ComboBoxFileSearch.Items.Count - 1
-                Dim Value As String = FMain.new_ComboBoxFileSearch.Items(i).ToString
+        If FMain.ComboBoxFileWildcard.Items.Count > 0 Then
+            For i As Integer = 0 To FMain.ComboBoxFileWildcard.Items.Count - 1
+                Dim Value As String = FMain.ComboBoxFileWildcard.Items(i).ToString
                 Defaults.Add(String.Format("new_ComboBoxFileSearch=new_ComboBoxFileSearchItem.{0}", Value))
             Next
         End If

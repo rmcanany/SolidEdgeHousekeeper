@@ -404,7 +404,7 @@ Public Class UtilsPreferences
     End Function
 
 
-    Private Function GetTaskListFilename(CheckExisting As Boolean) As String
+    Public Function GetTaskListFilename(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
         Dim TaskListFilename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
 
@@ -476,6 +476,117 @@ Public Class UtilsPreferences
 
         Return TaskList
     End Function
+
+
+    Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
+        Dim Filename = "form_main_settings.json"
+        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveFormMainSettings(_Form_Main As Form_Main)
+
+        Dim tmpJSONDict As New Dictionary(Of String, String)
+        Dim JSONString As String
+
+        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
+
+        Dim FormType As Type = _Form_Main.GetType()
+        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
+        Dim Value As String
+
+        Dim KeepProps As New List(Of String)
+        KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
+        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports", "ProcessAsAvailable"})
+        KeepProps.AddRange({"ProcessAsAvailableRevert", "ProcessAsAvailableChange", "StatusAto", "StatusBto", "StatusIRto", "StatusIWto"})
+        KeepProps.AddRange({"StatusOto", "StatusRto", "SortNone", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
+        KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction", "AssemblyTemplate", "PartTemplate", "SheetmetalTemplate"})
+        KeepProps.AddRange({"DraftTemplate", "MaterialTable", "UseTemplateProperties"})
+        KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "FileListFontSize", "RememberTasks", "RunInBackground"})
+        KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
+        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "SolidEdgeRequired"})
+
+        For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
+
+            If Not KeepProps.Contains(PropInfo.Name) Then
+                Continue For
+            End If
+
+            Value = CStr(PropInfo.GetValue(_Form_Main, Nothing))
+
+            If Value Is Nothing Then
+                Select Case PropInfo.PropertyType.Name.ToLower
+                    Case "string"
+                        Value = ""
+                    Case "double"
+                        Value = "0"
+                    Case "int32"
+                        Value = "0"
+                    Case "boolean"
+                        Value = "False"
+                    Case Else
+                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
+                End Select
+            End If
+
+            tmpJSONDict(PropInfo.Name) = Value
+
+        Next
+
+        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+
+    End Sub
+
+    Public Sub GetFormMainSettings(_Form_Main As Form_Main)
+
+        Dim tmpJSONDict As New Dictionary(Of String, String)
+        Dim JSONString As String
+
+        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
+
+        Dim FormType As Type = _Form_Main.GetType()
+        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
+        'Dim Value As String
+
+        If Not Infile = "" Then
+            JSONString = IO.File.ReadAllText(Infile)
+
+            tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+            For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
+
+                If tmpJSONDict.Keys.Contains(PropInfo.Name) Then
+                    Dim PropTypestring = PropInfo.PropertyType.Name
+
+                    Select Case PropInfo.PropertyType.Name.ToLower
+                        Case "string"
+                            PropInfo.SetValue(_Form_Main, CStr(tmpJSONDict(PropInfo.Name)))
+                        Case "double"
+                            PropInfo.SetValue(_Form_Main, CDbl(tmpJSONDict(PropInfo.Name)))
+                        Case "int32"
+                            PropInfo.SetValue(_Form_Main, CInt(tmpJSONDict(PropInfo.Name)))
+                        Case "boolean"
+                            PropInfo.SetValue(_Form_Main, CBool(tmpJSONDict(PropInfo.Name)))
+                    End Select
+
+                End If
+            Next
+        End If
+
+    End Sub
 
 
     Public Function GetNewTaskInstance(

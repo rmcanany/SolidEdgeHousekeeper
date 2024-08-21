@@ -30,6 +30,19 @@ Public Class TaskPrint
         End Set
     End Property
 
+    Private _SelectedSheets As String
+    Public Property SelectedSheets As String
+        Get
+            Return _SelectedSheets
+        End Get
+        Set(value As String)
+            _SelectedSheets = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
     Private _ShowPrintingOptions As Boolean
     Public Property ShowPrintingOptions As Boolean
         Get
@@ -122,7 +135,7 @@ Public Class TaskPrint
         End Set
     End Property
 
-    Public Property SelectedSheets As List(Of String)
+    Public Property SelectedSheetsList As List(Of String)
 
 
     Enum ControlNames
@@ -170,7 +183,7 @@ Public Class TaskPrint
         Me.ScaleLineTypes = False
         Me.ScaleLineWidths = False
 
-        Me.SelectedSheets = New List(Of String)
+        Me.SelectedSheetsList = New List(Of String)
     End Sub
 
 
@@ -241,7 +254,7 @@ Public Class TaskPrint
             SheetSetup = Sheet.SheetSetup
             PaperSizeConstant = SheetSetup.SheetSizeOption
             Try
-                If SelectedSheets.Contains(PaperSizeConstant.ToString) Then
+                If SelectedSheetsList.Contains(PaperSizeConstant.ToString) Then
                     DraftPrinter.AddSheet(Sheet)
                     DraftPrinter.PrintOut()
                     SEApp.DoIdle()
@@ -390,7 +403,7 @@ Public Class TaskPrint
                 ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
             End If
 
-            If SelectedSheets.Count = 0 Then
+            If SelectedSheetsList.Count = 0 Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -505,17 +518,26 @@ Public Class TaskPrint
 
                 If FSS.DialogResult = DialogResult.OK Then
 
-                    Me.SelectedSheets = FSS.SelectedSheets
+                    Me.SelectedSheetsList = FSS.SelectedSheets
 
-                    TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
-                    TextBox.Text = ""
-                    For Each SheetSize As String In Me.SelectedSheets
-                        If TextBox.Text = "" Then
-                            TextBox.Text = SheetSize
+                    Dim s = ""
+                    For Each SheetSize As String In Me.SelectedSheetsList
+                        If s = "" Then
+                            s = SheetSize
                         Else
-                            TextBox.Text = String.Format("{0} {1}", TextBox.Text, SheetSize)
+                            s = String.Format("{0} {1}", s, SheetSize)
                         End If
                     Next
+
+                    TextBox = CType(ControlsDict(ControlNames.SelectedSheets.ToString), TextBox)
+                    TextBox.Text = s
+                    'For Each SheetSize As String In Me.SelectedSheetsList
+                    '    If TextBox.Text = "" Then
+                    '        TextBox.Text = SheetSize
+                    '    Else
+                    '        TextBox.Text = String.Format("{0} {1}", TextBox.Text, SheetSize)
+                    '    End If
+                    'Next
 
                 End If
 
@@ -595,8 +617,9 @@ Public Class TaskPrint
                 End Try
 
             Case ControlNames.SelectedSheets.ToString
+                Me.SelectedSheets = TextBox.Text
                 If Not TextBox.Text = "" Then
-                    SelectedSheets = Split(TextBox.Text, " ").ToList
+                    SelectedSheetsList = Split(TextBox.Text, " ").ToList
                 End If
 
             Case Else

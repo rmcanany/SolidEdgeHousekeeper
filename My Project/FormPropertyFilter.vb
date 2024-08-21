@@ -45,12 +45,34 @@ Public Class FormPropertyFilter
 
         Me.UCList = New List(Of UCPropertyFilter)
 
+
         Dim Version = Form_Main.Version
 
         Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
 
         Me.HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, "filtering")
 
+
+        Dim tf As Boolean
+
+        tf = Me.TemplatePropertyDict Is Nothing
+        tf = tf Or Me.TemplatePropertyList Is Nothing
+
+        If Not tf Then
+            tf = Me.TemplatePropertyDict.Count = 0
+            tf = tf Or Me.TemplatePropertyList.Count = 0
+        End If
+
+        tf = tf And Form_Main.WarnNoImportedProperties
+
+        If tf Then
+            Dim s As String = "Template properties not populated.  This is not an error, "
+            s = String.Format("{0}however it means properties must be entered manually.  ", s)
+            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
+            MsgBox(s, vbOKOnly)
+        End If
 
     End Sub
 

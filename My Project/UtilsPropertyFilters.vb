@@ -103,13 +103,13 @@ Public Class UtilsPropertyFilters
             DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
             LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
 
-            If FMain.CheckBoxPropertyFilterCheckDraftFile.Checked Then
+            If FMain.CheckBoxPropertyFilterIncludeDraftItself.Checked Then
                 tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
             Else
                 tf = False
             End If
 
-            If FMain.CheckBoxPropertyFilterFollowDraftLinks.Checked Then
+            If FMain.CheckBoxPropertyFilterIncludeDraftModel.Checked Then
                 For Each LinkedDocument In LinkedDocuments
                     tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
                 Next
