@@ -3,8 +3,10 @@
 Public Class UtilsDocumentation
 
     Public Function GenerateVersionURL(Tag As String) As String
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640"
-        Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag)
+        'Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/cd9ac5ea170d59eaf9041efca3b18a6c6441d9f1"
+
+        Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
         Return VersionURL
     End Function

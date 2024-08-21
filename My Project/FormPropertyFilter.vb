@@ -46,11 +46,16 @@ Public Class FormPropertyFilter
         Me.UCList = New List(Of UCPropertyFilter)
 
 
-        Dim Version = Form_Main.Version
+        'Dim Version = Form_Main.Version
 
-        Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
+        'Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
 
-        Me.HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, "filtering")
+        'Me.HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, "filtering")
+
+        Dim UD As New UtilsDocumentation
+        Dim Tag = "filtering"
+        Me.HelpURL = UD.GenerateVersionURL(Tag)
+
 
 
         Dim tf As Boolean

@@ -60,6 +60,11 @@ Public Class FormPropertyInputEditor
             MsgBox(s, vbOKOnly)
         End If
 
+        ' Set by TaskEditProperties
+        'Dim UD As New UtilsDocumentation
+        'Dim Tag = "edit-properties"
+        'Me.HelpURL = UD.GenerateVersionURL(Tag)
+
     End Sub
 
 

@@ -131,18 +131,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _TLAIgnoreIncludeInReports As Boolean
-    Public Property TLAIgnoreIncludeInReports As Boolean
-        Get
-            Return _TLAIgnoreIncludeInReports
-        End Get
-        Set(value As Boolean)
-            _TLAIgnoreIncludeInReports = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxTLAIgnoreIncludeInReports.Checked = value
-            End If
-        End Set
-    End Property
 
     ' ###### DOCUMENT STATUS ######
 
@@ -1109,7 +1097,7 @@ Public Class Form_Main
             TextBoxFastSearchScopeFilename.Enabled = True
             ButtonFastSearchScopeFilename.Enabled = True
             CheckBoxDraftAndModelSameName.Enabled = True
-            CheckBoxTLAIgnoreIncludeInReports.Enabled = True
+            'CheckBoxTLAIgnoreIncludeInReports.Enabled = True
         End If
 
         ListViewFilesOutOfDate = True
@@ -1126,7 +1114,7 @@ Public Class Form_Main
             TextBoxFastSearchScopeFilename.Enabled = False
             ButtonFastSearchScopeFilename.Enabled = False
             CheckBoxDraftAndModelSameName.Enabled = False
-            CheckBoxTLAIgnoreIncludeInReports.Enabled = False
+            'CheckBoxTLAIgnoreIncludeInReports.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True
@@ -2442,10 +2430,6 @@ Public Class Form_Main
 
     Private Sub CheckBoxWarnBareTLA_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnBareTLA.CheckedChanged
         Me.WarnBareTLA = CheckBoxWarnBareTLA.Checked
-    End Sub
-
-    Private Sub CheckBoxTLAIgnoreIncludeInReports_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAIgnoreIncludeInReports.CheckedChanged
-        Me.TLAIgnoreIncludeInReports = CheckBoxTLAIgnoreIncludeInReports.Checked
     End Sub
 
     Private Sub RadioButtonProcessAsAvailableChange_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonProcessAsAvailableChange.CheckedChanged

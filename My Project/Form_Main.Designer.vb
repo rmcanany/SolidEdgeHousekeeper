@@ -78,7 +78,6 @@ Partial Class Form_Main
         Me.TabPageTopLevelAssy = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
         Me.LabelTLAListOptions = New System.Windows.Forms.Label()
-        Me.CheckBoxTLAIgnoreIncludeInReports = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAAutoIncludeTLF = New System.Windows.Forms.CheckBox()
         Me.CheckBoxDraftAndModelSameName = New System.Windows.Forms.CheckBox()
         Me.CheckBoxTLAIncludePartCopies = New System.Windows.Forms.CheckBox()
@@ -813,7 +812,6 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.ColumnCount = 1
         Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLAListOptions, 0, 0)
-        Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIgnoreIncludeInReports, 0, 10)
         Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAAutoIncludeTLF, 0, 1)
         Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxDraftAndModelSameName, 0, 8)
         Me.ExTableLayoutPanel4.Controls.Add(Me.CheckBoxTLAIncludePartCopies, 0, 3)
@@ -826,7 +824,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel4.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel4.Name = "ExTableLayoutPanel4"
-        Me.ExTableLayoutPanel4.RowCount = 12
+        Me.ExTableLayoutPanel4.RowCount = 11
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -838,7 +836,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(524, 783)
         Me.ExTableLayoutPanel4.TabIndex = 22
         Me.ExTableLayoutPanel4.Task = Nothing
@@ -852,22 +850,6 @@ Partial Class Form_Main
         Me.LabelTLAListOptions.Size = New System.Drawing.Size(82, 16)
         Me.LabelTLAListOptions.TabIndex = 0
         Me.LabelTLAListOptions.Text = "LIST OPTIONS"
-        '
-        'CheckBoxTLAIgnoreIncludeInReports
-        '
-        Me.CheckBoxTLAIgnoreIncludeInReports.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxTLAIgnoreIncludeInReports.AutoSize = True
-        Me.CheckBoxTLAIgnoreIncludeInReports.Checked = True
-        Me.CheckBoxTLAIgnoreIncludeInReports.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTLAIgnoreIncludeInReports.Enabled = False
-        Me.CheckBoxTLAIgnoreIncludeInReports.Location = New System.Drawing.Point(3, 335)
-        Me.CheckBoxTLAIgnoreIncludeInReports.Name = "CheckBoxTLAIgnoreIncludeInReports"
-        Me.CheckBoxTLAIgnoreIncludeInReports.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxTLAIgnoreIncludeInReports.Size = New System.Drawing.Size(266, 20)
-        Me.CheckBoxTLAIgnoreIncludeInReports.TabIndex = 21
-        Me.CheckBoxTLAIgnoreIncludeInReports.Text = "Ignore occurrence's IncludeInReports setting"
-        Me.CheckBoxTLAIgnoreIncludeInReports.UseVisualStyleBackColor = True
-        Me.CheckBoxTLAIgnoreIncludeInReports.Visible = False
         '
         'CheckBoxTLAAutoIncludeTLF
         '
@@ -2566,7 +2548,6 @@ Partial Class Form_Main
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents TabControl2 As TabControl
     Friend WithEvents TabPageTopLevelAssy As TabPage
-    Friend WithEvents CheckBoxTLAIgnoreIncludeInReports As CheckBox
     Friend WithEvents CheckBoxTLAIncludePartCopies As CheckBox
     Friend WithEvents CheckBoxDraftAndModelSameName As CheckBox
     Friend WithEvents CheckBoxWarnBareTLA As CheckBox
