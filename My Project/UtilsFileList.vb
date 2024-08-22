@@ -127,7 +127,7 @@ Public Class UtilsFileList
         Dim UC As New UtilsCommon
 
         FMain.ListViewFilesOutOfDate = False
-        FMain.BT_Update.BackColor = Color.FromName("Control")
+        'FMain.BT_Update.BackColor = Color.FromName("Control")
 
         Form_Main.StopProcess = False
         FMain.ButtonCancel.Text = "Stop"

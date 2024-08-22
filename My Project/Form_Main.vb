@@ -17,7 +17,23 @@ Public Class Form_Main
     Private ListItems_TextFiltered As New List(Of ListViewItem)
     Private ListItems_PropFiltered As New List(Of ListViewItem)
 
-    Public ListViewFilesOutOfDate As Boolean
+    Private _ListViewFilesOutOfDate As Boolean
+    Public Property ListViewFilesOutOfDate As Boolean
+        Get
+            Return _ListViewFilesOutOfDate
+        End Get
+        Set(value As Boolean)
+            _ListViewFilesOutOfDate = value
+            If Me.TabControl1 IsNot Nothing Then
+                If ListViewFilesOutOfDate Then
+                    BT_Update.BackColor = Color.Orange
+                Else
+                    BT_Update.BackColor = Color.FromName("Control")
+                End If
+            End If
+        End Set
+    End Property
+
 
     Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
 
@@ -672,8 +688,6 @@ Public Class Form_Main
     End Property
 
 
-
-
     Public Property SolidEdgeRequired As Integer
 
 
@@ -713,7 +727,7 @@ Public Class Form_Main
 
         UP.GetFormMainSettings(Me)
 
-        PopulateCheckedListBoxes()
+        'PopulateCheckedListBoxes()
         'UDefaults.LoadDefaults()
 
         ReconcileFormChanges()
@@ -761,7 +775,7 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = False
-        BT_Update.BackColor = Color.FromName("Control")
+        'BT_Update.BackColor = Color.FromName("Control")
 
         Me.TaskList = UP.GetTaskList
 
@@ -799,29 +813,6 @@ Public Class Form_Main
     End Sub
 
 
-    Private Sub PopulateCheckedListBoxes()
-
-        'CheckedListBoxAssembly.Items.Clear()
-        'For Each Key In LabelToActionAssembly.Keys
-        '    CheckedListBoxAssembly.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxPart.Items.Clear()
-        'For Each Key In LabelToActionPart.Keys
-        '    CheckedListBoxPart.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxSheetmetal.Items.Clear()
-        'For Each Key In LabelToActionSheetmetal.Keys
-        '    CheckedListBoxSheetmetal.Items.Add(Key)
-        'Next
-
-        'CheckedListBoxDraft.Items.Clear()
-        'For Each Key In LabelToActionDraft.Keys
-        '    CheckedListBoxDraft.Items.Add(Key)
-        'Next
-    End Sub
-
     Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
 
         'Dim UD As New UtilsDefaults(Me)
@@ -829,29 +820,29 @@ Public Class Form_Main
         ' Update configuration
         'Configuration = UD.GetConfiguration()
 
-        Dim backcolor As New Color
-        backcolor = BT_Update.BackColor
+        'Dim backcolor As New Color
+        'backcolor = BT_Update.BackColor
 
-        BT_Update.BackColor = Color.FromName("Control")
+        'BT_Update.BackColor = Color.FromName("Control")
 
-        If ListViewFilesOutOfDate Then
-            BT_Update.BackColor = Color.Orange
-        Else
-            BT_Update.BackColor = Color.FromName("Control")
-        End If
+        'If ListViewFilesOutOfDate Then
+        '    BT_Update.BackColor = Color.Orange
+        'Else
+        '    BT_Update.BackColor = Color.FromName("Control")
+        'End If
 
-        If Not CheckBoxProcessAsAvailable.Checked Then
-            Dim StatusChangeRadioButtons As New List(Of RadioButton)
-            Dim RB As RadioButton
+        'If Not CheckBoxProcessAsAvailable.Checked Then
+        '    Dim StatusChangeRadioButtons As New List(Of RadioButton)
+        '    Dim RB As RadioButton
 
-            StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+        '    StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-            RadioButtonProcessAsAvailableRevert.Enabled = False
-            RadioButtonProcessAsAvailableChange.Enabled = False
-            For Each RB In StatusChangeRadioButtons
-                RB.Enabled = False
-            Next
-        End If
+        '    RadioButtonProcessAsAvailableRevert.Enabled = False
+        '    RadioButtonProcessAsAvailableChange.Enabled = False
+        '    For Each RB In StatusChangeRadioButtons
+        '        RB.Enabled = False
+        '    Next
+        'End If
 
     End Sub
 
@@ -971,7 +962,7 @@ Public Class Form_Main
             Me.PropertyFilterDict = FPF.PropertyFilterDict
 
             ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'BT_Update.BackColor = Color.Orange
         End If
 
     End Sub
@@ -1002,26 +993,13 @@ Public Class Form_Main
             CheckBoxEnablePropertyFilter.Image = My.Resources.Checked
             new_ButtonPropertyFilter.Enabled = True
 
-            'Dim FPF As New FormPropertyFilter
-            'FPF.PropertyFilterDict = Me.PropertyFilterDict
-            'FPF.ShowDialog()
-
-            'If FPF.DialogResult = DialogResult.OK Then
-            '    Me.PropertyFilterDict = FPF.PropertyFilterDict
-
-            '    ListViewFilesOutOfDate = True
-            '    BT_Update.BackColor = Color.Orange
-            'End If
-
         Else
             CheckBoxEnablePropertyFilter.Image = My.Resources.Unchecked
             new_ButtonPropertyFilter.Enabled = False
         End If
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
-
-        'ApplyFilters()
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1072,7 +1050,7 @@ Public Class Form_Main
         Me.TLAReportUnrelatedFiles = CheckBoxTLAReportUnrelatedFiles.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         ReconcileFormChanges()
     End Sub
@@ -1101,7 +1079,7 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         ReconcileFormChanges()
     End Sub
@@ -1118,7 +1096,7 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         ReconcileFormChanges()
     End Sub
@@ -1155,7 +1133,7 @@ Public Class Form_Main
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'BT_Update.BackColor = Color.Orange
         End If
 
     End Sub
@@ -1176,7 +1154,7 @@ Public Class Form_Main
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1248,7 +1226,7 @@ Public Class Form_Main
             End If
 
             ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1270,7 +1248,7 @@ Public Class Form_Main
             If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            BT_Update.BackColor = Color.Orange
+            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1286,7 +1264,7 @@ Public Class Form_Main
         DragDropCacheExcluded.Clear()
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1411,7 +1389,7 @@ Public Class Form_Main
                 If tmpItem.Group.Name = "Sources" Then
                     tmpItem.Remove()
                     ListViewFilesOutOfDate = True
-                    BT_Update.BackColor = Color.Orange
+                    'BT_Update.BackColor = Color.Orange
 
                 ElseIf tmpItem.Group.Name <> "Excluded" Then
                     ' Move item to "Excluded" group
@@ -1731,14 +1709,14 @@ Public Class Form_Main
         Me.TLAIncludePartCopies = CheckBoxTLAIncludePartCopies.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
     End Sub
 
     Private Sub CheckBoxDraftAndModelSameName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDraftAndModelSameName.CheckedChanged
         Me.DraftAndModelSameName = CheckBoxDraftAndModelSameName.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1746,7 +1724,7 @@ Public Class Form_Main
         Me.SortDependency = RadioButtonSortDependency.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         If RadioButtonSortDependency.Checked Then
             CheckBoxSortIncludeNoDependencies.Enabled = True
@@ -1759,7 +1737,7 @@ Public Class Form_Main
         Me.SortNone = RadioButtonSortNone.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1767,7 +1745,7 @@ Public Class Form_Main
         Me.SortAlphabetical = RadioButtonSortAlphabetical.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1775,7 +1753,7 @@ Public Class Form_Main
         Me.SortIncludeNoDependencies = CheckBoxSortIncludeNoDependencies.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1783,7 +1761,7 @@ Public Class Form_Main
         Me.SortRandomSample = RadioButtonSortRandomSample.Checked
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         If RadioButtonSortRandomSample.Checked Then
             TextBoxSortRandomSampleFraction.Enabled = True
@@ -1794,7 +1772,7 @@ Public Class Form_Main
 
     Private Sub TextBoxRandomSampleFraction_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSortRandomSampleFraction.LostFocus
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
 
         Dim Fraction As Double
         Try
@@ -2664,7 +2642,7 @@ Public Class Form_Main
         Me.FileWildcard = ComboBoxFileWildcard.Text
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
+        'BT_Update.BackColor = Color.Orange
     End Sub
 
     Private Sub ComboBoxFileWildcard_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.LostFocus
