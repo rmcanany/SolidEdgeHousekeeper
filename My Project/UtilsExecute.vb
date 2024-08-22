@@ -38,8 +38,8 @@ Public Class UtilsExecute
         UP.SaveFormMainSettings(FMain)
 
         UP.SaveTaskList(FMain.TaskList)
-        UP.SaveTemplatePropertyDict(FMain.TemplatePropertyDict)
-        UP.SaveTemplatePropertyList(FMain.TemplatePropertyList)
+        'UP.SaveTemplatePropertyDict(FMain.TemplatePropertyDict)
+        'UP.SaveTemplatePropertyList(FMain.TemplatePropertyList)
 
 
         ErrorMessage = CheckStartConditions()

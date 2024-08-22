@@ -406,8 +406,8 @@ Public Class FormPropertyFilter
 
             Me.PropertyFilterDict = JSONDict
 
-            Dim UP As New UtilsPreferences
-            UP.SavePropertyFilterDict(Me.PropertyFilterDict)
+            'Dim UP As New UtilsPreferences
+            'UP.SavePropertyFilterDict(Me.PropertyFilterDict)
 
             Me.DialogResult = DialogResult.OK
         End If

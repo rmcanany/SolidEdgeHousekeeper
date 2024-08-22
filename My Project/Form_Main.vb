@@ -577,7 +577,7 @@ Public Class Form_Main
         End Set
     End Property
 
-    Public Property TemplatePropertyList As List(Of String)
+    Public Property TemplatePropertyList As New List(Of String)
 
 
     ' ###### GENERAL ######
@@ -991,8 +991,8 @@ Public Class Form_Main
             UP.SaveFormMainSettings(Me)
 
             UP.SaveTaskList(Me.TaskList)
-            UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-            UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
+            'UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+            'UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
             End
         End If
     End Sub
@@ -1009,8 +1009,8 @@ Public Class Form_Main
         UP.SaveFormMainSettings(Me)
 
         UP.SaveTaskList(Me.TaskList)
-        UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-        UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
+        'UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
+        'UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
         End
     End Sub
 
