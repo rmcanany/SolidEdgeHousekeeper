@@ -30,7 +30,7 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        FMain.ReconcileFormChanges()
+        'FMain.ReconcileFormChanges()
         'Dim UD As New UtilsDefaults(FMain)
         'UD.SaveDefaults()
 
@@ -149,7 +149,7 @@ Public Class UtilsExecute
         Dim USEA = New UtilsSEApp
         USEA.TextBoxStatus = Me.TextBoxStatus
 
-        FMain.ReconcileFormChanges()
+        'FMain.ReconcileFormChanges()
 
         'If Not CheckBoxUseCurrentSession.Checked Then
         '    If USEA.SEIsRunning() Then

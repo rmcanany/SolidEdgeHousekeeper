@@ -190,7 +190,6 @@
     <Compile Include="My Project\FormTextPrompt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\UtilsDefaults.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
     <Compile Include="My Project\UtilsFeatures.vb" />

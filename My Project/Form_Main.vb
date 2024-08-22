@@ -2,6 +2,7 @@
 
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports Newtonsoft.Json
 
 Public Class Form_Main
 
@@ -37,7 +38,41 @@ Public Class Form_Main
 
     Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
 
+
+    Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+        Get
+            Return _PropertyFilterDict
+        End Get
+        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+            _PropertyFilterDict = value
+            If Me.TabControl1 IsNot Nothing Then
+                Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
+                If Not Me.PropertyFilterDictJSON = s Then
+                    Me.PropertyFilterDictJSON = s
+                End If
+            End If
+        End Set
+    End Property
+
+
+    Private _PropertyFilterDictJSON As String
+    Public Property PropertyFilterDictJSON As String
+        Get
+            Return _PropertyFilterDictJSON
+        End Get
+        Set(value As String)
+            _PropertyFilterDictJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+                    Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+                End If
+            End If
+
+        End Set
+    End Property
+
+
 
     Public Property TaskList As List(Of Task)
 
@@ -494,7 +529,6 @@ Public Class Form_Main
         End Set
     End Property
 
-
     Private _UseTemplateProperties As Boolean
     Public Property UseTemplateProperties As Boolean
         Get
@@ -508,7 +542,41 @@ Public Class Form_Main
         End Set
     End Property
 
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+
+    Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+        Get
+            Return _TemplatePropertyDict
+        End Get
+        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+            _TemplatePropertyDict = value
+            If Me.TabControl1 IsNot Nothing Then
+                Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
+                If Not Me.TemplatePropertyDictJSON = s Then
+                    Me.TemplatePropertyDictJSON = s
+                End If
+            End If
+        End Set
+    End Property
+
+
+    Private _TemplatePropertyDictJSON As String
+    Public Property TemplatePropertyDictJSON As String
+        Get
+            Return _TemplatePropertyDictJSON
+        End Get
+        Set(value As String)
+            _TemplatePropertyDictJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
+                    Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
+                End If
+            End If
+
+        End Set
+    End Property
+
     Public Property TemplatePropertyList As List(Of String)
 
 
@@ -687,6 +755,24 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _FileWildcardList As New List(Of String)
+    Public Property FileWildcardList As List(Of String)
+        Get
+            Return _FileWildcardList
+        End Get
+        Set(value As List(Of String))
+            _FileWildcardList = value
+            If Me.TabControl1 IsNot Nothing Then
+                For Each s As String In _FileWildcardList
+                    If Not ComboBoxFileWildcard.Items.Contains(s) Then
+                        ComboBoxFileWildcard.Items.Add(s)
+                    End If
+                Next
+            End If
+        End Set
+    End Property
+
+
 
     Public Property SolidEdgeRequired As Integer
 
@@ -718,8 +804,6 @@ Public Class Form_Main
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
 
-        'Dim UDefaults As New UtilsDefaults(Me)
-
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
         UP.CreateSavedExpressions()
@@ -727,10 +811,6 @@ Public Class Form_Main
 
         UP.GetFormMainSettings(Me)
 
-        'PopulateCheckedListBoxes()
-        'UDefaults.LoadDefaults()
-
-        ReconcileFormChanges()
         UD.BuildReadmeFile()
 
         CarIcona()
@@ -757,25 +837,28 @@ Public Class Form_Main
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
-        'CheckBoxEnableFileWildcard.Checked = False
-        'ComboBoxFileWildcard.Enabled = False
-        'CheckBoxEnablePropertyFilter.Checked = False
-        'new_ButtonPropertyFilter.Enabled = False
-
-        If RadioButtonSortDependency.Checked Then
-            CheckBoxSortIncludeNoDependencies.Enabled = True
-        Else
+        If Not Me.SortDependency Then
             CheckBoxSortIncludeNoDependencies.Enabled = False
         End If
 
-        If RadioButtonSortRandomSample.Checked Then
-            TextBoxSortRandomSampleFraction.Enabled = True
-        Else
+        If Not Me.SortRandomSample Then
             TextBoxSortRandomSampleFraction.Enabled = False
         End If
 
+        If Not Me.ProcessAsAvailable Then
+            Dim StatusChangeRadioButtons As New List(Of RadioButton)
+            Dim RB As RadioButton
+
+            StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+
+            RadioButtonProcessAsAvailableRevert.Enabled = False
+            RadioButtonProcessAsAvailableChange.Enabled = False
+            For Each RB In StatusChangeRadioButtons
+                RB.Enabled = False
+            Next
+        End If
+
         ListViewFilesOutOfDate = False
-        'BT_Update.BackColor = Color.FromName("Control")
 
         Me.TaskList = UP.GetTaskList
 
@@ -800,12 +883,11 @@ Public Class Form_Main
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
-        Me.TemplatePropertyDict = UP.GetTemplatePropertyDict()
-        Me.TemplatePropertyList = UP.GetTemplatePropertyList
+        'Me.TemplatePropertyDict = UP.GetTemplatePropertyDict()
+        'Me.TemplatePropertyList = UP.GetTemplatePropertyList
 
-        Me.PropertyFilterDict = UP.GetPropertyFilterDict
+        'Me.PropertyFilterDict = UP.GetPropertyFilterDict
 
-        'UP.CheckForNewerVersion(Me.Version)
         If Me.CheckForNewerVersion Then
             UP.CheckForNewerVersion(Me.Version)
         End If
@@ -813,38 +895,38 @@ Public Class Form_Main
     End Sub
 
 
-    Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
+    'Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
 
-        'Dim UD As New UtilsDefaults(Me)
+    '    'Dim UD As New UtilsDefaults(Me)
 
-        ' Update configuration
-        'Configuration = UD.GetConfiguration()
+    '    ' Update configuration
+    '    'Configuration = UD.GetConfiguration()
 
-        'Dim backcolor As New Color
-        'backcolor = BT_Update.BackColor
+    '    'Dim backcolor As New Color
+    '    'backcolor = BT_Update.BackColor
 
-        'BT_Update.BackColor = Color.FromName("Control")
+    '    'BT_Update.BackColor = Color.FromName("Control")
 
-        'If ListViewFilesOutOfDate Then
-        '    BT_Update.BackColor = Color.Orange
-        'Else
-        '    BT_Update.BackColor = Color.FromName("Control")
-        'End If
+    '    'If ListViewFilesOutOfDate Then
+    '    '    BT_Update.BackColor = Color.Orange
+    '    'Else
+    '    '    BT_Update.BackColor = Color.FromName("Control")
+    '    'End If
 
-        'If Not CheckBoxProcessAsAvailable.Checked Then
-        '    Dim StatusChangeRadioButtons As New List(Of RadioButton)
-        '    Dim RB As RadioButton
+    '    'If Not CheckBoxProcessAsAvailable.Checked Then
+    '    '    Dim StatusChangeRadioButtons As New List(Of RadioButton)
+    '    '    Dim RB As RadioButton
 
-        '    StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+    '    '    StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        '    RadioButtonProcessAsAvailableRevert.Enabled = False
-        '    RadioButtonProcessAsAvailableChange.Enabled = False
-        '    For Each RB In StatusChangeRadioButtons
-        '        RB.Enabled = False
-        '    Next
-        'End If
+    '    '    RadioButtonProcessAsAvailableRevert.Enabled = False
+    '    '    RadioButtonProcessAsAvailableChange.Enabled = False
+    '    '    For Each RB In StatusChangeRadioButtons
+    '    '        RB.Enabled = False
+    '    '    Next
+    '    'End If
 
-    End Sub
+    'End Sub
 
     'Public Function GetControlDict(Exclude As Boolean) As Dictionary(Of String, Control)
     '    Dim ControlDict As New Dictionary(Of String, Control)
@@ -941,7 +1023,7 @@ Public Class Form_Main
             Me.FastSearchScopeFilename = tmpFileDialog.FileName
         End If
         ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
 
     End Sub
 
@@ -1023,27 +1105,27 @@ Public Class Form_Main
 
     Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
         ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
         ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
         ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
         ListViewFilesOutOfDate = True
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxRememberTasks_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRememberTasks.CheckedChanged
         Me.RememberTasks = CheckBoxRememberTasks.Checked
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxTLAReportUnrelatedFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAReportUnrelatedFiles.CheckedChanged
@@ -1052,7 +1134,7 @@ Public Class Form_Main
         ListViewFilesOutOfDate = True
         'BT_Update.BackColor = Color.Orange
 
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
 
@@ -1081,7 +1163,7 @@ Public Class Form_Main
         ListViewFilesOutOfDate = True
         'BT_Update.BackColor = Color.Orange
 
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonTLATopDown_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLATopDown.CheckedChanged
@@ -1098,7 +1180,7 @@ Public Class Form_Main
         ListViewFilesOutOfDate = True
         'BT_Update.BackColor = Color.Orange
 
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
 
@@ -1109,7 +1191,7 @@ Public Class Form_Main
     Private Sub TextBoxFastSearchScopeFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFastSearchScopeFilename.TextChanged
         Me.FastSearchScopeFilename = TextBoxFastSearchScopeFilename.Text
 
-        ReconcileFormChanges()
+        'ReconcileFormChanges()
     End Sub
 
 
@@ -2259,7 +2341,7 @@ Public Class Form_Main
 
         Me.Cursor = Cursors.WaitCursor
 
-        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        Dim tmpTemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
 
         Dim Templates As List(Of String) = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
         Dim TemplateDocTypes As List(Of String) = {"asm", "par", "psm", "dft"}.ToList
@@ -2295,27 +2377,27 @@ Public Class Form_Main
                         Try
                             Prop = CType(PropertySet.Item(j), SolidEdgeFileProperties.Property)
                             PropName = Prop.Name
-                            If Not TemplatePropertyDict.Keys.Contains(PropName) Then
-                                TemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-                                TemplatePropertyDict(PropName)("PropertySet") = PropertySetName
-                                TemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
-                                TemplatePropertyDict(PropName)("ParPropItemNumber") = ""
-                                TemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
-                                TemplatePropertyDict(PropName)("DftPropItemNumber") = ""
+                            If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
+                                tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
+                                tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetName
+                                tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
+                                tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
+                                tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
+                                tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
                                 Dim s As String = UC.PropLocalizedToEnglish(PropertySetName, j + 1, DocType)
                                 If s = "" Then s = PropName
-                                TemplatePropertyDict(PropName)("EnglishName") = s
+                                tmpTemplatePropertyDict(PropName)("EnglishName") = s
                             End If
 
                             Select Case DocType
                                 Case "asm"
-                                    TemplatePropertyDict(PropName)("AsmPropItemNumber") = CStr(j + 1)
+                                    tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = CStr(j + 1)
                                 Case "par"
-                                    TemplatePropertyDict(PropName)("ParPropItemNumber") = CStr(j + 1)
+                                    tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = CStr(j + 1)
                                 Case "psm"
-                                    TemplatePropertyDict(PropName)("PsmPropItemNumber") = CStr(j + 1)
+                                    tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = CStr(j + 1)
                                 Case "dft"
-                                    TemplatePropertyDict(PropName)("DftPropItemNumber") = CStr(j + 1)
+                                    tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = CStr(j + 1)
                             End Select
 
                         Catch ex As Exception
@@ -2331,13 +2413,15 @@ Public Class Form_Main
         Next
 
         ''Check consistency -- only works when running non-localized
-        'For Each Key As String In TemplatePropertyDict.Keys
-        '    If Not Key = TemplatePropertyDict(Key)("EnglishName") Then
-        '        MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, TemplatePropertyDict(Key)("EnglishName")))
+        'For Each Key As String In tmpTemplatePropertyDict.Keys
+        '    If Not Key = tmpTemplatePropertyDict(Key)("EnglishName") Then
+        '        MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, tmpTemplatePropertyDict(Key)("EnglishName")))
         '    End If
         'Next
 
         Me.Cursor = Cursors.Default
+
+        Me.TemplatePropertyDict = tmpTemplatePropertyDict
 
         ButtonCustomizeTemplatePropertyDict.PerformClick()
 
@@ -2623,36 +2707,24 @@ Public Class Form_Main
         Me.PropertyFilterIncludeDraftItself = CheckBoxPropertyFilterIncludeDraftItself.Checked
     End Sub
 
-    'Private Sub new_ComboBoxFileSearch_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.SelectedIndexChanged
-    '    ListViewFilesOutOfDate = True
-    '    BT_Update.BackColor = Color.Orange
-
-    '    ReconcileFormChanges()
-    'End Sub
-
-    'Private Sub new_ComboBoxFileSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBoxFileWildcard.KeyDown
-    '    If e.KeyCode = Keys.Enter Then
-    '        'ApplyFilters()
-    '        e.Handled = True
-    '        e.SuppressKeyPress = True
-    '    End If
-    'End Sub
-
-    Private Sub ComboBoxFileWildcard_TextChanged(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.TextChanged
+    Private Sub ComboBoxFileWildcard_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.LostFocus
         Me.FileWildcard = ComboBoxFileWildcard.Text
 
-        ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-    End Sub
+        If Not FileWildcardList.Contains(Me.FileWildcard) Then
+            FileWildcardList.Add(Me.FileWildcard)
+        End If
 
-    Private Sub ComboBoxFileWildcard_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.LostFocus
-
-        Dim Key As String = ComboBoxFileWildcard.Text
-
-        If Not ComboBoxFileWildcard.Items.Contains(Key) Then
+        If Not ComboBoxFileWildcard.Items.Contains(ComboBoxFileWildcard.Text) Then
             ComboBoxFileWildcard.Items.Add(ComboBoxFileWildcard.Text)
         End If
 
+        ListViewFilesOutOfDate = True
+    End Sub
+
+    Private Sub ComboBoxFileWildcard_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFileWildcard.SelectedIndexChanged
+        Me.FileWildcard = ComboBoxFileWildcard.Text
+
+        ListViewFilesOutOfDate = True
     End Sub
 
     Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnNoImportedProperties.CheckedChanged

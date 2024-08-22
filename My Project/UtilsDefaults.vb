@@ -380,7 +380,7 @@ Public Class UtilsDefaults
             MsgBox("Some form defaults were not restored.  The program will continue.  Please verify settings.")
         End Try
 
-        FMain.ReconcileFormChanges()
+        'FMain.ReconcileFormChanges()
 
     End Sub
 

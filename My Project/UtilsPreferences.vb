@@ -504,6 +504,7 @@ Public Class UtilsPreferences
         Dim FormType As Type = _Form_Main.GetType()
         Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
         Dim Value As String
+        Dim PropType As String
 
         Dim KeepProps As New List(Of String)
         KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
@@ -514,7 +515,8 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"DraftTemplate", "MaterialTable", "UseTemplateProperties"})
         KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "FileListFontSize", "RememberTasks", "RunInBackground"})
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
-        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "SolidEdgeRequired"})
+        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
+        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
@@ -522,18 +524,31 @@ Public Class UtilsPreferences
                 Continue For
             End If
 
-            Value = CStr(PropInfo.GetValue(_Form_Main, Nothing))
+            PropType = PropInfo.PropertyType.Name.ToLower
+
+            Value = Nothing
+
+            Select Case PropType
+                Case "string", "double", "int32", "boolean"
+                    Value = CStr(PropInfo.GetValue(_Form_Main, Nothing))
+                Case "list`1"
+                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(_Form_Main, Nothing))
+                Case Else
+                    MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
+            End Select
+
 
             If Value Is Nothing Then
-                Select Case PropInfo.PropertyType.Name.ToLower
+                Select Case PropType
                     Case "string"
                         Value = ""
-                    Case "double"
-                        Value = "0"
-                    Case "int32"
+                    Case "double", "int32"
                         Value = "0"
                     Case "boolean"
                         Value = "False"
+                    Case "list`1"
+                        Value = JsonConvert.SerializeObject(New List(Of String))
+                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
                     Case Else
                         MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
                 End Select
@@ -580,6 +595,9 @@ Public Class UtilsPreferences
                             PropInfo.SetValue(_Form_Main, CInt(tmpJSONDict(PropInfo.Name)))
                         Case "boolean"
                             PropInfo.SetValue(_Form_Main, CBool(tmpJSONDict(PropInfo.Name)))
+                        Case "list`1"
+                            Dim L = JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
+                            PropInfo.SetValue(_Form_Main, L)
                     End Select
 
                 End If
