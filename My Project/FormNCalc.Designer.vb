@@ -43,9 +43,12 @@ Partial Class FormNCalc
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.BackColor = System.Drawing.Color.White
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Test, Me.ToolStripSeparator1, Me.DD_SavedExpressions, Me.BT_Save, Me.BT_SaveAs, Me.BT_Delete, Me.BT_Clear, Me.ToolStripSeparator2, Me.BT_Help})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStrip1.Size = New System.Drawing.Size(915, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -127,7 +130,6 @@ Partial Class FormNCalc
         Me.TextEditorFormula.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorFormula.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorFormula.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TextEditorFormula.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorFormula.IsReplaceMode = False
         Me.TextEditorFormula.Location = New System.Drawing.Point(0, 25)
         Me.TextEditorFormula.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -150,7 +152,6 @@ Partial Class FormNCalc
         Me.TextEditorResults.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.TextEditorResults.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.TextEditorResults.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextEditorResults.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.TextEditorResults.IsReplaceMode = False
         Me.TextEditorResults.Location = New System.Drawing.Point(0, 249)
         Me.TextEditorResults.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -164,13 +165,13 @@ Partial Class FormNCalc
         '
         'FormNCalc
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(915, 445)
         Me.Controls.Add(Me.TextEditorResults)
         Me.Controls.Add(Me.TextEditorFormula)
         Me.Controls.Add(Me.ToolStrip1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
