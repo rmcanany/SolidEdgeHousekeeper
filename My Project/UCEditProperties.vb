@@ -77,16 +77,17 @@ Public Class UCEditProperties
     Private Sub ComboBoxPropertyName_Leave(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.Leave
         Me.PropertyName = ComboBoxPropertyName.Text
 
-        If Me.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
-            Dim s As String = TemplatePropertyDict(Me.PropertyName)("PropertySet")
+        If Not IsNothing(Me.TemplatePropertyDict) Then
+            If Me.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
+                Dim s As String = TemplatePropertyDict(Me.PropertyName)("PropertySet")
 
-            If Not ((s = "") Or (s = "Custom")) Then
-                s = "System"
+                If Not ((s = "") Or (s = "Custom")) Then
+                    s = "System"
+                End If
+
+                ComboBoxPropertySet.Text = s
             End If
-
-            ComboBoxPropertySet.Text = s
         End If
-
 
         Notify()
     End Sub
