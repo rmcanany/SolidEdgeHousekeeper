@@ -69,10 +69,25 @@ Public Class UCEditProperties
         Notify()
     End Sub
 
-    'Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
-    '    Me.PropertyName = ComboBoxPropertyName.Text
-    '    Notify()
-    'End Sub
+    Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
+        Me.PropertyName = ComboBoxPropertyName.Text
+
+        If Not IsNothing(Me.TemplatePropertyDict) Then
+            If Me.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
+                Dim s As String = TemplatePropertyDict(Me.PropertyName)("PropertySet")
+
+                If Not ((s = "") Or (s = "Custom")) Then
+                    s = "System"
+                End If
+
+                ComboBoxPropertySet.Text = s
+            Else
+                ComboBoxPropertySet.Text = ""
+            End If
+        End If
+
+        Notify()
+    End Sub
 
     Private Sub ComboBoxPropertyName_Leave(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.Leave
         Me.PropertyName = ComboBoxPropertyName.Text
@@ -86,11 +101,14 @@ Public Class UCEditProperties
                 End If
 
                 ComboBoxPropertySet.Text = s
+            Else
+                ComboBoxPropertySet.Text = ""
             End If
         End If
 
         Notify()
     End Sub
+
 
     Private Sub ComboBoxFindType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFindSearch.SelectedIndexChanged
         Me.FindSearch = ComboBoxFindSearch.Text

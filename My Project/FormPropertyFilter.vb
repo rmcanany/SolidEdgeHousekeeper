@@ -1,21 +1,23 @@
 ﻿Option Strict On
 
+Imports System.Text.RegularExpressions
 Imports Newtonsoft.Json
 
 Public Class FormPropertyFilter
 
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property JSONString As String
-    '{"0":
-    '    {"Variable":"A",
-    '     "PropertySet":"Custom",
-    '     "PropertyName":"hmk_Part_Number",
-    '     "Comparison":"contains",
-    '     "Value":"aluminum",
-    '     "Formula":"A AND B"},
-    ' "1":
-    '...
-    '}
+
+    'Public Property JSONString As String
+    ''{"0":
+    ''    {"Variable":"A",
+    ''     "PropertySet":"Custom",
+    ''     "PropertyName":"hmk_Part_Number",
+    ''     "Comparison":"contains",
+    ''     "Value":"aluminum",
+    ''     "Formula":"A AND B"},
+    '' "1":
+    ''...
+    ''}
 
     Public Property UCList As List(Of UCPropertyFilter)
     Public Property HelpURL As String
@@ -25,59 +27,29 @@ Public Class FormPropertyFilter
     Public Property Formula As String
 
 
-
-    'Dim t As Timer = New Timer()
-
     Public Sub New()
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-        Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        Me.TemplatePropertyList = Form_Main.TemplatePropertyList
 
         Dim UP As New UtilsPreferences
+
+        ' Form_Main does these assignments
+        'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+        'Me.TemplatePropertyList = Form_Main.TemplatePropertyList
         'Me.PropertyFilterDict = UP.GetPropertyFilterDict
+
         Me.SavedSettingsDict = UP.GetPropertyFilterSavedSettings()
 
-        'Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
-
         Me.UCList = New List(Of UCPropertyFilter)
-
-
-        'Dim Version = Form_Main.Version
-
-        'Dim VersionSpecificReadme = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/README-{0}.md", Version)
-
-        'Me.HelpURL = String.Format("{0}#{1}", VersionSpecificReadme, "filtering")
 
         Dim UD As New UtilsDocumentation
         Dim Tag = "filtering"
         Me.HelpURL = UD.GenerateVersionURL(Tag)
 
 
-
-        Dim tf As Boolean
-
-        tf = Me.TemplatePropertyDict Is Nothing
-        tf = tf Or Me.TemplatePropertyList Is Nothing
-
-        If Not tf Then
-            tf = Me.TemplatePropertyDict.Count = 0
-            tf = tf Or Me.TemplatePropertyList.Count = 0
-        End If
-
-        tf = tf And Form_Main.WarnNoImportedProperties
-
-        If tf Then
-            Dim s As String = "Template properties not populated.  This is not an error, "
-            s = String.Format("{0}however it means properties must be entered manually.  ", s)
-            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
-            MsgBox(s, vbOKOnly)
-        End If
 
     End Sub
 
@@ -86,37 +58,53 @@ Public Class FormPropertyFilter
         Dim InputsOK As Boolean = True
         Dim s As String = ""
         Dim indent As String = "    "
+        Dim tf As Boolean
 
-        'For Each UC As UCEditProperties In UCList
+        Dim Matches As MatchCollection
+        Dim MatchString As Match
+        Dim Pattern As String
 
-        '	' Ignore any with no PropertyName
-        '	If Not UC.PropertyName = "" Then
-        '		If UC.PropertySet = "" Then
-        '			s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-        '		End If
-        '		If UC.FindSearch = "" Then
-        '			s = String.Format("{0}{1}Select a Find Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-        '		End If
-        '		If Not UC.FindSearch = "X" Then
-        '			If UC.ReplaceSearch = "" Then
-        '				s = String.Format("{0}{1}Select a Replace Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-        '			End If
-        '		End If
-        '	End If
+        For Each UC As UCPropertyFilter In UCList
 
-        'Next
+            ' Ignore any with no PropertyName
+            If Not UC.PropertyName = "" Then
+                If UC.PropertySet = "" Then
+                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
 
-        'If Not s = "" Then
-        '	InputsOK = False
-        '	s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
-        '	MsgBox(s, vbOKOnly)
-        'End If
+                If UC.Comparison = "" Then
+                    s = String.Format("{0}{1}Set a Comparison for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
+
+                If UC.Value.Contains("%{") Then
+                    ' Any number of substrings that start with "%{" and end with the first encountered "}".
+                    Pattern = "%{[^}]*}"
+                    Matches = Regex.Matches(UC.Value, Pattern)
+                    For Each MatchString In Matches
+                        tf = MatchString.Value.Contains("System.")
+                        tf = tf Or MatchString.Value.Contains("Custom.")
+                        If Not tf Then
+                            s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, MatchString.Value, vbCrLf)
+                        End If
+                    Next
+
+                End If
+            End If
+
+        Next
+
+        If Not s = "" Then
+            InputsOK = False
+            s = String.Format("Please correct the following before continuing{0}{1}", vbCrLf, s)
+            MsgBox(s, vbOKOnly)
+        End If
 
         Return InputsOK
     End Function
 
-    Private Function CreateJSONDict() As Dictionary(Of String, Dictionary(Of String, String))
-        Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
+    Private Function UpdatePropertyFilterDictFromForm() As Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim tmpPropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
 
         Dim i = 0
 
@@ -130,57 +118,53 @@ Public Class FormPropertyFilter
                 d("Value") = UC.Value
                 d("Formula") = UC.Formula
 
-                JSONDict(CStr(i)) = d
+                tmpPropertyFilterDict(CStr(i)) = d
 
                 i += 1
             End If
         Next
 
-        Return JSONDict
+        Return tmpPropertyFilterDict
     End Function
 
-    Public Sub PopulateUCList(JSONDict As Dictionary(Of String, Dictionary(Of String, String)))
+    Public Sub PopulateUCList(tmpPropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
+
         Dim NewUC As UCPropertyFilter
 
         Me.UCList.Clear()
 
-        'Dim Ascii = 65  ' "A"
-
-        For Each Key As String In JSONDict.Keys
+        For Each Key As String In tmpPropertyFilterDict.Keys
             NewUC = New UCPropertyFilter(Me)
 
-            NewUC.Variable = JSONDict(Key)("Variable")
-            'NewUC.Variable = Chr(Ascii)
-            NewUC.PropertySet = JSONDict(Key)("PropertySet")
-            NewUC.PropertyName = JSONDict(Key)("PropertyName")
-            NewUC.Comparison = JSONDict(Key)("Comparison")
-            NewUC.Value = JSONDict(Key)("Value")
-            NewUC.Formula = JSONDict(Key)("Formula")
+            NewUC.Variable = tmpPropertyFilterDict(Key)("Variable")
+            NewUC.PropertySet = tmpPropertyFilterDict(Key)("PropertySet")
+            NewUC.PropertyName = tmpPropertyFilterDict(Key)("PropertyName")
+            NewUC.Comparison = tmpPropertyFilterDict(Key)("Comparison")
+            NewUC.Value = tmpPropertyFilterDict(Key)("Value")
+            NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
 
             NewUC.ReconcileFormWithProps()
 
             NewUC.Dock = DockStyle.Fill
 
             UCList.Add(NewUC)
-
-            'Ascii += 1
         Next
 
     End Sub
 
     Public Sub PopulateForm()
 
-        Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
-        Dim ListIsFromSavedSettings As Boolean = False
+        'Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
+        'Dim ListIsFromSavedSettings As Boolean = False
 
-        If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
-            ListIsFromSavedSettings = True
-            JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
-        End If
+        'If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
+        '    ListIsFromSavedSettings = True
+        '    JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
+        'End If
 
-        PopulateUCList(JSONDict)
+        PopulateUCList(Me.PropertyFilterDict)
 
-        UpdateForm(ListIsFromSavedSettings:=ListIsFromSavedSettings)
+        UpdateForm(UpdateFormula:=False)
 
     End Sub
 
@@ -235,13 +219,16 @@ Public Class FormPropertyFilter
 
     End Sub
 
-    Private Sub UpdateForm(ListIsFromSavedSettings As Boolean)
+    Private Sub UpdateForm(UpdateFormula As Boolean)
 
-        If Not ListIsFromSavedSettings Then
+        If UpdateFormula Then
             UpdateVariablesAndFormula()
         Else
-            Dim tmpFormula As String = UCList(0).Formula
-            Me.Formula = tmpFormula
+            If UCList.Count > 0 Then
+                Me.Formula = UCList(0).Formula
+            Else
+                Me.Formula = ""
+            End If
             TextBoxFormula.Text = Me.Formula
         End If
 
@@ -266,17 +253,17 @@ Public Class FormPropertyFilter
         Next
 
         If NeedANewRow Then
-            AddRow(ListIsFromSavedSettings:=ListIsFromSavedSettings)
+            AddRow(UpdateFormula:=UpdateFormula)
         End If
 
     End Sub
 
-    Public Sub AddRow(ListIsFromSavedSettings As Boolean)
+    Public Sub AddRow(UpdateFormula As Boolean)
         Dim NewUC As New UCPropertyFilter(Me)
         NewUC.Dock = DockStyle.Fill
         Me.UCList.Add(NewUC)
 
-        If Not ListIsFromSavedSettings Then
+        If UpdateFormula Then
             UpdateVariablesAndFormula()
         End If
 
@@ -336,9 +323,9 @@ Public Class FormPropertyFilter
 
             Me.UCList = tmpUCList
 
+            UpdateForm(UpdateFormula:=True)
         End If
 
-        UpdateForm(ListIsFromSavedSettings:=False)
 
     End Sub
 
@@ -373,7 +360,7 @@ Public Class FormPropertyFilter
         Next
 
         If NeedANewRow Then
-            AddRow(ListIsFromSavedSettings:=False)
+            AddRow(UpdateFormula:=True)
         End If
 
     End Sub
@@ -381,7 +368,11 @@ Public Class FormPropertyFilter
 
     Private Sub FormPropertyFilter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
+        'Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
+
+        If Me.PropertyFilterDict Is Nothing Then
+            Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
+        End If
 
         PopulateForm()
 
@@ -394,20 +385,34 @@ Public Class FormPropertyFilter
             FormatFormula(PropertyFilterDict("0")("Formula"))
         End If
 
+        ' Check if the Properties were imported from templates
+        Dim tf As Boolean
+
+        tf = Me.TemplatePropertyDict Is Nothing
+        tf = tf Or Me.TemplatePropertyList Is Nothing
+
+        If Not tf Then
+            tf = Me.TemplatePropertyDict.Count = 0
+            tf = tf Or Me.TemplatePropertyList.Count = 0
+        End If
+
+        tf = tf And Form_Main.WarnNoImportedProperties
+
+        If tf Then
+            Dim s As String = "Template properties not populated.  This is not an error, "
+            s = String.Format("{0}however it means properties must be entered manually.  ", s)
+            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
+            MsgBox(s, vbOKOnly)
+        End If
+
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
         If CheckInputs() Then
-            Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
-
-            JSONDict = CreateJSONDict()
-            Me.JSONString = JsonConvert.SerializeObject(JSONDict)
-
-            Me.PropertyFilterDict = JSONDict
-
-            'Dim UP As New UtilsPreferences
-            'UP.SavePropertyFilterDict(Me.PropertyFilterDict)
+            Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
 
             Me.DialogResult = DialogResult.OK
         End If
@@ -440,7 +445,7 @@ Public Class FormPropertyFilter
 
             UCList = tmpUCList
 
-            UpdateForm(ListIsFromSavedSettings:=False)
+            UpdateForm(UpdateFormula:=True)
         End If
 
     End Sub
@@ -471,7 +476,7 @@ Public Class FormPropertyFilter
 
         If Proceed Then
             Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
-            JSONDict = CreateJSONDict()
+            JSONDict = UpdatePropertyFilterDictFromForm()
 
             SavedSettingsDict(Name) = JSONDict
 
@@ -491,7 +496,7 @@ Public Class FormPropertyFilter
 
             PopulateUCList(SavedSettingsDict(Name))
 
-            UpdateForm(ListIsFromSavedSettings:=True)
+            UpdateForm(UpdateFormula:=False)
 
         End If
 
@@ -538,5 +543,7 @@ Public Class FormPropertyFilter
 
     End Sub
 
+    'Private Sub TextBoxFormula_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFormula.TextChanged
 
+    'End Sub
 End Class

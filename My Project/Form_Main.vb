@@ -1037,7 +1037,11 @@ Public Class Form_Main
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
 
         Dim FPF As New FormPropertyFilter
+
         FPF.PropertyFilterDict = Me.PropertyFilterDict
+        FPF.TemplatePropertyDict = Me.TemplatePropertyDict
+        FPF.TemplatePropertyList = Me.TemplatePropertyList
+
         FPF.ShowDialog()
 
         If FPF.DialogResult = DialogResult.OK Then
