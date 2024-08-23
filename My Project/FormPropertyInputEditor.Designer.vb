@@ -246,7 +246,7 @@ Partial Class FormPropertyInputEditor
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(38, 10)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(73, 15)
+        Me.Label13.Size = New System.Drawing.Size(71, 15)
         Me.Label13.TabIndex = 0
         Me.Label13.Text = "Property Set"
         '
@@ -256,7 +256,7 @@ Partial Class FormPropertyInputEditor
         Me.Label15.AutoSize = True
         Me.Label15.Location = New System.Drawing.Point(138, 10)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(89, 15)
+        Me.Label15.Size = New System.Drawing.Size(87, 15)
         Me.Label15.TabIndex = 1
         Me.Label15.Text = "Property Name"
         '
@@ -266,7 +266,7 @@ Partial Class FormPropertyInputEditor
         Me.Label16.AutoSize = True
         Me.Label16.Location = New System.Drawing.Point(288, 10)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(27, 15)
+        Me.Label16.Size = New System.Drawing.Size(24, 15)
         Me.Label16.TabIndex = 2
         Me.Label16.Text = "FS*"
         '
@@ -276,7 +276,7 @@ Partial Class FormPropertyInputEditor
         Me.Label17.AutoSize = True
         Me.Label17.Location = New System.Drawing.Point(338, 10)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(57, 15)
+        Me.Label17.Size = New System.Drawing.Size(54, 15)
         Me.Label17.TabIndex = 3
         Me.Label17.Text = "Find Text"
         '
@@ -286,7 +286,7 @@ Partial Class FormPropertyInputEditor
         Me.Label18.AutoSize = True
         Me.Label18.Location = New System.Drawing.Point(465, 10)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(29, 15)
+        Me.Label18.Size = New System.Drawing.Size(25, 15)
         Me.Label18.TabIndex = 4
         Me.Label18.Text = "RS*"
         '
@@ -296,7 +296,7 @@ Partial Class FormPropertyInputEditor
         Me.Label19.AutoSize = True
         Me.Label19.Location = New System.Drawing.Point(515, 10)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(79, 15)
+        Me.Label19.Size = New System.Drawing.Size(72, 15)
         Me.Label19.TabIndex = 5
         Me.Label19.Text = "Replace Text"
         '
@@ -368,7 +368,7 @@ Partial Class FormPropertyInputEditor
         Me.Label22.AutoSize = True
         Me.Label22.Location = New System.Drawing.Point(110, 25)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(440, 15)
+        Me.Label22.Size = New System.Drawing.Size(401, 15)
         Me.Label22.TabIndex = 2
         Me.Label22.Text = "RS: Replace Search   PT: Plain Text    RX: Regular Expression    EX: Expression"
         '
@@ -377,7 +377,7 @@ Partial Class FormPropertyInputEditor
         Me.Label21.AutoSize = True
         Me.Label21.Location = New System.Drawing.Point(110, 5)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(549, 15)
+        Me.Label21.Size = New System.Drawing.Size(518, 15)
         Me.Label21.TabIndex = 1
         Me.Label21.Text = "FS: Find Search           PT: Plain Text    WC: Wildcard                       RX" &
     ": Regular Expression    X: Delete"
@@ -387,7 +387,7 @@ Partial Class FormPropertyInputEditor
         Me.Label20.AutoSize = True
         Me.Label20.Location = New System.Drawing.Point(20, 5)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(65, 15)
+        Me.Label20.Size = New System.Drawing.Size(58, 15)
         Me.Label20.TabIndex = 0
         Me.Label20.Text = "* LEGEND"
         '
@@ -402,7 +402,7 @@ Partial Class FormPropertyInputEditor
         Me.Controls.Add(Me.ToolStripEditProperties)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyInputEditor"
