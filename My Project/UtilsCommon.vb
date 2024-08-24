@@ -94,6 +94,7 @@ Public Class UtilsCommon
 
         Return PropDict
     End Function
+
     Public Function GetFileProperties(Filename As String) As List(Of String)
         ' Gets the properties using Windows functionality
 
@@ -472,6 +473,7 @@ Public Class UtilsCommon
 
         Return EnglishName
     End Function
+
     Public Sub FindLinked(DMDoc As DesignManager.Document)
 
         Dim Filename As String
@@ -655,8 +657,8 @@ Public Class UtilsCommon
         Dim FoundProp As SolidEdgeFramework.Property = Nothing
         Dim Proceed As Boolean = True
         Dim tf As Boolean
-        Dim tf1 As Boolean
-        Dim tf2 As Boolean
+        'Dim tf1 As Boolean
+        'Dim tf2 As Boolean
         Dim PropertyFound As Boolean
 
         If ModelLinkIdx = 0 Then  ' Implies the document is a model file
@@ -707,14 +709,14 @@ Public Class UtilsCommon
         If Proceed Then
             For Each PropertySet In PropertySets
                 For Each Prop In PropertySet
-                    'Check if both names are 'custom' or neither are
-                    tf1 = (PropertySetName.ToLower = "custom") And (PropertySet.Name.ToLower = "custom")
-                    tf2 = (PropertySetName.ToLower <> "custom") And (PropertySet.Name.ToLower <> "custom")
+                    ''Check if both names are 'custom' or neither are
+                    'tf1 = (PropertySetName.ToLower = "custom") And (PropertySet.Name.ToLower = "custom")
+                    'tf2 = (PropertySetName.ToLower <> "custom") And (PropertySet.Name.ToLower <> "custom")
 
-                    tf = tf1 Or tf2
-                    If Not tf Then
-                        Continue For
-                    End If
+                    'tf = tf1 Or tf2
+                    'If Not tf Then
+                    '    Continue For
+                    'End If
 
                     ' Some properties do not have names.
                     Try
@@ -726,7 +728,12 @@ Public Class UtilsCommon
                     Catch ex As Exception
                     End Try
 
-                    If PropertySetName = "System" And PropertySet.Name = "SummaryInformation" Then
+                    ' Here and below, a custom property will pass the first two tests, not the third.
+                    tf = PropertySetName = "System"
+                    tf = tf Or PropertySetName = ""
+                    tf = tf And PropertySet.Name = "SummaryInformation"
+
+                    If tf Then
 
                         Select Case PropertyName
                             Case = "Title"
@@ -758,7 +765,11 @@ Public Class UtilsCommon
 
                     End If
 
-                    If PropertySetName = "System" And PropertySet.Name = "DocumentSummaryInformation" Then
+                    tf = PropertySetName = "System"
+                    tf = tf Or PropertySetName = ""
+                    tf = tf And PropertySet.Name = "DocumentSummaryInformation"
+
+                    If tf Then
 
                         Select Case PropertyName
 
@@ -781,7 +792,11 @@ Public Class UtilsCommon
 
                     End If
 
-                    If PropertySetName = "System" And PropertySet.Name = "ProjectInformation" Then
+                    tf = PropertySetName = "System"
+                    tf = tf Or PropertySetName = ""
+                    tf = tf And PropertySet.Name = "ProjectInformation"
+
+                    If tf Then
 
                         Select Case PropertyName
 
@@ -803,6 +818,10 @@ Public Class UtilsCommon
                         End Select
 
                     End If
+
+                    tf = PropertySetName = "System"
+                    tf = tf Or PropertySetName = ""
+                    tf = tf And PropertySet.Name = "MechanicalModeling"
 
                     If PropertySetName = "System" And PropertySet.Name = "MechanicalModeling" Then
 
@@ -833,8 +852,12 @@ Public Class UtilsCommon
 
         End If
 
-        'If the property was not found, and the PropertySetName is "Custom", add it.
-        tf = (AddProp) And (Not PropertyFound) And (PropertySetName.ToLower = "custom")
+        ''If the property was not found, and the PropertySetName is "Custom", add it.
+        'tf = (AddProp) And (Not PropertyFound) And (PropertySetName.ToLower = "custom")
+
+        'If the property was not found, add it.
+        tf = (AddProp) And (Not PropertyFound)
+
         If tf Then
             Try
                 PropertySet = PropertySets.Item("Custom")
@@ -865,35 +888,70 @@ Public Class UtilsCommon
 
         Dim OLEProp As OLEProperty = Nothing
 
-        Try
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
 
-            If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+        Try
+            'If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+            '    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            'End If
+
+            'If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+            '    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+            'End If
+
+            'If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+            '    OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+            'End If
+
+            'If PropertySetName.ToLower = "custom" Then
+            '    Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            '    Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+
+            '    OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+            'End If
+
+            If SIList.Contains(PropertyName) Then
                 Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
                 Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
                 OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-            End If
 
-            If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+            ElseIf DSIList.Contains(PropertyName) Then
                 Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                 Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
                 OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-            End If
 
-            If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+            ElseIf FunnyList.Contains(PropertyName) Then
                 Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                 Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
                 OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-            End If
 
-            If PropertySetName.ToLower = "custom" Then
+            Else
                 Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                 Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
 
                 OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+
             End If
+
 
         Catch ex As Exception
 
@@ -1387,19 +1445,31 @@ Public Class UtilsCommon
 
         FullName = SplitFOAName(FullName)("Filename")
 
-        tf = Instring.Contains("%{System")
-        tf = tf Or Instring.Contains("%{Custom")
-        tf = tf Or Instring.Contains("%{Project")
+        'tf = Instring.Contains("%{System")
+        'tf = tf Or Instring.Contains("%{Custom")
+        'tf = tf Or Instring.Contains("%{Project")
 
-        If Not tf Then
+        'If Not tf Then
+        '    Outstring = Instring
+        '    Proceed = False
+        'End If
+
+        'If Proceed Then
+        '    ' Any number of substrings that start with "%{" and end with the first encountered "}".
+        '    Pattern = "%{[^}]*}"
+        '    Matches = Regex.Matches(Instring, Pattern)
+        '    For Each MatchString In Matches
+        '        Formulas.Add(MatchString.Value)
+        '    Next
+        'End If
+
+        ' Any number of substrings that start with "%{" and end with the first encountered "}".
+        Pattern = "%{[^}]*}"
+        Matches = Regex.Matches(Instring, Pattern)
+        If Matches.Count = 0 Then
             Outstring = Instring
             Proceed = False
-        End If
-
-        If Proceed Then
-            ' Any number of substrings that start with "%{" and end with the first encountered "}".
-            Pattern = "%{[^}]*}"
-            Matches = Regex.Matches(Instring, Pattern)
+        Else
             For Each MatchString In Matches
                 Formulas.Add(MatchString.Value)
             Next
@@ -1407,19 +1477,31 @@ Public Class UtilsCommon
 
         If Proceed Then
             For Each Formula In Formulas
-                Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
-                Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
-                i = Formula.IndexOf(".")  ' First occurrence
 
-                Dim tmpFormula = Formula.Split(CType(".", Char))
-                If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
-                If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+                Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
+                '                                      "%{hmk_Engineer|R1}" -> "hmk_Engineer|R1}"
+                Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
+                '                                      "hmk_Engineer|R1}" -> "hmk_Engineer|R1"
+
+                tf = Formula.ToLower.Contains("system.")
+                tf = tf Or Formula.ToLower.Contains("custom.")
+
+                If tf Then
+                    i = Formula.IndexOf(".")  ' First occurrence
+
+                    Dim tmpFormula = Formula.Split(CType(".", Char))
+                    If tmpFormula.Length > 0 Then PropertySet = tmpFormula(0) 'Formula.Substring(0, i)    ' "Custom"
+                    If tmpFormula.Length > 1 Then PropertyName = tmpFormula(1) 'Formula.Substring(i + 1)  ' "hmk_Engineer|R1"
+                Else
+                    PropertySet = ""
+                    PropertyName = Formula
+                End If
 
                 'Not supported by Direct Structured Storage
                 If PropertyName.Contains("|R") Then
                     If Not IsNothing(SEDoc) Then
                         i = PropertyName.IndexOf("|")
-                        ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> "1"
+                        ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R1" -> 1
                         PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
                     Else
                         Return "[ERROR]" & PropertyName

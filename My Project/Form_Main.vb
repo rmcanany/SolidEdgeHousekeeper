@@ -577,7 +577,7 @@ Public Class Form_Main
         End Set
     End Property
 
-    Public Property TemplatePropertyList As New List(Of String)
+    Public Property TemplatePropertyList As List(Of String)
 
 
     ' ###### GENERAL ######
@@ -755,7 +755,7 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _FileWildcardList As New List(Of String)
+    Private _FileWildcardList As List(Of String)
     Public Property FileWildcardList As List(Of String)
         Get
             Return _FileWildcardList
@@ -810,6 +810,22 @@ Public Class Form_Main
         UP.CreateInteractiveEditCommands()
 
         UP.GetFormMainSettings(Me)
+
+        If Me.PropertyFilterDict Is Nothing Then
+            Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
+        End If
+
+        If Me.TemplatePropertyDict Is Nothing Then
+            Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        End If
+
+        If Me.TemplatePropertyList Is Nothing Then
+            Me.TemplatePropertyList = New List(Of String)
+        End If
+
+        If Me.FileWildcardList Is Nothing Then
+            Me.FileWildcardList = New List(Of String)
+        End If
 
         UD.BuildReadmeFile()
 
@@ -1635,8 +1651,8 @@ Public Class Form_Main
 
     Private Sub TextBoxFontSize_Leave(sender As Object, e As EventArgs) Handles TextBoxFileListFontSize.Leave
 
-        If Not IsNumeric(TextBoxFileListFontSize.Text) Then TextBoxFileListFontSize.Text = "8"
-        If TextBoxFileListFontSize.Text = "0" Then TextBoxFileListFontSize.Text = "8"
+        If Not IsNumeric(TextBoxFileListFontSize.Text) Then TextBoxFileListFontSize.Text = "9"
+        If TextBoxFileListFontSize.Text = "0" Then TextBoxFileListFontSize.Text = "9"
         ListViewFiles.Font = New Font(ListViewFiles.Font.FontFamily, CInt(TextBoxFileListFontSize.Text), FontStyle.Regular)
 
     End Sub

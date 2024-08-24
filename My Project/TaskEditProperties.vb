@@ -103,7 +103,6 @@ Public Class TaskEditProperties
     End Property
 
 
-
     Enum ControlNames
         Edit
         JSONString

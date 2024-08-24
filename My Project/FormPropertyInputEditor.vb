@@ -35,30 +35,11 @@ Public Class FormPropertyInputEditor
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
         Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
         Me.TemplatePropertyList = Form_Main.TemplatePropertyList
+
         Me.UCList = New List(Of UCEditProperties)
-
-        Dim tf As Boolean
-
-        tf = Me.TemplatePropertyDict Is Nothing
-        tf = tf Or Me.TemplatePropertyList Is Nothing
-
-        If Not tf Then
-            tf = Me.TemplatePropertyDict.Count = 0
-            tf = tf Or Me.TemplatePropertyList.Count = 0
-        End If
-
-        tf = tf And Form_Main.WarnNoImportedProperties
-
-        If tf Then
-            Dim s As String = "Template properties not populated.  This is not an error, "
-            s = String.Format("{0}however it means properties must be entered manually.  ", s)
-            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
-            MsgBox(s, vbOKOnly)
-        End If
 
         ' Set by TaskEditProperties
         'Dim UD As New UtilsDocumentation
@@ -77,9 +58,9 @@ Public Class FormPropertyInputEditor
 
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
-                If UC.PropertySet = "" Then
-                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-                End If
+                'If UC.PropertySet = "" Then
+                '    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                'End If
                 If UC.FindSearch = "" Then
                     s = String.Format("{0}{1}Select a Find Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                 End If
@@ -307,6 +288,29 @@ Public Class FormPropertyInputEditor
         For Each Key As String In Me.SavedSettingsDict.Keys
             ComboBoxSavedSettings.Items.Add(Key)
         Next
+
+        ' Check for imported template properties
+        Dim tf As Boolean
+
+        tf = Me.TemplatePropertyDict Is Nothing
+        tf = tf Or Me.TemplatePropertyList Is Nothing
+
+        If Not tf Then
+            tf = Me.TemplatePropertyDict.Count = 0
+            tf = tf Or Me.TemplatePropertyList.Count = 0
+        End If
+
+        tf = tf And Form_Main.WarnNoImportedProperties
+
+        If tf Then
+            Dim s As String = "Template properties not populated.  This is not an error, "
+            s = String.Format("{0}however it means properties must be entered manually.  ", s)
+            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
+            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
+            MsgBox(s, vbOKOnly)
+        End If
+
 
     End Sub
 

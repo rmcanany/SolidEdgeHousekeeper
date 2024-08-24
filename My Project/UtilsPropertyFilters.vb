@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Public Class UtilsPropertyFilters
 
     Public Property FMain As Form_Main
+    Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
@@ -25,7 +26,7 @@ Public Class UtilsPropertyFilters
         '     "PropertyName":"hmk_Part_Number",
         '     "Comparison":"contains",
         '     "Value":"aluminum",
-        '     "Formula":"A AND B"},
+        '     "Formula":" A AND B "},
         ' "1":
         '...
         '}
@@ -59,7 +60,6 @@ Public Class UtilsPropertyFilters
         Dim msg As String
 
         DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
-        'DMApp.SetGlobalParameter ' not exposed.
 
         FMain.Activate()
 
@@ -67,9 +67,10 @@ Public Class UtilsPropertyFilters
             If Form_Main.StopProcess Then
                 Exit For
             End If
-            'msg = CommonTasks.TruncateFullPath(FoundFile, Nothing)
+
             msg = System.IO.Path.GetFileName(FoundFile)
             FMain.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+
             tf = ProcessFile(DMApp, FoundFile, PropertyFilterDict, PropertyFilterFormula)
             If tf Then
                 FilteredFiles.Add(FoundFile)
@@ -150,7 +151,8 @@ Public Class UtilsPropertyFilters
             Comparison = PropertyFilterDict(Key)("Comparison")
             Value = PropertyFilterDict(Key)("Value")
 
-            DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
+            'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
+            DocValue = SearchProperties(PropertySets, PropertyName)
 
             tf2 = DoComparison(Comparison, Value, DocValue)
 
@@ -186,30 +188,35 @@ Public Class UtilsPropertyFilters
     End Function
 
     Public Function DoComparison(Comparison As String, Value As String, DocValue As String) As Boolean
+
         Dim tf As Boolean = False
 
-        If Comparison = "contains" Then
-            tf = DocValue.ToLower.Contains(Value.ToLower)
-        ElseIf Comparison = "is_exactly" Then
-            tf = DocValue.ToLower = Value.ToLower
-        ElseIf Comparison = "is_not" Then
-            tf = DocValue.ToLower <> Value.ToLower
-        ElseIf Comparison = "wildcard_match" Then
-            tf = DocValue.ToLower Like Value.ToLower
-        ElseIf Comparison = "regex_match" Then
-            tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
-        ElseIf Comparison = ">" Then
-            Try
-                tf = TextToDouble(DocValue) > TextToDouble(Value)
-            Catch ex As Exception
-                tf = DocValue.ToLower > Value.ToLower
-            End Try
-        ElseIf Comparison = "<" Then
-            Try
-                tf = TextToDouble(DocValue) < TextToDouble(Value)
-            Catch ex As Exception
-                tf = DocValue.ToLower < Value.ToLower
-            End Try
+        If Not DocValue = Me.PropNotFoundString Then  ' Can't match a prop that doesn't exist
+
+            If Comparison = "contains" Then
+                tf = DocValue.ToLower.Contains(Value.ToLower)
+            ElseIf Comparison = "is_exactly" Then
+                tf = DocValue.ToLower = Value.ToLower
+            ElseIf Comparison = "is_not" Then
+                tf = DocValue.ToLower <> Value.ToLower
+            ElseIf Comparison = "wildcard_match" Then
+                tf = DocValue.ToLower Like Value.ToLower
+            ElseIf Comparison = "regex_match" Then
+                tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
+            ElseIf Comparison = ">" Then
+                Try
+                    tf = TextToDouble(DocValue) > TextToDouble(Value)
+                Catch ex As Exception
+                    tf = DocValue.ToLower > Value.ToLower
+                End Try
+            ElseIf Comparison = "<" Then
+                Try
+                    tf = TextToDouble(DocValue) < TextToDouble(Value)
+                Catch ex As Exception
+                    tf = DocValue.ToLower < Value.ToLower
+                End Try
+            End If
+
         End If
 
         Return tf
@@ -256,80 +263,94 @@ Public Class UtilsPropertyFilters
 
     End Function
 
+    'Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
+    '                                  PropertySet As String,
+    '                                  PropertyName As String) As String
+
     Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
-                                      PropertySet As String,
-                                      PropertyName As String) As String
-        Dim DocValue As String = ""
-        Dim Properties As DesignManager.Properties
+                                     PropertyName As String) As String
+
+        Dim DocValue As String = Me.PropNotFoundString
+        Dim PropertySet As DesignManager.Properties
         Dim Prop As DesignManager.Property
-        Dim SystemPropertySets As New List(Of String)
-        Dim SystemPropertySet As String
+        Dim PropertySetNames As New List(Of String)
+        Dim PropertySetName As String
 
         Dim DateTime As DateTime
 
-        SystemPropertySets.Add("ProjectInformation")
-        SystemPropertySets.Add("MechanicalModeling")
-        SystemPropertySets.Add("SummaryInformation")
-        SystemPropertySets.Add("ExtendedSummaryInformation")
-        SystemPropertySets.Add("DocumentSummaryInformation")
+        PropertySetNames.Add("SummaryInformation")
+        PropertySetNames.Add("ExtendedSummaryInformation")
+        PropertySetNames.Add("DocumentSummaryInformation")
+        PropertySetNames.Add("ProjectInformation")
+        PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+        PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
 
         Dim TypeName As String
 
-        If PropertySet.ToLower = "custom" Then
-            ' The property may not be in every file
+        Dim GotAMatch As Boolean = False
+
+        For Each PropertySetName In PropertySetNames
+            ' Not all files have all PropertySets
             Try
-                Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
-                Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
-                TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-                DocValue = Prop.Value.ToString
-                If TypeName.ToLower = "date" Then
-                    DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-                    DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-                End If
+                PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                For i As Integer = 0 To PropertySet.Count - 1
+                    Prop = CType(PropertySet.Item(i), DesignManager.Property)
+                    If Prop.Name.ToLower = PropertyName.ToLower Then
+                        TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
+                        DocValue = Prop.Value.ToString
+                        If TypeName.ToLower = "date" Then
+                            DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+                            DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+                        End If
+                        GotAMatch = True
+                        Exit For
+                    End If
+                Next
             Catch ex As Exception
             End Try
-        Else
-            For Each SystemPropertySet In SystemPropertySets
-                ' The property will be in only one of the SystemPropertySets -- hopefully.
-                Try
-                    Properties = CType(PropertySets.Item(SystemPropertySet), DesignManager.Properties)
-                    Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
-                    TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-                    DocValue = Prop.Value.ToString
-                    If TypeName.ToLower = "date" Then
-                        DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-                        DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-                    End If
-                    Exit For
-                Catch ex As Exception
-                End Try
-            Next
 
-        End If
+            If GotAMatch Then
+                Exit For
+            End If
+        Next
+
+        'If PropertySet.ToLower = "custom" Then
+        '    ' The property may not be in every file
+        '    Try
+        '        Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
+        '        Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
+        '        TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
+        '        DocValue = Prop.Value.ToString
+        '        If TypeName.ToLower = "date" Then
+        '            DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+        '            DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+        '        End If
+        '    Catch ex As Exception
+        '    End Try
+        'Else
+        '    For Each PropertySetName In PropertySetNames
+        '        ' The property will be in only one of the SystemPropertySets -- hopefully.
+        '        Try
+        '            Properties = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+        '            Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
+        '            TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
+        '            DocValue = Prop.Value.ToString
+        '            If TypeName.ToLower = "date" Then
+        '                DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+        '                DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+        '            End If
+
+        '            ' If it gets to here, it didn't bomb out getting 'Prop'.  We can move on.
+        '            Exit For
+
+        '        Catch ex As Exception
+        '        End Try
+        '    Next
+
+        'End If
 
         Return DocValue
     End Function
-
-    'Shared Function ParsePropertyString(PropertyString As String, Element As String) As String
-    '    Dim Result As String
-    '    Dim PropertyStringList As List(Of String)
-
-    '    PropertyStringList = PropertyString.Split("."c).ToList
-
-    '    If Element = "PropertySet" Then
-    '        Result = PropertyStringList(0)
-    '    Else
-    '        PropertyStringList.RemoveAt(0)
-
-    '        Result = PropertyStringList(0)
-    '        For i = 1 To PropertyStringList.Count - 1
-    '            Result += String.Format(".{0}", PropertyStringList(i))
-    '        Next
-
-    '    End If
-
-    '    Return Result
-    'End Function
 
     Public Function EvaluateBoolean(Formula As String) As Boolean
         Dim tf As Boolean

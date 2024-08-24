@@ -6,8 +6,6 @@ Imports Newtonsoft.Json
 Public Class FormPropertyFilter
 
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-
-    'Public Property JSONString As String
     ''{"0":
     ''    {"Variable":"A",
     ''     "PropertySet":"Custom",
@@ -49,8 +47,6 @@ Public Class FormPropertyFilter
         Dim Tag = "filtering"
         Me.HelpURL = UD.GenerateVersionURL(Tag)
 
-
-
     End Sub
 
 
@@ -58,37 +54,40 @@ Public Class FormPropertyFilter
         Dim InputsOK As Boolean = True
         Dim s As String = ""
         Dim indent As String = "    "
-        Dim tf As Boolean
+        'Dim tf As Boolean
 
-        Dim Matches As MatchCollection
-        Dim MatchString As Match
-        Dim Pattern As String
+        'Dim Matches As MatchCollection
+        'Dim MatchString As Match
+        'Dim Pattern As String
 
         For Each UC As UCPropertyFilter In UCList
 
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
-                If UC.PropertySet = "" Then
-                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-                End If
+
+                'This field is currently ignored in processing.
+                'If UC.PropertySet = "" Then
+                '    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                'End If
 
                 If UC.Comparison = "" Then
                     s = String.Format("{0}{1}Set a Comparison for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                 End If
 
-                If UC.Value.Contains("%{") Then
-                    ' Any number of substrings that start with "%{" and end with the first encountered "}".
-                    Pattern = "%{[^}]*}"
-                    Matches = Regex.Matches(UC.Value, Pattern)
-                    For Each MatchString In Matches
-                        tf = MatchString.Value.Contains("System.")
-                        tf = tf Or MatchString.Value.Contains("Custom.")
-                        If Not tf Then
-                            s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, MatchString.Value, vbCrLf)
-                        End If
-                    Next
+                'This functionality is not currently implemented for property filters
+                'If UC.Value.Contains("%{") Then
+                '    ' Any number of substrings that start with "%{" and end with the first encountered "}".
+                '    Pattern = "%{[^}]*}"
+                '    Matches = Regex.Matches(UC.Value, Pattern)
+                '    For Each MatchString In Matches
+                '        tf = MatchString.Value.Contains("System.")
+                '        tf = tf Or MatchString.Value.Contains("Custom.")
+                '        If Not tf Then
+                '            s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, MatchString.Value, vbCrLf)
+                '        End If
+                '    Next
 
-                End If
+                'End If
             End If
 
         Next
