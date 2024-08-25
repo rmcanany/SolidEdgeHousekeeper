@@ -542,7 +542,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
@@ -799,7 +798,7 @@ Public Class Form_Main
 
     Private Sub Startup()
 
-        MsgBox("Fix VersionSpecificReadme")
+        'MsgBox("Fix VersionSpecificReadme")
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
@@ -2374,6 +2373,13 @@ Public Class Form_Main
         Dim PropName As String
         Dim DocType As String
 
+        Dim KeepDict As New Dictionary(Of String, List(Of String))
+        KeepDict("SummaryInformation") = {"Title", "Subject", "Author", "Keywords", "Comments"}.ToList
+        KeepDict("ExtendedSummaryInformation") = {"Status", "Hardware"}.ToList
+        KeepDict("DocumentSummaryInformation") = {"Category", "Manager", "Company"}.ToList
+        KeepDict("ProjectInformation") = {"Document Number", "Revision", "Project Name"}.ToList
+        KeepDict("MechanicalModeling") = {"Material", "Sheet Metal Gage"}.ToList
+
         Dim UC As New UtilsCommon
 
         Dim tf As Boolean
@@ -2397,6 +2403,13 @@ Public Class Form_Main
                         Try
                             Prop = CType(PropertySet.Item(j), SolidEdgeFileProperties.Property)
                             PropName = Prop.Name
+
+                            If KeepDict.Keys.Contains(PropertySetName) Then
+                                If Not KeepDict(PropertySetName).Contains(PropName) Then
+                                    Continue For
+                                End If
+                            End If
+
                             If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
                                 tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
                                 tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetName
@@ -2431,6 +2444,18 @@ Public Class Form_Main
             End If
             n += 1
         Next
+
+        ' Add Sheet Metal Gage if it's not already there
+        PropName = "Sheet Metal Gage"
+        If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
+            tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
+            tmpTemplatePropertyDict(PropName)("PropertySet") = "MechanicalModeling"
+            tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
+            tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
+            tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = "2"
+            tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
+            tmpTemplatePropertyDict(PropName)("EnglishName") = PropName
+        End If
 
         ''Check consistency -- only works when running non-localized
         'For Each Key As String In tmpTemplatePropertyDict.Keys

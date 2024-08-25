@@ -333,30 +333,12 @@ Public Class TaskSaveModelAs
 
                     NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
-
-                    Try
-                        If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                            SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-                        Else  ' Saving as image
-                            SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-                        End If
-                    Catch ex As Exception
+                    If NewFilename = "" Then
                         ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-                    End Try
+                        ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+                    End If
 
-                Else
-                    Members = tmpSEDoc.AssemblyFamilyMembers
-                    For Each Member In Members
-                        Members.ActivateMember(Member.MemberName)
-
-                        NewFilename = GenerateNewFilename(SEDoc, NewExtension, Member.MemberName)
-
+                    If ExitStatus = 0 Then
                         FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                         Try
@@ -374,6 +356,40 @@ Public Class TaskSaveModelAs
                             ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
                         End Try
 
+                    End If
+
+                Else
+                    Members = tmpSEDoc.AssemblyFamilyMembers
+                    For Each Member In Members
+                        Members.ActivateMember(Member.MemberName)
+
+                        NewFilename = GenerateNewFilename(SEDoc, NewExtension, Member.MemberName)
+
+                        If NewFilename = "" Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+                        End If
+
+                        If ExitStatus = 0 Then
+                            FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+
+                            Try
+                                If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                                    SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
+                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                                Else  ' Saving as image
+                                    SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
+                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                                End If
+                            Catch ex As Exception
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+                            End Try
+
+                        End If
+
                     Next
                 End If
 
@@ -383,22 +399,30 @@ Public Class TaskSaveModelAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
-
-                Try
-                    If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                        SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-                    Else  ' Saving as image
-                        SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-                    End If
-                Catch ex As Exception
+                If NewFilename = "" Then
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-                End Try
+                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+                End If
+
+                If ExitStatus = 0 Then
+                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+
+                    Try
+                        If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                            SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
+                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                        Else  ' Saving as image
+                            SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
+                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                        End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+                    End Try
+
+                End If
 
 
             Case = "psm"
@@ -411,67 +435,61 @@ Public Class TaskSaveModelAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+                If NewFilename = "" Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+                End If
 
-                Try
-                    If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
+                If ExitStatus = 0 Then
+                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
-                        If NewExtension = ".dxf" Then
-                            SupplementalErrorMessage = SaveAsFlatDXF(tmpSEDoc, NewFilename, SEApp)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    Try
+                        If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
 
-                        ElseIf NewExtension = ".pdf" Then
-                            DraftFilename = System.IO.Path.ChangeExtension(tmpSEDoc.FullName, ".dft")
-                            If Not FileIO.FileSystem.FileExists(DraftFilename) Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Draft document not found '{0}'", DraftFilename))
-                            Else
-                                SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
-                                SEApp.DoIdle()
-
-                                SupplementalErrorMessage = SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
+                            If NewExtension = ".dxf" Then
+                                SupplementalErrorMessage = SaveAsFlatDXF(tmpSEDoc, NewFilename, SEApp)
                                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
+                            ElseIf NewExtension = ".pdf" Then
+                                DraftFilename = System.IO.Path.ChangeExtension(tmpSEDoc.FullName, ".dft")
+                                If Not FileIO.FileSystem.FileExists(DraftFilename) Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Draft document not found '{0}'", DraftFilename))
+                                Else
+                                    SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
+                                    SEApp.DoIdle()
+
+                                    SupplementalErrorMessage = SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
+                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                                End If
+
+                            Else
+                                SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
+                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                             End If
 
-                        Else
-                            SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
+
+                        Else  ' Saving as image
+                            SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
                             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
                         End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+                    End Try
 
+                    Try
+                        If Not SEDraftDoc Is Nothing Then
+                            SEDraftDoc.Close(False)
+                            SEApp.DoIdle()
+                        End If
+                    Catch ex As Exception
+                    End Try
 
-                    Else  ' Saving as image
-                        SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                End If
 
-                    End If
-                Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-                End Try
-
-                Try
-                    If Not SEDraftDoc Is Nothing Then
-                        SEDraftDoc.Close(False)
-                        SEApp.DoIdle()
-                    End If
-                Catch ex As Exception
-                End Try
-
-                'Case = "dft"
-                '    Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-
-                '    NewFilename = GenerateNewFilename(SEDoc, NewExtension)
-
-                '    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
-
-                '    If Me.AddWatermark Then
-                '        SupplementalErrorMessage = AddWatermarkToSheets(tmpSEDoc, NewFilename, SEApp)
-                '        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-                '    End If
-
-                '    SupplementalErrorMessage = SaveAsDrawing(tmpSEDoc, NewFilename, SEApp)
-                '    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
 
@@ -512,6 +530,8 @@ Public Class TaskSaveModelAs
         Dim UC As New UtilsCommon
         Dim UFC As New UtilsFilenameCharmap()
 
+        Dim Success As Boolean = True
+
         OldFullFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
         'If OldFullFilename.Contains("!") Then
         '    OldFullFilename = TC.SplitFOAName(OldFullFilename)("Filename")
@@ -537,7 +557,11 @@ Public Class TaskSaveModelAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                Try
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                Catch ex As Exception
+                    Success = False
+                End Try
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
@@ -550,7 +574,11 @@ Public Class TaskSaveModelAs
         s = System.IO.Path.GetFileNameWithoutExtension(NewFilename)
         NewFilename = NewFilename.Replace(s, UFC.SubstituteIllegalCharacters(s))
 
-        Return NewFilename
+        If Success Then
+            Return NewFilename
+        Else
+            Return ""
+        End If
     End Function
 
     Private Function SaveAsDrawing(

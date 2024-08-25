@@ -102,6 +102,38 @@ Public Class TaskEditProperties
         End Set
     End Property
 
+    Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+        Get
+            Return _TemplatePropertyDict
+        End Get
+        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+            _TemplatePropertyDict = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
+                If Not Me.TemplatePropertyDictJSON = s Then
+                    Me.TemplatePropertyDictJSON = s
+                End If
+            End If
+        End Set
+    End Property
+
+
+    Private _TemplatePropertyDictJSON As String
+    Public Property TemplatePropertyDictJSON As String
+        Get
+            Return _TemplatePropertyDictJSON
+        End Get
+        Set(value As String)
+            _TemplatePropertyDictJSON = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
+                    Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
+                End If
+            End If
+
+        End Set
+    End Property
 
     Enum ControlNames
         Edit
@@ -145,6 +177,8 @@ Public Class TaskEditProperties
         Me.StructuredStorageEdit = False
         'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
+
+        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
 
     End Sub
 
@@ -348,6 +382,12 @@ Public Class TaskEditProperties
             ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
             ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
+            If Not TemplatePropertyDict.Keys.Contains(PropertyName) Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
+            End If
+
             'If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
             '    FindSearchType = "PT"
             'ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
@@ -400,42 +440,98 @@ Public Class TaskEditProperties
                 End If
             End If
 
+            Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
+
             If Proceed Then
+
+                Dim SIList As New List(Of String)
+                SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+
+                Dim DSIList As New List(Of String)
+                DSIList.AddRange({"Category", "Company", "Manager"})
+
+                Dim FunnyList As New List(Of String)
+                FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
 
                 Try
 
+                    'If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+                    '    dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    'End If
+
+                    'If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                    '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+                    'End If
+
+                    'If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+                    '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+                    'End If
+
+                    'If PropertySetName = "Custom" Then
+                    '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                    '    co = dsiStream.AsOLEPropertiesContainer
+
+                    '    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                    '    If IsNothing(OLEProp) Then
+
+                    '        Dim userProperties = co.UserDefinedProperties
+                    '        Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                    '        userProperties.PropertyNames(newPropertyId) = PropertyName
+                    '        OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                    '        OLEProp.Value = " "
+                    '        userProperties.AddProperty(OLEProp)
+
+                    '    End If
+
+                    'End If
+
+                    ''If PropertySetName = "Project" Then
+                    ''    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                    ''    co = dsiStream.AsOLEPropertiesContainer
+
+                    ''    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+                    ''End If
+
+
                     '######## get the property here
-                    If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
+
+                    If SIList.Contains(PropertyNameEnglish) Then
                         dsiStream = cf.RootStorage.GetStream("SummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-                    End If
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
+                    ElseIf DSIList.Contains(PropertyNameEnglish) Then
                         dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-                    End If
+                        OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
+                    ElseIf FunnyList.Contains(PropertyNameEnglish) Then
                         dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-                    End If
+                        OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
-                    If PropertySetName = "Custom" Then
+                    Else  ' Hopefully a Custom Property
                         dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
                         If IsNothing(OLEProp) Then
 
                             Dim userProperties = co.UserDefinedProperties
                             Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                            userProperties.PropertyNames(newPropertyId) = PropertyName
+                            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
                             OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
                             OLEProp.Value = " "
                             userProperties.AddProperty(OLEProp)
@@ -443,13 +539,6 @@ Public Class TaskEditProperties
                         End If
 
                     End If
-
-                    'If PropertySetName = "Project" Then
-                    '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                    '    co = dsiStream.AsOLEPropertiesContainer
-
-                    '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-                    'End If
 
                 Catch ex As Exception
                     Proceed = False
@@ -463,7 +552,7 @@ Public Class TaskEditProperties
             If IsNothing(OLEProp) Then
                 Proceed = False
                 ExitStatus = 1
-                s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, propertynameenglish)
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
             End If
 
@@ -489,7 +578,7 @@ Public Class TaskEditProperties
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                    s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
@@ -509,7 +598,7 @@ Public Class TaskEditProperties
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                    s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
@@ -519,9 +608,9 @@ Public Class TaskEditProperties
                 Try
 
                     '############ save the properties here (!)
-                    If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
-                        co.Save(dsiStream)
-                    End If
+                    co.Save(dsiStream)
+                    'If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
+                    'End If
 
                 Catch ex As Exception
                     Proceed = False
@@ -531,17 +620,26 @@ Public Class TaskEditProperties
                 End Try
             End If
 
+            '' Best to continue to find all errors
+            'If Not Proceed Then
+            '    Exit For
+            'End If
+
         Next
 
-        '############ save the properties here (!)
-        If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
+
+        ' ###### In case of error, don't save anything. ######
+        If ExitStatus = 0 Then
+            '############ save the properties here (!)
             cf.Commit()
         Else
-            'ExitStatus = 1
-            's = "Project properties are ReadOnly (Writeable in next release)"
-            'If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            s = "Errors encountered.  No changes made."
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
         End If
-        cf.Close()
+
+        If cf IsNot Nothing Then
+            cf.Close()
+        End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -901,12 +999,12 @@ Public Class TaskEditProperties
 
             End If
 
-            If Not Me.SolidEdgeRequired Then
+            If (Not Me.SolidEdgeRequired) And (Me.TemplatePropertyDict.Count = 0) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
                 ExitStatus = 1
-                Dim s = String.Format("{0}'Edit outside SE' is currently broken.  Try again later.", Indent)
+                Dim s = String.Format("{0}Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page", Indent)
                 ErrorMessageList.Add(s)
             End If
         End If
@@ -939,6 +1037,9 @@ Public Class TaskEditProperties
                     ' Me.JSONDict is updated when the TextBox changes.
                     TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
                     TextBox.Text = FPIE.JSONString
+
+                    Me.TemplatePropertyDict = FPIE.TemplatePropertyDict
+
                 End If
 
             Case ControlNames.Browse.ToString

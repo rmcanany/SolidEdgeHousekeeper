@@ -295,15 +295,23 @@ Public Class TaskSaveDrawingAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
-
-                If Me.AddWatermark Then
-                    SupplementalErrorMessage = AddWatermarkToSheets(tmpSEDoc, NewFilename, SEApp)
-                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                If NewFilename = "" Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
                 End If
 
-                SupplementalErrorMessage = SaveAsDrawing(tmpSEDoc, NewFilename, SEApp)
-                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                If ExitStatus = 0 Then
+                    FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
+
+                    If Me.AddWatermark Then
+                        SupplementalErrorMessage = AddWatermarkToSheets(tmpSEDoc, NewFilename, SEApp)
+                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    End If
+
+                    SupplementalErrorMessage = SaveAsDrawing(tmpSEDoc, NewFilename, SEApp)
+                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
@@ -333,6 +341,8 @@ Public Class TaskSaveDrawingAs
         Dim NewSubDirectory As String = ""
 
         Dim s As String
+
+        Dim Success As Boolean = True
 
         Dim OldFullFilename As String = ""   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
         Dim OldDirectoryName As String = ""  ' "C:\Projects"
@@ -366,7 +376,11 @@ Public Class TaskSaveDrawingAs
                     NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
                 End If
             Else
-                NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                Try
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                Catch ex As Exception
+                    Success = False
+                End Try
 
                 If Suffix = "" Then
                     NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
@@ -379,7 +393,11 @@ Public Class TaskSaveDrawingAs
         s = System.IO.Path.GetFileNameWithoutExtension(NewFilename)
         NewFilename = NewFilename.Replace(s, UFC.SubstituteIllegalCharacters(s))
 
-        Return NewFilename
+        If Success Then
+            Return NewFilename
+        Else
+            Return ""
+        End If
     End Function
 
     Private Function AddWatermarkToSheets(

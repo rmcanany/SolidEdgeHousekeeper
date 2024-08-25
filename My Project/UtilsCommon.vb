@@ -967,6 +967,8 @@ Public Class UtilsCommon
 
             Else
 
+                Return Nothing
+
                 If AddProp Then
                     Try
                         'TBD Add property here
@@ -1512,7 +1514,7 @@ Public Class UtilsCommon
 
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
 
-                Dim tmpValue As String = ""
+                Dim tmpValue As String = Nothing
 
                 If PropertyName.ToLower = "File Name".ToLower Then
                     tmpValue = System.IO.Path.GetFileName(FullName)  ' C:\project\part.par -> part.par
@@ -1535,7 +1537,11 @@ Public Class UtilsCommon
 
                 End If
 
-                DocValues.Add(tmpValue)
+                If tmpValue IsNot Nothing Then
+                    DocValues.Add(tmpValue)
+                Else
+                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                End If
 
             Next
         End If
