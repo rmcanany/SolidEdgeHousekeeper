@@ -901,6 +901,14 @@ Public Class TaskEditProperties
 
             End If
 
+            If Not Me.SolidEdgeRequired Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                Dim s = String.Format("{0}'Edit outside SE' is currently broken.  Try again later.", Indent)
+                ErrorMessageList.Add(s)
+            End If
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
