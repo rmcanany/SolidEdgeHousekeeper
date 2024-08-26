@@ -136,4 +136,21 @@ Public Class UCPropertyFilter
 
     End Sub
 
+    Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+
+        Dim FPP As New FormPropertyPicker
+        FPP.TemplatePropertyDict = Me.TemplatePropertyDict
+        FPP.TemplatePropertyList = Me.TemplatePropertyList
+
+        FPP.ShowDialog()
+
+        If FPP.DialogResult = DialogResult.OK Then
+            Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+            Dim CaretPosition = TextBox.SelectionStart
+            TextBox.Text = TextBox.Text.Insert(CaretPosition, FPP.PropertyString)
+
+        End If
+        Dim i = 0
+
+    End Sub
 End Class

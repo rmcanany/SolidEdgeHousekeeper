@@ -2457,6 +2457,21 @@ Public Class Form_Main
             tmpTemplatePropertyDict(PropName)("EnglishName") = PropName
         End If
 
+        ' Add special File properties
+        Dim PropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
+        For Each PropName In PropNames
+            If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
+                tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
+                tmpTemplatePropertyDict(PropName)("PropertySet") = ""
+                tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
+                tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
+                tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
+                tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
+                tmpTemplatePropertyDict(PropName)("EnglishName") = PropName
+            End If
+        Next
+
+
         ''Check consistency -- only works when running non-localized
         'For Each Key As String In tmpTemplatePropertyDict.Keys
         '    If Not Key = tmpTemplatePropertyDict(Key)("EnglishName") Then
@@ -2802,7 +2817,7 @@ Public Class Form_Main
     ' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)
     ' C:\project\part.par -> C:\project
 
-    ' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName))
+    ' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)
     ' C:\project\part.par -> part
 
     ' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)

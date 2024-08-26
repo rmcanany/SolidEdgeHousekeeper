@@ -22,15 +22,19 @@ Partial Class UCEditProperties
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
         Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
         Me.ComboBoxFindSearch = New System.Windows.Forms.ComboBox()
         Me.TextBoxFindString = New System.Windows.Forms.TextBox()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ComboBoxReplaceSearch = New System.Windows.Forms.ComboBox()
         Me.TextBoxReplaceString = New System.Windows.Forms.TextBox()
         Me.ExTableLayoutPanel1.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExTableLayoutPanel1
@@ -107,11 +111,24 @@ Partial Class UCEditProperties
         '
         'TextBoxFindString
         '
+        Me.TextBoxFindString.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxFindString.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxFindString.Location = New System.Drawing.Point(333, 3)
         Me.TextBoxFindString.Name = "TextBoxFindString"
         Me.TextBoxFindString.Size = New System.Drawing.Size(106, 23)
         Me.TextBoxFindString.TabIndex = 4
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 26)
+        '
+        'InsertPropertyToolStripMenuItem
+        '
+        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
         '
         'ComboBoxReplaceSearch
         '
@@ -126,6 +143,7 @@ Partial Class UCEditProperties
         '
         'TextBoxReplaceString
         '
+        Me.TextBoxReplaceString.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxReplaceString.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxReplaceString.Location = New System.Drawing.Point(495, 3)
         Me.TextBoxReplaceString.Margin = New System.Windows.Forms.Padding(3, 3, 15, 3)
@@ -144,6 +162,7 @@ Partial Class UCEditProperties
         Me.Size = New System.Drawing.Size(700, 30)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -156,4 +175,6 @@ Partial Class UCEditProperties
     Friend WithEvents TextBoxFindString As TextBox
     Friend WithEvents ComboBoxReplaceSearch As ComboBox
     Friend WithEvents TextBoxReplaceString As TextBox
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
 End Class

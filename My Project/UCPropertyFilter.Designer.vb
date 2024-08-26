@@ -22,6 +22,9 @@ Partial Class UCPropertyFilter
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
         Me.LabelVariable = New System.Windows.Forms.Label()
@@ -29,8 +32,21 @@ Partial Class UCPropertyFilter
         Me.ComboBoxComparison = New System.Windows.Forms.ComboBox()
         Me.TextBoxValue = New System.Windows.Forms.TextBox()
         Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 26)
+        '
+        'InsertPropertyToolStripMenuItem
+        '
+        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(151, 22)
+        Me.InsertPropertyToolStripMenuItem.Text = "Insert property"
         '
         'ExTableLayoutPanel1
         '
@@ -103,6 +119,7 @@ Partial Class UCPropertyFilter
         '
         'TextBoxValue
         '
+        Me.TextBoxValue.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxValue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxValue.Location = New System.Drawing.Point(413, 3)
         Me.TextBoxValue.Name = "TextBoxValue"
@@ -127,6 +144,7 @@ Partial Class UCPropertyFilter
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCPropertyFilter"
         Me.Size = New System.Drawing.Size(700, 30)
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
         Me.ResumeLayout(False)
@@ -140,4 +158,6 @@ Partial Class UCPropertyFilter
     Friend WithEvents ComboBoxComparison As ComboBox
     Friend WithEvents TextBoxValue As TextBox
     Friend WithEvents ComboBoxPropertyName As ComboBox
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
 End Class

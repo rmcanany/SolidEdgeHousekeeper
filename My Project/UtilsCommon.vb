@@ -1531,16 +1531,16 @@ Public Class UtilsCommon
                         tmpValue = GetOLEPropValue(cf, PropertySet, PropertyName, False)
                     End If
 
-                    If ValidFilenameRequired Then
-                        tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
-                    End If
-
                 End If
 
                 If tmpValue IsNot Nothing Then
                     DocValues.Add(tmpValue)
                 Else
                     Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                End If
+
+                If ValidFilenameRequired Then
+                    tmpValue = UFC.SubstituteIllegalCharacters(tmpValue)
                 End If
 
             Next

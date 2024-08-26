@@ -152,7 +152,7 @@ Public Class UtilsPropertyFilters
             Value = PropertyFilterDict(Key)("Value")
 
             'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
-            DocValue = SearchProperties(PropertySets, PropertyName)
+            DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
             tf2 = DoComparison(Comparison, Value, DocValue)
 
@@ -268,7 +268,8 @@ Public Class UtilsPropertyFilters
     '                                  PropertyName As String) As String
 
     Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
-                                     PropertyName As String) As String
+                                     PropertyName As String,
+                                     FoundFile As String) As String
 
         Dim DocValue As String = Me.PropNotFoundString
         Dim PropertySet As DesignManager.Properties
@@ -276,78 +277,60 @@ Public Class UtilsPropertyFilters
         Dim PropertySetNames As New List(Of String)
         Dim PropertySetName As String
 
-        Dim DateTime As DateTime
+        Dim FilePropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
 
-        PropertySetNames.Add("SummaryInformation")
-        PropertySetNames.Add("ExtendedSummaryInformation")
-        PropertySetNames.Add("DocumentSummaryInformation")
-        PropertySetNames.Add("ProjectInformation")
-        PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-        PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
+        If FilePropNames.Contains(PropertyName) Then
+            Select Case PropertyName
+                Case "File Name"
+                    DocValue = System.IO.Path.GetFileName(FoundFile)  ' C:\project\part.par -> part.par
+                Case "File Name (full path)"
+                    DocValue = FoundFile  ' C:\project\part.par -> C:\project\part.par
+                Case "File Name (no extension)"
+                    DocValue = System.IO.Path.GetFileNameWithoutExtension(FoundFile)  ' C:\project\part.par -> part
+            End Select
 
-        Dim TypeName As String
+        Else
+            Dim DateTime As DateTime
 
-        Dim GotAMatch As Boolean = False
+            PropertySetNames.Add("SummaryInformation")
+            PropertySetNames.Add("ExtendedSummaryInformation")
+            PropertySetNames.Add("DocumentSummaryInformation")
+            PropertySetNames.Add("ProjectInformation")
+            PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+            PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
 
-        For Each PropertySetName In PropertySetNames
-            ' Not all files have all PropertySets
-            Try
-                PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-                For i As Integer = 0 To PropertySet.Count - 1
-                    Prop = CType(PropertySet.Item(i), DesignManager.Property)
-                    If Prop.Name.ToLower = PropertyName.ToLower Then
-                        TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-                        DocValue = Prop.Value.ToString
-                        If TypeName.ToLower = "date" Then
-                            DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-                            DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+            Dim TypeName As String
+
+            Dim GotAMatch As Boolean = False
+
+            For Each PropertySetName In PropertySetNames
+                ' Not all files have all PropertySets
+                Try
+                    PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                    For i As Integer = 0 To PropertySet.Count - 1
+                        Prop = CType(PropertySet.Item(i), DesignManager.Property)
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
+                            DocValue = Prop.Value.ToString
+                            If TypeName.ToLower = "date" Then
+                                DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+                                DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+                            End If
+                            GotAMatch = True
+                            Exit For
                         End If
-                        GotAMatch = True
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
-            End Try
+                    Next
+                Catch ex As Exception
+                End Try
 
-            If GotAMatch Then
-                Exit For
-            End If
-        Next
+                If GotAMatch Then
+                    Exit For
+                End If
+            Next
 
-        'If PropertySet.ToLower = "custom" Then
-        '    ' The property may not be in every file
-        '    Try
-        '        Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
-        '        Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
-        '        TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-        '        DocValue = Prop.Value.ToString
-        '        If TypeName.ToLower = "date" Then
-        '            DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-        '            DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-        '        End If
-        '    Catch ex As Exception
-        '    End Try
-        'Else
-        '    For Each PropertySetName In PropertySetNames
-        '        ' The property will be in only one of the SystemPropertySets -- hopefully.
-        '        Try
-        '            Properties = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-        '            Prop = CType(Properties.Item(PropertyName), DesignManager.Property)
-        '            TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-        '            DocValue = Prop.Value.ToString
-        '            If TypeName.ToLower = "date" Then
-        '                DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-        '                DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-        '            End If
+        End If
 
-        '            ' If it gets to here, it didn't bomb out getting 'Prop'.  We can move on.
-        '            Exit For
 
-        '        Catch ex As Exception
-        '        End Try
-        '    Next
-
-        'End If
 
         Return DocValue
     End Function

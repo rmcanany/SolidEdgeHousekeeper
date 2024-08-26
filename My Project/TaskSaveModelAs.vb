@@ -814,6 +814,7 @@ Public Class TaskSaveModelAs
     Private Function GetNewFileTypeNames() As List(Of String)
         Dim NewFileTypeNames As New List(Of String)
 
+        NewFileTypeNames.Add("")
         NewFileTypeNames.Add("Step (*.stp)")
         NewFileTypeNames.Add("IGES (*.igs)")
         NewFileTypeNames.Add("Parasolid Text (*.x_t)")
@@ -994,6 +995,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
+        'TextBox.ContextMenuStrip = ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)

@@ -549,6 +549,7 @@ Public Class TaskSaveDrawingAs
         Dim NewFileTypeNames As New List(Of String)
         '        FileTypesString = "PDF (*.pdf):PDF per Sheet (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
 
+        NewFileTypeNames.Add("")
         NewFileTypeNames.Add("PDF (*.pdf)")
         NewFileTypeNames.Add("PDF per Sheet (*.pdf)")
         NewFileTypeNames.Add("DXF (*.dxf)")

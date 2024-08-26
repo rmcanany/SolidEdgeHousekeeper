@@ -184,6 +184,12 @@
     <Compile Include="My Project\FormNewVersionAvailable.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormPropertyPicker.Designer.vb">
+      <DependentUpon>FormPropertyPicker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormPropertyPicker.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormTextPrompt.Designer.vb">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>
     </Compile>
@@ -345,6 +351,9 @@
     <Compile Include="My Project\UtilsSEApp.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="My Project\FormPropertyPicker.resx">
+      <DependentUpon>FormPropertyPicker.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Form_Main.resx">
       <DependentUpon>Form_Main.vb</DependentUpon>
       <SubType>Designer</SubType>
