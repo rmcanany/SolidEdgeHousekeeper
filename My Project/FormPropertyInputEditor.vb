@@ -165,7 +165,7 @@ Public Class FormPropertyInputEditor
             NewUC.ReplaceSearch = JSONDict(Key)("ReplaceSearch")
             NewUC.ReplaceString = JSONDict(Key)("ReplaceString")
 
-            NewUC.ReconcileFormWithProps()
+            'NewUC.ReconcileFormWithProps()
 
             NewUC.Dock = DockStyle.Fill
 
@@ -310,8 +310,8 @@ Public Class FormPropertyInputEditor
             End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
-            Else
-                UC.ReconcileFormWithProps()
+                'Else
+                '    UC.ReconcileFormWithProps()
             End If
         Next
 

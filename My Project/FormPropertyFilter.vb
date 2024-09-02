@@ -151,6 +151,7 @@ Public Class FormPropertyFilter
 
         For Each Key As String In tmpPropertyFilterDict.Keys
             NewUC = New UCPropertyFilter(Me)
+            NewUC.NotifyPropertyFilter = False
 
             NewUC.Variable = tmpPropertyFilterDict(Key)("Variable")
             NewUC.PropertySet = tmpPropertyFilterDict(Key)("PropertySet")
@@ -159,11 +160,12 @@ Public Class FormPropertyFilter
             NewUC.Value = tmpPropertyFilterDict(Key)("Value")
             NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
 
-            NewUC.ReconcileFormWithProps()
+            'NewUC.ReconcileFormWithProps()
 
             NewUC.Dock = DockStyle.Fill
 
             UCList.Add(NewUC)
+            NewUC.NotifyPropertyFilter = True
         Next
 
     End Sub
@@ -229,7 +231,7 @@ Public Class FormPropertyFilter
         For Each UC As UCPropertyFilter In UCList
             If Not UC.PropertyName = "" Then
                 UC.Formula = Me.Formula
-                UC.ReconcileFormWithProps()
+                'UC.ReconcileFormWithProps()
             End If
         Next
 
@@ -367,7 +369,7 @@ Public Class FormPropertyFilter
         For Each UC As UCPropertyFilter In UCList
             If ChangedUC.Selected Then
                 If UC IsNot ChangedUC Then
-                    UC.CheckBoxSelect.Checked = False
+                    UC.CheckBoxSelected.Checked = False
                 End If
             End If
             If UC.PropertyName = "" Then

@@ -38,14 +38,7 @@ Public Class UCEditProperties
         Set(value As String)
             _PropertyName = value
             If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                If Not value = "" Then
-                    If Not TemplatePropertyList.Contains(value) Then TemplatePropertyList.Add(value)
-                    If Not ComboBoxPropertyName.Items.Contains(value) Then ComboBoxPropertyName.Items.Add(value)
-                End If
                 ComboBoxPropertyName.Text = value
-                'If value = "badger" Then
-                '    'MsgBox(String.Format("{0} {1}", ComboBoxPropertyName.Text, value))
-                'End If
             End If
         End Set
     End Property
@@ -173,40 +166,6 @@ Public Class UCEditProperties
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
         Me.PropertySet = ComboBoxPropertySet.Text
 
-        'ComboBoxPropertyName.Items.Clear()
-
-        'Select Case Me.PropertySet
-        '    Case ""
-        '        For Each s As String In TemplatePropertyList
-        '            ComboBoxPropertyName.Items.Add(s)
-        '        Next
-        '    Case "Custom"
-        '        For Each s As String In TemplatePropertyList
-        '            If TemplatePropertyDict.Keys.Contains(s) Then
-        '                If (TemplatePropertyDict(s)("PropertySet") = "Custom") Or (TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
-        '                    ComboBoxPropertyName.Items.Add(s)
-        '                End If
-        '            End If
-        '        Next
-        '    Case "System"
-        '        For Each s As String In TemplatePropertyList
-        '            If TemplatePropertyDict.Keys.Contains(s) Then
-        '                If (Not TemplatePropertyDict(s)("PropertySet") = "Custom") Or (TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
-        '                    ComboBoxPropertyName.Items.Add(s)
-        '                End If
-        '            End If
-        '        Next
-        'End Select
-
-        'If Me.ProcessEvents Then
-        '    Me.ProcessEvents = False
-        '    If Not ComboBoxPropertyName.Items.Contains(ComboBoxPropertyName.Text) Then
-        '        'ComboBoxPropertyName.Text = CStr(ComboBoxPropertyName.Items(0))
-        '        Me.PropertyName = ""
-        '    End If
-        '    Me.ProcessEvents = True
-        'End If
-
         Notify()
     End Sub
 
@@ -276,20 +235,6 @@ Public Class UCEditProperties
     Private Sub TextBoxReplaceString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxReplaceString.TextChanged
         Me.ReplaceString = TextBoxReplaceString.Text
         Notify()
-    End Sub
-
-    Public Sub ReconcileFormWithProps()
-        'Me.NotifyPropertyEditor = False
-
-        'CheckBoxSelected.Checked = Me.Selected
-        'ComboBoxPropertySet.Text = Me.PropertySet
-        'ComboBoxPropertyName.Text = Me.PropertyName
-        'ComboBoxFindSearch.Text = Me.FindSearch
-        'TextBoxFindString.Text = Me.FindString
-        'ComboBoxReplaceSearch.Text = Me.ReplaceSearch
-        'TextBoxReplaceString.Text = Me.ReplaceString
-
-        'Me.NotifyPropertyEditor = True
     End Sub
 
     Public Sub Notify()

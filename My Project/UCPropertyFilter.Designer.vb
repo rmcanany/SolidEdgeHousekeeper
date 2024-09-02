@@ -26,7 +26,7 @@ Partial Class UCPropertyFilter
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
-        Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSelected = New System.Windows.Forms.CheckBox()
         Me.LabelVariable = New System.Windows.Forms.Label()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
         Me.ComboBoxComparison = New System.Windows.Forms.ComboBox()
@@ -57,7 +57,7 @@ Partial Class UCPropertyFilter
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxSelect, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxSelected, 0, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelVariable, 1, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxPropertySet, 2, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxComparison, 4, 0)
@@ -72,18 +72,18 @@ Partial Class UCPropertyFilter
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
-        'CheckBoxSelect
+        'CheckBoxSelected
         '
-        Me.CheckBoxSelect.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxSelect.AutoSize = True
-        Me.CheckBoxSelect.Location = New System.Drawing.Point(3, 5)
-        Me.CheckBoxSelect.Name = "CheckBoxSelect"
-        Me.CheckBoxSelect.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxSelect.Size = New System.Drawing.Size(24, 20)
-        Me.CheckBoxSelect.TabIndex = 0
-        Me.CheckBoxSelect.TabStop = False
-        Me.CheckBoxSelect.Text = "CheckBox1"
-        Me.CheckBoxSelect.UseVisualStyleBackColor = True
+        Me.CheckBoxSelected.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxSelected.AutoSize = True
+        Me.CheckBoxSelected.Location = New System.Drawing.Point(3, 5)
+        Me.CheckBoxSelected.Name = "CheckBoxSelected"
+        Me.CheckBoxSelected.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.CheckBoxSelected.Size = New System.Drawing.Size(24, 20)
+        Me.CheckBoxSelected.TabIndex = 0
+        Me.CheckBoxSelected.TabStop = False
+        Me.CheckBoxSelected.Text = "CheckBox1"
+        Me.CheckBoxSelected.UseVisualStyleBackColor = True
         '
         'LabelVariable
         '
@@ -152,7 +152,7 @@ Partial Class UCPropertyFilter
     End Sub
 
     Friend WithEvents ExTableLayoutPanel1 As ExTableLayoutPanel
-    Friend WithEvents CheckBoxSelect As CheckBox
+    Friend WithEvents CheckBoxSelected As CheckBox
     Friend WithEvents LabelVariable As Label
     Friend WithEvents ComboBoxPropertySet As ComboBox
     Friend WithEvents ComboBoxComparison As ComboBox

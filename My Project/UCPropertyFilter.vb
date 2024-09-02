@@ -4,13 +4,87 @@ Imports System.Net.NetworkInformation
 Public Class UCPropertyFilter
     Public Property PropertyFilter As FormPropertyFilter
 
+    Private _Selected As Boolean
     Public Property Selected As Boolean
+        Get
+            Return _Selected
+        End Get
+        Set(value As Boolean)
+            _Selected = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                CheckBoxSelected.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _Variable As String
     Public Property Variable As String
+        Get
+            Return _Variable
+        End Get
+        Set(Variable As String)
+            _Variable = Variable
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                LabelVariable.Text = Variable
+            End If
+        End Set
+    End Property
+
+
+    Private _PropertySet As String
     Public Property PropertySet As String
+        Get
+            Return _PropertySet
+        End Get
+        Set(value As String)
+            _PropertySet = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                ComboBoxPropertySet.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _PropertyName As String
     Public Property PropertyName As String
+        Get
+            Return _PropertyName
+        End Get
+        Set(value As String)
+            _PropertyName = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                ComboBoxPropertyName.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _Comparison As String
     Public Property Comparison As String
+        Get
+            Return _Comparison
+        End Get
+        Set(value As String)
+            _Comparison = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                ComboBoxComparison.Text = value
+            End If
+        End Set
+    End Property
+
+    Private _Value As String
     Public Property Value As String
+        Get
+            Return _Value
+        End Get
+        Set(value As String)
+            _Value = value
+            If Me.ExTableLayoutPanel1 IsNot Nothing Then
+                TextBoxValue.Text = value
+            End If
+        End Set
+    End Property
+
     Public Property Formula As String
+
 
     Public Property NotifyPropertyFilter As Boolean
     'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
@@ -69,49 +143,20 @@ Public Class UCPropertyFilter
 
     End Sub
 
-    Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelect.CheckedChanged
-        Me.Selected = CheckBoxSelect.Checked
+    Private Sub CheckBoxSelect_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSelected.CheckedChanged
+        Me.Selected = CheckBoxSelected.Checked
         Notify()
     End Sub
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
         Me.PropertySet = ComboBoxPropertySet.Text
 
-        'ComboBoxPropertyName.Items.Clear()
-
-        'Select Case Me.PropertySet
-        '    Case ""
-        '        For Each s As String In TemplatePropertyList
-        '            ComboBoxPropertyName.Items.Add(s)
-        '        Next
-        '    Case "Custom"
-        '        For Each s As String In TemplatePropertyList
-        '            If Form_Main.TemplatePropertyDict.Keys.Contains(s) Then
-        '                If (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Custom") Or (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
-        '                    ComboBoxPropertyName.Items.Add(s)
-        '                End If
-        '            End If
-        '        Next
-        '    Case "System"
-        '        For Each s As String In TemplatePropertyList
-        '            If Form_Main.TemplatePropertyDict.Keys.Contains(s) Then
-        '                If (Not Form_Main.TemplatePropertyDict(s)("PropertySet") = "Custom") Or (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
-        '                    ComboBoxPropertyName.Items.Add(s)
-        '                End If
-        '            End If
-        '        Next
-        'End Select
-
-        'If Me.ProcessEvents Then
-        '    Me.ProcessEvents = False
-        '    ComboBoxPropertyName.Text = CStr(ComboBoxPropertyName.Items(0))
-        '    Me.ProcessEvents = True
-        'End If
-
         Notify()
+
     End Sub
 
     Private Sub UpdatePropertyName()
+
         Me.PropertyName = ComboBoxPropertyName.Text
 
         Dim PropSet As String = ""
@@ -125,7 +170,8 @@ Public Class UCPropertyFilter
                 End If
 
                 If PropSet = "Duplicate" Then
-                    PropSet = ""
+                    'PropSet = ""
+                    PropSet = Me.PropertySet
                 End If
 
             Else
@@ -135,7 +181,7 @@ Public Class UCPropertyFilter
 
         If Me.ProcessEvents Then
             Me.ProcessEvents = False
-            ComboBoxPropertySet.Text = PropSet
+            Me.PropertySet = PropSet
             Me.ProcessEvents = True
         End If
 
@@ -161,18 +207,6 @@ Public Class UCPropertyFilter
         Notify()
     End Sub
 
-    Public Sub ReconcileFormWithProps()
-        Me.NotifyPropertyFilter = False
-
-        CheckBoxSelect.Checked = Me.Selected
-        LabelVariable.Text = Me.Variable
-        ComboBoxPropertySet.Text = Me.PropertySet
-        ComboBoxPropertyName.Text = Me.PropertyName
-        ComboBoxComparison.Text = Me.Comparison
-        TextBoxValue.Text = Me.Value
-
-        Me.NotifyPropertyFilter = True
-    End Sub
 
     Public Sub Notify()
         If NotifyPropertyFilter Then
