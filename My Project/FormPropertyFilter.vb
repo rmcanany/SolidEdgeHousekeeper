@@ -20,7 +20,7 @@ Public Class FormPropertyFilter
     Public Property UCList As List(Of UCPropertyFilter)
     Public Property HelpURL As String
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
     Public Property Formula As String
 
@@ -32,12 +32,15 @@ Public Class FormPropertyFilter
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Dim UP As New UtilsPreferences
+        Dim UC As New UtilsCommon
 
         ' Form_Main does these assignments
         'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        'Me.TemplatePropertyList = Form_Main.TemplatePropertyList
         'Me.PropertyFilterDict = UP.GetPropertyFilterDict
+
+        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+
+        Dim UP As New UtilsPreferences
 
         Me.SavedSettingsDict = UP.GetPropertyFilterSavedSettings()
 
@@ -47,6 +50,26 @@ Public Class FormPropertyFilter
         Dim Tag = "filtering"
         Me.HelpURL = UD.GenerateVersionURL(Tag)
 
+
+        ' Check if the Properties were imported from templates
+        Dim tf As Boolean
+
+        tf = Form_Main.TemplatePropertyDict Is Nothing
+        tf = tf Or Me.TemplatePropertyList Is Nothing
+
+        If Not tf Then
+            tf = Form_Main.TemplatePropertyDict.Count = 0
+            tf = tf Or Me.TemplatePropertyList.Count = 0
+        End If
+
+        If tf Then
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            MsgBox(s, vbOKOnly)
+            Exit Sub
+        End If
+
+
     End Sub
 
 
@@ -54,6 +77,7 @@ Public Class FormPropertyFilter
         Dim InputsOK As Boolean = True
         Dim s As String = ""
         Dim indent As String = "    "
+        Dim UtilsCommon = New UtilsCommon
         'Dim tf As Boolean
 
         'Dim Matches As MatchCollection
@@ -65,29 +89,22 @@ Public Class FormPropertyFilter
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
 
-                'This field is currently ignored in processing.
-                'If UC.PropertySet = "" Then
-                '    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-                'End If
+                ' UC.Value = "" is not an error.
+
+                If UC.PropertySet = "" Then
+                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
 
                 If UC.Comparison = "" Then
                     s = String.Format("{0}{1}Set a Comparison for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                 End If
 
-                'This functionality is not currently implemented for property filters
-                'If UC.Value.Contains("%{") Then
-                '    ' Any number of substrings that start with "%{" and end with the first encountered "}".
-                '    Pattern = "%{[^}]*}"
-                '    Matches = Regex.Matches(UC.Value, Pattern)
-                '    For Each MatchString In Matches
-                '        tf = MatchString.Value.Contains("System.")
-                '        tf = tf Or MatchString.Value.Contains("Custom.")
-                '        If Not tf Then
-                '            s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, MatchString.Value, vbCrLf)
-                '        End If
-                '    Next
+                If Not UC.Value = "" Then
+                    If Not UtilsCommon.CheckValidPropertyFormulas(UC.Value) Then
+                        s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.Value, vbCrLf)
+                    End If
+                End If
 
-                'End If
             End If
 
         Next
@@ -384,27 +401,32 @@ Public Class FormPropertyFilter
             FormatFormula(PropertyFilterDict("0")("Formula"))
         End If
 
-        ' Check if the Properties were imported from templates
-        Dim tf As Boolean
+        '' Check if the Properties were imported from templates
+        'Dim tf As Boolean
 
-        tf = Me.TemplatePropertyDict Is Nothing
-        tf = tf Or Me.TemplatePropertyList Is Nothing
+        'tf = Form_Main.TemplatePropertyDict Is Nothing
+        'tf = tf Or Me.TemplatePropertyList Is Nothing
 
-        If Not tf Then
-            tf = Me.TemplatePropertyDict.Count = 0
-            tf = tf Or Me.TemplatePropertyList.Count = 0
-        End If
+        'If Not tf Then
+        '    tf = Form_Main.TemplatePropertyDict.Count = 0
+        '    tf = tf Or Me.TemplatePropertyList.Count = 0
+        'End If
 
-        tf = tf And Form_Main.WarnNoImportedProperties
+        ''tf = tf And Form_Main.WarnNoImportedProperties
 
-        If tf Then
-            Dim s As String = "Template properties not populated.  This is not an error, "
-            s = String.Format("{0}however it means properties must be entered manually.  ", s)
-            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
-            MsgBox(s, vbOKOnly)
-        End If
+        'If tf Then
+        '    'Dim s As String = "Template properties not populated.  This is not an error, "
+        '    's = String.Format("{0}however it means properties must be entered manually.  ", s)
+        '    's = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
+        '    's = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
+        '    's = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
+        '    'MsgBox(s, vbOKOnly)
+
+        '    Dim s = "Template properties required for this command not found. "
+        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+        '    MsgBox(s, vbOKOnly)
+        '    Exit Sub
+        'End If
 
     End Sub
 
@@ -545,4 +567,41 @@ Public Class FormPropertyFilter
     'Private Sub TextBoxFormula_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFormula.TextChanged
 
     'End Sub
+
+    Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
+
+        Dim PreviousPropertyName As String
+
+        If ButtonShowAll.Checked Then
+            ButtonShowAll.Image = My.Resources.Checked
+
+            For i As Integer = 0 To UCList.Count - 1
+                UCList(i).NotifyPropertyFilter = False
+                PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
+                UCList(i).ComboBoxPropertyName.Items.Clear()
+                UCList(i).ComboBoxPropertyName.Items.Add("")
+                For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                Next
+                UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
+                UCList(i).NotifyPropertyFilter = True
+            Next
+        Else
+            ButtonShowAll.Image = My.Resources.Unchecked
+
+            For i As Integer = 0 To UCList.Count - 1
+                UCList(i).NotifyPropertyFilter = False
+                PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
+                UCList(i).ComboBoxPropertyName.Items.Clear()
+                UCList(i).ComboBoxPropertyName.Items.Add("")
+                For Each Key As String In Me.TemplatePropertyList
+                    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                Next
+                UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
+                UCList(i).NotifyPropertyFilter = True
+            Next
+        End If
+
+    End Sub
+
 End Class

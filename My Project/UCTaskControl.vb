@@ -162,6 +162,23 @@ Public Class UCTaskControl
 
     End Sub
 
+    Private Sub InsertPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+
+        Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+        Dim CaretPosition = TextBox.Text.Length
+
+        Dim FPP As New FormPropertyPicker
+        'FPP.TemplatePropertyDict = Me.TemplatePropertyDict
+        'FPP.TemplatePropertyList = Me.TemplatePropertyList
+
+        FPP.ShowDialog()
+
+        If FPP.DialogResult = DialogResult.OK Then
+            TextBox.Text = TextBox.Text.Insert(CaretPosition, FPP.PropertyString)
+
+        End If
+
+    End Sub
 End Class
 
 

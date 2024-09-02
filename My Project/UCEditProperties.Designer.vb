@@ -24,7 +24,7 @@ Partial Class UCEditProperties
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
-        Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxSelected = New System.Windows.Forms.CheckBox()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
         Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
         Me.ComboBoxFindSearch = New System.Windows.Forms.ComboBox()
@@ -47,7 +47,7 @@ Partial Class UCEditProperties
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.ExTableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.0!))
-        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxSelect, 0, 0)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxSelected, 0, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxPropertySet, 1, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxPropertyName, 2, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ComboBoxFindSearch, 3, 0)
@@ -64,18 +64,18 @@ Partial Class UCEditProperties
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
-        'CheckBoxSelect
+        'CheckBoxSelected
         '
-        Me.CheckBoxSelect.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxSelect.AutoSize = True
-        Me.CheckBoxSelect.Location = New System.Drawing.Point(4, 9)
-        Me.CheckBoxSelect.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBoxSelect.Name = "CheckBoxSelect"
-        Me.CheckBoxSelect.Padding = New System.Windows.Forms.Padding(3, 0, 0, 6)
-        Me.CheckBoxSelect.Size = New System.Drawing.Size(18, 20)
-        Me.CheckBoxSelect.TabIndex = 0
-        Me.CheckBoxSelect.TabStop = False
-        Me.CheckBoxSelect.UseVisualStyleBackColor = True
+        Me.CheckBoxSelected.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxSelected.AutoSize = True
+        Me.CheckBoxSelected.Location = New System.Drawing.Point(4, 9)
+        Me.CheckBoxSelected.Margin = New System.Windows.Forms.Padding(4)
+        Me.CheckBoxSelected.Name = "CheckBoxSelected"
+        Me.CheckBoxSelected.Padding = New System.Windows.Forms.Padding(3, 0, 0, 6)
+        Me.CheckBoxSelected.Size = New System.Drawing.Size(18, 20)
+        Me.CheckBoxSelected.TabIndex = 0
+        Me.CheckBoxSelected.TabStop = False
+        Me.CheckBoxSelected.UseVisualStyleBackColor = True
         '
         'ComboBoxPropertySet
         '
@@ -92,6 +92,7 @@ Partial Class UCEditProperties
         'ComboBoxPropertyName
         '
         Me.ComboBoxPropertyName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBoxPropertyName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(133, 3)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
@@ -168,7 +169,7 @@ Partial Class UCEditProperties
     End Sub
 
     Friend WithEvents ExTableLayoutPanel1 As ExTableLayoutPanel
-    Friend WithEvents CheckBoxSelect As CheckBox
+    Friend WithEvents CheckBoxSelected As CheckBox
     Friend WithEvents ComboBoxPropertySet As ComboBox
     Friend WithEvents ComboBoxPropertyName As ComboBox
     Friend WithEvents ComboBoxFindSearch As ComboBox

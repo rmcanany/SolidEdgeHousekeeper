@@ -995,7 +995,7 @@ Public Class TaskSaveModelAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
-        'TextBox.ContextMenuStrip = ContextMenuStrip1
+        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)

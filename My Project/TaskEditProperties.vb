@@ -375,6 +375,8 @@ Public Class TaskEditProperties
 
             Proceed = True
 
+            ' ####################### Get parameters #######################
+
             PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
             PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
             FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
@@ -388,21 +390,8 @@ Public Class TaskEditProperties
                 ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
             End If
 
-            'If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
-            '    FindSearchType = "PT"
-            'ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
-            '    FindSearchType = "WC"
-            'Else
-            '    FindSearchType = "RX"
-            'End If
 
-            'If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
-            '    ReplaceSearchType = "PT"
-            'ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
-            '    ReplaceSearchType = "RX"
-            'Else
-            '    ReplaceSearchType = "EX"
-            'End If
+            ' ####################### Do formula substitution #######################
 
             If Proceed Then
                 Try
@@ -440,6 +429,9 @@ Public Class TaskEditProperties
                 End If
             End If
 
+
+            ' ####################### Get the property object #######################
+
             Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
 
             If Proceed Then
@@ -452,6 +444,9 @@ Public Class TaskEditProperties
 
                 Dim FunnyList As New List(Of String)
                 FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+                Dim tfSystem As Boolean = (PropertySetName.ToLower = "system") Or (PropertySetName = "")
+                Dim tfCustom As Boolean = (PropertySetName.ToLower = "custom") Or (PropertySetName = "")
 
                 Try
 
@@ -494,47 +489,42 @@ Public Class TaskEditProperties
 
                     'End If
 
-                    ''If PropertySetName = "Project" Then
-                    ''    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                    ''    co = dsiStream.AsOLEPropertiesContainer
-
-                    ''    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-                    ''End If
-
-
                     '######## get the property here
 
-                    If SIList.Contains(PropertyNameEnglish) Then
+                    If (SIList.Contains(PropertyNameEnglish)) And (tfSystem) Then
                         dsiStream = cf.RootStorage.GetStream("SummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    ElseIf DSIList.Contains(PropertyNameEnglish) Then
+                    ElseIf (DSIList.Contains(PropertyNameEnglish)) And (tfSystem) Then
                         dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    ElseIf FunnyList.Contains(PropertyNameEnglish) Then
+                    ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (tfSystem) Then
                         dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                         co = dsiStream.AsOLEPropertiesContainer
 
                         OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
                     Else  ' Hopefully a Custom Property
-                        dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                        co = dsiStream.AsOLEPropertiesContainer
+                        If tfCustom Then
+                            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                            co = dsiStream.AsOLEPropertiesContainer
 
-                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-                        If IsNothing(OLEProp) Then
+                            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+                            If IsNothing(OLEProp) Then
 
-                            Dim userProperties = co.UserDefinedProperties
-                            Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
-                            OLEProp.Value = " "
-                            userProperties.AddProperty(OLEProp)
+                                Dim userProperties = co.UserDefinedProperties
+                                Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                                OLEProp.Value = " "
+                                userProperties.AddProperty(OLEProp)
+
+                            End If
 
                         End If
 
@@ -555,6 +545,9 @@ Public Class TaskEditProperties
                 s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, propertynameenglish)
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
             End If
+
+
+            ' ####################### Do the replacement #######################
 
             If Proceed Then
 
@@ -584,6 +577,9 @@ Public Class TaskEditProperties
 
             End If
 
+
+            ' ####################### Delete the property if needed #######################
+
             If Proceed Then
 
                 Try
@@ -604,6 +600,9 @@ Public Class TaskEditProperties
 
             End If
 
+
+            ' ####################### Save the properties #######################
+
             If Proceed Then
                 Try
 
@@ -619,11 +618,6 @@ Public Class TaskEditProperties
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
             End If
-
-            '' Best to continue to find all errors
-            'If Not Proceed Then
-            '    Exit For
-            'End If
 
         Next
 
@@ -681,7 +675,7 @@ Public Class TaskEditProperties
 
             Proceed = True
 
-            ' ####################### Get names and find/replace strings #######################
+            ' ####################### Get parameters #######################
 
             PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
             PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
@@ -690,23 +684,6 @@ Public Class TaskEditProperties
             ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
             ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-            '' ####################### Get search types #######################
-
-            'If PropertiesToEditDict(RowIndexString)("Find_PT").ToLower = "true" Then
-            '    FindSearchType = "PT"
-            'ElseIf PropertiesToEditDict(RowIndexString)("Find_WC").ToLower = "true" Then
-            '    FindSearchType = "WC"
-            'Else
-            '    FindSearchType = "RX"
-            'End If
-
-            'If PropertiesToEditDict(RowIndexString)("Replace_PT").ToLower = "true" Then
-            '    ReplaceSearchType = "PT"
-            'ElseIf PropertiesToEditDict(RowIndexString)("Replace_RX").ToLower = "true" Then
-            '    ReplaceSearchType = "RX"
-            'Else
-            '    ReplaceSearchType = "EX"
-            'End If
 
             ' ####################### Do formula substitution #######################
 
@@ -738,14 +715,22 @@ Public Class TaskEditProperties
                     If Prop Is Nothing Then
                         Proceed = False
                         ExitStatus = 1
-                        s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                        If Not PropertySetName = "" Then
+                            s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                        Else
+                            s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                        End If
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                     End If
 
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    If Not PropertySetName = "" Then
+                        s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
+                    Else
+                        s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                    End If
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End Try
 
@@ -834,24 +819,23 @@ Public Class TaskEditProperties
                 PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
                 PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
 
-                If (PropertyName.ToLower = "material") And (PropertySetName.ToLower = "system") Then
+                Dim tf As Boolean = PropertySetName.ToLower = "system"
+                tf = tf Or (PropertySetName.ToLower = "system")
+                tf = tf And (PropertyName.ToLower = "material")
+                tf = tf And (Me.AutoUpdateMaterial)
 
-                    If Me.AutoUpdateMaterial Then
-
-                        Select Case UC.GetDocType(SEDoc)
-                            Case "par", "psm"
-                                Dim UM As New UtilsMaterials
-                                SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
+                If tf Then
+                    Select Case UC.GetDocType(SEDoc)
+                        Case "par", "psm"
+                            Dim UM As New UtilsMaterials
+                            SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
                                         SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
 
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
-                            Case Else
-                                ' Not an error
-
-                        End Select
-
-                    End If
+                        Case Else
+                            ' Not an error
+                    End Select
                 End If
             End If
 

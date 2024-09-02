@@ -60,6 +60,12 @@ This is *blazingly* fast.  It can run a monster batch of parts before Solid Edge
 
 Oh, did I mention you don't need Solid Edge installed to use this?  Maybe *you-know-who* in Purchasing could get in on the fun for a change!
 
+#### Property Formula
+
+One other change was made to the `Edit Properties` command -- the formula is now evaluated internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should be fine because it is a core Windows feature (starting with Win7 maybe, not sure).  
+
+However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
+
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 
 
@@ -126,15 +132,16 @@ Added the ability to select properties defined in your templates.  Also implemen
 
 ![Property Filter](My%20Project/media/property_filter.png)
 
-The template properties are populated on the **Configuration Tab -- Templates Page**.
+The template properties are populated on the **Configuration Tab -- Templates Page**.  
 
 ![Customize Property List](My%20Project/media/customize_property_list.png)
 
-This functionality was also added to the `Edit Properties` command.  That command, and `Edit Variables` also now have the option to save settings for reuse.
+To populate the Property Name field, click the drop down arrow.  To use a property in the Value field (or in the Find and Replace text of the `Edit Properties` command), right click the field and select the `Insert property` command.
 
-One other change was made to the `Property Filter` specifically -- the formula is now processed internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should be fine because it is a core Windows feature (starting with Win7 maybe, not sure).  
+![Insert Property](My%20Project/media/property_selector.png)
 
-However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
+
+
 
 See the [<ins>**Property Filter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering) for details.
 

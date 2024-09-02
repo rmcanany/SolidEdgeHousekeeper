@@ -36,8 +36,10 @@ Public Class FormPropertyInputEditor
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        Me.TemplatePropertyList = Form_Main.TemplatePropertyList
+        Dim UC As New UtilsCommon
+
+        'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
 
         Me.UCList = New List(Of UCEditProperties)
 
@@ -46,6 +48,27 @@ Public Class FormPropertyInputEditor
         'Dim Tag = "edit-properties"
         'Me.HelpURL = UD.GenerateVersionURL(Tag)
 
+        '' Check for imported template properties
+        'Dim tf As Boolean
+
+        'tf = Me.TemplatePropertyDict Is Nothing
+        'tf = tf Or Me.TemplatePropertyList Is Nothing
+
+        'If Not tf Then
+        '    tf = Me.TemplatePropertyDict.Count = 0
+        '    tf = tf Or Me.TemplatePropertyList.Count = 0
+        'End If
+
+        ''tf = tf And Form_Main.WarnNoImportedProperties
+
+        'If tf Then
+        '    Dim s = "Template properties required for this command not found. "
+        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+        '    MsgBox(s, vbOKOnly)
+        '    Me.DialogResult = DialogResult.Cancel
+        'End If
+
+
     End Sub
 
 
@@ -53,22 +76,42 @@ Public Class FormPropertyInputEditor
         Dim InputsOK As Boolean = True
         Dim s As String = ""
         Dim indent As String = "    "
+        Dim UtilsCommon As New UtilsCommon
 
         For Each UC As UCEditProperties In UCList
 
             ' Ignore any with no PropertyName
             If Not UC.PropertyName = "" Then
-                'If UC.PropertySet = "" Then
-                '    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
-                'End If
+
+                ' Blank FindString or ReplaceString is not an error.
+
+                If UC.PropertySet = "" Then
+                    s = String.Format("{0}{1}Select a PropertySet for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
+                End If
+
                 If UC.FindSearch = "" Then
                     s = String.Format("{0}{1}Select a Find Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                 End If
+
+                If Not UC.FindString = "" Then
+                    If Not UtilsCommon.CheckValidPropertyFormulas(UC.FindString) Then
+                        s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.FindString, vbCrLf)
+                    End If
+                End If
+
                 If Not UC.FindSearch = "X" Then
                     If UC.ReplaceSearch = "" Then
                         s = String.Format("{0}{1}Select a Replace Search Type for '{2}'{3}", s, indent, UC.PropertyName, vbCrLf)
                     End If
+
+                    If Not UC.ReplaceString = "" Then
+                        If Not UtilsCommon.CheckValidPropertyFormulas(UC.ReplaceString) Then
+                            s = String.Format("{0}{1}Property formula '{2}' missing 'System.' or 'Custom.'{3}", s, indent, UC.ReplaceString, vbCrLf)
+                        End If
+                    End If
+
                 End If
+
             End If
 
         Next
@@ -113,6 +156,8 @@ Public Class FormPropertyInputEditor
 
         For Each Key As String In JSONDict.Keys
             NewUC = New UCEditProperties(Me)
+            NewUC.NotifyPropertyEditor = False
+
             NewUC.PropertySet = JSONDict(Key)("PropertySet")
             NewUC.PropertyName = JSONDict(Key)("PropertyName")
             NewUC.FindSearch = JSONDict(Key)("FindSearch")
@@ -125,6 +170,7 @@ Public Class FormPropertyInputEditor
             NewUC.Dock = DockStyle.Fill
 
             UCList.Add(NewUC)
+            NewUC.NotifyPropertyEditor = True
         Next
 
     End Sub
@@ -259,11 +305,13 @@ Public Class FormPropertyInputEditor
         For Each UC As UCEditProperties In UCList
             If ChangedUC.Selected Then
                 If UC IsNot ChangedUC Then
-                    UC.CheckBoxSelect.Checked = False
+                    UC.CheckBoxSelected.Checked = False
                 End If
             End If
             If UC.PropertyName = "" Then
                 NeedANewRow = False
+            Else
+                UC.ReconcileFormWithProps()
             End If
         Next
 
@@ -292,23 +340,21 @@ Public Class FormPropertyInputEditor
         ' Check for imported template properties
         Dim tf As Boolean
 
-        tf = Me.TemplatePropertyDict Is Nothing
+        tf = Form_Main.TemplatePropertyDict Is Nothing
         tf = tf Or Me.TemplatePropertyList Is Nothing
 
         If Not tf Then
-            tf = Me.TemplatePropertyDict.Count = 0
+            tf = Form_Main.TemplatePropertyDict.Count = 0
             tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
 
-        tf = tf And Form_Main.WarnNoImportedProperties
+        'tf = tf And Form_Main.WarnNoImportedProperties
 
         If tf Then
-            Dim s As String = "Template properties not populated.  This is not an error, "
-            s = String.Format("{0}however it means properties must be entered manually.  ", s)
-            s = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
-            s = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
             MsgBox(s, vbOKOnly)
+            Me.DialogResult = DialogResult.Cancel
         End If
 
 
@@ -317,6 +363,9 @@ Public Class FormPropertyInputEditor
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
         If CheckInputs() Then
+
+            Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+
             Dim UP As New UtilsPreferences
             UP.SaveEditPropertiesSavedSettings(Me.SavedSettingsDict)
 
@@ -470,4 +519,42 @@ Public Class FormPropertyInputEditor
         ComboBoxSavedSettings.Items.Remove(Name)
         ComboBoxSavedSettings.Text = ""
     End Sub
+
+    Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
+
+        Dim PreviousPropertyName As String
+
+        If ButtonShowAll.Checked Then
+            ButtonShowAll.Image = My.Resources.Checked
+
+            For i As Integer = 0 To UCList.Count - 1
+                UCList(i).NotifyPropertyEditor = False
+                PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
+                UCList(i).ComboBoxPropertyName.Items.Clear()
+                UCList(i).ComboBoxPropertyName.Items.Add("")
+                For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                Next
+                UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
+                UCList(i).NotifyPropertyEditor = True
+            Next
+        Else
+            ButtonShowAll.Image = My.Resources.Unchecked
+
+            For i As Integer = 0 To UCList.Count - 1
+                UCList(i).NotifyPropertyEditor = False
+                PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
+                UCList(i).ComboBoxPropertyName.Items.Clear()
+                UCList(i).ComboBoxPropertyName.Items.Add("")
+                For Each Key As String In Me.TemplatePropertyList
+                    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                Next
+                UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
+                UCList(i).NotifyPropertyEditor = True
+            Next
+        End If
+
+    End Sub
+
+
 End Class

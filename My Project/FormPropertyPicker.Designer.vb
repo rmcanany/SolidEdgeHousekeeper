@@ -27,9 +27,10 @@ Partial Class FormPropertyPicker
         Me.ButtonPropAndIndex = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
-        Me.ComboBoxProperties = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -38,7 +39,7 @@ Partial Class FormPropertyPicker
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonPropOnly, Me.ButtonPropAndIndex, Me.ToolStripSeparator1, Me.ButtonShowAll})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(299, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(284, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -81,20 +82,20 @@ Partial Class FormPropertyPicker
         Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
         Me.ButtonShowAll.Text = "Show All Props"
         '
-        'ComboBoxProperties
+        'ComboBoxPropertyName
         '
-        Me.ComboBoxProperties.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ComboBoxPropertyName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComboBoxProperties.FormattingEnabled = True
-        Me.ComboBoxProperties.Location = New System.Drawing.Point(12, 40)
-        Me.ComboBoxProperties.Name = "ComboBoxProperties"
-        Me.ComboBoxProperties.Size = New System.Drawing.Size(272, 24)
-        Me.ComboBoxProperties.TabIndex = 1
+        Me.ComboBoxPropertyName.FormattingEnabled = True
+        Me.ComboBoxPropertyName.Location = New System.Drawing.Point(100, 35)
+        Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(165, 24)
+        Me.ComboBoxPropertyName.TabIndex = 1
         '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(121, 81)
+        Me.ButtonOK.Location = New System.Drawing.Point(106, 67)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
         Me.ButtonOK.TabIndex = 2
@@ -104,21 +105,32 @@ Partial Class FormPropertyPicker
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(209, 80)
+        Me.ButtonCancel.Location = New System.Drawing.Point(189, 66)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
         Me.ButtonCancel.TabIndex = 3
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
         '
+        'ComboBoxPropertySet
+        '
+        Me.ComboBoxPropertySet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxPropertySet.FormattingEnabled = True
+        Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "System", "Custom"})
+        Me.ComboBoxPropertySet.Location = New System.Drawing.Point(10, 35)
+        Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(75, 24)
+        Me.ComboBoxPropertySet.TabIndex = 4
+        '
         'FormPropertyPicker
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(299, 115)
+        Me.ClientSize = New System.Drawing.Size(284, 101)
+        Me.Controls.Add(Me.ComboBoxPropertySet)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Controls.Add(Me.ComboBoxProperties)
+        Me.Controls.Add(Me.ComboBoxPropertyName)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
@@ -136,7 +148,8 @@ Partial Class FormPropertyPicker
     Friend WithEvents ButtonPropAndIndex As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents ButtonShowAll As ToolStripButton
-    Friend WithEvents ComboBoxProperties As ComboBox
+    Friend WithEvents ComboBoxPropertyName As ComboBox
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
+    Friend WithEvents ComboBoxPropertySet As ComboBox
 End Class

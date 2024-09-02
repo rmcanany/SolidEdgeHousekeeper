@@ -52,23 +52,23 @@ Partial Class FormPropertyInputEditor
         Me.Label19 = New System.Windows.Forms.Label()
         Me.PanelSearches = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelSearches = New Housekeeper.ExTableLayoutPanel()
-        Me.UcPropertyInput1 = New Housekeeper.UCEditProperties()
         Me.PanelFooter = New System.Windows.Forms.Panel()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripEditProperties.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
         Me.PanelSearches.SuspendLayout()
-        Me.ExTableLayoutPanelSearches.SuspendLayout()
         Me.PanelFooter.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -95,7 +95,7 @@ Partial Class FormPropertyInputEditor
         'ToolStripEditProperties
         '
         Me.ToolStripEditProperties.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ToolStripButtonHelp})
+        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ButtonShowAll, Me.ToolStripSeparator4, Me.ToolStripButtonHelp})
         Me.ToolStripEditProperties.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripEditProperties.Name = "ToolStripEditProperties"
         Me.ToolStripEditProperties.Size = New System.Drawing.Size(759, 25)
@@ -324,7 +324,6 @@ Partial Class FormPropertyInputEditor
         Me.ExTableLayoutPanelSearches.AutoScroll = True
         Me.ExTableLayoutPanelSearches.ColumnCount = 1
         Me.ExTableLayoutPanelSearches.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanelSearches.Controls.Add(Me.UcPropertyInput1, 0, 0)
         Me.ExTableLayoutPanelSearches.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanelSearches.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanelSearches.Name = "ExTableLayoutPanelSearches"
@@ -335,27 +334,6 @@ Partial Class FormPropertyInputEditor
         Me.ExTableLayoutPanelSearches.Size = New System.Drawing.Size(750, 200)
         Me.ExTableLayoutPanelSearches.TabIndex = 11
         Me.ExTableLayoutPanelSearches.Task = Nothing
-        '
-        'UcPropertyInput1
-        '
-        Me.UcPropertyInput1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcPropertyInput1.FindSearch = ""
-        Me.UcPropertyInput1.FindString = ""
-        Me.UcPropertyInput1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UcPropertyInput1.Location = New System.Drawing.Point(4, 4)
-        Me.UcPropertyInput1.Margin = New System.Windows.Forms.Padding(4)
-        Me.UcPropertyInput1.Name = "UcPropertyInput1"
-        Me.UcPropertyInput1.NotifyPropertyEditor = True
-        Me.UcPropertyInput1.PropertyEditor = Nothing
-        Me.UcPropertyInput1.PropertyName = ""
-        Me.UcPropertyInput1.PropertySet = ""
-        Me.UcPropertyInput1.ReplaceSearch = ""
-        Me.UcPropertyInput1.ReplaceString = ""
-        Me.UcPropertyInput1.Selected = False
-        Me.UcPropertyInput1.Size = New System.Drawing.Size(742, 27)
-        Me.UcPropertyInput1.TabIndex = 0
-        Me.UcPropertyInput1.TemplatePropertyDict = Nothing
-        Me.UcPropertyInput1.TemplatePropertyList = Nothing
         '
         'PanelFooter
         '
@@ -377,77 +355,14 @@ Partial Class FormPropertyInputEditor
         Me.PanelFooter.Size = New System.Drawing.Size(750, 50)
         Me.PanelFooter.TabIndex = 16
         '
-        'Label20
+        'Label9
         '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(20, 5)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(58, 16)
-        Me.Label20.TabIndex = 0
-        Me.Label20.Text = "* LEGEND"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(100, 5)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(87, 16)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "FS: Find Search"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(220, 5)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(74, 16)
-        Me.Label2.TabIndex = 4
-        Me.Label2.Text = "PT: Plain Text"
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(315, 5)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(78, 16)
-        Me.Label3.TabIndex = 5
-        Me.Label3.Text = "WC: Wildcard"
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(460, 5)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(124, 16)
-        Me.Label4.TabIndex = 6
-        Me.Label4.Text = "RX: Regular Expression"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(602, 5)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(52, 16)
-        Me.Label5.TabIndex = 7
-        Me.Label5.Text = "X: Delete"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(100, 25)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(106, 16)
-        Me.Label6.TabIndex = 8
-        Me.Label6.Text = "RS: Replace Search"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(220, 25)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(74, 16)
-        Me.Label7.TabIndex = 9
-        Me.Label7.Text = "PT: Plain Text"
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(460, 25)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(80, 16)
+        Me.Label9.TabIndex = 11
+        Me.Label9.Text = "EX: Expression"
         '
         'Label8
         '
@@ -458,14 +373,91 @@ Partial Class FormPropertyInputEditor
         Me.Label8.TabIndex = 10
         Me.Label8.Text = "RX: Regular Expression"
         '
-        'Label9
+        'Label7
         '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(460, 25)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(80, 16)
-        Me.Label9.TabIndex = 11
-        Me.Label9.Text = "EX: Expression"
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(220, 25)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(74, 16)
+        Me.Label7.TabIndex = 9
+        Me.Label7.Text = "PT: Plain Text"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(100, 25)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(106, 16)
+        Me.Label6.TabIndex = 8
+        Me.Label6.Text = "RS: Replace Search"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(602, 5)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(52, 16)
+        Me.Label5.TabIndex = 7
+        Me.Label5.Text = "X: Delete"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(460, 5)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(124, 16)
+        Me.Label4.TabIndex = 6
+        Me.Label4.Text = "RX: Regular Expression"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(315, 5)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(78, 16)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "WC: Wildcard"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(220, 5)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(74, 16)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "PT: Plain Text"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(100, 5)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(87, 16)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "FS: Find Search"
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(20, 5)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(58, 16)
+        Me.Label20.TabIndex = 0
+        Me.Label20.Text = "* LEGEND"
+        '
+        'ButtonShowAll
+        '
+        Me.ButtonShowAll.CheckOnClick = True
+        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonShowAll.Name = "ButtonShowAll"
+        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
+        Me.ButtonShowAll.Text = "Show All Props"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
         '
         'FormPropertyInputEditor
         '
@@ -489,7 +481,6 @@ Partial Class FormPropertyInputEditor
         Me.ExTableLayoutPanelHeader.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.PerformLayout()
         Me.PanelSearches.ResumeLayout(False)
-        Me.ExTableLayoutPanelSearches.ResumeLayout(False)
         Me.PanelFooter.ResumeLayout(False)
         Me.PanelFooter.PerformLayout()
         Me.ResumeLayout(False)
@@ -536,4 +527,6 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
+    Friend WithEvents ButtonShowAll As ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

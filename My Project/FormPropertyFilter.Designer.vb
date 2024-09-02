@@ -41,31 +41,33 @@ Partial Class FormPropertyFilter
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
-        Me.PanelFilters = New System.Windows.Forms.Panel()
-        Me.PanelFooter = New System.Windows.Forms.Panel()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.TextBoxFormula = New System.Windows.Forms.TextBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.ExTableLayoutPanelFilters = New Housekeeper.ExTableLayoutPanel()
-        Me.UcPropertyFilter1 = New Housekeeper.UCPropertyFilter()
         Me.ExTableLayoutPanelHeader = New Housekeeper.ExTableLayoutPanel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
+        Me.PanelFilters = New System.Windows.Forms.Panel()
+        Me.ExTableLayoutPanelFilters = New Housekeeper.ExTableLayoutPanel()
+        Me.UcPropertyFilter1 = New Housekeeper.UCPropertyFilter()
+        Me.PanelFooter = New System.Windows.Forms.Panel()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.TextBoxFormula = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
-        Me.PanelFilters.SuspendLayout()
-        Me.PanelFooter.SuspendLayout()
-        Me.ExTableLayoutPanelFilters.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
+        Me.PanelFilters.SuspendLayout()
+        Me.ExTableLayoutPanelFilters.SuspendLayout()
+        Me.PanelFooter.SuspendLayout()
         Me.SuspendLayout()
         '
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(526, 329)
+        Me.ButtonCancel.Location = New System.Drawing.Point(597, 329)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(88, 23)
@@ -76,7 +78,7 @@ Partial Class FormPropertyFilter
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(417, 329)
+        Me.ButtonOK.Location = New System.Drawing.Point(488, 329)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(88, 23)
@@ -86,10 +88,10 @@ Partial Class FormPropertyFilter
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonHelp})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAll, Me.ToolStripSeparator4, Me.ButtonHelp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(634, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(705, 25)
         Me.ToolStrip1.TabIndex = 24
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -212,99 +214,6 @@ Partial Class FormPropertyFilter
         Me.PanelHeader.Size = New System.Drawing.Size(750, 35)
         Me.PanelHeader.TabIndex = 25
         '
-        'PanelFilters
-        '
-        Me.PanelFilters.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelFilters.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.PanelFilters.Controls.Add(Me.ExTableLayoutPanelFilters)
-        Me.PanelFilters.Location = New System.Drawing.Point(5, 65)
-        Me.PanelFilters.Name = "PanelFilters"
-        Me.PanelFilters.Size = New System.Drawing.Size(625, 200)
-        Me.PanelFilters.TabIndex = 26
-        '
-        'PanelFooter
-        '
-        Me.PanelFooter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelFooter.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.PanelFooter.Controls.Add(Me.Label7)
-        Me.PanelFooter.Controls.Add(Me.TextBoxFormula)
-        Me.PanelFooter.Controls.Add(Me.Label6)
-        Me.PanelFooter.Location = New System.Drawing.Point(5, 265)
-        Me.PanelFooter.Name = "PanelFooter"
-        Me.PanelFooter.Size = New System.Drawing.Size(625, 50)
-        Me.PanelFooter.TabIndex = 27
-        '
-        'Label7
-        '
-        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(225, 15)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(62, 16)
-        Me.Label7.TabIndex = 2
-        Me.Label7.Text = "FORMULA"
-        '
-        'TextBoxFormula
-        '
-        Me.TextBoxFormula.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFormula.Enabled = False
-        Me.TextBoxFormula.Location = New System.Drawing.Point(293, 12)
-        Me.TextBoxFormula.Name = "TextBoxFormula"
-        Me.TextBoxFormula.Size = New System.Drawing.Size(316, 23)
-        Me.TextBoxFormula.TabIndex = 1
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(25, 15)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(135, 16)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "*LEGEND         V: Variable"
-        '
-        'ExTableLayoutPanelFilters
-        '
-        Me.ExTableLayoutPanelFilters.AutoScroll = True
-        Me.ExTableLayoutPanelFilters.ColumnCount = 1
-        Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanelFilters.Controls.Add(Me.UcPropertyFilter1, 0, 0)
-        Me.ExTableLayoutPanelFilters.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanelFilters.Location = New System.Drawing.Point(0, 0)
-        Me.ExTableLayoutPanelFilters.Name = "ExTableLayoutPanelFilters"
-        Me.ExTableLayoutPanelFilters.RowCount = 2
-        Me.ExTableLayoutPanelFilters.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.ExTableLayoutPanelFilters.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.ExTableLayoutPanelFilters.Size = New System.Drawing.Size(625, 200)
-        Me.ExTableLayoutPanelFilters.TabIndex = 0
-        Me.ExTableLayoutPanelFilters.Task = Nothing
-        '
-        'UcPropertyFilter1
-        '
-        Me.UcPropertyFilter1.Comparison = ""
-        Me.UcPropertyFilter1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcPropertyFilter1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UcPropertyFilter1.Formula = ""
-        Me.UcPropertyFilter1.Location = New System.Drawing.Point(4, 4)
-        Me.UcPropertyFilter1.Margin = New System.Windows.Forms.Padding(4)
-        Me.UcPropertyFilter1.Name = "UcPropertyFilter1"
-        Me.UcPropertyFilter1.NotifyPropertyFilter = True
-        Me.UcPropertyFilter1.PropertyFilter = Nothing
-        Me.UcPropertyFilter1.PropertyName = ""
-        Me.UcPropertyFilter1.PropertySet = ""
-        Me.UcPropertyFilter1.Selected = False
-        Me.UcPropertyFilter1.Size = New System.Drawing.Size(617, 27)
-        Me.UcPropertyFilter1.TabIndex = 0
-        Me.UcPropertyFilter1.TemplatePropertyDict = Nothing
-        Me.UcPropertyFilter1.TemplatePropertyList = Nothing
-        Me.UcPropertyFilter1.Value = ""
-        Me.UcPropertyFilter1.Variable = ""
-        '
         'ExTableLayoutPanelHeader
         '
         Me.ExTableLayoutPanelHeader.ColumnCount = 6
@@ -378,11 +287,118 @@ Partial Class FormPropertyFilter
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Value"
         '
+        'PanelFilters
+        '
+        Me.PanelFilters.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelFilters.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.PanelFilters.Controls.Add(Me.ExTableLayoutPanelFilters)
+        Me.PanelFilters.Location = New System.Drawing.Point(5, 65)
+        Me.PanelFilters.Name = "PanelFilters"
+        Me.PanelFilters.Size = New System.Drawing.Size(696, 200)
+        Me.PanelFilters.TabIndex = 26
+        '
+        'ExTableLayoutPanelFilters
+        '
+        Me.ExTableLayoutPanelFilters.AutoScroll = True
+        Me.ExTableLayoutPanelFilters.ColumnCount = 1
+        Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanelFilters.Controls.Add(Me.UcPropertyFilter1, 0, 0)
+        Me.ExTableLayoutPanelFilters.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanelFilters.Location = New System.Drawing.Point(0, 0)
+        Me.ExTableLayoutPanelFilters.Name = "ExTableLayoutPanelFilters"
+        Me.ExTableLayoutPanelFilters.RowCount = 2
+        Me.ExTableLayoutPanelFilters.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelFilters.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.ExTableLayoutPanelFilters.Size = New System.Drawing.Size(696, 200)
+        Me.ExTableLayoutPanelFilters.TabIndex = 0
+        Me.ExTableLayoutPanelFilters.Task = Nothing
+        '
+        'UcPropertyFilter1
+        '
+        Me.UcPropertyFilter1.Comparison = ""
+        Me.UcPropertyFilter1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcPropertyFilter1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UcPropertyFilter1.Formula = ""
+        Me.UcPropertyFilter1.Location = New System.Drawing.Point(4, 4)
+        Me.UcPropertyFilter1.Margin = New System.Windows.Forms.Padding(4)
+        Me.UcPropertyFilter1.Name = "UcPropertyFilter1"
+        Me.UcPropertyFilter1.NotifyPropertyFilter = True
+        Me.UcPropertyFilter1.ProcessEvents = True
+        Me.UcPropertyFilter1.PropertyFilter = Nothing
+        Me.UcPropertyFilter1.PropertyName = ""
+        Me.UcPropertyFilter1.PropertySet = ""
+        Me.UcPropertyFilter1.Selected = False
+        Me.UcPropertyFilter1.Size = New System.Drawing.Size(688, 27)
+        Me.UcPropertyFilter1.TabIndex = 0
+        Me.UcPropertyFilter1.TemplatePropertyList = Nothing
+        Me.UcPropertyFilter1.Value = ""
+        Me.UcPropertyFilter1.Variable = ""
+        '
+        'PanelFooter
+        '
+        Me.PanelFooter.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelFooter.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.PanelFooter.Controls.Add(Me.Label7)
+        Me.PanelFooter.Controls.Add(Me.TextBoxFormula)
+        Me.PanelFooter.Controls.Add(Me.Label6)
+        Me.PanelFooter.Location = New System.Drawing.Point(5, 265)
+        Me.PanelFooter.Name = "PanelFooter"
+        Me.PanelFooter.Size = New System.Drawing.Size(696, 50)
+        Me.PanelFooter.TabIndex = 27
+        '
+        'Label7
+        '
+        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(225, 15)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(62, 16)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "FORMULA"
+        '
+        'TextBoxFormula
+        '
+        Me.TextBoxFormula.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxFormula.Enabled = False
+        Me.TextBoxFormula.Location = New System.Drawing.Point(293, 12)
+        Me.TextBoxFormula.Name = "TextBoxFormula"
+        Me.TextBoxFormula.Size = New System.Drawing.Size(387, 23)
+        Me.TextBoxFormula.TabIndex = 1
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(25, 15)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(135, 16)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "*LEGEND         V: Variable"
+        '
+        'ButtonShowAll
+        '
+        Me.ButtonShowAll.CheckOnClick = True
+        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonShowAll.Name = "ButtonShowAll"
+        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
+        Me.ButtonShowAll.Text = "Show All Props"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
         'FormPropertyFilter
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(634, 361)
+        Me.ClientSize = New System.Drawing.Size(705, 361)
         Me.Controls.Add(Me.PanelFooter)
         Me.Controls.Add(Me.PanelFilters)
         Me.Controls.Add(Me.PanelHeader)
@@ -398,12 +414,12 @@ Partial Class FormPropertyFilter
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.PanelHeader.ResumeLayout(False)
-        Me.PanelFilters.ResumeLayout(False)
-        Me.PanelFooter.ResumeLayout(False)
-        Me.PanelFooter.PerformLayout()
-        Me.ExTableLayoutPanelFilters.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.PerformLayout()
+        Me.PanelFilters.ResumeLayout(False)
+        Me.ExTableLayoutPanelFilters.ResumeLayout(False)
+        Me.PanelFooter.ResumeLayout(False)
+        Me.PanelFooter.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -440,4 +456,6 @@ Partial Class FormPropertyFilter
     Friend WithEvents Label6 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents TextBoxFormula As TextBox
+    Friend WithEvents ButtonShowAll As ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

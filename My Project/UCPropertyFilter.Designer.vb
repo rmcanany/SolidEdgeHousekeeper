@@ -119,7 +119,6 @@ Partial Class UCPropertyFilter
         '
         'TextBoxValue
         '
-        Me.TextBoxValue.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxValue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxValue.Location = New System.Drawing.Point(413, 3)
         Me.TextBoxValue.Name = "TextBoxValue"
@@ -129,6 +128,7 @@ Partial Class UCPropertyFilter
         'ComboBoxPropertyName
         '
         Me.ComboBoxPropertyName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBoxPropertyName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(163, 3)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"

@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.Net.NetworkInformation
 
 Public Class UCPropertyFilter
     Public Property PropertyFilter As FormPropertyFilter
@@ -12,8 +13,10 @@ Public Class UCPropertyFilter
     Public Property Formula As String
 
     Public Property NotifyPropertyFilter As Boolean
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
+    Public Property ProcessEvents As Boolean = True
+
 
 
     Public Sub New()
@@ -39,9 +42,15 @@ Public Class UCPropertyFilter
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
+        Dim UC As New UtilsCommon
+
         Me.PropertyFilter = _PropertyFilter
-        Me.TemplatePropertyDict = PropertyFilter.TemplatePropertyDict
-        Me.TemplatePropertyList = PropertyFilter.TemplatePropertyList
+        'Me.TemplatePropertyDict = PropertyFilter.TemplatePropertyDict
+        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+
+        'MsgBox("Temporarily setting hmk_Make_From PropertySet to 'Duplicate'")
+        'Me.TemplatePropertyDict("hmk_Make_From")("PropertySet") = "Duplicate"
 
         ComboBoxPropertyName.Items.Add("")
         For Each s As String In TemplatePropertyList
@@ -67,42 +76,78 @@ Public Class UCPropertyFilter
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
         Me.PropertySet = ComboBoxPropertySet.Text
+
+        'ComboBoxPropertyName.Items.Clear()
+
+        'Select Case Me.PropertySet
+        '    Case ""
+        '        For Each s As String In TemplatePropertyList
+        '            ComboBoxPropertyName.Items.Add(s)
+        '        Next
+        '    Case "Custom"
+        '        For Each s As String In TemplatePropertyList
+        '            If Form_Main.TemplatePropertyDict.Keys.Contains(s) Then
+        '                If (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Custom") Or (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
+        '                    ComboBoxPropertyName.Items.Add(s)
+        '                End If
+        '            End If
+        '        Next
+        '    Case "System"
+        '        For Each s As String In TemplatePropertyList
+        '            If Form_Main.TemplatePropertyDict.Keys.Contains(s) Then
+        '                If (Not Form_Main.TemplatePropertyDict(s)("PropertySet") = "Custom") Or (Form_Main.TemplatePropertyDict(s)("PropertySet") = "Duplicate") Then
+        '                    ComboBoxPropertyName.Items.Add(s)
+        '                End If
+        '            End If
+        '        Next
+        'End Select
+
+        'If Me.ProcessEvents Then
+        '    Me.ProcessEvents = False
+        '    ComboBoxPropertyName.Text = CStr(ComboBoxPropertyName.Items(0))
+        '    Me.ProcessEvents = True
+        'End If
+
         Notify()
     End Sub
 
-    Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
+    Private Sub UpdatePropertyName()
         Me.PropertyName = ComboBoxPropertyName.Text
 
-        If Me.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
-            Dim s As String = TemplatePropertyDict(Me.PropertyName)("PropertySet")
+        Dim PropSet As String = ""
 
-            If Not ((s = "") Or (s = "Custom")) Then
-                s = "System"
+        If Not IsNothing(Form_Main.TemplatePropertyDict) Then
+            If Form_Main.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
+                PropSet = Form_Main.TemplatePropertyDict(Me.PropertyName)("PropertySet")
+
+                If Not ((PropSet = "") Or (PropSet = "Custom") Or (PropSet = "Duplicate")) Then
+                    PropSet = "System"
+                End If
+
+                If PropSet = "Duplicate" Then
+                    PropSet = ""
+                End If
+
+            Else
+                PropSet = ""
             End If
-
-            ComboBoxPropertySet.Text = s
-        Else
-            ComboBoxPropertySet.Text = ""
         End If
 
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
+            ComboBoxPropertySet.Text = PropSet
+            Me.ProcessEvents = True
+        End If
+
+    End Sub
+
+    Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
+        UpdatePropertyName()
         Notify()
     End Sub
 
     Private Sub ComboBoxPropertyName_Leave(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.Leave
-        Me.PropertyName = ComboBoxPropertyName.Text
-
-        If Me.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
-            Dim s As String = TemplatePropertyDict(Me.PropertyName)("PropertySet")
-
-            If Not ((s = "") Or (s = "Custom")) Then
-                s = "System"
-            End If
-
-            ComboBoxPropertySet.Text = s
-        Else
-            ComboBoxPropertySet.Text = ""
-        End If
-
+        UpdatePropertyName()
         Notify()
     End Sub
 
@@ -136,21 +181,22 @@ Public Class UCPropertyFilter
 
     End Sub
 
-    Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+    'Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
 
-        Dim FPP As New FormPropertyPicker
-        FPP.TemplatePropertyDict = Me.TemplatePropertyDict
-        FPP.TemplatePropertyList = Me.TemplatePropertyList
+    '    Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+    '    Dim CaretPosition = TextBox.SelectionStart
 
-        FPP.ShowDialog()
+    '    Dim FPP As New FormPropertyPicker
+    '    FPP.TemplatePropertyDict = Me.TemplatePropertyDict
+    '    FPP.TemplatePropertyList = Me.TemplatePropertyList
 
-        If FPP.DialogResult = DialogResult.OK Then
-            Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
-            Dim CaretPosition = TextBox.SelectionStart
-            TextBox.Text = TextBox.Text.Insert(CaretPosition, FPP.PropertyString)
+    '    FPP.ShowDialog()
 
-        End If
-        Dim i = 0
+    '    If FPP.DialogResult = DialogResult.OK Then
+    '        TextBox.Text = TextBox.Text.Insert(CaretPosition, FPP.PropertyString)
 
-    End Sub
+    '    End If
+    '    Dim i = 0
+
+    'End Sub
 End Class

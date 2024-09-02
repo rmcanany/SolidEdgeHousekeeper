@@ -576,7 +576,7 @@ Public Class Form_Main
         End Set
     End Property
 
-    Public Property TemplatePropertyList As List(Of String)
+    'Public Property TemplatePropertyList As List(Of String)
 
 
     ' ###### GENERAL ######
@@ -698,18 +698,18 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _WarnNoImportedProperties As Boolean
-    Public Property WarnNoImportedProperties As Boolean
-        Get
-            Return _WarnNoImportedProperties
-        End Get
-        Set(value As Boolean)
-            _WarnNoImportedProperties = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxWarnNoImportedProperties.Checked = value
-            End If
-        End Set
-    End Property
+    'Private _WarnNoImportedProperties As Boolean
+    'Public Property WarnNoImportedProperties As Boolean
+    '    Get
+    '        Return _WarnNoImportedProperties
+    '    End Get
+    '    Set(value As Boolean)
+    '        _WarnNoImportedProperties = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            CheckBoxWarnNoImportedProperties.Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
 
 
@@ -818,9 +818,9 @@ Public Class Form_Main
             Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
         End If
 
-        If Me.TemplatePropertyList Is Nothing Then
-            Me.TemplatePropertyList = New List(Of String)
-        End If
+        'If Me.TemplatePropertyList Is Nothing Then
+        '    Me.TemplatePropertyList = New List(Of String)
+        'End If
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1051,20 +1051,35 @@ Public Class Form_Main
 
     Private Sub new_ButtonPropertyFilter_Click(sender As Object, e As EventArgs) Handles new_ButtonPropertyFilter.Click
 
-        Dim FPF As New FormPropertyFilter
+        ' Check if the Properties were imported from templates
+        Dim tf As Boolean
 
-        FPF.PropertyFilterDict = Me.PropertyFilterDict
-        FPF.TemplatePropertyDict = Me.TemplatePropertyDict
-        FPF.TemplatePropertyList = Me.TemplatePropertyList
+        tf = Me.TemplatePropertyDict Is Nothing
+        'tf = tf Or Me.TemplatePropertyList Is Nothing
 
-        FPF.ShowDialog()
-
-        If FPF.DialogResult = DialogResult.OK Then
-            Me.PropertyFilterDict = FPF.PropertyFilterDict
-
-            ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
+        If Not tf Then
+            tf = Me.TemplatePropertyDict.Count = 0
+            'tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
+
+        If Not tf Then
+            Dim FPF As New FormPropertyFilter
+
+            FPF.PropertyFilterDict = Me.PropertyFilterDict
+            FPF.ShowDialog()
+
+            If FPF.DialogResult = DialogResult.OK Then
+                Me.PropertyFilterDict = FPF.PropertyFilterDict
+                ListViewFilesOutOfDate = True
+            End If
+        Else
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            MsgBox(s, vbOKOnly)
+            Exit Sub
+        End If
+
+
 
     End Sub
 
@@ -2340,148 +2355,16 @@ Public Class Form_Main
     End Sub
 
     Private Sub ButtonUseTemplateProperties_Click(sender As Object, e As EventArgs) Handles ButtonUseTemplateProperties.Click
-        '{
-        '"Titolo":{
-        '    "PropertySet":"SummaryInformation"
-        '    "AsmPropItemNumber":"1"
-        '    "ParPropItemNumber":"1"
-        '    "PsmPropItemNumber":"1"
-        '    "DftPropItemNumber":"1"
-        '    "EnglishName":"Title"},
-        '"Oggetto":{
-        '    "PropertySet":"SummaryInformation"
-        '    "AsmPropItemNumber":"2"
-        '    "ParPropItemNumber":"2"
-        '    "PsmPropItemNumber":"2"
-        '    "DftPropItemNumber":"2"
-        '    "EnglishName":"Subject"},
-        ' ...
-        '}
-
-        Me.Cursor = Cursors.WaitCursor
-
-        Dim tmpTemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
-
-        Dim Templates As List(Of String) = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
-        Dim TemplateDocTypes As List(Of String) = {"asm", "par", "psm", "dft"}.ToList
-
-        Dim PropertySets As SolidEdgeFileProperties.PropertySets
-        Dim PropertySet As SolidEdgeFileProperties.Properties
-        Dim Prop As SolidEdgeFileProperties.Property
-        PropertySets = New SolidEdgeFileProperties.PropertySets
-        Dim PropertySetName As String
-        Dim PropName As String
-        Dim DocType As String
-
-        Dim KeepDict As New Dictionary(Of String, List(Of String))
-        KeepDict("SummaryInformation") = {"Title", "Subject", "Author", "Keywords", "Comments"}.ToList
-        KeepDict("ExtendedSummaryInformation") = {"Status", "Hardware"}.ToList
-        KeepDict("DocumentSummaryInformation") = {"Category", "Manager", "Company"}.ToList
-        KeepDict("ProjectInformation") = {"Document Number", "Revision", "Project Name"}.ToList
-        KeepDict("MechanicalModeling") = {"Material", "Sheet Metal Gage"}.ToList
 
         Dim UC As New UtilsCommon
 
-        Dim tf As Boolean
+        Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
-        Dim n As Integer = 0
+        Me.Cursor = Cursors.WaitCursor
 
-        For Each Template As String In Templates
-            tf = Not Template = ""
-            tf = tf And FileIO.FileSystem.FileExists(Template)
-            If tf Then
-                DocType = TemplateDocTypes(n)
-                PropertySets.Open(Template, True)
-                For i = 0 To PropertySets.Count - 1
-                    Try
-                        PropertySet = CType(PropertySets.Item(i), SolidEdgeFileProperties.Properties)
-                    Catch ex As Exception
-                        Continue For
-                    End Try
-                    PropertySetName = PropertySet.Name
-                    For j = 0 To PropertySet.Count - 1
-                        Try
-                            Prop = CType(PropertySet.Item(j), SolidEdgeFileProperties.Property)
-                            PropName = Prop.Name
-
-                            If KeepDict.Keys.Contains(PropertySetName) Then
-                                If Not KeepDict(PropertySetName).Contains(PropName) Then
-                                    Continue For
-                                End If
-                            End If
-
-                            If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
-                                tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-                                tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetName
-                                tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
-                                tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
-                                tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
-                                tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
-                                Dim s As String = UC.PropLocalizedToEnglish(PropertySetName, j + 1, DocType)
-                                If s = "" Then s = PropName
-                                tmpTemplatePropertyDict(PropName)("EnglishName") = s
-                            End If
-
-                            Select Case DocType
-                                Case "asm"
-                                    tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = CStr(j + 1)
-                                Case "par"
-                                    tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = CStr(j + 1)
-                                Case "psm"
-                                    tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = CStr(j + 1)
-                                Case "dft"
-                                    tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = CStr(j + 1)
-                            End Select
-
-                        Catch ex As Exception
-                            MsgBox(DocType + " " + PropertySetName + " " + CStr(i) + " " + CStr(j) + Chr(13) + ex.ToString)
-                        End Try
-                    Next
-                Next
-
-                PropertySets.Close()
-
-            End If
-            n += 1
-        Next
-
-        ' Add Sheet Metal Gage if it's not already there
-        PropName = "Sheet Metal Gage"
-        If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
-            tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-            tmpTemplatePropertyDict(PropName)("PropertySet") = "MechanicalModeling"
-            tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
-            tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
-            tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = "2"
-            tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
-            tmpTemplatePropertyDict(PropName)("EnglishName") = PropName
-        End If
-
-        ' Add special File properties
-        Dim PropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
-        For Each PropName In PropNames
-            If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
-                tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-                tmpTemplatePropertyDict(PropName)("PropertySet") = ""
-                tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
-                tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
-                tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
-                tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = ""
-                tmpTemplatePropertyDict(PropName)("EnglishName") = PropName
-            End If
-        Next
-
-
-        ''Check consistency -- only works when running non-localized
-        'For Each Key As String In tmpTemplatePropertyDict.Keys
-        '    If Not Key = tmpTemplatePropertyDict(Key)("EnglishName") Then
-        '        MsgBox(String.Format("Key '{0}' does not match EnglishName '{1}'", Key, tmpTemplatePropertyDict(Key)("EnglishName")))
-        '    End If
-        'Next
+        Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList)
 
         Me.Cursor = Cursors.Default
-
-        Me.TemplatePropertyDict = tmpTemplatePropertyDict
 
         ButtonCustomizeTemplatePropertyDict.PerformClick()
 
@@ -2509,18 +2392,20 @@ Public Class Form_Main
 
     Private Sub ButtonCustomizeTemplatePropertyDict_Click(sender As Object, e As EventArgs) Handles ButtonCustomizeTemplatePropertyDict.Click
 
-        If Me.TemplatePropertyList Is Nothing Then
-            Me.TemplatePropertyList = New List(Of String)
-        End If
+        'If Me.TemplatePropertyList Is Nothing Then
+        '    Me.TemplatePropertyList = New List(Of String)
+        'End If
 
         Dim FPLC As New FormPropertyListCustomize
 
         Dim Result As DialogResult = FPLC.ShowDialog()
 
         If Result = DialogResult.OK Then
-            Me.TemplatePropertyList = FPLC.TemplatePropertyList
+            'Me.TemplatePropertyList = FPLC.FavoritesList
+            Dim UC As New UtilsCommon
+            Me.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Me.TemplatePropertyDict, FPLC.FavoritesList)
         End If
-
+        Dim s = Me.TemplatePropertyDict.Keys(0)
     End Sub
 
     Private Sub CheckBoxNoUpdateMRU_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxNoUpdateMRU.CheckedChanged
@@ -2787,9 +2672,9 @@ Public Class Form_Main
         ListViewFilesOutOfDate = True
     End Sub
 
-    Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxWarnNoImportedProperties.CheckedChanged
-        Me.WarnNoImportedProperties = CheckBoxWarnNoImportedProperties.Checked
-    End Sub
+    'Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs)
+    '    Me.WarnNoImportedProperties = CheckBoxWarnNoImportedProperties.Checked
+    'End Sub
 
 
 

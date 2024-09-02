@@ -2,8 +2,8 @@
 
 Public Class FormPropertyListCustomize
 
-    Public Property TemplatePropertyList As List(Of String)
-    Public Property AvailableProperties As List(Of String)
+    Public Property FavoritesList As List(Of String)
+    Public Property AvailableList As List(Of String)
 
 
     Public Sub New()
@@ -13,17 +13,27 @@ Public Class FormPropertyListCustomize
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Me.TemplatePropertyList = New List(Of String)
-        For Each Propname As String In Form_Main.TemplatePropertyList
-            Me.TemplatePropertyList.Add(Propname)
-        Next
+        'Dim Proceed As Boolean = True
 
-        Me.AvailableProperties = New List(Of String)
-        If Not Form_Main.TemplatePropertyDict Is Nothing Then
-            For Each Propname As String In Form_Main.TemplatePropertyDict.Keys
-                Me.AvailableProperties.Add(Propname)
-            Next
-        End If
+        'If Not Form_Main.TemplatePropertyDict Is Nothing Then
+        '    If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
+        '        Dim UC As New UtilsCommon
+
+        '        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        '        Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+        '    Else
+        '        Proceed = False
+        '    End If
+        'Else
+        '    Proceed = False
+        'End If
+
+        'If Not Proceed Then
+        '    Dim s = "Template properties required for this command not found. "
+        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+        '    MsgBox(s, vbOKOnly)
+        '    Exit Sub
+        'End If
 
     End Sub
 
@@ -33,7 +43,7 @@ Public Class FormPropertyListCustomize
         Dim DescriptionList As New List(Of String)
         Dim RepeatsList As New List(Of String)
 
-        For Each Propname As String In Me.TemplatePropertyList
+        For Each Propname As String In Me.FavoritesList
             DescriptionList.Add(Propname)
         Next
 
@@ -72,18 +82,39 @@ Public Class FormPropertyListCustomize
 
     Private Sub FormPropertyListCustomize_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        BuildColumns()
+        Dim Proceed As Boolean = True
 
-        Dim i As Integer = 0
+        If Not Form_Main.TemplatePropertyDict Is Nothing Then
+            If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
+                Dim UC As New UtilsCommon
 
-        For Each Propname As String In Me.AvailableProperties
-            DataGridViewSource.Rows.Add({Propname})
-            i += 1
-        Next
+                Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+                Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            Else
+                Proceed = False
+            End If
+        Else
+            Proceed = False
+        End If
 
-        DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+        If Not Proceed Then
+            Dim s = "Template properties required for this command not found. "
+            s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
+            MsgBox(s, vbOKOnly)
+            Me.DialogResult = DialogResult.Cancel
+        Else
+            BuildColumns()
 
-        UpdateDataGridViewTarget()
+            For Each Propname As String In Me.AvailableList
+                DataGridViewSource.Rows.Add({Propname})
+            Next
+
+            DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
+
+            UpdateDataGridViewTarget()
+
+        End If
+
 
     End Sub
 
@@ -127,16 +158,12 @@ Public Class FormPropertyListCustomize
 
     End Sub
 
-    Private Sub UpdateDataGridViewTargetSource()
-        Dim i As Integer
+    Private Sub UpdateDataGridViewSource()
 
         DataGridViewSource.Rows.Clear()
 
-        i = 0
-
-        For Each Propname As String In Me.AvailableProperties
+        For Each Propname As String In Me.AvailableList
             DataGridViewSource.Rows.Add({Propname})
-            i += 1
         Next
 
         DataGridViewSource.Columns.Item(0).Width = DataGridViewSource.Width - 20
@@ -144,15 +171,11 @@ Public Class FormPropertyListCustomize
     End Sub
 
     Private Sub UpdateDataGridViewTarget()
-        Dim i As Integer
 
         DataGridViewTarget.Rows.Clear()
 
-        i = 0
-
-        For Each Propname As String In Me.TemplatePropertyList
+        For Each Propname As String In Me.FavoritesList
             DataGridViewTarget.Rows.Add({Propname})
-            i += 1
         Next
 
         DataGridViewTarget.Columns.Item(0).Width = DataGridViewTarget.Width - 20
@@ -187,8 +210,7 @@ Public Class FormPropertyListCustomize
             Case 0 ' Description
                 Dim TextBox As DataGridViewTextBoxCell = CType(DataGridViewTarget.Rows(e.RowIndex).Cells(e.ColumnIndex), DataGridViewTextBoxCell)
 
-                Me.TemplatePropertyList(e.RowIndex) = CStr(TextBox.Value)
-                'Me.TaskList(e.RowIndex).Description = CStr(TextBox.Value)
+                Me.FavoritesList(e.RowIndex) = CStr(TextBox.Value)
 
                 DataGridViewTarget.Invalidate()
 
@@ -219,26 +241,26 @@ Public Class FormPropertyListCustomize
 
             If Not tf Then
 
-                For i As Integer = 0 To Me.TemplatePropertyList.Count - 1
+                For i As Integer = 0 To Me.FavoritesList.Count - 1
 
                     Select Case Direction
 
                         Case "up"
                             If i = SelectedRowIndex - 1 Then
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i + 1))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i + 1))
                             ElseIf i = SelectedRowIndex Then
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i - 1))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i - 1))
                             Else
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i))
                             End If
 
                         Case "down"
                             If i = SelectedRowIndex Then
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i + 1))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i + 1))
                             ElseIf i = SelectedRowIndex + 1 Then
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i - 1))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i - 1))
                             Else
-                                tmpTemplatePropertyList.Add(Me.TemplatePropertyList(i))
+                                tmpTemplatePropertyList.Add(Me.FavoritesList(i))
                             End If
 
                         Case Else
@@ -247,7 +269,7 @@ Public Class FormPropertyListCustomize
 
                 Next
 
-                Me.TemplatePropertyList = tmpTemplatePropertyList
+                Me.FavoritesList = tmpTemplatePropertyList
 
                 If Direction = "up" Then
                     UpdateDataGridViewTarget(SelectedRowIndex - 1)
@@ -270,11 +292,27 @@ Public Class FormPropertyListCustomize
 
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
         Dim FPLCM As New FormPropertyListCustomizeManualEntry
+        Dim UC As New UtilsCommon
 
         Dim Result = FPLCM.ShowDialog()
 
         If FPLCM.DialogResult = DialogResult.OK Then
-            TemplatePropertyList.Add(FPLCM.Propname)
+
+            FavoritesList.Add(FPLCM.PropertyName)
+
+            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictAddProp(
+                Form_Main.TemplatePropertyDict,
+                FPLCM.PropertySet,
+                FPLCM.PropertyName,
+                FPLCM.EnglishName,
+                FavoritesList.Count)
+
+            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, FavoritesList)
+
+            Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            UpdateDataGridViewSource()
+
+            Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
             UpdateDataGridViewTarget()
         End If
 
@@ -301,14 +339,14 @@ Public Class FormPropertyListCustomize
         Next
 
         i = 0
-        For Each Propname As String In Me.TemplatePropertyList
+        For Each Propname As String In Me.FavoritesList
             If Not SelectedRowIndices.Contains(i) Then
                 tmpTemplatePropertyList.Add(Propname)
             End If
             i += 1
         Next
 
-        Me.TemplatePropertyList = tmpTemplatePropertyList
+        Me.FavoritesList = tmpTemplatePropertyList
 
         UpdateDataGridViewTarget()
 
@@ -338,13 +376,13 @@ Public Class FormPropertyListCustomize
         Next
 
         i = 0
-        For Each Propname As String In Me.TemplatePropertyList
+        For Each Propname As String In Me.FavoritesList
             tmpTemplatePropertyList.Add(Propname)
             i += 1
         Next
 
         i = 0
-        For Each Propname As String In Me.AvailableProperties
+        For Each Propname As String In Me.AvailableList
             If SelectedRowIndices.Contains(i) Then
                 'TaskDescription = GetUniqueTaskDescription(tmpTaskList, Task.Description)
                 tmpTemplatePropertyList.Add(Propname)
@@ -352,7 +390,7 @@ Public Class FormPropertyListCustomize
             i += 1
         Next
 
-        Me.TemplatePropertyList = tmpTemplatePropertyList
+        Me.FavoritesList = tmpTemplatePropertyList
 
         UpdateDataGridViewTarget()
 
@@ -383,18 +421,15 @@ Public Class FormPropertyListCustomize
 
     Private Sub CheckBoxSortSourceList_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSortSourceList.CheckedChanged
 
+        Dim UC As New UtilsCommon
+
         If CheckBoxSortSourceList.Checked Then
-            Me.AvailableProperties.Sort()
+            Me.AvailableList.Sort()
         Else
-            Me.AvailableProperties.Clear()
-            If Form_Main.TemplatePropertyDict IsNot Nothing Then
-                For Each Propname As String In Form_Main.TemplatePropertyDict.Keys
-                    Me.AvailableProperties.Add(Propname)
-                Next
-            End If
+            Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
         End If
 
-        UpdateDataGridViewTargetSource()
+        UpdateDataGridViewSource()
 
     End Sub
 End Class

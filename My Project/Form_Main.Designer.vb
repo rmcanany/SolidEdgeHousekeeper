@@ -192,7 +192,6 @@ Partial Class Form_Main
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
-        Me.CheckBoxWarnNoImportedProperties = New System.Windows.Forms.CheckBox()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -2093,7 +2092,6 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 3)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 4)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 8)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnNoImportedProperties, 0, 9)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
@@ -2250,19 +2248,6 @@ Partial Class Form_Main
         Me.CheckBoxCheckForNewerVersion.TabIndex = 74
         Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
         Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
-        '
-        'CheckBoxWarnNoImportedProperties
-        '
-        Me.CheckBoxWarnNoImportedProperties.AutoSize = True
-        Me.CheckBoxWarnNoImportedProperties.Checked = True
-        Me.CheckBoxWarnNoImportedProperties.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnNoImportedProperties.Location = New System.Drawing.Point(3, 283)
-        Me.CheckBoxWarnNoImportedProperties.Name = "CheckBoxWarnNoImportedProperties"
-        Me.CheckBoxWarnNoImportedProperties.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxWarnNoImportedProperties.Size = New System.Drawing.Size(322, 20)
-        Me.CheckBoxWarnNoImportedProperties.TabIndex = 75
-        Me.CheckBoxWarnNoImportedProperties.Text = "Warn me if template properties have not been imported"
-        Me.CheckBoxWarnNoImportedProperties.UseVisualStyleBackColor = True
         '
         'TextBoxStatus
         '
@@ -2682,5 +2667,4 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel7 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel8 As ExTableLayoutPanel
     Friend WithEvents ButtonHelp As Button
-    Friend WithEvents CheckBoxWarnNoImportedProperties As CheckBox
 End Class

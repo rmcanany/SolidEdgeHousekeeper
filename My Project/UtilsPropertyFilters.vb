@@ -141,6 +141,8 @@ Public Class UtilsPropertyFilters
         Dim VariableTruthValues As New Dictionary(Of String, String)
         Dim BooleanExpression As String
 
+        Dim UC As New UtilsCommon
+
         PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
         PropertySets.Open(FoundFile, True)
 

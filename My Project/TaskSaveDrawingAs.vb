@@ -638,6 +638,7 @@ Public Class TaskSaveDrawingAs
         RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.Formula.ToString, "")
+        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
         AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
