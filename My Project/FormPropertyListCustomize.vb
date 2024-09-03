@@ -13,28 +13,6 @@ Public Class FormPropertyListCustomize
 
         ' Add any initialization after the InitializeComponent() call.
 
-        'Dim Proceed As Boolean = True
-
-        'If Not Form_Main.TemplatePropertyDict Is Nothing Then
-        '    If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
-        '        Dim UC As New UtilsCommon
-
-        '        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        '        Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
-        '    Else
-        '        Proceed = False
-        '    End If
-        'Else
-        '    Proceed = False
-        'End If
-
-        'If Not Proceed Then
-        '    Dim s = "Template properties required for this command not found. "
-        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
-        '    MsgBox(s, vbOKOnly)
-        '    Exit Sub
-        'End If
-
     End Sub
 
 

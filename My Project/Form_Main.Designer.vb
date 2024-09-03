@@ -177,7 +177,6 @@ Partial Class Form_Main
         Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
         Me.ButtonCopyToTasks = New System.Windows.Forms.Button()
         Me.LabelCopyToTasks = New System.Windows.Forms.Label()
-        Me.CheckBoxUseTemplateProperties = New System.Windows.Forms.CheckBox()
         Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
@@ -212,6 +211,7 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.LabelUpdateProperties = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -1896,11 +1896,12 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizeTemplatePropertyDict, 0, 7)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCopyToTasks, 0, 5)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCopyToTasks, 1, 5)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxUseTemplateProperties, 1, 6)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUseTemplateProperties, 0, 6)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 6)
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 8
+        Me.ExTableLayoutPanel1.RowCount = 9
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2007,7 +2008,7 @@ Partial Class Form_Main
         '
         Me.LabelCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelCustomizeTemplatePropertyDict.AutoSize = True
-        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 225)
+        Me.LabelCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(103, 217)
         Me.LabelCustomizeTemplatePropertyDict.Name = "LabelCustomizeTemplatePropertyDict"
         Me.LabelCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(285, 16)
         Me.LabelCustomizeTemplatePropertyDict.TabIndex = 12
@@ -2016,9 +2017,9 @@ Partial Class Form_Main
         'ButtonCustomizeTemplatePropertyDict
         '
         Me.ButtonCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(3, 218)
+        Me.ButtonCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(3, 213)
         Me.ButtonCustomizeTemplatePropertyDict.Name = "ButtonCustomizeTemplatePropertyDict"
-        Me.ButtonCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(94, 29)
+        Me.ButtonCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(94, 24)
         Me.ButtonCustomizeTemplatePropertyDict.TabIndex = 11
         Me.ButtonCustomizeTemplatePropertyDict.Text = "Customize"
         Me.ButtonCustomizeTemplatePropertyDict.UseVisualStyleBackColor = True
@@ -2039,21 +2040,9 @@ Partial Class Form_Main
         Me.LabelCopyToTasks.AutoSize = True
         Me.LabelCopyToTasks.Location = New System.Drawing.Point(103, 157)
         Me.LabelCopyToTasks.Name = "LabelCopyToTasks"
-        Me.LabelCopyToTasks.Size = New System.Drawing.Size(252, 16)
+        Me.LabelCopyToTasks.Size = New System.Drawing.Size(272, 16)
         Me.LabelCopyToTasks.TabIndex = 14
-        Me.LabelCopyToTasks.Text = "Copy template locations to tasks that require it"
-        '
-        'CheckBoxUseTemplateProperties
-        '
-        Me.CheckBoxUseTemplateProperties.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.CheckBoxUseTemplateProperties.AutoSize = True
-        Me.CheckBoxUseTemplateProperties.Location = New System.Drawing.Point(103, 185)
-        Me.CheckBoxUseTemplateProperties.Name = "CheckBoxUseTemplateProperties"
-        Me.CheckBoxUseTemplateProperties.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxUseTemplateProperties.Size = New System.Drawing.Size(257, 20)
-        Me.CheckBoxUseTemplateProperties.TabIndex = 8
-        Me.CheckBoxUseTemplateProperties.Text = "Use template properties in property dialogs"
-        Me.CheckBoxUseTemplateProperties.UseVisualStyleBackColor = True
+        Me.LabelCopyToTasks.Text = "Copy template locations to tasks that require them"
         '
         'ButtonUseTemplateProperties
         '
@@ -2407,6 +2396,16 @@ Partial Class Form_Main
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'LabelUpdateProperties
+        '
+        Me.LabelUpdateProperties.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelUpdateProperties.AutoSize = True
+        Me.LabelUpdateProperties.Location = New System.Drawing.Point(103, 187)
+        Me.LabelUpdateProperties.Name = "LabelUpdateProperties"
+        Me.LabelUpdateProperties.Size = New System.Drawing.Size(291, 16)
+        Me.LabelUpdateProperties.TabIndex = 16
+        Me.LabelUpdateProperties.Text = "Update template properties for use in property dialogs"
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
@@ -2647,7 +2646,6 @@ Partial Class Form_Main
     Friend WithEvents TextBoxSheetmetalTemplate As TextBox
     Friend WithEvents ButtonDraftTemplate As Button
     Friend WithEvents TextBoxDraftTemplate As TextBox
-    Friend WithEvents CheckBoxUseTemplateProperties As CheckBox
     Friend WithEvents ButtonMaterialTable As Button
     Friend WithEvents TextBoxMaterialTable As TextBox
     Friend WithEvents ButtonCustomizeTemplatePropertyDict As Button
@@ -2667,4 +2665,5 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel7 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel8 As ExTableLayoutPanel
     Friend WithEvents ButtonHelp As Button
+    Friend WithEvents LabelUpdateProperties As Label
 End Class

@@ -1591,10 +1591,13 @@ Public Class UtilsCommon
     End Function
 
     Public Function TemplatePropertyDictPopulate(
-        TemplateList As List(Of String)
+        TemplateList As List(Of String),
+        PreviousTemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
         ) As Dictionary(Of String, Dictionary(Of String, String))
 
         Dim tmpTemplatePropertyDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        Dim PreviousFavoritesList = TemplatePropertyGetFavoritesList(PreviousTemplatePropertyDict)
 
         ' ###### Dict structure below.  English mapping from UC.PropLocalizedToEnglish ######
         ' ###### In case of a duplicate, PropertySet will be 'Duplicate'               ######
@@ -1758,6 +1761,12 @@ Public Class UtilsCommon
             End If
         Next
 
+        For i As Integer = 0 To PreviousFavoritesList.Count - 1
+            PropName = PreviousFavoritesList(i)
+            If tmpTemplatePropertyDict.Keys.Contains(PropName) Then
+                tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = CStr(i)
+            End If
+        Next
 
         Return tmpTemplatePropertyDict
 
