@@ -1766,6 +1766,18 @@ Public Class UtilsCommon
             PropName = PreviousFavoritesList(i)
             If tmpTemplatePropertyDict.Keys.Contains(PropName) Then
                 tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = CStr(i)
+            ElseIf PreviousTemplatePropertyDict.Keys.Contains(PropName) Then
+                If PreviousTemplatePropertyDict(PropName)("PropertySource") = "Manual" Then
+                    tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
+                    tmpTemplatePropertyDict(PropName)("PropertySet") = PreviousTemplatePropertyDict(PropName)("PropertySet")
+                    tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = PreviousTemplatePropertyDict(PropName)("AsmPropItemNumber")
+                    tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = PreviousTemplatePropertyDict(PropName)("ParPropItemNumber")
+                    tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = PreviousTemplatePropertyDict(PropName)("PsmPropItemNumber")
+                    tmpTemplatePropertyDict(PropName)("DftPropItemNumber") = PreviousTemplatePropertyDict(PropName)("PropertySet")
+                    tmpTemplatePropertyDict(PropName)("EnglishName") = PreviousTemplatePropertyDict(PropName)("EnglishName")
+                    tmpTemplatePropertyDict(PropName)("PropertySource") = PreviousTemplatePropertyDict(PropName)("PropertySource")
+                    tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = CStr(i)
+                End If
             End If
         Next
 
@@ -1825,7 +1837,10 @@ Public Class UtilsCommon
 
         For idx As Integer = 0 To FavoritesList.Count - 1
             Dim PropName As String = FavoritesList(idx)
-            tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = CStr(idx)
+            If tmpTemplatePropertyDict.Keys.Contains(PropName) Then
+                tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = CStr(idx)
+
+            End If
         Next
 
         Return tmpTemplatePropertyDict

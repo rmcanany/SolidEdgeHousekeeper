@@ -2392,7 +2392,6 @@ Public Class Form_Main
 
     Private Sub ButtonCustomizeTemplatePropertyDict_Click(sender As Object, e As EventArgs) Handles ButtonCustomizeTemplatePropertyDict.Click
 
-
         Dim FPLC As New FormPropertyListCustomize
 
         Dim Result As DialogResult = FPLC.ShowDialog()
