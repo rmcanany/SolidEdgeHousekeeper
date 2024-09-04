@@ -1644,8 +1644,6 @@ Public Class UtilsCommon
         ' Do Custom last to deal with duplicates
         KeepDict("Custom") = New List(Of String)
 
-        'Dim UC As New UtilsCommon
-
         Dim tf As Boolean
 
         'Dim TemplateIdx As Integer = 0
@@ -1673,9 +1671,15 @@ Public Class UtilsCommon
                             Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
                             PropName = Prop.Name
 
+                            Dim EnglishName As String = PropLocalizedToEnglish(PropertySetName, i + 1, DocType)
+                            If EnglishName = "" Then EnglishName = PropName
+
                             If Not PropertySetName = "Custom" Then
                                 If KeepDict.Keys.Contains(PropertySetName) Then
-                                    If Not KeepDict(PropertySetName).Contains(PropName) Then
+                                    'If Not KeepDict(PropertySetName).Contains(PropName) Then
+                                    '    Continue For
+                                    'End If
+                                    If Not KeepDict(PropertySetName).Contains(EnglishName) Then
                                         Continue For
                                     End If
                                 End If
@@ -1684,9 +1688,6 @@ Public Class UtilsCommon
                             If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
 
                                 tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-
-                                Dim EnglishName As String = PropLocalizedToEnglish(PropertySetName, i + 1, DocType)
-                                If EnglishName = "" Then EnglishName = PropName
 
                                 tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetName
                                 tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
