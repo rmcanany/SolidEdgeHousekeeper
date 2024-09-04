@@ -79,7 +79,7 @@ Partial Class UCPropertyFilter
         Me.CheckBoxSelected.Location = New System.Drawing.Point(3, 5)
         Me.CheckBoxSelected.Name = "CheckBoxSelected"
         Me.CheckBoxSelected.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxSelected.Size = New System.Drawing.Size(24, 20)
+        Me.CheckBoxSelected.Size = New System.Drawing.Size(24, 19)
         Me.CheckBoxSelected.TabIndex = 0
         Me.CheckBoxSelected.TabStop = False
         Me.CheckBoxSelected.Text = "CheckBox1"
@@ -91,7 +91,7 @@ Partial Class UCPropertyFilter
         Me.LabelVariable.AutoSize = True
         Me.LabelVariable.Location = New System.Drawing.Point(45, 7)
         Me.LabelVariable.Name = "LabelVariable"
-        Me.LabelVariable.Size = New System.Drawing.Size(0, 16)
+        Me.LabelVariable.Size = New System.Drawing.Size(0, 15)
         Me.LabelVariable.TabIndex = 1
         '
         'ComboBoxPropertySet
@@ -102,7 +102,7 @@ Partial Class UCPropertyFilter
         Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "Custom", "System"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(63, 3)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
-        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 24)
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 23)
         Me.ComboBoxPropertySet.TabIndex = 2
         Me.ComboBoxPropertySet.TabStop = False
         '
@@ -114,7 +114,7 @@ Partial Class UCPropertyFilter
         Me.ComboBoxComparison.Items.AddRange(New Object() {"", "contains", "is_exactly", "is_not", "wildcard_match", "regex_match", ">", "<"})
         Me.ComboBoxComparison.Location = New System.Drawing.Point(313, 3)
         Me.ComboBoxComparison.Name = "ComboBoxComparison"
-        Me.ComboBoxComparison.Size = New System.Drawing.Size(94, 24)
+        Me.ComboBoxComparison.Size = New System.Drawing.Size(94, 23)
         Me.ComboBoxComparison.TabIndex = 2
         '
         'TextBoxValue
@@ -132,15 +132,15 @@ Partial Class UCPropertyFilter
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(163, 3)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
-        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(144, 24)
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(144, 23)
         Me.ComboBoxPropertyName.TabIndex = 1
         '
         'UCPropertyFilter
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ExTableLayoutPanel1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCPropertyFilter"
         Me.Size = New System.Drawing.Size(700, 30)

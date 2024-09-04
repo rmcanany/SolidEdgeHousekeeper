@@ -22,6 +22,7 @@ Partial Class FormEditInteractively
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormEditInteractively))
         Me.PauseButton = New System.Windows.Forms.Button()
         Me.SaveButton = New System.Windows.Forms.Button()
         Me.DoNotSaveButton = New System.Windows.Forms.Button()
@@ -76,11 +77,11 @@ Partial Class FormEditInteractively
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Segoe UI Variable Display", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label1.Location = New System.Drawing.Point(20, 68)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(249, 20)
+        Me.Label1.Size = New System.Drawing.Size(408, 18)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
         '
@@ -89,12 +90,12 @@ Partial Class FormEditInteractively
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(26, 92)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(0, 16)
+        Me.Label2.Size = New System.Drawing.Size(0, 15)
         Me.Label2.TabIndex = 6
         '
         'FormEditInteractively
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(294, 146)
         Me.Controls.Add(Me.Label2)
@@ -103,7 +104,8 @@ Partial Class FormEditInteractively
         Me.Controls.Add(Me.DoNotSaveButton)
         Me.Controls.Add(Me.SaveButton)
         Me.Controls.Add(Me.PauseButton)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormEditInteractively"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
