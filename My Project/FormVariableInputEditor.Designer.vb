@@ -124,9 +124,9 @@ Partial Class FormVariableInputEditor
         '
         Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(33, 9)
+        Me.Label1.Location = New System.Drawing.Point(33, 10)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(82, 16)
+        Me.Label1.Size = New System.Drawing.Size(83, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Variable Name"
         '
@@ -134,9 +134,9 @@ Partial Class FormVariableInputEditor
         '
         Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(205, 9)
+        Me.Label8.Location = New System.Drawing.Point(205, 10)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(104, 16)
+        Me.Label8.Size = New System.Drawing.Size(106, 15)
         Me.Label8.TabIndex = 1
         Me.Label8.Text = "Number / Formula"
         '
@@ -144,9 +144,9 @@ Partial Class FormVariableInputEditor
         '
         Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(377, 9)
+        Me.Label9.Location = New System.Drawing.Point(377, 10)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(56, 16)
+        Me.Label9.Size = New System.Drawing.Size(56, 15)
         Me.Label9.TabIndex = 2
         Me.Label9.Text = "Unit Type"
         '
@@ -154,9 +154,9 @@ Partial Class FormVariableInputEditor
         '
         Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(549, 9)
+        Me.Label10.Location = New System.Drawing.Point(549, 10)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(20, 16)
+        Me.Label10.Size = New System.Drawing.Size(20, 15)
         Me.Label10.TabIndex = 3
         Me.Label10.Text = "EX"
         '
@@ -164,9 +164,9 @@ Partial Class FormVariableInputEditor
         '
         Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(579, 9)
+        Me.Label11.Location = New System.Drawing.Point(579, 10)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(77, 16)
+        Me.Label11.Size = New System.Drawing.Size(79, 15)
         Me.Label11.TabIndex = 4
         Me.Label11.Text = "Expose Name"
         '
@@ -188,7 +188,6 @@ Partial Class FormVariableInputEditor
         Me.ExTableLayoutPanelVariables.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ExTableLayoutPanelVariables.ColumnCount = 1
         Me.ExTableLayoutPanelVariables.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        'Me.ExTableLayoutPanelVariables.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanelVariables.Controls.Add(Me.UcEditVariables1, 0, 0)
         Me.ExTableLayoutPanelVariables.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanelVariables.Location = New System.Drawing.Point(0, 0)
@@ -206,6 +205,7 @@ Partial Class FormVariableInputEditor
         Me.UcEditVariables1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.UcEditVariables1.Expose = False
         Me.UcEditVariables1.ExposeName = ""
+        Me.UcEditVariables1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.UcEditVariables1.Formula = ""
         Me.UcEditVariables1.Location = New System.Drawing.Point(4, 4)
         Me.UcEditVariables1.Margin = New System.Windows.Forms.Padding(4)
@@ -235,7 +235,7 @@ Partial Class FormVariableInputEditor
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(110, 15)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(61, 16)
+        Me.Label13.Size = New System.Drawing.Size(63, 15)
         Me.Label13.TabIndex = 1
         Me.Label13.Text = "EX: Expose"
         '
@@ -244,7 +244,7 @@ Partial Class FormVariableInputEditor
         Me.Label12.AutoSize = True
         Me.Label12.Location = New System.Drawing.Point(20, 15)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(55, 16)
+        Me.Label12.Size = New System.Drawing.Size(55, 15)
         Me.Label12.TabIndex = 0
         Me.Label12.Text = "*LEGEND"
         '
@@ -351,7 +351,7 @@ Partial Class FormVariableInputEditor
         '
         'FormVariableInputEditor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(759, 361)
         Me.Controls.Add(Me.ToolStripEditVariables)
@@ -360,7 +360,7 @@ Partial Class FormVariableInputEditor
         Me.Controls.Add(Me.PanelHeader)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormVariableInputEditor"

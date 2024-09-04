@@ -354,6 +354,9 @@
     <EmbeddedResource Include="My Project\FormPropertyPicker.resx">
       <DependentUpon>FormPropertyPicker.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormTextPrompt.resx">
+      <DependentUpon>FormTextPrompt.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Form_Main.resx">
       <DependentUpon>Form_Main.vb</DependentUpon>
       <SubType>Designer</SubType>

@@ -23,6 +23,7 @@ Partial Class FormPropertyListCustomize
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPropertyListCustomize))
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -189,6 +190,7 @@ Partial Class FormPropertyListCustomize
         Me.DataGridViewSource.Location = New System.Drawing.Point(4, 3)
         Me.DataGridViewSource.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.DataGridViewSource.Name = "DataGridViewSource"
+        Me.DataGridViewSource.ReadOnly = True
         Me.DataGridViewSource.RowHeadersVisible = False
         Me.DataGridViewSource.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewSource.Size = New System.Drawing.Size(211, 299)
@@ -205,6 +207,7 @@ Partial Class FormPropertyListCustomize
         Me.DataGridViewTarget.Location = New System.Drawing.Point(340, 3)
         Me.DataGridViewTarget.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.DataGridViewTarget.Name = "DataGridViewTarget"
+        Me.DataGridViewTarget.ReadOnly = True
         Me.DataGridViewTarget.RowHeadersVisible = False
         Me.DataGridViewTarget.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewTarget.Size = New System.Drawing.Size(212, 299)
@@ -214,23 +217,24 @@ Partial Class FormPropertyListCustomize
         '
         Me.CheckBoxSortSourceList.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSortSourceList.AutoSize = True
-        Me.CheckBoxSortSourceList.Location = New System.Drawing.Point(18, 324)
+        Me.CheckBoxSortSourceList.Location = New System.Drawing.Point(18, 325)
         Me.CheckBoxSortSourceList.Name = "CheckBoxSortSourceList"
-        Me.CheckBoxSortSourceList.Size = New System.Drawing.Size(229, 20)
+        Me.CheckBoxSortSourceList.Size = New System.Drawing.Size(228, 19)
         Me.CheckBoxSortSourceList.TabIndex = 8
         Me.CheckBoxSortSourceList.Text = "Sort available properties alphabetically"
         Me.CheckBoxSortSourceList.UseVisualStyleBackColor = True
         '
         'FormPropertyListCustomize
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(584, 361)
         Me.Controls.Add(Me.CheckBoxSortSourceList)
         Me.Controls.Add(Me.ExTableLayoutPanel1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormPropertyListCustomize"
         Me.Text = "Customize Property List"

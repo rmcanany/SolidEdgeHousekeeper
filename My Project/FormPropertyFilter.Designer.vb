@@ -39,6 +39,8 @@ Partial Class FormPropertyFilter
         Me.ButtonEditFormula = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel3 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelHeader = New Housekeeper.ExTableLayoutPanel()
@@ -54,8 +56,6 @@ Partial Class FormPropertyFilter
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
@@ -195,6 +195,20 @@ Partial Class FormPropertyFilter
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
         '
+        'ButtonShowAll
+        '
+        Me.ButtonShowAll.CheckOnClick = True
+        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonShowAll.Name = "ButtonShowAll"
+        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
+        Me.ButtonShowAll.Text = "Show All Props"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
         'ButtonHelp
         '
         Me.ButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -241,9 +255,9 @@ Partial Class FormPropertyFilter
         '
         Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(38, 9)
+        Me.Label1.Location = New System.Drawing.Point(38, 10)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(14, 16)
+        Me.Label1.Size = New System.Drawing.Size(14, 15)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "V"
         '
@@ -251,9 +265,9 @@ Partial Class FormPropertyFilter
         '
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(63, 9)
+        Me.Label2.Location = New System.Drawing.Point(63, 10)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(72, 16)
+        Me.Label2.Size = New System.Drawing.Size(71, 15)
         Me.Label2.TabIndex = 1
         Me.Label2.Text = "Property Set"
         '
@@ -261,9 +275,9 @@ Partial Class FormPropertyFilter
         '
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(163, 9)
+        Me.Label3.Location = New System.Drawing.Point(163, 10)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(86, 16)
+        Me.Label3.Size = New System.Drawing.Size(87, 15)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Property Name"
         '
@@ -271,9 +285,9 @@ Partial Class FormPropertyFilter
         '
         Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(313, 9)
+        Me.Label4.Location = New System.Drawing.Point(313, 10)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(71, 16)
+        Me.Label4.Size = New System.Drawing.Size(72, 15)
         Me.Label4.TabIndex = 3
         Me.Label4.Text = "Comparison"
         '
@@ -281,9 +295,9 @@ Partial Class FormPropertyFilter
         '
         Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(413, 9)
+        Me.Label5.Location = New System.Drawing.Point(413, 10)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(35, 16)
+        Me.Label5.Size = New System.Drawing.Size(35, 15)
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Value"
         '
@@ -320,7 +334,7 @@ Partial Class FormPropertyFilter
         '
         Me.UcPropertyFilter1.Comparison = ""
         Me.UcPropertyFilter1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcPropertyFilter1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UcPropertyFilter1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.UcPropertyFilter1.Formula = ""
         Me.UcPropertyFilter1.Location = New System.Drawing.Point(4, 4)
         Me.UcPropertyFilter1.Margin = New System.Windows.Forms.Padding(4)
@@ -356,7 +370,7 @@ Partial Class FormPropertyFilter
         Me.Label7.AutoSize = True
         Me.Label7.Location = New System.Drawing.Point(225, 15)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(62, 16)
+        Me.Label7.Size = New System.Drawing.Size(62, 15)
         Me.Label7.TabIndex = 2
         Me.Label7.Text = "FORMULA"
         '
@@ -376,27 +390,13 @@ Partial Class FormPropertyFilter
         Me.Label6.AutoSize = True
         Me.Label6.Location = New System.Drawing.Point(25, 15)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(135, 16)
+        Me.Label6.Size = New System.Drawing.Size(136, 15)
         Me.Label6.TabIndex = 0
         Me.Label6.Text = "*LEGEND         V: Variable"
         '
-        'ButtonShowAll
-        '
-        Me.ButtonShowAll.CheckOnClick = True
-        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonShowAll.Name = "ButtonShowAll"
-        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
-        Me.ButtonShowAll.Text = "Show All Props"
-        '
-        'ToolStripSeparator4
-        '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
-        '
         'FormPropertyFilter
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(705, 361)
         Me.Controls.Add(Me.PanelFooter)
@@ -405,7 +405,7 @@ Partial Class FormPropertyFilter
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "FormPropertyFilter"

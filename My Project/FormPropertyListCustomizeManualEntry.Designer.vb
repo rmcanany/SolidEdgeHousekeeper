@@ -22,6 +22,7 @@ Partial Class FormPropertyListCustomizeManualEntry
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPropertyListCustomizeManualEntry))
         Me.LabelPropertyName = New System.Windows.Forms.Label()
         Me.TextBoxPropertyName = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -47,7 +48,7 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.LabelPropertyName.Location = New System.Drawing.Point(104, 4)
         Me.LabelPropertyName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelPropertyName.Name = "LabelPropertyName"
-        Me.LabelPropertyName.Size = New System.Drawing.Size(86, 16)
+        Me.LabelPropertyName.Size = New System.Drawing.Size(87, 15)
         Me.LabelPropertyName.TabIndex = 0
         Me.LabelPropertyName.Text = "Property Name"
         '
@@ -86,7 +87,7 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.LabelPropertySet.AutoSize = True
         Me.LabelPropertySet.Location = New System.Drawing.Point(3, 4)
         Me.LabelPropertySet.Name = "LabelPropertySet"
-        Me.LabelPropertySet.Size = New System.Drawing.Size(72, 16)
+        Me.LabelPropertySet.Size = New System.Drawing.Size(71, 15)
         Me.LabelPropertySet.TabIndex = 0
         Me.LabelPropertySet.Text = "Property Set"
         '
@@ -96,7 +97,7 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.LabelEnglishName.AutoSize = True
         Me.LabelEnglishName.Location = New System.Drawing.Point(273, 4)
         Me.LabelEnglishName.Name = "LabelEnglishName"
-        Me.LabelEnglishName.Size = New System.Drawing.Size(119, 16)
+        Me.LabelEnglishName.Size = New System.Drawing.Size(120, 15)
         Me.LabelEnglishName.TabIndex = 1
         Me.LabelEnglishName.Text = "English Name (if any)"
         '
@@ -107,7 +108,7 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "System", "Custom"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(3, 3)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
-        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 24)
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 23)
         Me.ComboBoxPropertySet.TabIndex = 2
         '
         'TextBoxEnglishName
@@ -196,11 +197,12 @@ Partial Class FormPropertyListCustomizeManualEntry
         '
         'FormPropertyListCustomizeManualEntry
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(446, 105)
         Me.Controls.Add(Me.ExTableLayoutPanel3)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyListCustomizeManualEntry"
         Me.Text = "Add Property Manually"
