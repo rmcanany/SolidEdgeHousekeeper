@@ -85,7 +85,7 @@ Partial Class UCEditProperties
         Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "System", "Custom"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(33, 3)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
-        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 24)
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 23)
         Me.ComboBoxPropertySet.TabIndex = 1
         Me.ComboBoxPropertySet.TabStop = False
         '
@@ -96,7 +96,7 @@ Partial Class UCEditProperties
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(133, 3)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
-        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(144, 24)
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(144, 23)
         Me.ComboBoxPropertyName.TabIndex = 2
         '
         'ComboBoxFindSearch
@@ -107,7 +107,7 @@ Partial Class UCEditProperties
         Me.ComboBoxFindSearch.Items.AddRange(New Object() {"", "PT", "WC", "RX", "X"})
         Me.ComboBoxFindSearch.Location = New System.Drawing.Point(283, 3)
         Me.ComboBoxFindSearch.Name = "ComboBoxFindSearch"
-        Me.ComboBoxFindSearch.Size = New System.Drawing.Size(44, 24)
+        Me.ComboBoxFindSearch.Size = New System.Drawing.Size(44, 23)
         Me.ComboBoxFindSearch.TabIndex = 3
         '
         'TextBoxFindString
@@ -139,7 +139,7 @@ Partial Class UCEditProperties
         Me.ComboBoxReplaceSearch.Items.AddRange(New Object() {"", "PT", "RX", "EX"})
         Me.ComboBoxReplaceSearch.Location = New System.Drawing.Point(445, 3)
         Me.ComboBoxReplaceSearch.Name = "ComboBoxReplaceSearch"
-        Me.ComboBoxReplaceSearch.Size = New System.Drawing.Size(44, 24)
+        Me.ComboBoxReplaceSearch.Size = New System.Drawing.Size(44, 23)
         Me.ComboBoxReplaceSearch.TabIndex = 5
         '
         'TextBoxReplaceString
@@ -154,10 +154,10 @@ Partial Class UCEditProperties
         '
         'UCEditProperties
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ExTableLayoutPanel1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCEditProperties"
         Me.Size = New System.Drawing.Size(700, 30)

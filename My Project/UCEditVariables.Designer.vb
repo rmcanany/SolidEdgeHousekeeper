@@ -48,7 +48,6 @@ Partial Class UCEditVariables
         Me.ExTableLayoutPanel1.Controls.Add(Me.CheckBoxExpose, 4, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxExposeName, 5, 0)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        'Me.ExTableLayoutPanel1.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
@@ -66,7 +65,7 @@ Partial Class UCEditVariables
         Me.CheckBoxSelect.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxSelect.Name = "CheckBoxSelect"
         Me.CheckBoxSelect.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxSelect.Size = New System.Drawing.Size(22, 20)
+        Me.CheckBoxSelect.Size = New System.Drawing.Size(22, 19)
         Me.CheckBoxSelect.TabIndex = 0
         Me.CheckBoxSelect.TabStop = False
         Me.CheckBoxSelect.Text = "CheckBox1"
@@ -94,7 +93,7 @@ Partial Class UCEditVariables
         Me.ComboBoxUnitType.FormattingEnabled = True
         Me.ComboBoxUnitType.Location = New System.Drawing.Point(353, 3)
         Me.ComboBoxUnitType.Name = "ComboBoxUnitType"
-        Me.ComboBoxUnitType.Size = New System.Drawing.Size(154, 24)
+        Me.ComboBoxUnitType.Size = New System.Drawing.Size(154, 23)
         Me.ComboBoxUnitType.TabIndex = 3
         '
         'CheckBoxExpose
@@ -105,7 +104,7 @@ Partial Class UCEditVariables
         Me.CheckBoxExpose.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxExpose.Name = "CheckBoxExpose"
         Me.CheckBoxExpose.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
-        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 20)
+        Me.CheckBoxExpose.Size = New System.Drawing.Size(22, 19)
         Me.CheckBoxExpose.TabIndex = 4
         Me.CheckBoxExpose.Text = "CheckBox2"
         Me.CheckBoxExpose.UseVisualStyleBackColor = True
@@ -120,10 +119,10 @@ Partial Class UCEditVariables
         '
         'UCEditVariables
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.ExTableLayoutPanel1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "UCEditVariables"
         Me.Size = New System.Drawing.Size(700, 30)
