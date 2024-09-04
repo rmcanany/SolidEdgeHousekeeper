@@ -22,6 +22,7 @@ Partial Class FormEditTaskListChangeColor
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormEditTaskListChangeColor))
         Me.ComboBoxColor = New System.Windows.Forms.ComboBox()
         Me.LabelColor = New System.Windows.Forms.Label()
         Me.LabelSaturation = New System.Windows.Forms.Label()
@@ -42,7 +43,7 @@ Partial Class FormEditTaskListChangeColor
         Me.ComboBoxColor.Location = New System.Drawing.Point(122, 11)
         Me.ComboBoxColor.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ComboBoxColor.Name = "ComboBoxColor"
-        Me.ComboBoxColor.Size = New System.Drawing.Size(140, 24)
+        Me.ComboBoxColor.Size = New System.Drawing.Size(140, 23)
         Me.ComboBoxColor.Sorted = True
         Me.ComboBoxColor.TabIndex = 1
         '
@@ -52,7 +53,7 @@ Partial Class FormEditTaskListChangeColor
         Me.LabelColor.Location = New System.Drawing.Point(75, 14)
         Me.LabelColor.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelColor.Name = "LabelColor"
-        Me.LabelColor.Size = New System.Drawing.Size(36, 16)
+        Me.LabelColor.Size = New System.Drawing.Size(36, 15)
         Me.LabelColor.TabIndex = 5
         Me.LabelColor.Text = "Color"
         '
@@ -62,7 +63,7 @@ Partial Class FormEditTaskListChangeColor
         Me.LabelSaturation.Location = New System.Drawing.Point(14, 54)
         Me.LabelSaturation.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelSaturation.Name = "LabelSaturation"
-        Me.LabelSaturation.Size = New System.Drawing.Size(88, 16)
+        Me.LabelSaturation.Size = New System.Drawing.Size(89, 15)
         Me.LabelSaturation.TabIndex = 6
         Me.LabelSaturation.Text = "Saturation (0-1)"
         '
@@ -72,7 +73,7 @@ Partial Class FormEditTaskListChangeColor
         Me.LabelBrightness.Location = New System.Drawing.Point(14, 88)
         Me.LabelBrightness.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelBrightness.Name = "LabelBrightness"
-        Me.LabelBrightness.Size = New System.Drawing.Size(88, 16)
+        Me.LabelBrightness.Size = New System.Drawing.Size(90, 15)
         Me.LabelBrightness.TabIndex = 7
         Me.LabelBrightness.Text = "Brightness (0-1)"
         '
@@ -132,7 +133,7 @@ Partial Class FormEditTaskListChangeColor
         '
         'FormEditTaskListChangeColor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(315, 161)
         Me.Controls.Add(Me.NumericUpDownBrightness)
@@ -144,7 +145,8 @@ Partial Class FormEditTaskListChangeColor
         Me.Controls.Add(Me.LabelSaturation)
         Me.Controls.Add(Me.LabelColor)
         Me.Controls.Add(Me.ComboBoxColor)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormEditTaskListChangeColor"
         Me.Text = "Change Color"

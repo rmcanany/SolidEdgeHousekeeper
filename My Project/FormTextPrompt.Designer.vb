@@ -22,6 +22,7 @@ Partial Class FormTextPrompt
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormTextPrompt))
         Me.LabelPrompt = New System.Windows.Forms.Label()
         Me.TextBoxInput = New System.Windows.Forms.TextBox()
         Me.ButtonOK = New System.Windows.Forms.Button()
@@ -33,7 +34,7 @@ Partial Class FormTextPrompt
         Me.LabelPrompt.AutoSize = True
         Me.LabelPrompt.Location = New System.Drawing.Point(10, 10)
         Me.LabelPrompt.Name = "LabelPrompt"
-        Me.LabelPrompt.Size = New System.Drawing.Size(66, 13)
+        Me.LabelPrompt.Size = New System.Drawing.Size(71, 13)
         Me.LabelPrompt.TabIndex = 0
         Me.LabelPrompt.Text = "LabelPrompt"
         '
@@ -43,13 +44,13 @@ Partial Class FormTextPrompt
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxInput.Location = New System.Drawing.Point(10, 35)
         Me.TextBoxInput.Name = "TextBoxInput"
-        Me.TextBoxInput.Size = New System.Drawing.Size(251, 20)
+        Me.TextBoxInput.Size = New System.Drawing.Size(251, 22)
         Me.TextBoxInput.TabIndex = 1
         '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonOK.Location = New System.Drawing.Point(100, 70)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
@@ -60,7 +61,7 @@ Partial Class FormTextPrompt
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonCancel.Location = New System.Drawing.Point(187, 70)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
@@ -77,6 +78,8 @@ Partial Class FormTextPrompt
         Me.Controls.Add(Me.ButtonOK)
         Me.Controls.Add(Me.TextBoxInput)
         Me.Controls.Add(Me.LabelPrompt)
+        Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "FormTextPrompt"
         Me.Text = "FormTextPrompt"
         Me.ResumeLayout(False)

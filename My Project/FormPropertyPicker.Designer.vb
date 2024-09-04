@@ -22,6 +22,7 @@ Partial Class FormPropertyPicker
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormPropertyPicker))
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ButtonPropOnly = New System.Windows.Forms.ToolStripButton()
         Me.ButtonPropAndIndex = New System.Windows.Forms.ToolStripButton()
@@ -48,12 +49,12 @@ Partial Class FormPropertyPicker
         Me.ButtonPropOnly.Checked = True
         Me.ButtonPropOnly.CheckOnClick = True
         Me.ButtonPropOnly.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ButtonPropOnly.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonPropOnly.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonPropOnly.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.ButtonPropOnly.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonPropOnly.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPropOnly.Name = "ButtonPropOnly"
-        Me.ButtonPropOnly.Size = New System.Drawing.Size(53, 22)
+        Me.ButtonPropOnly.Size = New System.Drawing.Size(57, 22)
         Me.ButtonPropOnly.Text = "%{~}"
         Me.ButtonPropOnly.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ButtonPropOnly.ToolTipText = "Property only"
@@ -61,11 +62,11 @@ Partial Class FormPropertyPicker
         'ButtonPropAndIndex
         '
         Me.ButtonPropAndIndex.CheckOnClick = True
-        Me.ButtonPropAndIndex.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtonPropAndIndex.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonPropAndIndex.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.ButtonPropAndIndex.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPropAndIndex.Name = "ButtonPropAndIndex"
-        Me.ButtonPropAndIndex.Size = New System.Drawing.Size(70, 22)
+        Me.ButtonPropAndIndex.Size = New System.Drawing.Size(79, 22)
         Me.ButtonPropAndIndex.Text = "%{~|R1}"
         '
         'ToolStripSeparator1
@@ -89,7 +90,7 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(100, 35)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
-        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(165, 24)
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(165, 23)
         Me.ComboBoxPropertyName.TabIndex = 1
         '
         'ButtonOK
@@ -119,12 +120,12 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "System", "Custom"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(10, 35)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
-        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(75, 24)
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(75, 23)
         Me.ComboBoxPropertySet.TabIndex = 4
         '
         'FormPropertyPicker
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(284, 101)
         Me.Controls.Add(Me.ComboBoxPropertySet)
@@ -132,7 +133,8 @@ Partial Class FormPropertyPicker
         Me.Controls.Add(Me.ButtonOK)
         Me.Controls.Add(Me.ComboBoxPropertyName)
         Me.Controls.Add(Me.ToolStrip1)
-        Me.Font = New System.Drawing.Font("Segoe UI Variable Display", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyPicker"
         Me.Text = "Property Selector"
