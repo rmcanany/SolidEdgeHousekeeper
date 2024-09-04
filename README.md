@@ -140,9 +140,9 @@ Top down is meant for self-contained project directories (e.g., `C:\Projects\Pro
 
 **Include parents of part copies option**
 
-![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
-
 This option may be confusing.  Referring to the diagram, note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`, while `C.par` is not. Enabling the option means that `C.par` would be included in the search results.
+
+![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
 
 #### 3. Select by list
 
@@ -190,7 +190,7 @@ The `Unsorted` option is primarily intended to preserve the order of imported li
 
 The `Dependency` option is useful in conjunction with the `Update part copy` commands.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
 
-The dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running the process two times in a row.
+The dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running the process twice in a row.
 
 The `Random sample` option randomly selects and shuffles  a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 

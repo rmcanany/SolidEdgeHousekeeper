@@ -3,8 +3,11 @@
 Public Class UtilsDocumentation
 
     Public Function GenerateVersionURL(Tag As String) As String
+        ' To get the BaseURL, on GitHub, click the Commits button on the file list header.
+        ' Click the top commit on the list.  On that page, click Browse Files.
+        ' The URL that opens is the BaseURL.
         'Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640"
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/cd9ac5ea170d59eaf9041efca3b18a6c6441d9f1"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/8323bec8aac344f7c4fcb8cffdf7e53e43c544f1"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
