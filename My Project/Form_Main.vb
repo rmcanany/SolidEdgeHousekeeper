@@ -529,18 +529,18 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _UseTemplateProperties As Boolean
-    Public Property UseTemplateProperties As Boolean
-        Get
-            Return _UseTemplateProperties
-        End Get
-        Set(value As Boolean)
-            _UseTemplateProperties = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxUseTemplateProperties.Checked = value
-            End If
-        End Set
-    End Property
+    'Private _UseTemplateProperties As Boolean
+    'Public Property UseTemplateProperties As Boolean
+    '    Get
+    '        Return _UseTemplateProperties
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UseTemplateProperties = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            CheckBoxUseTemplateProperties.Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
 
     Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
@@ -2286,11 +2286,11 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub CheckBoxUseTemplateProperties_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseTemplateProperties.CheckedChanged
-        Me.UseTemplateProperties = CheckBoxUseTemplateProperties.Checked
+    'Private Sub CheckBoxUseTemplateProperties_CheckedChanged(sender As Object, e As EventArgs)
+    '    Me.UseTemplateProperties = CheckBoxUseTemplateProperties.Checked
 
-        ButtonUseTemplateProperties.Enabled = Me.UseTemplateProperties
-    End Sub
+    '    ButtonUseTemplateProperties.Enabled = Me.UseTemplateProperties
+    'End Sub
 
     Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
         Dim s As String = ""
@@ -2362,7 +2362,7 @@ Public Class Form_Main
 
         Me.Cursor = Cursors.WaitCursor
 
-        Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList)
+        Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList, Me.TemplatePropertyDict)
 
         Me.Cursor = Cursors.Default
 
@@ -2392,20 +2392,16 @@ Public Class Form_Main
 
     Private Sub ButtonCustomizeTemplatePropertyDict_Click(sender As Object, e As EventArgs) Handles ButtonCustomizeTemplatePropertyDict.Click
 
-        'If Me.TemplatePropertyList Is Nothing Then
-        '    Me.TemplatePropertyList = New List(Of String)
-        'End If
 
         Dim FPLC As New FormPropertyListCustomize
 
         Dim Result As DialogResult = FPLC.ShowDialog()
 
         If Result = DialogResult.OK Then
-            'Me.TemplatePropertyList = FPLC.FavoritesList
             Dim UC As New UtilsCommon
             Me.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Me.TemplatePropertyDict, FPLC.FavoritesList)
         End If
-        Dim s = Me.TemplatePropertyDict.Keys(0)
+
     End Sub
 
     Private Sub CheckBoxNoUpdateMRU_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxNoUpdateMRU.CheckedChanged
