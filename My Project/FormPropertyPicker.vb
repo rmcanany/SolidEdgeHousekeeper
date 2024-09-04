@@ -1,8 +1,8 @@
 ﻿Option Strict On
 
 Public Class FormPropertyPicker
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property TemplatePropertyList As List(Of String)
+
+    Public Property FavoritesList As List(Of String)
     Public Property PropertyString As String
     Public Property PropertyOnly As Boolean
 
@@ -16,18 +16,18 @@ Public Class FormPropertyPicker
         Dim UC As New UtilsCommon
 
         Me.PropertyOnly = True
-        'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
 
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
         Dim s As String = ""
+        Dim indent As String = "    "
         If ComboBoxPropertySet.Text = "" Then
-            s = String.Format("{0}Select a Property Set{1}", s, vbCrLf)
+            s = String.Format("{0}{1}Select a Property Set{2}", s, indent, vbCrLf)
         End If
         If ComboBoxPropertyName.Text = "" Then
-            s = String.Format("{0}Select a Property{1}", s, vbCrLf)
+            s = String.Format("{0}{1}Select a Property{2}", s, indent, vbCrLf)
         End If
 
         If s = "" Then
@@ -69,7 +69,6 @@ Public Class FormPropertyPicker
         ButtonPropOnly.Image = My.Resources.Checked
         ButtonPropAndIndex.Image = My.Resources.Unchecked
 
-        'Me.PropertyString = String.Format("%{{{0}}}", ComboBoxProperties.Text)
     End Sub
 
     Private Sub ButtonPropAndIndex_Click(sender As Object, e As EventArgs) Handles ButtonPropAndIndex.Click
@@ -87,16 +86,16 @@ Public Class FormPropertyPicker
             ButtonShowAll.Image = My.Resources.Checked
 
             ComboBoxPropertyName.Items.Clear()
-            For Each Key As String In Form_Main.TemplatePropertyDict.Keys
-                ComboBoxPropertyName.Items.Add(Key)
+            For Each PropName As String In Form_Main.TemplatePropertyDict.Keys
+                ComboBoxPropertyName.Items.Add(PropName)
             Next
             ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
         Else
             ButtonShowAll.Image = My.Resources.Unchecked
 
             ComboBoxPropertyName.Items.Clear()
-            For Each Key As String In Me.TemplatePropertyList
-                ComboBoxPropertyName.Items.Add(Key)
+            For Each PropName As String In Me.FavoritesList
+                ComboBoxPropertyName.Items.Add(PropName)
             Next
             ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
         End If
@@ -105,8 +104,8 @@ Public Class FormPropertyPicker
 
     Private Sub FormPropertyPicker_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ComboBoxPropertyName.Items.Add("")
-        For Each Key As String In Me.TemplatePropertyList
-            ComboBoxPropertyName.Items.Add(Key)
+        For Each PropName As String In Me.FavoritesList
+            ComboBoxPropertyName.Items.Add(PropName)
         Next
     End Sub
 End Class
