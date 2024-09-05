@@ -547,58 +547,75 @@ Public Class TaskEditProperties
             End If
 
 
-            ' ####################### Do the replacement #######################
+            ' ####################### Delete or do the replacement #######################
 
             If Proceed Then
 
-                Try
-
-                    '####### set the property here
-                    If FindSearchType = "PT" Then
-                        OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                    Else
-                        If FindSearchType = "WC" Then
-                            FindString = UC.GlobToRegex(FindString)
-                        End If
-                        If ReplaceSearchType = "PT" Then
-                            ' ReplaceString = Regex.Escape(ReplaceString)
-                        End If
-
-                        OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-
-                    End If
-
-                Catch ex As Exception
-                    Proceed = False
-                    ExitStatus = 1
-                    s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
-
-            End If
-
-
-            ' ####################### Delete the property if needed #######################
-
-            If Proceed Then
-
-                Try
-                    '############ delete the property here
-                    'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
-                    '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-                    'End If
-                    If FindSearchType = "X" Then
+                If FindSearchType = "X" Then
+                    Try
+                        '############ delete the property here
                         co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-                    End If
 
-                Catch ex As Exception
-                    Proceed = False
-                    ExitStatus = 1
-                    s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    End Try
+
+                Else
+                    Try
+
+                        '####### set the property here
+                        If FindSearchType = "PT" Then
+                            OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                        Else
+                            If FindSearchType = "WC" Then
+                                FindString = UC.GlobToRegex(FindString)
+                            End If
+                            If ReplaceSearchType = "PT" Then
+                                ' ReplaceString = Regex.Escape(ReplaceString)
+                            End If
+
+                            OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                        End If
+
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    End Try
+
+
+                End If
+
 
             End If
+
+
+            '' ####################### Delete the property if needed #######################
+
+            'If Proceed Then
+
+            '    Try
+            '        '############ delete the property here
+            '        'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
+            '        '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+            '        'End If
+            '        If FindSearchType = "X" Then
+            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+            '        End If
+
+            '    Catch ex As Exception
+            '        Proceed = False
+            '        ExitStatus = 1
+            '        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '    End Try
+
+            'End If
 
 
             ' ####################### Save the properties #######################
@@ -736,55 +753,73 @@ Public Class TaskEditProperties
 
             End If
 
-            ' ####################### Do the replacement. #######################
+            ' ####################### Delete or do the replacement. #######################
 
             If Proceed Then
-                Try
-                    If ReplaceSearchType = "EX" Then
 
-                    End If
+                If FindSearchType = "X" Then
+                    Try
 
-                    If FindSearchType = "PT" Then
-                        Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                    Else
-                        If FindSearchType = "WC" Then
-                            FindString = UC.GlobToRegex(FindString)
-                        End If
-                        If ReplaceSearchType = "PT" Then
-                            ' ReplaceString = Regex.Escape(ReplaceString)
+                        If FindSearchType = "X" Then
+                            Prop.Delete()
                         End If
 
-                        Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    End Try
 
-                    End If
-                    ' Properties.Save()
+                Else
 
-                Catch ex As Exception
-                    Proceed = False
-                    ExitStatus = 1
-                    s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
+                    Try
+                        If ReplaceSearchType = "EX" Then
+
+                        End If
+
+                        If FindSearchType = "PT" Then
+                            Prop.Value = Replace(CType(Prop.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                        Else
+                            If FindSearchType = "WC" Then
+                                FindString = UC.GlobToRegex(FindString)
+                            End If
+                            If ReplaceSearchType = "PT" Then
+                                ' ReplaceString = Regex.Escape(ReplaceString)
+                            End If
+
+                            Prop.Value = Regex.Replace(CType(Prop.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                        End If
+
+                    Catch ex As Exception
+                        Proceed = False
+                        ExitStatus = 1
+                        s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    End Try
+
+                End If
 
             End If
 
-            ' ####################### Delete the property if needed. #######################
+            '' ####################### Delete the property if needed. #######################
 
-            If Proceed Then
-                Try
+            'If Proceed Then
+            '    Try
 
-                    If FindSearchType = "X" Then
-                        Prop.Delete()
-                    End If
+            '        If FindSearchType = "X" Then
+            '            Prop.Delete()
+            '        End If
 
-                Catch ex As Exception
-                    Proceed = False
-                    ExitStatus = 1
-                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
+            '    Catch ex As Exception
+            '        Proceed = False
+            '        ExitStatus = 1
+            '        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '    End Try
 
-            End If
+            'End If
 
             ' ####################### Save the properties #######################
 
@@ -1122,25 +1157,29 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
 
-        HelpString += vbCrLf + vbCrLf + "You can pre-populate property choices from your templates. "
-        HelpString += "That is done on the **Configuration Tab -- Templates Page**. "
-        HelpString += "Enable `Use template properties in property dialogs` and click `Update`. "
-        HelpString += "There are a lot of properties.  Choose which to display with the `Customize` button. "
-        HelpString += "You don't have to use a property from the list.  Simply type in the name in the `Property Name` field. "
+        HelpString += vbCrLf + vbCrLf + "Before using this command, you must pre-populate property choices from your templates. "
+        HelpString += "To do so, on the **Configuration Tab -- Templates Page**, select your templates and click the `Update` button. "
+        HelpString += "There are a lot of properties.  After the update is complete, the `Customize` dialog appears. "
+        HelpString += "Choose which to make available there. "
+        HelpString += "If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. "
+        HelpString += "To access properties not in your Favorites, enable the `Show All Props` option on the toolbar. "
 
         HelpString += vbCrLf + vbCrLf + "A `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "If you pre-populate properties, the program will set the correct choice automatically. "
+        HelpString += "The program will normally set the correct choice automatically. "
+        HelpString += "One exception is if you have a custom property with the same name as a system property. "
+        HelpString += "In that case, you have to select the appropriate one yourself. "
         HelpString += "For more information about `Property sets`, see the "
         HelpString += "**Property Filter** "
         HelpString += "section in this README file. "
 
-        HelpString += vbCrLf + vbCrLf + "There are four search modes, `PT`, `WC`, `RX`, and `EX`. "
+        HelpString += vbCrLf + vbCrLf + "There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. "
         HelpString += vbCrLf + vbCrLf + "- `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. "
         HelpString += vbCrLf + "- `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. "
         HelpString += vbCrLf + "- `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. "
         HelpString += "Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) "
         HelpString += "for more information."
         HelpString += vbCrLf + "- `EX` stands for 'Expression'.  It is discussed below. "
+        HelpString += vbCrLf + "- `X` isn't really a search mode.  It means delete the chosen property. "
 
         HelpString += vbCrLf + vbCrLf + "The properties are processed in the order in the table. "
         HelpString += "To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. "
@@ -1159,11 +1198,14 @@ Public Class TaskEditProperties
         HelpString += "and the property value in a file is `Aluminum 6061-T6`. "
         HelpString += "Then the new value would be `ALUMINUM 6061-T6`. "
 
-        HelpString += vbCrLf + vbCrLf + "**Property Formula**"
+        HelpString += vbCrLf + vbCrLf + "**Property Substitution**"
 
-        HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also use "
-        HelpString += "a property formula.  The formula has the same syntax as the Callout command, "
-        HelpString += "except preceeded with `System.` or `Custom.` as shown in the Input Editor above. "
+        HelpString += vbCrLf + vbCrLf + "In addition to plain text and pattern matching, you can also "
+        HelpString += "do property substitution.   The example in the Input Editor above "
+        HelpString += "is telling the program to use the file name for the Document Number. "
+        HelpString += "To select a property, right-click the `Find` or `Replace` field and select `Insert property`. "
+        HelpString += "You can also type it in if preferred.  The formula has the same syntax as the Callout command, "
+        HelpString += "except preceeded with `System.` or `Custom.` as shown in the example. "
 
         HelpString += vbCrLf + vbCrLf + "**Options**"
 

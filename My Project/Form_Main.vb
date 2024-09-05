@@ -798,7 +798,15 @@ Public Class Form_Main
 
     Private Sub Startup()
 
-        'MsgBox("Fix VersionSpecificReadme")
+        'Dim s As String = ""
+        'Dim indent As String = "    "
+        's = String.Format("{0}Reminders{1}", s, vbCrLf)
+        's = String.Format("{0}{1}Fix VersionSpecificReadme{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Fix property selection on new UCEditProperties and UCPropertyFilter{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Check property substitutions in EditProperties and Save As subdirectories{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Fix property delete when the Replace field has contents{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
+        'MsgBox(s, vbOKOnly)
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation

@@ -132,10 +132,18 @@ Public Class UCPropertyFilter
         'MsgBox("Temporarily setting hmk_Make_From PropertySet to 'Duplicate'")
         'Form_Main.TemplatePropertyDict("hmk_Make_From")("PropertySet") = "Duplicate"
 
-        ComboBoxPropertyName.Items.Add("")
-        For Each s As String In TemplatePropertyList
-            ComboBoxPropertyName.Items.Add(s)
-        Next
+        If Not Me.PropertyFilter.ShowAllProps Then
+            ComboBoxPropertyName.Items.Add("")
+            For Each s As String In TemplatePropertyList
+                ComboBoxPropertyName.Items.Add(s)
+            Next
+        Else
+            ComboBoxPropertyName.Items.Add("")
+            For Each s As String In Form_Main.TemplatePropertyDict.Keys
+                ComboBoxPropertyName.Items.Add(s)
+            Next
+        End If
+
 
         Me.Selected = False
         Me.Variable = ""
@@ -216,7 +224,19 @@ Public Class UCPropertyFilter
         Dim FilteredList = New List(Of String)
         Dim PropSet As String
 
-        For Each PropName As String In TemplatePropertyList
+        Dim tmpPropList As New List(Of String)
+
+        If Me.PropertyFilter.ShowAllProps Then
+            For Each s As String In Form_Main.TemplatePropertyDict.Keys
+                tmpPropList.Add(s)
+            Next
+        Else
+            For Each s As String In TemplatePropertyList
+                tmpPropList.Add(s)
+            Next
+        End If
+
+        For Each PropName As String In tmpPropList
             If Form_Main.TemplatePropertyDict.Keys.Contains(PropName) Then
                 PropSet = Form_Main.TemplatePropertyDict(PropName)("PropertySet")  ' 'SummaryInformation', ..., 'Custom', 'Duplicate', ''
 

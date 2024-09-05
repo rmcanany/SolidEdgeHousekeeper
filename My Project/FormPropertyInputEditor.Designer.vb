@@ -41,7 +41,7 @@ Partial Class FormPropertyInputEditor
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButtonExpressionEditor = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonShowAllProps = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
@@ -95,7 +95,7 @@ Partial Class FormPropertyInputEditor
         'ToolStripEditProperties
         '
         Me.ToolStripEditProperties.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ButtonShowAll, Me.ToolStripSeparator4, Me.ToolStripButtonHelp})
+        Me.ToolStripEditProperties.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator3, Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonDeleteSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ToolStripButtonUp, Me.ToolStripButtonDown, Me.ToolStripButtonDeleteRow, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ToolStripButtonExpressionEditor, Me.ToolStripSeparator5, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ToolStripButtonHelp})
         Me.ToolStripEditProperties.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripEditProperties.Name = "ToolStripEditProperties"
         Me.ToolStripEditProperties.Size = New System.Drawing.Size(759, 25)
@@ -201,14 +201,14 @@ Partial Class FormPropertyInputEditor
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
         Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 25)
         '
-        'ButtonShowAll
+        'ButtonShowAllProps
         '
-        Me.ButtonShowAll.CheckOnClick = True
-        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonShowAll.Name = "ButtonShowAll"
-        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
-        Me.ButtonShowAll.Text = "Show All Props"
+        Me.ButtonShowAllProps.CheckOnClick = True
+        Me.ButtonShowAllProps.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.ButtonShowAllProps.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonShowAllProps.Name = "ButtonShowAllProps"
+        Me.ButtonShowAllProps.Size = New System.Drawing.Size(106, 22)
+        Me.ButtonShowAllProps.Text = "Show All Props"
         '
         'ToolStripSeparator4
         '
@@ -528,6 +528,6 @@ Partial Class FormPropertyInputEditor
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
-    Friend WithEvents ButtonShowAll As ToolStripButton
+    Friend WithEvents ButtonShowAllProps As ToolStripButton
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

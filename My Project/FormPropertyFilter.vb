@@ -24,6 +24,21 @@ Public Class FormPropertyFilter
     Public Property TemplatePropertyList As List(Of String)
     Public Property Formula As String
 
+    Private _ShowAllProps As Boolean
+    Public Property ShowAllProps As Boolean
+        Get
+            Return _ShowAllProps
+        End Get
+        Set(value As Boolean)
+            _ShowAllProps = value
+            If Me.PanelHeader IsNot Nothing Then
+                ButtonShowAllProps.Checked = value
+            End If
+        End Set
+    End Property
+
+
+
 
     Public Sub New()
 
@@ -570,12 +585,14 @@ Public Class FormPropertyFilter
 
     'End Sub
 
-    Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
+    Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAllProps.Click
+
+        Me.ShowAllProps = ButtonShowAllProps.Checked
 
         Dim PreviousPropertyName As String
 
-        If ButtonShowAll.Checked Then
-            ButtonShowAll.Image = My.Resources.Checked
+        If ButtonShowAllProps.Checked Then
+            ButtonShowAllProps.Image = My.Resources.Checked
 
             For i As Integer = 0 To UCList.Count - 1
                 UCList(i).NotifyPropertyFilter = False
@@ -589,7 +606,7 @@ Public Class FormPropertyFilter
                 UCList(i).NotifyPropertyFilter = True
             Next
         Else
-            ButtonShowAll.Image = My.Resources.Unchecked
+            ButtonShowAllProps.Image = My.Resources.Unchecked
 
             For i As Integer = 0 To UCList.Count - 1
                 UCList(i).NotifyPropertyFilter = False

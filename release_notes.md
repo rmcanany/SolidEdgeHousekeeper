@@ -60,9 +60,22 @@ This is *blazingly* fast.  It can run a monster batch of parts before Solid Edge
 
 Oh, did I mention you don't need Solid Edge installed to use this?  Maybe *you-know-who* in Purchasing could get in on the fun for a change!
 
+#### Selecting Properties
+
+Prior to this version, properties had to be typed in manually.  Now they are read from your templates.  Click `Update` on the **Configuration Tab -- Templates Page** to populate the list.  To add a property not present in your template, right-click the Selected Properties list and choose `Add property manually`.
+
+![Expression Editor](My%20Project/media/customize_property_list.png)
+
+The properties are selected from a drop down in the `Property Filter` and `Edit Properties` dialogs.  If either of these commands is started and the property list was not populated, an error message is displayed.
+
+In places where property substitution is allowed, like the  `Find` and `Replace` text in `Edit Properties` or subdirectory formula in `Save As`, they are accessed via shortcut menu which brings up the following dialog.
+
+![Insert Property](My%20Project/media/property_selector.png)
+
+
 #### Property Formula
 
-One other change was made to the `Edit Properties` command -- the formula is now evaluated internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should be fine because it is a core Windows feature (starting with Win7 maybe, not sure).  
+One other change was made to the `Edit Properties` command -- the formula is now evaluated internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should not cause any problems because it is a core Windows feature (starting with Win7 maybe, not sure).  
 
 However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
 
@@ -128,20 +141,11 @@ See the [<ins>**Edit Interactively Help Topic**</ins>](https://github.com/rmcana
 
 ### Property Filter
 
-Added the ability to select properties defined in your templates.  Also implemented in-line editing, replacing the previous input field.
+Revamped the user interface to be easier to use.  As noted earlier, properties are now selected from a drop down.  By default only the Favorite Properties are listed.  To see all of them, enable the `Show All Props` option.
 
 ![Property Filter](My%20Project/media/property_filter.png)
 
-The template properties are populated on the **Configuration Tab -- Templates Page**.  
-
-![Customize Property List](My%20Project/media/customize_property_list.png)
-
-To populate the Property Name field, click the drop down arrow.  To use a property in the Value field (or in the Find and Replace text of the `Edit Properties` command), right click the field and select the `Insert property` command.
-
-![Insert Property](My%20Project/media/property_selector.png)
-
-
-
+The saved settings were previously stored in `*.txt` format.  Thye are now saved as a `*.json` file.  These are not compatible unfortunately, so any previously saved settings will have to be recreated.
 
 See the [<ins>**Property Filter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering) for details.
 
@@ -200,7 +204,7 @@ If you're a URL checker like me, you might notice the link is pointing to a pret
 
 https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640#open-save
 
-That long string of seemingly random numbers is GitHub's `Commit Tag`.  It is how you tell them to open a file from a certain point in the past.
+That long string of seemingly random numbers is the Git `Commit Tag`.  It is how you tell GitHub to open a file from a certain point in the past.
 
 ## V2024.1 Enhancements/Fixes
 

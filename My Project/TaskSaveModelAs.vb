@@ -1105,6 +1105,8 @@ Public Class TaskSaveModelAs
         Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
         Dim Indent = "    "
 
+        Dim UC As New UtilsCommon
+
         If Me.IsSelectedTask Then
             ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
@@ -1145,6 +1147,14 @@ Public Class TaskSaveModelAs
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Enter a subdirectory formula", Indent))
+            End If
+
+            If Not UC.CheckValidPropertyFormulas(Me.Formula) And (Me.UseSubdirectoryFormula) Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Subdirectory formula missing 'System.' or 'Custom.'", Indent))
             End If
 
             'ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.FitView And Me.FitView

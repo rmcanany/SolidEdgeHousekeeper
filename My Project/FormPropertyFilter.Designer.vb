@@ -39,7 +39,7 @@ Partial Class FormPropertyFilter
         Me.ButtonEditFormula = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel3 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonShowAllProps = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.PanelHeader = New System.Windows.Forms.Panel()
@@ -51,7 +51,6 @@ Partial Class FormPropertyFilter
         Me.Label5 = New System.Windows.Forms.Label()
         Me.PanelFilters = New System.Windows.Forms.Panel()
         Me.ExTableLayoutPanelFilters = New Housekeeper.ExTableLayoutPanel()
-        Me.UcPropertyFilter1 = New Housekeeper.UCPropertyFilter()
         Me.PanelFooter = New System.Windows.Forms.Panel()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBoxFormula = New System.Windows.Forms.TextBox()
@@ -60,7 +59,6 @@ Partial Class FormPropertyFilter
         Me.PanelHeader.SuspendLayout()
         Me.ExTableLayoutPanelHeader.SuspendLayout()
         Me.PanelFilters.SuspendLayout()
-        Me.ExTableLayoutPanelFilters.SuspendLayout()
         Me.PanelFooter.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -88,7 +86,7 @@ Partial Class FormPropertyFilter
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAll, Me.ToolStripSeparator4, Me.ButtonHelp})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComboBoxSavedSettings, Me.ButtonSaveSettings, Me.ButtonRemoveSetting, Me.ToolStripLabel1, Me.ToolStripSeparator1, Me.ButtonRowUp, Me.ButtonRowDown, Me.ButtonRowDelete, Me.ToolStripLabel2, Me.ToolStripSeparator2, Me.ButtonEditFormula, Me.ToolStripLabel3, Me.ToolStripSeparator3, Me.ButtonShowAllProps, Me.ToolStripSeparator4, Me.ButtonHelp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(705, 25)
@@ -195,14 +193,14 @@ Partial Class FormPropertyFilter
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(6, 25)
         '
-        'ButtonShowAll
+        'ButtonShowAllProps
         '
-        Me.ButtonShowAll.CheckOnClick = True
-        Me.ButtonShowAll.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
-        Me.ButtonShowAll.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonShowAll.Name = "ButtonShowAll"
-        Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
-        Me.ButtonShowAll.Text = "Show All Props"
+        Me.ButtonShowAllProps.CheckOnClick = True
+        Me.ButtonShowAllProps.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.ButtonShowAllProps.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonShowAllProps.Name = "ButtonShowAllProps"
+        Me.ButtonShowAllProps.Size = New System.Drawing.Size(106, 22)
+        Me.ButtonShowAllProps.Text = "Show All Props"
         '
         'ToolStripSeparator4
         '
@@ -319,7 +317,6 @@ Partial Class FormPropertyFilter
         Me.ExTableLayoutPanelFilters.ColumnCount = 1
         Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanelFilters.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanelFilters.Controls.Add(Me.UcPropertyFilter1, 0, 0)
         Me.ExTableLayoutPanelFilters.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanelFilters.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanelFilters.Name = "ExTableLayoutPanelFilters"
@@ -329,27 +326,6 @@ Partial Class FormPropertyFilter
         Me.ExTableLayoutPanelFilters.Size = New System.Drawing.Size(696, 200)
         Me.ExTableLayoutPanelFilters.TabIndex = 0
         Me.ExTableLayoutPanelFilters.Task = Nothing
-        '
-        'UcPropertyFilter1
-        '
-        Me.UcPropertyFilter1.Comparison = ""
-        Me.UcPropertyFilter1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcPropertyFilter1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.UcPropertyFilter1.Formula = ""
-        Me.UcPropertyFilter1.Location = New System.Drawing.Point(4, 4)
-        Me.UcPropertyFilter1.Margin = New System.Windows.Forms.Padding(4)
-        Me.UcPropertyFilter1.Name = "UcPropertyFilter1"
-        Me.UcPropertyFilter1.NotifyPropertyFilter = True
-        Me.UcPropertyFilter1.ProcessEvents = True
-        Me.UcPropertyFilter1.PropertyFilter = Nothing
-        Me.UcPropertyFilter1.PropertyName = ""
-        Me.UcPropertyFilter1.PropertySet = ""
-        Me.UcPropertyFilter1.Selected = False
-        Me.UcPropertyFilter1.Size = New System.Drawing.Size(688, 27)
-        Me.UcPropertyFilter1.TabIndex = 0
-        Me.UcPropertyFilter1.TemplatePropertyList = Nothing
-        Me.UcPropertyFilter1.Value = ""
-        Me.UcPropertyFilter1.Variable = ""
         '
         'PanelFooter
         '
@@ -417,7 +393,6 @@ Partial Class FormPropertyFilter
         Me.ExTableLayoutPanelHeader.ResumeLayout(False)
         Me.ExTableLayoutPanelHeader.PerformLayout()
         Me.PanelFilters.ResumeLayout(False)
-        Me.ExTableLayoutPanelFilters.ResumeLayout(False)
         Me.PanelFooter.ResumeLayout(False)
         Me.PanelFooter.PerformLayout()
         Me.ResumeLayout(False)
@@ -456,6 +431,6 @@ Partial Class FormPropertyFilter
     Friend WithEvents Label6 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents TextBoxFormula As TextBox
-    Friend WithEvents ButtonShowAll As ToolStripButton
+    Friend WithEvents ButtonShowAllProps As ToolStripButton
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
 End Class

@@ -47,7 +47,9 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", 
 
 ## GETTING HELP
 
-Start with the Readme.  To quickly navigate, use the Table of Contents by clicking ![Table of Contents](My%20Project/media/table_of_contents_icon.png) as shown in the image below. 
+Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
+
+If it doesn't show what you're looking for, click ![Table of Contents](My%20Project/media/table_of_contents_icon.png) to open the Table of Contents as shown below. 
 
 ![Table of Contents](My%20Project/media/table_of_contents.png)
 
@@ -74,7 +76,7 @@ The other option is to use the [<ins>**Latest Release**</ins>](https://github.co
   <img src="My%20Project/media/release_page.png">
 </p>
 
-Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (sometimes hidden under the Assets dropdown). It should prompt you to save it. Choose a convenient location on your machine. Extract the zip file (probably by right-clicking and selecting Extract All). Double-click the `.exe` file to run.
+Click the file `SolidEdgeHousekeeper-vYYYY.N.zip` (sometimes hidden under the Assets dropdown). It should prompt you to save it. Choose a convenient location on your machine. Extract the zip file (probably by right-clicking and selecting Extract All). Double-click the `.exe` file to run.
 
 The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
 
@@ -184,13 +186,13 @@ You can limit the search to return only selected types of Solid Edge files. To d
 
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-You can choose sorting options of `Unsorted`, `Alphabetic`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
+You can choose sorting options of `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
 
 The `Unsorted` option is primarily intended to preserve the order of imported lists.
 
-The `Dependency` option is useful in conjunction with the `Update part copy` commands.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
+The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
 
-The dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running the process twice in a row.
+Dependency ordering is not fool proof.  It has trouble with mutual dependencies, such as Interpart copies.  I've had some luck simply running `Update part copy` twice in a row.
 
 The `Random sample` option randomly selects and shuffles  a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 
@@ -216,7 +218,9 @@ Filters are a way to refine the list of files to process.  You can filter on fil
 
 #### 1. Property Filter
 
-The property filter allows you to select files by their property values. To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
+The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the **Configuration Tab** section of this Readme.
+
+To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
 The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models in the drawing for the specified properties. Set the option on the **Configuration Tab -- General Page**. One situation where you might want to disable this option is when searching for file Status. See **Document Status Options** below.
 
@@ -492,7 +496,7 @@ Checks drawing views one by one, and updates them if needed.
 ### Update flat pattern
 Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 
 
-Before updating the flat pattern, this command first regenerates the flat *model*. That is the under-the-hood parent geometry of the flat pattern. If you have a highly-automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
+Before updating the flat pattern, this command first regenerates the flat *model*. That is the parent geometry of the flat pattern. If you have an automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
 
 ### Break links
 Breaks external links to a file.  This is irreversible, so you know, think about it. Several options are available.  They are explained below. 
@@ -518,16 +522,17 @@ Searches for text in a specified property and replaces it if found. The property
 
 **Using the Input Editor**
 
-You can pre-populate property choices from your templates. That is done on the **Configuration Tab -- Templates Page**. Enable `Use template properties in property dialogs` and click `Update`. There are a lot of properties.  Choose which to display with the `Customize` button. You don't have to use a property from the list.  Simply type in the name in the `Property Name` field. 
+Before using this command, you must pre-populate property choices from your templates. To do so, on the **Configuration Tab -- Templates Page**, select your templates and click the `Update` button. There are a lot of properties.  After the update is complete, the `Customize` dialog appears. Choose which to make available there. If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. To access properties not in your Favorites, enable the `Show All Props` option on the toolbar. 
 
-A `Property set`, either `System` or `Custom`, is required. If you pre-populate properties, the program will set the correct choice automatically. For more information about `Property sets`, see the **Property Filter** section in this README file. 
+A `Property set`, either `System` or `Custom`, is required. The program will normally set the correct choice automatically. One exception is if you have a custom property with the same name as a system property. In that case, you have to select the appropriate one yourself. For more information about `Property sets`, see the **Property Filter** section in this README file. 
 
-There are four search modes, `PT`, `WC`, `RX`, and `EX`. 
+There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. 
 
 - `PT` stands for 'Plain Text'.  It is simple to use, but finds literal matches only. 
 - `WC` stands for 'Wild Card'.  You use `*`, `?`  `[charlist]`, and `[!charlist]` according to the VB `Like` syntax. 
 - `RX` stands for 'Regex'.  It is a more comprehensive (and notoriously cryptic) method of matching text. Check the [<ins>**.NET Regex Guide**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference) for more information.
 - `EX` stands for 'Expression'.  It is discussed below. 
+- `X` isn't really a search mode.  It means delete the chosen property. 
 
 The properties are processed in the order in the table. To change the order, select a row and, on the toolbar `Row Tools` group, click the `Up` or `Down` arrow. The `Delete` button removes the selected row. 
 
@@ -537,9 +542,9 @@ You can save a setup for future use. In the toolbar `Saved Settings` group, ente
 
 The search *is not* case sensitive, the replacement *is*. For example, say the search is `aluminum`, the replacement is `ALUMINUM`, and the property value in a file is `Aluminum 6061-T6`. Then the new value would be `ALUMINUM 6061-T6`. 
 
-**Property Formula**
+**Property Substitution**
 
-In addition to plain text and pattern matching, you can also use a property formula.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the Input Editor above. 
+In addition to plain text and pattern matching, you can also do property substitution.   The example in the Input Editor above is telling the program to use the file name for the Document Number. To select a property, right-click the `Find` or `Replace` field and select `Insert property`. You can also type it in if preferred.  The formula has the same syntax as the Callout command, except preceeded with `System.` or `Custom.` as shown in the example. 
 
 **Options**
 
