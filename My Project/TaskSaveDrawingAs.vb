@@ -1019,11 +1019,11 @@ Public Class TaskSaveDrawingAs
         Dim HelpString As String
         HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
 
-        HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_drawing_as.png)"
+        HelpString += vbCrLf + vbCrLf + "![SaveDrawingAs](My%20Project/media/task_save_drawing_as.png)"
 
         HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
         HelpString += "Select the directory using the `Browse` button, "
-        HelpString += "or check the `Original Directory` checkbox. "
+        HelpString += "or enable the `Original Directory` option. "
 
         HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
         HelpString += "See the `Save model as` help topic for details. "

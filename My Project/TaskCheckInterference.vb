@@ -303,7 +303,10 @@ Public Class TaskCheckInterference
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Runs an interference check.  All parts are checked against all others. "
-        HelpString += "This can take a long time on large assemblies, "
+
+        HelpString += vbCrLf + vbCrLf + "![CheckInterference](My%20Project/media/task_check_interference.png)"
+
+        HelpString += vbCrLf + vbCrLf + "This can take a long time on large assemblies, "
         HelpString += "so there is a limit to the number of parts to check. "
         HelpString += "Set it on the Options panel."
 

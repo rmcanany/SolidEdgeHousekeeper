@@ -6,7 +6,7 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2024.2"
+    Public Property Version As String = "2024.2.0"  ' Three fields, all integers: Year.ReleaseNumber.MaintenancePackNumber
 
     Public Property UtilsLogFile As UtilsLogFile
 
@@ -802,14 +802,16 @@ Public Class Form_Main
         'Dim indent As String = "    "
         's = String.Format("{0}Reminders{1}", s, vbCrLf)
         's = String.Format("{0}{1}Fix VersionSpecificReadme{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}{1}Fix property selection on new UCEditProperties and UCPropertyFilter{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}{1}Check property substitutions in EditProperties and Save As subdirectories{2}", s, indent, vbCrLf)
+        's = String.Format("{0}{1}Fix property selection on part number does not match{2}", s, indent, vbCrLf)
+        's = String.Format("{0}{1}Save as flat pattern should not show dir for unselected file type{2}", s, indent, vbCrLf)
         ''s = String.Format("{0}{1}Fix property delete when the Replace field has contents{2}", s, indent, vbCrLf)
         ''s = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
         'MsgBox(s, vbOKOnly)
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
+
+        UP.CheckVersionFormat(Me.Version)
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()

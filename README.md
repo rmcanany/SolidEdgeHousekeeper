@@ -206,7 +206,7 @@ You can get around this by checking `Process files as Available regardless of do
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
-If you want simply to change the Status on a batch of files, choose the `Open/Save` Task for each document type.
+If you want simply to change the Status on a batch of files, specify your Before/After choices here, then run the `Open/Save` command.
 
 If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Design Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
 
@@ -234,7 +234,7 @@ This is a powerful tool with a lot of options. These are detailed below.
 
 Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
 
-Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted as desired.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
+Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
 
 Most people use a limited number of properties.  You can set which ones are available in the drop-down list.  That is done on the **Configuration Tab -- Templates Page**.
 
@@ -242,17 +242,17 @@ Most people use a limited number of properties.  You can set which ones are avai
   <img src="My%20Project/media/customize_property_list.png">
 </p>
 
-The **Available Properties** are populated by enabling `Use template properties in property dialogs` and clicking `Update`.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
+The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
 
 **Property Set**
 
-In addition to entering the `Property name`, you must also select the `Property set`, either `System` or `Custom`.
+In addition to entering the `Property name`, you must also specify the `Property set`, either `System` or `Custom`.
 
 `System` properties are in every Solid Edge file. They include `Material`, `Project`, etc. Some are in English only, others are localized.
 
 `Custom` properties are ones that you create, probably in a template. Solid Edge also creates some Custom properties for you. These include `Exposed Variables` and output from the `Inspect > Physical Properties` command. The custom property names can be in any language. (In theory, at least -- not tested at this time. Not sure about the Solid Edge entries either.)
 
-If you made a customized property list, the `Property Set` will be populated automatically.  Unless you added it manually, that is, in which case you'll have to select the appropriate one.
+Template properties will know their `PropertySet`.  Unless you added it manually, that is, in which case you specify it yourself.
 
 **Comparison**
 
@@ -274,7 +274,7 @@ In the image above, sticking with the default formula means you would get all pa
 
 **Editing the Formula**
 
-You can optionally change the formula. Click the `Edit Formula` button and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
+You can optionally change the formula. Click the `Edit Formula` button in the toolbar and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
 **One More Thing About the Formula**
@@ -338,7 +338,7 @@ You can monitor progress on the status bar.  It shows the number of files proces
  
 You can interrupt the program before it finishes. As shown above, while processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
-To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on the Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
+To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on Solid Edge's Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
 
 
 
@@ -380,7 +380,7 @@ To add a task, select one from `AVAILABLE TASKS` and click `Add`.  You can have 
 
 Each task must have a unique name.  Rename one by double-clicking it in the list.  You can rename all of them, for example in your own language, if desired.
 
-The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  You can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
+The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  I'm not kidding that the task needs to be selected *before* right-clicking.  Otherwise for some reason the task at the top of the list is modified.  Anyway, you can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
 
 To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any other changes you made, such as your template locations, etc.
 
@@ -388,7 +388,7 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 ## CONFIGURATION TAB
 
-Global options for the program are set here on this tab.
+Global options for the program are set on this tab.
 
 ### Top Level Assembly Page
 
@@ -410,13 +410,15 @@ Templates and related tools.
   <img src="My%20Project/media/configuration_tab_templates_page.png">
 </p>
 
-- `Assembly, Part, Sheetmetal, Draft, Material Table`
+Description of tab controls:
+
+- `Assembly`, `Part`, `Sheetmetal`, `Draft`, `Material Table`
 Buttons to let you specify template locations.
 - `Copy template locations to tasks that require it`
 Each Task is configured separately.  If you want all of them to use your main templates, click the `Copy` button.  This action is on-demand, so if your templates change you would have to copy them again.  Each Task retains its settings, so if you change a template in one, it will remember your choice.
-- `Use template properties in property dialogs`
-This is where you pre-populate properties so you can select them without typing.  Enable the option, then click `Update`.  Pre-populated properties also know to which `Property Set` they belong, so that field gets filled in automatically.
-- `Customize selection and order of template properties`
+- `Update`
+This is where you pre-populate properties for use in dialogs that need them.  
+- `Customize`
 There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
 
 ### General Page
@@ -427,12 +429,14 @@ Everything else.
   <img src="My%20Project/media/configuration_tab_general_page.png">
 </p>
 
+Description of tab controls:
+
 - `Use current Solid Edge session (if any)`
 Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses that check.
 - `Warn me if file save is required`
 This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It's enabled by default.  I always turn it off.
 - `Do not show processed files in Most Recently Used List`
-This keeps from clogging up the list with files processed in batch.
+This keeps from clogging up Solid Edge's file list with those processed in batch mode.
 - `File list font size`
 This allows you to change the font size of the file list.
 - `Remember selected tasks between sessions`
@@ -460,22 +464,34 @@ Can run out of memory for very large assemblies.
 ### Update material from material table
 Checks to see if the part's material name and properties match any material in a file you specify on the Options panel. 
 
+![UpdateMaterialFromMaterialTable](My%20Project/media/task_update_material_from_material_table.png)
+
 If the names match, but their properties (e.g., density, face style, etc.) do not, the material is updated. If no match is found, or no material is assigned, it is reported in the log file.
 
 You can optionally remove any face style overrides. Set the option on the Options panel. 
 
 ### Update part copies
-In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. You can optionally update the parent files recursively by enabling `Update parent documents` on the Options panel.
+In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. 
+
+![UpdatePartCopies](My%20Project/media/task_update_part_copies.png)
+
+You can optionally update the parent files recursively by enabling `Update parent documents` on the Options panel.
 
 ### Update physical properties
 Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 
+
+![Update Physical Properties](My%20Project/media/task_update_physical_properties.png)
 
 You can optionally control the display of the physical properties symbols. They can either be shown, hidden, or left unchanged. To leave their display unchanged, disable both the `Show` and `Hide` options. 
 
 Occasionally, the physical properties are updated correctly, but the results are not carried over to the Variable Table. The error is detected and reported in the log file. One fix that often works is to open the file in SE, change the material, then change it back. To see if it worked, run `Inspect > Physical Properties`, then check for `Mass` in the Variable Table. 
 
 ### Update model size in variable table
-Copies the model size to the variable table. This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
+Copies the model size to the variable table. 
+
+![UpdateModelSizeInVariableTable](My%20Project/media/task_update_model_size_in_variable_table.png)
+
+This is primarily intended for standard cross-section material (barstock, channel, etc.), but can be used for any purpose. Exposes the variables so they can be used in a callout, parts list, or the like. 
 
 The size is determined using the built-in Solid Edge `RangeBox`. The range box is oriented along the XYZ axes. Misleading values will result for parts with an off axis orientation, such as a 3D tube. 
 
@@ -483,7 +499,7 @@ The size can be reported as `XYZ`, or `MinMidMax`, or both. `MinMidMax` is indep
 
 Note that the values are non-associative copies. Any change to the model will require rerunning this command to update the variable table. 
 
-The command reports sheet metal size in the formed state. For a flat pattern, instead of creating new variables using this command, you can use the variables already created by the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. 
+The command reports sheet metal size in the formed state. For a flat pattern, instead of creating new variables using this command, you can use the variables already created by the flat pattern command -- `Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Material Thickness`. If you have an entry in the Material Table Gage Properties Tab `Sheet Metal Gage` combobox, you can use that instead of (or along with) `Material Thickness`. 
 
 ### Update design for cost
 Updates DesignForCost and saves the document.
@@ -499,7 +515,11 @@ Updates flat patterns. If the update was not successful, or no flat patterns wer
 Before updating the flat pattern, this command first regenerates the flat *model*. That is the parent geometry of the flat pattern. If you have an automated model-to-laser pipeline, you may have noticed that sometimes an exported flat model contains no geometry. This is a fix for that situation.
 
 ### Break links
-Breaks external links to a file.  This is irreversible, so you know, think about it. Several options are available.  They are explained below. 
+Breaks external links to a file.  This is irreversible, so you know, think about it. 
+
+![BreakLinks](My%20Project/media/task_break_links.png)
+
+The command options are explained below. 
 
 `Break part copy design links` and `Break part copy construction links` remove links created with the `Part Copy` command. The geometry remains intact.
 
@@ -516,9 +536,15 @@ Breaks external links to a file.  This is irreversible, so you know, think about
 Luckily, Solid Edge can take care of that. That's in the program, but only for Callouts. If you have TextBoxes, Blocks, or other objects that use Property text, let me know. I can try to address those in a future release. 
 
 ### Edit properties
-Searches for text in a specified property and replaces it if found. The property, search text, and replacement text are entered on the Input Editor. To activate the editor click the `Edit` button in the options panel. 
+Searches for text in a specified property and replaces it if found. 
+
+![EditProperties](My%20Project/media/task_edit_properties.png)
+
+The property, search text, and replacement text are entered on the Input Editor. To activate the editor click the `Edit` button in the options panel. 
 
 ![Find_Replace](My%20Project/media/property_input_editor.png)
+
+This is a powerful tool with a lot of options.  These are detailed below. 
 
 **Using the Input Editor**
 
@@ -570,12 +596,18 @@ Available functions
 
 **Edit Outside Solid Edge (Experimental)**
 
-Direct edit using Windows Structured Storage for fast execution. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
+Direct edit using Windows Structured Storage for fast execution. Like *blazingly* fast -- 100x to 400x faster than Solid Edge. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
 
-There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage 'Property Stream'. As such, they are not accesible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
+There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage `Property Stream`. As such, they are not accessible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
+
+Also, Structured Storage does not know about file links. That means it cannot access models from their drawings. Property callouts that require such access, for example `%{System.Material|R1}`, generate an error with this option. 
 
 ### Edit variables
-Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. Access the form using the `Edit` button. 
+Adds, changes, and/or exposes variables. 
+
+![EditVariables](My%20Project/media/task_edit_variables.png)
+
+The information is entered on the Input Editor. Access the form using the `Edit` button. 
 
 ![Variable_Editor](My%20Project/media/variable_input_editor.png)
 
@@ -592,15 +624,17 @@ The variables are processed in the order in the table. To change the order, sele
 You can save a setup for future use. In the toolbar `Saved Settings` group, enter the name and click `Save`. To retrieve a setting, click the down arrow and select it. To remove a setting, select it and click `Delete`. 
 
 ### Edit interactively
-Brings up files one at a time for manual processing. A dialog box lets you tell Housekeeper when you are done. You can save the file or not, or choose to abort.  Aborting stops processing and returns you to the Housekeeper main form.  
+Brings up files one at a time for manual processing. 
+
+![EditInteractively](My%20Project/media/task_edit_interactively.png)
+
+A dialog box lets you tell Housekeeper when you are done. You can save the file or not, or choose to abort.  Aborting stops processing and returns you to the Housekeeper main form.  
 
 ![Edit Interactively Dialog](My%20Project/media/edit_interactively_dialog.png)
 
 You choose the dialog's starting position. `X` and `Y` are the number of pixels from the left and top of the screen, respectively. If you move the dialog, it remembers the location for subsequent files. It doesn't remember between runs, unfortunately. That turns out to be surprisingly complicated. As a workaround, a change in position is reported on the form. Once processing is complete, you can enter the reported values in the command options. Those numbers *are* remembered between runs. 
 
 You can optionally set a countdown timer and/or start a command. 
-
-![Edit Interactively Options](My%20Project/media/edit_interactively.png)
 
 **Countdown Timer**
 
@@ -635,7 +669,7 @@ The conversion is only possible in Synchronous mode. Ordered files are switched 
 ### Update model styles from template
 Updates the styles you select from a template you specify. 
 
-![Update Styles](My%20Project/media/update_model_styles_from_template.png)
+![UpdateModelStylesFromTemplate](My%20Project/media/task_update_model_styles_from_template.png)
 
 Using the checkboxes provided, you can update all styles, or select which ones to update individually. 
 
@@ -650,6 +684,8 @@ The active view style of the file is changed to match the one active in the temp
 ### Update drawing styles from template
 Updates styles and/or background sheets from a template you specify. 
 
+![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)
+
 These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. The latter group encountered errors with the current implementation.  The errors were not thoroughly investigated, however. If you need one or more of those styles updated, please ask on the Forum. 
 
 ### Remove face style overrides
@@ -659,59 +695,88 @@ Face style overrides change a part's appearance in the assembly. This command ca
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 ### Fit view
-Maximizes the window, sets the view orientation for model files, and does a fit. Select the desired orientation on the Options panel.
+Maximizes the window, sets the view orientation for model files, and does a fit. 
+
+![FitView](My%20Project/media/task_fit_view.png)
+
+Select the desired orientation on the Options panel. The setting is required, but is ignored for draft files.
 
 ### Check interference
-Runs an interference check.  All parts are checked against all others. This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the Options panel.
+Runs an interference check.  All parts are checked against all others. 
+
+![CheckInterference](My%20Project/media/task_check_interference.png)
+
+This can take a long time on large assemblies, so there is a limit to the number of parts to check. Set it on the Options panel.
 
 ### Check links
-Checks linked files.  `Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  Only links directly contained in the file are checked.  Links to links are not.
+Checks linked files.  
+
+![CheckLinks](My%20Project/media/task_check_links.png)
+
+`Missing links` are files not found on disk.  `Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  Only links directly contained in the file are checked.  Links to links are not.
 
 ### Check relationships
-Checks if the file has any conflicting, underconstrained, or suppressed relationships.
+Checks if the file has any failed, underconstrained, or suppressed relationships.
+
+![CheckRelationships](My%20Project/media/task_check_relationships.png)
 
 ### Check flat pattern
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
 ### Check material not in material table
-Checks the file's material against the material table. The material table is chosen on the Options panel. 
+Checks if the material in the file exists in the material table. 
+
+![CheckMaterialNotInMaterialTable](My%20Project/media/task_check_material_not_in_material_table.png)
+
+The material table is chosen on the Options panel. This command only checks the name.  To check/update its properties (density, face style, etc.), run the `Update material from material table` command. 
 
 ### Check missing drawing
 Assumes drawing has the same name as the model, and is in the same directory
 
 ### Check part number does not match filename
-Checks if the file name contains the part number. Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
+Checks if the file name contains the part number. 
+
+![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)
+
+Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
 
 The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 
 ### Check part copies
-If the file has any insert part copies, checks if they are up to date.
+If the file has any Part Copies, checks if they are up to date.
 
 ### Check drawing parts list
 Checks is there are any parts list in the drawing and if they are all up to date.
 
 ### Check drawings
-Checks draft files for various problems.  The options are: 
-`Drawing views out of date`: Checks if any drawing views are not up to date. 
-`Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
-`Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
+Checks draft files for various problems. 
+
+![CheckDrawings](My%20Project/media/task_check_drawings.png)
+
+The options are: 
+- `Drawing views out of date`: Checks if any drawing views are not up to date. 
+- `Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
+- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
 
 ### Run external program
-Runs an `*.exe` or `*.vbs` or `*.ps1` file.  Select the program with the `Browse` button. It is located on the Options panel. 
+Runs an `*.exe` or `*.vbs` or `*.ps1` file. 
+
+![RunExternalProgram](My%20Project/media/task_run_external_program.png)
+
+Select the program with the `Browse` button on the Options panel. 
 
 If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
 ### Save model as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
-![Save Model As](My%20Project/media/save_model_as.png)
+![SaveModelAs](My%20Project/media/task_save_model_as.png)
 
 Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
-You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: 
-`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. 
-You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: 
-`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. 
+You can optionally create subdirectories using a formula similar to the Property Text Callout. Enable the `Use subdirectory formula` option to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the formula. Here are two examples. 
+- `Project %{System.Project Name}` 
+- `%{System.Material}\%{System.Sheet Metal Gage}` 
 
 As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the **Property Filter** section in this Readme file. 
 
@@ -721,14 +786,14 @@ Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Draw
 
 The `PDF Drawing` option saves the drawing of the sheet metal file. The drawing must have the same name as the model, and be in the same directory. A more flexible option may be to use `Save Drawing As` command, using a `Property Filter` if needed. 
 
-For image file formats there are additional options. You can hide constructions and/or fit the view.  For Fit, choose an orientation, either `Isometric`, `Dimetric`, or `Trimetric`. You can also crop images to the aspect ratio of the model, rather than the window. The option is called `Crop image to model size`. On tall skinny parts cropping works a little *too* well.  You might need to resort to Photoshop for those. Finally, you can change the view style by selecting that option and entering its name in the textbox provided. 
+For image file formats there are additional options. You can hide constructions and/or fit the view.  For Fit, choose an orientation, either `Isometric`, `Dimetric`, or `Trimetric`. You can also crop images to the aspect ratio of the model, rather than the window. The option is called `Crop image to model size`. On tall skinny parts cropping works a little *too* well.  You might need to expand the margins a bit in Photoshop for those. Finally, you can change the view style by selecting that option and entering its name in the textbox provided. 
 
 ### Save drawing as
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
-![Save Model As](My%20Project/media/save_drawing_as.png)
+![SaveDrawingAs](My%20Project/media/task_save_drawing_as.png)
 
-Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
+Select the file type using the combobox. Select the directory using the `Browse` button, or enable the `Original Directory` option. 
 
 You can optionally create subdirectories using a formula similar to the Property Text Callout. See the `Save model as` help topic for details. 
 
@@ -750,11 +815,11 @@ You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the sam
 ### Print
 Prints drawings. 
 
-![Printer_Setup](My%20Project/media/print.png)
+![Print](My%20Project/media/task_print.png)
 
 The dropdown should list all installed printers. 
 
-If you use more than one printer, use `Edit task list` to add one or more Print tasks. Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. 
+If you use more than one printer, use the `Edit task list` function on the **Task Tab** to add one or more Print tasks. Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. 
 
 You assign sheet sizes to a printer with the `Select Sheets` button. Print jobs are routed on a per-sheet basis. So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. 
 

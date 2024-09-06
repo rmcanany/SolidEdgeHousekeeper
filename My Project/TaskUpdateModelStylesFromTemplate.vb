@@ -1524,7 +1524,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim HelpString As String
         HelpString = "Updates the styles you select from a template you specify. "
 
-        HelpString += vbCrLf + vbCrLf + "![Update Styles](My%20Project/media/update_model_styles_from_template.png)"
+        HelpString += vbCrLf + vbCrLf + "![UpdateModelStylesFromTemplate](My%20Project/media/task_update_model_styles_from_template.png)"
 
         HelpString += vbCrLf + vbCrLf + "Using the checkboxes provided, you can update all styles, or select which ones to update individually. "
 

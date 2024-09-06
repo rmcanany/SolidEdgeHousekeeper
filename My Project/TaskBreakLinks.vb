@@ -641,7 +641,10 @@ Public Class TaskBreakLinks
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Breaks external links to a file.  This is irreversible, so you know, think about it. "
-        HelpString += "Several options are available.  They are explained below. "
+
+        HelpString += vbCrLf + vbCrLf + "![BreakLinks](My%20Project/media/task_break_links.png)"
+
+        HelpString += vbCrLf + vbCrLf + "The command options are explained below. "
 
         HelpString += vbCrLf + vbCrLf + "`Break part copy design links` and `Break part copy construction links` "
         HelpString += "remove links created with the `Part Copy` command. "

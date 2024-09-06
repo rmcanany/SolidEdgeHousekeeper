@@ -470,8 +470,11 @@ Public Class TaskEditVariables
     Private Function GetHelpText() As String
         Dim HelpString As String
 
-        HelpString = "Adds, changes, and/or exposes variables.  The information is entered on the Input Editor. "
-        HelpString += "Access the form using the `Edit` button. "
+        HelpString = "Adds, changes, and/or exposes variables. "
+
+        HelpString += vbCrLf + vbCrLf + "![EditVariables](My%20Project/media/task_edit_variables.png)"
+
+        HelpString += vbCrLf + vbCrLf + "The information is entered on the Input Editor. Access the form using the `Edit` button. "
 
         HelpString += vbCrLf + vbCrLf + "![Variable_Editor](My%20Project/media/variable_input_editor.png)"
 

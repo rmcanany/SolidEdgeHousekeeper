@@ -174,7 +174,7 @@ Public Class TaskCheckPartCopies
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "If the file has any insert part copies, checks if they are up to date."
+        HelpString = "If the file has any Part Copies, checks if they are up to date."
 
         Return HelpString
     End Function

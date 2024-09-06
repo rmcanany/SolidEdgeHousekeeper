@@ -280,7 +280,10 @@ Public Class TaskUpdatePartCopies
         Dim HelpString As String
         HelpString = "In conjuction with `Assembly Activate and update all`, "
         HelpString += "used mainly to eliminate the gray corners on assembly drawings. "
-        HelpString += "You can optionally update the parent files recursively "
+
+        HelpString += vbCrLf + vbCrLf + "![UpdatePartCopies](My%20Project/media/task_update_part_copies.png)"
+
+        HelpString += vbCrLf + vbCrLf + "You can optionally update the parent files recursively "
         HelpString += "by enabling `Update parent documents` on the Options panel."
 
         Return HelpString

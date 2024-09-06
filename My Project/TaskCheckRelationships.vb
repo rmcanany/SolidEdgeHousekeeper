@@ -587,7 +587,10 @@ Public Class TaskCheckRelationships
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks if the file has any conflicting, underconstrained, or suppressed relationships."
+        HelpString = "Checks if the file has any failed, underconstrained, or suppressed relationships."
+
+        HelpString += vbCrLf + vbCrLf + "![CheckRelationships](My%20Project/media/task_check_relationships.png)"
+
 
         Return HelpString
     End Function

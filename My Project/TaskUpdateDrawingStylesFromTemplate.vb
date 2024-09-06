@@ -626,6 +626,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Updates styles and/or background sheets from a template you specify. "
+
+        HelpString += vbCrLf + vbCrLf + "![UpdateDrawingStylesFromTemplate](My%20Project/media/task_update_drawing_styles_from_template.png)"
+
         HelpString += vbCrLf + vbCrLf
         HelpString += "These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyles`, `TableStyles`, `TextCharStyles`, `TextStyles`. "
         HelpString += "These are not: `FillStyles`, `HatchPatternStyles`, `SmartFrame2dStyles`. "

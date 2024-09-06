@@ -631,7 +631,10 @@ Public Class TaskUpdateModelSizeInVariableTable
         Dim HelpString As String
 
         HelpString = "Copies the model size to the variable table. "
-        HelpString += "This is primarily intended for standard cross-section material "
+
+        HelpString += vbCrLf + vbCrLf + "![UpdateModelSizeInVariableTable](My%20Project/media/task_update_model_size_in_variable_table.png)"
+
+        HelpString += vbCrLf + vbCrLf + "This is primarily intended for standard cross-section material "
         HelpString += "(barstock, channel, etc.), but can be used for any purpose. "
         HelpString += "Exposes the variables so they can be used in a callout, parts list, or the like. "
 
@@ -650,7 +653,9 @@ Public Class TaskUpdateModelSizeInVariableTable
         HelpString += vbCrLf + vbCrLf + "The command reports sheet metal size in the formed state. "
         HelpString += "For a flat pattern, instead of creating new variables using this command, "
         HelpString += "you can use the variables already created by the flat pattern command -- "
-        HelpString += "`Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Sheet Metal Gage`. "
+        HelpString += "`Flat_Pattern_Model_CutSizeX`, `Flat_Pattern_Model_CutSizeY`, and `Material Thickness`. "
+        HelpString += "If you have an entry in the Material Table Gage Properties Tab `Sheet Metal Gage` combobox, "
+        HelpString += "you can use that instead of (or along with) `Material Thickness`. "
 
         Return HelpString
     End Function

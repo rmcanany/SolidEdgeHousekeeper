@@ -277,7 +277,7 @@ Public Class TaskCheckDrawings
 
         RowIndex = 0
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewsOutOfDate.ToString, "Check for out of date drawing views")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewsOutOfDate.ToString, "Out of date drawing views")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -285,7 +285,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.DetachedDimensionsOrAnnotations.ToString, "Check for detatched dimensions or annotations")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DetachedDimensionsOrAnnotations.ToString, "Detatched dimensions or annotations")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -293,7 +293,7 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewOnBackgroundSheet.ToString, "Check for drawing views on background sheet")
+        CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewOnBackgroundSheet.ToString, "Drawing views on background sheet")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -400,11 +400,15 @@ Public Class TaskCheckDrawings
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks draft files for various problems.  The options are: "
-        HelpString += vbCrLf + "`Drawing views out of date`: Checks if any drawing views are not up to date. "
-        HelpString += vbCrLf + "`Detached dimensions or annotations`: Checks that dimensions, "
+        HelpString = "Checks draft files for various problems. "
+
+        HelpString += vbCrLf + vbCrLf + "![CheckDrawings](My%20Project/media/task_check_drawings.png)"
+
+        HelpString += vbCrLf + vbCrLf + "The options are: "
+        HelpString += vbCrLf + "- `Drawing views out of date`: Checks if any drawing views are not up to date. "
+        HelpString += vbCrLf + "- `Detached dimensions or annotations`: Checks that dimensions, "
         HelpString += "balloons, callouts, etc. are attached to geometry in the drawing. "
-        HelpString += vbCrLf + "`Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "
+        HelpString += vbCrLf + "- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "
 
         Return HelpString
     End Function

@@ -417,6 +417,8 @@ Public Class TaskUpdatePhysicalProperties
 
         HelpString = "Updates mass, volume, etc.  Models with no assigned density are reported in the log file. "
 
+        HelpString += vbCrLf + vbCrLf + "![Update Physical Properties](My%20Project/media/task_update_physical_properties.png)"
+
         HelpString += vbCrLf + vbCrLf + "You can optionally control the display of the physical properties symbols. "
         HelpString += "They can either be shown, hidden, or left unchanged. "
         HelpString += "To leave their display unchanged, "

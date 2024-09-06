@@ -275,8 +275,13 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks the file's material against the material table. "
-        HelpString += "The material table is chosen on the Options panel. "
+        HelpString = "Checks if the material in the file exists in the material table. "
+
+        HelpString += vbCrLf + vbCrLf + "![CheckMaterialNotInMaterialTable](My%20Project/media/task_check_material_not_in_material_table.png)"
+
+        HelpString += vbCrLf + vbCrLf + "The material table is chosen on the Options panel. "
+        HelpString += "This command only checks the name.  To check/update its properties (density, face style, etc.), "
+        HelpString += "run the `Update material from material table` command. "
 
         Return HelpString
     End Function

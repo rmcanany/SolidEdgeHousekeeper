@@ -300,6 +300,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim HelpString As String
         HelpString = "Checks to see if the part's material name and properties match any material "
         HelpString += "in a file you specify on the Options panel. "
+
+        HelpString += vbCrLf + vbCrLf + "![UpdateMaterialFromMaterialTable](My%20Project/media/task_update_material_from_material_table.png)"
+
         HelpString += vbCrLf + vbCrLf + "If the names match, "
         HelpString += "but their properties (e.g., density, face style, etc.) do not, the material is updated. "
         HelpString += "If no match is found, or no material is assigned, it is reported in the log file."

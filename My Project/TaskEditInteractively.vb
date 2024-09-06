@@ -741,7 +741,10 @@ Public Class TaskEditInteractively
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Brings up files one at a time for manual processing. "
-        HelpString += "A dialog box lets you tell Housekeeper when you are done. "
+
+        HelpString += vbCrLf + vbCrLf + "![EditInteractively](My%20Project/media/task_edit_interactively.png)"
+
+        HelpString += vbCrLf + vbCrLf + "A dialog box lets you tell Housekeeper when you are done. "
         HelpString += "You can save the file or not, or choose to abort.  "
         HelpString += "Aborting stops processing and returns you to the Housekeeper main form.  "
 
@@ -757,9 +760,6 @@ Public Class TaskEditInteractively
         HelpString += "Those numbers *are* remembered between runs. "
 
         HelpString += vbCrLf + vbCrLf + "You can optionally set a countdown timer and/or start a command. "
-
-        HelpString += vbCrLf + vbCrLf + "![Edit Interactively Options](My%20Project/media/edit_interactively.png)"
-
         HelpString += vbCrLf + vbCrLf + "**Countdown Timer**"
         HelpString += vbCrLf + vbCrLf + "The countdown timer lets you run hands-free. "
         HelpString += "This can be handy for doing a quick inspection of a batch of files, for example. "

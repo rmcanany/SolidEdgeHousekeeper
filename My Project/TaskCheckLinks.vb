@@ -411,7 +411,11 @@ Public Class TaskCheckLinks
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks linked files.  `Missing links` are files not found on disk.  "
+        HelpString = "Checks linked files.  "
+
+        HelpString += vbCrLf + vbCrLf + "![CheckLinks](My%20Project/media/task_check_links.png)"
+
+        HelpString += vbCrLf + vbCrLf + "`Missing links` are files not found on disk.  "
         HelpString += "`Misplaced links` are files not contained in the search directories specified on the **Home Tab**.  "
         HelpString += "Only links directly contained in the file are checked.  "
         HelpString += "Links to links are not."

@@ -1367,19 +1367,23 @@ Public Class TaskSaveModelAs
         Dim HelpString As String
         HelpString = "Exports the file to either a non-Solid Edge format, or the same format in a different directory. "
 
-        HelpString += vbCrLf + vbCrLf + "![Save Model As](My%20Project/media/save_model_as.png)"
+        HelpString += vbCrLf + vbCrLf + "![SaveModelAs](My%20Project/media/task_save_model_as.png)"
 
         HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
 
-        HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. For example: "
-        HelpString += vbCrLf + "`Material %{System.Material} Gage %{System.Sheet Metal Gage}`. "
-        HelpString += vbCrLf + "You can create nested subdirectories if desired. Simply use the `\` in the formula. For example: "
-        HelpString += vbCrLf + "`Material %{System.Material}\Gage %{System.Sheet Metal Gage}`. "
+        HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
+        HelpString += "Enable the `Use subdirectory formula` option to do so. "
+        HelpString += "To add a property, right-click the text box and select `Insert property`. "
+        HelpString += "You can also just type it in if that's easier. "
+        HelpString += "You can create nested subdirectories if desired. Simply add `\` in the formula. Here are two examples. "
+        HelpString += vbCrLf + "- `Project %{System.Project Name}` "
+        HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
 
         HelpString += vbCrLf + vbCrLf + "As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, refer to the **Property Filter** section in this Readme file. "
+
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
         HelpString += "If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. "
         HelpString += "You can/should edit it to change the replacement characters to your preference. "
@@ -1387,6 +1391,7 @@ Public Class TaskSaveModelAs
 
         HelpString += vbCrLf + vbCrLf + "Sheetmetal files have two additional options -- `DXF Flat (*.dxf)` and `PDF Drawing (*.pdf)`. "
         HelpString += "The `DXF Flat` option saves the flat pattern of the sheet metal file. "
+
         HelpString += vbCrLf + vbCrLf + "The `PDF Drawing` option saves the drawing of the sheet metal file. "
         HelpString += "The drawing must have the same name as the model, and be in the same directory. "
         HelpString += "A more flexible option may be to use `Save Drawing As` command, "
@@ -1396,7 +1401,7 @@ Public Class TaskSaveModelAs
         HelpString += "You can hide constructions and/or fit the view.  For Fit, choose an orientation, either `Isometric`, `Dimetric`, or `Trimetric`. "
         HelpString += "You can also crop images to the aspect ratio of the model, rather than the window. "
         HelpString += "The option is called `Crop image to model size`. "
-        HelpString += "On tall skinny parts cropping works a little *too* well.  You might need to resort to Photoshop for those. "
+        HelpString += "On tall skinny parts cropping works a little *too* well.  You might need to expand the margins a bit in Photoshop for those. "
         HelpString += "Finally, you can change the view style by selecting that option and entering its name in the textbox provided. "
 
 

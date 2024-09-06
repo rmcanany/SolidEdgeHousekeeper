@@ -1150,10 +1150,15 @@ Public Class TaskEditProperties
         Dim HelpString As String
 
         HelpString = "Searches for text in a specified property and replaces it if found. "
-        HelpString += "The property, search text, and replacement text are entered on the Input Editor. "
+
+        HelpString += vbCrLf + vbCrLf + "![EditProperties](My%20Project/media/task_edit_properties.png)"
+
+        HelpString += vbCrLf + vbCrLf + "The property, search text, and replacement text are entered on the Input Editor. "
         HelpString += "To activate the editor click the `Edit` button in the options panel. "
 
         HelpString += vbCrLf + vbCrLf + "![Find_Replace](My%20Project/media/property_input_editor.png)"
+
+        HelpString += vbCrLf + vbCrLf + "This is a powerful tool with a lot of options.  These are detailed below. "
 
         HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
 
@@ -1260,14 +1265,19 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "**Edit Outside Solid Edge (Experimental)**"
 
         HelpString += vbCrLf + vbCrLf + "Direct edit using Windows Structured Storage for fast execution. "
+        HelpString += "Like *blazingly* fast -- 100x to 400x faster than Solid Edge. "
         HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
 
         HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
-        HelpString += "but do not actually reside in a Structured Storage 'Property Stream'. "
-        HelpString += "As such, they are not accesible using this technique. "
+        HelpString += "but do not actually reside in a Structured Storage `Property Stream`. "
+        HelpString += "As such, they are not accessible using this technique. "
         HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
         HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
         HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
+
+        HelpString += vbCrLf + vbCrLf + "Also, Structured Storage does not know about file links. "
+        HelpString += "That means it cannot access models from their drawings. "
+        HelpString += "Property callouts that require such access, for example `%{System.Material|R1}`, generate an error with this option. "
 
         Return HelpString
     End Function

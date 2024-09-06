@@ -354,7 +354,10 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks if the file name contains the part number. "
-        HelpString += "Enter the property name that holds part number on the Options panel. "
+
+        HelpString += vbCrLf + vbCrLf + "![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)"
+
+        HelpString += vbCrLf + vbCrLf + "Enter the property name that holds part number on the Options panel. "
         HelpString += "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the **Property Filter** section in this README file. "
 

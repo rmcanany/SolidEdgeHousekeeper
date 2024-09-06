@@ -192,9 +192,9 @@ Contributed by **@Francesco Arfilli**  Thank you!
 
 Added an option, on the **Configuration Tab -- General Page**, to run Housekeeper with an already-open SE instance.  Previously, SE had to be closed before starting the program.
 
-The previous behavior was to protect you from crashes I caused, losing any unsaved changes to open files in the process.  That can still happen, but it's less frequent now.  One sure way to crash SE is to try to open a corrupted file, or one saved in a newer version, or one from Academic/Community/Commercial flavor if you're not running the same.
+The previous behavior was to protect you from crashes, causing any unsaved work to be lost.  That can still happen, but it's less frequent now.  One sure way to crash SE is to try to open a corrupted file, or one saved in a newer version, or one from Academic/Community/Commercial flavor if you're not running the same.
 
-If you're pretty sure you won't run into that, this is a handy option.  It wouldn't hurt my feelings if you went ahead and saved what you have open before starting, though.
+If you're pretty sure you won't run into that, this is a handy option.  It won't hurt my feelings if you save your work before starting.
 
 ### Readme
 

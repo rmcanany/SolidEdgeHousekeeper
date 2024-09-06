@@ -634,14 +634,21 @@ Public Class TaskPrint
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Prints drawings. "
-        HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/print.png)"
+
+        HelpString += vbCrLf + vbCrLf + "![Print](My%20Project/media/task_print.png)"
+
         HelpString += vbCrLf + vbCrLf + "The dropdown should list all installed printers. "
-        HelpString += vbCrLf + vbCrLf + "If you use more than one printer, use `Edit task list` to add one or more Print tasks. "
+
+        HelpString += vbCrLf + vbCrLf + "If you use more than one printer, "
+        HelpString += "use the `Edit task list` function on the **Task Tab** to add one or more Print tasks. "
         HelpString += "Set up each by selecting the printer/plotter, sheet sizes, and other options as desired. "
+
         HelpString += vbCrLf + vbCrLf + "You assign sheet sizes to a printer with the `Select Sheets` button. "
         HelpString += "Print jobs are routed on a per-sheet basis. "
         HelpString += "So if a drawing has some sheets that need a printer and others that need a plotter, it will do what you expect. "
+
         HelpString += vbCrLf + vbCrLf + "![Printer_Setup](My%20Project/media/sheet_selector.png)"
+
         HelpString += vbCrLf + vbCrLf + "This command may not work with PDF printers. "
         HelpString += "Try the Save As PDF command instead. "
 
