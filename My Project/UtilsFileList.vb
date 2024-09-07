@@ -39,48 +39,52 @@ Public Class UtilsFileList
             End If
         Next
 
-        If (GroupTags.Contains("ASM_Folder")) And Not (GroupTags.Contains("asm")) Then
-            msg = "A top level assembly folder was found with no top level assembly.  "
-            msg += "Please add an assembly, or delete the folder(s)."
-            ListViewFiles.EndUpdate()
-            FMain.Cursor = Cursors.Default
-            FMain.TextBoxStatus.Text = ""
-            MsgBox(msg, vbOKOnly)
-            Exit Sub
-        End If
+        If Not GroupTags.Contains("asm") Then
 
-        If (FMain.RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text)) Then
-            msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-            ListViewFiles.EndUpdate()
-            FMain.Cursor = Cursors.Default
-            FMain.TextBoxStatus.Text = ""
-            MsgBox(msg, vbOKOnly)
-            Exit Sub
-        End If
-
-        If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
-
-            'If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
-            If FMain.CheckBoxWarnBareTLA.Checked Then
-                msg = "A top-level assembly with no top-level folder detected.  "
-                msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
-                msg += "Click OK to continue, or Cancel to stop." + vbCrLf
-                msg += "Disable this message on the Configuration tab."
-                Dim result As MsgBoxResult = MsgBox(msg, vbOKCancel)
-                If result = MsgBoxResult.Ok Then
-                    BareTopLevelAssembly = True
-                Else
-                    ListViewFiles.EndUpdate()
-                    FMain.Cursor = Cursors.Default
-                    FMain.TextBoxStatus.Text = ""
-                    Exit Sub
-                End If
-            Else
-                BareTopLevelAssembly = True
+            If GroupTags.Contains("ASM_Folder") Then
+                msg = "A top level assembly folder was found with no top level assembly specified.  "
+                msg += "Please add an assembly, or delete the folder(s)."
+                ListViewFiles.EndUpdate()
+                FMain.Cursor = Cursors.Default
+                FMain.TextBoxStatus.Text = ""
+                MsgBox(msg, vbOKOnly)
+                Exit Sub
             End If
         End If
 
-        'Dim UFL As New UtilsFileList(Me, ListViewFiles)
+        If GroupTags.Contains("asm") Then
+
+            If (FMain.RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text)) Then
+                msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                ListViewFiles.EndUpdate()
+                FMain.Cursor = Cursors.Default
+                FMain.TextBoxStatus.Text = ""
+                MsgBox(msg, vbOKOnly)
+                Exit Sub
+            End If
+
+            If Not (GroupTags.Contains("ASM_Folder")) Then
+
+                If FMain.CheckBoxWarnBareTLA.Checked Then
+                    msg = "A top-level assembly with no top-level folder detected.  "
+                    msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
+                    msg += "Click OK to continue, or Cancel to stop." + vbCrLf
+                    msg += "Disable this message on the Configuration Tab -- Top Level Assembly Page."
+                    Dim result As MsgBoxResult = MsgBox(msg, vbOKCancel)
+                    If result = MsgBoxResult.Ok Then
+                        BareTopLevelAssembly = True
+                    Else
+                        ListViewFiles.EndUpdate()
+                        FMain.Cursor = Cursors.Default
+                        FMain.TextBoxStatus.Text = ""
+                        Exit Sub
+                    End If
+                Else
+                    BareTopLevelAssembly = True
+                End If
+            End If
+
+        End If
 
         ' Only remaining items should be in the "Sources" group.
         For Each item As ListViewItem In ListViewFiles.Items
@@ -95,9 +99,6 @@ Public Class UtilsFileList
         ListViewFiles.EndUpdate()
 
         FMain.Cursor = Cursors.Default
-        'If TextBoxStatus.Text = "Updating list..." Then
-        '    TextBoxStatus.Text = "No files found"
-        'End If
 
         ElapsedTime = Now.Subtract(StartTime).TotalMinutes
         If ElapsedTime < 60 Then
@@ -105,7 +106,6 @@ Public Class UtilsFileList
         Else
             ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
         End If
-
 
         Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
         FMain.TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)

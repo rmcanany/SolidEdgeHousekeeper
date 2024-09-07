@@ -125,7 +125,7 @@ Public Class FormPropertyListCustomize
 
                     Dim Col2 As New DataGridViewTextBoxColumn
                     Col2.Name = ColumnName
-                    Col2.HeaderText = "SELECTED PROPERTIES"
+                    Col2.HeaderText = "FAVORITE PROPERTIES"
 
                     DataGridViewTarget.Columns.Add(Col2)
 

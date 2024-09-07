@@ -868,6 +868,8 @@ Partial Class Form_Main
         '
         Me.CheckBoxDraftAndModelSameName.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxDraftAndModelSameName.AutoSize = True
+        Me.CheckBoxDraftAndModelSameName.Checked = True
+        Me.CheckBoxDraftAndModelSameName.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxDraftAndModelSameName.Location = New System.Drawing.Point(3, 265)
         Me.CheckBoxDraftAndModelSameName.Name = "CheckBoxDraftAndModelSameName"
         Me.CheckBoxDraftAndModelSameName.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
@@ -929,13 +931,11 @@ Partial Class Form_Main
         '
         Me.RadioButtonTLABottomUp.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonTLABottomUp.AutoSize = True
-        Me.RadioButtonTLABottomUp.Checked = True
         Me.RadioButtonTLABottomUp.Location = New System.Drawing.Point(3, 235)
         Me.RadioButtonTLABottomUp.Name = "RadioButtonTLABottomUp"
         Me.RadioButtonTLABottomUp.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonTLABottomUp.Size = New System.Drawing.Size(328, 19)
         Me.RadioButtonTLABottomUp.TabIndex = 11
-        Me.RadioButtonTLABottomUp.TabStop = True
         Me.RadioButtonTLABottomUp.Text = "Bottom Up Search -- Best for general purpose directories"
         Me.RadioButtonTLABottomUp.UseVisualStyleBackColor = True
         '
@@ -943,11 +943,13 @@ Partial Class Form_Main
         '
         Me.RadioButtonTLATopDown.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonTLATopDown.AutoSize = True
+        Me.RadioButtonTLATopDown.Checked = True
         Me.RadioButtonTLATopDown.Location = New System.Drawing.Point(3, 205)
         Me.RadioButtonTLATopDown.Name = "RadioButtonTLATopDown"
         Me.RadioButtonTLATopDown.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonTLATopDown.Size = New System.Drawing.Size(354, 19)
         Me.RadioButtonTLATopDown.TabIndex = 12
+        Me.RadioButtonTLATopDown.TabStop = True
         Me.RadioButtonTLATopDown.Text = "Top Down Search -- Best for self-contained project directories"
         Me.RadioButtonTLATopDown.UseVisualStyleBackColor = True
         '

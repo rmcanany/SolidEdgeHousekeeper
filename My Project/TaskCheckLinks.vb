@@ -235,6 +235,8 @@ Public Class TaskCheckLinks
             ' Perform the checks
             For Each s In LinkFilenames
 
+                s = UC.SplitFOAName(s)("Filename")
+
                 If CheckItem = "Missing links" Then
                     If Not FileIO.FileSystem.FileExists(s) Then
                         ExitStatus = 1

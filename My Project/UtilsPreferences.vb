@@ -790,7 +790,9 @@ Public Class UtilsPreferences
 
         NewYear = CInt(NewVersionList(0))
         NewIdx = CInt(NewVersionList(1))
-        NewMP = CInt(NewVersionList(2))
+        If NewVersionList.Count = 3 Then
+            NewMP = CInt(NewVersionList(2))
+        End If
 
         tf = NewYear > CurrentYear
         tf = tf Or (NewYear = CurrentYear) And (NewIdx > CurrentIdx)
