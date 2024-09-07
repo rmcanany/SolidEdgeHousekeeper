@@ -124,7 +124,7 @@ See the [<ins>**Recognize Holes Help Topic**</ins>](https://github.com/rmcanany/
 
 Added options to use a countdown timer and/or start a command.
 
-![Edit Interactively](My%20Project/media/edit_interactively_2.png)
+![Edit Interactively](My%20Project/media/edit_interactively_release_notes.png)
 
 The countdown timer is handy if you need to quickly review a bunch of files.  If something catches your eye, you can pause to investigate.  You don't have to wait for the timer to complete.  Just click one of the buttons at the bottom of the dialog to move on to the next file.
 
@@ -160,7 +160,7 @@ View the [<ins>**Quick Start Guide**</ins>](https://github.com/rmcanany/SolidEdg
 
 Consolidated several commands into one.  Each is now presented as a separate option.
 
-![Check Relationships](My%20Project/media/check_relationships.png)
+![Check Relationships](My%20Project/media/task_check_relationships.png)
 
 Several other commands were similarly consolidated, `Check drawings` and `Update drawing styles from template`, for example.
 

@@ -806,7 +806,7 @@ When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The f
 ### Create drawing of flat pattern
 Creates a drawing of a flat pattern using the template you specify. If the file does not contain a flat pattern, the command reports an error. It does not check if the flat pattern is up to date. For that, run the `Check flat pattern` and/or `Update flat pattern` commands before running this one. 
 
-![Expression Editor](My%20Project/media/create_drawing_of_flat_pattern.png)
+![Expression Editor](My%20Project/media/task_create_drawing_of_flat_pattern.png)
 
 The command attempts to place the flat pattern centered on the sheet. It rotates it if needed to match the available space. It scales it to entirely fill the sheet in one direction. That's not the scale you ultimately want, but is the starting point for the `Scale factor`. With that you control the final size. If you want it to take up 90% of the available space, enter `0.9`. For half size, enter `0.5`, etc. X and Y offset will offset the drawing by the specified values from center, +Y will offset up, -Y will offset down. +X will offset right, -X will offset left.
 

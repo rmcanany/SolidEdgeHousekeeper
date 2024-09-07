@@ -928,7 +928,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         HelpString += "For that, run the `Check flat pattern` and/or `Update flat pattern` commands "
         HelpString += "before running this one. "
 
-        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/create_drawing_of_flat_pattern.png)"
+        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/task_create_drawing_of_flat_pattern.png)"
 
         HelpString += vbCrLf + vbCrLf + "The command attempts to place the flat pattern centered on the sheet. "
         HelpString += "It rotates it if needed to match the available space. "
