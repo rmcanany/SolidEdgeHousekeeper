@@ -1378,11 +1378,13 @@ Public Class TaskSaveModelAs
         HelpString += "To add a property, right-click the text box and select `Insert property`. "
         HelpString += "You can also just type it in if that's easier. "
         HelpString += "You can create nested subdirectories if desired. Simply add `\` in the formula. Here are two examples. "
+
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
 
         HelpString += vbCrLf + vbCrLf + "As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. "
-        HelpString += "For more information, refer to the **Property Filter** section in this Readme file. "
+        HelpString += "For more information, refer to the "
+        HelpString += "[<ins>**Property Filter**</ins>](#1-property-filter) section in this Readme file. "
 
         HelpString += vbCrLf + vbCrLf + "It is possible that a property contains a character that cannot be used in a file name. "
         HelpString += "If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. "

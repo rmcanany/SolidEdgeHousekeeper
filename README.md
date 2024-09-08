@@ -87,13 +87,13 @@ If you are upgrading from a previous release, you should be able to copy the set
 
 ![Tabs](My%20Project/media/tabs.png)
 
-Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See **FILE SELECTION AND FILTERING** below for details. 
+Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION AND FILTERING**</ins>](#file-selection-and-filtering) below for details. 
 
 If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look for file names starting with 'Housekeeper' in the `%temp%` folder.
 
 ![Status Bar](My%20Project/media/status_bar_ready.png)
 
-To start execution, click the `Process` button.  The status bar tracks progress. You can also stop execution if desired. See **STARTING, STOPPING, AND MONITORING EXECUTION** for details.
+To start execution, click the `Process` button.  The status bar tracks progress. You can also stop execution if desired. See [<ins>**STARTING, STOPPING, AND MONITORING EXECUTION**</ins>](#starting-stopping-and-monitoring-execution) for details.
 
 
 
@@ -122,11 +122,11 @@ You would be asking for trouble specifying more than one top-level assembly.  Ho
 
 ![Top level assembly options](My%20Project/media/configuration_tab_top_level_assembly_page.png)
 
-A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the **Configuration Tab -- Top Level Assy Page**.
+A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page).
 
 When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
 
-If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed. Disable the warning on the **Configuration Tab -- Top Level Assy Page**.
+If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed. Disable the warning on the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page).
 
 If you *do* specify one or more folders, there are two options for performing *where used*, **Top Down** or **Bottom Up** (see next). Guidelines are given below, however it's not a bad idea to try both methods to see which works best for you.
 
@@ -176,7 +176,7 @@ If you select one or more files on the list, you can click the right mouse butto
 
 #### 5. Update
 
-The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see **Filtering** below), an update is required.  In those cases the button will turn orange to let you know.  
+The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
 #### 6. File Type
 
@@ -184,9 +184,11 @@ You can limit the search to return only selected types of Solid Edge files. To d
 
 ### Sorting
 
+You can sort the file list in a variety of ways.
+
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-You can choose sorting options of `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  These options are set on the **Configuration Tab -- Sorting Page**.
+The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the [<ins>**Configuration Tab -- Sorting Page**</ins>](#sorting-page).
 
 The `Unsorted` option is primarily intended to preserve the order of imported lists.
 
@@ -200,7 +202,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
-You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Status Page**.
+You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the [<ins>**Configuration Tab -- Status Page**</ins>](#status-page).
 
 ![Document Status](My%20Project/media/configuration_tab_status_page.png)
 
@@ -212,31 +214,31 @@ If you don't need to worry about document Status for your current task, it's not
 
 ### Filtering
 
-![Filter Toolbar](My%20Project/media/filter_toolbar.png)
-
 Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
+
+![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
 #### 1. Property Filter
 
-The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the **Configuration Tab** section of this Readme.
+The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page) section of this Readme.
 
 To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
-The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models in the drawing for the specified properties. Set the option on the **Configuration Tab -- General Page**. One situation where you might want to disable this option is when searching for file Status. See **Document Status Options** below.
+The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models in the drawing for the specified properties. Set the option on the [<ins>**Configuration Tab -- General Page**</ins>](#general-page). One situation where you might want to disable this option is when searching for file Status. See [<ins>**Document Status Options**</ins>](#document-status-options) below.
 
 This is a powerful tool with a lot of options. These are detailed below.
 
 **Composing a Filter**
 
+Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
+
 <p align="center">
   <img src="My%20Project/media/property_filter.png">
 </p>
 
-Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
-
 Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
 
-Most people use a limited number of properties.  You can set which ones are available in the drop-down list.  That is done on the **Configuration Tab -- Templates Page**.
+Most people use a limited number of properties.  You can set which ones are available in the drop-down list.  That is done on the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page).
 
 <p align="center">
   <img src="My%20Project/media/customize_property_list.png">
@@ -279,11 +281,11 @@ i.e., `A AND (B OR C)`.
 
 **One More Thing About the Formula**
 
-I don't know where else to put this, so I'll put it here.  Prior to Housekeeper V2024.2, the formula was parsed and evaluated using the .NET built-in VBScript engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
+Prior to Housekeeper V2024.2, the formula, a boolean expression, was parsed and evaluated using the .NET built-in `VBScript` engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
 
-The program now uses PowerShell to do the evaluation.  The communication code is built into .NET, but PowerShell itself has to be installed separately.  On recent versions of Windows (maybe back to Win7, not sure) PowerShell comes bundled with the OS, so it shouldn't be an issue.
+The program now uses `PowerShell` to do the evaluation.  The communication code is built into .NET, but `PowerShell` itself has to be installed separately.  On recent versions of Windows (maybe back to Win7, not sure) it comes bundled with the OS, so it shouldn't be an issue.
 
-If there is an issue, like PowerShell isn't installed, you won't get an error message.  Instead, you'll get no files matching your property search.  If you know that's wrong, please mention it on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There may be other more .NET-native ways of evaluating the formula.
+If there is an issue, like `PowerShell` isn't installed, you won't get an error message.  Instead, you'll get no files matching your property search.  If you know that's wrong, please mention it on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There may be other more .NET-native ways of evaluating the formula.
 
 **Dates and Numbers**
 
@@ -301,7 +303,7 @@ You can select files based on Status, but not like this:
 
 There is a number associated with each Status value. You have to use that instead of the name.  
 
-Here is the way to get all `Available` files: `System.Status is_exactly 0`
+Here is a way to get all `Available` files: `System.Status is_exactly 0`
 
 For *everything but* `Available` you could use: `System.Status > 0`
 
@@ -338,7 +340,7 @@ You can monitor progress on the status bar.  It shows the number of files proces
  
 You can interrupt the program before it finishes. As shown above, while processing, the Cancel button changes to a Stop button.  Just click that to halt execution.  It may take several seconds to register the request.  It doesn't hurt to click it a couple of times.
 
-To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on Solid Edge's Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the **Configuration Tab -- General Page**.
+To save some time, you can process files in the background, without graphics.  This capability is somewhat experimental; let me know if you run into problems.  To save some space on Solid Edge's Most Recently Used list, you can disable adding files that are processed by Housekeeper.  Both options are set on the [<ins>**Configuration Tab -- General Page**</ins>](#general-page).
 
 
 
@@ -382,7 +384,7 @@ Each task must have a unique name.  Rename one by double-clicking it in the list
 
 The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  I'm not kidding that the task needs to be selected *before* right-clicking.  Otherwise for some reason the task at the top of the list is modified.  Anyway, you can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
 
-To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any other changes you made, such as your template locations, etc.
+To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as setting your template locations, etc.
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
 
@@ -548,9 +550,9 @@ This is a powerful tool with a lot of options.  These are detailed below.
 
 **Using the Input Editor**
 
-Before using this command, you must pre-populate property choices from your templates. To do so, on the **Configuration Tab -- Templates Page**, select your templates and click the `Update` button. There are a lot of properties.  After the update is complete, the `Customize` dialog appears. Choose which to make available there. If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. To access properties not in your Favorites, enable the `Show All Props` option on the toolbar. 
+Before using this command, you must pre-populate property choices from your templates. To do so, on the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page), select your templates and click the `Update` button. There are a lot of properties.  After the update is complete, the `Customize` dialog appears. Choose which to make available there. If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. To access properties not in your Favorites, enable the `Show All Props` option on the toolbar. 
 
-A `Property set`, either `System` or `Custom`, is required. The program will normally set the correct choice automatically. One exception is if you have a custom property with the same name as a system property. In that case, you have to select the appropriate one yourself. For more information about `Property sets`, see the **Property Filter** section in this README file. 
+A `Property set`, either `System` or `Custom`, is required. The program will normally set the correct choice automatically. One exception is if you have a custom property with the same name as a system property. In that case, you have to select the appropriate one yourself. For more information about `Property sets`, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
 
 There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. 
 
@@ -738,7 +740,7 @@ Checks if the file name contains the part number.
 
 ![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)
 
-Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the **Property Filter** section in this README file. 
+Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
 
 The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 
@@ -778,7 +780,7 @@ You can optionally create subdirectories using a formula similar to the Property
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
-As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the **Property Filter** section in this Readme file. 
+As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the [<ins>**Property Filter**</ins>](#1-property-filter) section in this Readme file. 
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 

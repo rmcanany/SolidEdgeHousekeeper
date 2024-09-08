@@ -1163,7 +1163,9 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "**Using the Input Editor**"
 
         HelpString += vbCrLf + vbCrLf + "Before using this command, you must pre-populate property choices from your templates. "
-        HelpString += "To do so, on the **Configuration Tab -- Templates Page**, select your templates and click the `Update` button. "
+        HelpString += "To do so, on the "
+        HelpString += "[<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page), "
+        HelpString += "select your templates and click the `Update` button. "
         HelpString += "There are a lot of properties.  After the update is complete, the `Customize` dialog appears. "
         HelpString += "Choose which to make available there. "
         HelpString += "If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. "
@@ -1174,7 +1176,7 @@ Public Class TaskEditProperties
         HelpString += "One exception is if you have a custom property with the same name as a system property. "
         HelpString += "In that case, you have to select the appropriate one yourself. "
         HelpString += "For more information about `Property sets`, see the "
-        HelpString += "**Property Filter** "
+        HelpString += "[<ins>**Property Filter**</ins>](#1-property-filter) "
         HelpString += "section in this README file. "
 
         HelpString += vbCrLf + vbCrLf + "There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. "

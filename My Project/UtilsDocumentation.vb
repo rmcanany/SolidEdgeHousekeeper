@@ -8,7 +8,7 @@ Public Class UtilsDocumentation
         ' The URL that opens is the BaseURL.
 
         'Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640"
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/4028a4e00356895b46bc571ca98fe7ef16fe59e2"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/df624cb7204c4225068591933ae2b0c9f7687864"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 

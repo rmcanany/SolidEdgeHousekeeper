@@ -609,6 +609,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -616,6 +617,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
+        Button.Visible = False
 
         TextBox = FormatOptionsTextBox(ControlNames.NewDirDraft.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
@@ -623,6 +625,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         'tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
+        TextBox.Visible = False
 
         RowIndex += 1
 
@@ -639,12 +642,14 @@ Public Class TaskCreateDrawingOfFlatPattern
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
         Button = FormatOptionsButton(ControlNames.BrowseNewDirPDF.ToString, "Directory")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
         ControlsDict(Button.Name) = Button
+        Button.Visible = False
 
         TextBox = FormatOptionsTextBox(ControlNames.NewDirPDF.ToString, "")
         TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
@@ -652,6 +657,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         'tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
+        TextBox.Visible = False
 
         RowIndex += 1
 
