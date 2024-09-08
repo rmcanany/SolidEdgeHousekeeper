@@ -450,45 +450,6 @@ Public Class TaskEditProperties
 
                 Try
 
-                    'If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
-                    '    dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-                    '    co = dsiStream.AsOLEPropertiesContainer
-
-                    '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-                    'End If
-
-                    'If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
-                    '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                    '    co = dsiStream.AsOLEPropertiesContainer
-
-                    '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-                    'End If
-
-                    'If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
-                    '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                    '    co = dsiStream.AsOLEPropertiesContainer
-
-                    '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-                    'End If
-
-                    'If PropertySetName = "Custom" Then
-                    '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                    '    co = dsiStream.AsOLEPropertiesContainer
-
-                    '    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-                    '    If IsNothing(OLEProp) Then
-
-                    '        Dim userProperties = co.UserDefinedProperties
-                    '        Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                    '        userProperties.PropertyNames(newPropertyId) = PropertyName
-                    '        OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
-                    '        OLEProp.Value = " "
-                    '        userProperties.AddProperty(OLEProp)
-
-                    '    End If
-
-                    'End If
-
                     '######## get the property here
 
                     If (SIList.Contains(PropertyNameEnglish)) And (tfSystem) Then
@@ -515,14 +476,24 @@ Public Class TaskEditProperties
                             co = dsiStream.AsOLEPropertiesContainer
 
                             OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-                            If IsNothing(OLEProp) Then
+                            If (IsNothing(OLEProp)) And (Me.AutoAddMissingProperty) Then ' Add it
 
-                                Dim userProperties = co.UserDefinedProperties
-                                Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-                                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
-                                OLEProp.Value = " "
-                                userProperties.AddProperty(OLEProp)
+                                Try
+                                    Dim userProperties = co.UserDefinedProperties
+                                    'Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                                    'Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Count + 1, UInteger)
+                                    Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Count, UInteger)
+                                    userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                                    OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                                    OLEProp.Value = " "
+                                    userProperties.AddProperty(OLEProp)
+                                    Dim i = 0
+                                Catch ex As Exception
+                                    Proceed = False
+                                    ExitStatus = 1
+                                    s = String.Format("Unable to add property '{0}.{1}({2})'.", PropertySetName, PropertyName, PropertyNameEnglish)
+                                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                                End Try
 
                             End If
 

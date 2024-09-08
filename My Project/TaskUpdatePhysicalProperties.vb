@@ -209,7 +209,7 @@ Public Class TaskUpdatePhysicalProperties
                     End If
                 Catch ex As Exception
                     ExitStatus = 1
-                    ErrorMessageList.Add("Error updating physical properties.")
+                    ErrorMessageList.Add("Unable to update physical properties.")
                 End Try
 
             Case "par"
@@ -269,7 +269,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayCenterOfVolume = False
                         Catch ex As Exception
                             ExitStatus = 1
-                            ErrorMessageList.Add("Error reported hiding symbols.  Please verify results.")
+                            ErrorMessageList.Add("Issue reported when hiding symbols.  Please verify results.")
                         End Try
                     End If
                     If Me.ShowSymbols Then
@@ -279,7 +279,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayCenterOfVolume = True
                         Catch ex As Exception
                             ExitStatus = 1
-                            ErrorMessageList.Add("Error reported hiding symbols.  Please verify results.")
+                            ErrorMessageList.Add("Issue reported showing symbols.  Please verify results.")
                         End Try
                     End If
 

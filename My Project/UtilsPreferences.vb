@@ -743,7 +743,6 @@ Public Class UtilsPreferences
 
     Public Sub CheckForNewerVersion(CurrentVersion As String)
         ' Version example '2024.2'
-        ' Version example '2024.2.0'
         ' tag_name example '"tag_name":"v2024.1"'
 
         Dim tf As Boolean
@@ -754,8 +753,6 @@ Public Class UtilsPreferences
         Dim NewYear As Integer
         Dim CurrentIdx As Integer
         Dim NewIdx As Integer
-        Dim CurrentMP As Integer
-        Dim NewMP As Integer
 
         Dim DoubleQuote As Char = Chr(34)
 
@@ -765,7 +762,6 @@ Public Class UtilsPreferences
 
         CurrentYear = CInt(CurrentVersionList(0))
         CurrentIdx = CInt(CurrentVersionList(1))
-        CurrentMP = CInt(CurrentVersionList(2))
 
         WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
 
@@ -780,9 +776,9 @@ Public Class UtilsPreferences
         Next
 
         s = s.ToLower
-        s = s.Replace(DoubleQuote, "")  ' '"tag_name":"v2024.1.0"' -> 'tag_name:v2024.1.0'
-        s = s.Split(CChar(":"))(1)      ' 'tag_name:v2024.1.0' -> 'v2024.1.0'
-        s = s.Replace("v", "")          ' 'v2024.1.0' -> '2024.1.0'
+        s = s.Replace(DoubleQuote, "")  ' '"tag_name":"v2024.1"' -> 'tag_name:v2024.1'
+        s = s.Split(CChar(":"))(1)      ' 'tag_name:v2024.1' -> 'v2024.1'
+        s = s.Replace("v", "")          ' 'v2024.1' -> '2024.1'
 
         Dim NewVersion As String = s
 
@@ -790,13 +786,9 @@ Public Class UtilsPreferences
 
         NewYear = CInt(NewVersionList(0))
         NewIdx = CInt(NewVersionList(1))
-        If NewVersionList.Count = 3 Then
-            NewMP = CInt(NewVersionList(2))
-        End If
 
         tf = NewYear > CurrentYear
         tf = tf Or (NewYear = CurrentYear) And (NewIdx > CurrentIdx)
-        tf = tf Or (NewYear = CurrentYear) And (NewIdx = CurrentIdx) And (NewMP > CurrentMP)
 
         If tf Then
             Dim FNVA As New FormNewVersionAvailable(CurrentVersion, NewVersion)
@@ -811,14 +803,13 @@ Public Class UtilsPreferences
         Dim indent As String = "    "
 
         Dim CurrentVersionList As List(Of String) = Version.Split(CChar(".")).ToList
-        If Not CurrentVersionList.Count = 3 Then
-            s = String.Format("{0}Version incorrect format.  Should be 'YYYY.N.MP', not '{1}'{2}", s, Version, vbCrLf)
+        If Not CurrentVersionList.Count = 2 Then
+            s = String.Format("{0}Version incorrect format.  Should be 'YYYY.N', not '{1}'{2}", s, Version, vbCrLf)
         Else
             Try
                 Dim i As Integer
                 i = CInt(CurrentVersionList(0))
                 i = CInt(CurrentVersionList(1))
-                i = CInt(CurrentVersionList(2))
             Catch ex As Exception
                 s = String.Format("{0}Version incorrect format.  '{1}' contains at least one non-integer{2}", s, Version, vbCrLf)
             End Try

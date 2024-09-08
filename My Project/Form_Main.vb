@@ -6,7 +6,7 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2024.2.0"  ' Three fields, all integers: Year.ReleaseNumber.MaintenancePackNumber
+    Public Property Version As String = "2024.2"  ' Two fields, both integers: Year.ReleaseNumber
 
     Public Property UtilsLogFile As UtilsLogFile
 
@@ -798,15 +798,15 @@ Public Class Form_Main
 
     Private Sub Startup()
 
-        'Dim s As String = ""
-        'Dim indent As String = "    "
-        's = String.Format("{0}Reminders{1}", s, vbCrLf)
-        's = String.Format("{0}{1}Update UD.GenerateVersionURL just before release{2}", s, indent, vbCrLf)
+        Dim s As String = ""
+        Dim indent As String = "    "
+        s = String.Format("{0}Reminders{1}", s, vbCrLf)
+        s = String.Format("{0}{1}Update UD.GenerateVersionURL just before release{2}", s, indent, vbCrLf)
         's = String.Format("{0}{1}Fix property selection on part number does not match{2}", s, indent, vbCrLf)
         's = String.Format("{0}{1}Save as flat pattern should not show dir for unselected file type{2}", s, indent, vbCrLf)
         's = String.Format("{0}{1}Countdown timer font{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
-        'MsgBox(s, vbOKOnly)
+        's = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
+        MsgBox(s, vbOKOnly)
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation

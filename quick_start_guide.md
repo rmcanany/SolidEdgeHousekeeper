@@ -18,7 +18,7 @@ The first time you run it, you may get a `Windows Protected you PC` message.  Yo
 
 ## OPERATION
 
-Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  To start execution, click the `Process` button.  
+Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  To start execution, click the `Process` button.  The **Home Tab** looks like this.
 
 <p align="center">
   <img src="My%20Project/media/home_tab_done.png">
@@ -29,6 +29,13 @@ The basic steps to select files is as follows.  (See **Next Steps** below for mo
 - *Or* select a folder and sub folders by clicking ![Folders](Resources/icons8_folder_tree_16.png).  
 - Populate the list by clicking ![Update](Resources/Synch_16.png) (it should be colored orange).  
 - To start over, clear the list by clicking ![Remove All](Resources/icons8_trash_16.png).
+
+The **Task Tab** looks like this.
+
+<p align="center">
+  <img src="My%20Project/media/sheetmetal_done.png">
+</p>
+
 
 The basic steps to configure a task are as follows.
 - Click the left-most checkbox to enable a task.
