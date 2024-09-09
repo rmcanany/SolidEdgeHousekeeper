@@ -494,7 +494,11 @@ Public Class TaskEditProperties
                                 Catch ex As Exception
                                     Proceed = False
                                     ExitStatus = 1
-                                    s = String.Format("Unable to add property '{0}.{1}({2})'.", PropertySetName, PropertyName, PropertyNameEnglish)
+                                    If PropertyName = PropertyNameEnglish Then
+                                        s = String.Format("Unable to add property '{0}.{1}'.", PropertySetName, PropertyName)
+                                    Else
+                                        s = String.Format("Unable to add property '{0}.{1}({2})'.", PropertySetName, PropertyName, PropertyNameEnglish)
+                                    End If
                                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                                 End Try
 
@@ -516,7 +520,11 @@ Public Class TaskEditProperties
             If IsNothing(OLEProp) Then
                 Proceed = False
                 ExitStatus = 1
-                s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, propertynameenglish)
+                If PropertyName = PropertyNameEnglish Then
+                    s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                Else
+                    s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                End If
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
             End If
 
@@ -533,7 +541,11 @@ Public Class TaskEditProperties
                     Catch ex As Exception
                         Proceed = False
                         ExitStatus = 1
-                        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                        If PropertyName = PropertyNameEnglish Then
+                            s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                        Else
+                            s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                        End If
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                     End Try
 
@@ -558,7 +570,11 @@ Public Class TaskEditProperties
                     Catch ex As Exception
                         Proceed = False
                         ExitStatus = 1
-                        s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
+                        If PropertyName = PropertyNameEnglish Then
+                            s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+                        Else
+                            s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
+                        End If
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                     End Try
 
