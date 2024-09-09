@@ -483,7 +483,7 @@ Public Class TaskEditProperties
                                     Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
                                     'This is the ID the new property will have
                                     'Duplicated IDs are not allowed
-                                    'We need a method to calculate an unique ID; .Max() seemed a good one cause .Max() + 1 should be unique
+                                    'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
                                     'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
 
                                     userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
