@@ -798,20 +798,18 @@ Public Class Form_Main
 
     Private Sub Startup()
 
-        Dim s As String = ""
-        Dim indent As String = "    "
-        s = String.Format("{0}Reminders{1}", s, vbCrLf)
-        s = String.Format("{0}{1}Update UD.GenerateVersionURL just before release{2}", s, indent, vbCrLf)
-        's = String.Format("{0}{1}Fix property selection on part number does not match{2}", s, indent, vbCrLf)
-        's = String.Format("{0}{1}Save as flat pattern should not show dir for unselected file type{2}", s, indent, vbCrLf)
-        's = String.Format("{0}{1}Countdown timer font{2}", s, indent, vbCrLf)
-        's = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
-        MsgBox(s, vbOKOnly)
+        'Dim s As String = ""
+        'Dim indent As String = "    "
+        's = String.Format("{0}Reminders{1}", s, vbCrLf)
+        's = String.Format("{0}{1}Update UD.GenerateVersionURL just before release{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Fix property selection on part number does not match{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Save as flat pattern should not show dir for unselected file type{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}{1}Countdown timer font{2}", s, indent, vbCrLf)
+        ''s = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
+        'MsgBox(s, vbOKOnly)
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
-
-        UP.CheckVersionFormat(Me.Version)
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -904,10 +902,7 @@ Public Class Form_Main
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
-        'Me.TemplatePropertyDict = UP.GetTemplatePropertyDict()
-        'Me.TemplatePropertyList = UP.GetTemplatePropertyList
-
-        'Me.PropertyFilterDict = UP.GetPropertyFilterDict
+        UP.CheckVersionFormat(Me.Version)
 
         If Me.CheckForNewerVersion Then
             UP.CheckForNewerVersion(Me.Version)

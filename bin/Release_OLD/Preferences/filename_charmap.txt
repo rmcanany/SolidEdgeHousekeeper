@@ -1,0 +1,59 @@
+c This file contains a list of common illegal characters
+c for files and directories, and their replacements.
+c 
+c It covers operating systems such as Windows, Mac and Linux
+c and devices such as desktops, tablets and smartphones.
+c 
+c The format is <illegal character><space><replacement value>
+c 
+c So for example, '# my_replacement' means 
+c If '#' is found, replace it with the text 'my_replacement'.
+c Another example, '#' means 
+c If '#' is found, replace it with '' (ie, just delete it).
+c 
+c (Note, in the default mapping below, I replace all illegal
+c characters with '~'.  Feel free to change it to your preference.)  
+c 
+c If you're just using Windows, you probably only have to define
+c replacements for the characters    < > : " / \ | ? * !
+c and comment out or delete the rest.
+c 
+c (Actually Windows doesn't care about !, but Solid Edge does.
+c It used to identify Assembly Family members.)
+c 
+c If you mess up, you can delete this file and Housekeeper will
+c regenerate it next time you start the program.
+c 
+c To comment out a line (so Housekeeper ignores it) start the line
+c with 'c' as done in this header text.
+c 
+c There is no error checking when the program reads in this file.
+c So don't do stuff like '* ?' or '   c This is too complicated!!!'.
+c 
+c 
+c Character mapping below
+
+# ~
+% ~
+& ~
+{ ~
+} ~
+\ ~
+< ~
+> ~
+* ~
+? ~
+/ ~
+$ ~
+! ~
+' ~
+" ~
+: ~
+@ ~
++ ~
+` ~
+| ~
+= ~
+
+c Note the following replacement (of a space character) is commented out.
+c  ~

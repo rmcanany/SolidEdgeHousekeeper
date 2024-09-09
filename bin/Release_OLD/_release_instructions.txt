@@ -1,0 +1,84 @@
+Update Readme.md and release_notes.md (in Housekeeper root directory).  Preserve previous release notes.  To edit, right-click in Solution Explorer and click Open.
+
+Update BaseURL in GenerateVersionURL()
+
+Run Housekeeper in "Release" mode at least once to populate the Task help in Readme.md and create an up to date executable in the Release folder.
+
+
+Commit changes
+
+Using Github Desktop, commit changes on git with description "See release_notes.md for Vyyyy.n".  Do not push to GitHub yet.
+
+
+Create a Tag
+
+In Github Desktop left pane, click History
+Right click latest commit and select Create Tag
+Enter vyyyy.n (for a release candidate vyyyy.n-rc[0-9])
+Click left pane Changes
+Right pane should show a prompt to Push commits and tags
+
+
+Push to GitHub
+
+Push commits and tags to the origin remote on Github.  
+
+
+Create a Release
+
+In ~\bin\Release, Zip:
+    ExcelDataReader.DataSet.dll
+    ExcelDataReader.dll
+    Housekeeper.exe
+    Interop.SolidEdge.dll
+    Microsoft.WindowsAPICodePack.dll
+    Microsoft.WindowsAPICodePack.Shell.dll
+    Microsoft.WindowsAPICodePack.ShellExtensions.dll
+    Newtonsoft.Json.dll
+    SolidEdge.Community.dll
+into:
+    SolidEdgeHousekeeper-vyyyy.n(-rc[0-9]).zip
+
+Log onto GitHub
+
+Go to https://github.com/rmcanany/SolidEdgeHousekeeper
+
+On the right pane, click Releases.  On the Releases page, click Draft a new release.
+
+Click Choose a tag and select tag vyyyy.n(-rc[0-9])
+
+Enter title "SolidEdgeHousekeeper Vyyyy.n(-rc[0-9])"
+
+Enter description "See release_notes.md for Vyyyy.n"
+
+Click Attach files, browse and select SolidEdgeHousekeeper-vyyyy.n(-rc[0-9]).zip
+
+Check Set as the latest release.  Click Publish Release.
+
+
+Test
+
+Download SolidEdgeHousekeeper-vyyyy.n(-rc[0-9]), extract and run the executable to test.
+
+
+Announce
+
+If Beta testing is needed, message the Beta testing group.  Include links to the release notes, readme, and zip file.
+
+Announce the release on the Solid Edge Forum, include the latest release notes.
+
+
+Check Downloads
+
+https://hanadigital.github.io/grev/?user=rmcanany&repo=SolidEdgeHousekeeper
+20230701 958
+20240101 1001
+20240104 1037
+20240123 1078
+20240711 1323
+20240808 1368
+20240901 1397
+
+
+
+
