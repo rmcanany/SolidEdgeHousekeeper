@@ -1220,11 +1220,11 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "**Expressions**"
 
-        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
-
         HelpString += vbCrLf + vbCrLf + "An `expression` is similar to a formula in Excel. "
         HelpString += "Expressions enable more complex manipulations of the `Replace` string. "
         HelpString += "To create one, click the `Expression Editor` button on the input editor form. "
+
+        HelpString += vbCrLf + vbCrLf + "![Expression Editor](My%20Project/media/expression_editor.png)"
 
         HelpString += vbCrLf + vbCrLf + "You can perform string processing, "
         HelpString += "create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. "

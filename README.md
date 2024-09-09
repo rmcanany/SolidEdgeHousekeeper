@@ -584,9 +584,9 @@ If you are changing `System.Material` specifically, you can also update the prop
 
 **Expressions**
 
-![Expression Editor](My%20Project/media/expression_editor.png)
-
 An `expression` is similar to a formula in Excel. Expressions enable more complex manipulations of the `Replace` string. To create one, click the `Expression Editor` button on the input editor form. 
+
+![Expression Editor](My%20Project/media/expression_editor.png)
 
 You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
