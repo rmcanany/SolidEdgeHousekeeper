@@ -480,7 +480,9 @@ Public Class TaskEditProperties
 
                                 Try
                                     Dim userProperties = co.UserDefinedProperties
-                                    Dim newPropertyId As UInteger = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                                    Dim newPropertyId As UInteger = 0
+
+                                    If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
                                     'This is the ID the new property will have
                                     'Duplicated IDs are not allowed
                                     'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
