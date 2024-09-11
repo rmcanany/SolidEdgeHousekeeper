@@ -153,6 +153,8 @@ Public Class UtilsPropertyFilters
             Comparison = PropertyFilterDict(Key)("Comparison")
             Value = PropertyFilterDict(Key)("Value")
 
+            ' Value = SearchProperties(PropertySets, Value, FoundFile)
+
             'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
             DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
