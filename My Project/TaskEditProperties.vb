@@ -480,7 +480,7 @@ Public Class TaskEditProperties
 
                                 Try
                                     Dim userProperties = co.UserDefinedProperties
-                                    Dim newPropertyId As UInteger = 0
+                                    Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
 
                                     If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
                                     'This is the ID the new property will have
