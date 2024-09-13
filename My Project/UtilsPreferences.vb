@@ -742,7 +742,7 @@ Public Class UtilsPreferences
 
 
     Public Sub CheckForNewerVersion(CurrentVersion As String)
-        ' Version example '2024.2'
+        ' Version example '2024.2' or '2024.2.1' but the last number is currently ignored for this check
         ' tag_name example '"tag_name":"v2024.1"'
 
         Dim tf As Boolean
@@ -762,6 +762,7 @@ Public Class UtilsPreferences
 
         CurrentYear = CInt(CurrentVersionList(0))
         CurrentIdx = CInt(CurrentVersionList(1))
+        ' ignore bugfix number
 
         WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
 
@@ -786,6 +787,7 @@ Public Class UtilsPreferences
 
         NewYear = CInt(NewVersionList(0))
         NewIdx = CInt(NewVersionList(1))
+        ' ignore bugfix number
 
         tf = NewYear > CurrentYear
         tf = tf Or (NewYear = CurrentYear) And (NewIdx > CurrentIdx)
@@ -804,7 +806,11 @@ Public Class UtilsPreferences
 
         Dim CurrentVersionList As List(Of String) = Version.Split(CChar(".")).ToList
         If Not CurrentVersionList.Count = 2 Then
-            s = String.Format("{0}Version incorrect format.  Should be 'YYYY.N', not '{1}'{2}", s, Version, vbCrLf)
+            If CurrentVersionList.Count = 3 Then
+                ' OK
+            Else
+                s = String.Format("{0}Version incorrect format.  Should be 'YYYY.N', not '{1}'{2}", s, Version, vbCrLf)
+            End If
         Else
             Try
                 Dim i As Integer

@@ -73,12 +73,6 @@ In places where property substitution is allowed, like the  `Find` and `Replace`
 ![Insert Property](My%20Project/media/property_selector.png)
 
 
-#### Property Formula
-
-One other change was made to the `Edit Properties` command -- the formula is now evaluated internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should not cause any problems because it is a core Windows feature (starting with Win7 maybe, not sure).  
-
-However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
-
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 
 
@@ -147,6 +141,12 @@ Revamped the user interface to be easier to use.  As noted earlier, properties a
 
 The saved settings were previously stored in `*.txt` format.  Thye are now saved as a `*.json` file.  These are not compatible unfortunately, so any previously saved settings will have to be recreated.
 
+#### Property Formula
+
+One other change was made to the `Property Filter` command -- the `formula` (a boolean expression) is now evaluated internally with `PowerShell`, replacing the not-long-for-this-world `VBScript`.  In theory that should not cause any problems because it is a core Windows feature (starting with Win7 maybe, not sure).  
+
+However, if it doesn't work for you, please let me know.  I have a couple of other ideas where that program could come in handy.  If it's going to cause headaches I'll go a different direction.
+
 See the [<ins>**Property Filter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering) for details.
 
 ### Quick Start Guide
@@ -204,7 +204,7 @@ If you're a URL checker like me, you might notice the link is pointing to a pret
 
 https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640#open-save
 
-That long string of seemingly random numbers is the Git `Commit Tag`.  It is how you tell GitHub to open a file from a certain point in the past.
+That long string of seemingly random numbers is the `Git` `Commit Hash`.  It is how you tell GitHub to open a file from a certain point in the past.
 
 ## V2024.1 Enhancements/Fixes
 
