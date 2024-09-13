@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/93fe2db17903b664c5f6ea66aff3f157e73f0d87"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/5c297606154d5ef95dcad6a1b6ab771ed9a9a9b8"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
