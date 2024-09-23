@@ -389,7 +389,7 @@ Partial Class Form_Main
         Me.new_ButtonFileSearchDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_ButtonFileSearchDelete.Name = "new_ButtonFileSearchDelete"
         Me.new_ButtonFileSearchDelete.Size = New System.Drawing.Size(23, 22)
-        Me.new_ButtonFileSearchDelete.Text = "ToolStripButton5"
+        Me.new_ButtonFileSearchDelete.Text = "Clear"
         '
         'ToolStripSeparator7
         '
@@ -534,7 +534,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
         Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterDft.Text = "ToolStripButton2"
+        Me.new_CheckBoxFilterDft.Text = "Filter DFT"
         '
         'new_CheckBoxFilterPsm
         '
@@ -547,7 +547,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
         Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterPsm.Text = "ToolStripButton3"
+        Me.new_CheckBoxFilterPsm.Text = "Filter PSM"
         '
         'new_CheckBoxFilterPar
         '
@@ -561,7 +561,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
         Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.new_CheckBoxFilterPar.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterPar.Text = "ToolStripButton1"
+        Me.new_CheckBoxFilterPar.Text = "Filter PAR"
         '
         'new_CheckBoxFilterAsm
         '
@@ -574,7 +574,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
         Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)
-        Me.new_CheckBoxFilterAsm.Text = "ToolStripButton4"
+        Me.new_CheckBoxFilterAsm.Text = "Filter ASM"
         '
         'ToolStripLabel1
         '
