@@ -314,6 +314,11 @@ Public Class TaskCreateDrawingOfFlatPattern
             ExitStatus = 1
             ErrorMessageList.Add("No flat patterns detected")
         End If
+        
+        If FlatPatternModels.Count > 0 AndAlso FlatPatternModels.Item(1).FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Flat pattern feature is in a failed state")
+        End If
 
         If ExitStatus = 0 Then
             FlatPatternModel = FlatPatternModels.Item(1)
