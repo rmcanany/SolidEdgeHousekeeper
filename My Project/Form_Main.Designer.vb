@@ -361,6 +361,11 @@ Partial Class Form_Main
         Me.new_ButtonPropertyFilter.Name = "new_ButtonPropertyFilter"
         Me.new_ButtonPropertyFilter.Size = New System.Drawing.Size(23, 22)
         Me.new_ButtonPropertyFilter.Text = "Configure"
+        If Not CheckBoxEnablePropertyFilter.Checked Then
+            Me.new_ButtonPropertyFilter.Enabled = False
+        Else
+            Me.new_ButtonPropertyFilter.Enabled = True
+        End If
         '
         'ToolStripSeparator6
         '
@@ -381,6 +386,11 @@ Partial Class Form_Main
         Me.ComboBoxFileWildcard.Name = "ComboBoxFileWildcard"
         Me.ComboBoxFileWildcard.Size = New System.Drawing.Size(140, 25)
         Me.ComboBoxFileWildcard.Sorted = True
+        If Not CheckBoxEnableFileWildcard.Checked Then
+            Me.ComboBoxFileWildcard.Enabled = False
+        Else
+            Me.ComboBoxFileWildcard.Enabled = True
+        End If
         '
         'new_ButtonFileSearchDelete
         '
