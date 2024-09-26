@@ -6,7 +6,7 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property Version As String = "2024.2"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
+    Public Property Version As String = "2024.2.1"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
 
     Public Property UtilsLogFile As UtilsLogFile
 

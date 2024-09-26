@@ -416,12 +416,10 @@ Description of tab controls:
 
 - `Assembly`, `Part`, `Sheetmetal`, `Draft`, `Material Table`
 Buttons to let you specify template locations.
-- `Copy template locations to tasks that require it`
-Each Task is configured separately.  If you want all of them to use your main templates, click the `Copy` button.  This action is on-demand, so if your templates change you would have to copy them again.  Each Task retains its settings, so if you change a template in one, it will remember your choice.
 - `Update`
 This is where you pre-populate properties for use in dialogs that need them.  
 - `Customize`
-There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
+There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see and in what order.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
 
 ### General Page
 
