@@ -130,12 +130,14 @@ Public MustInherit Class Task
     Public Property RequiresDraftTemplate As Boolean = False
     Public Property RequiresMaterialTable As Boolean = False
 
+    'These belong only in the tasks that need them.
+    'Easier to synchronize props with UI there, for one thing.
     'Public Property AssemblyTemplate As String = ""
     'Public Property PartTemplate As String = ""
     'Public Property SheetmetalTemplate As String = ""
     'Public Property DraftTemplate As String = ""
-
     'Public Property MaterialTable As String = ""
+    'Public Property UseConfigurationPageTemplates As Boolean = False
 
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True

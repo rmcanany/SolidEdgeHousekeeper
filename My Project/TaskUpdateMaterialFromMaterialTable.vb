@@ -17,6 +17,19 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Set
     End Property
 
+    Private _UseConfigurationPageTemplates As Boolean
+    Public Property UseConfigurationPageTemplates As Boolean
+        Get
+            Return _UseConfigurationPageTemplates
+        End Get
+        Set(value As Boolean)
+            _UseConfigurationPageTemplates = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _RemoveFaceStyleOverrides As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
         Get
@@ -46,6 +59,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
 
     Enum ControlNames
+        UseConfigurationPageTemplates
         Browse
         MaterialTable
         RemoveFaceStyleOverrides
@@ -160,6 +174,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex = 0
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page material table")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Matl Table")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
@@ -237,6 +259,21 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim Name = Checkbox.Name
 
         Select Case Name
+
+            Case ControlNames.UseConfigurationPageTemplates.ToString
+                Me.UseConfigurationPageTemplates = Checkbox.Checked
+
+                If Me.UseConfigurationPageTemplates Then
+                    Me.MaterialTable = Form_Main.MaterialTable
+                    CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = False
+                    CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = False
+
+                Else
+                    CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = True
+                    CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = True
+
+                End If
+
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 

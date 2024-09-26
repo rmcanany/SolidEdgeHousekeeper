@@ -18,6 +18,19 @@ Public Class TaskCreateDrawingOfFlatPattern
         End Set
     End Property
 
+    Private _UseConfigurationPageTemplates As Boolean
+    Public Property UseConfigurationPageTemplates As Boolean
+        Get
+            Return _UseConfigurationPageTemplates
+        End Get
+        Set(value As Boolean)
+            _UseConfigurationPageTemplates = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
 
     Private _ScaleFactor As Double
     Public Property ScaleFactor As Double
@@ -193,6 +206,7 @@ Public Class TaskCreateDrawingOfFlatPattern
 
 
     Enum ControlNames
+        UseConfigurationPageTemplates
         Browse
         DraftTemplate
         ScaleFactor
@@ -519,6 +533,14 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         RowIndex = 0
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseConfigurationPageTemplates.ToString, "Use configuration page templates")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         Button = FormatOptionsButton(ControlNames.Browse.ToString, "Dft Template")
         AddHandler Button.Click, AddressOf ButtonOptions_Click
         tmpTLPOptions.Controls.Add(Button, 0, RowIndex)
@@ -771,6 +793,21 @@ Public Class TaskCreateDrawingOfFlatPattern
 
 
         Select Case Name
+
+            Case ControlNames.UseConfigurationPageTemplates.ToString
+                Me.UseConfigurationPageTemplates = Checkbox.Checked
+
+                If Me.UseConfigurationPageTemplates Then
+                    Me.DraftTemplate = Form_Main.DraftTemplate
+                    CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = False
+                    CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Visible = False
+
+                Else
+                    CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = True
+                    CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Visible = True
+
+                End If
+
             Case ControlNames.OverwriteExisting.ToString
                 Me.OverwriteExisting = Checkbox.Checked
 

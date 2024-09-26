@@ -529,20 +529,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Private _UseTemplateProperties As Boolean
-    'Public Property UseTemplateProperties As Boolean
-    '    Get
-    '        Return _UseTemplateProperties
-    '    End Get
-    '    Set(value As Boolean)
-    '        _UseTemplateProperties = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            CheckBoxUseTemplateProperties.Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
-
     Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
         Get
@@ -558,7 +544,6 @@ Public Class Form_Main
             End If
         End Set
     End Property
-
 
     Private _TemplatePropertyDictJSON As String
     Public Property TemplatePropertyDictJSON As String
@@ -576,7 +561,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Public Property TemplatePropertyList As List(Of String)
 
 
     ' ###### GENERAL ######
@@ -698,20 +682,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    'Private _WarnNoImportedProperties As Boolean
-    'Public Property WarnNoImportedProperties As Boolean
-    '    Get
-    '        Return _WarnNoImportedProperties
-    '    End Get
-    '    Set(value As Boolean)
-    '        _WarnNoImportedProperties = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            CheckBoxWarnNoImportedProperties.Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
-
 
     '###### HOME TAB ######
 
@@ -724,6 +694,7 @@ Public Class Form_Main
             _EnablePropertyFilter = value
             If Me.TabControl1 IsNot Nothing Then
                 CheckBoxEnablePropertyFilter.Checked = value
+                new_ButtonPropertyFilter.Enabled = value
             End If
         End Set
     End Property
@@ -737,6 +708,7 @@ Public Class Form_Main
             _EnableFileWildcard = value
             If Me.TabControl1 IsNot Nothing Then
                 CheckBoxEnableFileWildcard.Checked = value
+                ComboBoxFileWildcard.Enabled = value
             End If
         End Set
     End Property
@@ -908,8 +880,89 @@ Public Class Form_Main
             UP.CheckForNewerVersion(Me.Version)
         End If
 
+        new_ButtonPropertyFilter.Enabled = CheckBoxEnablePropertyFilter.Checked
+        ComboBoxFileWildcard.Enabled = CheckBoxEnableFileWildcard.Checked
+
     End Sub
 
+
+    Private Sub CopyTemplatesToTasks()
+        Dim s As String = ""
+        For Each Task As Task In Me.TaskList
+
+            Dim TaskType As Type = Task.GetType
+
+            If Task.RequiresAssemblyTemplate Then
+                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+                    If T.UseConfigurationPageTemplates Then
+                        T.AssemblyTemplate = Me.AssemblyTemplate
+                    End If
+                Else
+                    s = String.Format("{0}RequiresAssemblyTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                End If
+            End If
+            If Task.RequiresPartTemplate Then
+                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+                    If T.UseConfigurationPageTemplates Then
+                        T.PartTemplate = Me.PartTemplate
+                    End If
+                Else
+                    s = String.Format("{0}RequiresPartTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                End If
+            End If
+            If Task.RequiresSheetmetalTemplate Then
+                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+                    If T.UseConfigurationPageTemplates Then
+                        T.SheetmetalTemplate = Me.SheetmetalTemplate
+                    End If
+                Else
+                    s = String.Format("{0}RequiresSheetmetalTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                End If
+            End If
+            If Task.RequiresDraftTemplate Then
+                If TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
+                    Dim T = CType(Task, TaskUpdateDrawingStylesFromTemplate)
+                    If T.UseConfigurationPageTemplates Then
+                        T.DraftTemplate = Me.DraftTemplate
+                    End If
+                ElseIf TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
+                    Dim T = CType(Task, TaskCreateDrawingOfFlatPattern)
+                    If T.UseConfigurationPageTemplates Then
+                        T.DraftTemplate = Me.DraftTemplate
+                    End If
+                Else
+                    s = String.Format("{0}RequiresDraftTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+                End If
+            End If
+            If Task.RequiresMaterialTable Then
+                If TypeOf Task Is TaskCheckMaterialNotInMaterialTable Then
+                    Dim T = CType(Task, TaskCheckMaterialNotInMaterialTable)
+                    If T.UseConfigurationPageTemplates Then
+                        T.MaterialTable = Me.MaterialTable
+                    End If
+                ElseIf TypeOf Task Is TaskEditProperties Then
+                    Dim T = CType(Task, TaskEditProperties)
+                    If T.UseConfigurationPageTemplates Then
+                        T.MaterialTable = Me.MaterialTable
+                    End If
+                ElseIf TypeOf Task Is TaskUpdateMaterialFromMaterialTable Then
+                    Dim T = CType(Task, TaskUpdateMaterialFromMaterialTable)
+                    If T.UseConfigurationPageTemplates Then
+                        T.MaterialTable = Me.MaterialTable
+                    End If
+                Else
+                    s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
+                End If
+            End If
+            'Task.ReconcileFormWithProps()
+        Next
+        If Not s = "" Then
+            MsgBox(s)
+        End If
+    End Sub
 
     'Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
 
@@ -2230,6 +2283,7 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.AssemblyTemplate = tmpFileDialog.FileName
+            CopyTemplatesToTasks()
             'TextBoxAssemblyTemplate.Text = Me.AssemblyTemplate
         End If
 
@@ -2243,7 +2297,8 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.PartTemplate = tmpFileDialog.FileName
-            TextBoxPartTemplate.Text = Me.PartTemplate
+            CopyTemplatesToTasks()
+            'TextBoxPartTemplate.Text = Me.PartTemplate
         End If
 
     End Sub
@@ -2256,7 +2311,8 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.SheetmetalTemplate = tmpFileDialog.FileName
-            TextBoxSheetmetalTemplate.Text = Me.SheetmetalTemplate
+            CopyTemplatesToTasks()
+            'TextBoxSheetmetalTemplate.Text = Me.SheetmetalTemplate
         End If
 
     End Sub
@@ -2269,7 +2325,8 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.DraftTemplate = tmpFileDialog.FileName
-            TextBoxDraftTemplate.Text = Me.DraftTemplate
+            CopyTemplatesToTasks()
+            'TextBoxDraftTemplate.Text = Me.DraftTemplate
         End If
 
     End Sub
@@ -2282,7 +2339,8 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.MaterialTable = tmpFileDialog.FileName
-            TextBoxMaterialTable.Text = Me.MaterialTable
+            CopyTemplatesToTasks()
+            'TextBoxMaterialTable.Text = Me.MaterialTable
         End If
 
     End Sub
@@ -2293,67 +2351,67 @@ Public Class Form_Main
     '    ButtonUseTemplateProperties.Enabled = Me.UseTemplateProperties
     'End Sub
 
-    Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
-        Dim s As String = ""
-        For Each Task As Task In Me.TaskList
+    'Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
+    '    Dim s As String = ""
+    '    For Each Task As Task In Me.TaskList
 
-            Dim TaskType As Type = Task.GetType
+    '        Dim TaskType As Type = Task.GetType
 
-            If Task.RequiresAssemblyTemplate Then
-                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-                    T.AssemblyTemplate = Me.AssemblyTemplate
-                Else
-                    s = String.Format("{0}RequiresAssemblyTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-                End If
-            End If
-            If Task.RequiresPartTemplate Then
-                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-                    T.PartTemplate = Me.PartTemplate
-                Else
-                    s = String.Format("{0}RequiresPartTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-                End If
-            End If
-            If Task.RequiresSheetmetalTemplate Then
-                If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-                    Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-                    T.SheetmetalTemplate = Me.SheetmetalTemplate
-                Else
-                    s = String.Format("{0}RequiresSheetmetalTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-                End If
-            End If
-            If Task.RequiresDraftTemplate Then
-                If TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
-                    Dim T = CType(Task, TaskUpdateDrawingStylesFromTemplate)
-                    T.DraftTemplate = Me.DraftTemplate
-                ElseIf TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
-                    Dim T = CType(Task, TaskCreateDrawingOfFlatPattern)
-                    T.DraftTemplate = Me.DraftTemplate
-                Else
-                    s = String.Format("{0}RequiresDraftTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-                End If
-            End If
-            If Task.RequiresMaterialTable Then
-                If TypeOf Task Is TaskCheckMaterialNotInMaterialTable Then
-                    Dim T = CType(Task, TaskCheckMaterialNotInMaterialTable)
-                    T.MaterialTable = Me.MaterialTable
-                ElseIf TypeOf Task Is TaskEditProperties Then
-                    Dim T = CType(Task, TaskEditProperties)
-                    T.MaterialTable = Me.MaterialTable
-                ElseIf TypeOf Task Is TaskUpdateMaterialFromMaterialTable Then
-                    Dim T = CType(Task, TaskUpdateMaterialFromMaterialTable)
-                    T.MaterialTable = Me.MaterialTable
-                Else
-                    s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
-                End If
-            End If
-            'Task.ReconcileFormWithProps()
-        Next
-        If Not s = "" Then
-            MsgBox(s)
-        End If
-    End Sub
+    '        If Task.RequiresAssemblyTemplate Then
+    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+    '                T.AssemblyTemplate = Me.AssemblyTemplate
+    '            Else
+    '                s = String.Format("{0}RequiresAssemblyTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+    '            End If
+    '        End If
+    '        If Task.RequiresPartTemplate Then
+    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+    '                T.PartTemplate = Me.PartTemplate
+    '            Else
+    '                s = String.Format("{0}RequiresPartTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+    '            End If
+    '        End If
+    '        If Task.RequiresSheetmetalTemplate Then
+    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
+    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
+    '                T.SheetmetalTemplate = Me.SheetmetalTemplate
+    '            Else
+    '                s = String.Format("{0}RequiresSheetmetalTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+    '            End If
+    '        End If
+    '        If Task.RequiresDraftTemplate Then
+    '            If TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
+    '                Dim T = CType(Task, TaskUpdateDrawingStylesFromTemplate)
+    '                T.DraftTemplate = Me.DraftTemplate
+    '            ElseIf TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
+    '                Dim T = CType(Task, TaskCreateDrawingOfFlatPattern)
+    '                T.DraftTemplate = Me.DraftTemplate
+    '            Else
+    '                s = String.Format("{0}RequiresDraftTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
+    '            End If
+    '        End If
+    '        If Task.RequiresMaterialTable Then
+    '            If TypeOf Task Is TaskCheckMaterialNotInMaterialTable Then
+    '                Dim T = CType(Task, TaskCheckMaterialNotInMaterialTable)
+    '                T.MaterialTable = Me.MaterialTable
+    '            ElseIf TypeOf Task Is TaskEditProperties Then
+    '                Dim T = CType(Task, TaskEditProperties)
+    '                T.MaterialTable = Me.MaterialTable
+    '            ElseIf TypeOf Task Is TaskUpdateMaterialFromMaterialTable Then
+    '                Dim T = CType(Task, TaskUpdateMaterialFromMaterialTable)
+    '                T.MaterialTable = Me.MaterialTable
+    '            Else
+    '                s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
+    '            End If
+    '        End If
+    '        'Task.ReconcileFormWithProps()
+    '    Next
+    '    If Not s = "" Then
+    '        MsgBox(s)
+    '    End If
+    'End Sub
 
     Private Sub ButtonUseTemplateProperties_Click(sender As Object, e As EventArgs) Handles ButtonUseTemplateProperties.Click
 
@@ -2666,6 +2724,10 @@ Public Class Form_Main
         Me.FileWildcard = ComboBoxFileWildcard.Text
 
         ListViewFilesOutOfDate = True
+    End Sub
+
+    Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs)
+
     End Sub
 
     'Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs)
