@@ -120,14 +120,20 @@ Public Class TaskRunExternalProgram
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        'Dim ExternalProgram As String = Configuration("TextBoxExternalProgramAssembly")
-
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(Me.ExternalProgram)
         Dim P As New Diagnostics.Process
         Dim ExitCode As Integer
         Dim ErrorMessageFilename As String
         Dim ErrorMessages As String()
         Dim Extension As String
+
+        Dim UP As New UtilsPreferences
+        Dim SettingsFilename = UP.GetFormMainSettingsFilename(CheckExisting:=True)
+        If Not SettingsFilename = "" Then
+            Dim NewSettingsFilename = System.IO.Path.GetFileName(SettingsFilename)
+            NewSettingsFilename = String.Format("{0}\{1}", ExternalProgramDirectory, NewSettingsFilename)
+            System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+        End If
 
         Extension = IO.Path.GetExtension(Me.ExternalProgram)
 

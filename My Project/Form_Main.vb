@@ -2730,17 +2730,6 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub CheckBoxWarnNoImportedProperties_CheckedChanged(sender As Object, e As EventArgs)
-    '    Me.WarnNoImportedProperties = CheckBoxWarnNoImportedProperties.Checked
-    'End Sub
-
-
-
-
-
-
-
-
 
     ' Commands I can never remember
 
@@ -2788,6 +2777,7 @@ Public Class Form_Main
 
     'ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
 
+    'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
 
 End Class
 
