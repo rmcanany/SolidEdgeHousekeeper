@@ -15,7 +15,11 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2024.2 Enhancements/Fixes
 
-We'll get to the highlights in a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
+We'll get to the highlights in just a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
+
+Also, a big shout out to our **Beta Testers**!  With their help, we fixed several bugs, streamlined some inputs, added new options to a couple of commands, clarified some documentation, and pushed a dozen commits to GitHub.  Thank you!
+
+Now to the highlights...
 
 ### New Task Page
 Concept by **@Francesco Arfilli** Thank you!
@@ -177,6 +181,8 @@ See the [<ins>**Update Model Styles from Template Help Topic**</ins>](https://gi
 ### Save Model As
 
 Added an option, for image files, to change the view style before saving.  (Thank you **@tempod**!)
+
+Added the ability, when saving to the original directory, to specify a subdirectory.  (Thank you **@[Robin BIoemberg]**!)   This feature was also added to the `Save Drawing As` command.
 
 See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
 
