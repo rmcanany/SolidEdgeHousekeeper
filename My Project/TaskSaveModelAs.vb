@@ -542,10 +542,24 @@ Public Class TaskSaveModelAs
         OldExtension = IO.Path.GetExtension(OldFullFilename)
 
         If Me.SaveInOriginalDirectory Then
-            If Suffix = "" Then
-                NewFilename = System.IO.Path.ChangeExtension(OldFullFilename, NewExtension)
+            If Not Me.UseSubdirectoryFormula Then
+                If Suffix = "" Then
+                    NewFilename = System.IO.Path.ChangeExtension(OldFullFilename, NewExtension)
+                Else
+                    NewFilename = String.Format("{0}\{1}-{2}{3}", OldDirectoryName, OldFilenameWOExt, Suffix, NewExtension)
+                End If
             Else
-                NewFilename = String.Format("{0}\{1}-{2}{3}", OldDirectoryName, OldFilenameWOExt, Suffix, NewExtension)
+                Try
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                Catch ex As Exception
+                    Success = False
+                End Try
+
+                If Suffix = "" Then
+                    NewFilename = String.Format("{0}\{1}\{2}{3}", OldDirectoryName, NewSubDirectory, OldFilenameWOExt, NewExtension)
+                Else
+                    NewFilename = String.Format("{0}\{1}\{2}-{3}{4}", OldDirectoryName, NewSubDirectory, OldFilenameWOExt, Suffix, NewExtension)
+                End If
             End If
         Else
             NewDirectory = Me.NewDir
@@ -699,18 +713,27 @@ Public Class TaskSaveModelAs
         Dim ErrorMessageList As New List(Of String)
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
+        Try
             SEDoc.SaveAs(NewFilename)
             SEApp.DoIdle()
-        Else
-            If Not Me.SaveInOriginalDirectory Then
-                SEDoc.SaveCopyAs(NewFilename)
-                SEApp.DoIdle()
-            Else
-                ExitStatus = 1
-                ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
-            End If
-        End If
+        Catch ex As Exception
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
+        End Try
+
+        ' These checks are performed in CheckStartConditions
+        'If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
+        '    SEDoc.SaveAs(NewFilename)
+        '    SEApp.DoIdle()
+        'Else
+        '    If Not Me.SaveInOriginalDirectory Then
+        '        SEDoc.SaveCopyAs(NewFilename)
+        '        SEApp.DoIdle()
+        '    Else
+        '        ExitStatus = 1
+        '        ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+        '    End If
+        'End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -1125,7 +1148,7 @@ Public Class TaskSaveModelAs
                 ErrorMessageList.Add(String.Format("{0}Output file type not detected", Indent))
             End If
 
-            If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) Then
+            If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) And (Not Me.UseSubdirectoryFormula) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -1233,10 +1256,10 @@ Public Class TaskSaveModelAs
                 CType(ControlsDict(ControlNames.BrowseNewDir.ToString), Button).Visible = Not Me.SaveInOriginalDirectory
                 CType(ControlsDict(ControlNames.NewDir.ToString), TextBox).Visible = Not Me.SaveInOriginalDirectory
 
-                Dim CheckBox2 = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
-                CheckBox2.Visible = Not Me.SaveInOriginalDirectory
-                Dim tf = (CheckBox2.Checked) And (Not Me.SaveInOriginalDirectory)
-                CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Visible = tf
+                'Dim CheckBox2 = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
+                'CheckBox2.Visible = Not Me.SaveInOriginalDirectory
+                'Dim tf = (CheckBox2.Checked) And (Not Me.SaveInOriginalDirectory)
+                'CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Visible = tf
 
 
             Case ControlNames.UseSubdirectoryFormula.ToString
