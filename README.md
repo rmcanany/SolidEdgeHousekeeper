@@ -150,7 +150,7 @@ You would be asking for trouble specifying more than one top-level assembly.  Ho
 
 ![Top level assembly options](My%20Project/media/configuration_tab_top_level_assembly_page.png)
 
-A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page).
+A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the dialog shown above.
 
 When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
 
@@ -216,7 +216,7 @@ You can sort the file list in a variety of ways.
 
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the [<ins>**Configuration Tab -- Sorting Page**</ins>](#sorting-page).
+The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the dialog shown above.
 
 The `Unsorted` option is primarily intended to preserve the order of imported lists.
 
@@ -230,7 +230,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
-You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the [<ins>**Configuration Tab -- Status Page**</ins>](#status-page).
+You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the dialog shown below.
 
 ![Document Status](My%20Project/media/configuration_tab_status_page.png)
 
@@ -263,7 +263,7 @@ Filters are a way to refine the list of files to process.  You can filter on fil
 
 #### Introduction to Property Filtering
 
-The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page) section of this Readme.
+The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page) section of this Readme.
 
 To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
@@ -280,14 +280,6 @@ Compose a filter by defining one or more **Conditions**, and adding them one-by-
 </p>
 
 Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
-
-Most people use a limited number of properties.  You can set which ones are available in the drop-down list.  That is done on the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page).
-
-<p align="center">
-  <img src="My%20Project/media/customize_property_list.png">
-</p>
-
-The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
 
 #### Property Set
 
