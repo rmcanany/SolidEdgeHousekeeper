@@ -210,7 +210,9 @@ If you're a URL checker like me, you might notice the link is pointing to a pret
 
 https://github.com/rmcanany/SolidEdgeHousekeeper/tree/dd8c4f99b824f1e94c7799fa3cb5a7db8fd2c640#open-save
 
-That long string of seemingly random numbers is the `Git` `Commit Hash`.  It is how you tell GitHub to open a file from a certain point in the past.
+That long string of seemingly random numbers is the `Git Commit Hash`.  It is the mechanism used to tell GitHub to open a file as it appeared at a certain point in the past.
+
+In addition to the new context-sensitive help, also added a table of contents to improve navigation of the documentation.  Links to all major topics are provided.  More complex sections, such as Property Filtering, have their own supplemental table of contents.
 
 ## V2024.1 Enhancements/Fixes
 
