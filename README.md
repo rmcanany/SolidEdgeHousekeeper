@@ -28,7 +28,7 @@
 	- [<ins>**Sorting**</ins>](#sorting)
 	- [<ins>**Document Status Options**</ins>](#document-status-options)
 	- [<ins>**Filtering**</ins>](#filtering)
-- [<ins>**Starting, Stopping, and Monitoring Execution**</ins>](##starting-stopping-and-monitoring-execution)
+- [<ins>**Starting, Stopping, and Monitoring Execution**</ins>](#starting-stopping-and-monitoring-execution)
 - [<ins>**Task Tab**</ins>](#task-tab)
 - [<ins>**Configuration Tab**</ins>](#configuration-tab)
 - [<ins>**Task Details**</ins>](#task-details)
@@ -120,12 +120,12 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 
 ### File Selection Contents
 - [<ins>**Introduction to Selection**</ins>](#introduction-to-selection)
-- [<ins>**1. Select by Folder**</ins>](#select-by-folder)
-- [<ins>**2. Select by Top-Level Assembly**</ins>](#select-by-top-level-assembly)
-- [<ins>**3. Select by List**</ins>](#select-by-list)
-- [<ins>**4. Tools**</ins>](#tools)
-- [<ins>**5. Update**</ins>](#update)
-- [<ins>**6. File Type**</ins>](#file-type)
+- [<ins>**Select by Folder**</ins>](#select-by-folder)
+- [<ins>**Select by Top-Level Assembly**</ins>](#select-by-top-level-assembly)
+- [<ins>**Select by List**</ins>](#select-by-list)
+- [<ins>**Tools**</ins>](#tools)
+- [<ins>**Update**</ins>](#update)
+- [<ins>**File Type**</ins>](#file-type)
 
 
 ### Introduction to Selection
@@ -138,13 +138,13 @@ An alternative method is to select files with errors from a previous run.
 
 ![Toolbar](My%20Project/media/selection_toolbar_labeled.png)
 
-### 1. Select by Folder
+### Select by Folder
 
-Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the diagram, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
+Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, label 1, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
 
-### 2. Select by Top-Level Assembly
+### Select by Top-Level Assembly
 
-Choose this option to select files linked to an assembly. Click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, label 2, click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
 
 You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
 
@@ -174,17 +174,17 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 ![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
 
-### 3. Select by list
+### Select by list
 
-Referring to the diagram, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
+Referring to the diagram, label 3, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
 
 If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
 
-### 4. Tools
+### Tools
 
 #### Select files with errors from the previous run
 
-Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
+Referring to the toolbar diagram, label 4, click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 
 #### Remove all
 
@@ -202,13 +202,13 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
 
-### 5. Update
+### Update
 
-The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
+Referring to the toolbar diagram, label 5, the update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
-### 6. File Type
+### File Type
 
-You can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
+Referring to the toolbar diagram, label 6, you can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
 
 ## Sorting
 
