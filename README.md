@@ -17,7 +17,26 @@
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
 
-## DESCRIPTION
+# TABLE OF CONTENTS
+- [<ins>**Description**</ins>](#description)
+- [<ins>**Installation**</ins>](#installation)
+- [<ins>**Getting Help**</ins>](#getting-help)
+- [<ins>**Helping Out**</ins>](#helping-out)
+- [<ins>**Operation**</ins>](#operation)
+- [<ins>**File Selection and Filtering**</ins>](#file-selection-and-filtering)
+	- [<ins>**Selection**</ins>](#selection)
+	- [<ins>**Sorting**</ins>](#sorting)
+	- [<ins>**Document Status Options**</ins>](#document-status-options)
+	- [<ins>**Filtering**</ins>](#filtering)
+- [<ins>**Starting, Stopping, and Monitoring Execution**</ins>](##starting-stopping-and-monitoring-execution)
+- [<ins>**Task Tab**</ins>](#task-tab)
+- [<ins>**Configuration Tab**</ins>](#configuration-tab)
+- [<ins>**Task Details**</ins>](#task-details)
+- [<ins>**Known Issues**</ins>](#known-issues)
+- [<ins>**Open Source Packages**</ins>](#open-source-packages)
+- [<ins>**Code Organization**</ins>](#code-organization)
+
+# DESCRIPTION
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
@@ -45,27 +64,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", 
 > *Why did the Solid Edge Housekeeper get a promotion?*  
 > *She was the only one who could clean up the mess that Solid Edge users make.*
 
-## GETTING HELP
-
-Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
-
-If it doesn't show what you're looking for, click ![Table of Contents](My%20Project/media/table_of_contents_icon.png) to open the Table of Contents as shown below. 
-
-![Table of Contents](My%20Project/media/table_of_contents.png)
-
-Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge)
-
-
-## HELPING OUT
-
-If you want to make Housekeeper better, join us as a beta tester! Beta testing is nothing more than conducting your own workflow on your own files and telling me if you run into problems. It isn't meant to be a lot of work. The big idea is to make the program better for you and me and everyone else!
-
-To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
-
-If you know .NET, or want to learn, there's more to do!  To get started on GitHub collaboration, head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.
-
-
-## INSTALLATION
+# INSTALLATION
 
 There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
 
@@ -83,7 +82,24 @@ The first time you run it, you may encounter the following dialog.  You can clic
 If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in Housekeeper's Preferences folder. There is one exception.  Starting with v2024.2, property filters are stored in a `*.json` format.  The old `*.txt` format is no longer used.
 
 
-## OPERATION
+# GETTING HELP
+
+Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
+
+If you need more general information, try the [<ins>**Table of Contents**</ins>](#table-of-contents).  It has links to all topics in the Readme.  Topics which are particularly detailed have their own contents section.
+
+Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+
+# HELPING OUT
+
+If you want to make Housekeeper better, join us as a beta tester! Beta testing is nothing more than conducting your own workflow on your own files and telling me if you run into problems. It isn't meant to be a lot of work. The big idea is to make the program better for you and me and everyone else!
+
+To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
+
+If you know .NET, or want to learn, there's more to do!  If you're new to GitHub collaboration, head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.  Otherwise, feel free to fork the repo and start in with those PRs!
+
+
+# OPERATION
 
 ![Tabs](My%20Project/media/tabs.png)
 
@@ -98,9 +114,21 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 
 
 
-## FILE SELECTION AND FILTERING
+# FILE SELECTION AND FILTERING
 
-### Selection
+## Selection
+
+### File Selection Contents
+- [<ins>**Introduction to Selection**</ins>](#introduction-to-selection)
+- [<ins>**1. Select by Folder**</ins>](#select-by-folder)
+- [<ins>**2. Select by Top-Level Assembly**</ins>](#select-by-top-level-assembly)
+- [<ins>**3. Select by List**</ins>](#select-by-list)
+- [<ins>**4. Tools**</ins>](#tools)
+- [<ins>**5. Update**</ins>](#update)
+- [<ins>**6. File Type**</ins>](#file-type)
+
+
+### Introduction to Selection
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -110,11 +138,11 @@ An alternative method is to select files with errors from a previous run.
 
 ![Toolbar](My%20Project/media/selection_toolbar_labeled.png)
 
-#### 1. Select by Folder
+### 1. Select by Folder
 
 Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the diagram, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
 
-#### 2. Select by Top-Level Assembly
+### 2. Select by Top-Level Assembly
 
 Choose this option to select files linked to an assembly. Click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
 
@@ -126,43 +154,43 @@ A top level assembly search can optionally report files with no links to the ass
 
 When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
 
-If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed. Disable the warning on the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page).
+If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed; disable the `Warn me` option to turn it off.
 
 If you *do* specify one or more folders, there are two options for performing *where used*, **Top Down** or **Bottom Up** (see next). Guidelines are given below, however it's not a bad idea to try both methods to see which works best for you.
 
-**Bottom Up**
+#### Bottom Up
 
 Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\\BIG_SERVER\all_parts\`), where the number of files in the folder(s) far exceed the number of files in the assembly. The program gets links by recursion, then finds draft files with *where used*. If your draft files have the same name as the model they depict, click that option and the program will find drawings directly, bypassing the often time-consuming *where used* operation. 
 
 A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Program Files\...\Preferences\FastSearchScope.txt`), which tells the program if the specified folder is on an indexed drive. 
 
-**Top Down**
+#### Top Down
 
 Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program launches Design Manager to open every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
 
-**Include parents of part copies option**
+#### Include parents of part copies option
 
 This option may be confusing.  Referring to the diagram, note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`, while `C.par` is not. Enabling the option means that `C.par` would be included in the search results.
 
 ![Top level assembly options](My%20Project/media/top_level_assy_diagram.png)
 
-#### 3. Select by list
+### 3. Select by list
 
 Referring to the diagram, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
 
 If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
 
-#### 4. Tools
+### 4. Tools
 
-**Select files with errors from the previous run**
+#### Select files with errors from the previous run
 
 Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 
-**Remove all**
+#### Remove all
 
 Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
 
-**Shortcut menu**
+#### Shortcut menu
 
 If you select one or more files on the list, you can click the right mouse button for more options.  
 
@@ -174,15 +202,15 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
 
-#### 5. Update
+### 5. Update
 
 The update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
-#### 6. File Type
+### 6. File Type
 
 You can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
 
-### Sorting
+## Sorting
 
 You can sort the file list in a variety of ways.
 
@@ -198,7 +226,7 @@ Dependency ordering is not fool proof.  It has trouble with mutual dependencies,
 
 The `Random sample` option randomly selects and shuffles  a fraction of the total files found.  The `Sample fraction` is a decimal number between `0.0` and `1.0`. This option is primarily intended for software testing, but can be used for any purpose.
 
-### Document Status Options
+## Document Status Options
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
@@ -212,13 +240,28 @@ If you want simply to change the Status on a batch of files, specify your Before
 
 If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Design Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
 
-### Filtering
+## Filtering
 
 Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
-#### 1. Property Filter
+### 1. Property Filter
+
+#### Property Filter Contents
+- [<ins>**Introduction to Property Filtering**</ins>](#introduction-to-property-filtering)
+- [<ins>**Composing a filter**</ins>](#composing-a-filter)
+- [<ins>**Property Set**</ins>](#property-set)
+- [<ins>**Comparison**</ins>](#comparison)
+- [<ins>**Default Filter Formula**</ins>](#default-filter-formula)
+- [<ins>**Editing the Formula**</ins>](#editing-the-formula)
+- [<ins>**One More Thing About the Formula**</ins>](#one-more-thing-about-the-formula)
+- [<ins>**Dates and Numbers**</ins>](#dates-and-numbers)
+- [<ins>**Document Status**</ins>](#document-status)
+- [<ins>**Saved Settings**</ins>](#saved-settings)
+
+
+#### Introduction to Property Filtering
 
 The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Top Level Assembly Page**</ins>](#top-level-assembly-page) section of this Readme.
 
@@ -228,7 +271,7 @@ The Property Filter checks Draft files, but they often don't have properties of 
 
 This is a powerful tool with a lot of options. These are detailed below.
 
-**Composing a Filter**
+#### Composing a Filter
 
 Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
 
@@ -246,7 +289,7 @@ Most people use a limited number of properties.  You can set which ones are avai
 
 The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
 
-**Property Set**
+#### Property Set
 
 In addition to entering the `Property name`, you must also specify the `Property set`, either `System` or `Custom`.
 
@@ -256,7 +299,7 @@ In addition to entering the `Property name`, you must also specify the `Property
 
 Template properties will know their `PropertySet`.  Unless you added it manually, that is, in which case you specify it yourself.
 
-**Comparison**
+#### Comparison
 
 Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
 
@@ -268,18 +311,18 @@ Internally the [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-u
 
 `Regex_match` uses Regular Expressions.  They are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
 
-**Default Filter Formula**
+#### Default Filter Formula
 
 Each Condition is assigned a variable name, (`A`, `B`, `...`). The default filter formula is to match all conditions (e.g., `A AND B AND C`).
 
 In the image above, sticking with the default formula means you would get all parts in project 7481 made out of Stainless and engineered by Fred, i.e., `A AND B AND C`.
 
-**Editing the Formula**
+#### Editing the Formula
 
 You can optionally change the formula. Click the `Edit Formula` button in the toolbar and type the desired expression. For example, if you wanted all parts from Project 7481, **either** made out of Stainless, **or** engineered by Fred, you would enter the formula shown, 
 i.e., `A AND (B OR C)`.
 
-**One More Thing About the Formula**
+#### One More Thing About the Formula
 
 Prior to Housekeeper V2024.2, the formula, a boolean expression, was parsed and evaluated using the .NET built-in `VBScript` engine.  Oversimplifying a bit, that is no longer supported on 64-bit operating systems.
 
@@ -287,7 +330,7 @@ The program now uses `PowerShell` to do the evaluation.  The communication code 
 
 If there is an issue, like `PowerShell` isn't installed, you won't get an error message.  Instead, you'll get no files matching your property search.  If you know that's wrong, please mention it on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There may be other more .NET-native ways of evaluating the formula.
 
-**Dates and Numbers**
+#### Dates and Numbers
 
 Dates and numbers are converted to their native format when possible. This is done to obtain commonsense results for `<` and `>`. Note the conversion is attempted even if the property type is `TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
 
@@ -295,7 +338,7 @@ Dates take the form `YYYYMMDD` when converted. This is the format that must be u
 
 Numbers are converted to floating point decimals. In Solid Edge many numbers, in particular those from the variable table, include units. These must be stripped off by the program to make comparisons. Currently only distance and mass units are checked (`in`, `mm`, `lbm`, `kg`). It`s easy to add more, so please ask on the Forum if you need others.
 
-**Document Status**
+#### Document Status
 
 You can select files based on Status, but not like this:
 	
@@ -318,17 +361,17 @@ Here's the list:
 
 As mentioned above, this is a situation where the option `Include Draft file model documents in search` can yield confusing results. For example, an `InWork` Draft file containing a `Released` part would appear in a search for `Released` documents.
 
-**Saved Settings**
+#### Saved Settings
 
 The filters are saved in `property_filter_saved_settings.json` in the `Preferences` directory under the root directory of `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. 
 
-#### 2. Wildcard Filter
+### 2. Wildcard Filter
 
-The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png). 
-
+The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png).
+ 
 As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator) for details and examples.
 
-## STARTING, STOPPING, AND MONITORING EXECUTION
+# STARTING, STOPPING, AND MONITORING EXECUTION
 
 ![Tabs](My%20Project/media/status_bar_running.png)
 
@@ -344,7 +387,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 
 
-## TASK TAB
+# TASK TAB
 
 The Task Tab is where you choose what operations to perform.
 
@@ -352,7 +395,7 @@ The Task Tab is where you choose what operations to perform.
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
-### Task Controls
+## Task Controls
 
 To enable a task, click its left-most checkbox.  If it has options, they will appear when the task is selected.  You can hide the options by clicking ![Collapse](Resources/collapse.png) (Collapse).  If you don't want the options to automatically appear, enable `Only show options manually` at the bottom of the Options pane.
 
@@ -360,7 +403,7 @@ When a task is selected, the applicable file types are automatically enabled.  T
 
 To open the task's help page, click ![Help](Resources/icons8_help_16.png) on the right side of its header row.  There you can learn what the task does and details about any options it has.
 
-### General Controls
+## General Controls
 
 The row at the top of the task list has buttons that operate on all tasks.  Click the left-most checkbox to disable all.  Click ![Collapse](Resources/collapse.png) (Collapse All) to hide options for all selected tasks.  
 
@@ -368,7 +411,7 @@ The remaining four buttons toggle file type selection.  In order, they are ![Ass
 
 On the far right ![Help](Resources/icons8_help_16.png) brings up general help for the task tab.
 
-### Customizing
+## Customizing
 
 You can customize the list.  To do so, click `Edit Task List` at the bottom of the form.  The following dialog will appear.
 
@@ -388,23 +431,23 @@ To save the changes, click `OK`, `Cancel` otherwise.  To start over with the tas
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
 
-## CONFIGURATION TAB
+# CONFIGURATION TAB
 
 Global options for the program are set on this tab.
 
-### Top Level Assembly Page
+## Top Level Assembly Page
 
-See the [<ins>**Top Level Assembly**</ins>](#2-select-by-top-level-assembly) section.
+See the [<ins>**Top Level Assembly**</ins>](#select-by-top-level-assembly) section.
 
 ### Status Page
 
 See the [<ins>**Document Status**</ins>](#document-status-options) section.
 
-### Sorting Page
+## Sorting Page
 
 See the [<ins>**Sorting**</ins>](#sorting) section.
 
-### Templates Page
+## Templates Page
 
 Templates and related tools.
 
@@ -417,11 +460,18 @@ Description of tab controls:
 - `Assembly`, `Part`, `Sheetmetal`, `Draft`, `Material Table`
 Buttons to let you specify template locations.
 - `Update`
-This is where you pre-populate properties for use in dialogs that need them.  
+This is where you pre-populate properties for use in dialogs that need them.  See below.
 - `Customize`
-There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see and in what order.  For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section (scroll down a bit to find it).
+There are a lot of properties in a Solid Edge file.  This is where you decide which ones to see and in what order.  
 
-### General Page
+<p align="center">
+  <img src="My%20Project/media/customize_property_list.png">
+</p>
+
+The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
+
+
+## General Page
 
 Everything else.
 
@@ -446,9 +496,9 @@ For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) sectio
 - `Property Filter -- Include the Draft file itself in search`
 For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
 - `Check for newer version at startup`
-Uses GitHub's API to get the most recent version and compares it to the running version.  Not everyone wants programs to access outside resources like that, so is disabled by default.  
+Uses GitHub's API to get the most recent version and compares it to the running version.  Not everyone wants programs to access outside resources like that, so it is disabled by default.  
 
-## TASK DETAILS
+# TASK DETAILS
 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
@@ -828,7 +878,7 @@ You assign sheet sizes to a printer with the `Select Sheets` button. Print jobs 
 This command may not work with PDF printers. Try the Save As PDF command instead. 
 
 
-## KNOWN ISSUES
+# KNOWN ISSUES
 
 **The program is not perfect**
 - *Cause*: The programmer is not perfect.
@@ -853,7 +903,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 - *Possible workaround*: Refresh the screen by minimizing and maximizing the Solid Edge window.
 
 
-## OPEN SOURCE PACKAGES
+# OPEN SOURCE PACKAGES
 
 This project uses these awesome open source packages.
 - Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)
@@ -864,7 +914,7 @@ This project uses these awesome open source packages.
 - Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)
 - Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)
 
-## CODE ORGANIZATION
+# CODE ORGANIZATION
 
 Processing starts in Form_Main.vb.  A short description of the code's organization can be found there.
 

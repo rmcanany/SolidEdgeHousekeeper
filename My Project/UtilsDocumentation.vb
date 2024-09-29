@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/050c9e92f09e88aa5b357b672274fbd7a55d9c7a"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/47f0c4ad9149bdecb2ede8fed8846a5e1b986c7e"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
@@ -66,7 +66,7 @@ Public Class UtilsDocumentation
             Next
 
             ReadmeOut.Add("")
-            msg = "## KNOWN ISSUES"
+            msg = "# KNOWN ISSUES"
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -116,7 +116,7 @@ Public Class UtilsDocumentation
 
 
             ReadmeOut.Add("")
-            msg = "## OPEN SOURCE PACKAGES"
+            msg = "# OPEN SOURCE PACKAGES"
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -139,7 +139,7 @@ Public Class UtilsDocumentation
 
             msg = ""
             ReadmeOut.Add("")
-            msg = "## CODE ORGANIZATION"
+            msg = "# CODE ORGANIZATION"
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
             msg = "Processing starts in Form_Main.vb.  A short description of the code's organization can be found there."
