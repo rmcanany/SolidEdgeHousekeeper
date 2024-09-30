@@ -59,7 +59,7 @@ If this is your first time here, you may want to check out the [<ins>**Quick Sta
 
 > *Rad, this saves a mountain of time for me. Thanks!*
 
-Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", Google's Bard said:
+Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*, Google's Bard said:
 
 > *Why did the Solid Edge Housekeeper get a promotion?*  
 > *She was the only one who could clean up the mess that Solid Edge users make.*
