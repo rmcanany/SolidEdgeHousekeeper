@@ -64,6 +64,12 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?", 
 > *Why did the Solid Edge Housekeeper get a promotion?*  
 > *She was the only one who could clean up the mess that Solid Edge users make.*
 
+*Download Tracker*
+
+<p align="center">
+  <img src="My%20Project/media/plot_downloads.png">
+</p>
+
 # INSTALLATION
 
 There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
