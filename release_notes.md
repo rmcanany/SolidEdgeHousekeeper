@@ -17,7 +17,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
 
-Also, a big shout out to our **Beta Testers**!  With their help, we fixed several bugs, streamlined some inputs, added new options to a couple of commands, clarified some documentation, and pushed a dozen commits to GitHub.  Thank you!
+Also, a big shout out to our **Beta Testers**!  With their help, we fixed several bugs, streamlined inputs, added command options, clarified documentation, and pushed a dozen commits to GitHub.  Thank you!
 
 Now to the highlights...
 
@@ -76,6 +76,11 @@ In places where property substitution is allowed, like the  `Find` and `Replace`
 
 ![Insert Property](My%20Project/media/property_selector.png)
 
+#### Family of Assemblies
+
+Fixed an issue where Family of Assemblies were not processed.  (Thank you **@64Pacific**!)  
+
+A recent update to Solid Edge now allows each family member to have its own properties.  This command only works on the base file.  It checks if the `Apply edits to all members` flag is set.  If not, it reports an error.
 
 See the [<ins>**Edit Properties Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-properties) for details.
 

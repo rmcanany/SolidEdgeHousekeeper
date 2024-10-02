@@ -146,17 +146,17 @@ An alternative method is to select files with errors from a previous run.
 
 ### Select by Folder
 
-Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, label 1, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
+Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
 
 ### Select by Top-Level Assembly
 
-Choose this option to select files linked to an assembly. Referring to the toolbar diagram, label 2, click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
 
 You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
 
 ![Top level assembly options](My%20Project/media/configuration_tab_top_level_assembly_page.png)
 
-A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the dialog shown above.
+A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the **Configuration Tab -- Top Level Assembly Page** as shown above.
 
 When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
 
@@ -182,7 +182,7 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 ### Select by list
 
-Referring to the diagram, label 3, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
+Referring to the toolbar diagram, tool group 3, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
 
 If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
 
@@ -190,7 +190,7 @@ If you are importing a list from another source, be aware that the file names mu
 
 #### Select files with errors from the previous run
 
-Referring to the toolbar diagram, label 4, click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
+Referring to the toolbar diagram, tool group 4, click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 
 #### Remove all
 
@@ -210,11 +210,11 @@ If you select one or more files on the list, you can click the right mouse butto
 
 ### Update
 
-Referring to the toolbar diagram, label 5, the update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
+Referring to the toolbar diagram, tool group 5, the update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
 ### File Type
 
-Referring to the toolbar diagram, label 6, you can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
+Referring to the toolbar diagram, tool group 6, you can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
 
 ## Sorting
 
@@ -222,7 +222,7 @@ You can sort the file list in a variety of ways.
 
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the dialog shown above.
+The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the **Configuration Tab -- Sorting Page** as shown above.
 
 The `Unsorted` option is primarily intended to preserve the order of imported lists.
 
@@ -236,7 +236,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
-You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the dialog shown below.
+You can get around this by checking `Process files as Available regardless of document Status`. Set the option on the **Configuration Tab -- Status Page** as shown below.
 
 ![Document Status](My%20Project/media/configuration_tab_status_page.png)
 
@@ -301,7 +301,7 @@ Template properties will know their `PropertySet`.  Unless you added it manually
 
 Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
 
-`Contains` means the Value can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
+`Contains` means the **Value** can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
 `Wildcard_match` searches for a match with a wildcard pattern. For example `[bfj]ake` would match `bake`, `fake`, and `jake`. A more familiar example might be `Aluminum*`, which would match `Aluminum 6061-T6`, `Aluminum 2023`, etc. Unlike `contains`, in this example, `Cast Aluminum Jigplate` would *not* match because it doesn't start with `Aluminum`. (`*Aluminum*` *would* match, by the way.)
 
@@ -482,7 +482,7 @@ Description of tab controls:
 - `Use current Solid Edge session (if any)`
 Normally Housekeeper will not start if Solid Edge is open.  This is to protect you in case opening a file causes an exception in Solid Edge.  This can happen with a corrupted file and other situations.  If it does, the program closes and reopens Solid Edge, causing any unsaved changes to be lost.  Enabling this option bypasses that check.
 - `Warn me if file save is required`
-This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It's enabled by default.  I always turn it off.
+This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It is enabled by default.  It's very annoying and you'll want to turn it off.  Just don't forget, I told you to make backups!
 - `Do not show processed files in Most Recently Used List`
 This keeps from clogging up Solid Edge's file list with those processed in batch mode.
 - `File list font size`

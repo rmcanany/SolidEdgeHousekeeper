@@ -30,21 +30,12 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        'FMain.ReconcileFormChanges()
-        'Dim UD As New UtilsDefaults(FMain)
-        'UD.SaveDefaults()
-
         Dim UP As New UtilsPreferences
         UP.SaveFormMainSettings(FMain)
-
         UP.SaveTaskList(FMain.TaskList)
-        'UP.SaveTemplatePropertyDict(FMain.TemplatePropertyDict)
-        'UP.SaveTemplatePropertyList(FMain.TemplatePropertyList)
-
 
         ErrorMessage = CheckStartConditions()
 
-        'Dim LVF = Me.ListViewFiles
         If ErrorMessage <> "" Then
             FMain.Cursor = Cursors.Default
             Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKOnly, "Check start conditions")
@@ -149,13 +140,6 @@ Public Class UtilsExecute
         Dim USEA = New UtilsSEApp
         USEA.TextBoxStatus = Me.TextBoxStatus
 
-        'FMain.ReconcileFormChanges()
-
-        'If Not CheckBoxUseCurrentSession.Checked Then
-        '    If USEA.SEIsRunning() Then
-        '        msg += "    Close Solid Edge" + Chr(13)
-        '    End If
-        'End If
         If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
                 msg += "    Close Solid Edge" + Chr(13)
@@ -403,6 +387,8 @@ Public Class UtilsExecute
 
         Dim tf As Boolean
 
+        Dim Proceed As Boolean = True
+
         ' Account for infrequent malfunctions on a large number of files.
         TotalAborts -= 0.1
         If TotalAborts < 0 Then
@@ -430,75 +416,114 @@ Public Class UtilsExecute
             SEApp.DoIdle()
         End If
 
-        '############### Here its assumed that a task always need the file opened in Solid Edge
-        '############### This prevent the ability to process file with tasks that don't need Solid Edge
-        '############### A new option should be inserted to prevent this situation
-
         Try
             If FMain.SolidEdgeRequired > 0 Then
-                If (FMain.CheckBoxRunInBackground.Checked) And (Not Filetype = "Assembly") Then
-                    SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
-                    ' Here is the same functionality without using the SolidEdgeCommunity dependency
-                    ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
-                    ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
-                    ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+                ' ############ This actually works, but needs testing -- not including in v2024.3 #############
+                '' Check versions
+                'Dim Version = SEApp.Version
+                'Dim InstalledVersion As Integer = CInt(Version.Split(CChar("."))(0))
+                'Dim DType As SolidEdgeFramework.DocumentTypeConstants = Nothing
+                'Dim CreatedVersion As String = ""
+                'Dim LSV As String = ""
+                'Dim GeometricVersion As UInteger = 0
+                'Try
+                '    SEApp.SEGetFileVersionInfo(Path, DType, CreatedVersion, LSV, GeometricVersion)
+                'Catch ex As Exception
+                '    Proceed = False
+                '    ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                'End Try
 
-                Else
-                    SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                    SEDoc.Activate()
+                'If Proceed Then
+                '    Dim LastSavedVersion As Integer = CInt(LSV.Split(CChar("."))(0))
+                '    If LastSavedVersion > InstalledVersion Then
+                '        Proceed = False
+                '        Dim s = String.Format("Can not open file.  Version '{0}' is newer than installed version '{1}'", LastSavedVersion, InstalledVersion)
+                '        ErrorMessagesCombined(s) = New List(Of String) From {""}
+                '    End If
+                'End If
 
-                    ' Maximize the window in the application
-                    If Filetype = "Draft" Then
-                        ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
-                        ActiveSheetWindow.WindowState = 2
+                'If Proceed Then
+                '    ' Check for corrupted file
+                '    Dim PropertySets = New SolidEdgeFileProperties.PropertySets
+                '    Try
+                '        PropertySets.Open(Path, True)
+                '        PropertySets.Close()
+                '        PropertySets = Nothing
+                '    Catch ex As Exception
+                '        Proceed = False
+                '        ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                '    End Try
+                'End If
+
+                If Proceed Then
+                    If (FMain.CheckBoxRunInBackground.Checked) And (Not Filetype = "Assembly") Then
+                        SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+
+                        ' Here is the same functionality without using the SolidEdgeCommunity dependency
+                        ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
+                        ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
+                        ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+
                     Else
-                        ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
-                        ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
-                    End If
-                End If
+                        SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                        SEDoc.Activate()
 
-                SEApp.DoIdle()
+                        ' Maximize the window in the application
+                        If Filetype = "Draft" Then
+                            ActiveSheetWindow = CType(SEApp.ActiveWindow, SolidEdgeDraft.SheetWindow)
+                            ActiveSheetWindow.WindowState = 2
+                        Else
+                            ActiveWindow = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
+                            ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+                        End If
+                    End If
+
+                    SEApp.DoIdle()
+
+                End If
             End If
 
-            'Dim PropDict = TC.tmpGetSEProperties(SEDoc)
+            If Proceed Then
+                For Each Task As Task In FMain.TaskList
+                    If Task.IsSelectedTask Then
+                        tf = (Filetype = "Assembly") And (Task.IsSelectedAssembly)
+                        tf = tf Or ((Filetype = "Part") And (Task.IsSelectedPart))
+                        tf = tf Or ((Filetype = "Sheetmetal") And (Task.IsSelectedSheetmetal))
+                        tf = tf Or ((Filetype = "Draft") And (Task.IsSelectedDraft))
 
+                        If tf Then
 
-            For Each Task As Task In FMain.TaskList
-                If Task.IsSelectedTask Then
-                    tf = (Filetype = "Assembly") And (Task.IsSelectedAssembly)
-                    tf = tf Or ((Filetype = "Part") And (Task.IsSelectedPart))
-                    tf = tf Or ((Filetype = "Sheetmetal") And (Task.IsSelectedSheetmetal))
-                    tf = tf Or ((Filetype = "Draft") And (Task.IsSelectedDraft))
-
-                    If tf Then
-
-                        If FMain.SolidEdgeRequired > 0 Then
-                            ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
-                        Else
-                            ErrorMessage = Task.Process(Path)
-                        End If
-
-                        ExitStatus = ErrorMessage.Keys(0)
-
-                        If ExitStatus <> 0 Then
-                            ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
-
-                            If ExitStatus = 99 Then
-                                FMain.StopProcess = True
+                            If FMain.SolidEdgeRequired > 0 Then
+                                ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
+                            Else
+                                ErrorMessage = Task.Process(Path)
                             End If
 
+                            ExitStatus = ErrorMessage.Keys(0)
+
+                            If ExitStatus <> 0 Then
+                                ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
+
+                                If ExitStatus = 99 Then
+                                    FMain.StopProcess = True
+                                End If
+
+                            End If
                         End If
                     End If
-                End If
-            Next
+                Next
+
+            End If
 
             If FMain.SolidEdgeRequired > 0 Then
-                SEDoc.Close(False)
-                SEApp.DoIdle()
+                If Proceed Then
+                    SEDoc.Close(False)
+                    SEApp.DoIdle()
+                End If
 
                 ' Deal with Document Status
-                If FMain.CheckBoxProcessAsAvailable.Checked Then
+                If FMain.CheckBoxProcessAsAvailable.Checked And FMain.SolidEdgeRequired > 0 Then
                     If FMain.RadioButtonProcessAsAvailableRevert.Checked Then
                         If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
                             StatusChangeSuccessful = UC.SetStatus(DMApp, Path, OldStatus)

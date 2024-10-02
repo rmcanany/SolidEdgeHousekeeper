@@ -100,22 +100,6 @@ Public Class TaskCheckFlatPattern
 
     End Function
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Return Me.TLPTask
-    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
