@@ -13,7 +13,7 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
-## V2024.2 Enhancements/Fixes
+## V2024.3 Enhancements/Fixes
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!
 
