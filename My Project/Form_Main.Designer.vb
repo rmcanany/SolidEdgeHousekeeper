@@ -26,6 +26,11 @@ Partial Class Form_Main
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
+        Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
+        Me.BT_DeleteCLBItem = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
         Me.ListViewFiles = New System.Windows.Forms.ListView()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -54,6 +59,8 @@ Partial Class Form_Main
         Me.BT_Update = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Help = New System.Windows.Forms.ToolStripButton()
+        Me.BT_ColumnsSelect = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.new_CheckBoxFilterDft = New System.Windows.Forms.ToolStripButton()
         Me.new_CheckBoxFilterPsm = New System.Windows.Forms.ToolStripButton()
         Me.new_CheckBoxFilterPar = New System.Windows.Forms.ToolStripButton()
@@ -212,6 +219,7 @@ Partial Class Form_Main
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
+        Me.ColumnSelectionPanel.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
         Me.ToolStrip_List.SuspendLayout()
         Me.TabPageTasks.SuspendLayout()
@@ -262,6 +270,7 @@ Partial Class Form_Main
         '
         Me.TabPageHome.BackColor = System.Drawing.SystemColors.Control
         Me.TabPageHome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TabPageHome.Controls.Add(Me.ColumnSelectionPanel)
         Me.TabPageHome.Controls.Add(Me.ListViewFiles)
         Me.TabPageHome.Controls.Add(Me.ToolStrip_Filter)
         Me.TabPageHome.Controls.Add(Me.ToolStrip_List)
@@ -273,6 +282,65 @@ Partial Class Form_Main
         Me.TabPageHome.Size = New System.Drawing.Size(551, 648)
         Me.TabPageHome.TabIndex = 0
         Me.TabPageHome.Text = "Home"
+        '
+        'ColumnSelectionPanel
+        '
+        Me.ColumnSelectionPanel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ColumnSelectionPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ColumnSelectionPanel.Controls.Add(Me.BT_DeleteCLBItem)
+        Me.ColumnSelectionPanel.Controls.Add(Me.Button2)
+        Me.ColumnSelectionPanel.Controls.Add(Me.Button1)
+        Me.ColumnSelectionPanel.Controls.Add(Me.CLB_Properties)
+        Me.ColumnSelectionPanel.Location = New System.Drawing.Point(396, 2)
+        Me.ColumnSelectionPanel.Name = "ColumnSelectionPanel"
+        Me.ColumnSelectionPanel.Size = New System.Drawing.Size(146, 192)
+        Me.ColumnSelectionPanel.TabIndex = 36
+        Me.ColumnSelectionPanel.Visible = False
+        '
+        'BT_DeleteCLBItem
+        '
+        Me.BT_DeleteCLBItem.Image = Global.Housekeeper.My.Resources.Resources.Cancel
+        Me.BT_DeleteCLBItem.Location = New System.Drawing.Point(121, 43)
+        Me.BT_DeleteCLBItem.Name = "BT_DeleteCLBItem"
+        Me.BT_DeleteCLBItem.Size = New System.Drawing.Size(20, 20)
+        Me.BT_DeleteCLBItem.TabIndex = 38
+        Me.BT_DeleteCLBItem.UseVisualStyleBackColor = True
+        Me.BT_DeleteCLBItem.Visible = False
+        '
+        'Button2
+        '
+        Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button2.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.Button2.Location = New System.Drawing.Point(73, 162)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(71, 28)
+        Me.Button2.TabIndex = 37
+        Me.Button2.Text = "Close"
+        Me.Button2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Button2.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Dock = System.Windows.Forms.DockStyle.Left
+        Me.Button1.Image = Global.Housekeeper.My.Resources.Resources.expand
+        Me.Button1.Location = New System.Drawing.Point(0, 162)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(73, 28)
+        Me.Button1.TabIndex = 36
+        Me.Button1.Text = "Add"
+        Me.Button1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'CLB_Properties
+        '
+        Me.CLB_Properties.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.CLB_Properties.CheckOnClick = True
+        Me.CLB_Properties.Dock = System.Windows.Forms.DockStyle.Top
+        Me.CLB_Properties.FormattingEnabled = True
+        Me.CLB_Properties.Location = New System.Drawing.Point(0, 0)
+        Me.CLB_Properties.Name = "CLB_Properties"
+        Me.CLB_Properties.Size = New System.Drawing.Size(144, 162)
+        Me.CLB_Properties.TabIndex = 35
         '
         'ListViewFiles
         '
@@ -397,7 +465,7 @@ Partial Class Form_Main
         'ToolStrip_List
         '
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
         Me.ToolStrip_List.Location = New System.Drawing.Point(2, 2)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -520,6 +588,22 @@ Partial Class Form_Main
         Me.BT_Help.Size = New System.Drawing.Size(23, 22)
         Me.BT_Help.Text = "ToolStripButton2"
         Me.BT_Help.ToolTipText = "Help"
+        '
+        'BT_ColumnsSelect
+        '
+        Me.BT_ColumnsSelect.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.BT_ColumnsSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_ColumnsSelect.Image = Global.Housekeeper.My.Resources.Resources.TableProp
+        Me.BT_ColumnsSelect.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_ColumnsSelect.Name = "BT_ColumnsSelect"
+        Me.BT_ColumnsSelect.Size = New System.Drawing.Size(23, 22)
+        Me.BT_ColumnsSelect.Text = "Columns configuration"
+        '
+        'ToolStripSeparator10
+        '
+        Me.ToolStripSeparator10.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(6, 25)
         '
         'new_CheckBoxFilterDft
         '
@@ -2402,6 +2486,7 @@ Partial Class Form_Main
         Me.TabControl1.ResumeLayout(False)
         Me.TabPageHome.ResumeLayout(False)
         Me.TabPageHome.PerformLayout()
+        Me.ColumnSelectionPanel.ResumeLayout(False)
         Me.ToolStrip_Filter.ResumeLayout(False)
         Me.ToolStrip_Filter.PerformLayout()
         Me.ToolStrip_List.ResumeLayout(False)
@@ -2642,4 +2727,11 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel8 As ExTableLayoutPanel
     Friend WithEvents ButtonHelp As Button
     Friend WithEvents LabelUpdateProperties As Label
+    Friend WithEvents BT_ColumnsSelect As ToolStripButton
+    Friend WithEvents ToolStripSeparator10 As ToolStripSeparator
+    Friend WithEvents CLB_Properties As CheckedListBox
+    Friend WithEvents ColumnSelectionPanel As Panel
+    Friend WithEvents Button2 As Button
+    Friend WithEvents Button1 As Button
+    Friend WithEvents BT_DeleteCLBItem As Button
 End Class

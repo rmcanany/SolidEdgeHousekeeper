@@ -1,4 +1,8 @@
 ﻿Option Strict On
+Imports OpenMcdf
+Imports OpenMcdf.Extensions
+Imports OpenMcdf.Extensions.OLEProperties
+Imports System.IO
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView
@@ -329,6 +333,14 @@ Public Class UtilsFileList
                             Dim tmpLVItem As New ListViewItem
                             tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                             tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+
+
+                            'Adding extra properties data if needed
+                            For Each PropName In Form_Main.ListOfColumns
+                                tmpLVItem.SubItems.Add(FindProp(PropName, FoundFile))
+                            Next
+
+
                             tmpLVItem.ImageKey = "Unchecked"
                             tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                             tmpLVItem.Name = FoundFile
@@ -342,6 +354,22 @@ Public Class UtilsFileList
                 End If
 
             Next
+
+
+            '######## To be unified with the same in Form_Main ****** F.Arfilli
+            'Resetting the columns
+            If ListViewFiles.Columns.Count > 2 Then
+                Do Until ListViewFiles.Columns.Count = 2
+                    ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+                Loop
+            End If
+
+            'Creating necessary the columns
+            For Each PropName In Form_Main.ListOfColumns
+                ListViewFiles.Columns.Add(PropName, 50)
+            Next
+
+
 
             ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
 
@@ -358,6 +386,76 @@ Public Class UtilsFileList
         FMain.ButtonCancel.Text = "Cancel"
 
     End Sub
+
+    Shared Function FindProp(PropertyName As String, FullName As String) As ListViewItem.ListViewSubItem
+
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
+
+        ' ####################### Get the property object ####################### 
+
+        Dim PropertyNameEnglish = PropertyName 'TaskEditProperties.TemplatePropertyDict(PropertyName)("EnglishName") '######### Refactor to be Shared       F.Arfilli
+
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+        Try
+
+            '######## get the property here
+
+            If (SIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+            ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+            ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+            Else  ' Hopefully a Custom Property
+
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+
+            End If
+
+        Catch ex As Exception
+
+        End Try
+
+        FindProp = New ListViewItem.ListViewSubItem
+
+        If Not IsNothing(OLEProp) Then
+            FindProp.Text = OLEProp.Value.ToString
+        Else
+            FindProp.Text = ""
+        End If
+
+        If cf IsNot Nothing Then cf.Close()
+
+    End Function
 
     Public Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),

@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
@@ -746,6 +747,9 @@ Public Class Form_Main
 
 
     Public Property SolidEdgeRequired As Integer
+
+
+    Public Property ListOfColumns As New List(Of String)
 
 
 
@@ -2727,6 +2731,102 @@ Public Class Form_Main
     End Sub
 
     Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub BT_ColumnsSelect_Click(sender As Object, e As EventArgs) Handles BT_ColumnsSelect.Click
+
+        ColumnSelectionPanel.Visible = True
+
+    End Sub
+
+    Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
+
+        Me.Cursor = Cursors.WaitCursor
+
+        'Resetting the columns
+        If ListViewFiles.Columns.Count > 2 Then
+            Do Until ListViewFiles.Columns.Count = 2
+                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+            Loop
+        End If
+
+        'Creating necessary the columns
+        For Each PropName In ListOfColumns
+            ListViewFiles.Columns.Add(PropName, 50)
+        Next
+
+
+
+        For Each tmpLVItem As ListViewItem In ListViewFiles.Items
+
+            If tmpLVItem.SubItems.Count > 2 Then
+
+                Do Until tmpLVItem.SubItems.Count = 2
+
+                    tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+
+                Loop
+
+            End If
+
+            For Each PropName In ListOfColumns
+
+                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+
+            Next
+
+        Next
+
+        Me.Cursor = Cursors.Default
+
+    End Sub
+
+    Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
+
+        Dim itemIndex As Integer = CLB_Properties.IndexFromPoint(e.Location)
+        If itemIndex > -1 Then
+
+            Dim tmpPoint As Point = CLB_Properties.GetItemRectangle(itemIndex).Location
+            tmpPoint.X += CLB_Properties.GetItemRectangle(itemIndex).Width - BT_DeleteCLBItem.Width
+
+            BT_DeleteCLBItem.Location = tmpPoint
+            BT_DeleteCLBItem.Tag = itemIndex
+            BT_DeleteCLBItem.Visible = True
+        Else
+            BT_DeleteCLBItem.Visible = False
+        End If
+
+    End Sub
+
+    Private Sub BT_DeleteCLBItem_Click(sender As Object, e As EventArgs) Handles BT_DeleteCLBItem.Click
+
+        ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag) + 2)
+        ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+        CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
+        ColumnSelectionPanel.Visible = False
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
+        If A <> "" Then
+
+            If Not ListOfColumns.Contains(A) Then
+
+                ListOfColumns.Add(A)
+                CLB_Properties.Items.Add(A)
+                UpdatePropertiesColumns()
+
+            End If
+
+        End If
 
     End Sub
 
