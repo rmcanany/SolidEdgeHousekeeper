@@ -749,7 +749,24 @@ Public Class Form_Main
     Public Property SolidEdgeRequired As Integer
 
 
-    Public Property ListOfColumns As New List(Of String)
+    Private _ListOfColumns As List(Of String)
+    Public Property ListOfColumns As List(Of String)
+        Get
+            Return _ListOfColumns
+        End Get
+        Set(value As List(Of String))
+            _ListOfColumns = value
+            If Me.TabControl1 IsNot Nothing Then
+                For Each s As String In _ListOfColumns
+                    If Not CLB_Properties.Items.Contains(s) Then
+                        CLB_Properties.Items.Add(s)
+                    End If
+                Next
+                UpdatePropertiesColumns()
+            End If
+        End Set
+    End Property
+
 
 
 
@@ -804,6 +821,10 @@ Public Class Form_Main
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
+        End If
+
+        If Me.ListOfColumns Is Nothing Then
+            Me.ListOfColumns = New List(Of String)
         End If
 
         UD.BuildReadmeFile()
@@ -2772,7 +2793,9 @@ Public Class Form_Main
 
             For Each PropName In ListOfColumns
 
-                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
+                    tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+                End If
 
             Next
 
@@ -2815,8 +2838,30 @@ Public Class Form_Main
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
 
-        Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
-        If A <> "" Then
+        'Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
+        'If A <> "" Then
+
+        '    If Not ListOfColumns.Contains(A) Then
+
+        '        ListOfColumns.Add(A)
+        '        CLB_Properties.Items.Add(A)
+        '        UpdatePropertiesColumns()
+
+        '    End If
+
+        'End If
+
+        Dim FPP As New FormPropertyPicker
+
+        FPP.ShowDialog()
+
+        If FPP.DialogResult = DialogResult.OK Then
+            ' FPP.PropertyString format is %{System.some property name or other}
+            Dim A As String = FPP.PropertyString
+            A = A.Replace("%{", "")
+            A = A.Replace("}", "")
+            A = A.Replace("System.", "")
+            A = A.Replace("Custom.", "")
 
             If Not ListOfColumns.Contains(A) Then
 

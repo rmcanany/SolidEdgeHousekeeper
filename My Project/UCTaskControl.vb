@@ -168,8 +168,6 @@ Public Class UCTaskControl
         Dim CaretPosition = TextBox.Text.Length
 
         Dim FPP As New FormPropertyPicker
-        'FPP.TemplatePropertyDict = Me.TemplatePropertyDict
-        'FPP.TemplatePropertyList = Me.TemplatePropertyList
 
         FPP.ShowDialog()
 
