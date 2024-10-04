@@ -413,6 +413,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property TableProp() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TableProp", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property TaskActivateAndUpdateAll() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("TaskActivateAndUpdateAll", resourceCulture)
@@ -593,6 +603,16 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property TaskOptimize() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TaskOptimize", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property TaskPrint() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("TaskPrint", resourceCulture)
@@ -766,16 +786,6 @@ Namespace My.Resources
         Friend ReadOnly Property Update() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Update", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property TaskOptimize() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("TaskOptimize", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
