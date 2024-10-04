@@ -1183,6 +1183,7 @@ Public Class UtilsCommon
             PropertySets.Close()
 
         Catch ex As Exception
+            Dim i = 0
         End Try
 
         Return Status
