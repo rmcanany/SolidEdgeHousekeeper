@@ -929,4 +929,49 @@ Public Class UtilsFileList
         Return SourceDirectories
     End Function
 
+    Public Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
+
+        FMain.Cursor = Cursors.WaitCursor
+
+        'Resetting the columns
+        If ListViewFiles.Columns.Count > 2 Then
+            Do Until ListViewFiles.Columns.Count = 2
+                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+            Loop
+        End If
+
+        'Creating necessary the columns
+        For Each PropName In FMain.ListOfColumns
+            ListViewFiles.Columns.Add(PropName, 50)
+        Next
+
+
+
+        For Each tmpLVItem As ListViewItem In ListViewFiles.Items
+
+            If tmpLVItem.SubItems.Count > 2 Then
+
+                Do Until tmpLVItem.SubItems.Count = 2
+
+                    tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+
+                Loop
+
+            End If
+
+            For Each PropName In FMain.ListOfColumns
+
+                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
+                    tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+                End If
+
+            Next
+
+        Next
+
+        FMain.Cursor = Cursors.Default
+
+    End Sub
+
+
 End Class

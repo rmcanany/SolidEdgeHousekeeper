@@ -762,7 +762,8 @@ Public Class Form_Main
                         CLB_Properties.Items.Add(s)
                     End If
                 Next
-                UpdatePropertiesColumns()
+                Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                UFL.UpdatePropertiesColumns()
             End If
         End Set
     End Property
@@ -2761,49 +2762,49 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
+    'Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
 
-        Me.Cursor = Cursors.WaitCursor
+    '    Me.Cursor = Cursors.WaitCursor
 
-        'Resetting the columns
-        If ListViewFiles.Columns.Count > 2 Then
-            Do Until ListViewFiles.Columns.Count = 2
-                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-            Loop
-        End If
+    '    'Resetting the columns
+    '    If ListViewFiles.Columns.Count > 2 Then
+    '        Do Until ListViewFiles.Columns.Count = 2
+    '            ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+    '        Loop
+    '    End If
 
-        'Creating necessary the columns
-        For Each PropName In ListOfColumns
-            ListViewFiles.Columns.Add(PropName, 50)
-        Next
+    '    'Creating necessary the columns
+    '    For Each PropName In ListOfColumns
+    '        ListViewFiles.Columns.Add(PropName, 50)
+    '    Next
 
 
 
-        For Each tmpLVItem As ListViewItem In ListViewFiles.Items
+    '    For Each tmpLVItem As ListViewItem In ListViewFiles.Items
 
-            If tmpLVItem.SubItems.Count > 2 Then
+    '        If tmpLVItem.SubItems.Count > 2 Then
 
-                Do Until tmpLVItem.SubItems.Count = 2
+    '            Do Until tmpLVItem.SubItems.Count = 2
 
-                    tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
+    '                tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
 
-                Loop
+    '            Loop
 
-            End If
+    '        End If
 
-            For Each PropName In ListOfColumns
+    '        For Each PropName In ListOfColumns
 
-                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-                    tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
-                End If
+    '            If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
+    '                tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+    '            End If
 
-            Next
+    '        Next
 
-        Next
+    '    Next
 
-        Me.Cursor = Cursors.Default
+    '    Me.Cursor = Cursors.Default
 
-    End Sub
+    'End Sub
 
     Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
 
@@ -2830,13 +2831,13 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub ButtonCloseListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonCloseListOfColumns.Click
 
         ColumnSelectionPanel.Visible = False
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub ButtonAddToListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonAddToListOfColumns.Click
 
         'Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
         'If A <> "" Then
@@ -2853,6 +2854,8 @@ Public Class Form_Main
 
         Dim FPP As New FormPropertyPicker
 
+        FPP.ButtonPropAndIndex.Enabled = False
+
         FPP.ShowDialog()
 
         If FPP.DialogResult = DialogResult.OK Then
@@ -2867,7 +2870,9 @@ Public Class Form_Main
 
                 ListOfColumns.Add(A)
                 CLB_Properties.Items.Add(A)
-                UpdatePropertiesColumns()
+
+                Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                UFL.UpdatePropertiesColumns()
 
             End If
 
