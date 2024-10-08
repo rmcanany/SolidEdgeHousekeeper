@@ -362,8 +362,6 @@ Public Class UtilsFileList
 
             Next
 
-
-            '######## To be unified with the same in Form_Main ****** F.Arfilli
             'Resetting the columns
             If ListViewFiles.Columns.Count > 2 Then
                 Do Until ListViewFiles.Columns.Count = 2
@@ -371,29 +369,7 @@ Public Class UtilsFileList
                 Loop
             End If
 
-            'Creating necessary the columns     ########################### Unify with line 990
-            For Each PropName In Form_Main.ListOfColumns
-
-                If PropName.Name <> "Name" And PropName.Name <> "Path" Then
-                    ListViewFiles.Columns.Add(PropName.Name, 0)
-                    If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
-                ElseIf PropName.Name = "Name" Then
-                    If Not PropName.Visible Then
-                        ListViewFiles.Columns.Item(0).Width = 0
-                    Else
-                        ListViewFiles.Columns.Item(0).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
-                    End If
-                ElseIf PropName.Name = "Path" Then
-                    If Not PropName.Visible Then
-                        ListViewFiles.Columns.Item(1).Width = 0
-                    Else
-                        ListViewFiles.Columns.Item(1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
-                    End If
-                End If
-
-            Next
-
-
+            CreateColumns()
 
             ListViewFiles.EndUpdate()
 
@@ -992,9 +968,14 @@ Public Class UtilsFileList
 
         Next
 
+        CreateColumns()
 
+        FMain.Cursor = Cursors.Default
 
-        'Creating necessary the columns
+    End Sub
+
+    Private Sub CreateColumns()
+
         For Each PropName In Form_Main.ListOfColumns
 
             If PropName.Name <> "Name" And PropName.Name <> "Path" Then
@@ -1015,12 +996,6 @@ Public Class UtilsFileList
             End If
 
         Next
-
-
-
-
-
-        FMain.Cursor = Cursors.Default
 
     End Sub
 

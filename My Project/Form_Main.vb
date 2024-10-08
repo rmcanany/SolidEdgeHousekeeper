@@ -750,10 +750,6 @@ Public Class Form_Main
 
 
     Private _ListOfColumns As List(Of PropertyColumn)
-    'Sub New()
-    '    _ListOfColumns = New List(Of String)
-    '    _ListOfColumns.Add("Path")
-    'End Sub
     Public Property ListOfColumns As List(Of PropertyColumn)
 
         Get
@@ -2781,50 +2777,6 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
-
-    '    Me.Cursor = Cursors.WaitCursor
-
-    '    'Resetting the columns
-    '    If ListViewFiles.Columns.Count > 2 Then
-    '        Do Until ListViewFiles.Columns.Count = 2
-    '            ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-    '        Loop
-    '    End If
-
-    '    'Creating necessary the columns
-    '    For Each PropName In ListOfColumns
-    '        ListViewFiles.Columns.Add(PropName, 50)
-    '    Next
-
-
-
-    '    For Each tmpLVItem As ListViewItem In ListViewFiles.Items
-
-    '        If tmpLVItem.SubItems.Count > 2 Then
-
-    '            Do Until tmpLVItem.SubItems.Count = 2
-
-    '                tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
-
-    '            Loop
-
-    '        End If
-
-    '        For Each PropName In ListOfColumns
-
-    '            If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-    '                tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
-    '            End If
-
-    '        Next
-
-    '    Next
-
-    '    Me.Cursor = Cursors.Default
-
-    'End Sub
-
     Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
 
         Dim itemIndex As Integer = CLB_Properties.IndexFromPoint(e.Location)
@@ -2879,11 +2831,6 @@ Public Class Form_Main
 
         If FPP.DialogResult = DialogResult.OK Then
 
-            'Me.Cursor = Cursors.WaitCursor  '<--------- For some reason the WaitCursor doesn't appear, try to force it
-
-            'Me.UseWaitCursor = True
-            'Application.DoEvents()
-
             ' FPP.PropertyString format is %{System.some property name or other}
             Dim A As String = FPP.PropertyString
             A = A.Replace("%{", "")
@@ -2904,9 +2851,6 @@ Public Class Form_Main
                 UFL.UpdatePropertiesColumns()
 
             End If
-
-            'Me.Cursor = Cursors.Default
-            'Me.UseWaitCursor = False
 
         End If
 
