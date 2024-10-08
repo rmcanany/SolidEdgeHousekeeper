@@ -523,6 +523,10 @@ Public Class UtilsPreferences
         Dim Value As String
         Dim PropType As String
 
+        'This should be happening elsewhere, but not.
+        _Form_Main.DictOfColumnsJSON = JsonConvert.SerializeObject(_Form_Main.DictOfColumns)
+
+
         Dim KeepProps As New List(Of String)
         KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
         KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports", "ProcessAsAvailable"})
@@ -533,7 +537,7 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU", "FileListFontSize", "RememberTasks", "RunInBackground"})
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
         KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
-        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumns"})
+        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "DictOfColumnsJSON"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
@@ -567,7 +571,7 @@ Public Class UtilsPreferences
                         Value = JsonConvert.SerializeObject(New List(Of String))
                         MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
                     Case Else
-                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
+                        MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
                 End Select
             End If
 

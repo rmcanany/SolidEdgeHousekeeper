@@ -749,24 +749,49 @@ Public Class Form_Main
     Public Property SolidEdgeRequired As Integer
 
 
-    Private _ListOfColumns As List(Of String)
-    Public Property ListOfColumns As List(Of String)
+    Private _DictOfColumns As Dictionary(Of String, String)
+    Public Property DictOfColumns As Dictionary(Of String, String)
         Get
-            Return _ListOfColumns
+            Return _DictOfColumns
         End Get
-        Set(value As List(Of String))
-            _ListOfColumns = value
+        Set(value As Dictionary(Of String, String))
+            _DictOfColumns = value
             If Me.TabControl1 IsNot Nothing Then
-                For Each s As String In _ListOfColumns
-                    If Not CLB_Properties.Items.Contains(s) Then
-                        CLB_Properties.Items.Add(s)
+                Dim s = JsonConvert.SerializeObject(Me.DictOfColumns)
+                If Not Me.DictOfColumnsJSON = s Then
+                    Me.DictOfColumnsJSON = s
+                End If
+
+                Dim UC As New UtilsCommon
+                Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                For Each PropFormula As String In _DictOfColumns.Keys
+                    Dim PropName = UC.PropNameFromFormula(PropFormula)
+                    If Not CLB_Properties.Items.Contains(PropName) Then
+                        CLB_Properties.Items.Add(PropName)
                     End If
                 Next
-                Dim UFL As New UtilsFileList(Me, ListViewFiles)
                 UFL.UpdatePropertiesColumns()
             End If
         End Set
     End Property
+
+
+    Private _DictOfColumnsJSON As String
+    Public Property DictOfColumnsJSON As String
+        Get
+            Return _DictOfColumnsJSON
+        End Get
+        Set(value As String)
+            _DictOfColumnsJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                If Not _DictOfColumnsJSON = JsonConvert.SerializeObject(Me.DictOfColumns) Then
+                    Me.DictOfColumns = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(_DictOfColumnsJSON)
+                End If
+            End If
+
+        End Set
+    End Property
+
 
 
 
@@ -824,8 +849,8 @@ Public Class Form_Main
             Me.FileWildcardList = New List(Of String)
         End If
 
-        If Me.ListOfColumns Is Nothing Then
-            Me.ListOfColumns = New List(Of String)
+        If Me.DictOfColumns Is Nothing Then
+            Me.DictOfColumns = New Dictionary(Of String, String)
         End If
 
         UD.BuildReadmeFile()
@@ -2752,9 +2777,6 @@ Public Class Form_Main
         ListViewFilesOutOfDate = True
     End Sub
 
-    Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs)
-
-    End Sub
 
     Private Sub BT_ColumnsSelect_Click(sender As Object, e As EventArgs) Handles BT_ColumnsSelect.Click
 
@@ -2762,49 +2784,6 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
-
-    '    Me.Cursor = Cursors.WaitCursor
-
-    '    'Resetting the columns
-    '    If ListViewFiles.Columns.Count > 2 Then
-    '        Do Until ListViewFiles.Columns.Count = 2
-    '            ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-    '        Loop
-    '    End If
-
-    '    'Creating necessary the columns
-    '    For Each PropName In ListOfColumns
-    '        ListViewFiles.Columns.Add(PropName, 50)
-    '    Next
-
-
-
-    '    For Each tmpLVItem As ListViewItem In ListViewFiles.Items
-
-    '        If tmpLVItem.SubItems.Count > 2 Then
-
-    '            Do Until tmpLVItem.SubItems.Count = 2
-
-    '                tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
-
-    '            Loop
-
-    '        End If
-
-    '        For Each PropName In ListOfColumns
-
-    '            If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-    '                tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
-    '            End If
-
-    '        Next
-
-    '    Next
-
-    '    Me.Cursor = Cursors.Default
-
-    'End Sub
 
     Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
 
@@ -2825,10 +2804,23 @@ Public Class Form_Main
 
     Private Sub BT_DeleteCLBItem_Click(sender As Object, e As EventArgs) Handles BT_DeleteCLBItem.Click
 
-        ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag) + 2)
-        ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
-        CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+        Dim Idx As Integer = CInt(BT_DeleteCLBItem.Tag)
 
+        ListViewFiles.Columns.RemoveAt(Idx + 2)
+        CLB_Properties.Items.RemoveAt(Idx)
+
+        Dim i As Integer = 0
+        Dim PropFormula As String = ""
+        For Each PropFormula In DictOfColumns.Keys
+            If i = Idx Then
+                Exit For
+            End If
+            i += 1
+        Next
+
+        DictOfColumns.Remove(PropFormula)
+
+        ListViewFilesOutOfDate = True
     End Sub
 
     Private Sub ButtonCloseListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonCloseListOfColumns.Click
@@ -2839,19 +2831,6 @@ Public Class Form_Main
 
     Private Sub ButtonAddToListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonAddToListOfColumns.Click
 
-        'Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
-        'If A <> "" Then
-
-        '    If Not ListOfColumns.Contains(A) Then
-
-        '        ListOfColumns.Add(A)
-        '        CLB_Properties.Items.Add(A)
-        '        UpdatePropertiesColumns()
-
-        '    End If
-
-        'End If
-
         Dim FPP As New FormPropertyPicker
 
         FPP.ButtonPropAndIndex.Enabled = False
@@ -2859,24 +2838,29 @@ Public Class Form_Main
         FPP.ShowDialog()
 
         If FPP.DialogResult = DialogResult.OK Then
-            ' FPP.PropertyString format is %{System.some property name or other}
-            Dim A As String = FPP.PropertyString
-            A = A.Replace("%{", "")
-            A = A.Replace("}", "")
-            A = A.Replace("System.", "")
-            A = A.Replace("Custom.", "")
+            ' FPP.PropertyString format is %{System.PropName}
+            Dim UC As New UtilsCommon
+            Dim PropFormula = FPP.PropertyString
+            Dim PropName = UC.PropNameFromFormula(PropFormula)
 
-            If Not ListOfColumns.Contains(A) Then
+            If Not DictOfColumns.Keys.Contains(PropFormula) Then
 
-                ListOfColumns.Add(A)
-                CLB_Properties.Items.Add(A)
+                DictOfColumns(PropFormula) = CStr(True)
+                CLB_Properties.Items.Add(PropName)
 
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
                 UFL.UpdatePropertiesColumns()
 
             End If
 
+            ListViewFilesOutOfDate = True
         End If
+
+    End Sub
+
+    Private Sub UpdateDictOfColumns()
+        Dim tmpDictOfColumns As New Dictionary(Of String, String)
+
 
     End Sub
 

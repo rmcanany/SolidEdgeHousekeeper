@@ -1530,7 +1530,8 @@ Public Class UtilsCommon
 
                     DocValues.Add(tmpValue)
                 Else
-                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                    'Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                    DocValues.Add("")
                 End If
 
             Next
@@ -1919,6 +1920,40 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function PropNameFromFormula(PropFormula As String) As String
+        ' '%{System.Title}' -> 'Title'
+        ' '%{Custom.Donut}' -> 'Donut'
 
+        Dim PropName As String
+
+        PropName = PropFormula
+        PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
+        PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut}' -> 'Donut}'
+        PropName = PropName.Replace("}", "") '         'Title}' -> 'Title'
+
+        Return PropName
+    End Function
+
+    Public Function PropSetFromFormula(PropFormula As String) As String
+        ' '%{System.Title}' -> 'System'
+        Dim PropSet As String
+
+        PropSet = PropFormula
+        PropSet = PropSet.Replace("%{", "") '    '%{System.Title}' -> 'System.Title}'
+        PropSet = PropSet.Replace("}", "") '     'System.Title}' -> 'System.Title'
+        PropSet = PropSet.Split(CChar("."))(0) ' 'System.Title' -> 'System'
+
+        Return PropSet
+    End Function
+
+    Public Function cfFromFullName(FullName As String) As CompoundFile
+        Dim cf As CompoundFile
+
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
+        cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Return cf
+    End Function
 
 End Class
