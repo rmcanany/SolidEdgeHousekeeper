@@ -764,7 +764,9 @@ Public Class Form_Main
                     End If
                 Next
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
+                Me.Cursor = Cursors.Default
             End If
         End Set
 
@@ -831,13 +833,15 @@ Public Class Form_Main
 
             Dim NameColumn As New PropertyColumn With {
                 .Name = "Name",
-                .Visible = True
+                .Visible = True,
+                .Formula = ""
             }
             Me.ListOfColumns.Add(NameColumn)
 
             Dim PathColumn As New PropertyColumn With {
                 .Name = "Path",
-                .Visible = True
+                .Visible = True,
+                .Formula = ""
             }
             Me.ListOfColumns.Add(PathColumn)
 
@@ -2810,19 +2814,6 @@ Public Class Form_Main
 
     Private Sub ButtonAddToListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonAddToListOfColumns.Click
 
-        'Dim A As String = InputBox("Enter the name of the property to show in the list", "Add column", "Title")
-        'If A <> "" Then
-
-        '    If Not ListOfColumns.Contains(A) Then
-
-        '        ListOfColumns.Add(A)
-        '        CLB_Properties.Items.Add(A)
-        '        UpdatePropertiesColumns()
-
-        '    End If
-
-        'End If
-
         Dim FPP As New FormPropertyPicker
 
         FPP.ButtonPropAndIndex.Enabled = False
@@ -2830,6 +2821,11 @@ Public Class Form_Main
         FPP.ShowDialog()
 
         If FPP.DialogResult = DialogResult.OK Then
+
+            Dim UC As New UtilsCommon
+
+            Dim PropFormula As String = FPP.PropertyString
+            Dim PropName As String = UC.PropNameFromFormula(PropFormula)
 
             ' FPP.PropertyString format is %{System.some property name or other}
             Dim A As String = FPP.PropertyString
@@ -2839,8 +2835,9 @@ Public Class Form_Main
             A = A.Replace("Custom.", "")
 
             Dim tmpColumn As New PropertyColumn
-            tmpColumn.Name = A
+            tmpColumn.Name = PropName
             tmpColumn.Visible = True
+            tmpColumn.Formula = PropFormula
 
             If Not ListOfColumns.Contains(tmpColumn) Then
 
@@ -2848,7 +2845,9 @@ Public Class Form_Main
                 CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
 
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
+                Me.Cursor = Cursors.Default
 
             End If
 
@@ -2933,5 +2932,6 @@ End Class
 Public Class PropertyColumn
     Property Name As String
     Property Visible As Boolean
+    Property Formula As String
 
 End Class
