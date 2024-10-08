@@ -337,6 +337,7 @@ Partial Class Form_Main
         Me.CLB_Properties.CheckOnClick = True
         Me.CLB_Properties.Dock = System.Windows.Forms.DockStyle.Top
         Me.CLB_Properties.FormattingEnabled = True
+        Me.CLB_Properties.Items.AddRange(New Object() {"Name", "Path"})
         Me.CLB_Properties.Location = New System.Drawing.Point(0, 0)
         Me.CLB_Properties.Name = "CLB_Properties"
         Me.CLB_Properties.Size = New System.Drawing.Size(144, 162)

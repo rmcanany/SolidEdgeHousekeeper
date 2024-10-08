@@ -337,8 +337,15 @@ Public Class UtilsFileList
 
                             'Adding extra properties data if needed
                             For Each PropName In Form_Main.ListOfColumns
-                                tmpLVItem.SubItems.Add(FindProp(PropName, FoundFile))
+
+                                If PropName.Name <> "Name" And PropName.Name <> "Path" Then
+
+                                    tmpLVItem.SubItems.Add(FindProp(PropName.Name, FoundFile))
+
+                                End If
+
                             Next
+
 
 
                             tmpLVItem.ImageKey = "Unchecked"
@@ -355,8 +362,6 @@ Public Class UtilsFileList
 
             Next
 
-
-            '######## To be unified with the same in Form_Main ****** F.Arfilli
             'Resetting the columns
             If ListViewFiles.Columns.Count > 2 Then
                 Do Until ListViewFiles.Columns.Count = 2
@@ -364,14 +369,7 @@ Public Class UtilsFileList
                 Loop
             End If
 
-            'Creating necessary the columns
-            For Each PropName In Form_Main.ListOfColumns
-                ListViewFiles.Columns.Add(PropName, 50)
-            Next
-
-
-
-            ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
+            CreateColumns()
 
             ListViewFiles.EndUpdate()
 
@@ -931,7 +929,8 @@ Public Class UtilsFileList
 
     Public Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
 
-        FMain.Cursor = Cursors.WaitCursor
+        FMain.Cursor.Current = Cursors.WaitCursor
+        Application.DoEvents()
 
         'Resetting the columns
         If ListViewFiles.Columns.Count > 2 Then
@@ -940,10 +939,6 @@ Public Class UtilsFileList
             Loop
         End If
 
-        'Creating necessary the columns
-        For Each PropName In FMain.ListOfColumns
-            ListViewFiles.Columns.Add(PropName, 50)
-        Next
 
 
 
@@ -961,15 +956,46 @@ Public Class UtilsFileList
 
             For Each PropName In FMain.ListOfColumns
 
-                If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-                    tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
+                If PropName.Name <> "Name" And PropName.Name <> "Path" Then
+
+                    If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
+                        tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName.Name, tmpLVItem.SubItems.Item(0).Name))
+                    End If
+
                 End If
 
             Next
 
         Next
 
+        CreateColumns()
+
         FMain.Cursor = Cursors.Default
+
+    End Sub
+
+    Private Sub CreateColumns()
+
+        For Each PropName In Form_Main.ListOfColumns
+
+            If PropName.Name <> "Name" And PropName.Name <> "Path" Then
+                ListViewFiles.Columns.Add(PropName.Name, 0)
+                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+            ElseIf PropName.Name = "Name" Then
+                If Not PropName.Visible Then
+                    ListViewFiles.Columns.Item(0).Width = 0
+                Else
+                    ListViewFiles.Columns.Item(0).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            ElseIf PropName.Name = "Path" Then
+                If Not PropName.Visible Then
+                    ListViewFiles.Columns.Item(1).Width = 0
+                Else
+                    ListViewFiles.Columns.Item(1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            End If
+
+        Next
 
     End Sub
 

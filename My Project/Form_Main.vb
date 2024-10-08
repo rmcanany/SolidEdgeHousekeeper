@@ -749,15 +749,16 @@ Public Class Form_Main
     Public Property SolidEdgeRequired As Integer
 
 
-    Private _ListOfColumns As List(Of String)
-    Public Property ListOfColumns As List(Of String)
+    Private _ListOfColumns As List(Of PropertyColumn)
+    Public Property ListOfColumns As List(Of PropertyColumn)
+
         Get
             Return _ListOfColumns
         End Get
-        Set(value As List(Of String))
+        Set(value As List(Of PropertyColumn))
             _ListOfColumns = value
             If Me.TabControl1 IsNot Nothing Then
-                For Each s As String In _ListOfColumns
+                For Each s As PropertyColumn In _ListOfColumns
                     If Not CLB_Properties.Items.Contains(s) Then
                         CLB_Properties.Items.Add(s)
                     End If
@@ -766,6 +767,7 @@ Public Class Form_Main
                 UFL.UpdatePropertiesColumns()
             End If
         End Set
+
     End Property
 
 
@@ -825,7 +827,20 @@ Public Class Form_Main
         End If
 
         If Me.ListOfColumns Is Nothing Then
-            Me.ListOfColumns = New List(Of String)
+            Me.ListOfColumns = New List(Of PropertyColumn)
+
+            Dim NameColumn As New PropertyColumn With {
+                .Name = "Name",
+                .Visible = True
+            }
+            Me.ListOfColumns.Add(NameColumn)
+
+            Dim PathColumn As New PropertyColumn With {
+                .Name = "Path",
+                .Visible = True
+            }
+            Me.ListOfColumns.Add(PathColumn)
+
         End If
 
         UD.BuildReadmeFile()
@@ -2762,54 +2777,10 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
-
-    '    Me.Cursor = Cursors.WaitCursor
-
-    '    'Resetting the columns
-    '    If ListViewFiles.Columns.Count > 2 Then
-    '        Do Until ListViewFiles.Columns.Count = 2
-    '            ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-    '        Loop
-    '    End If
-
-    '    'Creating necessary the columns
-    '    For Each PropName In ListOfColumns
-    '        ListViewFiles.Columns.Add(PropName, 50)
-    '    Next
-
-
-
-    '    For Each tmpLVItem As ListViewItem In ListViewFiles.Items
-
-    '        If tmpLVItem.SubItems.Count > 2 Then
-
-    '            Do Until tmpLVItem.SubItems.Count = 2
-
-    '                tmpLVItem.SubItems.RemoveAt(tmpLVItem.SubItems.Count - 1)
-
-    '            Loop
-
-    '        End If
-
-    '        For Each PropName In ListOfColumns
-
-    '            If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-    '                tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
-    '            End If
-
-    '        Next
-
-    '    Next
-
-    '    Me.Cursor = Cursors.Default
-
-    'End Sub
-
     Private Sub CLB_Properties_MouseMove(sender As Object, e As MouseEventArgs) Handles CLB_Properties.MouseMove
 
         Dim itemIndex As Integer = CLB_Properties.IndexFromPoint(e.Location)
-        If itemIndex > -1 Then
+        If itemIndex > 1 Then
 
             Dim tmpPoint As Point = CLB_Properties.GetItemRectangle(itemIndex).Location
             tmpPoint.X += CLB_Properties.GetItemRectangle(itemIndex).Width - BT_DeleteCLBItem.Width
@@ -2825,7 +2796,7 @@ Public Class Form_Main
 
     Private Sub BT_DeleteCLBItem_Click(sender As Object, e As EventArgs) Handles BT_DeleteCLBItem.Click
 
-        ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag) + 2)
+        ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
@@ -2859,6 +2830,7 @@ Public Class Form_Main
         FPP.ShowDialog()
 
         If FPP.DialogResult = DialogResult.OK Then
+
             ' FPP.PropertyString format is %{System.some property name or other}
             Dim A As String = FPP.PropertyString
             A = A.Replace("%{", "")
@@ -2866,10 +2838,14 @@ Public Class Form_Main
             A = A.Replace("System.", "")
             A = A.Replace("Custom.", "")
 
-            If Not ListOfColumns.Contains(A) Then
+            Dim tmpColumn As New PropertyColumn
+            tmpColumn.Name = A
+            tmpColumn.Visible = True
 
-                ListOfColumns.Add(A)
-                CLB_Properties.Items.Add(A)
+            If Not ListOfColumns.Contains(tmpColumn) Then
+
+                ListOfColumns.Add(tmpColumn)
+                CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
 
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
                 UFL.UpdatePropertiesColumns()
@@ -2877,6 +2853,28 @@ Public Class Form_Main
             End If
 
         End If
+
+    End Sub
+
+    Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
+
+        For Each item In ListOfColumns
+
+            If item.Name = CLB_Properties.Items(e.Index).ToString Then
+                item.Visible = CType(e.NewValue, Boolean)
+
+                If ListViewFiles.Columns.Count > e.Index Then 'Insert this check in case of adding a new property the column doesn't exists yet
+                    If Not item.Visible Then
+                        ListViewFiles.Columns.Item(e.Index).Width = 0
+                    Else
+                        ListViewFiles.Columns.Item(e.Index).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    End If
+                End If
+
+                Exit For
+            End If
+
+        Next
 
     End Sub
 
@@ -2932,3 +2930,8 @@ Public Class Form_Main
 End Class
 
 
+Public Class PropertyColumn
+    Property Name As String
+    Property Visible As Boolean
+
+End Class
