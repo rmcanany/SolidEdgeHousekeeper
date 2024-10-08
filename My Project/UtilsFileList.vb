@@ -125,10 +125,8 @@ Public Class UtilsFileList
         Dim tf As Boolean
         'Dim msg As String
 
-        'Dim StartupPath As String
-        'Dim TODOFile As String
-        'StartupPath = System.Windows.Forms.Application.StartupPath()
-        'TODOFile = String.Format("{0}\{1}", StartupPath, "todo.txt")
+        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
         Dim UC As New UtilsCommon
 
@@ -185,6 +183,8 @@ Public Class UtilsFileList
                         tmpFoundFiles.Add(tmpItem.Name)
                     Next
                     FoundFiles = tmpFoundFiles
+
+                    'MsgBox("Here")
 
                 Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
@@ -336,15 +336,16 @@ Public Class UtilsFileList
 
 
                             'Adding extra properties data if needed
-                            For Each PropFormula As String In Form_Main.DictOfColumns.Keys
-                                Dim PropValue As String = UC.SubstitutePropertyFormula(Nothing,
-                                                                               UC.cfFromFullName(FoundFile),
-                                                                               FoundFile,
-                                                                               PropFormula,
-                                                                               False)
+                            For Each PropName In Form_Main.ListOfColumns
 
-                                tmpLVItem.SubItems.Add(PropValue)
+                                If PropName.Name <> "Name" And PropName.Name <> "Path" Then
+
+                                    tmpLVItem.SubItems.Add(FindProp(PropName.Name, FoundFile))
+
+                                End If
+
                             Next
+
 
 
                             tmpLVItem.ImageKey = "Unchecked"
@@ -361,8 +362,6 @@ Public Class UtilsFileList
 
             Next
 
-
-            '######## To be unified with the same in Form_Main ****** F.Arfilli
             'Resetting the columns
             If ListViewFiles.Columns.Count > 2 Then
                 Do Until ListViewFiles.Columns.Count = 2
@@ -370,15 +369,7 @@ Public Class UtilsFileList
                 Loop
             End If
 
-            'Creating necessary the columns
-            For Each PropFormula As String In Form_Main.DictOfColumns.Keys
-                ListViewFiles.Columns.Add(UC.PropNameFromFormula(PropFormula), 50)
-            Next
-
-
-
-            'ListViewFiles.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent)
-            ListViewFiles.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent)
+            CreateColumns()
 
             ListViewFiles.EndUpdate()
 
@@ -394,75 +385,75 @@ Public Class UtilsFileList
 
     End Sub
 
-    'Shared Function FindProp(PropertyName As String, FullName As String) As ListViewItem.ListViewSubItem
+    Shared Function FindProp(PropertyName As String, FullName As String) As ListViewItem.ListViewSubItem
 
-    '    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-    '    Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
-    '    Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
-    '    Dim dsiStream As CFStream = Nothing
-    '    Dim co As OLEPropertiesContainer = Nothing
-    '    Dim OLEProp As OLEProperty = Nothing
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
 
-    '    ' ####################### Get the property object ####################### 
+        ' ####################### Get the property object ####################### 
 
-    '    Dim PropertyNameEnglish = PropertyName 'TaskEditProperties.TemplatePropertyDict(PropertyName)("EnglishName") '######### Refactor to be Shared       F.Arfilli
+        Dim PropertyNameEnglish = PropertyName 'TaskEditProperties.TemplatePropertyDict(PropertyName)("EnglishName") '######### Refactor to be Shared       F.Arfilli
 
-    '    Dim SIList As New List(Of String)
-    '    SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
 
-    '    Dim DSIList As New List(Of String)
-    '    DSIList.AddRange({"Category", "Company", "Manager"})
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
 
-    '    Dim FunnyList As New List(Of String)
-    '    FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
 
-    '    Try
+        Try
 
-    '        '######## get the property here
+            '######## get the property here
 
-    '        If (SIList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
+            If (SIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-    '            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-    '        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
+            ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-    '            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-    '        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-    '            co = dsiStream.AsOLEPropertiesContainer
+            ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
 
-    '            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
-    '        Else  ' Hopefully a Custom Property
+            Else  ' Hopefully a Custom Property
 
-    '            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-    '            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+                OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
 
-    '        End If
+            End If
 
-    '    Catch ex As Exception
+        Catch ex As Exception
 
-    '    End Try
+        End Try
 
-    '    FindProp = New ListViewItem.ListViewSubItem
+        FindProp = New ListViewItem.ListViewSubItem
 
-    '    If Not IsNothing(OLEProp) Then
-    '        FindProp.Text = OLEProp.Value.ToString
-    '    Else
-    '        FindProp.Text = ""
-    '    End If
+        If Not IsNothing(OLEProp) Then
+            FindProp.Text = OLEProp.Value.ToString
+        Else
+            FindProp.Text = ""
+        End If
 
-    '    If cf IsNot Nothing Then cf.Close()
+        If cf IsNot Nothing Then cf.Close()
 
-    'End Function
+    End Function
 
     Public Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),
@@ -938,7 +929,8 @@ Public Class UtilsFileList
 
     Public Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
 
-        FMain.Cursor = Cursors.WaitCursor
+        FMain.Cursor.Current = Cursors.WaitCursor
+        Application.DoEvents()
 
         'Resetting the columns
         If ListViewFiles.Columns.Count > 2 Then
@@ -947,11 +939,6 @@ Public Class UtilsFileList
             Loop
         End If
 
-        'Creating necessary the columns
-        Dim UC As New UtilsCommon
-        For Each PropFormula As String In Form_Main.DictOfColumns.Keys
-            ListViewFiles.Columns.Add(UC.PropNameFromFormula(PropFormula), 50)
-        Next
 
 
 
@@ -967,33 +954,48 @@ Public Class UtilsFileList
 
             End If
 
-            'For Each PropFormula As String In FMain.DictOfColumns.Keys
+            For Each PropName In FMain.ListOfColumns
 
-            '    If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-            '        tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName, tmpLVItem.SubItems.Item(0).Name))
-            '    End If
+                If PropName.Name <> "Name" And PropName.Name <> "Path" Then
 
-            'Next
+                    If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
+                        tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropName.Name, tmpLVItem.SubItems.Item(0).Name))
+                    End If
 
-            Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
-            'Adding extra properties data if needed
-            For Each PropFormula As String In Form_Main.DictOfColumns.Keys
-
-                If IO.File.Exists(FullName) Then
-                    Dim PropValue As String = UC.SubstitutePropertyFormula(Nothing,
-                                                                       UC.cfFromFullName(FullName),
-                                                                       FullName,
-                                                                       PropFormula,
-                                                                       False)
-                    tmpLVItem.SubItems.Add(PropValue)
                 End If
 
             Next
 
-
         Next
 
+        CreateColumns()
+
         FMain.Cursor = Cursors.Default
+
+    End Sub
+
+    Private Sub CreateColumns()
+
+        For Each PropName In Form_Main.ListOfColumns
+
+            If PropName.Name <> "Name" And PropName.Name <> "Path" Then
+                ListViewFiles.Columns.Add(PropName.Name, 0)
+                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+            ElseIf PropName.Name = "Name" Then
+                If Not PropName.Visible Then
+                    ListViewFiles.Columns.Item(0).Width = 0
+                Else
+                    ListViewFiles.Columns.Item(0).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            ElseIf PropName.Name = "Path" Then
+                If Not PropName.Visible Then
+                    ListViewFiles.Columns.Item(1).Width = 0
+                Else
+                    ListViewFiles.Columns.Item(1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+            End If
+
+        Next
 
     End Sub
 
