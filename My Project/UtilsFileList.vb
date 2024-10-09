@@ -935,7 +935,7 @@ Public Class UtilsFileList
         Return SourceDirectories
     End Function
 
-    Public Sub UpdatePropertiesColumns() '####### To be moved in UtilsFileList
+    Public Sub UpdatePropertiesColumns()
 
         'FMain.Cursor.Current = Cursors.WaitCursor  ' ########## Moved to where this method is being called in Form_Main
         Application.DoEvents()

@@ -864,7 +864,7 @@ Public Class Form_Main
             Me.FileWildcardList = New List(Of String)
         End If
 
-        If Me.ListOfColumns Is Nothing Then
+        If Me.ListOfColumns.Count = 0 Then
             Me.ListOfColumns = New List(Of PropertyColumn)
 
             Dim NameColumn As New PropertyColumn With {
@@ -880,6 +880,9 @@ Public Class Form_Main
                 .Formula = ""
             }
             Me.ListOfColumns.Add(PathColumn)
+
+            CLB_Properties.SetItemChecked(0, True)
+            CLB_Properties.SetItemChecked(1, True)
 
         End If
 
