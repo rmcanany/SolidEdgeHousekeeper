@@ -757,9 +757,9 @@ Public Class Form_Main
         Set(value As List(Of PropertyColumn))
             _ListOfColumns = value
             If Me.TabControl1 IsNot Nothing Then
-                For Each s As PropertyColumn In _ListOfColumns
-                    If Not CLB_Properties.Items.Contains(s) Then
-                        CLB_Properties.Items.Add(s)
+                For Each PropColumn As PropertyColumn In _ListOfColumns
+                    If Not CLB_Properties.Items.Contains(PropColumn.Name) Then
+                        CLB_Properties.Items.Add(PropColumn.Name)
                     End If
                 Next
 
@@ -864,27 +864,38 @@ Public Class Form_Main
             Me.FileWildcardList = New List(Of String)
         End If
 
-        If Me.ListOfColumns.Count = 0 Then
+        If Me.ListOfColumns Is Nothing Then
             Me.ListOfColumns = New List(Of PropertyColumn)
+        End If
+
+        If Me.ListOfColumns.Count = 0 Then
+            Dim tmpListOfColumns = New List(Of PropertyColumn)
 
             Dim NameColumn As New PropertyColumn With {
                 .Name = "Name",
                 .Visible = True,
                 .Formula = ""
             }
-            Me.ListOfColumns.Add(NameColumn)
+            tmpListOfColumns.Add(NameColumn)
 
             Dim PathColumn As New PropertyColumn With {
                 .Name = "Path",
                 .Visible = True,
                 .Formula = ""
             }
-            Me.ListOfColumns.Add(PathColumn)
+            tmpListOfColumns.Add(PathColumn)
 
-            CLB_Properties.SetItemChecked(0, True)
-            CLB_Properties.SetItemChecked(1, True)
+            'CLB_Properties.SetItemChecked(0, True)
+            'CLB_Properties.SetItemChecked(1, True)
+
+            Me.ListOfColumns = tmpListOfColumns ' Triggers a Property update
 
         End If
+
+        For i As Integer = 0 To Me.ListOfColumns.Count - 1
+            Dim PropColumn As PropertyColumn = ListOfColumns(i)
+            CLB_Properties.SetItemChecked(i, PropColumn.Visible)
+        Next
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
@@ -2778,8 +2789,15 @@ Public Class Form_Main
     Private Sub BT_DeleteCLBItem_Click(sender As Object, e As EventArgs) Handles BT_DeleteCLBItem.Click
 
         ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
-        ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+
+        Dim tmpListOfColumns As New List(Of PropertyColumn)
+        For Each PropColumn In Me.ListOfColumns
+            tmpListOfColumns.Add(PropColumn)
+        Next
+        tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+
 
     End Sub
 
@@ -2804,13 +2822,6 @@ Public Class Form_Main
             Dim PropFormula As String = FPP.PropertyString
             Dim PropName As String = UC.PropNameFromFormula(PropFormula)
 
-            ' FPP.PropertyString format is %{System.some property name or other}
-            'Dim A As String = FPP.PropertyString
-            'A = A.Replace("%{", "")
-            'A = A.Replace("}", "")
-            'A = A.Replace("System.", "")
-            'A = A.Replace("Custom.", "")
-
             Dim tmpColumn As New PropertyColumn
             tmpColumn.Name = PropName
             tmpColumn.Visible = True
@@ -2818,8 +2829,15 @@ Public Class Form_Main
 
             If Not ListOfColumns.Contains(tmpColumn) Then
 
-                ListOfColumns.Add(tmpColumn)
+                Dim tmpListOfColumns As New List(Of PropertyColumn)
+                For Each PropColumn In Me.ListOfColumns
+                    tmpListOfColumns.Add(PropColumn)
+                Next
+
+                tmpListOfColumns.Add(tmpColumn)
                 CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
+
+                Me.ListOfColumns = tmpListOfColumns  ' Trigger update
 
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
                 Me.Cursor = Cursors.WaitCursor
@@ -2834,7 +2852,12 @@ Public Class Form_Main
 
     Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
 
-        For Each item In ListOfColumns
+        Dim tmpListOfColumns As New List(Of PropertyColumn)
+        For Each PropColumn In Me.ListOfColumns
+            tmpListOfColumns.Add(PropColumn)
+        Next
+
+        For Each item In tmpListOfColumns
 
             If item.Name = CLB_Properties.Items(e.Index).ToString Then
                 item.Visible = CType(e.NewValue, Boolean)
@@ -2851,6 +2874,8 @@ Public Class Form_Main
             End If
 
         Next
+
+        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
 
     End Sub
 
