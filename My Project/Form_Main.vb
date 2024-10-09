@@ -751,7 +751,6 @@ Public Class Form_Main
 
     Private _ListOfColumns As List(Of PropertyColumn)
     Public Property ListOfColumns As List(Of PropertyColumn)
-
         Get
             Return _ListOfColumns
         End Get
@@ -763,15 +762,49 @@ Public Class Form_Main
                         CLB_Properties.Items.Add(s)
                     End If
                 Next
+
                 Dim UFL As New UtilsFileList(Me, ListViewFiles)
                 Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
                 Me.Cursor = Cursors.Default
+
+                Dim tmpListOfColumnsJSON As New List(Of String)
+
+                For Each PropColumn In Me.ListOfColumns
+                    tmpListOfColumnsJSON.Add(PropColumn.ToJSON)
+                Next
+
+                Dim UC As New UtilsCommon
+                If Not UC.CompareListOfColumnsJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
+                    Me.ListOfColumnsJSON = tmpListOfColumnsJSON
+                End If
             End If
         End Set
 
     End Property
 
+    Private _ListOfColumnsJSON As List(Of String)
+    Public Property ListOfColumnsJSON As List(Of String)
+        Get
+            Return _ListOfColumnsJSON
+        End Get
+        Set(value As List(Of String))
+            _ListOfColumnsJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                Dim tmpListOfColumns As New List(Of PropertyColumn)
+                For Each s As String In _ListOfColumnsJSON
+                    Dim tmpPropertyColumn As New PropertyColumn
+                    tmpPropertyColumn.FromJSON(s)
+                    tmpListOfColumns.Add(tmpPropertyColumn)
+                Next
+
+                Dim UC As New UtilsCommon
+                If Not UC.CompareListOfColumns(tmpListOfColumns, Me.ListOfColumns) Then
+                    Me.ListOfColumns = tmpListOfColumns
+                End If
+            End If
+        End Set
+    End Property
 
 
 
@@ -796,6 +829,8 @@ Public Class Form_Main
 
     Private Sub Startup()
 
+        Me.Cursor = Cursors.WaitCursor
+
         'Dim s As String = ""
         'Dim indent As String = "    "
         's = String.Format("{0}Reminders{1}", s, vbCrLf)
@@ -808,6 +843,7 @@ Public Class Form_Main
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
+        Dim UC As New UtilsCommon
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -846,6 +882,10 @@ Public Class Form_Main
             Me.ListOfColumns.Add(PathColumn)
 
         End If
+
+        Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
+
+        Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList, Me.TemplatePropertyDict)
 
         UD.BuildReadmeFile()
 
@@ -927,6 +967,8 @@ Public Class Form_Main
 
         new_ButtonPropertyFilter.Enabled = CheckBoxEnablePropertyFilter.Checked
         ComboBoxFileWildcard.Enabled = CheckBoxEnableFileWildcard.Checked
+
+        Me.Cursor = Cursors.Default
 
     End Sub
 
@@ -2390,75 +2432,7 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub CheckBoxUseTemplateProperties_CheckedChanged(sender As Object, e As EventArgs)
-    '    Me.UseTemplateProperties = CheckBoxUseTemplateProperties.Checked
-
-    '    ButtonUseTemplateProperties.Enabled = Me.UseTemplateProperties
-    'End Sub
-
-    'Private Sub ButtonCopyToTasks_Click(sender As Object, e As EventArgs) Handles ButtonCopyToTasks.Click
-    '    Dim s As String = ""
-    '    For Each Task As Task In Me.TaskList
-
-    '        Dim TaskType As Type = Task.GetType
-
-    '        If Task.RequiresAssemblyTemplate Then
-    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-    '                T.AssemblyTemplate = Me.AssemblyTemplate
-    '            Else
-    '                s = String.Format("{0}RequiresAssemblyTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-    '            End If
-    '        End If
-    '        If Task.RequiresPartTemplate Then
-    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-    '                T.PartTemplate = Me.PartTemplate
-    '            Else
-    '                s = String.Format("{0}RequiresPartTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-    '            End If
-    '        End If
-    '        If Task.RequiresSheetmetalTemplate Then
-    '            If TypeOf Task Is TaskUpdateModelStylesFromTemplate Then
-    '                Dim T = CType(Task, TaskUpdateModelStylesFromTemplate)
-    '                T.SheetmetalTemplate = Me.SheetmetalTemplate
-    '            Else
-    '                s = String.Format("{0}RequiresSheetmetalTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-    '            End If
-    '        End If
-    '        If Task.RequiresDraftTemplate Then
-    '            If TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
-    '                Dim T = CType(Task, TaskUpdateDrawingStylesFromTemplate)
-    '                T.DraftTemplate = Me.DraftTemplate
-    '            ElseIf TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
-    '                Dim T = CType(Task, TaskCreateDrawingOfFlatPattern)
-    '                T.DraftTemplate = Me.DraftTemplate
-    '            Else
-    '                s = String.Format("{0}RequiresDraftTemplate {1}{2}", s, TaskType.ToString, vbCrLf)
-    '            End If
-    '        End If
-    '        If Task.RequiresMaterialTable Then
-    '            If TypeOf Task Is TaskCheckMaterialNotInMaterialTable Then
-    '                Dim T = CType(Task, TaskCheckMaterialNotInMaterialTable)
-    '                T.MaterialTable = Me.MaterialTable
-    '            ElseIf TypeOf Task Is TaskEditProperties Then
-    '                Dim T = CType(Task, TaskEditProperties)
-    '                T.MaterialTable = Me.MaterialTable
-    '            ElseIf TypeOf Task Is TaskUpdateMaterialFromMaterialTable Then
-    '                Dim T = CType(Task, TaskUpdateMaterialFromMaterialTable)
-    '                T.MaterialTable = Me.MaterialTable
-    '            Else
-    '                s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
-    '            End If
-    '        End If
-    '        'Task.ReconcileFormWithProps()
-    '    Next
-    '    If Not s = "" Then
-    '        MsgBox(s)
-    '    End If
-    'End Sub
-
-    Private Sub ButtonUseTemplateProperties_Click(sender As Object, e As EventArgs) Handles ButtonUseTemplateProperties.Click
+    Private Sub ButtonUpdateTemplateProperties_Click(sender As Object, e As EventArgs) Handles ButtonUpdateTemplateProperties.Click
 
         Dim UC As New UtilsCommon
 
@@ -2828,11 +2802,11 @@ Public Class Form_Main
             Dim PropName As String = UC.PropNameFromFormula(PropFormula)
 
             ' FPP.PropertyString format is %{System.some property name or other}
-            Dim A As String = FPP.PropertyString
-            A = A.Replace("%{", "")
-            A = A.Replace("}", "")
-            A = A.Replace("System.", "")
-            A = A.Replace("Custom.", "")
+            'Dim A As String = FPP.PropertyString
+            'A = A.Replace("%{", "")
+            'A = A.Replace("}", "")
+            'A = A.Replace("System.", "")
+            'A = A.Replace("Custom.", "")
 
             Dim tmpColumn As New PropertyColumn
             tmpColumn.Name = PropName
@@ -2926,6 +2900,10 @@ Public Class Form_Main
 
     'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
 
+    '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+
+    'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+
 End Class
 
 
@@ -2934,4 +2912,25 @@ Public Class PropertyColumn
     Property Visible As Boolean
     Property Formula As String
 
+    Public Function ToJSON() As String
+        Dim JSONString As String
+        Dim tmpList As New List(Of String)
+
+        tmpList.AddRange({Name, CStr(Visible), Formula})
+
+        JSONString = JsonConvert.SerializeObject(tmpList)
+
+        Return JSONString
+    End Function
+
+    Public Sub FromJSON(JSONString As String)
+        Dim tmpList As New List(Of String)
+
+        tmpList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+        Name = tmpList(0)
+        Visible = CBool(tmpList(1))
+        Formula = tmpList(2)
+
+    End Sub
 End Class

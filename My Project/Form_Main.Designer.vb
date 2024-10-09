@@ -182,7 +182,7 @@ Partial Class Form_Main
         Me.TextBoxMaterialTable = New System.Windows.Forms.TextBox()
         Me.LabelCustomizeTemplatePropertyDict = New System.Windows.Forms.Label()
         Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
-        Me.ButtonUseTemplateProperties = New System.Windows.Forms.Button()
+        Me.ButtonUpdateTemplateProperties = New System.Windows.Forms.Button()
         Me.LabelUpdateProperties = New System.Windows.Forms.Label()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
@@ -1979,7 +1979,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 4)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 6)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizeTemplatePropertyDict, 0, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUseTemplateProperties, 0, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdateTemplateProperties, 0, 5)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 5)
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
@@ -2107,15 +2107,15 @@ Partial Class Form_Main
         Me.ButtonCustomizeTemplatePropertyDict.Text = "Customize"
         Me.ButtonCustomizeTemplatePropertyDict.UseVisualStyleBackColor = True
         '
-        'ButtonUseTemplateProperties
+        'ButtonUpdateTemplateProperties
         '
-        Me.ButtonUseTemplateProperties.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonUseTemplateProperties.Location = New System.Drawing.Point(3, 153)
-        Me.ButtonUseTemplateProperties.Name = "ButtonUseTemplateProperties"
-        Me.ButtonUseTemplateProperties.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonUseTemplateProperties.TabIndex = 15
-        Me.ButtonUseTemplateProperties.Text = "Update"
-        Me.ButtonUseTemplateProperties.UseVisualStyleBackColor = True
+        Me.ButtonUpdateTemplateProperties.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonUpdateTemplateProperties.Location = New System.Drawing.Point(3, 153)
+        Me.ButtonUpdateTemplateProperties.Name = "ButtonUpdateTemplateProperties"
+        Me.ButtonUpdateTemplateProperties.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonUpdateTemplateProperties.TabIndex = 15
+        Me.ButtonUpdateTemplateProperties.Text = "Update"
+        Me.ButtonUpdateTemplateProperties.UseVisualStyleBackColor = True
         '
         'LabelUpdateProperties
         '
@@ -2714,7 +2714,7 @@ Partial Class Form_Main
     Friend WithEvents TextBoxMaterialTable As TextBox
     Friend WithEvents ButtonCustomizeTemplatePropertyDict As Button
     Friend WithEvents LabelCustomizeTemplatePropertyDict As Label
-    Friend WithEvents ButtonUseTemplateProperties As Button
+    Friend WithEvents ButtonUpdateTemplateProperties As Button
     Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
     Friend WithEvents CheckBoxCheckForNewerVersion As CheckBox

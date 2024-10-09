@@ -1956,4 +1956,54 @@ Public Class UtilsCommon
         Return cf
     End Function
 
+    Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
+        Dim IsEqual As Boolean = True
+
+        If A Is Nothing Or B Is Nothing Then
+            IsEqual = False
+        End If
+
+        If IsEqual Then
+            If Not A.Count = B.Count Then
+                IsEqual = False
+            End If
+        End If
+
+        If IsEqual Then
+            Dim AJSON As String
+            Dim BJSON As String
+            For i As Integer = 0 To A.Count - 1
+                AJSON = A(i).ToJSON
+                BJSON = B(i).ToJSON
+                IsEqual = AJSON = BJSON
+                If Not IsEqual Then Exit For
+            Next
+        End If
+
+        Return IsEqual
+    End Function
+
+    Public Function CompareListOfColumnsJSON(A As List(Of String), B As List(Of String)) As Boolean
+        Dim IsEqual As Boolean = True
+
+        If A Is Nothing Or B Is Nothing Then
+            IsEqual = False
+        End If
+
+        If IsEqual Then
+            If Not A.Count = B.Count Then
+                IsEqual = False
+            End If
+        End If
+
+        If IsEqual Then
+            For i As Integer = 0 To A.Count - 1
+                IsEqual = A(i) = B(i)
+                If Not IsEqual Then Exit For
+            Next
+        End If
+
+        Return IsEqual
+    End Function
+
 End Class
