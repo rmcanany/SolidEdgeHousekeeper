@@ -343,8 +343,10 @@ Public Class UtilsFileList
                                     'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
                                     Dim PropValue As String
                                     Try
-                                        PropValue = UC.SubstitutePropertyFormula(Nothing, UC.cfFromFullName(FoundFile), FoundFile, PropColumn.Formula,
+                                        Dim cf = UC.cfFromFullName(FoundFile)
+                                        PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
                                                                                  ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                                        cf = Nothing
                                     Catch ex As Exception
                                         PropValue = ""
                                     End Try
@@ -976,8 +978,10 @@ Public Class UtilsFileList
 
                         Dim PropValue As String
                         Try
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, UC.cfFromFullName(FullName), FullName, PropColumn.Formula,
+                            Dim cf = UC.cfFromFullName(FullName)
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FullName, PropColumn.Formula,
                                                                                    ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            cf = Nothing
                         Catch ex As Exception
                             PropValue = ""
                         End Try

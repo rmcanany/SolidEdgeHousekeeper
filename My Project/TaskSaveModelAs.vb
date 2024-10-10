@@ -1283,9 +1283,9 @@ Public Class TaskSaveModelAs
             Case ControlNames.FitView.ToString
                 Me.FitView = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Visible = Me.FitView
-                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Visible = Me.FitView
-                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Visible = Me.FitView
+                CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
+                CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
+                CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox).Visible = Me.FitView And Checkbox.Visible
 
             Case ControlNames.Isometric.ToString
                 Me.Isometric = Checkbox.Checked
