@@ -874,14 +874,16 @@ Public Class Form_Main
             Dim NameColumn As New PropertyColumn With {
                 .Name = "Name",
                 .Visible = True,
-                .Formula = ""
+                .Formula = "",
+                .Width = 100
             }
             tmpListOfColumns.Add(NameColumn)
 
             Dim PathColumn As New PropertyColumn With {
                 .Name = "Path",
                 .Visible = True,
-                .Formula = ""
+                .Formula = "",
+                .Width = 100
             }
             tmpListOfColumns.Add(PathColumn)
 
@@ -2826,6 +2828,7 @@ Public Class Form_Main
             tmpColumn.Name = PropName
             tmpColumn.Visible = True
             tmpColumn.Formula = PropFormula
+            tmpColumn.Width = 100
 
             If Not ListOfColumns.Contains(tmpColumn) Then
 
@@ -2866,7 +2869,7 @@ Public Class Form_Main
                     If Not item.Visible Then
                         ListViewFiles.Columns.Item(e.Index).Width = 0
                     Else
-                        ListViewFiles.Columns.Item(e.Index).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                        ListViewFiles.Columns.Item(e.Index).Width = item.Width  'AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
                     End If
                 End If
 
@@ -2876,6 +2879,31 @@ Public Class Form_Main
         Next
 
         Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+
+    End Sub
+
+    Private Sub ListViewFiles_ColumnWidthChanged(sender As Object, e As ColumnWidthChangedEventArgs) Handles ListViewFiles.ColumnWidthChanged
+
+        If Not IsNothing(ListOfColumns) Then
+
+            If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
+
+                If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
+
+                    ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
+
+                    Dim tmpListOfColumns As New List(Of PropertyColumn)
+                    For Each PropColumn In Me.ListOfColumns
+                        tmpListOfColumns.Add(PropColumn)
+                    Next
+
+                    Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
+                End If
+
+            End If
+
+        End If
 
     End Sub
 
@@ -2939,12 +2967,13 @@ Public Class PropertyColumn
     Property Name As String
     Property Visible As Boolean
     Property Formula As String
+    Property Width As Integer
 
     Public Function ToJSON() As String
         Dim JSONString As String
         Dim tmpList As New List(Of String)
 
-        tmpList.AddRange({Name, CStr(Visible), Formula})
+        tmpList.AddRange({Name, CStr(Visible), Formula, CStr(Width)})
 
         JSONString = JsonConvert.SerializeObject(tmpList)
 
@@ -2959,6 +2988,9 @@ Public Class PropertyColumn
         Name = tmpList(0)
         Visible = CBool(tmpList(1))
         Formula = tmpList(2)
+        Width = CInt(tmpList(3))
 
     End Sub
 End Class
+
+

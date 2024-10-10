@@ -40,6 +40,7 @@ Partial Class FormPropertyPicker
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonPropOnly, Me.ButtonPropAndIndex, Me.ToolStripSeparator1, Me.ButtonShowAll})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.ToolStrip1.Size = New System.Drawing.Size(284, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
@@ -90,15 +91,15 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(100, 35)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
-        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(165, 23)
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(172, 23)
         Me.ComboBoxPropertyName.TabIndex = 1
         '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(106, 67)
+        Me.ButtonOK.Location = New System.Drawing.Point(100, 64)
         Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonOK.Size = New System.Drawing.Size(85, 23)
         Me.ButtonOK.TabIndex = 2
         Me.ButtonOK.Text = "OK"
         Me.ButtonOK.UseVisualStyleBackColor = True
@@ -106,9 +107,9 @@ Partial Class FormPropertyPicker
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(189, 66)
+        Me.ButtonCancel.Location = New System.Drawing.Point(187, 64)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonCancel.Size = New System.Drawing.Size(85, 23)
         Me.ButtonCancel.TabIndex = 3
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
@@ -120,7 +121,7 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertySet.Items.AddRange(New Object() {"", "System", "Custom"})
         Me.ComboBoxPropertySet.Location = New System.Drawing.Point(10, 35)
         Me.ComboBoxPropertySet.Name = "ComboBoxPropertySet"
-        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(75, 23)
+        Me.ComboBoxPropertySet.Size = New System.Drawing.Size(84, 23)
         Me.ComboBoxPropertySet.TabIndex = 4
         '
         'FormPropertyPicker

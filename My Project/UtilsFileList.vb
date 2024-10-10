@@ -999,18 +999,18 @@ Public Class UtilsFileList
 
             If PropName.Name <> "Name" And PropName.Name <> "Path" Then
                 ListViewFiles.Columns.Add(PropName.Name, 0)
-                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                If PropName.Visible Then ListViewFiles.Columns.Item(ListViewFiles.Columns.Count - 1).Width = PropName.Width 'AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
             ElseIf PropName.Name = "Name" Then
                 If Not PropName.Visible Then
                     ListViewFiles.Columns.Item(0).Width = 0
                 Else
-                    ListViewFiles.Columns.Item(0).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    ListViewFiles.Columns.Item(0).Width = PropName.Width '.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
             ElseIf PropName.Name = "Path" Then
                 If Not PropName.Visible Then
                     ListViewFiles.Columns.Item(1).Width = 0
                 Else
-                    ListViewFiles.Columns.Item(1).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    ListViewFiles.Columns.Item(1).Width = PropName.Width '.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
                 End If
             End If
 
