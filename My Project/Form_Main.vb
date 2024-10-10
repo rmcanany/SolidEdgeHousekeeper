@@ -7,8 +7,6 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
-    Public Property HoldColumns As Boolean = True
-
     Public Property Version As String = "2024.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
 
     Public Property UtilsLogFile As UtilsLogFile
@@ -2886,34 +2884,26 @@ Public Class Form_Main
 
     Private Sub ListViewFiles_ColumnWidthChanged(sender As Object, e As ColumnWidthChangedEventArgs) Handles ListViewFiles.ColumnWidthChanged
 
-        If Not HoldColumns Then
+        If Not IsNothing(ListOfColumns) Then
 
-            If Not IsNothing(ListOfColumns) Then
+            If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
 
                 If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
+
                     ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
+
+                    Dim tmpListOfColumns As New List(Of PropertyColumn)
+                    For Each PropColumn In Me.ListOfColumns
+                        tmpListOfColumns.Add(PropColumn)
+                    Next
+
+                    Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
                 End If
-
-                '################## Try to update the width in the JSON list but there is a problem
-                Dim tmpListOfColumns As New List(Of PropertyColumn)
-                For Each PropColumn In Me.ListOfColumns
-                    tmpListOfColumns.Add(PropColumn)
-                Next
-
-                HoldColumns = True
-
-                '################## This generates a Loop that ends With a StackOverflow
-                Me.ListOfColumns = tmpListOfColumns  ' Trigger update
 
             End If
 
         End If
-
-    End Sub
-
-    Private Sub ListViewFiles_ColumnWidthChanging(sender As Object, e As ColumnWidthChangingEventArgs) Handles ListViewFiles.ColumnWidthChanging
-
-        HoldColumns = False
 
     End Sub
 
