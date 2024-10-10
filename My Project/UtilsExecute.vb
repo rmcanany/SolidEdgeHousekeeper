@@ -30,6 +30,8 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
+        FMain.UpdateJSONProperties()
+
         Dim UP As New UtilsPreferences
         UP.SaveFormMainSettings(FMain)
         UP.SaveTaskList(FMain.TaskList)

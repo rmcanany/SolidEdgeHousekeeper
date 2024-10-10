@@ -1920,6 +1920,7 @@ Public Class UtilsCommon
 
     End Function
 
+
     Public Function PropNameFromFormula(PropFormula As String) As String
         ' '%{System.Title}' -> 'Title'
         ' '%{Custom.Donut}' -> 'Donut'
