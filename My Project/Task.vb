@@ -142,6 +142,8 @@ Public MustInherit Class Task
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
 
+    Public Property RequiresTemplatePropertyDict As Boolean = False
+
 
 
 

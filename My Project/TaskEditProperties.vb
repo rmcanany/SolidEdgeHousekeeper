@@ -176,6 +176,7 @@ Public Class TaskEditProperties
         Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
+        Me.RequiresTemplatePropertyDict = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -409,7 +410,8 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    FindString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False)
+                    FindString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False,
+                                                              TemplatePropertyDict)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -418,7 +420,8 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+                    ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False,
+                                                                 TemplatePropertyDict, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -712,7 +715,8 @@ Public Class TaskEditProperties
 
             If Proceed Then
                 Try
-                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False)
+                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False,
+                                                              TemplatePropertyDict)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -721,7 +725,8 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False,
+                                                                 TemplatePropertyDict, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1

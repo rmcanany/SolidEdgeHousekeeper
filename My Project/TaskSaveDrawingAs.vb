@@ -164,6 +164,7 @@ Public Class TaskSaveDrawingAs
 
     Public Property PDFPerSheetFileTypeName As String
 
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Enum ControlNames
         NewFileTypeName
@@ -200,6 +201,7 @@ Public Class TaskSaveDrawingAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
+        Me.RequiresTemplatePropertyDict = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -369,7 +371,8 @@ Public Class TaskSaveDrawingAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula,
+                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
                 Catch ex As Exception
                     Success = False
                 End Try
@@ -391,7 +394,8 @@ Public Class TaskSaveDrawingAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula,
+                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
                 Catch ex As Exception
                     Success = False
                 End Try

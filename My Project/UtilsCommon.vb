@@ -908,38 +908,7 @@ Public Class UtilsCommon
         Dim FunnyList As New List(Of String)
         FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
 
-        'Dim tfSystem As Boolean = (PropertySetName.ToLower = "system") Or (PropertySetName = "")
-        'Dim tfCustom As Boolean = (PropertySetName.ToLower = "custom") Or (PropertySetName = "")
-
         Try
-            'If PropertySetName = "System" And (PropertyName <> "Category" And PropertyName <> "Manager" And PropertyName <> "Company" And PropertyName <> "Document Number" And PropertyName <> "Revision" And PropertyName <> "Project Name") Then
-            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            '    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-            'End If
-
-            'If PropertySetName = "System" And (PropertyName = "Category" Or PropertyName = "Manager" Or PropertyName = "Company") Then
-            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            '    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-            'End If
-
-            'If PropertySetName = "System" And (PropertyName = "Document Number" Or PropertyName = "Revision" Or PropertyName = "Project Name") Then
-            '    Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-            '    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            '    OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-            'End If
-
-            'If PropertySetName.ToLower = "custom" Then
-            '    Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            '    Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
-
-            '    OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-            'End If
-
             If (SIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
                 Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
                 Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
@@ -1423,11 +1392,13 @@ Public Class UtilsCommon
         ByVal FullName As String,
         ByVal Instring As String,
         ValidFilenameRequired As Boolean,
+        TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String)),
         Optional Expression As Boolean = False
         ) As String
 
         ' Replaces property formulas in a string
         ' "Material: %{System.Material}, Engineer: %{Custom.Engineer}" --> "Material: STEEL, Engineer: FRED"
+        ' "%{System.Titulo}" -> "Va bene!"
 
         Dim Outstring As String = ""
         Dim tf As Boolean
@@ -1518,7 +1489,8 @@ Public Class UtilsCommon
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
                         If Not FoundProp Is Nothing Then tmpValue = FoundProp.Value.ToString
                     Else
-                        tmpValue = GetOLEPropValue(cf, PropertySet, PropertyName, False)
+                        Dim EnglishName As String = TemplatePropertyDict(PropertyName)("EnglishName")
+                        tmpValue = GetOLEPropValue(cf, PropertySet, EnglishName, False)
                     End If
 
                 End If
@@ -1530,8 +1502,7 @@ Public Class UtilsCommon
 
                     DocValues.Add(tmpValue)
                 Else
-                    'Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
-                    DocValues.Add("")
+                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
                 End If
 
             Next

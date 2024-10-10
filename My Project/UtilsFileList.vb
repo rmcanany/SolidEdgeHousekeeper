@@ -341,12 +341,13 @@ Public Class UtilsFileList
                                 If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
 
                                     'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
-
-                                    Dim PropValue As String = UC.SubstitutePropertyFormula(Nothing,
-                                                                               UC.cfFromFullName(FoundFile),
-                                                                               FoundFile,
-                                                                               PropColumn.Formula,
-                                                                               False)
+                                    Dim PropValue As String
+                                    Try
+                                        PropValue = UC.SubstitutePropertyFormula(Nothing, UC.cfFromFullName(FoundFile), FoundFile, PropColumn.Formula,
+                                                                                 ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                                    Catch ex As Exception
+                                        PropValue = ""
+                                    End Try
 
                                     tmpLVItem.SubItems.Add(PropValue)
 
@@ -973,11 +974,13 @@ Public Class UtilsFileList
                     If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
                         'tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropColumn.Name, tmpLVItem.SubItems.Item(0).Name))
 
-                        Dim PropValue As String = UC.SubstitutePropertyFormula(Nothing,
-                                                                       UC.cfFromFullName(FullName),
-                                                                       FullName,
-                                                                       PropColumn.Formula,
-                                                                       False)
+                        Dim PropValue As String
+                        Try
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, UC.cfFromFullName(FullName), FullName, PropColumn.Formula,
+                                                                                   ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                        Catch ex As Exception
+                            PropValue = ""
+                        End Try
                         tmpLVItem.SubItems.Add(PropValue)
                     End If
 

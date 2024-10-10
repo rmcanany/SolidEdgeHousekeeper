@@ -972,6 +972,21 @@ Public Class Form_Main
                 Task.IsSelectedSheetmetal = False
                 Task.IsSelectedDraft = False
             End If
+            If Task.RequiresTemplatePropertyDict Then
+                Select Case Task.Name
+                    Case "TaskEditProperties"
+                        Dim T = CType(Task, TaskEditProperties)
+                        T.TemplatePropertyDict = Me.TemplatePropertyDict
+                    Case "TaskSaveDrawingAs"
+                        Dim T = CType(Task, TaskSaveDrawingAs)
+                        T.TemplatePropertyDict = Me.TemplatePropertyDict
+                    Case "TaskSaveModelAs"
+                        Dim T = CType(Task, TaskSaveModelAs)
+                        T.TemplatePropertyDict = Me.TemplatePropertyDict
+                    Case Else
+                        MsgBox(String.Format("TemplatePropertyDict not added to {0} in Form_Main.Startup()", Task.Name))
+                End Select
+            End If
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
@@ -2350,6 +2365,21 @@ Public Class Form_Main
 
             For i = TaskList.Count - 1 To 0 Step -1
                 Dim Task = TaskList(i)
+                If Task.RequiresTemplatePropertyDict Then
+                    Select Case Task.Name
+                        Case "TaskEditProperties"
+                            Dim T = CType(Task, TaskEditProperties)
+                            T.TemplatePropertyDict = Me.TemplatePropertyDict
+                        Case "TaskSaveDrawingAs"
+                            Dim T = CType(Task, TaskSaveDrawingAs)
+                            T.TemplatePropertyDict = Me.TemplatePropertyDict
+                        Case "TaskSaveModelAs"
+                            Dim T = CType(Task, TaskSaveModelAs)
+                            T.TemplatePropertyDict = Me.TemplatePropertyDict
+                        Case Else
+                            MsgBox(String.Format("TemplatePropertyDict not added to {0} in Form_Main.EditTaskListButton_Click()", Task.Name))
+                    End Select
+                End If
                 tmpTaskPanel.Controls.Add(Task.TaskControl)
             Next
 
