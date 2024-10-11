@@ -431,8 +431,9 @@ Public Class UtilsExecute
                         ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
 
                     Else
-                        'SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                        SEDoc = DirectCast(SEApp.Documents.Open(Path, 1), SolidEdgeFramework.SolidEdgeDocument)
+                        SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
+                        'SEDoc = DirectCast(SEApp.Documents.Open(Path, 4), SolidEdgeFramework.SolidEdgeDocument)
+                        ' 1 no clear effect (nce), 2 nce, 4 nce
                         SEDoc.Activate()
 
                         ' Maximize the window in the application
