@@ -168,7 +168,15 @@ Public Class UtilsFileList
 
                 Case = "csv", "txt"
                     If FileIO.FileSystem.FileExists(Source.Name) Then
-                        FoundFiles = IO.File.ReadAllLines(Source.Name)
+
+                        Dim tmpFoundFiles = IO.File.ReadAllLines(Source.Name)
+
+                        For i = 0 To tmpFoundFiles.Count - 1
+                            tmpFoundFiles(i) = tmpFoundFiles(i).Split(CChar(",")).First
+                        Next
+
+                        FoundFiles = tmpFoundFiles
+
                     End If
 
                 Case = "excel"

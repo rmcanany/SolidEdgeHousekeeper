@@ -7,6 +7,10 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
+
+    Private editbox As New TextBox()
+    Private hitinfo As ListViewHitTestInfo
+
     Public Property Version As String = "2024.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
 
     Public Property UtilsLogFile As UtilsLogFile
@@ -1784,7 +1788,14 @@ Public Class Form_Main
             For Each tmpItem As ListViewItem In ListViewFiles.Items
 
                 If tmpItem.Group.Name <> "Sources" And tmpItem.Group.Name <> "Excluded" Then
-                    content += tmpItem.Name & vbCrLf
+                    content += tmpItem.Name ' & vbCrLf
+
+                    For Each subItem As ListViewItem.ListViewSubItem In tmpItem.SubItems
+                        If subItem.Bounds.Width <> 0 Then content += "," & subItem.Text
+                    Next
+
+                    content += vbCrLf
+
                 End If
 
             Next
@@ -2958,6 +2969,63 @@ Public Class Form_Main
                 End If
 
             End If
+
+        End If
+
+    End Sub
+
+    Private Sub ListViewFiles_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListViewFiles.MouseDoubleClick
+
+        If ListViewFiles.SelectedItems.Count > 0 And e.Button = MouseButtons.Left Then
+
+            Dim mousePos As Point = ListViewFiles.PointToClient(Control.MousePosition)
+            hitinfo = ListViewFiles.HitTest(mousePos)
+
+            Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
+
+            If columnIndex > 1 Then 'We don't want to be able to edit Name and Path columns
+
+                Dim ListViewFile As ListViewItem = hitinfo.Item
+
+                editbox.Parent = ListViewFiles
+
+                editbox.Bounds = hitinfo.SubItem.Bounds
+                editbox.Text = hitinfo.SubItem.Text
+                AddHandler editbox.Leave, AddressOf editbox_LostFocus
+                AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
+
+                editbox.Show()
+                editbox.SelectionStart = editbox.TextLength
+                editbox.SelectedText = ""
+                editbox.SelectionLength = 0
+                editbox.Focus()
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub editbox_LostFocus(sender As Object, e As EventArgs)
+
+        hitinfo.SubItem.Text = editbox.Text
+        editbox.Hide()
+
+        Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
+        Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+        TaskEditProperties.UpdateSingleProperty(hitinfo.Item.Name, PropertyNameEnglish, hitinfo.SubItem.Text)
+
+        'hitinfo.Item.Name 'File to edit
+        'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
+        'hitinfo.SubItem.Text 'New value
+
+    End Sub
+
+    Private Sub editbox_KeyUp(sender As Object, e As KeyEventArgs)
+
+        If e.KeyCode = Keys.Enter Then
+
+            ListViewFiles.Focus()
 
         End If
 
