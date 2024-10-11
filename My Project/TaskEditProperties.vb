@@ -1320,4 +1320,22 @@ Public Class TaskEditProperties
         Return HelpString
     End Function
 
+
+
+
+
+
+
+
+    Friend Shared Sub UpdateSingleProperty(FullName As String, PropertyName As String, PropertyValue As String)
+
+        'Throw New NotImplementedException
+
+    End Sub
+
+
+
+
+
+
 End Class
