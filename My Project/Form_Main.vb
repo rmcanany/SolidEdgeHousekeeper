@@ -1788,7 +1788,14 @@ Public Class Form_Main
             For Each tmpItem As ListViewItem In ListViewFiles.Items
 
                 If tmpItem.Group.Name <> "Sources" And tmpItem.Group.Name <> "Excluded" Then
-                    content += tmpItem.Name & vbCrLf
+                    content += tmpItem.Name ' & vbCrLf
+
+                    For Each subItem As ListViewItem.ListViewSubItem In tmpItem.SubItems
+                        If subItem.Bounds.Width <> 0 Then content += "," & subItem.Text
+                    Next
+
+                    content += vbCrLf
+
                 End If
 
             Next
