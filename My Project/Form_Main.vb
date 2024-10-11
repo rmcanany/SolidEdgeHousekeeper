@@ -2982,20 +2982,25 @@ Public Class Form_Main
             hitinfo = ListViewFiles.HitTest(mousePos)
 
             Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
-            Dim ListViewFile As ListViewItem = hitinfo.Item
 
-            editbox.Parent = ListViewFiles
+            If columnIndex > 1 Then 'We don't want to be able to edit Name and Path columns
 
-            editbox.Bounds = hitinfo.SubItem.Bounds
-            editbox.Text = hitinfo.SubItem.Text
-            AddHandler editbox.Leave, AddressOf editbox_LostFocus
-            AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
+                Dim ListViewFile As ListViewItem = hitinfo.Item
 
-            editbox.Show()
-            editbox.SelectionStart = editbox.TextLength
-            editbox.SelectedText = ""
-            editbox.SelectionLength = 0
-            editbox.Focus()
+                editbox.Parent = ListViewFiles
+
+                editbox.Bounds = hitinfo.SubItem.Bounds
+                editbox.Text = hitinfo.SubItem.Text
+                AddHandler editbox.Leave, AddressOf editbox_LostFocus
+                AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
+
+                editbox.Show()
+                editbox.SelectionStart = editbox.TextLength
+                editbox.SelectedText = ""
+                editbox.SelectionLength = 0
+                editbox.Focus()
+
+            End If
 
         End If
 
