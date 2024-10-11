@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties
 Imports Newtonsoft.Json
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
@@ -1327,9 +1328,60 @@ Public Class TaskEditProperties
 
 
 
-    Friend Shared Sub UpdateSingleProperty(FullName As String, PropertyName As String, PropertyValue As String)
+    Shared Sub UpdateSingleProperty(FullName As String, PropertyNameEnglish As String, PropertyValue As String)
 
         'Throw New NotImplementedException
+
+
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
+
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+        If (SIList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+        Else  ' Hopefully a Custom Property
+
+            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+
+        End If
+
+        OLEProp.Value = PropertyValue
+
+        co.Save(dsiStream)
+        cf.Commit()
+        cf.Close()
 
     End Sub
 

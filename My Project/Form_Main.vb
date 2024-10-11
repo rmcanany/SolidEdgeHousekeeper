@@ -3000,9 +3000,8 @@ Public Class Form_Main
         editbox.Hide()
 
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
-
-        'TaskEditProperties.UpdateSingleProperty(FullName, PropertyName, PropertyValue)
-        TaskEditProperties.UpdateSingleProperty(hitinfo.Item.Name, hitinfo.Item.ListView.Columns.Item(columnIndex).Text, hitinfo.SubItem.Text)    '<------- call here the sub to edit property F.Arfilli
+        Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+        TaskEditProperties.UpdateSingleProperty(hitinfo.Item.Name, PropertyNameEnglish, hitinfo.SubItem.Text)
 
         'hitinfo.Item.Name 'File to edit
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
