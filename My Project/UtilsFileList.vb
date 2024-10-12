@@ -351,10 +351,17 @@ Public Class UtilsFileList
                                     'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
                                     Dim PropValue As String
                                     Try
-                                        Dim cf = UC.cfFromFullName(FoundFile)
+                                        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                                        Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
+                                        Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+                                        'Dim cf = UC.cfFromFullName(FoundFile)
                                         PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
                                                                                  ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                                        cf.Close()
+                                        fs.Close()
                                         cf = Nothing
+                                        fs = Nothing
                                     Catch ex As Exception
                                         PropValue = ""
                                     End Try
@@ -404,75 +411,6 @@ Public Class UtilsFileList
 
     End Sub
 
-    'Shared Function FindProp(PropertyName As String, FullName As String) As ListViewItem.ListViewSubItem
-
-    '    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-    '    Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
-    '    Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-    '    Dim dsiStream As CFStream = Nothing
-    '    Dim co As OLEPropertiesContainer = Nothing
-    '    Dim OLEProp As OLEProperty = Nothing
-
-    '    ' ####################### Get the property object ####################### 
-
-    '    Dim PropertyNameEnglish = PropertyName 'TaskEditProperties.TemplatePropertyDict(PropertyName)("EnglishName") '######### Refactor to be Shared       F.Arfilli
-
-    '    Dim SIList As New List(Of String)
-    '    SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
-
-    '    Dim DSIList As New List(Of String)
-    '    DSIList.AddRange({"Category", "Company", "Manager"})
-
-    '    Dim FunnyList As New List(Of String)
-    '    FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
-
-    '    Try
-
-    '        '######## get the property here
-
-    '        If (SIList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
-
-    '            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-    '        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
-
-    '            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-    '        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-    '            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-    '            co = dsiStream.AsOLEPropertiesContainer
-
-    '            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
-
-    '        Else  ' Hopefully a Custom Property
-
-    '            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-    '            co = dsiStream.AsOLEPropertiesContainer
-
-    '            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-
-    '        End If
-
-    '    Catch ex As Exception
-
-    '    End Try
-
-    '    FindProp = New ListViewItem.ListViewSubItem
-
-    '    If Not IsNothing(OLEProp) Then
-    '        FindProp.Text = OLEProp.Value.ToString
-    '    Else
-    '        FindProp.Text = ""
-    '    End If
-
-    '    If cf IsNot Nothing Then cf.Close()
-
-    'End Function
 
     Public Function FileWildcardSearch(
         ByVal FoundFiles As IReadOnlyCollection(Of String),
@@ -986,10 +924,16 @@ Public Class UtilsFileList
 
                         Dim PropValue As String
                         Try
-                            Dim cf = UC.cfFromFullName(FullName)
+                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                            Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
+                            Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+                            'Dim cf = UC.cfFromFullName(FullName)
                             PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FullName, PropColumn.Formula,
                                                                                    ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            cf.Close()
+                            fs.Close()
                             cf = Nothing
+                            fs = Nothing
                         Catch ex As Exception
                             PropValue = ""
                         End Try

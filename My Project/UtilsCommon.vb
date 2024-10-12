@@ -15,35 +15,6 @@ Public Class UtilsCommon
 
     Public tmpList As Collection
 
-    Public Sub CopyProperties(Source As Object, Destination As Object)
-
-        Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
-        Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
-
-        Dim destProps() As PropertyInfo = destType.GetProperties()
-        Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
-
-        For Each sourceProp As PropertyInfo In sourceProps
-            For Each destProp As PropertyInfo In destProps
-                If destProp.CanWrite Then
-                    If destProp.Name <> "Parent" Then
-                        If destProp.Name = sourceProp.Name Then
-                            If destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType) Then
-                                Try
-                                    Dim tmpValue = sourceProp.GetValue(Source, Nothing)
-                                    If Not tmpValue Is Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
-                                Catch ex As Exception
-                                    'Console.WriteLine(destType.FullName & " - " & destProp.Name)
-                                End Try
-                            End If
-                        End If
-                    End If
-                End If
-            Next
-        Next
-
-    End Sub
-
     Public Function FilenameIsOK(ByVal fileName As String) As Boolean
 
         Try
@@ -56,425 +27,7 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function tmpGetSEProperties(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As Dictionary(Of String, List(Of String))
-        Dim PropDict As New Dictionary(Of String, List(Of String))
 
-        Dim PropertySets As SolidEdgeFramework.PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-        Dim PropertySet As SolidEdgeFramework.Properties
-        Dim Prop As SolidEdgeFramework.Property
-
-        Dim s As String
-        Dim s1 As String
-
-        For i = 1 To PropertySets.Count
-            PropertySet = PropertySets.Item(i)
-            s = String.Format("Item {0} [{1}]", i, PropertySet.Name)
-            PropDict(s) = New List(Of String)
-
-            For j = 1 To PropertySet.Count
-                Prop = PropertySet.Item(j)
-                s1 = String.Format("Item {0} [{1}]", j, Prop.Name)
-                PropDict(s).Add(s1)
-            Next
-        Next
-
-        Dim DocType As String = GetDocType(SEDoc)
-
-        Dim UP As New UtilsPreferences
-
-        Dim PreferencesDir As String = UP.GetPreferencesDirectory()
-        Dim OutFilename As String = String.Format("{0}/PropDict_{1}.txt", PreferencesDir, DocType)
-        Dim OutList As New List(Of String)
-
-        For Each s In PropDict.Keys
-            For Each s1 In PropDict(s)
-                OutList.Add(String.Format("{0},{1}", s, s1))
-            Next
-        Next
-
-        IO.File.WriteAllLines(OutFilename, OutList)
-
-        Return PropDict
-    End Function
-
-    Public Function GetFileProperties(Filename As String) As List(Of String)
-        ' Gets the properties using Windows functionality
-
-        Dim PropList As New List(Of String)
-        Dim ValList As New List(Of String)
-
-        Dim shell As New Shell32.Shell
-        Dim Directory As Shell32.Folder
-
-        Directory = shell.NameSpace(System.IO.Path.GetDirectoryName(Filename))
-
-        Dim n = 10000
-        For Each s In Directory.Items
-            If Directory.GetDetailsOf(s, 0) = Path.GetFileName(Filename) Then
-                For i = 0 To n
-                    Dim Val = Directory.GetDetailsOf(s, i)
-                    Dim Key = Directory.GetDetailsOf(Directory.Items, i)
-                    If Not (Key = "" And Val = "") Then
-                        ValList.Add(String.Format("{0}: {1}", Key, Val))
-                    End If
-                Next
-                Exit For
-            End If
-        Next
-
-        Return ValList
-
-    End Function
-
-    Public Function PropLocalizedToEnglish(PropertySetName As String,
-                                           ItemNumber As Integer,
-                                           DocType As String) As String
-
-        ' ###### There is a comment contained in each Case statement.               ###### 
-        ' ###### It shows the English name for each file type in order.             ###### 
-        ' ###### The order is par, psm, asm, dft.                                   ###### 
-        ' ###### For example, the following entry is for MechanicalModeling Item 2  ###### 
-        ' ###### 'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []         ###### 
-        ' ###### It says that item's property name for a .par is Face Style,        ###### 
-        ' ###### .psm: Sheet Metal Gage, .asm: Bead Material, .dft: (not present),  ###### 
-
-        Dim EnglishName As String = ""
-
-        Select Case PropertySetName
-
-            Case "SummaryInformation"
-                Select Case ItemNumber
-                    Case 1
-                        'Item  [Title] [Title] [Title] [Title] 
-                        EnglishName = "Title"
-                    Case 2
-                        'Item 2 [Subject] [Subject] [Subject] [Subject] 
-                        EnglishName = "Subject"
-                    Case 3
-                        'Item 3 [Author] [Author] [Author] [Author] 
-                        EnglishName = "Author"
-                    Case 4
-                        'Item 4 [Keywords] [Keywords] [Keywords] [Keywords] 
-                        EnglishName = "Keywords"
-                    Case 5
-                        'Item 5 [Comments] [Comments] [Comments] [Comments] 
-                        EnglishName = "Comments"
-                    Case 6
-                        'Item 6 [Template] [Template] [Template] [Template] 
-                        EnglishName = "Template"
-                    Case 7
-                        'Item 7 [Last Author] [Last Author] [Last Author] [Last Author] 
-                        EnglishName = "Last Author"
-                    Case 8
-                        'Item 8 [Revision Number] [Revision Number] [Revision Number] [Revision Number] 
-                        EnglishName = "Revision Number"
-                    Case 9
-                        'Item 9 [Total Editing Time] [Total Editing Time] [Total Editing Time] [Total Editing Time] 
-                        EnglishName = "Total Editing Time"
-                    Case 10
-                        'Item 10 [Last Print Date] [Last Print Date] [Last Print Date] [Last Print Date] 
-                        EnglishName = "Last Print Date"
-                    Case 11
-                        'Item 11 [Origination Date] [Origination Date] [Origination Date] [Origination Date] 
-                        EnglishName = "Origination Date"
-                    Case 12
-                        'Item 12 [Last Save Date] [Last Save Date] [Last Save Date] [Last Save Date] 
-                        EnglishName = "Last Save Date"
-                    Case 13
-                        'Item 13 [Number of pages] [Number of pages] [Number of pages] [Number of pages] 
-                        EnglishName = "Number of pages"
-                    Case 14
-                        'Item 14 [Number of words] [Number of words] [Number of words] [Number of words] 
-                        EnglishName = "Number of words"
-                    Case 15
-                        'Item 15 [Number of characters] [Number of characters] [Number of characters] [Number of characters] 
-                        EnglishName = "Number of characters"
-                    Case 16
-                        'Item 16 [Application Name] [Application Name] [Application Name] [Application Name] 
-                        EnglishName = "Application Name"
-                    Case 17
-                        'Item 17 [Security] [Security] [Security] [Security] 
-                        EnglishName = "Security"
-                End Select
-
-            Case "ExtendedSummaryInformation"
-                Select Case ItemNumber
-                    Case 1
-                        'Item 1 [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] 
-                        EnglishName = "Name of Saving Application"
-                    Case 2
-                        'Item 2 [DocumentID] [DocumentID] [DocumentID] [DocumentID] 
-                        EnglishName = "DocumentID"
-                    Case 3
-                        'Item 3 [Status] [Status] [Status] [Status] 
-                        EnglishName = "Status"
-                    Case 4
-                        'Item 4 [Username] [Username] [Username] [Username] 
-                        EnglishName = "Username"
-                    Case 5
-                        'Item 5 [CreationLocale] [CreationLocale] [CreationLocale] [CreationLocale] 
-                        EnglishName = "CreationLocale"
-                    Case 6
-                        'Item 6 [Hardware] [Hardware] [StatusChangeDate] [StatusChangeDate]
-                        Select Case DocType
-                            Case "par", "psm"
-                                EnglishName = "Hardware"
-                            Case "asm", "dft"
-                                EnglishName = "StatusChangeDate"
-                        End Select
-                    Case 7
-                        'Item 7 [] [StatusChangeDate] [StatusChangeDate] [] 
-                        Select Case DocType
-                            Case "par", "psm"
-                                EnglishName = "StatusChangeDate"
-                            Case "asm", "dft"
-                                EnglishName = ""
-                        End Select
-                End Select
-
-            Case "DocumentSummaryInformation"
-                Select Case ItemNumber
-                    Case 1
-                        'Item 1 [Category] [Category] [Category] [Category]
-                        EnglishName = "Category"
-                    Case 2
-                        'Item 2 [Presentation Format] [Presentation Format] [Presentation Format] [Presentation Format]
-                        EnglishName = "Presentation Format"
-                    Case 3
-                        'Item 3 [Byte Count] [Byte Count] [Byte Count] [Byte Count]
-                        EnglishName = "Byte Count"
-                    Case 4
-                        'Item 4 [Lines] [Lines] [Lines] [Lines]
-                        EnglishName = "Lines"
-                    Case 5
-                        'Item 5 [Paragraphs] [Paragraphs] [Paragraphs] [Paragraphs]
-                        EnglishName = "Paragraphs"
-                    Case 6
-                        'Item 6 [Slides] [Slides] [Slides] [Slides]
-                        EnglishName = "Slides"
-                    Case 7
-                        'Item 7 [Notes] [Notes] [Notes] [Notes]
-                        EnglishName = "Notes"
-                    Case 8
-                        'Item 8 [Hidden Objects] [Hidden Objects] [Hidden Objects] [Hidden Objects]
-                        EnglishName = "Hidden Objects"
-                    Case 9
-                        'Item 9 [Multimedia Clips] [Multimedia Clips] [Multimedia Clips] [Multimedia Clips]
-                        EnglishName = "Multimedia Clips"
-                    Case 10
-                        'Item 10 [Manager] [Manager] [Manager] [Manager]
-                        EnglishName = "Manager"
-                    Case 11
-                        'Item 11 [Company] [Company] [Company] [Company]
-                        EnglishName = "Company"
-
-                End Select
-
-            Case "ProjectInformation"
-                Select Case ItemNumber
-                    Case 1
-                        'Item 1 [Document Number] [Document Number] [Document Number] [Document Number] 
-                        EnglishName = "Document Number"
-                    Case 2
-                        'Item 2 [Revision] [Revision] [Revision] [Revision] 
-                        EnglishName = "Revision"
-                    Case 3
-                        'Item 3 [Project Name] [Project Name] [Project Name] [Project Name] 
-                        EnglishName = "Project Name"
-
-                End Select
-
-            Case "MechanicalModeling"
-                Select Case ItemNumber
-                    Case 1
-                        'Item 1 [Material] [Material] [Material] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Material"
-                            Case "psm"
-                                EnglishName = "Material"
-                            Case "asm"
-                                EnglishName = "Material"
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 2
-                        'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Face Style"
-                            Case "psm"
-                                EnglishName = "Sheet Metal Gage"
-                            Case "asm"
-                                EnglishName = "Bead Material"
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 3
-                        'Item 3 [Fill Style] [Face Style] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Fill Style"
-                            Case "psm"
-                                EnglishName = "Face Style"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 4
-                        'Item 4 [Virtual Style] [Fill Style] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Virtual Style"
-                            Case "psm"
-                                EnglishName = "Fill Style"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 5
-                        'Item 5 [Coef. of Thermal Exp] [Virtual Style] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Coef. of Thermal Exp"
-                            Case "psm"
-                                EnglishName = "Virtual Style"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 6
-                        'Item 6 [Thermal Conductivity] [Coef. of Thermal Exp] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Thermal Conductivity"
-                            Case "psm"
-                                EnglishName = "Coef. of Thermal Exp"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 7
-                        'Item 7 [Specific Heat] [Thermal Conductivity] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Specific Heat"
-                            Case "psm"
-                                EnglishName = "Thermal Conductivity"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 8
-                        'Item 8 [Modulus of Elasticity] [Specific Heat] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Modulus of Elasticity"
-                            Case "psm"
-                                EnglishName = "Specific Heat"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 9
-                        'Item 9 [Poisson's Ratio] [Modulus of Elasticity] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Poisson's Ratio"
-                            Case "psm"
-                                EnglishName = "Modulus of Elasticity"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 10
-                        'Item 10 [Yield Stress] [Poisson's Ratio] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Yield Stress"
-                            Case "psm"
-                                EnglishName = "Poisson's Ratio"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 11
-                        'Item 11 [Ultimate Stress] [Yield Stress] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Ultimate Stress"
-                            Case "psm"
-                                EnglishName = "Yield Stress"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 12
-                        'Item 12 [Elongation] [Ultimate Stress] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Elongation"
-                            Case "psm"
-                                EnglishName = "Ultimate Stress"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 13
-                        'Item 13 [Grouping] [Elongation] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "Grouping"
-                            Case "psm"
-                                EnglishName = "Elongation"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 14
-                        'Item 14 [LibraryName] [Grouping] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = "LibraryName"
-                            Case "psm"
-                                EnglishName = "Grouping"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-                    Case 15
-                        'Item 15 [] [LibraryName] [] []
-                        Select Case DocType
-                            Case "par"
-                                EnglishName = ""
-                            Case "psm"
-                                EnglishName = "LibraryName"
-                            Case "asm"
-                                EnglishName = ""
-                            Case "dft"
-                                EnglishName = ""
-                        End Select
-
-                End Select
-
-        End Select
-
-
-
-        Return EnglishName
-    End Function
 
     Public Sub FindLinked(DMDoc As DesignManager.Document)
 
@@ -645,320 +198,6 @@ Public Class UtilsCommon
         Return DocType
     End Function
 
-    Public Function GetProp(
-        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        PropertySetName As String,
-        PropertyName As String,
-        ModelLinkIdx As Integer,
-        AddProp As Boolean
-        ) As SolidEdgeFramework.Property
-
-        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
-        Dim PropertySet As SolidEdgeFramework.Properties = Nothing
-        Dim Prop As SolidEdgeFramework.Property = Nothing
-        Dim FoundProp As SolidEdgeFramework.Property = Nothing
-        Dim Proceed As Boolean = True
-        Dim tf As Boolean
-        Dim tf1 As Boolean
-        Dim tf2 As Boolean
-        Dim PropertyFound As Boolean
-
-        If ModelLinkIdx = 0 Then  ' Implies the document is a model file
-            Try
-                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
-            Catch ex As Exception
-                Proceed = False
-            End Try
-
-        Else  ' Must be a draft file
-            Dim ModelLink As SolidEdgeDraft.ModelLink
-            Dim Typename As String = ""
-            Dim ModelDocName As String = ""
-
-            Try
-                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument
-                tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
-
-                ModelLink = tmpSEDoc.ModelLinks.Item(ModelLinkIdx)
-                Typename = GetDocType(CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument))
-
-                tf = True
-
-                If Typename.ToLower = "par" Then
-                    Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-                    ModelDocName = ModelDoc.FullName
-                End If
-
-                If Typename.ToLower = "psm" Then
-                    Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-                    ModelDocName = ModelDoc.FullName
-                End If
-
-                If Typename.ToLower = "asm" Then
-                    Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
-                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
-                    ModelDocName = ModelDoc.FullName
-                End If
-            Catch ex As Exception
-                Proceed = False
-            End Try
-
-        End If
-
-
-        If Proceed Then
-            For Each PropertySet In PropertySets
-                For Each Prop In PropertySet
-
-                    'Check if both names are 'custom' or neither are
-                    tf1 = (PropertySetName.ToLower = "custom") And (PropertySet.Name.ToLower = "custom")
-                    tf2 = (PropertySetName.ToLower <> "custom") And (PropertySet.Name.ToLower <> "custom")
-
-                    tf = tf1 Or tf2
-                    If Not tf Then
-                        Continue For
-                    End If
-                    'If Not PropertySetName = "" Then
-
-                    'End If
-
-                    ' Some properties do not have names.
-                    Try
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            FoundProp = Prop
-                            PropertyFound = True
-                            Exit For
-                        End If
-                    Catch ex As Exception
-                    End Try
-
-
-                    ' ###### Pretty sure the following was for Structured Storage, which is now processed elsewhere. ######
-
-                    '' Here and below, a custom property will pass the first two tests, not the third.
-                    'tf = PropertySetName = "System"
-                    'tf = tf Or PropertySetName = ""
-                    'tf = tf And PropertySet.Name = "SummaryInformation"
-
-                    'If tf Then
-
-                    '    Select Case PropertyName
-                    '        Case = "Title"
-                    '            FoundProp = PropertySet.Item(1)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Subject"
-                    '            FoundProp = PropertySet.Item(2)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Author"
-                    '            FoundProp = PropertySet.Item(3)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Keywords"
-                    '            FoundProp = PropertySet.Item(4)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Comments"
-                    '            FoundProp = PropertySet.Item(5)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '    End Select
-
-                    'End If
-
-                    'tf = PropertySetName = "System"
-                    'tf = tf Or PropertySetName = ""
-                    'tf = tf And PropertySet.Name = "DocumentSummaryInformation"
-
-                    'If tf Then
-
-                    '    Select Case PropertyName
-
-                    '        Case = "Category"
-                    '            FoundProp = PropertySet.Item(1)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Company"
-                    '            FoundProp = PropertySet.Item(11)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Manager"
-                    '            FoundProp = PropertySet.Item(10)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '    End Select
-
-                    'End If
-
-                    'tf = PropertySetName = "System"
-                    'tf = tf Or PropertySetName = ""
-                    'tf = tf And PropertySet.Name = "ProjectInformation"
-
-                    'If tf Then
-
-                    '    Select Case PropertyName
-
-                    '        Case = "Document Number"
-                    '            FoundProp = PropertySet.Item(1)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Revision"
-                    '            FoundProp = PropertySet.Item(2)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Project Name"
-                    '            FoundProp = PropertySet.Item(3)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '    End Select
-
-                    'End If
-
-                    'tf = PropertySetName = "System"
-                    'tf = tf Or PropertySetName = ""
-                    'tf = tf And PropertySet.Name = "MechanicalModeling"
-
-                    'If PropertySetName = "System" And PropertySet.Name = "MechanicalModeling" Then
-
-                    '    Select Case PropertyName
-
-                    '        Case = "Material"
-                    '            FoundProp = PropertySet.Item(1)
-                    '            PropertyFound = True
-                    '            Exit For
-
-                    '        Case = "Sheet Metal Gage"
-                    '            If GetDocType(SEDoc) = "psm" Then
-                    '                FoundProp = PropertySet.Item(2)
-                    '                PropertyFound = True
-                    '                Exit For
-                    '            End If
-
-                    '    End Select
-
-                    'End If
-
-                Next
-
-                If PropertyFound Then
-                    Exit For
-                End If
-            Next
-
-        End If
-
-
-        'If the property was not found, add it.
-        tf = PropertySetName.ToLower = "custom"
-        'tf = tf Or PropertySetName.ToLower = ""
-        tf = tf And AddProp
-        tf = tf And (Not PropertyFound)
-
-        If tf Then
-            ' Can't add a duplicate property
-            Try
-                PropertySet = PropertySets.Item("Custom")
-                FoundProp = PropertySet.Add(PropertyName, "")
-                PropertySet.Save()
-                PropertySets.Save()
-            Catch ex As Exception
-                ' Might want to report an error.
-            End Try
-
-        End If
-
-
-        Return FoundProp
-
-    End Function
-
-    Public Function GetOLEPropValue(
-        cf As CompoundFile,
-        PropertySetName As String,
-        PropertyName As String,
-        AddProp As Boolean
-        ) As String
-
-        GetOLEPropValue = ""
-
-        Dim Proceed As Boolean = True
-
-        Dim OLEProp As OLEProperty = Nothing
-
-        Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
-
-        Dim DSIList As New List(Of String)
-        DSIList.AddRange({"Category", "Company", "Manager"})
-
-        Dim FunnyList As New List(Of String)
-        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
-
-        Try
-            If (SIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
-                Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-
-            ElseIf (DSIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
-                Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
-
-            ElseIf (FunnyList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
-                Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-                OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
-
-            Else
-                If PropertySetName.ToLower = "custom" Then
-                    Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                    Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
-
-                    OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
-                End If
-
-            End If
-
-        Catch ex As Exception
-        End Try
-
-        If Not IsNothing(OLEProp) Then
-
-            Return OLEProp.Value.ToString
-
-        Else
-
-            Return Nothing
-
-            'If AddProp Then
-            '    Try
-            '        'TBD Add property here
-            '    Catch ex As Exception
-            '        Proceed = False
-            '    End Try
-
-            'End If
-        End If
-
-    End Function
 
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
     ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
@@ -1386,6 +625,280 @@ Public Class UtilsCommon
         ssmObsolete = 4
     End Enum
 
+
+    '###### PROPERTY FUNCTIONS ######
+
+    Public Function GetProp(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String,
+        ModelLinkIdx As Integer,
+        AddProp As Boolean
+        ) As SolidEdgeFramework.Property
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
+        Dim PropertySet As SolidEdgeFramework.Properties = Nothing
+        Dim Prop As SolidEdgeFramework.Property = Nothing
+        Dim FoundProp As SolidEdgeFramework.Property = Nothing
+        Dim Proceed As Boolean = True
+        Dim tf As Boolean
+        Dim tf1 As Boolean
+        Dim tf2 As Boolean
+        Dim PropertyFound As Boolean
+
+        If ModelLinkIdx = 0 Then  ' Implies the document is a model file
+            Try
+                PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+            Catch ex As Exception
+                Proceed = False
+            End Try
+
+        Else  ' Must be a draft file
+            Dim ModelLink As SolidEdgeDraft.ModelLink
+            Dim Typename As String = ""
+            Dim ModelDocName As String = ""
+
+            Try
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument
+                tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+
+                ModelLink = tmpSEDoc.ModelLinks.Item(ModelLinkIdx)
+                Typename = GetDocType(CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument))
+
+                tf = True
+
+                If Typename.ToLower = "par" Then
+                    Dim ModelDoc As SolidEdgePart.PartDocument = CType(ModelLink.ModelDocument, SolidEdgePart.PartDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "psm" Then
+                    Dim ModelDoc As SolidEdgePart.SheetMetalDocument = CType(ModelLink.ModelDocument, SolidEdgePart.SheetMetalDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+
+                If Typename.ToLower = "asm" Then
+                    Dim ModelDoc As SolidEdgeAssembly.AssemblyDocument = CType(ModelLink.ModelDocument, SolidEdgeAssembly.AssemblyDocument)
+                    PropertySets = CType(ModelDoc.Properties, SolidEdgeFramework.PropertySets)
+                    ModelDocName = ModelDoc.FullName
+                End If
+            Catch ex As Exception
+                Proceed = False
+            End Try
+
+        End If
+
+
+        If Proceed Then
+            For Each PropertySet In PropertySets
+                For Each Prop In PropertySet
+
+                    'Check if both names are 'custom' or neither are
+                    tf1 = (PropertySetName.ToLower = "custom") And (PropertySet.Name.ToLower = "custom")
+                    tf2 = (PropertySetName.ToLower <> "custom") And (PropertySet.Name.ToLower <> "custom")
+
+                    tf = tf1 Or tf2
+                    If Not tf Then
+                        Continue For
+                    End If
+                    'If Not PropertySetName = "" Then
+
+                    'End If
+
+                    ' Some properties do not have names.
+                    Try
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            FoundProp = Prop
+                            PropertyFound = True
+                            Exit For
+                        End If
+                    Catch ex As Exception
+                    End Try
+
+                Next
+
+                If PropertyFound Then
+                    Exit For
+                End If
+            Next
+
+        End If
+
+
+        'If the property was not found, add it.
+        tf = PropertySetName.ToLower = "custom"
+        tf = tf And AddProp
+        tf = tf And (Not PropertyFound)
+
+        If tf Then
+            ' Can't add a duplicate property
+            Try
+                PropertySet = PropertySets.Item("Custom")
+                FoundProp = PropertySet.Add(PropertyName, "")
+                PropertySet.Save()
+                PropertySets.Save()
+            Catch ex As Exception
+                ' Might want to report an error.
+            End Try
+
+        End If
+
+
+        Return FoundProp
+
+    End Function
+
+    Public Function GetOLEPropValue(
+        cf As CompoundFile,
+        PropertySetName As String,
+        PropertyName As String,
+        AddProp As Boolean
+        ) As String
+
+        GetOLEPropValue = ""
+
+        Dim Proceed As Boolean = True
+
+        Dim OLEProp As OLEProperty = Nothing
+
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+        Try
+            If (SIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+
+            ElseIf (DSIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyName.ToUpper)
+
+            ElseIf (FunnyList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
+                Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+
+                OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyName.ToLower & "*")
+
+            Else
+                If PropertySetName.ToLower = "custom" Then
+                    Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                    Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+
+                    OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyName)
+                End If
+
+            End If
+
+        Catch ex As Exception
+        End Try
+
+        If Not IsNothing(OLEProp) Then
+
+            Return OLEProp.Value.ToString
+
+        Else
+
+            Return Nothing
+
+            'If AddProp Then
+            '    Try
+            '        'TBD Add property here
+            '    Catch ex As Exception
+            '        Proceed = False
+            '    End Try
+
+            'End If
+        End If
+
+    End Function
+
+    Public Sub UpdateSingleProperty(FullName As String, PropertyNameEnglish As String, PropertyValue As String)
+
+        ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
+        Dim Retries As Integer = 3
+        Dim RetryDelay As Integer = 1000
+        Dim fs As FileStream = Nothing
+        For Retry As Integer = 0 To Retries
+            Try
+                fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+                Exit For
+            Catch ex As Exception
+                System.Threading.Thread.Sleep(RetryDelay)
+            End Try
+        Next
+
+        If fs Is Nothing Then
+            MsgBox("Could not change property", vbOKOnly)
+            Exit Sub
+        End If
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
+
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+
+        If (SIList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+        Else  ' Hopefully a Custom Property
+
+            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            co = dsiStream.AsOLEPropertiesContainer
+
+            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+
+        End If
+
+        OLEProp.Value = PropertyValue
+
+        co.Save(dsiStream)
+        cf.Commit()
+        cf.Close()
+        cf = Nothing
+        fs.Close()
+        fs = Nothing
+
+    End Sub
+
+
+
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal cf As CompoundFile,
@@ -1484,7 +997,6 @@ Public Class UtilsCommon
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
                     tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
                 Else
-
                     If Not IsNothing(SEDoc) Then
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
                         If Not FoundProp Is Nothing Then tmpValue = FoundProp.Value.ToString
@@ -1540,6 +1052,7 @@ Public Class UtilsCommon
 
     End Function
 
+
     Public Function CheckValidPropertyFormulas(Instring As String) As Boolean
 
         Dim Valid As Boolean = True
@@ -1562,6 +1075,37 @@ Public Class UtilsCommon
 
         Return Valid
     End Function
+
+
+    Public Sub CopyProperties(Source As Object, Destination As Object)
+
+        Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
+        Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
+
+        Dim destProps() As PropertyInfo = destType.GetProperties()
+        Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
+
+        For Each sourceProp As PropertyInfo In sourceProps
+            For Each destProp As PropertyInfo In destProps
+                If destProp.CanWrite Then
+                    If destProp.Name <> "Parent" Then
+                        If destProp.Name = sourceProp.Name Then
+                            If destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType) Then
+                                Try
+                                    Dim tmpValue = sourceProp.GetValue(Source, Nothing)
+                                    If Not tmpValue Is Nothing Then destProp.SetValue(Destination, tmpValue, Nothing)
+                                Catch ex As Exception
+                                    'Console.WriteLine(destType.FullName & " - " & destProp.Name)
+                                End Try
+                            End If
+                        End If
+                    End If
+                End If
+            Next
+        Next
+
+    End Sub
+
 
     Public Function TemplatePropertyDictPopulate(
         TemplateList As List(Of String),
@@ -1891,17 +1435,368 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function PropLocalizedToEnglish(PropertySetName As String,
+                                           ItemNumber As Integer,
+                                           DocType As String) As String
+
+        ' ###### There is a comment contained in each Case statement.               ###### 
+        ' ###### It shows the English name for each file type in order.             ###### 
+        ' ###### The order is par, psm, asm, dft.                                   ###### 
+        ' ###### For example, the following entry is for MechanicalModeling Item 2  ###### 
+        ' ###### 'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []         ###### 
+        ' ###### It says that item's property name for a .par is Face Style,        ###### 
+        ' ###### .psm: Sheet Metal Gage, .asm: Bead Material, .dft: (not present),  ###### 
+
+        Dim EnglishName As String = ""
+
+        Select Case PropertySetName
+
+            Case "SummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item  [Title] [Title] [Title] [Title] 
+                        EnglishName = "Title"
+                    Case 2
+                        'Item 2 [Subject] [Subject] [Subject] [Subject] 
+                        EnglishName = "Subject"
+                    Case 3
+                        'Item 3 [Author] [Author] [Author] [Author] 
+                        EnglishName = "Author"
+                    Case 4
+                        'Item 4 [Keywords] [Keywords] [Keywords] [Keywords] 
+                        EnglishName = "Keywords"
+                    Case 5
+                        'Item 5 [Comments] [Comments] [Comments] [Comments] 
+                        EnglishName = "Comments"
+                    Case 6
+                        'Item 6 [Template] [Template] [Template] [Template] 
+                        EnglishName = "Template"
+                    Case 7
+                        'Item 7 [Last Author] [Last Author] [Last Author] [Last Author] 
+                        EnglishName = "Last Author"
+                    Case 8
+                        'Item 8 [Revision Number] [Revision Number] [Revision Number] [Revision Number] 
+                        EnglishName = "Revision Number"
+                    Case 9
+                        'Item 9 [Total Editing Time] [Total Editing Time] [Total Editing Time] [Total Editing Time] 
+                        EnglishName = "Total Editing Time"
+                    Case 10
+                        'Item 10 [Last Print Date] [Last Print Date] [Last Print Date] [Last Print Date] 
+                        EnglishName = "Last Print Date"
+                    Case 11
+                        'Item 11 [Origination Date] [Origination Date] [Origination Date] [Origination Date] 
+                        EnglishName = "Origination Date"
+                    Case 12
+                        'Item 12 [Last Save Date] [Last Save Date] [Last Save Date] [Last Save Date] 
+                        EnglishName = "Last Save Date"
+                    Case 13
+                        'Item 13 [Number of pages] [Number of pages] [Number of pages] [Number of pages] 
+                        EnglishName = "Number of pages"
+                    Case 14
+                        'Item 14 [Number of words] [Number of words] [Number of words] [Number of words] 
+                        EnglishName = "Number of words"
+                    Case 15
+                        'Item 15 [Number of characters] [Number of characters] [Number of characters] [Number of characters] 
+                        EnglishName = "Number of characters"
+                    Case 16
+                        'Item 16 [Application Name] [Application Name] [Application Name] [Application Name] 
+                        EnglishName = "Application Name"
+                    Case 17
+                        'Item 17 [Security] [Security] [Security] [Security] 
+                        EnglishName = "Security"
+                End Select
+
+            Case "ExtendedSummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] [Name of Saving Application] 
+                        EnglishName = "Name of Saving Application"
+                    Case 2
+                        'Item 2 [DocumentID] [DocumentID] [DocumentID] [DocumentID] 
+                        EnglishName = "DocumentID"
+                    Case 3
+                        'Item 3 [Status] [Status] [Status] [Status] 
+                        EnglishName = "Status"
+                    Case 4
+                        'Item 4 [Username] [Username] [Username] [Username] 
+                        EnglishName = "Username"
+                    Case 5
+                        'Item 5 [CreationLocale] [CreationLocale] [CreationLocale] [CreationLocale] 
+                        EnglishName = "CreationLocale"
+                    Case 6
+                        'Item 6 [Hardware] [Hardware] [StatusChangeDate] [StatusChangeDate]
+                        Select Case DocType
+                            Case "par", "psm"
+                                EnglishName = "Hardware"
+                            Case "asm", "dft"
+                                EnglishName = "StatusChangeDate"
+                        End Select
+                    Case 7
+                        'Item 7 [] [StatusChangeDate] [StatusChangeDate] [] 
+                        Select Case DocType
+                            Case "par", "psm"
+                                EnglishName = "StatusChangeDate"
+                            Case "asm", "dft"
+                                EnglishName = ""
+                        End Select
+                End Select
+
+            Case "DocumentSummaryInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Category] [Category] [Category] [Category]
+                        EnglishName = "Category"
+                    Case 2
+                        'Item 2 [Presentation Format] [Presentation Format] [Presentation Format] [Presentation Format]
+                        EnglishName = "Presentation Format"
+                    Case 3
+                        'Item 3 [Byte Count] [Byte Count] [Byte Count] [Byte Count]
+                        EnglishName = "Byte Count"
+                    Case 4
+                        'Item 4 [Lines] [Lines] [Lines] [Lines]
+                        EnglishName = "Lines"
+                    Case 5
+                        'Item 5 [Paragraphs] [Paragraphs] [Paragraphs] [Paragraphs]
+                        EnglishName = "Paragraphs"
+                    Case 6
+                        'Item 6 [Slides] [Slides] [Slides] [Slides]
+                        EnglishName = "Slides"
+                    Case 7
+                        'Item 7 [Notes] [Notes] [Notes] [Notes]
+                        EnglishName = "Notes"
+                    Case 8
+                        'Item 8 [Hidden Objects] [Hidden Objects] [Hidden Objects] [Hidden Objects]
+                        EnglishName = "Hidden Objects"
+                    Case 9
+                        'Item 9 [Multimedia Clips] [Multimedia Clips] [Multimedia Clips] [Multimedia Clips]
+                        EnglishName = "Multimedia Clips"
+                    Case 10
+                        'Item 10 [Manager] [Manager] [Manager] [Manager]
+                        EnglishName = "Manager"
+                    Case 11
+                        'Item 11 [Company] [Company] [Company] [Company]
+                        EnglishName = "Company"
+
+                End Select
+
+            Case "ProjectInformation"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Document Number] [Document Number] [Document Number] [Document Number] 
+                        EnglishName = "Document Number"
+                    Case 2
+                        'Item 2 [Revision] [Revision] [Revision] [Revision] 
+                        EnglishName = "Revision"
+                    Case 3
+                        'Item 3 [Project Name] [Project Name] [Project Name] [Project Name] 
+                        EnglishName = "Project Name"
+
+                End Select
+
+            Case "MechanicalModeling"
+                Select Case ItemNumber
+                    Case 1
+                        'Item 1 [Material] [Material] [Material] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Material"
+                            Case "psm"
+                                EnglishName = "Material"
+                            Case "asm"
+                                EnglishName = "Material"
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 2
+                        'Item 2 [Face Style] [Sheet Metal Gage] [Bead Material] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Face Style"
+                            Case "psm"
+                                EnglishName = "Sheet Metal Gage"
+                            Case "asm"
+                                EnglishName = "Bead Material"
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 3
+                        'Item 3 [Fill Style] [Face Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Fill Style"
+                            Case "psm"
+                                EnglishName = "Face Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 4
+                        'Item 4 [Virtual Style] [Fill Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Virtual Style"
+                            Case "psm"
+                                EnglishName = "Fill Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 5
+                        'Item 5 [Coef. of Thermal Exp] [Virtual Style] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Coef. of Thermal Exp"
+                            Case "psm"
+                                EnglishName = "Virtual Style"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 6
+                        'Item 6 [Thermal Conductivity] [Coef. of Thermal Exp] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Thermal Conductivity"
+                            Case "psm"
+                                EnglishName = "Coef. of Thermal Exp"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 7
+                        'Item 7 [Specific Heat] [Thermal Conductivity] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Specific Heat"
+                            Case "psm"
+                                EnglishName = "Thermal Conductivity"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 8
+                        'Item 8 [Modulus of Elasticity] [Specific Heat] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Modulus of Elasticity"
+                            Case "psm"
+                                EnglishName = "Specific Heat"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 9
+                        'Item 9 [Poisson's Ratio] [Modulus of Elasticity] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Poisson's Ratio"
+                            Case "psm"
+                                EnglishName = "Modulus of Elasticity"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 10
+                        'Item 10 [Yield Stress] [Poisson's Ratio] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Yield Stress"
+                            Case "psm"
+                                EnglishName = "Poisson's Ratio"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 11
+                        'Item 11 [Ultimate Stress] [Yield Stress] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Ultimate Stress"
+                            Case "psm"
+                                EnglishName = "Yield Stress"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 12
+                        'Item 12 [Elongation] [Ultimate Stress] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Elongation"
+                            Case "psm"
+                                EnglishName = "Ultimate Stress"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 13
+                        'Item 13 [Grouping] [Elongation] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "Grouping"
+                            Case "psm"
+                                EnglishName = "Elongation"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 14
+                        'Item 14 [LibraryName] [Grouping] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = "LibraryName"
+                            Case "psm"
+                                EnglishName = "Grouping"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+                    Case 15
+                        'Item 15 [] [LibraryName] [] []
+                        Select Case DocType
+                            Case "par"
+                                EnglishName = ""
+                            Case "psm"
+                                EnglishName = "LibraryName"
+                            Case "asm"
+                                EnglishName = ""
+                            Case "dft"
+                                EnglishName = ""
+                        End Select
+
+                End Select
+
+        End Select
+
+
+
+        Return EnglishName
+    End Function
+
 
     Public Function PropNameFromFormula(PropFormula As String) As String
         ' '%{System.Title}' -> 'Title'
-        ' '%{Custom.Donut}' -> 'Donut'
+        ' '%{Custom.Donut|R12}' -> 'Donut'
 
         Dim PropName As String
 
         PropName = PropFormula
         PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
-        PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut}' -> 'Donut}'
+        PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
         PropName = PropName.Replace("}", "") '         'Title}' -> 'Title'
+        PropName = PropName.Split(CChar("|"))(0) '     'Donut|R12' -> 'Donut'
 
         Return PropName
     End Function
@@ -1918,15 +1813,77 @@ Public Class UtilsCommon
         Return PropSet
     End Function
 
-    Public Function cfFromFullName(FullName As String) As CompoundFile
-        Dim cf As CompoundFile
 
-        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
-        cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+    Public Function tmpGetSEProperties(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As Dictionary(Of String, List(Of String))
+        Dim PropDict As New Dictionary(Of String, List(Of String))
 
-        Return cf
+        Dim PropertySets As SolidEdgeFramework.PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+        Dim PropertySet As SolidEdgeFramework.Properties
+        Dim Prop As SolidEdgeFramework.Property
+
+        Dim s As String
+        Dim s1 As String
+
+        For i = 1 To PropertySets.Count
+            PropertySet = PropertySets.Item(i)
+            s = String.Format("Item {0} [{1}]", i, PropertySet.Name)
+            PropDict(s) = New List(Of String)
+
+            For j = 1 To PropertySet.Count
+                Prop = PropertySet.Item(j)
+                s1 = String.Format("Item {0} [{1}]", j, Prop.Name)
+                PropDict(s).Add(s1)
+            Next
+        Next
+
+        Dim DocType As String = GetDocType(SEDoc)
+
+        Dim UP As New UtilsPreferences
+
+        Dim PreferencesDir As String = UP.GetPreferencesDirectory()
+        Dim OutFilename As String = String.Format("{0}/PropDict_{1}.txt", PreferencesDir, DocType)
+        Dim OutList As New List(Of String)
+
+        For Each s In PropDict.Keys
+            For Each s1 In PropDict(s)
+                OutList.Add(String.Format("{0},{1}", s, s1))
+            Next
+        Next
+
+        IO.File.WriteAllLines(OutFilename, OutList)
+
+        Return PropDict
     End Function
+
+    Public Function GetFileProperties(Filename As String) As List(Of String)
+        ' Gets the properties using Windows functionality
+
+        Dim PropList As New List(Of String)
+        Dim ValList As New List(Of String)
+
+        Dim shell As New Shell32.Shell
+        Dim Directory As Shell32.Folder
+
+        Directory = shell.NameSpace(System.IO.Path.GetDirectoryName(Filename))
+
+        Dim n = 10000
+        For Each s In Directory.Items
+            If Directory.GetDetailsOf(s, 0) = Path.GetFileName(Filename) Then
+                For i = 0 To n
+                    Dim Val = Directory.GetDetailsOf(s, i)
+                    Dim Key = Directory.GetDetailsOf(Directory.Items, i)
+                    If Not (Key = "" And Val = "") Then
+                        ValList.Add(String.Format("{0}: {1}", Key, Val))
+                    End If
+                Next
+                Exit For
+            End If
+        Next
+
+        Return ValList
+
+    End Function
+
 
     Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
         Dim IsEqual As Boolean = True
@@ -1977,5 +1934,7 @@ Public Class UtilsCommon
 
         Return IsEqual
     End Function
+
+
 
 End Class

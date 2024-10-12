@@ -3008,12 +3008,14 @@ Public Class Form_Main
 
     Private Sub editbox_LostFocus(sender As Object, e As EventArgs)
 
+        Dim UC As New UtilsCommon
+
         hitinfo.SubItem.Text = editbox.Text
         editbox.Hide()
 
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
         Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
-        TaskEditProperties.UpdateSingleProperty(hitinfo.Item.Name, PropertyNameEnglish, hitinfo.SubItem.Text)
+        UC.UpdateSingleProperty(hitinfo.Item.Name, PropertyNameEnglish, hitinfo.SubItem.Text)
 
         'hitinfo.Item.Name 'File to edit
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit

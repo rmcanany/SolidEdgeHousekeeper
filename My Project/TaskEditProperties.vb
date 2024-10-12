@@ -605,29 +605,6 @@ Public Class TaskEditProperties
             End If
 
 
-            '' ####################### Delete the property if needed #######################
-
-            'If Proceed Then
-
-            '    Try
-            '        '############ delete the property here
-            '        'If PropertySetName = "Custom" And ReplaceString = "%{DeleteProperty}" Then
-            '        '    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-            '        'End If
-            '        If FindSearchType = "X" Then
-            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-            '        End If
-
-            '    Catch ex As Exception
-            '        Proceed = False
-            '        ExitStatus = 1
-            '        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
-            '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-            '    End Try
-
-            'End If
-
-
             ' ####################### Save the properties #######################
 
             If Proceed Then
@@ -1320,74 +1297,6 @@ Public Class TaskEditProperties
 
         Return HelpString
     End Function
-
-
-
-
-
-
-
-
-    Shared Sub UpdateSingleProperty(FullName As String, PropertyNameEnglish As String, PropertyValue As String)
-
-        'Throw New NotImplementedException
-
-
-        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-        Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-        Dim dsiStream As CFStream = Nothing
-        Dim co As OLEPropertiesContainer = Nothing
-        Dim OLEProp As OLEProperty = Nothing
-
-        Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
-
-        Dim DSIList As New List(Of String)
-        DSIList.AddRange({"Category", "Company", "Manager"})
-
-        Dim FunnyList As New List(Of String)
-        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
-
-        If (SIList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
-
-            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
-
-            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-            co = dsiStream.AsOLEPropertiesContainer
-
-            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
-
-        Else  ' Hopefully a Custom Property
-
-            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
-
-            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-
-        End If
-
-        OLEProp.Value = PropertyValue
-
-        co.Save(dsiStream)
-        cf.Commit()
-        cf.Close()
-
-    End Sub
-
-
-
-
 
 
 End Class
