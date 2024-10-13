@@ -3,6 +3,7 @@ Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports System.IO
+Imports System.Threading
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView
@@ -120,34 +121,22 @@ Public Class UtilsFileList
     Public Sub UpdateListViewFiles(Source As ListViewItem, BareTopLevelAssembly As Boolean)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
-        Dim FoundFile As String
         Dim ActiveFileExtensionsList As New List(Of String)
-        Dim tf As Boolean
-        'Dim msg As String
 
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
+        Dim UP As New UtilsPreferences
+        Dim StartupPath As String = UP.GetStartupDirectory()
 
         Dim UC As New UtilsCommon
 
         FMain.ListViewFilesOutOfDate = False
-        'FMain.BT_Update.BackColor = Color.FromName("Control")
 
-        Form_Main.StopProcess = False
+        FMain.StopProcess = False
         FMain.ButtonCancel.Text = "Stop"
 
-        If FMain.new_CheckBoxFilterAsm.Checked Then
-            ActiveFileExtensionsList.Add("*.asm")
-        End If
-        If FMain.new_CheckBoxFilterPar.Checked Then
-            ActiveFileExtensionsList.Add("*.par")
-        End If
-        If FMain.new_CheckBoxFilterPsm.Checked Then
-            ActiveFileExtensionsList.Add("*.psm")
-        End If
-        If FMain.new_CheckBoxFilterDft.Checked Then
-            ActiveFileExtensionsList.Add("*.dft")
-        End If
+        If FMain.new_CheckBoxFilterAsm.Checked Then ActiveFileExtensionsList.Add("*.asm")
+        If FMain.new_CheckBoxFilterPar.Checked Then ActiveFileExtensionsList.Add("*.par")
+        If FMain.new_CheckBoxFilterPsm.Checked Then ActiveFileExtensionsList.Add("*.psm")
+        If FMain.new_CheckBoxFilterDft.Checked Then ActiveFileExtensionsList.Add("*.dft")
 
         If ActiveFileExtensionsList.Count > 0 Then
 
@@ -192,71 +181,11 @@ Public Class UtilsFileList
                     Next
                     FoundFiles = tmpFoundFiles
 
-                    'MsgBox("Here")
-
                 Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
 
                 Case = "asm"
-
-                    If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
-                        Dim tmpFolders As New List(Of String)
-
-                        For Each item As ListViewItem In ListViewFiles.Items
-                            If item.Tag.ToString = "ASM_Folder" Then
-                                If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
-                            End If
-                        Next
-
-                        Dim tmpFoundFiles As New List(Of String)
-
-                        If FMain.RadioButtonTLABottomUp.Checked Then
-                            Dim UTLA As New UtilsTopLevelAssembly(FMain)
-
-                            FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
-
-                            tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
-                                                           Source.SubItems.Item(1).Text,
-                                                           ActiveFileExtensionsList,
-                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
-                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
-
-                        Else
-                            Dim UTLA As New UtilsTopLevelAssembly(FMain)
-                            tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
-                                                       Source.SubItems.Item(1).Text,
-                                                       ActiveFileExtensionsList,
-                                                       Report:=FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
-                        End If
-
-                        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
-
-                        FMain.TextBoxStatus.Text = ""
-
-                    ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
-
-                        Dim UTLA As New UtilsTopLevelAssembly(FMain)
-
-                        FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
-
-                        Dim tmpFoundFiles As New List(Of String)
-                        Dim tmpFolders As New List(Of String)
-
-                        ' Empty tmpFolders is flag for BareTopLevelAssembly
-                        ' No 'where used' is performed.
-                        ' Bare top level assemblies are always processed bottom up.
-
-                        tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
-                                                           Source.SubItems.Item(1).Text,
-                                                           ActiveFileExtensionsList,
-                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
-                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
-
-                        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
-
-                        FMain.TextBoxStatus.Text = ""
-
-                    End If
+                    FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
 
                 Case Else
                     FoundFiles = Nothing
@@ -268,23 +197,7 @@ Public Class UtilsFileList
 
         ' Remove problem files
         If Not FoundFiles Is Nothing Then
-            Dim tmpFoundFiles As New List(Of String)
-            For Each item In FoundFiles
-                tf = UC.FilenameIsOK(item)
-                tf = tf And IO.File.Exists(item)
-                tf = tf And Not tmpFoundFiles.Contains(item)
-                ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
-                ' Causes a problem comparing extensions
-                Try
-                    tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
-                Catch ex As Exception
-                    ' MsgBox("Catch")
-                End Try
-                If tf Then
-                    tmpFoundFiles.Add(item)
-                End If
-            Next
-            FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+            FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
         End If
 
 
@@ -324,92 +237,199 @@ Public Class UtilsFileList
                 End Try
                 FoundFiles = SortRandomSample(FoundFiles, Fraction)
             End If
+        End If
 
-            ListViewFiles.BeginUpdate()
-
-            For Each FoundFile In FoundFiles
-
-                FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
-                System.Windows.Forms.Application.DoEvents()
-
-                If UC.FilenameIsOK(FoundFile) Then
-
-                    If IO.File.Exists(FoundFile) Then
-
-                        If Not ListViewFiles.Items.ContainsKey(FoundFile) Then
-
-                            Dim tmpLVItem As New ListViewItem
-                            tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
-                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
-
-
-                            'Adding extra properties data if needed
-                            For Each PropColumn In Form_Main.ListOfColumns
-
-                                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-
-                                    'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
-                                    Dim PropValue As String
-                                    Try
-                                        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                                        Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
-                                        Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-                                        'Dim cf = UC.cfFromFullName(FoundFile)
-                                        PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
-                                                                                 ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                                        cf.Close()
-                                        fs.Close()
-                                        cf = Nothing
-                                        fs = Nothing
-                                    Catch ex As Exception
-                                        PropValue = ""
-                                    End Try
-
-                                    tmpLVItem.SubItems.Add(PropValue)
-
-                                End If
-
-                            Next
-
-
-
-                            tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
-                            tmpLVItem.Name = FoundFile
-                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
-                            ListViewFiles.Items.Add(tmpLVItem)
-
-                        End If
-
-                    End If
-
-                End If
-
-            Next
-
-            'Resetting the columns
-            If ListViewFiles.Columns.Count > 2 Then
-                Do Until ListViewFiles.Columns.Count = 2
-                    ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-                Loop
-            End If
-
-            CreateColumns()
-
-            ListViewFiles.EndUpdate()
-
-            FMain.TextBoxStatus.Text = ""
+        ' Populate ListView
+        If Not FoundFiles Is Nothing Then
+            PopulateListView(FoundFiles)
 
         Else
             'TextBoxStatus.Text = "No files found"
         End If
 
 
-        Form_Main.StopProcess = False
+        FMain.StopProcess = False
         FMain.ButtonCancel.Text = "Cancel"
 
     End Sub
+
+
+    Public Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
+
+        Dim UC As New UtilsCommon
+        Dim tf As Boolean
+
+        ListViewFiles.BeginUpdate()
+
+        For Each FoundFile In FoundFiles
+
+            FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
+            System.Windows.Forms.Application.DoEvents()
+
+            tf = UC.FilenameIsOK(FoundFile)
+            tf = tf And IO.File.Exists(FoundFile)
+            tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))
+
+            If tf Then
+
+                Dim tmpLVItem As New ListViewItem
+                tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
+
+
+                'Adding extra properties data if needed
+                For Each PropColumn In FMain.ListOfColumns
+
+                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+
+                        'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
+                        Dim PropValue As String
+                        Try
+                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                            Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
+                            Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
+                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            cf.Close()
+                            fs.Close()
+                            cf = Nothing
+                            fs = Nothing
+                        Catch ex As Exception
+                            PropValue = ""
+                        End Try
+
+                        tmpLVItem.SubItems.Add(PropValue)
+
+                    End If
+
+                Next
+
+                tmpLVItem.ImageKey = "Unchecked"
+                tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
+                tmpLVItem.Name = FoundFile
+                tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+                ListViewFiles.Items.Add(tmpLVItem)
+
+            End If
+
+        Next
+
+        'Resetting the columns
+        If ListViewFiles.Columns.Count > 2 Then
+            Do Until ListViewFiles.Columns.Count = 2
+                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+            Loop
+        End If
+
+        CreateColumns()
+
+        ListViewFiles.EndUpdate()
+
+        FMain.TextBoxStatus.Text = ""
+    End Sub
+
+
+    Public Function RemoveProblemFiles(FoundFiles As IReadOnlyCollection(Of String),
+                                       ActiveFileExtensionsList As List(Of String)
+                                       ) As IReadOnlyCollection(Of String)
+
+        Dim UC As New UtilsCommon
+        Dim tf As Boolean
+
+        Dim tmpFoundFiles As New List(Of String)
+        For Each item In FoundFiles
+            tf = UC.FilenameIsOK(item)
+            tf = tf And IO.File.Exists(item)
+            tf = tf And Not tmpFoundFiles.Contains(item)
+            ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
+            ' Causes a problem comparing extensions
+            Try
+                tf = tf And ActiveFileExtensionsList.Contains(IO.Path.GetExtension(item).Replace(".", "*."))
+            Catch ex As Exception
+                ' MsgBox("Catch")
+            End Try
+            If tf Then
+                tmpFoundFiles.Add(item)
+            End If
+        Next
+        FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+
+        Return FoundFiles
+
+    End Function
+
+
+    Public Function ProcessTLA(BareTopLevelAssembly As Boolean,
+                               Source As ListViewItem,
+                               ActiveFileExtensionsList As List(Of String)
+                               ) As IReadOnlyCollection(Of String)
+
+        Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
+
+        If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
+            Dim tmpFolders As New List(Of String)
+
+            For Each item As ListViewItem In ListViewFiles.Items
+                If item.Tag.ToString = "ASM_Folder" Then
+                    If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
+                End If
+            Next
+
+            Dim tmpFoundFiles As New List(Of String)
+
+            If FMain.RadioButtonTLABottomUp.Checked Then
+                Dim UTLA As New UtilsTopLevelAssembly(FMain)
+
+                FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+                tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList,
+                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
+                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+
+            Else
+                Dim UTLA As New UtilsTopLevelAssembly(FMain)
+                tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
+                                                       Source.SubItems.Item(1).Text,
+                                                       ActiveFileExtensionsList,
+                                                       Report:=FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+            End If
+
+            FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+
+            FMain.TextBoxStatus.Text = ""
+
+        ElseIf (BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
+
+            Dim UTLA As New UtilsTopLevelAssembly(FMain)
+
+            FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
+
+            Dim tmpFoundFiles As New List(Of String)
+            Dim tmpFolders As New List(Of String)
+
+            ' Empty tmpFolders is flag for BareTopLevelAssembly
+            ' No 'where used' is performed.
+            ' Bare top level assemblies are always processed bottom up.
+
+            tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
+                                                           Source.SubItems.Item(1).Text,
+                                                           ActiveFileExtensionsList,
+                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
+                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+
+            FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
+
+            FMain.TextBoxStatus.Text = ""
+
+        End If
+
+        Return FoundFiles
+
+    End Function
+
 
 
     Public Function FileWildcardSearch(
@@ -670,8 +690,6 @@ Public Class UtilsFileList
             End If
         Next
 
-        Dim NumPasses As Integer = 0
-
         While OldCount > Count
             For Each Filename In LinkDict.Keys
                 FMain.TextBoxStatus.Text = IO.Path.GetFileName(Filename)
@@ -709,8 +727,6 @@ Public Class UtilsFileList
                 Dim RemainingFileList As New List(Of String)
                 Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
                 Dim ValidExtension As String
-
-                NumPasses += 1
 
                 ' See what type of files remain
                 For Each Filename In LinkDict.Keys
@@ -788,8 +804,6 @@ Public Class UtilsFileList
             Next
         End If
 
-        'MsgBox(NumPasses.ToString)
-
         Return Outlist
 
     End Function
@@ -861,8 +875,6 @@ Public Class UtilsFileList
 
         For Each Item As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
 
-            'ListViewFiles.BeginUpdate()
-
             If Item.Group.Name = "Sources" Then
 
                 TagName = CType(Item.Tag, String)
@@ -876,8 +888,6 @@ Public Class UtilsFileList
                 End If
 
             End If
-
-            'ListViewFiles.EndUpdate()
 
         Next
 
@@ -954,7 +964,7 @@ Public Class UtilsFileList
 
     Private Sub CreateColumns()
 
-        For Each PropName In Form_Main.ListOfColumns
+        For Each PropName In FMain.ListOfColumns
 
             If PropName.Name <> "Name" And PropName.Name <> "Path" Then
                 ListViewFiles.Columns.Add(PropName.Name, 0)

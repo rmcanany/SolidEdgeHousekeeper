@@ -843,6 +843,7 @@ Public Class UtilsCommon
             MsgBox("Could not change property", vbOKOnly)
             Exit Sub
         End If
+
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 

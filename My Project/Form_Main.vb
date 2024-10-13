@@ -1008,24 +1008,30 @@ Public Class Form_Main
     End Sub
 
 
-    Public Sub UpdateJSONProperties()
+    'Public Sub UpdateJSONProperties()
+    '    ' Set Properties equal to themselves to trigger JSON updates
+    '    Me.ListOfColumns = Me.ListOfColumns
+    '    Me.TemplatePropertyDict = Me.TemplatePropertyDict
+    '    Me.PropertyFilterDict = Me.PropertyFilterDict
+
+    'End Sub
+
+    Public Sub Wrapup()
         ' Set Properties equal to themselves to trigger JSON updates
+        Me.TextBoxStatus.Text = "Updating JSON ListOfColumns"
         Me.ListOfColumns = Me.ListOfColumns
+        Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
         Me.TemplatePropertyDict = Me.TemplatePropertyDict
+        Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
-
-    End Sub
-
-    Private Sub Wrapup()
-        UpdateJSONProperties()
 
         ' Save settings
         Dim UP As New UtilsPreferences
+        Me.TextBoxStatus.Text = "Saving settings"
         UP.SaveFormMainSettings(Me)
+        Me.TextBoxStatus.Text = "Saving tasks"
         UP.SaveTaskList(Me.TaskList)
 
-        ' Shut down
-        End
 
     End Sub
 
@@ -1195,38 +1201,16 @@ Public Class Form_Main
         Else
             Wrapup()
 
-            ''Dim UD As New UtilsDefaults(Me)
-
-            ''ReconcileFormChanges()
-            ''UD.SaveDefaults()
-
-            'Dim UP As New UtilsPreferences
-
-            'UP.SaveFormMainSettings(Me)
-
-            'UP.SaveTaskList(Me.TaskList)
-            ''UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-            ''UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
-            'End
+            ' Shut down
+            End
         End If
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
-
         Wrapup()
-        ''Dim UD As New UtilsDefaults(Me)
 
-        ''ReconcileFormChanges()
-        ''UD.SaveDefaults()
-
-        'Dim UP As New UtilsPreferences
-
-        'UP.SaveFormMainSettings(Me)
-
-        'UP.SaveTaskList(Me.TaskList)
-        ''UP.SaveTemplatePropertyDict(Me.TemplatePropertyDict)
-        ''UP.SaveTemplatePropertyList(Me.TemplatePropertyList)
-        'End
+        ' Shut down
+        End
     End Sub
 
     Private Sub ButtonFastSearchScopeFilename_Click(sender As Object, e As EventArgs) Handles ButtonFastSearchScopeFilename.Click

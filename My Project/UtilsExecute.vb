@@ -30,11 +30,11 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        FMain.UpdateJSONProperties()
+        FMain.Wrapup()  ' Updates JSON Properties and saves settings
 
-        Dim UP As New UtilsPreferences
-        UP.SaveFormMainSettings(FMain)
-        UP.SaveTaskList(FMain.TaskList)
+        'Dim UP As New UtilsPreferences
+        'UP.SaveFormMainSettings(FMain)
+        'UP.SaveTaskList(FMain.TaskList)
 
         ErrorMessage = CheckStartConditions()
 
@@ -432,8 +432,6 @@ Public Class UtilsExecute
 
                     Else
                         SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)
-                        'SEDoc = DirectCast(SEApp.Documents.Open(Path, 4), SolidEdgeFramework.SolidEdgeDocument)
-                        ' 1 no clear effect (nce), 2 nce, 4 nce
                         SEDoc.Activate()
 
                         ' Maximize the window in the application
@@ -536,6 +534,9 @@ Public Class UtilsExecute
     End Function
 
     Private Function CheckVersion(SEApp As SolidEdgeFramework.Application, Filename As String) As Boolean
+        ' Checks if the file to be processed is of the same or earlier version than the version installed on the machine.
+        ' On at lease some corrupted files, generates an exception which is interpreted as not possible to open
+
         Dim IsOK As Boolean = True
 
         Dim Version = SEApp.Version
@@ -565,6 +566,8 @@ Public Class UtilsExecute
         OldStatus As SolidEdgeConstants.DocumentStatus,
         DMApp As DesignManager.Application,
         Path As String) As String
+
+        ' Changes Document Status as required.
 
         Dim ErrorMessage As String = ""
         Dim StatusChangeSuccessful As Boolean

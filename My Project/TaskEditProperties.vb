@@ -639,6 +639,10 @@ Public Class TaskEditProperties
             cf.Close()
         End If
 
+        If fs IsNot Nothing Then
+            fs.Close()
+        End If
+
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
