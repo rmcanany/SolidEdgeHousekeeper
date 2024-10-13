@@ -118,7 +118,9 @@ Public Class UtilsFileList
 
     End Sub
 
-    Public Sub UpdateListViewFiles(Source As ListViewItem, BareTopLevelAssembly As Boolean)
+    Public Sub UpdateListViewFiles(
+        Source As ListViewItem,
+        BareTopLevelAssembly As Boolean)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim ActiveFileExtensionsList As New List(Of String)
@@ -233,7 +235,10 @@ Public Class UtilsFileList
                 Try
                     Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
                 Catch ex As Exception
-                    MsgBox(String.Format("Cannot convert Sample fraction, '{0}', to a number", FMain.TextBoxSortRandomSampleFraction.Text))
+                    Fraction = 0.1
+                    Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
+                    s = String.Format("{0}Using default {1} instead.", s, Fraction)
+                    MsgBox(s)
                 End Try
                 FoundFiles = SortRandomSample(FoundFiles, Fraction)
             End If
@@ -330,9 +335,10 @@ Public Class UtilsFileList
     End Sub
 
 
-    Public Function RemoveProblemFiles(FoundFiles As IReadOnlyCollection(Of String),
-                                       ActiveFileExtensionsList As List(Of String)
-                                       ) As IReadOnlyCollection(Of String)
+    Public Function RemoveProblemFiles(
+        FoundFiles As IReadOnlyCollection(Of String),
+        ActiveFileExtensionsList As List(Of String)
+        ) As IReadOnlyCollection(Of String)
 
         Dim UC As New UtilsCommon
         Dim tf As Boolean
@@ -360,10 +366,11 @@ Public Class UtilsFileList
     End Function
 
 
-    Public Function ProcessTLA(BareTopLevelAssembly As Boolean,
-                               Source As ListViewItem,
-                               ActiveFileExtensionsList As List(Of String)
-                               ) As IReadOnlyCollection(Of String)
+    Public Function ProcessTLA(
+        BareTopLevelAssembly As Boolean,
+        Source As ListViewItem,
+        ActiveFileExtensionsList As List(Of String)
+        ) As IReadOnlyCollection(Of String)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
 
@@ -521,7 +528,6 @@ Public Class UtilsFileList
     Private Function GetDependencySortedFiles(Foundfiles As IReadOnlyCollection(Of String)) As IReadOnlyCollection(Of String)
         Dim OutList As New List(Of String)
         Dim MissingFilesList As New List(Of String)
-        'Dim tmpMissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
         Dim Filename As String
         Dim DMDoc As DesignManager.Document
@@ -531,21 +537,20 @@ Public Class UtilsFileList
 
         FMain.Activate()
 
-
         For Each Filename In Foundfiles
 
             FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
 
             DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
-            Dim tmp_DependencyDict As New Dictionary(Of String, List(Of String))
+            Dim tmpDependencyDict As New Dictionary(Of String, List(Of String))
 
-            tmp_DependencyDict = GetLinks(DMDoc, tmp_DependencyDict, MissingFilesList)
+            tmpDependencyDict = GetLinks(DMDoc, tmpDependencyDict, MissingFilesList)
 
-            For Each s As String In tmp_DependencyDict.Keys
+            For Each s As String In tmpDependencyDict.Keys
                 FMain.TextBoxStatus.Text = s
                 If Not DependencyDict.Keys.Contains(s) Then
-                    DependencyDict.Add(s, tmp_DependencyDict(s))
+                    DependencyDict.Add(s, tmpDependencyDict(s))
 
                 End If
             Next
@@ -597,16 +602,9 @@ Public Class UtilsFileList
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
         Dim tf As Boolean
 
-        'For Each Filename In OriginalLinkDict.Keys
-        '    LinkDict.Add(Filename, New List(Of String))
-        'Next
-
         Dim UC As New UtilsCommon
 
         DMDocName = UC.SplitFOAName(DMDoc.FullName)("Filename")
-        'If DMDocName.Contains("!") Then
-        '    DMDocName = DMDocName.Split("!"c)(0)
-        'End If
 
         If Not LinkDict.Keys.Contains(DMDocName) Then
 
@@ -621,20 +619,13 @@ Public Class UtilsFileList
             Dim FOPStatus As Integer
             DMDoc.IsDocumentFOP(FOPStatus)
 
-            'tf = CommonTasks.GetDocTypeByExtension(DMDocName) = ".dft"
-            'tf = tf Or (FOPStatus = 2)
-            tf = FOPStatus = 2
-
-            If Not tf Then
+            If Not FOPStatus = 2 Then
                 LinkDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
                 If Not LinkDocs Is Nothing Then
                     If LinkDocs.Count > 0 Then
                         For Each LinkDoc In LinkDocs
 
                             LinkDocName = UC.SplitFOAName(LinkDoc.FullName)("Filename")
-                            'If LinkDocName.Contains("!") Then
-                            '    LinkDocName = LinkDocName.Split("!"c)(0)
-                            'End If
 
                             If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
                                 If IO.File.Exists(LinkDocName) Then
