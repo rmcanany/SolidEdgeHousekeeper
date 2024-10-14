@@ -3017,6 +3017,12 @@ Public Class Form_Main
 
     End Sub
 
+    Private Sub ListViewFiles_ColumnClick(sender As Object, e As EventArgs) Handles ListViewFiles.ColumnClick
+        MsgBox("ColumnClick Event")
+        Dim ee = CType(e, ColumnClickEventArgs)
+        'ListViewFiles.ListViewItemSorter = New ListViewItemComparer(ee.Column)
+    End Sub
+
 
     ' Commands I can never remember
 
@@ -3104,3 +3110,24 @@ Public Class PropertyColumn
 End Class
 
 
+Class ListViewItemComparer
+    Implements IComparer
+
+    Private col As Integer
+
+    Public Sub New()
+        col = 0
+    End Sub
+
+    Public Sub New(ByVal column As Integer)
+        col = column
+    End Sub
+
+    'Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer
+    '    Return String.Compare((CType(x, ListViewItem)).SubItems(col).Text, (CType(y, ListViewItem)).SubItems(col).Text)
+    'End Function
+
+    Private Function IComparer_Compare(x As Object, y As Object) As Integer Implements IComparer.Compare
+        Return String.Compare((CType(x, ListViewItem)).SubItems(col).Text, (CType(y, ListViewItem)).SubItems(col).Text)
+    End Function
+End Class
