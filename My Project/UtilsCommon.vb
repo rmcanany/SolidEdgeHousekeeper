@@ -818,6 +818,10 @@ Public Class UtilsCommon
         Dim DSIList = GetDSIList()
         Dim FunnyList = GetFunnyList()
 
+        If Not PropertySet = "Custom" Then
+            PropertySet = "System"
+        End If
+
         Try
             If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
                 dsiStream = cf.RootStorage.GetStream("SummaryInformation")
@@ -977,7 +981,7 @@ Public Class UtilsCommon
         ' ###### my attempt to consolidate fetching OLEProp.  It's not working. ######
         ' Your way is working and I don't see the difference.
 
-        Dim MyWay As Boolean = False
+        Dim MyWay As Boolean = True
 
         If MyWay Then
             OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True)
