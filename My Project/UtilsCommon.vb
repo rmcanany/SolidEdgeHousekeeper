@@ -805,13 +805,15 @@ Public Class UtilsCommon
         cf As CompoundFile,
         PropertySet As String,
         PropertyNameEnglish As String,
-        AddProp As Boolean
+        AddProp As Boolean,
+        ByRef dsiStream As CFStream,
+        ByRef co As OLEPropertiesContainer
         ) As OLEProperty
 
         Dim Proceed As Boolean = True
 
-        Dim dsiStream As CFStream = Nothing
-        Dim co As OLEPropertiesContainer = Nothing
+        'Dim dsiStream As CFStream = Nothing
+        'Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
         Dim SIList = GetSIList()
@@ -974,6 +976,8 @@ Public Class UtilsCommon
 
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
 
@@ -984,10 +988,11 @@ Public Class UtilsCommon
         Dim MyWay As Boolean = True
 
         If MyWay Then
-            OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True)
+            OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
 
             OLEProp.Value = PropertyValue
 
+            co.Save(dsiStream)
             cf.Commit()
             cf.Close()
             cf = Nothing
@@ -995,8 +1000,8 @@ Public Class UtilsCommon
             fs = Nothing
 
         Else
-            Dim dsiStream As CFStream = Nothing
-            Dim co As OLEPropertiesContainer = Nothing
+            'Dim dsiStream As CFStream = Nothing
+            'Dim co As OLEPropertiesContainer = Nothing
             'Dim OLEProp As OLEProperty = Nothing
 
             Dim SIList = GetSIList()
