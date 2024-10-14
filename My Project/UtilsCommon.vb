@@ -28,7 +28,6 @@ Public Class UtilsCommon
     End Function
 
 
-
     Public Sub FindLinked(DMDoc As DesignManager.Document)
 
         Dim Filename As String
@@ -626,6 +625,58 @@ Public Class UtilsCommon
     End Enum
 
 
+    Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
+        Dim IsEqual As Boolean = True
+
+        If A Is Nothing Or B Is Nothing Then
+            IsEqual = False
+        End If
+
+        If IsEqual Then
+            If Not A.Count = B.Count Then
+                IsEqual = False
+            End If
+        End If
+
+        If IsEqual Then
+            Dim AJSON As String
+            Dim BJSON As String
+            For i As Integer = 0 To A.Count - 1
+                AJSON = A(i).ToJSON
+                BJSON = B(i).ToJSON
+                IsEqual = AJSON = BJSON
+                If Not IsEqual Then Exit For
+            Next
+        End If
+
+        Return IsEqual
+    End Function
+
+    Public Function CompareListOfColumnsJSON(A As List(Of String), B As List(Of String)) As Boolean
+        Dim IsEqual As Boolean = True
+
+        If A Is Nothing Or B Is Nothing Then
+            IsEqual = False
+        End If
+
+        If IsEqual Then
+            If Not A.Count = B.Count Then
+                IsEqual = False
+            End If
+        End If
+
+        If IsEqual Then
+            For i As Integer = 0 To A.Count - 1
+                IsEqual = A(i) = B(i)
+                If Not IsEqual Then Exit For
+            Next
+        End If
+
+        Return IsEqual
+    End Function
+
+
+
     '###### PROPERTY FUNCTIONS ######
 
     Public Function GetProp(
@@ -750,6 +801,84 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function GetOLEProp(
+        cf As CompoundFile,
+        PropertySet As String,
+        PropertyNameEnglish As String,
+        AddProp As Boolean
+        ) As OLEProperty
+
+        Dim Proceed As Boolean = True
+
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
+
+        Dim SIList = GetSIList()
+        Dim DSIList = GetDSIList()
+        Dim FunnyList = GetFunnyList()
+
+        Try
+            If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+            ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+
+            ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+            Else
+                If PropertySet.ToLower = "custom" Then
+                    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                    co = dsiStream.AsOLEPropertiesContainer
+
+                    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+                End If
+
+            End If
+
+        Catch ex As Exception
+        End Try
+
+        If (IsNothing(OLEProp)) And (AddProp) And (PropertySet.ToLower = "custom") Then
+
+            ' Add it
+            Try
+                Dim userProperties = co.UserDefinedProperties
+                Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
+
+                If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                'This is the ID the new property will have
+                'Duplicated IDs are not allowed
+                'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
+                'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
+
+                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
+                OLEProp.Value = " "
+                userProperties.AddProperty(OLEProp)
+            Catch ex As Exception
+            End Try
+
+        End If
+
+        co.Save(dsiStream)
+        cf.Commit()
+
+        Return OLEProp
+
+    End Function
+
     Public Function GetOLEPropValue(
         cf As CompoundFile,
         PropertySetName As String,
@@ -763,14 +892,9 @@ Public Class UtilsCommon
 
         Dim OLEProp As OLEProperty = Nothing
 
-        Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
-
-        Dim DSIList As New List(Of String)
-        DSIList.AddRange({"Category", "Company", "Manager"})
-
-        Dim FunnyList As New List(Of String)
-        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+        Dim SIList = GetSIList()
+        Dim DSIList = GetDSIList()
+        Dim FunnyList = GetFunnyList()
 
         Try
             If (SIList.Contains(PropertyName)) And (PropertySetName.ToLower = "system") Then
@@ -824,7 +948,7 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Sub UpdateSingleProperty(FullName As String, PropertyNameEnglish As String, PropertyValue As String)
+    Public Sub UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String)
 
         ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
         Dim Retries As Integer = 3
@@ -846,83 +970,117 @@ Public Class UtilsCommon
 
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-        Dim dsiStream As CFStream = Nothing
-        Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
-        Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
 
-        Dim DSIList As New List(Of String)
-        DSIList.AddRange({"Category", "Company", "Manager"})
 
-        Dim FunnyList As New List(Of String)
-        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+        ' ###### my attempt to consolidate fetching OLEProp.  It's not working. ######
+        ' Your way is working and I don't see the difference.
 
-        If (SIList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
+        Dim MyWay As Boolean = False
 
-            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+        If MyWay Then
+            OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True)
 
-        ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
+            OLEProp.Value = PropertyValue
 
-            OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+            cf.Commit()
+            cf.Close()
+            cf = Nothing
+            fs.Close()
+            fs = Nothing
 
-        ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-            dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-            co = dsiStream.AsOLEPropertiesContainer
+        Else
+            Dim dsiStream As CFStream = Nothing
+            Dim co As OLEPropertiesContainer = Nothing
+            'Dim OLEProp As OLEProperty = Nothing
 
-            OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+            Dim SIList = GetSIList()
+            Dim DSIList = GetDSIList()
+            Dim FunnyList = GetFunnyList()
 
-        Else  ' Hopefully a Custom Property
+            If (SIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-            dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            co = dsiStream.AsOLEPropertiesContainer
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-            OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+            ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-            If IsNothing(OLEProp) Then ' Add it
+                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                Try
-                    Dim userProperties = co.UserDefinedProperties
-                    Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
+            ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
 
-                    If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                    'This is the ID the new property will have
-                    'Duplicated IDs are not allowed
-                    'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
-                    'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
-                    userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-                    OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
-                    OLEProp.Value = " "
-                    userProperties.AddProperty(OLEProp)
-                    Dim i = 0
-                Catch ex As Exception
+            Else  ' Hopefully a Custom Property
 
-                    MsgBox("Could not change property", vbOKOnly)
+                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                co = dsiStream.AsOLEPropertiesContainer
 
-                End Try
+                OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+
+                If IsNothing(OLEProp) Then ' Add it
+
+                    Try
+                        Dim userProperties = co.UserDefinedProperties
+                        Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
+
+                        If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                        'This is the ID the new property will have
+                        'Duplicated IDs are not allowed
+                        'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
+                        'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
+
+                        userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                        OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
+                        OLEProp.Value = " "
+                        userProperties.AddProperty(OLEProp)
+                        Dim i = 0
+                    Catch ex As Exception
+
+                        MsgBox("Could not change property", vbOKOnly)
+
+                    End Try
+
+                End If
 
             End If
 
+            OLEProp.Value = PropertyValue
+
+            co.Save(dsiStream)
+            cf.Commit()
+            cf.Close()
+            cf = Nothing
+            fs.Close()
+            fs = Nothing
+
         End If
-
-        OLEProp.Value = PropertyValue
-
-        co.Save(dsiStream)
-        cf.Commit()
-        cf.Close()
-        cf = Nothing
-        fs.Close()
-        fs = Nothing
 
     End Sub
 
+    Public Function GetSIList() As List(Of String)
+        Dim SIList As New List(Of String)
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+        Return SIList
+    End Function
+
+    Public Function GetDSIList() As List(Of String)
+        Dim DSIList As New List(Of String)
+        DSIList.AddRange({"Category", "Company", "Manager"})
+        Return DSIList
+    End Function
+
+    Public Function GetFunnyList() As List(Of String)
+        Dim FunnyList As New List(Of String)
+        FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+        Return FunnyList
+    End Function
 
 
     Public Function SubstitutePropertyFormula(
@@ -1910,56 +2068,6 @@ Public Class UtilsCommon
 
     End Function
 
-
-    Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
-        Dim IsEqual As Boolean = True
-
-        If A Is Nothing Or B Is Nothing Then
-            IsEqual = False
-        End If
-
-        If IsEqual Then
-            If Not A.Count = B.Count Then
-                IsEqual = False
-            End If
-        End If
-
-        If IsEqual Then
-            Dim AJSON As String
-            Dim BJSON As String
-            For i As Integer = 0 To A.Count - 1
-                AJSON = A(i).ToJSON
-                BJSON = B(i).ToJSON
-                IsEqual = AJSON = BJSON
-                If Not IsEqual Then Exit For
-            Next
-        End If
-
-        Return IsEqual
-    End Function
-
-    Public Function CompareListOfColumnsJSON(A As List(Of String), B As List(Of String)) As Boolean
-        Dim IsEqual As Boolean = True
-
-        If A Is Nothing Or B Is Nothing Then
-            IsEqual = False
-        End If
-
-        If IsEqual Then
-            If Not A.Count = B.Count Then
-                IsEqual = False
-            End If
-        End If
-
-        If IsEqual Then
-            For i As Integer = 0 To A.Count - 1
-                IsEqual = A(i) = B(i)
-                If Not IsEqual Then Exit For
-            Next
-        End If
-
-        Return IsEqual
-    End Function
 
 
 

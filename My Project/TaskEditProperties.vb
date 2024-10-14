@@ -454,14 +454,9 @@ Public Class TaskEditProperties
 
             If Proceed Then
 
-                Dim SIList As New List(Of String)
-                SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
-
-                Dim DSIList As New List(Of String)
-                DSIList.AddRange({"Category", "Company", "Manager"})
-
-                Dim FunnyList As New List(Of String)
-                FunnyList.AddRange({"Document Number", "Revision", "Project Name"})
+                Dim SIList = UC.GetSIList()
+                Dim DSIList = UC.GetDSIList()
+                Dim FunnyList = UC.GetFunnyList()
 
                 Dim tfSystem As Boolean = (PropertySetName.ToLower = "system") Or (PropertySetName = "")
                 Dim tfCustom As Boolean = (PropertySetName.ToLower = "custom") Or (PropertySetName = "")
@@ -494,8 +489,9 @@ Public Class TaskEditProperties
                             co = dsiStream.AsOLEPropertiesContainer
 
                             OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-                            If (IsNothing(OLEProp)) And (Me.AutoAddMissingProperty) Then ' Add it
+                            If (IsNothing(OLEProp)) And (Me.AutoAddMissingProperty) Then
 
+                                ' Add it
                                 Try
                                     Dim userProperties = co.UserDefinedProperties
                                     Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
@@ -612,8 +608,6 @@ Public Class TaskEditProperties
 
                     '############ save the properties here (!)
                     co.Save(dsiStream)
-                    'If PropertySetName = "System" Or PropertySetName = "Custom" Or PropertySetName = "Project" Then
-                    'End If
 
                 Catch ex As Exception
                     Proceed = False
