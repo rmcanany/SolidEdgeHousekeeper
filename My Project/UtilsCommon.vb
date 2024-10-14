@@ -885,6 +885,31 @@ Public Class UtilsCommon
 
             OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
 
+            If IsNothing(OLEProp) Then ' Add it
+
+                Try
+                    Dim userProperties = co.UserDefinedProperties
+                    Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
+
+                    If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+                    'This is the ID the new property will have
+                    'Duplicated IDs are not allowed
+                    'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
+                    'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
+
+                    userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                    OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
+                    OLEProp.Value = " "
+                    userProperties.AddProperty(OLEProp)
+                    Dim i = 0
+                Catch ex As Exception
+
+                    MsgBox("Could not change property", vbOKOnly)
+
+                End Try
+
+            End If
+
         End If
 
         OLEProp.Value = PropertyValue

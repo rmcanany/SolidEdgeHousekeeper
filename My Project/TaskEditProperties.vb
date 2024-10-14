@@ -507,7 +507,7 @@ Public Class TaskEditProperties
                                     'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
 
                                     userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-                                    OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPWSTR, newPropertyId)
+                                    OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
                                     OLEProp.Value = " "
                                     userProperties.AddProperty(OLEProp)
                                     Dim i = 0
