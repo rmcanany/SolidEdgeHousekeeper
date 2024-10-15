@@ -2,7 +2,6 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
-Imports FioriniClassLibrary
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
@@ -933,7 +932,7 @@ Public Class Form_Main
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+        ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Collapsible)
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -1216,7 +1215,7 @@ Public Class Form_Main
 
         '############ Uncollapse the groups to not throw the exception, not ideal but works 'F.Arfilli
         For Each item As ListViewGroup In ListViewFiles.Groups
-            ListViewFiles.SetGroupState(ListViewGroupState.Normal, item)
+            ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Normal, item)
         Next
 
         ' Shut down

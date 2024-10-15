@@ -31,7 +31,7 @@ Partial Class Form_Main
         Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
         Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
         Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
-        Me.ListViewFiles = New FioriniClassLibrary.ListViewCollapsible()
+        Me.ListViewFiles = New ListViewExtended.ListViewCollapsible()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage_ImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -1079,7 +1079,7 @@ Partial Class Form_Main
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageStatus.Name = "TabPageStatus"
         Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageStatus.Size = New System.Drawing.Size(534, 803)
         Me.TabPageStatus.TabIndex = 3
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
@@ -1101,7 +1101,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(524, 784)
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(526, 797)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
         '
@@ -1817,7 +1817,7 @@ Partial Class Form_Main
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageSorting.Size = New System.Drawing.Size(534, 803)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -1843,7 +1843,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(524, 784)
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(526, 797)
         Me.ExTableLayoutPanel7.TabIndex = 56
         Me.ExTableLayoutPanel7.Task = Nothing
         '
@@ -1922,7 +1922,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
         Me.ExTableLayoutPanel8.RowCount = 1
         Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(518, 34)
+        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(520, 34)
         Me.ExTableLayoutPanel8.TabIndex = 54
         Me.ExTableLayoutPanel8.Task = Nothing
         '
@@ -1954,7 +1954,7 @@ Partial Class Form_Main
         Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(534, 803)
         Me.TabPageTemplates.TabIndex = 7
         Me.TabPageTemplates.Text = "Templates"
         Me.TabPageTemplates.UseVisualStyleBackColor = True
@@ -1992,7 +1992,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(520, 256)
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(522, 256)
         Me.ExTableLayoutPanel1.TabIndex = 0
         Me.ExTableLayoutPanel1.Task = Nothing
         '
@@ -2011,7 +2011,7 @@ Partial Class Form_Main
         Me.TextBoxAssemblyTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxAssemblyTemplate.Location = New System.Drawing.Point(103, 3)
         Me.TextBoxAssemblyTemplate.Name = "TextBoxAssemblyTemplate"
-        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxAssemblyTemplate.Size = New System.Drawing.Size(416, 23)
         Me.TextBoxAssemblyTemplate.TabIndex = 1
         '
         'ButtonPartTemplate
@@ -2029,7 +2029,7 @@ Partial Class Form_Main
         Me.TextBoxPartTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxPartTemplate.Location = New System.Drawing.Point(103, 33)
         Me.TextBoxPartTemplate.Name = "TextBoxPartTemplate"
-        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxPartTemplate.Size = New System.Drawing.Size(416, 23)
         Me.TextBoxPartTemplate.TabIndex = 3
         '
         'ButtonSheetmetalTemplate
@@ -2047,7 +2047,7 @@ Partial Class Form_Main
         Me.TextBoxSheetmetalTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxSheetmetalTemplate.Location = New System.Drawing.Point(103, 63)
         Me.TextBoxSheetmetalTemplate.Name = "TextBoxSheetmetalTemplate"
-        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxSheetmetalTemplate.Size = New System.Drawing.Size(416, 23)
         Me.TextBoxSheetmetalTemplate.TabIndex = 5
         '
         'ButtonDraftTemplate
@@ -2065,7 +2065,7 @@ Partial Class Form_Main
         Me.TextBoxDraftTemplate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxDraftTemplate.Location = New System.Drawing.Point(103, 93)
         Me.TextBoxDraftTemplate.Name = "TextBoxDraftTemplate"
-        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxDraftTemplate.Size = New System.Drawing.Size(416, 23)
         Me.TextBoxDraftTemplate.TabIndex = 7
         '
         'ButtonMaterialTable
@@ -2083,7 +2083,7 @@ Partial Class Form_Main
         Me.TextBoxMaterialTable.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxMaterialTable.Location = New System.Drawing.Point(103, 123)
         Me.TextBoxMaterialTable.Name = "TextBoxMaterialTable"
-        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(414, 23)
+        Me.TextBoxMaterialTable.Size = New System.Drawing.Size(416, 23)
         Me.TextBoxMaterialTable.TabIndex = 10
         '
         'LabelCustomizeTemplatePropertyDict
@@ -2135,7 +2135,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(532, 790)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(534, 803)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
@@ -2168,7 +2168,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(524, 784)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(526, 797)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
@@ -2261,7 +2261,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(518, 34)
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(520, 34)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
         '
@@ -2552,7 +2552,7 @@ Partial Class Form_Main
     Friend WithEvents PrintDialog1 As PrintDialog
     Friend WithEvents TabPage_ImageList As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents ListViewFiles As FioriniClassLibrary.ListViewCollapsible
+    Friend WithEvents ListViewFiles As ListViewExtended.ListViewCollapsible
     Friend WithEvents FileName As ColumnHeader
     Friend WithEvents FilePath As ColumnHeader
     Friend WithEvents ToolStrip_List As ToolStrip

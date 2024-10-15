@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29905.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Housekeeper", "Housekeeper.vbproj", "{F923060F-7F29-4637-BB23-0C402AA6DB62}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B72BE7BA-D479-4DC3-B8AD-8DCEBDCD1F7A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ListViewExtended", "My Project\ListViewExtended\ListViewExtended\ListViewExtended.vbproj", "{67573F49-3C86-4D74-B051-861E43F8D192}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +19,16 @@ Global
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F923060F-7F29-4637-BB23-0C402AA6DB62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67573F49-3C86-4D74-B051-861E43F8D192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67573F49-3C86-4D74-B051-861E43F8D192}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{67573F49-3C86-4D74-B051-861E43F8D192} = {B72BE7BA-D479-4DC3-B8AD-8DCEBDCD1F7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CC559A0C-CD7A-4C2A-99F2-75796CA5BF28}
