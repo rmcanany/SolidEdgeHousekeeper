@@ -87,6 +87,7 @@ Public Class UtilsExecute
             If Task.IsSelectedTask And Task.IsSelectedDraft Then DraftCount += 1
         Next
 
+        ' Process the files
         If PartCount > 0 Then ProcessFiles("Part")
         If SheetmetalCount > 0 Then ProcessFiles("Sheetmetal")
         If AssemblyCount > 0 Then ProcessFiles("Assembly")
