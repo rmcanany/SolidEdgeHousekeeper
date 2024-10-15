@@ -300,6 +300,7 @@ Public Class UtilsFileList
                             fs.Close()
                             cf = Nothing
                             fs = Nothing
+                            Application.DoEvents()
                         Catch ex As Exception
                             PropValue = ""
                         End Try
@@ -888,9 +889,10 @@ Public Class UtilsFileList
     Public Sub UpdatePropertiesColumns()
 
         'FMain.Cursor.Current = Cursors.WaitCursor  ' ########## Moved to where this method is being called in Form_Main
-        Application.DoEvents()
 
         Dim UC As New UtilsCommon
+
+        ListViewFiles.BeginUpdate()
 
         'Resetting the columns
         If ListViewFiles.Columns.Count > 2 Then
@@ -898,9 +900,6 @@ Public Class UtilsFileList
                 ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
             Loop
         End If
-
-
-
 
         For Each tmpLVItem As ListViewItem In ListViewFiles.Items
 
@@ -916,6 +915,8 @@ Public Class UtilsFileList
 
             Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
 
+            FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
+
             For Each PropColumn In FMain.ListOfColumns
 
                 If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
@@ -930,11 +931,12 @@ Public Class UtilsFileList
                             Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
                             'Dim cf = UC.cfFromFullName(FullName)
                             PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FullName, PropColumn.Formula,
-                                                                                   ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
                             cf.Close()
                             fs.Close()
                             cf = Nothing
                             fs = Nothing
+                            Application.DoEvents()
                         Catch ex As Exception
                             PropValue = ""
                         End Try
@@ -948,6 +950,8 @@ Public Class UtilsFileList
         Next
 
         CreateColumns()
+
+        ListViewFiles.EndUpdate()
 
         'FMain.Cursor = Cursors.Default
 

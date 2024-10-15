@@ -1020,14 +1020,31 @@ Public Class Form_Main
 
     'End Sub
 
-    Public Sub Wrapup()
+    Public Sub SaveSettings()
         ' Set Properties equal to themselves to trigger JSON updates
+
+        ' ListOfColumnsJSON
         Me.TextBoxStatus.Text = "Updating JSON ListOfColumns"
-        Me.ListOfColumns = Me.ListOfColumns
+        'Me.ListOfColumns = Me.ListOfColumns  ' Also updates the file list.  Not needed here.  Manually update instead.
+
+        Dim tmpListOfColumnsJSON As New List(Of String)
+
+        For Each PropColumn In Me.ListOfColumns
+            tmpListOfColumnsJSON.Add(PropColumn.ToJSON)
+        Next
+
+        Dim UC As New UtilsCommon
+        If Not UC.CompareListOfColumnsJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
+            Me.ListOfColumnsJSON = tmpListOfColumnsJSON
+        End If
+
+
+        ' Other JSON
         Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
         Me.TemplatePropertyDict = Me.TemplatePropertyDict
         Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
+
 
         ' Save settings
         Dim UP As New UtilsPreferences
@@ -1203,7 +1220,7 @@ Public Class Form_Main
         If ButtonCancel.Text = "Stop" Then
             StopProcess = True
         Else
-            Wrapup()
+            SaveSettings()
 
             ' Shut down
             End
@@ -1211,7 +1228,7 @@ Public Class Form_Main
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
-        Wrapup()
+        SaveSettings()
 
         '############ Uncollapse the groups to not throw the exception, not ideal but works 'F.Arfilli
         For Each item As ListViewGroup In ListViewFiles.Groups

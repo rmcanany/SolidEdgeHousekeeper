@@ -30,7 +30,7 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        FMain.Wrapup()  ' Updates JSON Properties and saves settings
+        FMain.SaveSettings()  ' Updates JSON Properties and saves settings
 
         'Dim UP As New UtilsPreferences
         'UP.SaveFormMainSettings(FMain)
