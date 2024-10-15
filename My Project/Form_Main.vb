@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports FioriniClassLibrary
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
@@ -932,6 +933,8 @@ Public Class Form_Main
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
+        ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
@@ -1212,7 +1215,7 @@ Public Class Form_Main
         Wrapup()
 
         ' Shut down
-        End
+        End             '<------- This throws an error if some ListView groups are collapsed 'F.Arfilli
     End Sub
 
     Private Sub ButtonFastSearchScopeFilename_Click(sender As Object, e As EventArgs) Handles ButtonFastSearchScopeFilename.Click

@@ -10,7 +10,7 @@ Public Class UtilsFileList
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListView)
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As FioriniClassLibrary.ListViewCollapsible)
         Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
     End Sub

@@ -100,6 +100,9 @@
     <Reference Include="Interop.SolidEdge, Version=220.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Interop.SolidEdge.220.2.0\lib\net45\Interop.SolidEdge.dll</HintPath>
     </Reference>
+    <Reference Include="ListViewExtended">
+      <HintPath>packages\ListViewExtended\ListViewExtended.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.WindowsAPICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>

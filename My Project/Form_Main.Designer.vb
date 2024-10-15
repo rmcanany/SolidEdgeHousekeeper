@@ -31,7 +31,7 @@ Partial Class Form_Main
         Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
         Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
         Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
-        Me.ListViewFiles = New System.Windows.Forms.ListView()
+        Me.ListViewFiles = New FioriniClassLibrary.ListViewCollapsible()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage_ImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -2553,7 +2553,7 @@ Partial Class Form_Main
     Friend WithEvents PrintDialog1 As PrintDialog
     Friend WithEvents TabPage_ImageList As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents ListViewFiles As ListView
+    Friend WithEvents ListViewFiles As FioriniClassLibrary.ListViewCollapsible
     Friend WithEvents FileName As ColumnHeader
     Friend WithEvents FilePath As ColumnHeader
     Friend WithEvents ToolStrip_List As ToolStrip
