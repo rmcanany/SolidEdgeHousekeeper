@@ -7,6 +7,8 @@ Imports Newtonsoft.Json
 
 Public Class Form_Main
 
+    Private lvwColumnSorter As ListViewColumnSorter
+
 
     Private editbox As New TextBox()
     Private hitinfo As ListViewHitTestInfo
@@ -3018,10 +3020,30 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub ListViewFiles_ColumnClick(sender As Object, e As EventArgs) Handles ListViewFiles.ColumnClick
-        MsgBox("ColumnClick Event")
-        Dim ee = CType(e, ColumnClickEventArgs)
-        'ListViewFiles.ListViewItemSorter = New ListViewItemComparer(ee.Column)
+    Private Sub ListViewFiles_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles ListViewFiles.ColumnClick
+
+        If IsNothing(lvwColumnSorter) Then
+            lvwColumnSorter = New ListViewColumnSorter()
+            ListViewFiles.ListViewItemSorter = lvwColumnSorter
+
+        End If
+
+        If (e.Column = lvwColumnSorter.SortColumn) Then
+            ' Reverse the current sort direction for this column.
+            If (lvwColumnSorter.Order = SortOrder.Ascending) Then
+                lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            ' Set the column number that is to be sorted; default to ascending.
+            lvwColumnSorter.SortColumn = e.Column
+            lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' Perform the sort with these new sort options.
+        ListViewFiles.Sort()
+
     End Sub
 
 
@@ -3110,25 +3132,75 @@ Public Class PropertyColumn
     End Sub
 End Class
 
+Public Class ListViewColumnSorter
+    Implements System.Collections.IComparer
 
-Class ListViewItemComparer
-    Implements IComparer
-
-    Private col As Integer
+    Private ColumnToSort As Integer
+    Private OrderOfSort As SortOrder
+    Private ObjectCompare As CaseInsensitiveComparer
 
     Public Sub New()
-        col = 0
+        ' Initialize the column to '0'.
+        ColumnToSort = 0
+
+        ' Initialize the sort order to 'none'.
+        OrderOfSort = SortOrder.None
+
+        ' Initialize the CaseInsensitiveComparer object.
+        ObjectCompare = New CaseInsensitiveComparer()
     End Sub
 
-    Public Sub New(ByVal column As Integer)
-        col = column
-    End Sub
+    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements IComparer.Compare
+        Dim compareResult As Integer
+        Dim listviewX As ListViewItem
+        Dim listviewY As ListViewItem
 
-    'Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer
-    '    Return String.Compare((CType(x, ListViewItem)).SubItems(col).Text, (CType(y, ListViewItem)).SubItems(col).Text)
-    'End Function
+        ' Cast the objects to be compared to ListViewItem objects.
+        listviewX = CType(x, ListViewItem)
+        listviewY = CType(y, ListViewItem)
 
-    Private Function IComparer_Compare(x As Object, y As Object) As Integer Implements IComparer.Compare
-        Return String.Compare((CType(x, ListViewItem)).SubItems(col).Text, (CType(y, ListViewItem)).SubItems(col).Text)
+        Dim Text_X As String = ""
+        Dim Text_Y As String = ""
+
+        If listviewX.SubItems.Count > ColumnToSort Then Text_X = listviewX.SubItems(ColumnToSort).Text
+        If listviewY.SubItems.Count > ColumnToSort Then Text_Y = listviewY.SubItems(ColumnToSort).Text
+
+        ' Compare the two items.
+        compareResult = ObjectCompare.Compare(Text_X, Text_Y)
+
+        ' Calculate the correct return value based on the object 
+        ' comparison.
+        If (OrderOfSort = SortOrder.Ascending) Then
+            ' Ascending sort is selected, return typical result of 
+            ' compare operation.
+            Return compareResult
+        ElseIf (OrderOfSort = SortOrder.Descending) Then
+            ' Descending sort is selected, return negative result of 
+            ' compare operation.
+            Return (-compareResult)
+        Else
+            ' Return '0' to indicate that they are equal.
+            Return 0
+        End If
     End Function
+
+    Public Property SortColumn() As Integer
+        Set(ByVal Value As Integer)
+            ColumnToSort = Value
+        End Set
+
+        Get
+            Return ColumnToSort
+        End Get
+    End Property
+
+    Public Property Order() As SortOrder
+        Set(ByVal Value As SortOrder)
+            OrderOfSort = Value
+        End Set
+
+        Get
+            Return OrderOfSort
+        End Get
+    End Property
 End Class
