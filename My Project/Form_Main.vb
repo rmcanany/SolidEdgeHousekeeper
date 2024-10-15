@@ -1214,8 +1214,14 @@ Public Class Form_Main
     Private Sub Form1_Closing(sender As Object, e As EventArgs) Handles Me.FormClosing
         Wrapup()
 
+        '############ Uncollapse the groups to not throw the exception, not ideal but works 'F.Arfilli
+        For Each item As ListViewGroup In ListViewFiles.Groups
+            ListViewFiles.SetGroupState(ListViewGroupState.Normal, item)
+        Next
+
         ' Shut down
-        End             '<------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+        End '########## <------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+
     End Sub
 
     Private Sub ButtonFastSearchScopeFilename_Click(sender As Object, e As EventArgs) Handles ButtonFastSearchScopeFilename.Click
