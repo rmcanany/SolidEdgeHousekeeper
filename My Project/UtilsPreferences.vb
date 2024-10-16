@@ -538,6 +538,7 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
         KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
         KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
+        KeepProps.AddRange({"Left", "Top", "Width", "Height"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
