@@ -3047,6 +3047,7 @@ Public Class Form_Main
 
         If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
             hitinfo.SubItem.Text = editbox.Text
+            hitinfo.SubItem.BackColor = Color.Empty
         End If
 
         editbox.Hide()
