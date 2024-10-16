@@ -820,6 +820,7 @@ Public Class UtilsCommon
         Dim SIList = GetSIList()
         Dim DSIList = GetDSIList()
         Dim FunnyList = GetFunnyList()
+        Dim ExtendedList = GetExtendedList()
 
         If Not PropertySet = "Custom" Then
             PropertySet = "System"
@@ -840,6 +841,12 @@ Public Class UtilsCommon
 
             ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
                 dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+            ElseIf (ExtendedList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+                dsiStream = cf.RootStorage.GetStream("C3teagxwOttdbfkuIaamtae3Ie")
                 co = dsiStream.AsOLEPropertiesContainer
 
                 OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
@@ -1035,7 +1042,19 @@ Public Class UtilsCommon
 
             If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-                OLEProp.Value = PropertyValue
+                Select Case OLEProp.VTType
+
+                    Case = VTPropertyType.VT_BOOL
+                        OLEProp.Value = CType(PropertyValue, Boolean)
+                    Case = VTPropertyType.VT_I4
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                        OLEProp.Value = PropertyValue
+
+                End Select
+
+
+                'OLEProp.Value = PropertyValue
                 co.Save(dsiStream)
                 cf.Commit()
 
@@ -1049,8 +1068,6 @@ Public Class UtilsCommon
             fs.Close()
             fs = Nothing
             System.Windows.Forms.Application.DoEvents()
-
-            Return True
 
         Else
             'Dim dsiStream As CFStream = Nothing
@@ -1144,6 +1161,11 @@ Public Class UtilsCommon
         Return FunnyList
     End Function
 
+    Public Function GetExtendedList() As List(Of String)
+        Dim ExtendedList As New List(Of String)
+        ExtendedList.AddRange({"Status", "CreationLocale", "Hardware"})
+        Return ExtendedList
+    End Function
 
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
