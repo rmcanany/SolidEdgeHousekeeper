@@ -108,4 +108,26 @@ Public Class FormPropertyPicker
             ComboBoxPropertyName.Items.Add(PropName)
         Next
     End Sub
+
+    Private Sub ButtonAddProp_Click(sender As Object, e As EventArgs) Handles ButtonAddProp.Click
+        Dim FPLC As New FormPropertyListCustomize
+
+        Dim Result As DialogResult = FPLC.ShowDialog()
+
+        If Result = DialogResult.OK Then
+            Dim UC As New UtilsCommon
+            Me.FavoritesList = FPLC.FavoritesList
+
+            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, Me.FavoritesList)
+
+            ComboBoxPropertyName.Items.Clear()
+            ComboBoxPropertyName.Items.Add("")
+            For Each PropName As String In Me.FavoritesList
+                ComboBoxPropertyName.Items.Add(PropName)
+            Next
+
+        End If
+
+
+    End Sub
 End Class

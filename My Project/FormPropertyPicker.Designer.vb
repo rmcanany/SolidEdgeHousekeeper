@@ -32,16 +32,17 @@ Partial Class FormPropertyPicker
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
+        Me.ButtonAddProp = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonPropOnly, Me.ButtonPropAndIndex, Me.ToolStripSeparator1, Me.ButtonShowAll})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ButtonPropOnly, Me.ButtonPropAndIndex, Me.ToolStripSeparator1, Me.ButtonShowAll, Me.ButtonAddProp})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.ToolStrip1.Size = New System.Drawing.Size(284, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(333, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -88,16 +89,17 @@ Partial Class FormPropertyPicker
         '
         Me.ComboBoxPropertyName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBoxPropertyName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxPropertyName.FormattingEnabled = True
         Me.ComboBoxPropertyName.Location = New System.Drawing.Point(100, 35)
         Me.ComboBoxPropertyName.Name = "ComboBoxPropertyName"
-        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(172, 23)
+        Me.ComboBoxPropertyName.Size = New System.Drawing.Size(221, 23)
         Me.ComboBoxPropertyName.TabIndex = 1
         '
         'ButtonOK
         '
         Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(100, 64)
+        Me.ButtonOK.Location = New System.Drawing.Point(149, 64)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(85, 23)
         Me.ButtonOK.TabIndex = 2
@@ -107,7 +109,7 @@ Partial Class FormPropertyPicker
         'ButtonCancel
         '
         Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(187, 64)
+        Me.ButtonCancel.Location = New System.Drawing.Point(236, 64)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(85, 23)
         Me.ButtonCancel.TabIndex = 3
@@ -124,11 +126,20 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertySet.Size = New System.Drawing.Size(84, 23)
         Me.ComboBoxPropertySet.TabIndex = 4
         '
+        'ButtonAddProp
+        '
+        Me.ButtonAddProp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ButtonAddProp.Image = CType(resources.GetObject("ButtonAddProp.Image"), System.Drawing.Image)
+        Me.ButtonAddProp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonAddProp.Name = "ButtonAddProp"
+        Me.ButtonAddProp.Size = New System.Drawing.Size(61, 22)
+        Me.ButtonAddProp.Text = "Add Prop"
+        '
         'FormPropertyPicker
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 101)
+        Me.ClientSize = New System.Drawing.Size(333, 101)
         Me.Controls.Add(Me.ComboBoxPropertySet)
         Me.Controls.Add(Me.ButtonCancel)
         Me.Controls.Add(Me.ButtonOK)
@@ -155,4 +166,5 @@ Partial Class FormPropertyPicker
     Friend WithEvents ButtonOK As Button
     Friend WithEvents ButtonCancel As Button
     Friend WithEvents ComboBoxPropertySet As ComboBox
+    Friend WithEvents ButtonAddProp As ToolStripButton
 End Class
