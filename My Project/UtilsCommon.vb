@@ -6,6 +6,7 @@ Imports System.Security.AccessControl
 Imports System.Text.RegularExpressions
 Imports System.Windows
 Imports ExcelDataReader
+Imports Microsoft.SqlServer.Server
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -819,6 +820,7 @@ Public Class UtilsCommon
         Dim SIList = GetSIList()
         Dim DSIList = GetDSIList()
         Dim FunnyList = GetFunnyList()
+        Dim ExtendedList = GetExtendedList()
 
         If Not PropertySet = "Custom" Then
             PropertySet = "System"
@@ -843,8 +845,25 @@ Public Class UtilsCommon
 
                 OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
+            ElseIf (ExtendedList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+                dsiStream = cf.RootStorage.GetStream("C3teagxwOttdbfkuIaamtae3Ie")
+                co = dsiStream.AsOLEPropertiesContainer
+
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+
+            ElseIf PropertyNameEnglish = "Material" And (PropertySet.ToLower = "system") Then
+
+                Try ' I haven't found a way from cf to get the file name and check for extension that doesn't have to be ASM or DFT 'F.Arfilli
+                    dsiStream = cf.RootStorage.GetStream("K4teagxwOttdbfkuIaamtae3Ie")
+                    co = dsiStream.AsOLEPropertiesContainer
+
+                    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName.ToLower = PropertyNameEnglish.ToLower)
+                Catch ex As Exception
+
+                End Try
+
             Else
-                If PropertySet.ToLower = "custom" Then
+                    If PropertySet.ToLower = "custom" Then
                     dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                     co = dsiStream.AsOLEPropertiesContainer
 
@@ -978,7 +997,11 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Sub UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String)
+    Public Function UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String) As Boolean
+
+
+        UpdateSingleProperty = False
+
 
         ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
         Dim Retries As Integer = 3
@@ -995,7 +1018,9 @@ Public Class UtilsCommon
 
         If fs Is Nothing Then
             MsgBox("Could not change property", vbOKOnly)
-            Exit Sub
+
+            Exit Function
+
         End If
 
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
@@ -1012,17 +1037,42 @@ Public Class UtilsCommon
         Dim MyWay As Boolean = True
 
         If MyWay Then
+
             OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
 
-            OLEProp.Value = PropertyValue
+            If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-            co.Save(dsiStream)
-            cf.Commit()
+                Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
+
+                    Case = VTPropertyType.VT_BOOL
+                        OLEProp.Value = CType(PropertyValue, Boolean)
+                    Case = VTPropertyType.VT_I4
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                        OLEProp.Value = PropertyValue
+                    Case = VTPropertyType.VT_FILETIME
+                        OLEProp.Value = CType(PropertyValue, DateTime)
+                    Case = VTPropertyType.VT_R8
+                        OLEProp.Value = CType(PropertyValue, Double)
+
+                End Select
+
+
+                'OLEProp.Value = PropertyValue
+                co.Save(dsiStream)
+                cf.Commit()
+
+                UpdateSingleProperty = True
+
+            End If
+
+
             cf.Close()
             cf = Nothing
             fs.Close()
             fs = Nothing
             System.Windows.Forms.Application.DoEvents()
+
         Else
             'Dim dsiStream As CFStream = Nothing
             'Dim co As OLEPropertiesContainer = Nothing
@@ -1095,11 +1145,11 @@ Public Class UtilsCommon
             System.Windows.Forms.Application.DoEvents()
         End If
 
-    End Sub
+    End Function
 
     Public Function GetSIList() As List(Of String)
         Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Doc_Security"})
         Return SIList
     End Function
 
@@ -1115,6 +1165,11 @@ Public Class UtilsCommon
         Return FunnyList
     End Function
 
+    Public Function GetExtendedList() As List(Of String)
+        Dim ExtendedList As New List(Of String)
+        ExtendedList.AddRange({"Status", "CreationLocale", "Hardware"})
+        Return ExtendedList
+    End Function
 
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,

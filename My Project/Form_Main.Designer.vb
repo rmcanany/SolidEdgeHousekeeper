@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿Imports ListViewExtended
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form_Main
     Inherits System.Windows.Forms.Form
 
@@ -2552,7 +2554,7 @@ Partial Class Form_Main
     Friend WithEvents PrintDialog1 As PrintDialog
     Friend WithEvents TabPage_ImageList As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents ListViewFiles As ListViewExtended.ListViewCollapsible
+    Friend WithEvents ListViewFiles As ListViewCollapsible
     Friend WithEvents FileName As ColumnHeader
     Friend WithEvents FilePath As ColumnHeader
     Friend WithEvents ToolStrip_List As ToolStrip

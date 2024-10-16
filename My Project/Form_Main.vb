@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
@@ -932,7 +933,7 @@ Public Class Form_Main
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Collapsible)
+        ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -1231,12 +1232,14 @@ Public Class Form_Main
         SaveSettings()
 
         '############ Uncollapse the groups to not throw the exception, not ideal but works 'F.Arfilli
-        For Each item As ListViewGroup In ListViewFiles.Groups
-            ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Normal, item)
-        Next
+        'For Each item As ListViewGroup In ListViewFiles.Groups
+        '    ListViewFiles.SetGroupState(ListViewGroupState.Normal, item)
+        'Next
 
         ' Shut down
         End '########## <------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+
+        '##### 16/10/24 It seems the error doesn't occur anymore
 
     End Sub
 
@@ -2869,13 +2872,15 @@ Public Class Form_Main
         ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
-        Dim tmpListOfColumns As New List(Of PropertyColumn)
-        For Each PropColumn In Me.ListOfColumns
-            tmpListOfColumns.Add(PropColumn)
-        Next
-        tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
-        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+        '###### We don't need to update at each removal, settings are saved on close
+        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+        'For Each PropColumn In Me.ListOfColumns
+        '    tmpListOfColumns.Add(PropColumn)
+        'Next
+        'tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
 
+        Me.ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
     End Sub
 
@@ -2933,12 +2938,14 @@ Public Class Form_Main
 
     Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
 
-        Dim tmpListOfColumns As New List(Of PropertyColumn)
-        For Each PropColumn In Me.ListOfColumns
-            tmpListOfColumns.Add(PropColumn)
-        Next
 
-        For Each item In tmpListOfColumns
+        '######### We don't want to store visibility information each time it change, it is saved on application close
+        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+        'For Each PropColumn In Me.ListOfColumns
+        '    tmpListOfColumns.Add(PropColumn)
+        'Next
+
+        For Each item In Me.ListOfColumns ' tmpListOfColumns
 
             If item.Name = CLB_Properties.Items(e.Index).ToString Then
                 item.Visible = CType(e.NewValue, Boolean)
@@ -2956,7 +2963,7 @@ Public Class Form_Main
 
         Next
 
-        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
 
     End Sub
 
@@ -2964,21 +2971,24 @@ Public Class Form_Main
 
         If Not IsNothing(ListOfColumns) Then
 
-            If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
+            If ListOfColumns.Count > e.ColumnIndex Then
 
-                If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
+                If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
 
-                    ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
+                    If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
 
-                    Dim tmpListOfColumns As New List(Of PropertyColumn)
-                    For Each PropColumn In Me.ListOfColumns
-                        tmpListOfColumns.Add(PropColumn)
-                    Next
+                        ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
 
-                    Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+                        '' We don't need to update everytime the width change, the width is saved on close ######### F.Arfilli
+                        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+                        'For Each PropColumn In Me.ListOfColumns
+                        '    tmpListOfColumns.Add(PropColumn)
+                        'Next
 
+                        'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
+                    End If
                 End If
-
             End If
 
         End If
@@ -3021,13 +3031,26 @@ Public Class Form_Main
 
         Dim UC As New UtilsCommon
 
-        hitinfo.SubItem.Text = editbox.Text
-        editbox.Hide()
-
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
-        Dim PropertySet As String = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
-        Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
-        UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, hitinfo.SubItem.Text)
+        Dim PropertySet As String = ""
+        Dim PropertyNameEnglish = ""
+
+        ' Template propertydict doesn't contain manually added properties, a method that adds them to the dictionary is needed
+        Try
+            PropertySet = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
+            PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+        Catch ex As Exception
+            PropertySet = "Custom"
+            PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
+        End Try
+
+
+        If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
+            hitinfo.SubItem.Text = editbox.Text
+            hitinfo.SubItem.BackColor = Color.Empty
+        End If
+
+        editbox.Hide()
 
         'hitinfo.Item.Name 'File to edit
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit

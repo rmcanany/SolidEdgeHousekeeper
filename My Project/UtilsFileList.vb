@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports ListViewExtended
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -10,7 +11,7 @@ Public Class UtilsFileList
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewExtended.ListViewCollapsible)
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible)
         Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
     End Sub
@@ -279,6 +280,7 @@ Public Class UtilsFileList
 
                 Dim tmpLVItem As New ListViewItem
                 tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
+                tmpLVItem.UseItemStyleForSubItems = False
                 tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
 
 
@@ -289,6 +291,7 @@ Public Class UtilsFileList
 
                         'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
                         Dim PropValue As String
+                        Dim tmpColor As Color = Color.White
                         Try
                             Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
                             Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
@@ -303,9 +306,10 @@ Public Class UtilsFileList
                             Application.DoEvents()
                         Catch ex As Exception
                             PropValue = ""
+                            tmpColor = Color.Gainsboro
                         End Try
 
-                        tmpLVItem.SubItems.Add(PropValue)
+                        tmpLVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, tmpLVItem.Font)
 
                     End If
 
@@ -601,7 +605,7 @@ Public Class UtilsFileList
         Dim LinkDocName As String
         'Dim Filename As String
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
-        Dim tf As Boolean
+        'Dim tf As Boolean
 
         Dim UC As New UtilsCommon
 
@@ -913,6 +917,8 @@ Public Class UtilsFileList
 
             End If
 
+            tmpLVItem.UseItemStyleForSubItems = False
+
             Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
 
             FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
@@ -925,6 +931,7 @@ Public Class UtilsFileList
                         'tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropColumn.Name, tmpLVItem.SubItems.Item(0).Name))
 
                         Dim PropValue As String
+                        Dim tmpColor As Color = Color.White
                         Try
                             Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
                             Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
@@ -939,8 +946,10 @@ Public Class UtilsFileList
                             Application.DoEvents()
                         Catch ex As Exception
                             PropValue = ""
+                            tmpColor = Color.Gainsboro
                         End Try
-                        tmpLVItem.SubItems.Add(PropValue)
+
+                        tmpLVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, tmpLVItem.Font)
                     End If
 
                 End If
