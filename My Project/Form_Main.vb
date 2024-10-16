@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 
@@ -932,7 +933,7 @@ Public Class Form_Main
         ListViewFiles.Groups.Add(ListViewGroup5)
         ListViewFiles.Groups.Add(ListViewGroup6)
 
-        ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Collapsible)
+        ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -1231,12 +1232,14 @@ Public Class Form_Main
         SaveSettings()
 
         '############ Uncollapse the groups to not throw the exception, not ideal but works 'F.Arfilli
-        For Each item As ListViewGroup In ListViewFiles.Groups
-            ListViewFiles.SetGroupState(ListViewExtended.ListViewGroupState.Normal, item)
-        Next
+        'For Each item As ListViewGroup In ListViewFiles.Groups
+        '    ListViewFiles.SetGroupState(ListViewGroupState.Normal, item)
+        'Next
 
         ' Shut down
         End '########## <------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+
+        '##### 16/10/24 It seems the error doesn't occur anymore
 
     End Sub
 
@@ -2933,12 +2936,14 @@ Public Class Form_Main
 
     Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
 
-        Dim tmpListOfColumns As New List(Of PropertyColumn)
-        For Each PropColumn In Me.ListOfColumns
-            tmpListOfColumns.Add(PropColumn)
-        Next
 
-        For Each item In tmpListOfColumns
+        '######### We don't want to store visibility information each time it change, it is saved on application close
+        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+        'For Each PropColumn In Me.ListOfColumns
+        '    tmpListOfColumns.Add(PropColumn)
+        'Next
+
+        For Each item In Me.ListOfColumns ' tmpListOfColumns
 
             If item.Name = CLB_Properties.Items(e.Index).ToString Then
                 item.Visible = CType(e.NewValue, Boolean)
@@ -2956,7 +2961,7 @@ Public Class Form_Main
 
         Next
 
-        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
 
     End Sub
 
@@ -2970,12 +2975,13 @@ Public Class Form_Main
 
                     ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
 
-                    Dim tmpListOfColumns As New List(Of PropertyColumn)
-                    For Each PropColumn In Me.ListOfColumns
-                        tmpListOfColumns.Add(PropColumn)
-                    Next
+                    '' We don't need to update everytime the width change, the width is saved on close ######### F.Arfilli
+                    'Dim tmpListOfColumns As New List(Of PropertyColumn)
+                    'For Each PropColumn In Me.ListOfColumns
+                    '    tmpListOfColumns.Add(PropColumn)
+                    'Next
 
-                    Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+                    'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
 
                 End If
 

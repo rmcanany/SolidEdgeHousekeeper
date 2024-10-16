@@ -6,6 +6,7 @@ Imports System.Security.AccessControl
 Imports System.Text.RegularExpressions
 Imports System.Windows
 Imports ExcelDataReader
+Imports Microsoft.SqlServer.Server
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -843,8 +844,19 @@ Public Class UtilsCommon
 
                 OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
+            ElseIf PropertyNameEnglish = "Material" And (PropertySet.ToLower = "system") Then
+
+                Try ' I haven't found a way from cf to get the file name and check for extension that doesn't have to be ASM or DFT 'F.Arfilli
+                    dsiStream = cf.RootStorage.GetStream("K4teagxwOttdbfkuIaamtae3Ie")
+                    co = dsiStream.AsOLEPropertiesContainer
+
+                    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName.ToLower = PropertyNameEnglish.ToLower)
+                Catch ex As Exception
+
+                End Try
+
             Else
-                If PropertySet.ToLower = "custom" Then
+                    If PropertySet.ToLower = "custom" Then
                     dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                     co = dsiStream.AsOLEPropertiesContainer
 
@@ -1012,12 +1024,18 @@ Public Class UtilsCommon
         Dim MyWay As Boolean = True
 
         If MyWay Then
+
             OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
 
-            OLEProp.Value = PropertyValue
+            If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-            co.Save(dsiStream)
-            cf.Commit()
+                OLEProp.Value = PropertyValue
+                co.Save(dsiStream)
+                cf.Commit()
+
+            End If
+
+
             cf.Close()
             cf = Nothing
             fs.Close()

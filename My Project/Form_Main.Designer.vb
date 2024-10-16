@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿Imports ListViewExtended
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form_Main
     Inherits System.Windows.Forms.Form
 
@@ -31,7 +33,7 @@ Partial Class Form_Main
         Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
         Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
         Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
-        Me.ListViewFiles = New ListViewExtended.ListViewCollapsible()
+        Me.ListViewFiles = New ListViewCollapsible()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage_ImageList = New System.Windows.Forms.ImageList(Me.components)
@@ -2552,7 +2554,7 @@ Partial Class Form_Main
     Friend WithEvents PrintDialog1 As PrintDialog
     Friend WithEvents TabPage_ImageList As ImageList
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
-    Friend WithEvents ListViewFiles As ListViewExtended.ListViewCollapsible
+    Friend WithEvents ListViewFiles As ListViewCollapsible
     Friend WithEvents FileName As ColumnHeader
     Friend WithEvents FilePath As ColumnHeader
     Friend WithEvents ToolStrip_List As ToolStrip

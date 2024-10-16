@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports ListViewExtended
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -10,7 +11,7 @@ Public Class UtilsFileList
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewExtended.ListViewCollapsible)
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible)
         Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
     End Sub
@@ -601,7 +602,7 @@ Public Class UtilsFileList
         Dim LinkDocName As String
         'Dim Filename As String
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
-        Dim tf As Boolean
+        'Dim tf As Boolean
 
         Dim UC As New UtilsCommon
 
