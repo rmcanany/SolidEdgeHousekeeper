@@ -1042,7 +1042,7 @@ Public Class UtilsCommon
 
             If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-                Select Case OLEProp.VTType
+                Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
 
                     Case = VTPropertyType.VT_BOOL
                         OLEProp.Value = CType(PropertyValue, Boolean)
@@ -1050,6 +1050,10 @@ Public Class UtilsCommon
                         OLEProp.Value = CType(PropertyValue, Integer)
                     Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
                         OLEProp.Value = PropertyValue
+                    Case = VTPropertyType.VT_FILETIME
+                        OLEProp.Value = CType(PropertyValue, DateTime)
+                    Case = VTPropertyType.VT_R8
+                        OLEProp.Value = CType(PropertyValue, Double)
 
                 End Select
 

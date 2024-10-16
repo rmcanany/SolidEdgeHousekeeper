@@ -3039,7 +3039,7 @@ Public Class Form_Main
             PropertySet = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
             PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
         Catch ex As Exception
-            PropertySet = "System"
+            PropertySet = "Custom"
             PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
         End Try
 
