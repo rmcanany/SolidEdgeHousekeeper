@@ -990,7 +990,11 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Sub UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String)
+    Public Function UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String) As Boolean
+
+
+        UpdateSingleProperty = False
+
 
         ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
         Dim Retries As Integer = 3
@@ -1007,7 +1011,9 @@ Public Class UtilsCommon
 
         If fs Is Nothing Then
             MsgBox("Could not change property", vbOKOnly)
-            Exit Sub
+
+            Exit Function
+
         End If
 
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
@@ -1033,6 +1039,8 @@ Public Class UtilsCommon
                 co.Save(dsiStream)
                 cf.Commit()
 
+                UpdateSingleProperty = True
+
             End If
 
 
@@ -1041,6 +1049,9 @@ Public Class UtilsCommon
             fs.Close()
             fs = Nothing
             System.Windows.Forms.Application.DoEvents()
+
+            Return True
+
         Else
             'Dim dsiStream As CFStream = Nothing
             'Dim co As OLEPropertiesContainer = Nothing
@@ -1113,7 +1124,7 @@ Public Class UtilsCommon
             System.Windows.Forms.Application.DoEvents()
         End If
 
-    End Sub
+    End Function
 
     Public Function GetSIList() As List(Of String)
         Dim SIList As New List(Of String)

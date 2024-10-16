@@ -3027,13 +3027,15 @@ Public Class Form_Main
 
         Dim UC As New UtilsCommon
 
-        hitinfo.SubItem.Text = editbox.Text
-        editbox.Hide()
-
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
         Dim PropertySet As String = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
         Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
-        UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, hitinfo.SubItem.Text)
+
+        If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
+            hitinfo.SubItem.Text = editbox.Text
+        End If
+
+        editbox.Hide()
 
         'hitinfo.Item.Name 'File to edit
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
