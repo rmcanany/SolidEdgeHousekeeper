@@ -33,7 +33,7 @@ Partial Class Form_Main
         Me.ButtonCloseListOfColumns = New System.Windows.Forms.Button()
         Me.ButtonAddToListOfColumns = New System.Windows.Forms.Button()
         Me.CLB_Properties = New System.Windows.Forms.CheckedListBox()
-        Me.ListViewFiles = New ListViewCollapsible()
+        Me.ListViewFiles = New ListViewExtended.ListViewCollapsible()
         Me.FileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.FilePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage_ImageList = New System.Windows.Forms.ImageList(Me.components)

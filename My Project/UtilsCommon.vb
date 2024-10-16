@@ -1145,7 +1145,7 @@ Public Class UtilsCommon
 
     Public Function GetSIList() As List(Of String)
         Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments"})
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Doc_Security"})
         Return SIList
     End Function
 

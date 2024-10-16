@@ -2872,13 +2872,15 @@ Public Class Form_Main
         ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
-        Dim tmpListOfColumns As New List(Of PropertyColumn)
-        For Each PropColumn In Me.ListOfColumns
-            tmpListOfColumns.Add(PropColumn)
-        Next
-        tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
-        Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
+        '###### We don't need to update at each removal, settings are saved on close
+        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+        'For Each PropColumn In Me.ListOfColumns
+        '    tmpListOfColumns.Add(PropColumn)
+        'Next
+        'tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
+        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
 
+        Me.ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
     End Sub
 
@@ -2969,22 +2971,24 @@ Public Class Form_Main
 
         If Not IsNothing(ListOfColumns) Then
 
-            If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
+            If ListOfColumns.Count > e.ColumnIndex Then
 
-                If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
+                If ListOfColumns.Item(e.ColumnIndex).Width <> ListViewFiles.Columns.Item(e.ColumnIndex).Width Then 'We don't want to fire an event if the value is not changed
 
-                    ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
+                    If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
 
-                    '' We don't need to update everytime the width change, the width is saved on close ######### F.Arfilli
-                    'Dim tmpListOfColumns As New List(Of PropertyColumn)
-                    'For Each PropColumn In Me.ListOfColumns
-                    '    tmpListOfColumns.Add(PropColumn)
-                    'Next
+                        ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
 
-                    'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+                        '' We don't need to update everytime the width change, the width is saved on close ######### F.Arfilli
+                        'Dim tmpListOfColumns As New List(Of PropertyColumn)
+                        'For Each PropColumn In Me.ListOfColumns
+                        '    tmpListOfColumns.Add(PropColumn)
+                        'Next
 
+                        'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
+                    End If
                 End If
-
             End If
 
         End If
@@ -3028,8 +3032,17 @@ Public Class Form_Main
         Dim UC As New UtilsCommon
 
         Dim columnIndex As Integer = hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem)
-        Dim PropertySet As String = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
-        Dim PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+        Dim PropertySet As String = ""
+        Dim PropertyNameEnglish = ""
+
+        Try
+            PropertySet = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
+            PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+        Catch ex As Exception
+            PropertySet = "System"
+            PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
+        End Try
+
 
         If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
             hitinfo.SubItem.Text = editbox.Text
