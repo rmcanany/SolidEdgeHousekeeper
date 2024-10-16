@@ -3035,6 +3035,7 @@ Public Class Form_Main
         Dim PropertySet As String = ""
         Dim PropertyNameEnglish = ""
 
+        ' Template propertydict doesn't contain manually added properties, a method that adds them to the dictionary is needed
         Try
             PropertySet = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
             PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
