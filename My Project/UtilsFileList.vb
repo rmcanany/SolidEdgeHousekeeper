@@ -297,7 +297,7 @@ Public Class UtilsFileList
                             Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
                             Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FoundFile, PropColumn.Formula,
                                                                      ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
                             cf.Close()
                             fs.Close()
@@ -937,7 +937,7 @@ Public Class UtilsFileList
                             Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
                             Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
                             'Dim cf = UC.cfFromFullName(FullName)
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FullName, PropColumn.Formula,
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, PropColumn.Formula,
                                                                      ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
                             cf.Close()
                             fs.Close()

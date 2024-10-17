@@ -424,7 +424,7 @@ Public Class TaskEditProperties
 
                 If Proceed Then
                     Try
-                        FindString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, FindString, ValidFilenameRequired:=False,
+                        FindString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False,
                                                               TemplatePropertyDict)
                     Catch ex As Exception
                         Proceed = False
@@ -434,7 +434,7 @@ Public Class TaskEditProperties
                     End Try
 
                     Try
-                        ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, FullName, ReplaceString, ValidFilenameRequired:=False,
+                        ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
                                                                  TemplatePropertyDict, ReplaceSearchType = "EX")
                     Catch ex As Exception
                         Proceed = False
@@ -712,8 +712,10 @@ Public Class TaskEditProperties
             ' ####################### Do formula substitution #######################
 
             If Proceed Then
+                Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
+
                 Try
-                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, FindString, ValidFilenameRequired:=False,
+                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False,
                                                               TemplatePropertyDict)
                 Catch ex As Exception
                     Proceed = False
@@ -723,7 +725,7 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, ReplaceString, ValidFilenameRequired:=False,
+                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
                                                                  TemplatePropertyDict, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False

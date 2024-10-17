@@ -119,6 +119,7 @@ Partial Class UCPropertyFilter
         '
         'TextBoxValue
         '
+        Me.TextBoxValue.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxValue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxValue.Location = New System.Drawing.Point(413, 3)
         Me.TextBoxValue.Name = "TextBoxValue"

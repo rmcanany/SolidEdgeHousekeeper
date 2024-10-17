@@ -44,6 +44,7 @@ Public Class TaskEditVariables
         End Set
     End Property
 
+    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
 
     Enum ControlNames
@@ -66,6 +67,7 @@ Public Class TaskEditVariables
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
         Me.Category = "Edit"
+        Me.RequiresTemplatePropertyDict = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -75,6 +77,8 @@ Public Class TaskEditVariables
         ' Options
         Me.JSONString = ""
         Me.AutoAddMissingVariable = False
+
+        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
 
     End Sub
 
@@ -206,7 +210,11 @@ Public Class TaskEditVariables
 
             For Each RowIndex In VariablesToEditDict.Keys
                 Dim VariableName As String = VariablesToEditDict(RowIndex)("VariableName").Trim
+
                 Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
+                Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
+                Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
+
                 Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"
                 Dim ExposeName As String = VariablesToEditDict(RowIndex)("ExposeName").Trim

@@ -31,7 +31,7 @@ Public Class UtilsPropertyFilters
         '...
         '}
 
-        Dim PropertyFilterFormula As String = PropertyFilterDict("0")("Formula")
+        Dim PropertyFilterFormula As String = PropertyFilterDict("0")("Formula")  ' Formula is the same for all entries.  Picking the first one.
 
         Dim LocalFoundFiles As New List(Of String)
         Dim FilteredFiles As New List(Of String)
@@ -100,6 +100,7 @@ Public Class UtilsPropertyFilters
         End If
 
         Extension = System.IO.Path.GetExtension(FoundFile)
+
         If Extension = ".dft" Then
             DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
             LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
@@ -151,11 +152,11 @@ Public Class UtilsPropertyFilters
             PropertySet = PropertyFilterDict(Key)("PropertySet")
             PropertyName = PropertyFilterDict(Key)("PropertyName")
             Comparison = PropertyFilterDict(Key)("Comparison")
+
             Value = PropertyFilterDict(Key)("Value")
+            Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+                                                 FMain.TemplatePropertyDict)
 
-            ' Value = SearchProperties(PropertySets, Value, FoundFile)
-
-            'DocValue = SearchProperties(PropertySets, PropertySet, PropertyName)
             DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
             tf2 = DoComparison(Comparison, Value, DocValue)
@@ -267,9 +268,6 @@ Public Class UtilsPropertyFilters
 
     End Function
 
-    'Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
-    '                                  PropertySet As String,
-    '                                  PropertyName As String) As String
 
     Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
                                      PropertyName As String,
