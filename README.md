@@ -663,7 +663,7 @@ The Variable name is required.  There are restrictions on the name.  It cannot s
 
 If a variable on the list is not in the file, it can optionally be added.  Set the behavior on the Options panel. 
 
-The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
+The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.  You can use a file property in the formula.  Right-click the formula text box and select Insert Property to do so.  
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 
