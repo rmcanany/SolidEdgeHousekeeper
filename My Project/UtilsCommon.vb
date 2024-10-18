@@ -2149,14 +2149,25 @@ Public Class UtilsCommon
     Public Function PropNameFromFormula(PropFormula As String) As String
         ' '%{System.Title}' -> 'Title'
         ' '%{Custom.Donut|R12}' -> 'Donut'
+        ' '%{Custom.foo|bar.baz}' -> 'foo|bar.baz'
+        ' '%{Custom.foo|bar.baz|R12}' -> 'foo|bar.baz'
 
         Dim PropName As String
+        Dim L As List(Of String)
 
         PropName = PropFormula
         PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
         PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
         PropName = PropName.Replace("}", "") '         'Title}' -> 'Title'
-        PropName = PropName.Split(CChar("|"))(0) '     'Donut|R12' -> 'Donut'
+        L = PropName.Split(CChar("|")).ToList '     'Donut|R12' -> 'Donut'
+        If L.Count > 2 Then
+            PropName = L(0)
+            For i As Integer = 1 To L.Count - 2
+                PropName = String.Format("{0}|{1}", PropName, L(i))
+            Next
+        Else
+            PropName = L(0)
+        End If
 
         Return PropName
     End Function
