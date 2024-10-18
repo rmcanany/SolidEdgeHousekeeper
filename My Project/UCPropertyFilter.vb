@@ -313,14 +313,14 @@ Public Class UCPropertyFilter
 
     End Sub
 
-    'Private Sub SelectPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+    'Private Sub ContextMenuStrip1_Click(sender As Object, e As EventArgs) Handles ContextMenuStrip1.Click
 
     '    Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
     '    Dim CaretPosition = TextBox.SelectionStart
 
     '    Dim FPP As New FormPropertyPicker
-    '    FPP.TemplatePropertyDict = Me.TemplatePropertyDict
-    '    FPP.TemplatePropertyList = Me.TemplatePropertyList
+    '    'FPP.TemplatePropertyDict = Me.TemplatePropertyDict
+    '    'FPP.TemplatePropertyList = Me.TemplatePropertyList
 
     '    FPP.ShowDialog()
 
@@ -331,4 +331,19 @@ Public Class UCPropertyFilter
     '    Dim i = 0
 
     'End Sub
+
+    Private Sub InsertPropertyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertPropertyToolStripMenuItem.Click
+        Dim TextBox = CType(ContextMenuStrip1.SourceControl, TextBox)
+        Dim CaretPosition = TextBox.SelectionStart
+
+        Dim FPP As New FormPropertyPicker
+
+        FPP.ShowDialog()
+
+        If FPP.DialogResult = DialogResult.OK Then
+            TextBox.Text = TextBox.Text.Insert(CaretPosition, FPP.PropertyString)
+
+        End If
+
+    End Sub
 End Class

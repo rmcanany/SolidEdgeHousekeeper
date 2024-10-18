@@ -537,6 +537,7 @@ Public Class Form_Main
         End Set
     End Property
 
+    ' See UC.TemplatePropertyDictAddProp for dictionary key definitions and values.
     Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
         Get
@@ -986,6 +987,9 @@ Public Class Form_Main
                     Case "TaskEditProperties"
                         Dim T = CType(Task, TaskEditProperties)
                         T.TemplatePropertyDict = Me.TemplatePropertyDict
+                    Case "TaskEditVariables"
+                        Dim T = CType(Task, TaskEditVariables)
+                        T.TemplatePropertyDict = Me.TemplatePropertyDict
                     Case "TaskSaveDrawingAs"
                         Dim T = CType(Task, TaskSaveDrawingAs)
                         T.TemplatePropertyDict = Me.TemplatePropertyDict
@@ -1013,13 +1017,6 @@ Public Class Form_Main
     End Sub
 
 
-    'Public Sub UpdateJSONProperties()
-    '    ' Set Properties equal to themselves to trigger JSON updates
-    '    Me.ListOfColumns = Me.ListOfColumns
-    '    Me.TemplatePropertyDict = Me.TemplatePropertyDict
-    '    Me.PropertyFilterDict = Me.PropertyFilterDict
-
-    'End Sub
 
     Public Sub SaveSettings()
         ' Set Properties equal to themselves to trigger JSON updates
@@ -3060,11 +3057,14 @@ Public Class Form_Main
         Dim PropertySet As String = ""
         Dim PropertyNameEnglish = ""
 
+        Dim PropertyName As String = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
+
         ' Template propertydict doesn't contain manually added properties, a method that adds them to the dictionary is needed
         Try
-            PropertySet = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("PropertySet")
-            PropertyNameEnglish = TemplatePropertyDict(hitinfo.Item.ListView.Columns.Item(columnIndex).Text)("EnglishName")
+            PropertySet = TemplatePropertyDict(PropertyName)("PropertySet")
+            PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
         Catch ex As Exception
+            MsgBox(String.Format("In editbox_LostFocus, TemplatePropertyDict key {0} not found", PropertyName))
             PropertySet = "Custom"
             PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
         End Try

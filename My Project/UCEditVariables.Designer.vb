@@ -22,6 +22,7 @@ Partial Class UCEditVariables
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxSelect = New System.Windows.Forms.CheckBox()
         Me.TextBoxVariableName = New System.Windows.Forms.TextBox()
@@ -29,7 +30,10 @@ Partial Class UCEditVariables
         Me.ComboBoxUnitType = New System.Windows.Forms.ComboBox()
         Me.CheckBoxExpose = New System.Windows.Forms.CheckBox()
         Me.TextBoxExposeName = New System.Windows.Forms.TextBox()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.InsertPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExTableLayoutPanel1.SuspendLayout()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExTableLayoutPanel1
@@ -80,6 +84,7 @@ Partial Class UCEditVariables
         '
         'TextBoxFormula
         '
+        Me.TextBoxFormula.ContextMenuStrip = Me.ContextMenuStrip1
         Me.TextBoxFormula.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxFormula.Location = New System.Drawing.Point(193, 3)
         Me.TextBoxFormula.Name = "TextBoxFormula"
@@ -117,6 +122,18 @@ Partial Class UCEditVariables
         Me.TextBoxExposeName.Size = New System.Drawing.Size(154, 23)
         Me.TextBoxExposeName.TabIndex = 5
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InsertPropertyToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(152, 26)
+        '
+        'InsertPropertyToolStripMenuItem
+        '
+        Me.InsertPropertyToolStripMenuItem.Name = "InsertPropertyToolStripMenuItem"
+        Me.InsertPropertyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.InsertPropertyToolStripMenuItem.Text = "Insert Property"
+        '
         'UCEditVariables
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -128,6 +145,7 @@ Partial Class UCEditVariables
         Me.Size = New System.Drawing.Size(700, 30)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -139,4 +157,6 @@ Partial Class UCEditVariables
     Friend WithEvents ComboBoxUnitType As ComboBox
     Friend WithEvents CheckBoxExpose As CheckBox
     Friend WithEvents TextBoxExposeName As TextBox
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents InsertPropertyToolStripMenuItem As ToolStripMenuItem
 End Class

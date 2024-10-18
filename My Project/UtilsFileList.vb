@@ -898,9 +898,9 @@ Public Class UtilsFileList
 
         Next
 
-        CreateColumns()
+            CreateColumns()
 
-        ListViewFiles.EndUpdate()
+            ListViewFiles.EndUpdate()
 
         'FMain.Cursor = Cursors.Default
 

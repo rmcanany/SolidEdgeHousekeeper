@@ -555,7 +555,7 @@ Public Class TaskSaveModelAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula,
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
                                                                    ValidFilenameRequired:=True, TemplatePropertyDict)
                 Catch ex As Exception
                     Success = False
@@ -578,7 +578,7 @@ Public Class TaskSaveModelAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, SEDoc.FullName, Me.Formula,
+                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
                                                                    ValidFilenameRequired:=True, TemplatePropertyDict)
                 Catch ex As Exception
                     Success = False

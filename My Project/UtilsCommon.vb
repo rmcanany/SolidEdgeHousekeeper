@@ -1,11 +1,14 @@
 ﻿Option Strict On
 
+Imports System.Drawing.Configuration
 Imports System.IO
+Imports System.Management.Automation.Runspaces
 Imports System.Reflection
 Imports System.Security.AccessControl
 Imports System.Text.RegularExpressions
 Imports System.Windows
 Imports ExcelDataReader
+Imports FastColoredTextBoxNS
 Imports Microsoft.SqlServer.Server
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
@@ -863,7 +866,7 @@ Public Class UtilsCommon
                 End Try
 
             Else
-                    If PropertySet.ToLower = "custom" Then
+                If PropertySet.ToLower = "custom" Then
                     dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                     co = dsiStream.AsOLEPropertiesContainer
 
@@ -905,6 +908,83 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function GetDMProp(
+        DMApp As DesignManager.Application,
+        FullName As String,
+        PropertySetName As String,
+        PropertyName As String,
+        ModelLinkIdx As Integer,
+        AddProp As Boolean
+        ) As DesignManager.Property
+
+        Dim PropertySets As DesignManager.PropertySets
+        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+        PropertySets.Open(FullName, True)
+
+
+        Dim DocValue As String = "HOUSEKEEPER_PROP_NOT_FOUND"
+        Dim PropertySet As DesignManager.Properties
+        Dim Prop As DesignManager.Property = Nothing
+        Dim PropertySetNames As New List(Of String)
+        'Dim PropertySetName As String
+
+        Dim FilePropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
+
+        If FilePropNames.Contains(PropertyName) Then
+            Select Case PropertyName
+                Case "File Name"
+                    DocValue = System.IO.Path.GetFileName(FullName)  ' C:\project\part.par -> part.par
+                Case "File Name (full path)"
+                    DocValue = FullName  ' C:\project\part.par -> C:\project\part.par
+                Case "File Name (no extension)"
+                    DocValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
+            End Select
+
+        Else
+            'Dim DateTime As DateTime
+
+            PropertySetNames.Add("SummaryInformation")
+            PropertySetNames.Add("ExtendedSummaryInformation")
+            PropertySetNames.Add("DocumentSummaryInformation")
+            PropertySetNames.Add("ProjectInformation")
+            PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+            PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
+
+            'Dim TypeName As String
+
+            Dim GotAMatch As Boolean = False
+
+            For Each PropertySetName In PropertySetNames
+                ' Not all files have all PropertySets
+                Try
+                    PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                    For i As Integer = 0 To PropertySet.Count - 1
+                        Prop = CType(PropertySet.Item(i), DesignManager.Property)
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            'TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
+                            'DocValue = Prop.Value.ToString
+                            'If TypeName.ToLower = "date" Then
+                            '    DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
+                            '    DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
+                            'End If
+                            GotAMatch = True
+                            Exit For
+                        End If
+                    Next
+                Catch ex As Exception
+                End Try
+
+                If GotAMatch Then
+                    Exit For
+                End If
+            Next
+
+        End If
+
+        Return Prop
+
+
+    End Function
     Public Function GetOLEPropValue(
         cf As CompoundFile,
         PropertySet As String,
@@ -1030,13 +1110,11 @@ Public Class UtilsCommon
         Dim OLEProp As OLEProperty = Nothing
 
 
-
-        ' ###### my attempt to consolidate fetching OLEProp.  It's not working. ######
-        ' Your way is working and I don't see the difference.
-
         Dim MyWay As Boolean = True
 
         If MyWay Then
+
+            If PropertySet = "Duplicate" Then PropertySet = "System"
 
             OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
 
@@ -1057,15 +1135,12 @@ Public Class UtilsCommon
 
                 End Select
 
-
-                'OLEProp.Value = PropertyValue
                 co.Save(dsiStream)
                 cf.Commit()
 
                 UpdateSingleProperty = True
 
             End If
-
 
             cf.Close()
             cf = Nothing
@@ -1074,75 +1149,75 @@ Public Class UtilsCommon
             System.Windows.Forms.Application.DoEvents()
 
         Else
-            'Dim dsiStream As CFStream = Nothing
-            'Dim co As OLEPropertiesContainer = Nothing
-            'Dim OLEProp As OLEProperty = Nothing
+            ''Dim dsiStream As CFStream = Nothing
+            ''Dim co As OLEPropertiesContainer = Nothing
+            ''Dim OLEProp As OLEProperty = Nothing
 
-            Dim SIList = GetSIList()
-            Dim DSIList = GetDSIList()
-            Dim FunnyList = GetFunnyList()
+            'Dim SIList = GetSIList()
+            'Dim DSIList = GetDSIList()
+            'Dim FunnyList = GetFunnyList()
 
-            If (SIList.Contains(PropertyNameEnglish)) Then
-                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-                co = dsiStream.AsOLEPropertiesContainer
+            'If (SIList.Contains(PropertyNameEnglish)) Then
+            '    dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+            '    co = dsiStream.AsOLEPropertiesContainer
 
-                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+            '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-            ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                co = dsiStream.AsOLEPropertiesContainer
+            'ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
+            '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            '    co = dsiStream.AsOLEPropertiesContainer
 
-                OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+            '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-            ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                co = dsiStream.AsOLEPropertiesContainer
+            'ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
+            '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+            '    co = dsiStream.AsOLEPropertiesContainer
 
-                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+            '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
-            Else  ' Hopefully a Custom Property
+            'Else  ' Hopefully a Custom Property
 
-                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                co = dsiStream.AsOLEPropertiesContainer
+            '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            '    co = dsiStream.AsOLEPropertiesContainer
 
-                OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+            '    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
 
-                If IsNothing(OLEProp) Then ' Add it
+            '    If IsNothing(OLEProp) Then ' Add it
 
-                    Try
-                        Dim userProperties = co.UserDefinedProperties
-                        Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
+            '        Try
+            '            Dim userProperties = co.UserDefinedProperties
+            '            Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
 
-                        If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-                        'This is the ID the new property will have
-                        'Duplicated IDs are not allowed
-                        'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
-                        'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
+            '            If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
+            '            'This is the ID the new property will have
+            '            'Duplicated IDs are not allowed
+            '            'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
+            '            'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
 
-                        userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-                        OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
-                        OLEProp.Value = " "
-                        userProperties.AddProperty(OLEProp)
-                        Dim i = 0
-                    Catch ex As Exception
+            '            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+            '            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
+            '            OLEProp.Value = " "
+            '            userProperties.AddProperty(OLEProp)
+            '            Dim i = 0
+            '        Catch ex As Exception
 
-                        MsgBox("Could not change property", vbOKOnly)
+            '            MsgBox("Could not change property", vbOKOnly)
 
-                    End Try
+            '        End Try
 
-                End If
+            '    End If
 
-            End If
+            'End If
 
-            OLEProp.Value = PropertyValue
+            'OLEProp.Value = PropertyValue
 
-            co.Save(dsiStream)
-            cf.Commit()
-            cf.Close()
-            cf = Nothing
-            fs.Close()
-            fs = Nothing
-            System.Windows.Forms.Application.DoEvents()
+            'co.Save(dsiStream)
+            'cf.Commit()
+            'cf.Close()
+            'cf = Nothing
+            'fs.Close()
+            'fs = Nothing
+            'System.Windows.Forms.Application.DoEvents()
         End If
 
     End Function
@@ -1174,6 +1249,7 @@ Public Class UtilsCommon
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal cf As CompoundFile,
+        DMApp As DesignManager.Application,
         ByVal FullName As String,
         ByVal Instring As String,
         ValidFilenameRequired As Boolean,
@@ -1227,35 +1303,19 @@ Public Class UtilsCommon
         If Proceed Then
             For Each Formula In Formulas
 
-                Formula = Formula.Replace("%{", "")  ' "%{Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1}"
-                Formula = Formula.Replace("}", "")   ' "Custom.hmk_Engineer|R1}" -> "Custom.hmk_Engineer|R1"
+                PropertySet = PropSetFromFormula(Formula)
+                PropertyName = PropNameFromFormula(Formula)
+                ModelIdx = ModelIdxFromFormula(Formula)
 
-                tf = Formula.ToLower.Contains("system.")
-                tf = tf Or Formula.ToLower.Contains("custom.")
-
-                If tf Then
-                    i = Formula.IndexOf(".")  ' First occurrence
-                    Dim L = Len(Formula)
-
-                    PropertySet = Formula.Substring(0, i)
-                    PropertyName = Formula.Substring(i + 1, L - (i + 1))
-                Else
+                If Not ((PropertySet = "System") Or (PropertySet = "Custom")) Then
                     Proceed = False
-                    'PropertySet = ""
-                    'PropertyName = Formula
                 End If
 
                 'Not supported by Direct Structured Storage
-                If PropertyName.Contains("|R") Then
-                    If Not IsNothing(SEDoc) Then
-                        i = PropertyName.IndexOf("|")
-                        ModelIdx = CInt(PropertyName.Substring(i + 2))  ' "hmk_Engineer|R12" -> 12
-                        PropertyName = PropertyName.Substring(0, i)  ' "hmk_Engineer|R1" -> "hmk_Engineer"
-                    Else
+                If Not cf Is Nothing Then
+                    If Not ModelIdx = 0 Then
                         Return "[ERROR]" & PropertyName
                     End If
-                Else
-                    ModelIdx = 0
                 End If
 
                 'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
@@ -1272,9 +1332,12 @@ Public Class UtilsCommon
                     If Not IsNothing(SEDoc) Then
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
                         If Not FoundProp Is Nothing Then tmpValue = FoundProp.Value.ToString
-                    Else
+                    ElseIf Not IsNothing(cf) Then
                         Dim EnglishName As String = TemplatePropertyDict(PropertyName)("EnglishName")
                         tmpValue = GetOLEPropValue(cf, PropertySet, EnglishName, False)
+                    ElseIf Not IsNothing(DMApp) Then
+                        Dim DMProp As DesignManager.Property = GetDMProp(DMApp, FullName, PropertySet, PropertyName, ModelIdx, False)
+                        If DMProp IsNot Nothing Then tmpValue = DMProp.Value.ToString
                     End If
 
                 End If
@@ -1394,24 +1457,27 @@ Public Class UtilsCommon
 
         '{
         '"Titolo":{
-        '    "PropertySet":"SummaryInformation",
+        '    "PropertySet":"System",                         'System', 'Custom', 'Duplicate'
+        '    "PropertySetActualName":"SummaryInformation",   'SummaryInformation', 'ExtendedSummaryInformation', ...
         '    "AsmPropItemNumber":"1",
         '    "ParPropItemNumber":"1",
         '    "PsmPropItemNumber":"1",
         '    "DftPropItemNumber":"1",
         '    "EnglishName":"Title",
-        '    "PropertySource":"Auto",  ' Was property added automatically or manually?:  "Auto", "Manual"
-        '    "FavoritesListIdx":"-1"},  ' If on the Favorites list, 'list index number', otherwise '-1'
+        '    "PropertySource":"Auto",                         Was property added automatically or manually?:  "Auto", "Manual"
+        '    "FavoritesListIdx":"-1"},                        If on the Favorites list, 'list index number', otherwise '-1'
         '"Oggetto":{
-        '    "PropertySet":"SummaryInformation",
+        '    "PropertySet":"System",
+        '    "PropertySetActualName":"SummaryInformation",
         '    "AsmPropItemNumber":"2",
         '    "ParPropItemNumber":"2",
         '    "PsmPropItemNumber":"2",
         '    "DftPropItemNumber":"2",
         '    "EnglishName":"Subject",
-        '    "PropertySource":"Auto",  ' Was property added automatically or manually?:  "Auto", "Manual"
-        '    "FavoritesListIdx":"-1"},  ' If on the Favorites list, 'list index number', otherwise '-1'
+        '    "PropertySource":"Auto",
+        '    "FavoritesListIdx":"-1"},
         ' ...
+        '}
         '}
 
         'Dim TemplateDocTypes As List(Of String) = {"asm", "par", "psm", "dft"}.ToList
@@ -1420,7 +1486,8 @@ Public Class UtilsCommon
         Dim PropertySet As SolidEdgeFileProperties.Properties
         Dim Prop As SolidEdgeFileProperties.Property
         PropertySets = New SolidEdgeFileProperties.PropertySets
-        Dim PropertySetName As String
+        Dim PropertySetActualName As String
+        Dim PropertySetHousekeeperName As String
         Dim PropName As String
         Dim DocType As String
 
@@ -1445,14 +1512,19 @@ Public Class UtilsCommon
 
                 PropertySets.Open(TemplateName, True)
 
-                For Each PropertySetName In KeepDict.Keys
+                For Each PropertySetActualName In KeepDict.Keys
+
+                    If PropertySetActualName = "Custom" Then
+                        PropertySetHousekeeperName = "Custom"
+                    Else
+                        PropertySetHousekeeperName = "System"
+                    End If
 
                     Try
-                        PropertySet = CType(PropertySets.Item(PropertySetName), SolidEdgeFileProperties.Properties)
+                        PropertySet = CType(PropertySets.Item(PropertySetActualName), SolidEdgeFileProperties.Properties)
                     Catch ex As Exception
                         Continue For
                     End Try
-                    'PropertySetName = PropertySet.Name
 
                     For i = 0 To PropertySet.Count - 1
 
@@ -1460,15 +1532,12 @@ Public Class UtilsCommon
                             Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
                             PropName = Prop.Name
 
-                            Dim EnglishName As String = PropLocalizedToEnglish(PropertySetName, i + 1, DocType)
+                            Dim EnglishName As String = PropLocalizedToEnglish(PropertySetActualName, i + 1, DocType)
                             If EnglishName = "" Then EnglishName = PropName
 
-                            If Not PropertySetName = "Custom" Then
-                                If KeepDict.Keys.Contains(PropertySetName) Then
-                                    'If Not KeepDict(PropertySetName).Contains(PropName) Then
-                                    '    Continue For
-                                    'End If
-                                    If Not KeepDict(PropertySetName).Contains(EnglishName) Then
+                            If Not PropertySetActualName = "Custom" Then
+                                If KeepDict.Keys.Contains(PropertySetActualName) Then
+                                    If Not KeepDict(PropertySetActualName).Contains(EnglishName) Then
                                         Continue For
                                     End If
                                 End If
@@ -1478,7 +1547,8 @@ Public Class UtilsCommon
 
                                 tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
 
-                                tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetName
+                                tmpTemplatePropertyDict(PropName)("PropertySet") = PropertySetHousekeeperName
+                                tmpTemplatePropertyDict(PropName)("PropertySetActualName") = PropertySetActualName
                                 tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
                                 tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
                                 tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
@@ -1487,14 +1557,14 @@ Public Class UtilsCommon
                                 tmpTemplatePropertyDict(PropName)("PropertySource") = "Auto"
                                 tmpTemplatePropertyDict(PropName)("FavoritesListIdx") = "-1"
                             Else
-                                tf = PropertySetName = "Custom"
+                                tf = PropertySetActualName = "Custom"
                                 tf = tf And (Not tmpTemplatePropertyDict(PropName)("PropertySet") = "Custom")
                                 If tf Then
                                     tmpTemplatePropertyDict(PropName)("PropertySet") = "Duplicate"
                                 End If
                             End If
 
-                            If Not PropertySetName = "Custom" Then
+                            If Not PropertySetActualName = "Custom" Then
                                 Select Case DocType
                                     Case "asm"
                                         tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = CStr(i + 1)
@@ -1509,7 +1579,7 @@ Public Class UtilsCommon
 
                         Catch ex As Exception
                             Dim s = "Error building TemplatePropertyDict: "
-                            s = String.Format("{0} DocType '{1}', PropertySetName '{2}', Item Number '{3}'", s, DocType, PropertySetName, i + 1)
+                            s = String.Format("{0} DocType '{1}', PropertySetName '{2}', Item Number '{3}'", s, DocType, PropertySetActualName, i + 1)
                             MsgBox(s, vbOKOnly)
                         End Try
                     Next
@@ -1525,7 +1595,8 @@ Public Class UtilsCommon
         PropName = "Sheet Metal Gage"
         If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
             tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
-            tmpTemplatePropertyDict(PropName)("PropertySet") = "MechanicalModeling"
+            tmpTemplatePropertyDict(PropName)("PropertySet") = "System"
+            tmpTemplatePropertyDict(PropName)("PropertySetActualName") = "MechanicalModeling"
             tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
             tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
             tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = "2"
@@ -1541,6 +1612,7 @@ Public Class UtilsCommon
             If Not tmpTemplatePropertyDict.Keys.Contains(PropName) Then
                 tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
                 tmpTemplatePropertyDict(PropName)("PropertySet") = "System"
+                tmpTemplatePropertyDict(PropName)("PropertySetActualName") = "System"
                 tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = ""
                 tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = ""
                 tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = ""
@@ -1559,6 +1631,7 @@ Public Class UtilsCommon
                 If PreviousTemplatePropertyDict(PropName)("PropertySource") = "Manual" Then
                     tmpTemplatePropertyDict(PropName) = New Dictionary(Of String, String)
                     tmpTemplatePropertyDict(PropName)("PropertySet") = PreviousTemplatePropertyDict(PropName)("PropertySet")
+                    tmpTemplatePropertyDict(PropName)("PropertySetActualName") = PreviousTemplatePropertyDict(PropName)("PropertySetActualName")
                     tmpTemplatePropertyDict(PropName)("AsmPropItemNumber") = PreviousTemplatePropertyDict(PropName)("AsmPropItemNumber")
                     tmpTemplatePropertyDict(PropName)("ParPropItemNumber") = PreviousTemplatePropertyDict(PropName)("ParPropItemNumber")
                     tmpTemplatePropertyDict(PropName)("PsmPropItemNumber") = PreviousTemplatePropertyDict(PropName)("PsmPropItemNumber")
@@ -1637,39 +1710,54 @@ Public Class UtilsCommon
 
     Public Function TemplatePropertyDictAddProp(
         TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String)),
-        PropertySet As String,
+        PropertySetActualName As String,
         PropertyName As String,
         EnglishName As String,
         FavoritesListIdx As Integer
         ) As Dictionary(Of String, Dictionary(Of String, String))
 
         '"Titolo":{
-        '    "PropertySet":"SummaryInformation",
+        '    "PropertySet":"System",                         'System', 'Custom', 'Duplicate'
+        '    "PropertySetActualName":"SummaryInformation",   'SummaryInformation', 'ExtendedSummaryInformation', ...
         '    "AsmPropItemNumber":"1",
         '    "ParPropItemNumber":"1",
         '    "PsmPropItemNumber":"1",
         '    "DftPropItemNumber":"1",
         '    "EnglishName":"Title",
-        '    "PropertySource":"Auto",  ' Was property added automatically or manually?:  "Auto", "Manual"
-        '    "FavoritesListIdx":"-1"},  ' If on the Favorites list, 'list index number', otherwise '-1'
+        '    "PropertySource":"Auto",                         Was property added automatically or manually?:  "Auto", "Manual"
+        '    "FavoritesListIdx":"-1"},                        If on the Favorites list, 'list index number', otherwise '-1'
         '"Oggetto":{
-        '    "PropertySet":"SummaryInformation",
+        '    "PropertySet":"System",
+        '    "PropertySetActualName":"SummaryInformation",
         '    "AsmPropItemNumber":"2",
         '    "ParPropItemNumber":"2",
         '    "PsmPropItemNumber":"2",
         '    "DftPropItemNumber":"2",
         '    "EnglishName":"Subject",
-        '    "PropertySource":"Auto",  ' Was property added automatically or manually?:  "Auto", "Manual"
-        '    "FavoritesListIdx":"-1"},  ' If on the Favorites list, 'list index number', otherwise '-1'
+        '    "PropertySource":"Auto",
+        '    "FavoritesListIdx":"-1"},
         ' ...
         '}
 
         Dim tmpTemplatePropertyDict = TemplatePropertyDict
 
+        Dim SystemPropertyList As New List(Of String)
+        SystemPropertyList.AddRange({"SummaryInformation", "ExtendedSummaryInformation", "DocumentSummaryInformation"})
+        SystemPropertyList.AddRange({"ProjectInformation", "MechanicalModeling"})
+
+        Dim PropertySet As String
+
+        If SystemPropertyList.Contains(PropertySetActualName) Then
+            PropertySet = "System"
+        Else
+            PropertySet = "Custom"
+        End If
+
         If Not tmpTemplatePropertyDict.Keys.Contains(PropertyName) Then
             tmpTemplatePropertyDict(PropertyName) = New Dictionary(Of String, String)
 
             tmpTemplatePropertyDict(PropertyName)("PropertySet") = PropertySet
+            tmpTemplatePropertyDict(PropertyName)("PropertySetActualName") = PropertySetActualName
             tmpTemplatePropertyDict(PropertyName)("AsmPropItemNumber") = ""
             tmpTemplatePropertyDict(PropertyName)("ParPropItemNumber") = ""
             tmpTemplatePropertyDict(PropertyName)("PsmPropItemNumber") = ""
@@ -1682,9 +1770,9 @@ Public Class UtilsCommon
             Dim OriginalPropertySet As String = tmpTemplatePropertyDict(PropertyName)("PropertySet")
             Dim s As String
 
-            If Not ((OriginalPropertySet = "Custom") Or (OriginalPropertySet = "Duplicate")) Then
-                OriginalPropertySet = "System"
-            End If
+            'If Not ((OriginalPropertySet = "Custom") Or (OriginalPropertySet = "Duplicate")) Then
+            '    OriginalPropertySet = "System"
+            'End If
 
             If Not OriginalPropertySet = PropertySet Then
                 s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
@@ -1696,10 +1784,10 @@ Public Class UtilsCommon
                     tmpTemplatePropertyDict(PropertyName)("PropertySource") = "Manual"
                     tmpTemplatePropertyDict(PropertyName)("FavoritesListIdx") = CStr(FavoritesListIdx)
                 End If
-            Else
-                s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
-                s = String.Format("{0}No action taken.", s)
-                MsgBox(s, vbOKOnly)
+                'Else
+                '    s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
+                '    s = String.Format("{0}No action taken.", s)
+                '    MsgBox(s, vbOKOnly)
             End If
         End If
 
@@ -1707,7 +1795,7 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function PropLocalizedToEnglish(PropertySetName As String,
+    Public Function PropLocalizedToEnglish(PropertySetActualName As String,
                                            ItemNumber As Integer,
                                            DocType As String) As String
 
@@ -1721,7 +1809,7 @@ Public Class UtilsCommon
 
         Dim EnglishName As String = ""
 
-        Select Case PropertySetName
+        Select Case PropertySetActualName
 
             Case "SummaryInformation"
                 Select Case ItemNumber
@@ -2085,8 +2173,33 @@ Public Class UtilsCommon
         Return PropSet
     End Function
 
+    Public Function ModelIdxFromFormula(PropFormula As String) As Integer
+        ' '%{System.Title}' -> 0
+        ' '%{System.Title|R12}' -> 12
+        Dim ModelIdxString As String
+        Dim ModelIdx As Integer
+
+        ModelIdxString = PropFormula
+        ModelIdxString = ModelIdxString.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
+        ModelIdxString = ModelIdxString.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
+        ModelIdxString = ModelIdxString.Replace("}", "") '         'Title}' -> 'Title'
+        If Not ModelIdxString.Contains("|") Then
+            ModelIdx = 0
+        Else
+            ModelIdxString = ModelIdxString.Split(CChar("|"))(1) '     'Donut|R12' -> 'R12'
+            ModelIdxString = ModelIdxString.Replace("R", "") '         'R12' -> '12'
+            ModelIdx = CInt(ModelIdxString)
+        End If
+
+        Return ModelIdx
+    End Function
+
 
     Public Function tmpGetSEProperties(SEDoc As SolidEdgeFramework.SolidEdgeDocument) As Dictionary(Of String, List(Of String))
+
+        ' ###### Not normally used.  Can add a call temporarily somewhere to allow inspection of all SEDoc properties.
+
+
         Dim PropDict As New Dictionary(Of String, List(Of String))
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
@@ -2128,7 +2241,9 @@ Public Class UtilsCommon
     End Function
 
     Public Function GetFileProperties(Filename As String) As List(Of String)
-        ' Gets the properties using Windows functionality
+
+        ' ###### Not normally used.  Can add a call temporarily somewhere to allow inspection of all Windows properties of any file.
+        ' ###### Gets the properties using Windows functionality
 
         Dim PropList As New List(Of String)
         Dim ValList As New List(Of String)
