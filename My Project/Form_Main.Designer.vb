@@ -357,6 +357,7 @@ Partial Class Form_Main
         Me.ListViewFiles.Location = New System.Drawing.Point(2, 27)
         Me.ListViewFiles.Margin = New System.Windows.Forms.Padding(0)
         Me.ListViewFiles.Name = "ListViewFiles"
+        Me.ListViewFiles.ShowItemToolTips = True
         Me.ListViewFiles.Size = New System.Drawing.Size(547, 607)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
