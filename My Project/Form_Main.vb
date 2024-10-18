@@ -2886,6 +2886,26 @@ Public Class Form_Main
 
     Private Sub ButtonCloseListOfColumns_Click(sender As Object, e As EventArgs) Handles ButtonCloseListOfColumns.Click
 
+        Dim tmpButton As Button = DirectCast(sender, Button)
+
+        If CStr(tmpButton.Tag) = "Dirty" Then
+
+            Dim tmpListOfColumns As New List(Of PropertyColumn)
+            For Each PropColumn In Me.ListOfColumns
+                tmpListOfColumns.Add(PropColumn)
+            Next
+
+            Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
+            Dim UFL As New UtilsFileList(Me, ListViewFiles)
+            Me.Cursor = Cursors.WaitCursor
+            UFL.UpdatePropertiesColumns()
+            Me.Cursor = Cursors.Default
+
+            ButtonCloseListOfColumns.Tag = ""
+
+        End If
+
         ColumnSelectionPanel.Visible = False
 
     End Sub
@@ -2913,20 +2933,25 @@ Public Class Form_Main
 
             If Not ListOfColumns.Contains(tmpColumn) Then
 
-                Dim tmpListOfColumns As New List(Of PropertyColumn)
-                For Each PropColumn In Me.ListOfColumns
-                    tmpListOfColumns.Add(PropColumn)
-                Next
+                'Dim tmpListOfColumns As New List(Of PropertyColumn)
+                'For Each PropColumn In Me.ListOfColumns
+                '    tmpListOfColumns.Add(PropColumn)
+                'Next
 
-                tmpListOfColumns.Add(tmpColumn)
+                'tmpListOfColumns.Add(tmpColumn)
+                'CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
+
+                'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
+
+                'Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                'Me.Cursor = Cursors.WaitCursor
+                'UFL.UpdatePropertiesColumns()
+                'Me.Cursor = Cursors.Default
+
+                ListOfColumns.Add(tmpColumn)
                 CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
 
-                Me.ListOfColumns = tmpListOfColumns  ' Trigger update
-
-                Dim UFL As New UtilsFileList(Me, ListViewFiles)
-                Me.Cursor = Cursors.WaitCursor
-                UFL.UpdatePropertiesColumns()
-                Me.Cursor = Cursors.Default
+                ButtonCloseListOfColumns.Tag = "Dirty"
 
             End If
 

@@ -283,42 +283,13 @@ Public Class UtilsFileList
                 tmpLVItem.UseItemStyleForSubItems = False
                 tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile))
 
-
-                'Adding extra properties data if needed
-                For Each PropColumn In FMain.ListOfColumns
-
-                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-
-                        'tmpLVItem.SubItems.Add(FindProp(PropColumn.Name, FoundFile))
-                        Dim PropValue As String
-                        Dim tmpColor As Color = Color.White
-                        Try
-                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                            Dim fs As FileStream = New FileStream(FoundFile, FileMode.Open, FileAccess.Read)
-                            Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FoundFile, PropColumn.Formula,
-                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                            cf.Close()
-                            fs.Close()
-                            cf = Nothing
-                            fs = Nothing
-                            Application.DoEvents()
-                        Catch ex As Exception
-                            PropValue = ""
-                            tmpColor = Color.Gainsboro
-                        End Try
-
-                        tmpLVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, tmpLVItem.Font)
-
-                    End If
-
-                Next
-
                 tmpLVItem.ImageKey = "Unchecked"
                 tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                 tmpLVItem.Name = FoundFile
                 tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+
+                UpdateLVItem(tmpLVItem)
+
                 ListViewFiles.Items.Add(tmpLVItem)
 
             End If
@@ -923,38 +894,7 @@ Public Class UtilsFileList
 
             FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
 
-            For Each PropColumn In FMain.ListOfColumns
-
-                If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-
-                    If IO.File.Exists(tmpLVItem.SubItems.Item(0).Name) Then
-                        'tmpLVItem.SubItems.Add(UtilsFileList.FindProp(PropColumn.Name, tmpLVItem.SubItems.Item(0).Name))
-
-                        Dim PropValue As String
-                        Dim tmpColor As Color = Color.White
-                        Try
-                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                            Dim fs As FileStream = New FileStream(FullName, FileMode.Open, FileAccess.Read)
-                            Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-                            'Dim cf = UC.cfFromFullName(FullName)
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, FullName, PropColumn.Formula,
-                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                            cf.Close()
-                            fs.Close()
-                            cf = Nothing
-                            fs = Nothing
-                            Application.DoEvents()
-                        Catch ex As Exception
-                            PropValue = ""
-                            tmpColor = Color.Gainsboro
-                        End Try
-
-                        tmpLVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, tmpLVItem.Font)
-                    End If
-
-                End If
-
-            Next
+            UpdateLVItem(tmpLVItem)
 
         Next
 
@@ -991,5 +931,64 @@ Public Class UtilsFileList
 
     End Sub
 
+    Private Sub UpdateLVItem(LVItem As ListViewItem)
+
+        If LVItem.Group.Name <> "Sources" Then
+
+            Dim UC As New UtilsCommon
+
+            Try
+
+                Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
+                Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+                'Adding extra properties data if needed
+                For Each PropColumn In FMain.ListOfColumns
+
+                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+
+                        Dim PropValue As String
+                        Dim tmpColor As Color = Color.White
+
+                        Try
+
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, LVItem.Name, PropColumn.Formula,
+                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                        Catch ex As Exception
+
+                            PropValue = ""
+                            tmpColor = Color.Gainsboro
+
+                        End Try
+
+                        LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
+
+                    End If
+
+                Next
+
+                cf.Close()
+                fs.Close()
+                cf = Nothing
+                fs = Nothing
+
+                Application.DoEvents()
+
+            Catch ex As Exception
+
+                For Each PropColumn In FMain.ListOfColumns
+                    LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
+                Next
+
+            End Try
+
+        Else
+
+            'Eventually insert code to personalize Sources group
+
+        End If
+
+    End Sub
 
 End Class
