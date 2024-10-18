@@ -202,6 +202,8 @@ Public Class UtilsCommon
     End Function
 
 
+    '###### DIMENSIONS AND VARIABLES ######
+
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument
     ) As Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
         Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
@@ -308,6 +310,22 @@ Public Class UtilsCommon
         Return DimensionFound
     End Function
 
+    Public Function GetUnitType(Name As String) As SolidEdgeConstants.UnitTypeConstants
+        Dim UnitType As SolidEdgeConstants.UnitTypeConstants
+
+        UnitType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
+
+        For Each UnitTypeConstant As SolidEdgeConstants.UnitTypeConstants In System.Enum.GetValues(GetType(SolidEdgeConstants.UnitTypeConstants))
+            If Name = UnitTypeConstant.ToString.Replace("igUnit", "") Then
+                UnitType = UnitTypeConstant
+                Exit For
+            End If
+        Next
+
+        Return UnitType
+    End Function
+
+
     Public Function GetSheets(
         Doc As SolidEdgeDraft.DraftDocument,
         SectionType As String
@@ -372,56 +390,12 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function GetStatus(
-        DMApp As DesignManager.Application,
-        Filename As String
-        ) As SolidEdgeConstants.DocumentStatus
-
-        Dim Status As SolidEdgeConstants.DocumentStatus = Nothing
-
-        Try
-
-            Dim PropertySets As DesignManager.PropertySets
-            Dim PropertySet As DesignManager.Properties
-
-            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            PropertySets.Open(Filename, True)
-
-            PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
-
-            Status = CType(CType(PropertySet.Item("Status"), DesignManager.Property).Value, SolidEdgeConstants.DocumentStatus)
-
-            PropertySets.Close()
-
-        Catch ex As Exception
-            Dim i = 0
-        End Try
-
-        Return Status
-    End Function
-
-    Public Function GetUnitType(Name As String) As SolidEdgeConstants.UnitTypeConstants
-        Dim UnitType As SolidEdgeConstants.UnitTypeConstants
-
-        UnitType = SolidEdgeConstants.UnitTypeConstants.igUnitDistance
-
-        For Each UnitTypeConstant As SolidEdgeConstants.UnitTypeConstants In System.Enum.GetValues(GetType(SolidEdgeConstants.UnitTypeConstants))
-            If Name = UnitTypeConstant.ToString.Replace("igUnit", "") Then
-                UnitType = UnitTypeConstant
-                Exit For
-            End If
-        Next
-
-        Return UnitType
-    End Function
-
     Public Function GlobToRegex(GlobString As String) As String
 
         Dim wildcard As String = GlobString
         Dim outstring As String = ""
         Dim in_character_class As Boolean = False
         Dim r As String
-
 
         For i As Integer = 0 To Len(wildcard) - 1
             If in_character_class Then
@@ -538,6 +512,65 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function SplitFOAName(SEDocFullName As String) As Dictionary(Of String, String)
+        Dim SplitDict As New Dictionary(Of String, String)
+        Dim Filename As String
+        Dim MemberName As String
+
+        If SEDocFullName.Contains("!") Then
+            Filename = SEDocFullName.Split("!"c)(0)
+            MemberName = SEDocFullName.Split("!"c)(1)
+        Else
+            Filename = SEDocFullName
+            MemberName = ""
+        End If
+
+        SplitDict("Filename") = Filename
+        SplitDict("MemberName") = MemberName
+
+        Return SplitDict
+    End Function
+
+
+    '###### STATUS FUNCTIONS ######
+
+    Public Enum StatusSecurityMapping
+        ssmAvailable = 0
+        ssmInWork = 0
+        ssmInReview = 0
+        ssmReleased = 4
+        ssmBaselined = 4
+        ssmObsolete = 4
+    End Enum
+
+    Public Function GetStatus(
+        DMApp As DesignManager.Application,
+        Filename As String
+        ) As SolidEdgeConstants.DocumentStatus
+
+        Dim Status As SolidEdgeConstants.DocumentStatus = Nothing
+
+        Try
+
+            Dim PropertySets As DesignManager.PropertySets
+            Dim PropertySet As DesignManager.Properties
+
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, True)
+
+            PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
+
+            Status = CType(CType(PropertySet.Item("Status"), DesignManager.Property).Value, SolidEdgeConstants.DocumentStatus)
+
+            PropertySets.Close()
+
+        Catch ex As Exception
+            Dim i = 0
+        End Try
+
+        Return Status
+    End Function
+
     Public Function SetStatus(
         DMApp As DesignManager.Application,
         Filename As String,
@@ -599,34 +632,6 @@ Public Class UtilsCommon
 
         Return Success
     End Function
-
-    Public Function SplitFOAName(SEDocFullName As String) As Dictionary(Of String, String)
-        Dim SplitDict As New Dictionary(Of String, String)
-        Dim Filename As String
-        Dim MemberName As String
-
-        If SEDocFullName.Contains("!") Then
-            Filename = SEDocFullName.Split("!"c)(0)
-            MemberName = SEDocFullName.Split("!"c)(1)
-        Else
-            Filename = SEDocFullName
-            MemberName = ""
-        End If
-
-        SplitDict("Filename") = Filename
-        SplitDict("MemberName") = MemberName
-
-        Return SplitDict
-    End Function
-
-    Public Enum StatusSecurityMapping
-        ssmAvailable = 0
-        ssmInWork = 0
-        ssmInReview = 0
-        ssmReleased = 4
-        ssmBaselined = 4
-        ssmObsolete = 4
-    End Enum
 
 
     Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
@@ -985,6 +990,7 @@ Public Class UtilsCommon
 
 
     End Function
+
     Public Function GetOLEPropValue(
         cf As CompoundFile,
         PropertySet As String,
@@ -1064,14 +1070,6 @@ Public Class UtilsCommon
 
                 Return Nothing
 
-                'If AddProp Then
-                '    Try
-                '        'TBD Add property here
-                '    Catch ex As Exception
-                '        Proceed = False
-                '    End Try
-
-                'End If
             End If
         End If
 
@@ -1318,7 +1316,7 @@ Public Class UtilsCommon
                     End If
                 End If
 
-                'Check for special properties %{File Name}, %{File Name (full path)}, %{File Name (no extension)}
+                'Check for special properties %{System.File Name}, %{System.File Name (full path)}, %{System.File Name (no extension)}
 
                 Dim tmpValue As String = Nothing
 
@@ -2147,44 +2145,30 @@ Public Class UtilsCommon
 
 
     Public Function PropNameFromFormula(PropFormula As String) As String
-
         ' '%{System.Title}' -> 'Title'
         ' '%{Custom.Donut|R12}' -> 'Donut'
+        ' '%{Custom.foo|bar.baz}' -> 'foo|bar.baz'
+        ' '%{Custom.foo|bar.baz|R12}' -> 'foo|bar.baz'
 
         Dim PropName As String
+        Dim Matches As MatchCollection
+        Dim Match As Match
+        Dim Pattern As String
 
         PropName = PropFormula
         PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
         PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
-        PropName = PropName.Replace("}", "") '         'Title}' -> 'Title'
-        PropName = PropName.Split(CChar("|"))(0) '     'Donut|R12' -> 'Donut'
+        PropName = PropName.Replace("}", "") ' 'Donut|R12}' -> 'Donut|R12',  'Title}' -> 'Title'
+
+        Pattern = "^(.*)(\|R[0-9]+)$"
+        Matches = Regex.Matches(PropName, Pattern)
+
+        If Matches.Count > 0 Then
+            Match = Matches(0)
+            PropName = Regex.Replace(Match.Value, Pattern, "$1")
+        End If
 
         Return PropName
-
-
-        '' '%{System.Title}' -> 'Title'
-        '' '%{Custom.Donut|R12}' -> 'Donut'
-        '' '%{Custom.foo|bar.baz}' -> 'foo|bar.baz'
-        '' '%{Custom.foo|bar.baz|R12}' -> 'foo|bar.baz'
-
-        'Dim PropName As String
-        'Dim L As List(Of String)
-
-        'PropName = PropFormula
-        'PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
-        'PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
-        'PropName = PropName.Replace("}", "") '         'Title}' -> 'Title'
-        'L = PropName.Split(CChar("|")).ToList '     'Donut|R12' -> 'Donut'
-        'If L.Count > 2 Then
-        '    PropName = L(0)
-        '    For i As Integer = 1 To L.Count - 2
-        '        PropName = String.Format("{0}|{1}", PropName, L(i))
-        '    Next
-        'Else
-        '    PropName = L(0)
-        'End If
-
-        'Return PropName
     End Function
 
     Public Function PropSetFromFormula(PropFormula As String) As String
@@ -2193,8 +2177,7 @@ Public Class UtilsCommon
 
         PropSet = PropFormula
         PropSet = PropSet.Replace("%{", "") '    '%{System.Title}' -> 'System.Title}'
-        PropSet = PropSet.Replace("}", "") '     'System.Title}' -> 'System.Title'
-        PropSet = PropSet.Split(CChar("."))(0) ' 'System.Title' -> 'System'
+        PropSet = PropSet.Split(CChar("."))(0) ' 'System.Title}' -> 'System'
 
         Return PropSet
     End Function
@@ -2202,25 +2185,24 @@ Public Class UtilsCommon
     Public Function ModelIdxFromFormula(PropFormula As String) As Integer
         ' '%{System.Title}' -> 0
         ' '%{System.Title|R12}' -> 12
+
+        Dim Matches As MatchCollection
+        Dim Match As Match
+        Dim Pattern As String
+
         Dim ModelIdxString As String
         Dim ModelIdx As Integer
 
-        ModelIdxString = PropFormula
-        ModelIdxString = ModelIdxString.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
-        ModelIdxString = ModelIdxString.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
-        ModelIdxString = ModelIdxString.Replace("}", "") '         'Title}' -> 'Title'
-        ModelIdxString = ModelIdxString.Split(CChar("|"))(1)
-        ModelIdxString = ModelIdxString.Replace("R", "") '         'Title}' -> 'Title'
+        Pattern = "^.*R([0-9]+)}$"
+        Matches = Regex.Matches(PropFormula, Pattern)
 
-        ModelIdx = CInt(ModelIdxString)
-
-        'If Not ModelIdxString.Contains("|") Then
-        '    ModelIdx = 0
-        'Else
-        '    ModelIdxString = ModelIdxString.Split(CChar("|"))(1) '     'Donut|R12' -> 'R12'
-        '    ModelIdxString = ModelIdxString.Replace("R", "") '         'R12' -> '12'
-        '    ModelIdx = CInt(ModelIdxString)
-        'End If
+        If Matches.Count = 0 Then
+            ModelIdx = 0
+        Else
+            Match = Matches(Matches.Count - 1)
+            ModelIdxString = Regex.Replace(Match.Value, Pattern, "$1")
+            ModelIdx = CInt(ModelIdxString)
+        End If
 
         Return ModelIdx
     End Function
