@@ -278,6 +278,8 @@ Public Class UtilsFileList
 
             If tf Then
 
+                Dim tmpFinfo As FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
+
                 Dim tmpLVItem As New ListViewItem
                 tmpLVItem.Text = IO.Path.GetFileName(FoundFile)
                 tmpLVItem.UseItemStyleForSubItems = False
@@ -287,6 +289,12 @@ Public Class UtilsFileList
                 tmpLVItem.Tag = IO.Path.GetExtension(FoundFile).ToLower 'Backup gruppo
                 tmpLVItem.Name = FoundFile
                 tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile).ToLower)
+
+                tmpLVItem.ToolTipText = tmpLVItem.Name & vbCrLf &
+                    "Size: " & (tmpFinfo.Length / 1024).ToString("0") & " KB" & vbCrLf &
+                    "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
+                    "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
+
                 ListViewFiles.Items.Add(tmpLVItem)
 
                 UpdateLVItem(tmpLVItem)
