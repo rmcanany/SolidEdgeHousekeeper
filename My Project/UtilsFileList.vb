@@ -188,17 +188,42 @@ Public Class UtilsFileList
                     System.Windows.Forms.Application.DoEvents()
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-                        Try
-                            FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                                    FileIO.SearchOption.SearchAllSubDirectories,
-                                    ActiveFileExtensionsList.ToArray)
-                        Catch ex As Exception
-                            Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
-                            s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
-                            MsgBox(s, vbOKOnly)
-                            FoundFiles = Nothing
-                            'Exit Sub
-                        End Try
+
+                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name)
+                        Dim tmpFoundFiles As New List(Of String)
+
+                        For Each tmpFolder In tmpFolders
+
+                            Try
+
+                                tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
+                                FileIO.SearchOption.SearchAllSubDirectories,
+                                ActiveFileExtensionsList.ToArray))
+
+                            Catch ex As Exception
+
+                                Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                                s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                                MsgBox(s, vbOKOnly)
+
+                            End Try
+
+                        Next
+
+                        FoundFiles = tmpFoundFiles
+
+                        'Try
+                        '    FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                        '            FileIO.SearchOption.SearchAllSubDirectories,
+                        '            ActiveFileExtensionsList.ToArray)
+                        'Catch ex As Exception
+                        '    Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                        '    s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                        '    MsgBox(s, vbOKOnly)
+                        '    FoundFiles = Nothing
+                        '    'Exit Sub
+                        'End Try
+
                     End If
 
                 Case = "csv", "txt"
