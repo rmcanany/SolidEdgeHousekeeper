@@ -188,17 +188,42 @@ Public Class UtilsFileList
                     System.Windows.Forms.Application.DoEvents()
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-                        Try
-                            FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                                    FileIO.SearchOption.SearchAllSubDirectories,
-                                    ActiveFileExtensionsList.ToArray)
-                        Catch ex As Exception
-                            Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
-                            s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
-                            MsgBox(s, vbOKOnly)
-                            FoundFiles = Nothing
-                            'Exit Sub
-                        End Try
+
+                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name)
+                        Dim tmpFoundFiles As New List(Of String)
+
+                        For Each tmpFolder In tmpFolders
+
+                            Try
+
+                                tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
+                                FileIO.SearchOption.SearchAllSubDirectories,
+                                ActiveFileExtensionsList.ToArray))
+
+                            Catch ex As Exception
+
+                                Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                                s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                                MsgBox(s, vbOKOnly)
+
+                            End Try
+
+                        Next
+
+                        FoundFiles = tmpFoundFiles
+
+                        'Try
+                        '    FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                        '            FileIO.SearchOption.SearchAllSubDirectories,
+                        '            ActiveFileExtensionsList.ToArray)
+                        'Catch ex As Exception
+                        '    Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                        '    s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                        '    MsgBox(s, vbOKOnly)
+                        '    FoundFiles = Nothing
+                        '    'Exit Sub
+                        'End Try
+
                     End If
 
                 Case = "csv", "txt"
@@ -1013,40 +1038,56 @@ Public Class UtilsFileList
     End Sub
 
     Private Sub UpdateLVItem(LVItem As ListViewItem)
+
+
+        '#### For some reason LVItem.Bounds.Bottom return a wrong value, ListViewCollapsible is the suspect
+        'If LVItem.Bounds.IntersectsWith(FMain.ListViewFiles.ClientRectangle) Then
+
+
+
+
+
+
+
+
+
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
-            Dim UC As New UtilsCommon
-            Try
-                Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
-                Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-                'Adding extra properties data if needed
-                For Each PropColumn In FMain.ListOfColumns
-                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-                        Dim PropValue As String
-                        Dim tmpColor As Color = Color.White
-                        Try
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
-                                                                     ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                        Catch ex As Exception
-                            PropValue = ""
-                            tmpColor = Color.Gainsboro
-                        End Try
-                        LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
-                    End If
-                Next
-                cf.Close()
-                fs.Close()
-                cf = Nothing
-                fs = Nothing
-                Application.DoEvents()
-            Catch ex As Exception
-                For Each PropColumn In FMain.ListOfColumns
-                    LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
-                Next
-            End Try
-        Else
-            'Eventually insert code to personalize Sources group
-        End If
+                Dim UC As New UtilsCommon
+                Try
+                    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                    Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
+                    Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+                    'Adding extra properties data if needed
+                    For Each PropColumn In FMain.ListOfColumns
+                        If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                            Dim PropValue As String
+                            Dim tmpColor As Color = Color.White
+                            Try
+                                PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
+                                                                         ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            Catch ex As Exception
+                                PropValue = ""
+                                tmpColor = Color.Gainsboro
+                            End Try
+                            LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
+                        End If
+                    Next
+                    cf.Close()
+                    fs.Close()
+                    cf = Nothing
+                    fs = Nothing
+                    Application.DoEvents()
+                Catch ex As Exception
+                    For Each PropColumn In FMain.ListOfColumns
+                        LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
+                    Next
+                End Try
+            Else
+                'Eventually insert code to personalize Sources group
+            End If
+
+        'End If
+
     End Sub
 
 End Class
