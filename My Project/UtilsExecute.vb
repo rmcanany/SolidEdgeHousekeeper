@@ -1,5 +1,7 @@
 ﻿Option Strict On
 
+Imports OpenMcdf
+Imports OpenMcdf.Extensions.OLEProperties
 Imports SolidEdgeCommunity
 
 Public Class UtilsExecute
@@ -299,7 +301,7 @@ Public Class UtilsExecute
 
 
         Dim DMApp As DesignManager.Application = Nothing
-        If FMain.CheckBoxProcessAsAvailable.Checked Then
+        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
             DMApp = New DesignManager.Application
             DMApp.Visible = 1
             SEApp.Activate()
@@ -333,7 +335,7 @@ Public Class UtilsExecute
             System.Windows.Forms.Application.DoEvents()
             If FMain.StopProcess Then
                 FMain.TextBoxStatus.Text = "Processing aborted"
-                If FMain.CheckBoxProcessAsAvailable.Checked Then
+                If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
                     DMApp.Quit()
                 End If
                 Exit Sub
@@ -360,7 +362,7 @@ Public Class UtilsExecute
 
         Next
 
-        If FMain.CheckBoxProcessAsAvailable.Checked Then
+        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
             DMApp.Quit()
         End If
 
@@ -397,20 +399,46 @@ Public Class UtilsExecute
             TotalAborts = 0
         End If
 
-        ' Deal with Document Status before the file is opened in SE
+        ' ###### Deal with Document Status before the file is opened in SE
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
-        If FMain.CheckBoxProcessAsAvailable.Checked And FMain.SolidEdgeRequired > 0 Then
+        'Dim OldOLEStatus As Integer
+        Dim fs As System.IO.FileStream = Nothing
+        Dim cfg As CFSConfiguration = Nothing
+        Dim cf As CompoundFile = Nothing
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
 
-            OldStatus = UC.GetStatus(DMApp, Path)
+        If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
+            If FMain.UseDMForStatusChanges Then
+                OldStatus = UC.GetDMStatus(DMApp, Path)
 
-            StatusChangeSuccessful = UC.SetStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-            If Not StatusChangeSuccessful Then
-                ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+                If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+                    If Not StatusChangeSuccessful Then
+                        ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+                    End If
+                End If
+
+                Dim tmpStatus = UC.GetDMStatus(DMApp, Path)
+                SEApp.DoIdle()
+            Else
+                'Try
+                '    fs = New System.IO.FileStream(Path, System.IO.FileMode.Open, System.IO.FileAccess.ReadWrite)
+                'Catch ex As Exception
+                'End Try
+                'If fs IsNot Nothing Then
+                '    cfg = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                '    cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+                '    OLEProp = UC.GetOLEProp(cf, "System", "Status", AddProp:=False, dsiStream, co)
+                '    OldOLEStatus = CInt(OLEProp.Value)
+                'End If
+
+
             End If
 
-            SEApp.DoIdle()
         End If
 
         Try
@@ -489,11 +517,14 @@ Public Class UtilsExecute
                 End If
 
                 ' Deal with Document Status after the file is closed is SE
-                If FMain.CheckBoxProcessAsAvailable.Checked Then
+                If FMain.ProcessAsAvailable Then
+                    If FMain.UseDMForStatusChanges Then
+                        Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
+                        If Not s = "" Then
+                            ErrorMessagesCombined(s) = New List(Of String) From {""}
+                        End If
+                    Else
 
-                    Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
-                    If Not s = "" Then
-                        ErrorMessagesCombined(s) = New List(Of String) From {""}
                     End If
 
                 End If
@@ -568,8 +599,6 @@ Public Class UtilsExecute
         DMApp As DesignManager.Application,
         Path As String) As String
 
-        ' Changes Document Status as required.
-
         Dim ErrorMessage As String = ""
         Dim StatusChangeSuccessful As Boolean
 
@@ -577,7 +606,7 @@ Public Class UtilsExecute
 
         If FMain.RadioButtonProcessAsAvailableRevert.Checked Then
             If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                StatusChangeSuccessful = UC.SetStatus(DMApp, Path, OldStatus)
+                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
                 If Not StatusChangeSuccessful Then
                     ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
                 End If
@@ -585,67 +614,43 @@ Public Class UtilsExecute
         End If
 
         If FMain.RadioButtonProcessAsAvailableChange.Checked Then
-            Dim NewStatus As SolidEdgeConstants.DocumentStatus
+            Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
 
-            Dim StatusChangedCheckedRadioButtons As New List(Of RadioButton)
-            StatusChangedCheckedRadioButtons = FMain.GetStatusChangeRadioButtons(True)
-
-            Dim FromStatus As String = ""
-            Dim ToStatus As String = ""
-
-            ' RadioButtonStatusAtoA, A, B, IR, IW, O, R
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                FromStatus = "RadioButtonStatusAto"
-            End If
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-                FromStatus = "RadioButtonStatusBto"
-            End If
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-                FromStatus = "RadioButtonStatusIRto"
-            End If
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-                FromStatus = "RadioButtonStatusIWto"
-            End If
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-                FromStatus = "RadioButtonStatusOto"
-            End If
-            If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-                FromStatus = "RadioButtonStatusRto"
-            End If
-
-            For Each RB As RadioButton In StatusChangedCheckedRadioButtons
-                If RB.Name.Contains(FromStatus) Then
-                    ToStatus = RB.Name.Replace(FromStatus, "")
+            If Not OldStatus = NewStatus Then
+                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
+                If Not StatusChangeSuccessful Then
+                    ErrorMessage = String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
                 End If
-            Next
-
-            If ToStatus = "A" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-            End If
-            If ToStatus = "B" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-            End If
-            If ToStatus = "IR" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview
-            End If
-            If ToStatus = "IW" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork
-            End If
-            If ToStatus = "O" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-            End If
-            If ToStatus = "R" Then
-                NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
-            End If
-
-            StatusChangeSuccessful = UC.SetStatus(DMApp, Path, NewStatus)
-            If Not StatusChangeSuccessful Then
-                ErrorMessage = String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
             End If
 
         End If
 
-        Return ErrorMessage
+            Return ErrorMessage
+    End Function
+
+    Private Function GetNewStatus(OldStatus As SolidEdgeConstants.DocumentStatus) As SolidEdgeConstants.DocumentStatus
+        Dim NewStatus As SolidEdgeConstants.DocumentStatus
+
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+            NewStatus = CType(FMain.StatusAtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+            NewStatus = CType(FMain.StatusBtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+            NewStatus = CType(FMain.StatusIRtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+            NewStatus = CType(FMain.StatusIWtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+            NewStatus = CType(FMain.StatusOtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+            NewStatus = CType(FMain.StatusRtoX, SolidEdgeConstants.DocumentStatus)
+        End If
+
+        Return NewStatus
     End Function
 
 End Class

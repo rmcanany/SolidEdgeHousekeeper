@@ -523,8 +523,6 @@ Public Class UtilsPreferences
         Dim Value As String
         Dim PropType As String
 
-        'This should be happening elsewhere, but not.
-        '_Form_Main.DictOfColumnsJSON = JsonConvert.SerializeObject(_Form_Main.DictOfColumns)
 
 
         Dim KeepProps As New List(Of String)
@@ -538,7 +536,7 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
         KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
         KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
-        KeepProps.AddRange({"Left", "Top", "Width", "Height"})
+        KeepProps.AddRange({"Left", "Top", "Width", "Height", "UseDMForStatusChanges"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 

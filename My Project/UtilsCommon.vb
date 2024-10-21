@@ -4,6 +4,7 @@ Imports System.Drawing.Configuration
 Imports System.IO
 Imports System.Management.Automation.Runspaces
 Imports System.Reflection
+Imports System.Reflection.Emit
 Imports System.Security.AccessControl
 Imports System.Text.RegularExpressions
 Imports System.Windows
@@ -543,35 +544,19 @@ Public Class UtilsCommon
         ssmObsolete = 4
     End Enum
 
-    Public Function GetStatus(
+    Public Function GetDMStatus(
         DMApp As DesignManager.Application,
         Filename As String
         ) As SolidEdgeConstants.DocumentStatus
 
         Dim Status As SolidEdgeConstants.DocumentStatus = Nothing
 
-        Try
-
-            Dim PropertySets As DesignManager.PropertySets
-            Dim PropertySet As DesignManager.Properties
-
-            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            PropertySets.Open(Filename, True)
-
-            PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
-
-            Status = CType(CType(PropertySet.Item("Status"), DesignManager.Property).Value, SolidEdgeConstants.DocumentStatus)
-
-            PropertySets.Close()
-
-        Catch ex As Exception
-            Dim i = 0
-        End Try
+        Status = CType(GetDMPropValue(DMApp, Filename, "System", "Status", ModelLinkIdx:=0), SolidEdgeConstants.DocumentStatus)
 
         Return Status
     End Function
 
-    Public Function SetStatus(
+    Public Function SetDMStatus(
         DMApp As DesignManager.Application,
         Filename As String,
         NewStatus As SolidEdgeConstants.DocumentStatus,
@@ -579,58 +564,95 @@ Public Class UtilsCommon
         ) As Boolean
         ' https://community.sw.siemens.com/s/question/0D54O000061wzRaSAI/changing-document-status
 
-        Dim Success As Boolean = True
+        Dim NewWay As Boolean = True
 
-        Try
-            Dim PropertySets As DesignManager.PropertySets
-            Dim PropertySet As DesignManager.Properties
-            Dim Prop As DesignManager.Property
+        If NewWay Then
+            Dim Success As Boolean = True
+            Dim NewSecurity As StatusSecurityMapping
+            Dim PropertySetNames As New List(Of String)
+            Dim PropertyNames As New List(Of String)
+            Dim NewValues As New List(Of Object)
 
-            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            PropertySets.Open(Filename, False)
+            Select Case NewStatus
+                Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                    NewSecurity = StatusSecurityMapping.ssmAvailable
+                Case SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                    NewSecurity = StatusSecurityMapping.ssmBaselined
+                Case SolidEdgeConstants.DocumentStatus.igStatusInReview
+                    NewSecurity = StatusSecurityMapping.ssmInReview
+                Case SolidEdgeConstants.DocumentStatus.igStatusInWork
+                    NewSecurity = StatusSecurityMapping.ssmInWork
+                Case SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                    NewSecurity = StatusSecurityMapping.ssmObsolete
+                Case SolidEdgeConstants.DocumentStatus.igStatusReleased
+                    NewSecurity = StatusSecurityMapping.ssmReleased
+            End Select
 
-            'PropertySet = PropertySets.Item("ExtendedSummaryInformation")
-            PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
+            PropertySetNames.AddRange({"System", "System"})
+            PropertyNames.AddRange({"Status", "Security"})
+            NewValues.AddRange({NewStatus, NewSecurity})
 
-            'PropertySet.Item("Status").Value = NewStatus
-            Prop = CType(PropertySet.Item("Status"), DesignManager.Property)
+            Success = SetDMPropValue(DMApp, Filename, PropertySetNames, PropertyNames, ModelLinkIdx:=0, AddProp:=False, NewValues)
 
-            Prop.Value = NewStatus
+            Return Success
+
+        Else
+            Dim Success As Boolean = True
+
+            Try
+                Dim PropertySets As DesignManager.PropertySets
+                Dim PropertySet As DesignManager.Properties
+                Dim Prop As DesignManager.Property
+
+                PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+                PropertySets.Open(Filename, False)
+
+                PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
+
+                Prop = CType(PropertySet.Item("Status"), DesignManager.Property)
+
+                Prop.Value = NewStatus
 
 
-            PropertySets.Save()
+                PropertySets.Save()
 
-            PropertySet = CType(PropertySets.Item("SummaryInformation"), DesignManager.Properties)
-            Prop = CType(PropertySet.Item("Security"), DesignManager.Property)
+                PropertySet = CType(PropertySets.Item("SummaryInformation"), DesignManager.Properties)
+                Prop = CType(PropertySet.Item("Security"), DesignManager.Property)
 
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                Prop.Value = StatusSecurityMapping.ssmAvailable
-            End If
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-                Prop.Value = StatusSecurityMapping.ssmBaselined
-            End If
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-                Prop.Value = StatusSecurityMapping.ssmInReview
-            End If
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-                Prop.Value = StatusSecurityMapping.ssmInWork
-            End If
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-                Prop.Value = StatusSecurityMapping.ssmObsolete
-            End If
-            If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-                Prop.Value = StatusSecurityMapping.ssmReleased
-            End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                    Prop.Value = StatusSecurityMapping.ssmAvailable
+                End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+                    Prop.Value = StatusSecurityMapping.ssmBaselined
+                End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+                    Prop.Value = StatusSecurityMapping.ssmInReview
+                End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+                    Prop.Value = StatusSecurityMapping.ssmInWork
+                End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+                    Prop.Value = StatusSecurityMapping.ssmObsolete
+                End If
+                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+                    Prop.Value = StatusSecurityMapping.ssmReleased
+                End If
 
-            PropertySets.Save()
-            PropertySets.Close()
+                PropertySets.Save()
+                PropertySets.Close()
 
-            'DMApp.Quit()
-        Catch ex As Exception
-            Success = False
-        End Try
+                'DMApp.Quit()
+            Catch ex As Exception
+                Success = False
+            End Try
 
-        Return Success
+            Return Success
+        End If
+
+
+
+
+
     End Function
 
 
@@ -805,7 +827,6 @@ Public Class UtilsCommon
 
         End If
 
-
         Return FoundProp
 
     End Function
@@ -914,39 +935,97 @@ Public Class UtilsCommon
     End Function
 
     Public Function GetDMProp(
-        DMApp As DesignManager.Application,
-        FullName As String,
+        PropertySets As DesignManager.PropertySets,
         PropertySetName As String,
-        PropertyName As String,
-        ModelLinkIdx As Integer,
-        AddProp As Boolean
+        PropertyName As String
         ) As DesignManager.Property
 
-        Dim PropertySets As DesignManager.PropertySets
-        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-        PropertySets.Open(FullName, True)
-
-
-        Dim DocValue As String = "HOUSEKEEPER_PROP_NOT_FOUND"
-        Dim PropertySet As DesignManager.Properties
         Dim Prop As DesignManager.Property = Nothing
+
+        'Dim ReadOnlyPropertySets As Boolean = True
+        Dim PropertySet As DesignManager.Properties
         Dim PropertySetNames As New List(Of String)
-        'Dim PropertySetName As String
+        Dim GotAMatch As Boolean = False
 
-        Dim FilePropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
+        If PropertySetName = "System" Then
+            PropertySetNames.Add("SummaryInformation")
+            PropertySetNames.Add("ExtendedSummaryInformation")
+            PropertySetNames.Add("DocumentSummaryInformation")
+            PropertySetNames.Add("ProjectInformation")
+            PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+        ElseIf PropertySetName = "Custom" Then
+            PropertySetNames.Add("Custom")
+        End If
 
-        If FilePropNames.Contains(PropertyName) Then
-            Select Case PropertyName
-                Case "File Name"
-                    DocValue = System.IO.Path.GetFileName(FullName)  ' C:\project\part.par -> part.par
-                Case "File Name (full path)"
-                    DocValue = FullName  ' C:\project\part.par -> C:\project\part.par
-                Case "File Name (no extension)"
-                    DocValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
-            End Select
+        'PropertySets.Open(Filename, ReadOnlyPropertySets)
+
+        For Each PropertySetName In PropertySetNames
+            ' Not all files have all PropertySets
+            ' Not all properties have names
+            Try
+                PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                For i As Integer = 0 To PropertySet.Count - 1
+                    Prop = CType(PropertySet.Item(i), DesignManager.Property)
+                    If Prop.Name.ToLower = PropertyName.ToLower Then
+                        GotAMatch = True
+                        Exit For
+                    End If
+                Next
+            Catch ex As Exception
+            End Try
+
+            If GotAMatch Then
+                Exit For
+            End If
+        Next
+
+        If GotAMatch Then
+            Return Prop
+        Else
+            Return Nothing
+        End If
+
+    End Function
+
+
+    Public Function GetDMPropValue(
+        DMApp As DesignManager.Application,
+        Filename As String,
+        PropertySetName As String,
+        PropertyName As String,
+        ModelLinkIdx As Integer
+        ) As Object
+
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+            Dim Prop As DesignManager.Property
+            Dim PropValue As Object = Nothing
+            Dim OpenReadOnly As Boolean = True
+            Dim PropertySets As DesignManager.PropertySets
+
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, OpenReadOnly)
+            Prop = GetDMProp(PropertySets, PropertySetName, PropertyName)
+
+            If Prop IsNot Nothing Then
+                PropValue = Prop.Value
+            End If
+
+            PropertySets.Close()
+
+            Return PropValue
 
         Else
-            'Dim DateTime As DateTime
+            Dim PropValue As Object = Nothing
+
+            Dim PropertySets As DesignManager.PropertySets
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, True)
+
+            Dim PropertySet As DesignManager.Properties
+            Dim Prop As DesignManager.Property = Nothing
+            Dim PropertySetNames As New List(Of String)
 
             PropertySetNames.Add("SummaryInformation")
             PropertySetNames.Add("ExtendedSummaryInformation")
@@ -954,8 +1033,6 @@ Public Class UtilsCommon
             PropertySetNames.Add("ProjectInformation")
             PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
             PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
-
-            'Dim TypeName As String
 
             Dim GotAMatch As Boolean = False
 
@@ -966,12 +1043,6 @@ Public Class UtilsCommon
                     For i As Integer = 0 To PropertySet.Count - 1
                         Prop = CType(PropertySet.Item(i), DesignManager.Property)
                         If Prop.Name.ToLower = PropertyName.ToLower Then
-                            'TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-                            'DocValue = Prop.Value.ToString
-                            'If TypeName.ToLower = "date" Then
-                            '    DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-                            '    DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-                            'End If
                             GotAMatch = True
                             Exit For
                         End If
@@ -984,12 +1055,110 @@ Public Class UtilsCommon
                 End If
             Next
 
+            If GotAMatch Then
+                PropValue = Prop.Value
+            End If
+
+            If PropertySets IsNot Nothing Then
+                PropertySets.Close()
+            End If
+
+            Return PropValue
+
+        End If
+    End Function
+
+    Public Function SetDMPropValue(
+        DMApp As DesignManager.Application,
+        Filename As String,
+        PropertySetNames As List(Of String),
+        PropertyNames As List(Of String),
+        ModelLinkIdx As Integer,
+        AddProp As Boolean,
+        NewValues As List(Of Object)
+        ) As Boolean
+
+        Dim Success As Boolean = True
+
+        Dim PropertySets As DesignManager.PropertySets
+        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+        PropertySets.Open(Filename, False)
+
+        Dim PropertySet As DesignManager.Properties = Nothing
+        Dim Prop As DesignManager.Property = Nothing
+        Dim PropertySetActualNames As New List(Of String)
+
+        PropertySetActualNames.Add("SummaryInformation")
+        PropertySetActualNames.Add("ExtendedSummaryInformation")
+        PropertySetActualNames.Add("DocumentSummaryInformation")
+        PropertySetActualNames.Add("ProjectInformation")
+        PropertySetActualNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+        PropertySetActualNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
+
+        For i As Integer = 0 To PropertyNames.Count - 1
+            Dim GotAMatch As Boolean = False
+
+            Try
+                For Each PropertySetName In PropertySetActualNames
+                    ' Not all files have all PropertySets
+                    Try
+                        PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                        For j As Integer = 0 To PropertySet.Count - 1
+                            Prop = CType(PropertySet.Item(j), DesignManager.Property)
+                            If Prop.Name.ToLower = PropertyNames(i).ToLower Then
+                                GotAMatch = True
+                                Exit For
+                            End If
+                        Next
+                    Catch ex As Exception
+                        ' Not an error.
+                    End Try
+
+                    If GotAMatch Then
+                        Exit For
+                    End If
+                Next
+
+                If (GotAMatch) And (Prop IsNot Nothing) Then
+                    Dim s = Prop.Name
+                    Prop.Value = NewValues(i)
+                    'PropertySet.Save()
+                Else
+                    Success = False
+                End If
+
+                If (Not GotAMatch) And (PropertySetNames(i) = "Custom") And (AddProp) Then
+                    ' Can't add a duplicate property
+                    Try
+                        PropertySet = CType(PropertySets.Item("Custom"), DesignManager.Properties)
+                        Prop = CType(PropertySet.Add(PropertyNames(i), ""), DesignManager.Property)
+                        Prop.Value = NewValues(i)
+
+                        PropertySet.Save()
+                        'PropertySets.Save()
+                    Catch ex As Exception
+                        ' Might want to report an error.
+                    End Try
+
+                End If
+
+                PropertySets.Save()
+
+            Catch ex2 As Exception
+                Success = False
+                Exit For
+            End Try
+        Next
+
+        PropertySets.Save()
+        If PropertySets IsNot Nothing Then
+            PropertySets.Close()
         End If
 
-        Return Prop
-
+        Return Success
 
     End Function
+
 
     Public Function GetOLEPropValue(
         cf As CompoundFile,
@@ -1260,7 +1429,7 @@ Public Class UtilsCommon
         ' "%{System.Titulo}" -> "Va bene!"
 
         Dim Outstring As String = ""
-        Dim tf As Boolean
+        'Dim tf As Boolean
         Dim Proceed As Boolean = True
 
         Dim PropertySet As String = ""
@@ -1334,8 +1503,8 @@ Public Class UtilsCommon
                         Dim EnglishName As String = TemplatePropertyDict(PropertyName)("EnglishName")
                         tmpValue = GetOLEPropValue(cf, PropertySet, EnglishName, False)
                     ElseIf Not IsNothing(DMApp) Then
-                        Dim DMProp As DesignManager.Property = GetDMProp(DMApp, FullName, PropertySet, PropertyName, ModelIdx, False)
-                        If DMProp IsNot Nothing Then tmpValue = DMProp.Value.ToString
+                        Dim DMPropValue As Object = GetDMPropValue(DMApp, FullName, PropertySet, PropertyName, ModelIdx)
+                        If DMPropValue IsNot Nothing Then tmpValue = DMPropValue.ToString
                     End If
 
                 End If

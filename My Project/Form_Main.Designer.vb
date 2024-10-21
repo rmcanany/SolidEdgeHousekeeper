@@ -160,6 +160,7 @@ Partial Class Form_Main
         Me.RadioButtonStatusOtoA = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableRevert = New System.Windows.Forms.RadioButton()
         Me.RadioButtonProcessAsAvailableChange = New System.Windows.Forms.RadioButton()
+        Me.CheckBoxUseDMForStatusChanges = New System.Windows.Forms.CheckBox()
         Me.TabPageSorting = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel7 = New Housekeeper.ExTableLayoutPanel()
         Me.RadioButtonSortNone = New System.Windows.Forms.RadioButton()
@@ -1092,13 +1093,15 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.ColumnCount = 1
         Me.ExTableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxProcessAsAvailable, 0, 0)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.Panel1, 0, 3)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableRevert, 0, 1)
-        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableChange, 0, 2)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.Panel1, 0, 4)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableRevert, 0, 2)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.RadioButtonProcessAsAvailableChange, 0, 3)
+        Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxUseDMForStatusChanges, 0, 1)
         Me.ExTableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel6.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel6.Name = "ExTableLayoutPanel6"
-        Me.ExTableLayoutPanel6.RowCount = 5
+        Me.ExTableLayoutPanel6.RowCount = 6
+        Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
@@ -1142,7 +1145,7 @@ Partial Class Form_Main
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInR)
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInIW)
         Me.Panel1.Controls.Add(Me.GroupBoxStatusInO)
-        Me.Panel1.Location = New System.Drawing.Point(3, 83)
+        Me.Panel1.Location = New System.Drawing.Point(3, 113)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(307, 275)
         Me.Panel1.TabIndex = 96
@@ -1790,7 +1793,7 @@ Partial Class Form_Main
         Me.RadioButtonProcessAsAvailableRevert.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonProcessAsAvailableRevert.AutoSize = True
         Me.RadioButtonProcessAsAvailableRevert.Checked = True
-        Me.RadioButtonProcessAsAvailableRevert.Location = New System.Drawing.Point(3, 33)
+        Me.RadioButtonProcessAsAvailableRevert.Location = New System.Drawing.Point(3, 63)
         Me.RadioButtonProcessAsAvailableRevert.Name = "RadioButtonProcessAsAvailableRevert"
         Me.RadioButtonProcessAsAvailableRevert.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonProcessAsAvailableRevert.Size = New System.Drawing.Size(246, 19)
@@ -1803,7 +1806,7 @@ Partial Class Form_Main
         '
         Me.RadioButtonProcessAsAvailableChange.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonProcessAsAvailableChange.AutoSize = True
-        Me.RadioButtonProcessAsAvailableChange.Location = New System.Drawing.Point(3, 58)
+        Me.RadioButtonProcessAsAvailableChange.Location = New System.Drawing.Point(3, 88)
         Me.RadioButtonProcessAsAvailableChange.Name = "RadioButtonProcessAsAvailableChange"
         Me.RadioButtonProcessAsAvailableChange.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonProcessAsAvailableChange.Size = New System.Drawing.Size(192, 19)
@@ -1811,6 +1814,18 @@ Partial Class Form_Main
         Me.RadioButtonProcessAsAvailableChange.TabStop = True
         Me.RadioButtonProcessAsAvailableChange.Text = "Change status after processing"
         Me.RadioButtonProcessAsAvailableChange.UseVisualStyleBackColor = True
+        '
+        'CheckBoxUseDMForStatusChanges
+        '
+        Me.CheckBoxUseDMForStatusChanges.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.CheckBoxUseDMForStatusChanges.AutoSize = True
+        Me.CheckBoxUseDMForStatusChanges.Location = New System.Drawing.Point(3, 35)
+        Me.CheckBoxUseDMForStatusChanges.Name = "CheckBoxUseDMForStatusChanges"
+        Me.CheckBoxUseDMForStatusChanges.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxUseDMForStatusChanges.Size = New System.Drawing.Size(323, 19)
+        Me.CheckBoxUseDMForStatusChanges.TabIndex = 97
+        Me.CheckBoxUseDMForStatusChanges.Text = "Use Design Manager (disable to use Structured Storage)"
+        Me.CheckBoxUseDMForStatusChanges.UseVisualStyleBackColor = True
         '
         'TabPageSorting
         '
@@ -2736,4 +2751,5 @@ Partial Class Form_Main
     Friend WithEvents ButtonCloseListOfColumns As Button
     Friend WithEvents ButtonAddToListOfColumns As Button
     Friend WithEvents BT_DeleteCLBItem As Button
+    Friend WithEvents CheckBoxUseDMForStatusChanges As CheckBox
 End Class

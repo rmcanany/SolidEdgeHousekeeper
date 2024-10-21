@@ -29,10 +29,18 @@ Public Class UtilsFileList
 
         Dim StartTime As DateTime = Now
 
+        Dim ActiveFileExtensionsList As New List(Of String)
 
         FMain.TextBoxStatus.Text = "Updating list..."
         FMain.LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
+
+        If FMain.new_CheckBoxFilterAsm.Checked Then ActiveFileExtensionsList.Add("*.asm")
+        If FMain.new_CheckBoxFilterPar.Checked Then ActiveFileExtensionsList.Add("*.par")
+        If FMain.new_CheckBoxFilterPsm.Checked Then ActiveFileExtensionsList.Add("*.psm")
+        If FMain.new_CheckBoxFilterDft.Checked Then ActiveFileExtensionsList.Add("*.dft")
+
+
 
         ListViewFiles.BeginUpdate()
 
@@ -44,6 +52,23 @@ Public Class UtilsFileList
                 GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
             End If
         Next
+
+        'Dim tmpListViewFiles As New ListView
+        'Dim TagName As String
+
+        'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+        '    If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
+        '        tmpListViewFiles.Items.Add(ListViewFiles.Items.Item(i))
+        '    Else
+        '        TagName = CType(ListViewFiles.Items.Item(i).Tag, String)
+        '        If Not GroupTags.Contains(TagName) Then
+        '            GroupTags.Add(TagName)
+        '        End If
+        '    End If
+        'Next
+
+        'ListViewFiles = tmpListViewFiles
+
 
         If Not GroupTags.Contains("asm") Then
 
@@ -96,7 +121,7 @@ Public Class UtilsFileList
         Dim tmpFoundFiles As New List(Of String)
 
         For Each item As ListViewItem In ListViewFiles.Items
-            tmpFoundFiles.AddRange(GetFoundFilesFiles(item, BareTopLevelAssembly))
+            tmpFoundFiles.AddRange(FindFiles(item, BareTopLevelAssembly))
         Next
 
         tmpFoundFiles = tmpFoundFiles.Distinct.ToList
@@ -104,11 +129,58 @@ Public Class UtilsFileList
         Dim FoundFiles As IReadOnlyCollection(Of String)
         FoundFiles = tmpFoundFiles
 
-
         'DragDropCache.Clear()
         'For Each item As ListViewItem In ListViewFiles.Items
         '    DragDropCache.Add(item)
         'Next
+
+        ' Remove problem files
+        If Not FoundFiles Is Nothing Then
+            FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
+        End If
+
+
+        ' Dependency sort
+        If Not FoundFiles Is Nothing Then
+            If FMain.RadioButtonSortDependency.Checked Then
+                FoundFiles = GetDependencySortedFiles(FoundFiles)
+            End If
+        End If
+
+
+        ' Run filters
+        If Not FoundFiles Is Nothing Then
+
+            ' Filter by file wildcard search
+            If FMain.CheckBoxEnableFileWildcard.Checked Then
+                FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
+            End If
+
+            ' Filter by properties
+            If FMain.CheckBoxEnablePropertyFilter.Checked Then
+                System.Threading.Thread.Sleep(1000)
+                Dim UPF As New UtilsPropertyFilters(Me.FMain)
+                FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
+            End If
+
+            If FMain.RadioButtonSortAlphabetical.Checked Then
+                FoundFiles = SortAlphabetical(FoundFiles)
+            End If
+
+            If FMain.RadioButtonSortRandomSample.Checked Then
+                Dim Fraction As Double = 0.1
+                Try
+                    Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
+                Catch ex As Exception
+                    Fraction = 0.1
+                    Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
+                    s = String.Format("{0}Using default {1} instead.", s, Fraction)
+                    MsgBox(s)
+                End Try
+                FoundFiles = SortRandomSample(FoundFiles, Fraction)
+            End If
+        End If
+
 
         ' Populate ListView
         If Not FoundFiles Is Nothing Then
@@ -139,7 +211,7 @@ Public Class UtilsFileList
 
     End Sub
 
-    Private Function GetFoundFilesFiles(
+    Private Function FindFiles(
         Source As ListViewItem,
         BareTopLevelAssembly As Boolean
         ) As IReadOnlyCollection(Of String)
@@ -248,52 +320,52 @@ Public Class UtilsFileList
 
         End If
 
-        ' Remove problem files
-        If Not FoundFiles Is Nothing Then
-            FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
-        End If
+        '' Remove problem files
+        'If Not FoundFiles Is Nothing Then
+        '    FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
+        'End If
 
 
-        ' Dependency sort
-        If Not FoundFiles Is Nothing Then
-            If FMain.RadioButtonSortDependency.Checked Then
-                FoundFiles = GetDependencySortedFiles(FoundFiles)
-            End If
-        End If
+        '' Dependency sort
+        'If Not FoundFiles Is Nothing Then
+        '    If FMain.RadioButtonSortDependency.Checked Then
+        '        FoundFiles = GetDependencySortedFiles(FoundFiles)
+        '    End If
+        'End If
 
 
-        ' Run filters
-        If Not FoundFiles Is Nothing Then
+        '' Run filters
+        'If Not FoundFiles Is Nothing Then
 
-            ' Filter by file wildcard search
-            If FMain.CheckBoxEnableFileWildcard.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
-            End If
+        '    ' Filter by file wildcard search
+        '    If FMain.CheckBoxEnableFileWildcard.Checked Then
+        '        FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
+        '    End If
 
-            ' Filter by properties
-            If FMain.CheckBoxEnablePropertyFilter.Checked Then
-                System.Threading.Thread.Sleep(1000)
-                Dim UPF As New UtilsPropertyFilters(Me.FMain)
-                FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
-            End If
+        '    ' Filter by properties
+        '    If FMain.CheckBoxEnablePropertyFilter.Checked Then
+        '        System.Threading.Thread.Sleep(1000)
+        '        Dim UPF As New UtilsPropertyFilters(Me.FMain)
+        '        FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
+        '    End If
 
-            If FMain.RadioButtonSortAlphabetical.Checked Then
-                FoundFiles = SortAlphabetical(FoundFiles)
-            End If
+        '    If FMain.RadioButtonSortAlphabetical.Checked Then
+        '        FoundFiles = SortAlphabetical(FoundFiles)
+        '    End If
 
-            If FMain.RadioButtonSortRandomSample.Checked Then
-                Dim Fraction As Double = 0.1
-                Try
-                    Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
-                Catch ex As Exception
-                    Fraction = 0.1
-                    Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
-                    s = String.Format("{0}Using default {1} instead.", s, Fraction)
-                    MsgBox(s)
-                End Try
-                FoundFiles = SortRandomSample(FoundFiles, Fraction)
-            End If
-        End If
+        '    If FMain.RadioButtonSortRandomSample.Checked Then
+        '        Dim Fraction As Double = 0.1
+        '        Try
+        '            Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
+        '        Catch ex As Exception
+        '            Fraction = 0.1
+        '            Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
+        '            s = String.Format("{0}Using default {1} instead.", s, Fraction)
+        '            MsgBox(s)
+        '        End Try
+        '        FoundFiles = SortRandomSample(FoundFiles, Fraction)
+        '    End If
+        'End If
 
         '' Populate ListView
         'If Not FoundFiles Is Nothing Then
@@ -405,6 +477,7 @@ Public Class UtilsFileList
             tf = UC.FilenameIsOK(item)
             tf = tf And IO.File.Exists(item)
             tf = tf And Not tmpFoundFiles.Contains(item)
+
             ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
             ' Causes a problem comparing extensions
             Try
@@ -412,6 +485,7 @@ Public Class UtilsFileList
             Catch ex As Exception
                 ' MsgBox("Catch")
             End Try
+
             If tf Then
                 tmpFoundFiles.Add(item)
             End If

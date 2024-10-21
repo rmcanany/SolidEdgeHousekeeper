@@ -84,6 +84,7 @@ Public Class Form_Main
 
     Public Property TaskList As List(Of Task)
 
+
     ' ###### TOP LEVEL ASSEMBLY ######
 
     Private _TLAAutoIncludeTLF As Boolean
@@ -193,6 +194,13 @@ Public Class Form_Main
 
     ' ###### DOCUMENT STATUS ######
 
+    '0 Available
+    '1 InWork
+    '2 InReview
+    '3 Released
+    '4 Baselined
+    '5 Obsolete
+
     Private _ProcessAsAvailable As Boolean
     Public Property ProcessAsAvailable As Boolean
         Get
@@ -202,6 +210,33 @@ Public Class Form_Main
             _ProcessAsAvailable = value
             If Me.TabControl1 IsNot Nothing Then
                 CheckBoxProcessAsAvailable.Checked = value
+
+                Dim StatusChangeRadioButtons As New List(Of RadioButton)
+                Dim RB As RadioButton
+
+                StatusChangeRadioButtons = GetStatusChangeRadioButtons()
+
+                CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+                RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
+                RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
+                If RadioButtonProcessAsAvailableChange.Checked Then
+                    For Each RB In StatusChangeRadioButtons
+                        RB.Enabled = Me.ProcessAsAvailable
+                    Next
+                End If
+            End If
+        End Set
+    End Property
+
+    Private _UseDMForStatusChanges As Boolean
+    Public Property UseDMForStatusChanges As Boolean
+        Get
+            Return _UseDMForStatusChanges
+        End Get
+        Set(value As Boolean)
+            _UseDMForStatusChanges = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxUseDMForStatusChanges.Checked = value
             End If
         End Set
     End Property
@@ -232,157 +267,157 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _StatusAto As String
-    Public Property StatusAto As String
+    Private _StatusAtoX As Integer
+    Public Property StatusAtoX As Integer
         Get
-            Return _StatusAto
+            Return _StatusAtoX
         End Get
-        Set(value As String)
-            _StatusAto = value
+        Set(value As Integer)
+            _StatusAtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusAtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusAtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusAtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusAtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusAtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusAtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusAtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusAtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusAtoO.Checked = True
                 End Select
             End If
         End Set
     End Property
 
-    Private _StatusBto As String
-    Public Property StatusBto As String
+    Private _StatusBtoX As Integer
+    Public Property StatusBtoX As Integer
         Get
-            Return _StatusBto
+            Return _StatusBtoX
         End Get
-        Set(value As String)
-            _StatusBto = value
+        Set(value As Integer)
+            _StatusBtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusBtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusBtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusBtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusBtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusBtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusBtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusBtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusBtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusBtoO.Checked = True
                 End Select
             End If
         End Set
     End Property
 
-    Private _StatusIRto As String
-    Public Property StatusIRto As String
+    Private _StatusIRtoX As Integer
+    Public Property StatusIRtoX As Integer
         Get
-            Return _StatusIRto
+            Return _StatusIRtoX
         End Get
-        Set(value As String)
-            _StatusIRto = value
+        Set(value As Integer)
+            _StatusIRtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusIRtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusIRtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusIRtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusIRtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusIRtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusIRtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusIRtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusIRtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusIRtoO.Checked = True
                 End Select
             End If
         End Set
     End Property
 
-    Private _StatusIWto As String
-    Public Property StatusIWto As String
+    Private _StatusIWtoX As Integer
+    Public Property StatusIWtoX As Integer
         Get
-            Return _StatusIWto
+            Return _StatusIWtoX
         End Get
-        Set(value As String)
-            _StatusIWto = value
+        Set(value As Integer)
+            _StatusIWtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusIWtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusIWtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusIWtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusIWtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusIWtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusIWtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusIWtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusIWtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusIWtoO.Checked = True
                 End Select
             End If
         End Set
     End Property
 
-    Private _StatusOto As String
-    Public Property StatusOto As String
+    Private _StatusOtoX As Integer
+    Public Property StatusOtoX As Integer
         Get
-            Return _StatusOto
+            Return _StatusOtoX
         End Get
-        Set(value As String)
-            _StatusOto = value
+        Set(value As Integer)
+            _StatusOtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusOtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusOtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusOtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusOtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusOtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusOtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusOtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusOtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusOtoO.Checked = True
                 End Select
             End If
         End Set
     End Property
 
-    Private _StatusRto As String
-    Public Property StatusRto As String
+    Private _StatusRtoX As Integer
+    Public Property StatusRtoX As Integer
         Get
-            Return _StatusRto
+            Return _StatusRtoX
         End Get
-        Set(value As String)
-            _StatusRto = value
+        Set(value As Integer)
+            _StatusRtoX = value
             If Me.TabControl1 IsNot Nothing Then
                 Select Case value
-                    Case "A"
+                    Case 0
                         RadioButtonStatusRtoA.Checked = True
-                    Case "B"
-                        RadioButtonStatusRtoB.Checked = True
-                    Case "IR"
-                        RadioButtonStatusRtoIR.Checked = True
-                    Case "IW"
+                    Case 1
                         RadioButtonStatusRtoIW.Checked = True
-                    Case "O"
-                        RadioButtonStatusRtoO.Checked = True
-                    Case "R"
+                    Case 2
+                        RadioButtonStatusRtoIR.Checked = True
+                    Case 3
                         RadioButtonStatusRtoR.Checked = True
+                    Case 4
+                        RadioButtonStatusRtoB.Checked = True
+                    Case 5
+                        RadioButtonStatusRtoO.Checked = True
                 End Select
             End If
         End Set
@@ -2129,21 +2164,23 @@ Public Class Form_Main
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        If CheckBoxProcessAsAvailable.Checked Then
-            RadioButtonProcessAsAvailableRevert.Enabled = True
-            RadioButtonProcessAsAvailableChange.Enabled = True
-            If RadioButtonProcessAsAvailableChange.Checked Then
-                For Each RB In StatusChangeRadioButtons
-                    RB.Enabled = True
-                Next
-            End If
-        Else
-            RadioButtonProcessAsAvailableRevert.Enabled = False
-            RadioButtonProcessAsAvailableChange.Enabled = False
+        CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+        RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
+        RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
+        If RadioButtonProcessAsAvailableChange.Checked Then
             For Each RB In StatusChangeRadioButtons
-                RB.Enabled = False
+                RB.Enabled = Me.ProcessAsAvailable
             Next
         End If
+
+        'If CheckBoxProcessAsAvailable.Checked Then
+        'Else
+        '    RadioButtonProcessAsAvailableRevert.Enabled = False
+        '    RadioButtonProcessAsAvailableChange.Enabled = False
+        '    For Each RB In StatusChangeRadioButtons
+        '        RB.Enabled = False
+        '    Next
+        'End If
     End Sub
 
     Private Sub RadioButtonProcessAsAvailableRevert_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonProcessAsAvailableRevert.CheckedChanged
@@ -2611,187 +2648,187 @@ Public Class Form_Main
 
     Private Sub RadioButtonStatusAtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoA.CheckedChanged
         If RadioButtonStatusAtoA.Checked Then
-            Me.StatusAto = "A"
+            Me.StatusAtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusAtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoB.CheckedChanged
         If RadioButtonStatusAtoB.Checked Then
-            Me.StatusAto = "B"
+            Me.StatusAtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusAtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIR.CheckedChanged
         If RadioButtonStatusAtoIR.Checked Then
-            Me.StatusAto = "IR"
+            Me.StatusAtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusAtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIW.CheckedChanged
         If RadioButtonStatusAtoIW.Checked Then
-            Me.StatusAto = "IW"
+            Me.StatusAtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusAtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoO.CheckedChanged
         If RadioButtonStatusAtoO.Checked Then
-            Me.StatusAto = "O"
+            Me.StatusAtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusAtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoR.CheckedChanged
         If RadioButtonStatusAtoR.Checked Then
-            Me.StatusAto = "R"
+            Me.StatusAtoX = 3
         End If
     End Sub
 
     Private Sub RadioButtonStatusBtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoA.CheckedChanged
         If RadioButtonStatusBtoA.Checked Then
-            Me.StatusBto = "A"
+            Me.StatusBtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusBtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoB.CheckedChanged
         If RadioButtonStatusBtoB.Checked Then
-            Me.StatusBto = "B"
+            Me.StatusBtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusBtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIR.CheckedChanged
         If RadioButtonStatusBtoIR.Checked Then
-            Me.StatusBto = "IR"
+            Me.StatusBtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusBtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIW.CheckedChanged
         If RadioButtonStatusBtoIW.Checked Then
-            Me.StatusBto = "IW"
+            Me.StatusBtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusBtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoO.CheckedChanged
         If RadioButtonStatusBtoO.Checked Then
-            Me.StatusBto = "O"
+            Me.StatusBtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusBtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoR.CheckedChanged
         If RadioButtonStatusBtoR.Checked Then
-            Me.StatusBto = "R"
+            Me.StatusBtoX = 3
         End If
     End Sub
 
     Private Sub RadioButtonStatusIRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoA.CheckedChanged
         If RadioButtonStatusIRtoA.Checked Then
-            Me.StatusIRto = "A"
+            Me.StatusIRtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoB.CheckedChanged
         If RadioButtonStatusIRtoB.Checked Then
-            Me.StatusIRto = "B"
+            Me.StatusIRtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIR.CheckedChanged
         If RadioButtonStatusIRtoIR.Checked Then
-            Me.StatusIRto = "IR"
+            Me.StatusIRtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIW.CheckedChanged
         If RadioButtonStatusIRtoIW.Checked Then
-            Me.StatusIRto = "IW"
+            Me.StatusIRtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoO.CheckedChanged
         If RadioButtonStatusIRtoO.Checked Then
-            Me.StatusIRto = "O"
+            Me.StatusIRtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoR.CheckedChanged
         If RadioButtonStatusIRtoR.Checked Then
-            Me.StatusIRto = "R"
+            Me.StatusIRtoX = 3
         End If
     End Sub
 
     Private Sub RadioButtonStatusIWtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoA.CheckedChanged
         If RadioButtonStatusIWtoA.Checked Then
-            Me.StatusIWto = "A"
+            Me.StatusIWtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoB.CheckedChanged
         If RadioButtonStatusIWtoB.Checked Then
-            Me.StatusIWto = "B"
+            Me.StatusIWtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIR.CheckedChanged
         If RadioButtonStatusIWtoIR.Checked Then
-            Me.StatusIWto = "IR"
+            Me.StatusIWtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIW.CheckedChanged
         If RadioButtonStatusIWtoIW.Checked Then
-            Me.StatusIWto = "IW"
+            Me.StatusIWtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoO.CheckedChanged
         If RadioButtonStatusIWtoO.Checked Then
-            Me.StatusIWto = "O"
+            Me.StatusIWtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoR.CheckedChanged
         If RadioButtonStatusIWtoR.Checked Then
-            Me.StatusIWto = "R"
+            Me.StatusIWtoX = 3
         End If
     End Sub
 
     Private Sub RadioButtonStatusOtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoA.CheckedChanged
         If RadioButtonStatusOtoA.Checked Then
-            Me.StatusOto = "A"
+            Me.StatusOtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusOtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoB.CheckedChanged
         If RadioButtonStatusOtoB.Checked Then
-            Me.StatusOto = "B"
+            Me.StatusOtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusOtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIR.CheckedChanged
         If RadioButtonStatusOtoIR.Checked Then
-            Me.StatusOto = "IR"
+            Me.StatusOtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusOtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIW.CheckedChanged
         If RadioButtonStatusOtoIW.Checked Then
-            Me.StatusOto = "IW"
+            Me.StatusOtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusOtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoO.CheckedChanged
         If RadioButtonStatusOtoO.Checked Then
-            Me.StatusOto = "O"
+            Me.StatusOtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusOtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoR.CheckedChanged
         If RadioButtonStatusOtoR.Checked Then
-            Me.StatusOto = "R"
+            Me.StatusOtoX = 3
         End If
     End Sub
 
     Private Sub RadioButtonStatusRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoA.CheckedChanged
         If RadioButtonStatusRtoA.Checked Then
-            Me.StatusRto = "A"
+            Me.StatusRtoX = 0
         End If
     End Sub
     Private Sub RadioButtonStatusRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoB.CheckedChanged
         If RadioButtonStatusRtoB.Checked Then
-            Me.StatusRto = "B"
+            Me.StatusRtoX = 4
         End If
     End Sub
     Private Sub RadioButtonStatusRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIR.CheckedChanged
         If RadioButtonStatusRtoIR.Checked Then
-            Me.StatusRto = "IR"
+            Me.StatusRtoX = 2
         End If
     End Sub
     Private Sub RadioButtonStatusRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIW.CheckedChanged
         If RadioButtonStatusRtoIW.Checked Then
-            Me.StatusRto = "IW"
+            Me.StatusRtoX = 1
         End If
     End Sub
     Private Sub RadioButtonStatusRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoO.CheckedChanged
         If RadioButtonStatusRtoO.Checked Then
-            Me.StatusRto = "O"
+            Me.StatusRtoX = 5
         End If
     End Sub
     Private Sub RadioButtonStatusRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoR.CheckedChanged
         If RadioButtonStatusRtoR.Checked Then
-            Me.StatusRto = "R"
+            Me.StatusRtoX = 3
         End If
     End Sub
 
@@ -3090,6 +3127,10 @@ Public Class Form_Main
         ' Perform the sort with these new sort options.
         ListViewFiles.Sort()
 
+    End Sub
+
+    Private Sub CheckBoxUseDMForStatusChanges_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseDMForStatusChanges.CheckedChanged
+        Me.UseDMForStatusChanges = CheckBoxUseDMForStatusChanges.Checked
     End Sub
 
 
