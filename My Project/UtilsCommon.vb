@@ -1023,58 +1023,58 @@ Public Class UtilsCommon
             'cf.Commit()
 
         Else
+            ' ######### TO BE REMOVED
+            ''''GetOLEPropValue = ""
 
-            GetOLEPropValue = ""
+            ''''Dim Proceed As Boolean = True
 
-            Dim Proceed As Boolean = True
+            ''''Dim OLEProp As OLEProperty = Nothing
 
-            Dim OLEProp As OLEProperty = Nothing
+            ''''Dim SIList = GetSIList()
+            ''''Dim DSIList = GetDSIList()
+            ''''Dim FunnyList = GetFunnyList()
 
-            Dim SIList = GetSIList()
-            Dim DSIList = GetDSIList()
-            Dim FunnyList = GetFunnyList()
+            ''''Try
+            ''''    If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
+            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
-            Try
-                If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                    Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-                    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+            ''''        OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+            ''''    ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
-                ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                    Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+            ''''        OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
-                    OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
+            ''''    ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
+            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
 
-                ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                    Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-                    Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
+            ''''        OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
-                    OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
+            ''''    Else
+            ''''        If PropertySet.ToLower = "custom" Then
+            ''''            Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+            ''''            Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
 
-                Else
-                    If PropertySet.ToLower = "custom" Then
-                        Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-                        Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
+            ''''            OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+            ''''        End If
 
-                        OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-                    End If
+            ''''    End If
 
-                End If
+            ''''Catch ex As Exception
+            ''''End Try
 
-            Catch ex As Exception
-            End Try
+            ''''If Not IsNothing(OLEProp) Then
 
-            If Not IsNothing(OLEProp) Then
+            ''''    Return OLEProp.Value.ToString
 
-                Return OLEProp.Value.ToString
+            ''''Else
 
-            Else
+            ''''    Return Nothing
 
-                Return Nothing
-
-            End If
+            ''''End If
         End If
 
     End Function
