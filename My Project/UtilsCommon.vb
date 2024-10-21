@@ -875,12 +875,16 @@ Public Class UtilsCommon
                     dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
                     co = dsiStream.AsOLEPropertiesContainer
 
-                    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+                    If Not IsNothing(co.UserDefinedProperties) Then '############# If this is nothing probably it is a FOA file, need a way to handle it F.Arfilli 
+                        OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
+                    End If
+
                 End If
 
             End If
 
         Catch ex As Exception
+
         End Try
 
         If (IsNothing(OLEProp)) And (AddProp) And (PropertySet.ToLower = "custom") Then
