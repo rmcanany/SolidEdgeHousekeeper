@@ -153,9 +153,27 @@ Public Class UtilsFileList
 
                 Case = "Folders"
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-                        FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                                    FileIO.SearchOption.SearchAllSubDirectories,
-                                    ActiveFileExtensionsList.ToArray)
+
+                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name)
+                        Dim tmpFoundFiles As New List(Of String)
+
+                        For Each tmpFolder In tmpFolders
+                            Try
+                                tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
+                                        FileIO.SearchOption.SearchAllSubDirectories,
+                                        ActiveFileExtensionsList.ToArray))
+                            Catch ex As Exception
+                                'Insert here code to handle access errors of a folder
+                            End Try
+
+                        Next
+
+                        FoundFiles = tmpFoundFiles
+
+                        'FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                        'FileIO.SearchOption.SearchAllSubDirectories,
+                        'ActiveFileExtensionsList.ToArray)
+
                     End If
 
                 Case = "csv", "txt"
