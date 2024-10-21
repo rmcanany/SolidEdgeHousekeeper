@@ -294,6 +294,7 @@ Public Class UtilsExecute
     End Sub
 
     Public Sub ProcessFiles(ByVal Filetype As String)
+
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
         Dim msg As String

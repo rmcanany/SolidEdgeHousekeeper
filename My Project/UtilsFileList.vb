@@ -261,28 +261,32 @@ Public Class UtilsFileList
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
 
-                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name)
+                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name, "*", SearchOption.AllDirectories)
                         Dim tmpFoundFiles As New List(Of String)
+                        Dim s As String = ""
 
                         For Each tmpFolder In tmpFolders
 
                             Try
 
                                 tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
-                                FileIO.SearchOption.SearchAllSubDirectories,
+                                FileIO.SearchOption.SearchTopLevelOnly,
                                 ActiveFileExtensionsList.ToArray))
 
                             Catch ex As Exception
 
-                                Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
-                                s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
-                                MsgBox(s, vbOKOnly)
+                                s = String.Format("{0}{1}{2}", s, tmpFolder, vbCrLf)
 
                             End Try
 
                         Next
 
                         FoundFiles = tmpFoundFiles
+
+                        If Not s = "" Then
+                            s = String.Format("The following folder(s) could not be processed and were ignored{0}{1}", vbCrLf, s)
+                            MsgBox(s, vbOKOnly)
+                        End If
 
                         'Try
                         '    FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,

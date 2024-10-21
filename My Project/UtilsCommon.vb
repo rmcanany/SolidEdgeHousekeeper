@@ -569,9 +569,9 @@ Public Class UtilsCommon
         If NewWay Then
             Dim Success As Boolean = True
             Dim NewSecurity As StatusSecurityMapping
-            Dim PropertySetNames As New List(Of String)
-            Dim PropertyNames As New List(Of String)
-            Dim NewValues As New List(Of Object)
+            'Dim PropertySetNames As New List(Of String)
+            'Dim PropertyNames As New List(Of String)
+            'Dim NewValues As New List(Of Object)
 
             Select Case NewStatus
                 Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
@@ -588,11 +588,16 @@ Public Class UtilsCommon
                     NewSecurity = StatusSecurityMapping.ssmReleased
             End Select
 
-            PropertySetNames.AddRange({"System", "System"})
-            PropertyNames.AddRange({"Status", "Security"})
-            NewValues.AddRange({NewStatus, NewSecurity})
+            'PropertySetNames.AddRange({"System", "System"})
+            'PropertyNames.AddRange({"Status", "Security"})
+            'NewValues.AddRange({NewStatus, NewSecurity})
 
-            Success = SetDMPropValue(DMApp, Filename, PropertySetNames, PropertyNames, ModelLinkIdx:=0, AddProp:=False, NewValues)
+            'Success = SetDMPropValueOLD(DMApp, Filename, PropertySetNames, PropertyNames, ModelLinkIdx:=0, AddProp:=False, NewValues)
+
+            Success = SetDMPropValue(DMApp, Filename, "System", "Status", AddProp:=False, NewStatus)
+            If Success Then
+                Success = SetDMPropValue(DMApp, Filename, "System", "Security", AddProp:=False, NewSecurity)
+            End If
 
             Return Success
 
@@ -1075,6 +1080,52 @@ Public Class UtilsCommon
     Public Function SetDMPropValue(
         DMApp As DesignManager.Application,
         Filename As String,
+        PropertySetName As String,
+        PropertyName As String,
+        AddProp As Boolean,
+        NewValue As Object
+        ) As Boolean
+
+        Dim Success As Boolean = True
+
+        Dim Prop As DesignManager.Property
+        Dim PropValue As Object = Nothing
+        Dim OpenReadOnly As Boolean = False
+        Dim PropertySets As DesignManager.PropertySets
+
+        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+        PropertySets.Open(Filename, OpenReadOnly)
+        Prop = GetDMProp(PropertySets, PropertySetName, PropertyName)
+
+        If Prop IsNot Nothing Then
+            Prop.Value = NewValue
+            PropertySets.Save()
+        Else
+            If (PropertySetName = "Custom") And (AddProp) Then
+                ' Can't add a duplicate property
+                Try
+                    Dim PropertySet As DesignManager.Properties = CType(PropertySets.Item("Custom"), DesignManager.Properties)
+                    Prop = CType(PropertySet.Add(PropertyName, ""), DesignManager.Property)
+                    Prop.Value = NewValue
+
+                    'PropertySet.Save()
+                    PropertySets.Save()
+                Catch ex As Exception
+                    Success = False
+                End Try
+
+            End If
+        End If
+
+        PropertySets.Close()
+
+        Return Success
+    End Function
+
+
+    Public Function SetDMPropValueOLD(
+        DMApp As DesignManager.Application,
+        Filename As String,
         PropertySetNames As List(Of String),
         PropertyNames As List(Of String),
         ModelLinkIdx As Integer,
@@ -1082,84 +1133,90 @@ Public Class UtilsCommon
         NewValues As List(Of Object)
         ) As Boolean
 
-        Dim Success As Boolean = True
+        Dim NewWay As Boolean = False
 
-        Dim PropertySets As DesignManager.PropertySets
-        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-        PropertySets.Open(Filename, False)
+        If NewWay Then
 
-        Dim PropertySet As DesignManager.Properties = Nothing
-        Dim Prop As DesignManager.Property = Nothing
-        Dim PropertySetActualNames As New List(Of String)
+        Else
+            Dim Success As Boolean = True
 
-        PropertySetActualNames.Add("SummaryInformation")
-        PropertySetActualNames.Add("ExtendedSummaryInformation")
-        PropertySetActualNames.Add("DocumentSummaryInformation")
-        PropertySetActualNames.Add("ProjectInformation")
-        PropertySetActualNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-        PropertySetActualNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
+            Dim PropertySets As DesignManager.PropertySets
+            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+            PropertySets.Open(Filename, False)
 
-        For i As Integer = 0 To PropertyNames.Count - 1
-            Dim GotAMatch As Boolean = False
+            Dim PropertySet As DesignManager.Properties = Nothing
+            Dim Prop As DesignManager.Property = Nothing
+            Dim PropertySetActualNames As New List(Of String)
 
-            Try
-                For Each PropertySetName In PropertySetActualNames
-                    ' Not all files have all PropertySets
-                    Try
-                        PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-                        For j As Integer = 0 To PropertySet.Count - 1
-                            Prop = CType(PropertySet.Item(j), DesignManager.Property)
-                            If Prop.Name.ToLower = PropertyNames(i).ToLower Then
-                                GotAMatch = True
-                                Exit For
-                            End If
-                        Next
-                    Catch ex As Exception
-                        ' Not an error.
-                    End Try
+            PropertySetActualNames.Add("SummaryInformation")
+            PropertySetActualNames.Add("ExtendedSummaryInformation")
+            PropertySetActualNames.Add("DocumentSummaryInformation")
+            PropertySetActualNames.Add("ProjectInformation")
+            PropertySetActualNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+            PropertySetActualNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
 
-                    If GotAMatch Then
-                        Exit For
-                    End If
-                Next
+            For i As Integer = 0 To PropertyNames.Count - 1
+                Dim GotAMatch As Boolean = False
 
-                If (GotAMatch) And (Prop IsNot Nothing) Then
-                    Dim s = Prop.Name
-                    Prop.Value = NewValues(i)
-                    'PropertySet.Save()
-                Else
-                    Success = False
-                End If
+                Try
+                    For Each PropertySetName In PropertySetActualNames
+                        ' Not all files have all PropertySets
+                        Try
+                            PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                            For j As Integer = 0 To PropertySet.Count - 1
+                                Prop = CType(PropertySet.Item(j), DesignManager.Property)
+                                If Prop.Name.ToLower = PropertyNames(i).ToLower Then
+                                    GotAMatch = True
+                                    Exit For
+                                End If
+                            Next
+                        Catch ex As Exception
+                            ' Not an error.
+                        End Try
 
-                If (Not GotAMatch) And (PropertySetNames(i) = "Custom") And (AddProp) Then
-                    ' Can't add a duplicate property
-                    Try
-                        PropertySet = CType(PropertySets.Item("Custom"), DesignManager.Properties)
-                        Prop = CType(PropertySet.Add(PropertyNames(i), ""), DesignManager.Property)
+                        If GotAMatch Then
+                            Exit For
+                        End If
+                    Next
+
+                    If (GotAMatch) And (Prop IsNot Nothing) Then
+                        Dim s = Prop.Name
                         Prop.Value = NewValues(i)
+                        'PropertySet.Save()
+                    Else
+                        Success = False
+                    End If
 
-                        PropertySet.Save()
-                        'PropertySets.Save()
-                    Catch ex As Exception
-                        ' Might want to report an error.
-                    End Try
+                    If (Not GotAMatch) And (PropertySetNames(i) = "Custom") And (AddProp) Then
+                        ' Can't add a duplicate property
+                        Try
+                            PropertySet = CType(PropertySets.Item("Custom"), DesignManager.Properties)
+                            Prop = CType(PropertySet.Add(PropertyNames(i), ""), DesignManager.Property)
+                            Prop.Value = NewValues(i)
 
-                End If
+                            PropertySet.Save()
+                            'PropertySets.Save()
+                        Catch ex As Exception
+                            ' Might want to report an error.
+                        End Try
 
-                PropertySets.Save()
+                    End If
 
-            Catch ex2 As Exception
-                Success = False
-                Exit For
-            End Try
-        Next
+                    PropertySets.Save()
 
-        PropertySets.Save()
-        If PropertySets IsNot Nothing Then
-            PropertySets.Close()
+                Catch ex2 As Exception
+                    Success = False
+                    Exit For
+                End Try
+            Next
+
+            PropertySets.Save()
+            If PropertySets IsNot Nothing Then
+                PropertySets.Close()
+            End If
+
+            Return Success
         End If
-
-        Return Success
 
     End Function
 
@@ -1171,80 +1228,22 @@ Public Class UtilsCommon
         AddProp As Boolean
         ) As String
 
-        Dim MyWay As Boolean = True
+        Dim PropValue As String = Nothing
 
-        If MyWay Then
-            Dim PropValue As String = Nothing
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
 
-            Dim dsiStream As CFStream = Nothing
-            Dim co As OLEPropertiesContainer = Nothing
-            Dim OLEProp As OLEProperty = Nothing
+        OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=False, dsiStream, co)
 
-            OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=False, dsiStream, co)
-
-            If OLEProp IsNot Nothing Then
-                PropValue = OLEProp.Value.ToString
-            End If
-
-            Return PropValue
-
-            'co.Save(dsiStream)
-            'cf.Commit()
-
-        Else
-            ' ######### TO BE REMOVED
-            ''''GetOLEPropValue = ""
-
-            ''''Dim Proceed As Boolean = True
-
-            ''''Dim OLEProp As OLEProperty = Nothing
-
-            ''''Dim SIList = GetSIList()
-            ''''Dim DSIList = GetDSIList()
-            ''''Dim FunnyList = GetFunnyList()
-
-            ''''Try
-            ''''    If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("SummaryInformation")
-            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            ''''        OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-            ''''    ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            ''''        OLEProp = System_Properties.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-            ''''    ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-            ''''        Dim System_Stream As CFStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-            ''''        Dim System_Properties As OLEPropertiesContainer = System_Stream.AsOLEPropertiesContainer
-
-            ''''        OLEProp = System_Properties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
-
-            ''''    Else
-            ''''        If PropertySet.ToLower = "custom" Then
-            ''''            Dim Custom_Stream As CFStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            ''''            Dim Custom_Properties As OLEPropertiesContainer = Custom_Stream.AsOLEPropertiesContainer
-
-            ''''            OLEProp = Custom_Properties.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-            ''''        End If
-
-            ''''    End If
-
-            ''''Catch ex As Exception
-            ''''End Try
-
-            ''''If Not IsNothing(OLEProp) Then
-
-            ''''    Return OLEProp.Value.ToString
-
-            ''''Else
-
-            ''''    Return Nothing
-
-            ''''End If
+        If OLEProp IsNot Nothing Then
+            PropValue = OLEProp.Value.ToString
         End If
+
+        Return PropValue
+
+        'co.Save(dsiStream)
+        'cf.Commit()
 
     End Function
 
@@ -1281,115 +1280,40 @@ Public Class UtilsCommon
         Dim OLEProp As OLEProperty = Nothing
 
 
-        Dim MyWay As Boolean = True
+        If PropertySet = "Duplicate" Then PropertySet = "System"
 
-        If MyWay Then
+        OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
 
-            If PropertySet = "Duplicate" Then PropertySet = "System"
+        If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-            OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=True, dsiStream, co)
+            Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
 
-            If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
+                Case = VTPropertyType.VT_BOOL
+                    OLEProp.Value = CType(PropertyValue, Boolean)
+                Case = VTPropertyType.VT_I4
+                    OLEProp.Value = CType(PropertyValue, Integer)
+                Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                    OLEProp.Value = PropertyValue
+                Case = VTPropertyType.VT_FILETIME
+                    OLEProp.Value = CType(PropertyValue, DateTime)
+                Case = VTPropertyType.VT_R8
+                    OLEProp.Value = CType(PropertyValue, Double)
 
-                Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
+            End Select
 
-                    Case = VTPropertyType.VT_BOOL
-                        OLEProp.Value = CType(PropertyValue, Boolean)
-                    Case = VTPropertyType.VT_I4
-                        OLEProp.Value = CType(PropertyValue, Integer)
-                    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
-                        OLEProp.Value = PropertyValue
-                    Case = VTPropertyType.VT_FILETIME
-                        OLEProp.Value = CType(PropertyValue, DateTime)
-                    Case = VTPropertyType.VT_R8
-                        OLEProp.Value = CType(PropertyValue, Double)
+            co.Save(dsiStream)
+            cf.Commit()
 
-                End Select
+            UpdateSingleProperty = True
 
-                co.Save(dsiStream)
-                cf.Commit()
-
-                UpdateSingleProperty = True
-
-            End If
-
-            cf.Close()
-            cf = Nothing
-            fs.Close()
-            fs = Nothing
-            System.Windows.Forms.Application.DoEvents()
-
-        Else
-            ''Dim dsiStream As CFStream = Nothing
-            ''Dim co As OLEPropertiesContainer = Nothing
-            ''Dim OLEProp As OLEProperty = Nothing
-
-            'Dim SIList = GetSIList()
-            'Dim DSIList = GetDSIList()
-            'Dim FunnyList = GetFunnyList()
-
-            'If (SIList.Contains(PropertyNameEnglish)) Then
-            '    dsiStream = cf.RootStorage.GetStream("SummaryInformation")
-            '    co = dsiStream.AsOLEPropertiesContainer
-
-            '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-            'ElseIf (DSIList.Contains(PropertyNameEnglish)) Then
-            '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            '    co = dsiStream.AsOLEPropertiesContainer
-
-            '    OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
-
-            'ElseIf (FunnyList.Contains(PropertyNameEnglish)) Then
-            '    dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
-            '    co = dsiStream.AsOLEPropertiesContainer
-
-            '    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
-
-            'Else  ' Hopefully a Custom Property
-
-            '    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
-            '    co = dsiStream.AsOLEPropertiesContainer
-
-            '    OLEProp = co.UserDefinedProperties.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName = PropertyNameEnglish)
-
-            '    If IsNothing(OLEProp) Then ' Add it
-
-            '        Try
-            '            Dim userProperties = co.UserDefinedProperties
-            '            Dim newPropertyId As UInteger = 2 'For some reason when custom property is empty there is an hidden property therefore the starting index must be 2
-
-            '            If userProperties.PropertyNames.Keys.Count > 0 Then newPropertyId = CType(userProperties.PropertyNames.Keys.Max() + 1, UInteger)
-            '            'This is the ID the new property will have
-            '            'Duplicated IDs are not allowed
-            '            'We need a method to calculate an unique ID; .Max() seems a good one cause .Max() + 1 should be unique
-            '            'Alternatively we need a method that find unused IDs inbetwen existing one; this will find unused IDs from previous property deletion
-
-            '            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-            '            OLEProp = userProperties.NewProperty(VTPropertyType.VT_LPSTR, newPropertyId)
-            '            OLEProp.Value = " "
-            '            userProperties.AddProperty(OLEProp)
-            '            Dim i = 0
-            '        Catch ex As Exception
-
-            '            MsgBox("Could not change property", vbOKOnly)
-
-            '        End Try
-
-            '    End If
-
-            'End If
-
-            'OLEProp.Value = PropertyValue
-
-            'co.Save(dsiStream)
-            'cf.Commit()
-            'cf.Close()
-            'cf = Nothing
-            'fs.Close()
-            'fs = Nothing
-            'System.Windows.Forms.Application.DoEvents()
         End If
+
+        cf.Close()
+        cf = Nothing
+        fs.Close()
+        fs = Nothing
+        System.Windows.Forms.Application.DoEvents()
+
 
     End Function
 
