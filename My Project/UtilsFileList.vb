@@ -93,14 +93,34 @@ Public Class UtilsFileList
         End If
 
         ' Only remaining items should be in the "Sources" group.
+        Dim tmpFoundFiles As New List(Of String)
+
         For Each item As ListViewItem In ListViewFiles.Items
-            UpdateListViewFiles(item, BareTopLevelAssembly)
+            tmpFoundFiles.AddRange(GetFoundFilesFiles(item, BareTopLevelAssembly))
         Next
+
+        tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+
+        Dim FoundFiles As IReadOnlyCollection(Of String)
+        FoundFiles = tmpFoundFiles
+
 
         'DragDropCache.Clear()
         'For Each item As ListViewItem In ListViewFiles.Items
         '    DragDropCache.Add(item)
         'Next
+
+        ' Populate ListView
+        If Not FoundFiles Is Nothing Then
+            PopulateListView(FoundFiles)
+
+        Else
+            'TextBoxStatus.Text = "No files found"
+        End If
+
+
+        FMain.StopProcess = False
+        FMain.ButtonCancel.Text = "Cancel"
 
         ListViewFiles.EndUpdate()
 
@@ -119,9 +139,10 @@ Public Class UtilsFileList
 
     End Sub
 
-    Public Sub UpdateListViewFiles(
+    Private Function GetFoundFilesFiles(
         Source As ListViewItem,
-        BareTopLevelAssembly As Boolean)
+        BareTopLevelAssembly As Boolean
+        ) As IReadOnlyCollection(Of String)
 
         Dim FoundFiles As IReadOnlyCollection(Of String) = Nothing
         Dim ActiveFileExtensionsList As New List(Of String)
@@ -145,38 +166,44 @@ Public Class UtilsFileList
 
             Select Case Source.Tag.ToString
                 Case = "Folder"
+                    FMain.TextBoxStatus.Text = String.Format("Processing folder '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    System.Windows.Forms.Application.DoEvents()
+
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-                        FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                        Try
+                            FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
                                      FileIO.SearchOption.SearchTopLevelOnly,
                                      ActiveFileExtensionsList.ToArray)
+                        Catch ex As Exception
+                            Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                            s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                            MsgBox(s, vbOKOnly)
+                            FoundFiles = Nothing
+                            'Exit Sub
+                        End Try
                     End If
 
                 Case = "Folders"
+                    FMain.TextBoxStatus.Text = String.Format("Processing folders '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    System.Windows.Forms.Application.DoEvents()
+
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
-
-                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name)
-                        Dim tmpFoundFiles As New List(Of String)
-
-                        For Each tmpFolder In tmpFolders
-                            Try
-                                tmpFoundFiles.AddRange(FileIO.FileSystem.GetFiles(tmpFolder,
-                                        FileIO.SearchOption.SearchAllSubDirectories,
-                                        ActiveFileExtensionsList.ToArray))
-                            Catch ex As Exception
-                                'Insert here code to handle access errors of a folder
-                            End Try
-
-                        Next
-
-                        FoundFiles = tmpFoundFiles
-
-                        'FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                        'FileIO.SearchOption.SearchAllSubDirectories,
-                        'ActiveFileExtensionsList.ToArray)
-
+                        Try
+                            FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
+                                    FileIO.SearchOption.SearchAllSubDirectories,
+                                    ActiveFileExtensionsList.ToArray)
+                        Catch ex As Exception
+                            Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
+                            s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
+                            MsgBox(s, vbOKOnly)
+                            FoundFiles = Nothing
+                            'Exit Sub
+                        End Try
                     End If
 
                 Case = "csv", "txt"
+                    FMain.TextBoxStatus.Text = String.Format("Processing list '{0}'", System.IO.Path.GetFileName(Source.Name))
+
                     If FileIO.FileSystem.FileExists(Source.Name) Then
 
                         Dim tmpFoundFiles = IO.File.ReadAllLines(Source.Name)
@@ -190,6 +217,8 @@ Public Class UtilsFileList
                     End If
 
                 Case = "excel"
+                    FMain.TextBoxStatus.Text = String.Format("Processing excel '{0}'", System.IO.Path.GetFileName(Source.Name))
+
                     If FileIO.FileSystem.FileExists(Source.Name) Then
                         FoundFiles = UC.ReadExcel(Source.Name)
                     End If
@@ -206,6 +235,9 @@ Public Class UtilsFileList
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
 
                 Case = "asm"
+                    FMain.TextBoxStatus.Text = String.Format("Processing top level assy '{0}'", System.IO.Path.GetFileName(Source.Name))
+                    System.Windows.Forms.Application.DoEvents()
+
                     FoundFiles = ProcessTLA(BareTopLevelAssembly, Source, ActiveFileExtensionsList)
 
                 Case Else
@@ -263,36 +295,57 @@ Public Class UtilsFileList
             End If
         End If
 
-        ' Populate ListView
-        If Not FoundFiles Is Nothing Then
-            PopulateListView(FoundFiles)
+        '' Populate ListView
+        'If Not FoundFiles Is Nothing Then
+        '    PopulateListView(FoundFiles)
 
-        Else
-            'TextBoxStatus.Text = "No files found"
-        End If
+        'Else
+        '    'TextBoxStatus.Text = "No files found"
+        'End If
 
 
-        FMain.StopProcess = False
-        FMain.ButtonCancel.Text = "Cancel"
+        'FMain.StopProcess = False
+        'FMain.ButtonCancel.Text = "Cancel"
 
-    End Sub
+        Return FoundFiles
+    End Function
 
 
     Public Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
 
         Dim UC As New UtilsCommon
         Dim tf As Boolean
+        Dim NumProcessed As Integer = 0
+        Dim PopulatePropertyColumns As Boolean = True
+
+        ' ###### User input for displaying file properties for a large number of files.
+        If (FMain.ListOfColumns.Count > 2) And (FoundFiles.Count > 1000) Then
+            Dim s As String = String.Format("Getting file properties on {0} files can take some time.  ", FoundFiles.Count)
+            s = String.Format("{0}Do you want to have them displayed anyway?", s)
+            Dim Result As MsgBoxResult = MsgBox(s, vbYesNo)
+            If Result = MsgBoxResult.No Then
+                PopulatePropertyColumns = False
+            End If
+        End If
 
         ListViewFiles.BeginUpdate()
 
         For Each FoundFile In FoundFiles
 
             FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
-            System.Windows.Forms.Application.DoEvents()
+            If NumProcessed Mod 100 = 0 Then
+                System.Windows.Forms.Application.DoEvents()
+                If FMain.StopProcess Then
+                    Exit For
+                End If
 
-            tf = UC.FilenameIsOK(FoundFile)
+            End If
+
+
+            tf = True
+            tf = tf And UC.FilenameIsOK(FoundFile)
             tf = tf And IO.File.Exists(FoundFile)
-            tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))
+            'tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))
 
             If tf Then
 
@@ -315,10 +368,13 @@ Public Class UtilsFileList
 
                 ListViewFiles.Items.Add(tmpLVItem)
 
-                UpdateLVItem(tmpLVItem)
+                If PopulatePropertyColumns Then
+                    UpdateLVItem(tmpLVItem)
+                End If
 
             End If
 
+            NumProcessed += 1
         Next
 
         'Resetting the columns
@@ -957,7 +1013,7 @@ Public Class UtilsFileList
     End Sub
 
     Private Sub UpdateLVItem(LVItem As ListViewItem)
-        If LVItem.Group.Name <> "Sources" Then
+        If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
             Dim UC As New UtilsCommon
             Try
                 Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors

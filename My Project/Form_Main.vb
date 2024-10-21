@@ -2928,21 +2928,6 @@ Public Class Form_Main
 
             If Not ListOfColumns.Contains(tmpColumn) Then
 
-                'Dim tmpListOfColumns As New List(Of PropertyColumn)
-                'For Each PropColumn In Me.ListOfColumns
-                '    tmpListOfColumns.Add(PropColumn)
-                'Next
-
-                'tmpListOfColumns.Add(tmpColumn)
-                'CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
-
-                'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
-
-                'Dim UFL As New UtilsFileList(Me, ListViewFiles)
-                'Me.Cursor = Cursors.WaitCursor
-                'UFL.UpdatePropertiesColumns()
-                'Me.Cursor = Cursors.Default
-
                 ListOfColumns.Add(tmpColumn)
                 CLB_Properties.Items.Add(tmpColumn.Name, tmpColumn.Visible)
 
@@ -2983,8 +2968,6 @@ Public Class Form_Main
 
         Next
 
-        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
-
     End Sub
 
     Private Sub ListViewFiles_ColumnWidthChanged(sender As Object, e As ColumnWidthChangedEventArgs) Handles ListViewFiles.ColumnWidthChanged
@@ -2998,14 +2981,6 @@ Public Class Form_Main
                     If ListViewFiles.Columns.Item(e.ColumnIndex).Width <> 0 Then 'We don't want to store a value of 0, column visibility is a different property
 
                         ListOfColumns.Item(e.ColumnIndex).Width = ListViewFiles.Columns.Item(e.ColumnIndex).Width
-
-                        '' We don't need to update everytime the width change, the width is saved on close ######### F.Arfilli
-                        'Dim tmpListOfColumns As New List(Of PropertyColumn)
-                        'For Each PropColumn In Me.ListOfColumns
-                        '    tmpListOfColumns.Add(PropColumn)
-                        'Next
-
-                        'Me.ListOfColumns = tmpListOfColumns  ' Trigger update
 
                     End If
                 End If
@@ -3058,6 +3033,7 @@ Public Class Form_Main
         Dim PropertyName As String = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
 
         ' Template propertydict doesn't contain manually added properties, a method that adds them to the dictionary is needed
+        ' Done 20241015 -Robert
         Try
             PropertySet = TemplatePropertyDict(PropertyName)("PropertySet")
             PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
@@ -3067,6 +3043,9 @@ Public Class Form_Main
             PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
         End Try
 
+        'hitinfo.Item.Name 'File to edit
+        'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
+        'hitinfo.SubItem.Text 'New value
 
         If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
             hitinfo.SubItem.Text = editbox.Text
@@ -3074,10 +3053,6 @@ Public Class Form_Main
         End If
 
         editbox.Hide()
-
-        'hitinfo.Item.Name 'File to edit
-        'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
-        'hitinfo.SubItem.Text 'New value
 
     End Sub
 
