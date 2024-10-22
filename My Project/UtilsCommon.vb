@@ -556,6 +556,35 @@ Public Class UtilsCommon
         Return Status
     End Function
 
+    Public Function GetOLEStatus(Filename As String) As SolidEdgeConstants.DocumentStatus
+
+        Dim Status As SolidEdgeConstants.DocumentStatus = Nothing
+
+        Dim fs As FileStream = Nothing
+
+        Try
+            fs = New FileStream(Filename, FileMode.Open, FileAccess.ReadWrite)
+        Catch ex As Exception
+        End Try
+
+        If fs IsNot Nothing Then
+            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+            Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+            Dim dsiStream As CFStream = Nothing
+            Dim co As OLEPropertiesContainer = Nothing
+            Dim OLEProp As OLEProperty = Nothing
+
+            Status = CType(CInt(GetOLEPropValue(cf, "System", "Status", AddProp:=False)), SolidEdgeConstants.DocumentStatus)
+
+            cf.Close()
+            fs.Close()
+        End If
+
+
+
+        Return Status
+    End Function
+
     Public Function SetDMStatus(
         DMApp As DesignManager.Application,
         Filename As String,
@@ -564,102 +593,65 @@ Public Class UtilsCommon
         ) As Boolean
         ' https://community.sw.siemens.com/s/question/0D54O000061wzRaSAI/changing-document-status
 
-        Dim NewWay As Boolean = True
+        Dim Success As Boolean = True
+        Dim NewSecurity As StatusSecurityMapping
 
-        If NewWay Then
-            Dim Success As Boolean = True
-            Dim NewSecurity As StatusSecurityMapping
-            'Dim PropertySetNames As New List(Of String)
-            'Dim PropertyNames As New List(Of String)
-            'Dim NewValues As New List(Of Object)
+        Select Case NewStatus
+            Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                NewSecurity = StatusSecurityMapping.ssmAvailable
+            Case SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                NewSecurity = StatusSecurityMapping.ssmBaselined
+            Case SolidEdgeConstants.DocumentStatus.igStatusInReview
+                NewSecurity = StatusSecurityMapping.ssmInReview
+            Case SolidEdgeConstants.DocumentStatus.igStatusInWork
+                NewSecurity = StatusSecurityMapping.ssmInWork
+            Case SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                NewSecurity = StatusSecurityMapping.ssmObsolete
+            Case SolidEdgeConstants.DocumentStatus.igStatusReleased
+                NewSecurity = StatusSecurityMapping.ssmReleased
+        End Select
 
-            Select Case NewStatus
-                Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
-                    NewSecurity = StatusSecurityMapping.ssmAvailable
-                Case SolidEdgeConstants.DocumentStatus.igStatusBaselined
-                    NewSecurity = StatusSecurityMapping.ssmBaselined
-                Case SolidEdgeConstants.DocumentStatus.igStatusInReview
-                    NewSecurity = StatusSecurityMapping.ssmInReview
-                Case SolidEdgeConstants.DocumentStatus.igStatusInWork
-                    NewSecurity = StatusSecurityMapping.ssmInWork
-                Case SolidEdgeConstants.DocumentStatus.igStatusObsolete
-                    NewSecurity = StatusSecurityMapping.ssmObsolete
-                Case SolidEdgeConstants.DocumentStatus.igStatusReleased
-                    NewSecurity = StatusSecurityMapping.ssmReleased
-            End Select
-
-            'PropertySetNames.AddRange({"System", "System"})
-            'PropertyNames.AddRange({"Status", "Security"})
-            'NewValues.AddRange({NewStatus, NewSecurity})
-
-            'Success = SetDMPropValueOLD(DMApp, Filename, PropertySetNames, PropertyNames, ModelLinkIdx:=0, AddProp:=False, NewValues)
-
-            Success = SetDMPropValue(DMApp, Filename, "System", "Status", AddProp:=False, NewStatus)
-            If Success Then
-                Success = SetDMPropValue(DMApp, Filename, "System", "Security", AddProp:=False, NewSecurity)
-            End If
-
-            Return Success
-
-        Else
-            Dim Success As Boolean = True
-
-            Try
-                Dim PropertySets As DesignManager.PropertySets
-                Dim PropertySet As DesignManager.Properties
-                Dim Prop As DesignManager.Property
-
-                PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-                PropertySets.Open(Filename, False)
-
-                PropertySet = CType(PropertySets.Item("ExtendedSummaryInformation"), DesignManager.Properties)
-
-                Prop = CType(PropertySet.Item("Status"), DesignManager.Property)
-
-                Prop.Value = NewStatus
-
-
-                PropertySets.Save()
-
-                PropertySet = CType(PropertySets.Item("SummaryInformation"), DesignManager.Properties)
-                Prop = CType(PropertySet.Item("Security"), DesignManager.Property)
-
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                    Prop.Value = StatusSecurityMapping.ssmAvailable
-                End If
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-                    Prop.Value = StatusSecurityMapping.ssmBaselined
-                End If
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-                    Prop.Value = StatusSecurityMapping.ssmInReview
-                End If
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-                    Prop.Value = StatusSecurityMapping.ssmInWork
-                End If
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-                    Prop.Value = StatusSecurityMapping.ssmObsolete
-                End If
-                If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-                    Prop.Value = StatusSecurityMapping.ssmReleased
-                End If
-
-                PropertySets.Save()
-                PropertySets.Close()
-
-                'DMApp.Quit()
-            Catch ex As Exception
-                Success = False
-            End Try
-
-            Return Success
+        Success = SetDMPropValue(DMApp, Filename, "System", "Status", AddProp:=False, NewStatus)
+        If Success Then
+            Success = SetDMPropValue(DMApp, Filename, "System", "Security", AddProp:=False, NewSecurity)
         End If
 
-
-
+        Return Success
 
 
     End Function
 
+    Public Function SetOLEStatus(
+        Filename As String,
+        NewStatus As SolidEdgeConstants.DocumentStatus
+        ) As Boolean
+
+        Dim Success As Boolean
+        Dim NewSecurity As StatusSecurityMapping
+
+        Select Case NewStatus
+            Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                NewSecurity = StatusSecurityMapping.ssmAvailable
+            Case SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                NewSecurity = StatusSecurityMapping.ssmBaselined
+            Case SolidEdgeConstants.DocumentStatus.igStatusInReview
+                NewSecurity = StatusSecurityMapping.ssmInReview
+            Case SolidEdgeConstants.DocumentStatus.igStatusInWork
+                NewSecurity = StatusSecurityMapping.ssmInWork
+            Case SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                NewSecurity = StatusSecurityMapping.ssmObsolete
+            Case SolidEdgeConstants.DocumentStatus.igStatusReleased
+                NewSecurity = StatusSecurityMapping.ssmReleased
+        End Select
+
+        Success = SetOLEPropValue(Filename, "System", "Status", CStr(NewStatus))
+        If Success Then
+            Success = SetOLEPropValue(Filename, "System", "Doc_Security", CStr(NewSecurity))
+        End If
+
+        Return Success
+
+    End Function
 
     Public Function CompareListOfColumns(A As List(Of PropertyColumn), B As List(Of PropertyColumn)) As Boolean
         Dim IsEqual As Boolean = True
@@ -868,6 +860,13 @@ Public Class UtilsCommon
                 dsiStream = tmpStorage.GetStream("SummaryInformation")
                 co = dsiStream.AsOLEPropertiesContainer
 
+                'Dim PropNamesDict = co.PropertyNames  ' ###### Nothing
+
+                'For Each key In PropNamesDict.Keys
+                '    Dim s = co.PropertyNames(key)
+                '    Dim i As Integer = 0
+                'Next
+
                 OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
             ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
@@ -913,7 +912,7 @@ Public Class UtilsCommon
             End If
 
         Catch ex As Exception
-
+            Dim i As Integer = 0
         End Try
 
         If (IsNothing(OLEProp)) And (AddProp) And (PropertySet.ToLower = "custom") Then
@@ -1265,10 +1264,10 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function UpdateSingleProperty(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String) As Boolean
+    Public Function SetOLEPropValue(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String) As Boolean
 
 
-        UpdateSingleProperty = False
+        SetOLEPropValue = False
 
 
         ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
@@ -1285,7 +1284,7 @@ Public Class UtilsCommon
         Next
 
         If fs Is Nothing Then
-            MsgBox("Could not change property", vbOKOnly)
+            'MsgBox("Could not change property", vbOKOnly)
 
             Exit Function
 
@@ -1322,7 +1321,7 @@ Public Class UtilsCommon
             co.Save(dsiStream)
             cf.Commit()
 
-            UpdateSingleProperty = True
+            SetOLEPropValue = True
 
         End If
 
@@ -1338,6 +1337,7 @@ Public Class UtilsCommon
     Public Function GetSIList() As List(Of String)
         Dim SIList As New List(Of String)
         SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Doc_Security"})
+        'SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Security"})
         Return SIList
     End Function
 

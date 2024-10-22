@@ -3084,7 +3084,7 @@ Public Class Form_Main
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
         'hitinfo.SubItem.Text 'New value
 
-        If UC.UpdateSingleProperty(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
+        If UC.SetOLEPropValue(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
             hitinfo.SubItem.Text = editbox.Text
             hitinfo.SubItem.BackColor = Color.Empty
         End If

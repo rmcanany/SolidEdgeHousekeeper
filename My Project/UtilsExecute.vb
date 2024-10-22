@@ -34,10 +34,6 @@ Public Class UtilsExecute
 
         FMain.SaveSettings()  ' Updates JSON Properties and saves settings
 
-        'Dim UP As New UtilsPreferences
-        'UP.SaveFormMainSettings(FMain)
-        'UP.SaveTaskList(FMain.TaskList)
-
         ErrorMessage = CheckStartConditions()
 
         If ErrorMessage <> "" Then
@@ -363,7 +359,7 @@ Public Class UtilsExecute
 
         Next
 
-        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
+        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (DMApp IsNot Nothing) Then
             DMApp.Quit()
         End If
 
@@ -380,10 +376,6 @@ Public Class UtilsExecute
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
-        'Dim LabelText As String
-        'Dim ModifiedFilename As String
-        'Dim OriginalFilename As String
-        'Dim RemnantsFilename As String
 
         Dim ActiveWindow As SolidEdgeFramework.Window
         Dim ActiveSheetWindow As SolidEdgeDraft.SheetWindow
@@ -394,13 +386,6 @@ Public Class UtilsExecute
 
         Dim Proceed As Boolean = True
 
-        ' Account for infrequent malfunctions on a large number of files.
-        TotalAborts -= 0.1
-        If TotalAborts < 0 Then
-            TotalAborts = 0
-        End If
-
-        ' ###### Deal with Document Status before the file is opened in SE
         Dim OldStatus As SolidEdgeConstants.DocumentStatus
         Dim StatusChangeSuccessful As Boolean
 
@@ -411,6 +396,14 @@ Public Class UtilsExecute
         Dim dsiStream As CFStream = Nothing
         Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
+
+        ' Account for infrequent malfunctions on a large number of files.
+        TotalAborts -= 0.1
+        If TotalAborts < 0 Then
+            TotalAborts = 0
+        End If
+
+        ' ###### Deal with Document Status before the file is opened in SE
 
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
             If FMain.UseDMForStatusChanges Then
@@ -423,20 +416,24 @@ Public Class UtilsExecute
                     End If
                 End If
 
-                Dim tmpStatus = UC.GetDMStatus(DMApp, Path)
                 SEApp.DoIdle()
             Else
-                'Try
-                '    fs = New System.IO.FileStream(Path, System.IO.FileMode.Open, System.IO.FileAccess.ReadWrite)
-                'Catch ex As Exception
-                'End Try
-                'If fs IsNot Nothing Then
-                '    cfg = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                '    cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-                '    OLEProp = UC.GetOLEProp(cf, "System", "Status", AddProp:=False, dsiStream, co)
-                '    OldOLEStatus = CInt(OLEProp.Value)
-                'End If
+                MsgBox("Status changing not currently working for Structured Storage")
 
+                OldStatus = UC.GetOLEStatus(Path)
+
+                If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                    StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+                    If Not StatusChangeSuccessful Then
+                        ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+                    End If
+                End If
+
+                'Dim tmpProp = UC.GetOLEStatus(Path)
+                'Dim x = UC.SetOLEPropValue(Path, "System", "Doc_Security", "4")
+                'x = UC.SetOLEPropValue(Path, "System", "Status", "4")
+                'StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
+                'Dim i = 0
 
             End If
 
@@ -519,13 +516,9 @@ Public Class UtilsExecute
 
                 ' Deal with Document Status after the file is closed is SE
                 If FMain.ProcessAsAvailable Then
-                    If FMain.UseDMForStatusChanges Then
-                        Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
-                        If Not s = "" Then
-                            ErrorMessagesCombined(s) = New List(Of String) From {""}
-                        End If
-                    Else
-
+                    Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
+                    If Not s = "" Then
+                        ErrorMessagesCombined(s) = New List(Of String) From {""}
                     End If
 
                 End If
@@ -601,15 +594,16 @@ Public Class UtilsExecute
         Path As String) As String
 
         Dim ErrorMessage As String = ""
-        Dim StatusChangeSuccessful As Boolean
+        Dim StatusChangeSuccessful As Boolean = True
 
         Dim UC As New UtilsCommon
 
         If FMain.RadioButtonProcessAsAvailableRevert.Checked Then
             If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
-                If Not StatusChangeSuccessful Then
-                    ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+                If FMain.UseDMForStatusChanges Then
+                    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
+                Else
+                    StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
                 End If
             End If
         End If
@@ -618,15 +612,21 @@ Public Class UtilsExecute
             Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
 
             If Not OldStatus = NewStatus Then
-                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
-                If Not StatusChangeSuccessful Then
-                    ErrorMessage = String.Format("Change status to '{0}' did not succeed", NewStatus.ToString)
+                If FMain.UseDMForStatusChanges Then
+                    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
+                Else
+                    StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
                 End If
             End If
 
         End If
 
-            Return ErrorMessage
+        If Not StatusChangeSuccessful Then
+            ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+        End If
+
+        Return ErrorMessage
+
     End Function
 
     Private Function GetNewStatus(OldStatus As SolidEdgeConstants.DocumentStatus) As SolidEdgeConstants.DocumentStatus
