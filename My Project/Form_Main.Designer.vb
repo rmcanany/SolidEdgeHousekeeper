@@ -2368,9 +2368,9 @@ Partial Class Form_Main
         '
         Me.TableLayoutPanel1.ColumnCount = 4
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonProcess, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.ButtonCancel, 2, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxStatus, 0, 0)
@@ -2390,10 +2390,10 @@ Partial Class Form_Main
         Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonProcess.Image = Global.Housekeeper.My.Resources.Resources.Play
         Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonProcess.Location = New System.Drawing.Point(210, 28)
+        Me.ButtonProcess.Location = New System.Drawing.Point(171, 28)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonProcess.Name = "ButtonProcess"
-        Me.ButtonProcess.Size = New System.Drawing.Size(113, 35)
+        Me.ButtonProcess.Size = New System.Drawing.Size(126, 35)
         Me.ButtonProcess.TabIndex = 3
         Me.ButtonProcess.Text = "Process"
         Me.ButtonProcess.UseVisualStyleBackColor = True
@@ -2404,10 +2404,10 @@ Partial Class Form_Main
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
         Me.ButtonCancel.Image = Global.Housekeeper.My.Resources.Resources.Close
         Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonCancel.Location = New System.Drawing.Point(327, 28)
+        Me.ButtonCancel.Location = New System.Drawing.Point(301, 28)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(113, 35)
+        Me.ButtonCancel.Size = New System.Drawing.Size(126, 35)
         Me.ButtonCancel.TabIndex = 2
         Me.ButtonCancel.Text = "Cancel"
         Me.ButtonCancel.UseVisualStyleBackColor = True
@@ -2417,9 +2417,9 @@ Partial Class Form_Main
         Me.ButtonHelp.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
         Me.ButtonHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.ButtonHelp.Location = New System.Drawing.Point(445, 29)
+        Me.ButtonHelp.Location = New System.Drawing.Point(432, 29)
         Me.ButtonHelp.Name = "ButtonHelp"
-        Me.ButtonHelp.Size = New System.Drawing.Size(111, 33)
+        Me.ButtonHelp.Size = New System.Drawing.Size(124, 33)
         Me.ButtonHelp.TabIndex = 4
         Me.ButtonHelp.Text = "Help"
         Me.ButtonHelp.UseVisualStyleBackColor = True

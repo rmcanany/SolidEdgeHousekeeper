@@ -3133,6 +3133,16 @@ Public Class Form_Main
         Me.UseDMForStatusChanges = CheckBoxUseDMForStatusChanges.Checked
     End Sub
 
+    Private Sub ListViewFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListViewFiles.SelectedIndexChanged
+
+        If ListViewFiles.SelectedItems.Count > 0 Then
+            ButtonProcess.Text = "    Process selected"
+        Else
+            ButtonProcess.Text = "Process"
+        End If
+
+    End Sub
+
 
     ' Commands I can never remember
 
