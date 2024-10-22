@@ -1177,12 +1177,6 @@ Public Class UtilsFileList
 
 
 
-
-
-
-
-
-
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon
                 Try
