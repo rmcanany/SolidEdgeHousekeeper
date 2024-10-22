@@ -521,11 +521,11 @@ Public Class UtilsFileList
                     "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
                     "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
 
-                ListViewFiles.Items.Add(tmpLVItem)
-
                 If PopulatePropertyColumns Then
                     UpdateLVItem(tmpLVItem)
                 End If
+
+                ListViewFiles.Items.Add(tmpLVItem)
 
             End If
 
