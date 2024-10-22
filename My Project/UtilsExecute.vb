@@ -301,13 +301,6 @@ Public Class UtilsExecute
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
 
-        Dim DMApp As DesignManager.Application = Nothing
-        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
-            DMApp = New DesignManager.Application
-            DMApp.Visible = 1
-            SEApp.Activate()
-        End If
-
         Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
 
         If Filetype = "Assembly" Then
@@ -322,6 +315,13 @@ Public Class UtilsExecute
             MsgBox("In ProcessFiles(), Filetype not recognized: " + Filetype + ".  Exiting...")
             SEApp.Quit()
             End
+        End If
+
+        Dim DMApp As DesignManager.Application = Nothing
+        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (FilesToProcess.Count > 0) Then
+            DMApp = New DesignManager.Application
+            DMApp.Visible = 1
+            SEApp.Activate()
         End If
 
         For Each FileToProcess In FilesToProcess
