@@ -261,7 +261,12 @@ Public Class UtilsFileList
 
                     If FileIO.FileSystem.DirectoryExists(Source.Name) Then
 
-                        Dim tmpFolders As String() = Directory.GetDirectories(Source.Name, "*", SearchOption.AllDirectories)
+                        Dim tmplist = GetAllDirectories(Source.Name)
+
+                        Dim tmpFolders As String() ' = Directory.GetDirectories(Source.Name, "*", SearchOption.AllDirectories)
+
+                        tmpFolders = tmplist.ToArray
+
                         Dim tmpFoundFiles As New List(Of String)
                         Dim s As String = ""
 
@@ -410,6 +415,55 @@ Public Class UtilsFileList
 
         Return FoundFiles
     End Function
+
+
+
+
+
+    Private Function GetAllDirectories(ByVal Path As String) As List(Of String)
+
+        Dim tmpList As New List(Of String)
+
+        GetMyDirectories(Path, tmpList)
+
+        Return tmpList
+
+    End Function
+
+    Public Sub GetMyDirectories(ByVal Path As String, ByRef DirectoriesList As List(Of String))
+
+        Try
+
+            Dim tmpList As String() = IO.Directory.GetDirectories(Path, "*.*", IO.SearchOption.TopDirectoryOnly)
+            'Get Current Directories
+            DirectoriesList.AddRange(tmpList)
+
+            'Loop  over sub-directories
+            For Each subDirectory As String In IO.Directory.GetDirectories(Path, "*.*", IO.SearchOption.TopDirectoryOnly)
+
+                Me.GetMyDirectories(subDirectory, DirectoriesList)
+
+            Next
+
+        Catch ex As UnauthorizedAccessException
+            'Access Denied exception
+
+        Catch ex1 As Exception
+            'Other exceptions
+
+        End Try
+
+    End Sub
+
+
+
+
+
+
+
+
+
+
 
 
     Public Sub PopulateListView(FoundFiles As IReadOnlyCollection(Of String))
