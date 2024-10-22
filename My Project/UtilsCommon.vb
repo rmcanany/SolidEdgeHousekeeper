@@ -860,27 +860,30 @@ Public Class UtilsCommon
             PropertySet = "System"
         End If
 
+        Dim tmpStorage As CFStorage = FOA_Storage(cf)
+        If IsNothing(tmpStorage) Then tmpStorage = cf.RootStorage
+
         Try
             If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                dsiStream = cf.RootStorage.GetStream("SummaryInformation")
+                dsiStream = tmpStorage.GetStream("SummaryInformation")
                 co = dsiStream.AsOLEPropertiesContainer
 
                 OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
             ElseIf (DSIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                dsiStream = tmpStorage.GetStream("DocumentSummaryInformation")
                 co = dsiStream.AsOLEPropertiesContainer
 
                 OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
             ElseIf (FunnyList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                dsiStream = cf.RootStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
+                dsiStream = tmpStorage.GetStream("Rfunnyd1AvtdbfkuIaamtae3Ie")
                 co = dsiStream.AsOLEPropertiesContainer
 
                 OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
             ElseIf (ExtendedList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
-                dsiStream = cf.RootStorage.GetStream("C3teagxwOttdbfkuIaamtae3Ie")
+                dsiStream = tmpStorage.GetStream("C3teagxwOttdbfkuIaamtae3Ie")
                 co = dsiStream.AsOLEPropertiesContainer
 
                 OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
@@ -888,7 +891,7 @@ Public Class UtilsCommon
             ElseIf PropertyNameEnglish = "Material" And (PropertySet.ToLower = "system") Then
 
                 Try ' I haven't found a way from cf to get the file name and check for extension that doesn't have to be ASM or DFT 'F.Arfilli
-                    dsiStream = cf.RootStorage.GetStream("K4teagxwOttdbfkuIaamtae3Ie")
+                    dsiStream = tmpStorage.GetStream("K4teagxwOttdbfkuIaamtae3Ie")
                     co = dsiStream.AsOLEPropertiesContainer
 
                     OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName.ToLower = PropertyNameEnglish.ToLower)
@@ -898,7 +901,7 @@ Public Class UtilsCommon
 
             Else
                 If PropertySet.ToLower = "custom" Then
-                    dsiStream = cf.RootStorage.GetStream("DocumentSummaryInformation")
+                    dsiStream = tmpStorage.GetStream("DocumentSummaryInformation")
                     co = dsiStream.AsOLEPropertiesContainer
 
                     If Not IsNothing(co.UserDefinedProperties) Then '############# If this is nothing probably it is a FOA file, need a way to handle it F.Arfilli 
@@ -942,6 +945,21 @@ Public Class UtilsCommon
         Return OLEProp
 
     End Function
+
+
+
+    Public Function FOA_Storage(CF As CompoundFile) As CFStorage
+
+        Try
+            Dim tmpStorage = CF.RootStorage.GetStorage("Master")
+            Return tmpStorage
+        Catch ex As Exception
+            Return Nothing
+        End Try
+
+    End Function
+
+
 
     Public Function GetDMProp(
         PropertySets As DesignManager.PropertySets,
