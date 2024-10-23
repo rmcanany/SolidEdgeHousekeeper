@@ -644,9 +644,9 @@ Public Class UtilsCommon
                 NewSecurity = StatusSecurityMapping.ssmReleased
         End Select
 
-        Success = SetOLEPropValue(Filename, "System", "Status", CStr(NewStatus))
+        Success = SetOLEPropValue(Filename, "System", "Doc_Security", CStr(NewSecurity))
         If Success Then
-            Success = SetOLEPropValue(Filename, "System", "Doc_Security", CStr(NewSecurity))
+            Success = SetOLEPropValue(Filename, "System", "Status", CStr(NewStatus))
         End If
 
         Return Success
@@ -1270,18 +1270,7 @@ Public Class UtilsCommon
         SetOLEPropValue = False
 
 
-        ' https://stackoverflow.com/questions/26741191/ioexception-the-process-cannot-access-the-file-file-path-because-it-is-being
-        Dim Retries As Integer = 3
-        Dim RetryDelay As Integer = 1000
-        Dim fs As FileStream = Nothing
-        For Retry As Integer = 0 To Retries
-            Try
-                fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-                Exit For
-            Catch ex As Exception
-                System.Threading.Thread.Sleep(RetryDelay)
-            End Try
-        Next
+        Dim fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
 
         If fs Is Nothing Then
             'MsgBox("Could not change property", vbOKOnly)

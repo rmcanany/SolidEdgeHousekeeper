@@ -53,23 +53,6 @@ Public Class UtilsFileList
             End If
         Next
 
-        'Dim tmpListViewFiles As New ListView
-        'Dim TagName As String
-
-        'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-        '    If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
-        '        tmpListViewFiles.Items.Add(ListViewFiles.Items.Item(i))
-        '    Else
-        '        TagName = CType(ListViewFiles.Items.Item(i).Tag, String)
-        '        If Not GroupTags.Contains(TagName) Then
-        '            GroupTags.Add(TagName)
-        '        End If
-        '    End If
-        'Next
-
-        'ListViewFiles = tmpListViewFiles
-
-
         If Not GroupTags.Contains("asm") Then
 
             If GroupTags.Contains("ASM_Folder") Then
@@ -500,7 +483,7 @@ Public Class UtilsFileList
             tf = True
             tf = tf And UC.FilenameIsOK(FoundFile)
             tf = tf And IO.File.Exists(FoundFile)
-            'tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))
+            'tf = tf And (Not ListViewFiles.Items.ContainsKey(FoundFile))  '###### Duplicates are removed from FoundFiles before calling this method.
 
             If tf Then
 
@@ -1174,8 +1157,9 @@ Public Class UtilsFileList
 
         '#### For some reason LVItem.Bounds.Bottom return a wrong value, ListViewCollapsible is the suspect
         'If LVItem.Bounds.IntersectsWith(FMain.ListViewFiles.ClientRectangle) Then
-
-
+        Dim x = LVItem.Bounds
+        Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
+        Dim z = FMain.ListViewFiles.ClientRectangle
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon

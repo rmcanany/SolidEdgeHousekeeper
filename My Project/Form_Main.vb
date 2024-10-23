@@ -1167,85 +1167,9 @@ Public Class Form_Main
         End If
     End Sub
 
-    'Public Sub ReconcileFormChanges(Optional UpdateFileList As Boolean = False)
-
-    '    'Dim UD As New UtilsDefaults(Me)
-
-    '    ' Update configuration
-    '    'Configuration = UD.GetConfiguration()
-
-    '    'Dim backcolor As New Color
-    '    'backcolor = BT_Update.BackColor
-
-    '    'BT_Update.BackColor = Color.FromName("Control")
-
-    '    'If ListViewFilesOutOfDate Then
-    '    '    BT_Update.BackColor = Color.Orange
-    '    'Else
-    '    '    BT_Update.BackColor = Color.FromName("Control")
-    '    'End If
-
-    '    'If Not CheckBoxProcessAsAvailable.Checked Then
-    '    '    Dim StatusChangeRadioButtons As New List(Of RadioButton)
-    '    '    Dim RB As RadioButton
-
-    '    '    StatusChangeRadioButtons = GetStatusChangeRadioButtons()
-
-    '    '    RadioButtonProcessAsAvailableRevert.Enabled = False
-    '    '    RadioButtonProcessAsAvailableChange.Enabled = False
-    '    '    For Each RB In StatusChangeRadioButtons
-    '    '        RB.Enabled = False
-    '    '    Next
-    '    'End If
-
-    'End Sub
-
-    'Public Function GetControlDict(Exclude As Boolean) As Dictionary(Of String, Control)
-    '    Dim ControlDict As New Dictionary(Of String, Control)
-    '    ControlDict = RecurseFormControls(Me, ControlDict, Exclude)
-    '    Return ControlDict
-    'End Function
-
-    'Public Function RecurseFormControls(Ctrl As Control,
-    '                                     ControlDict As Dictionary(Of String, Control),
-    '                                     Exclude As Boolean
-    '                                     ) As Dictionary(Of String, Control)
-
-    '    Dim ChildControl As Control
-    '    Dim tf As Boolean
-    '    Dim ExcludeControls As New List(Of String)
-
-    '    ExcludeControls.Add(Me.new_CheckBoxEnablePropertyFilter.Name)
-    '    ' ExcludeControls.Add(ListViewFiles.Name)
-
-    '    tf = TypeOf Ctrl Is ContainerControl
-    '    tf = tf Or TypeOf Ctrl Is TabControl
-    '    tf = tf Or TypeOf Ctrl Is TabPage
-    '    tf = tf Or TypeOf Ctrl Is GroupBox
-    '    tf = tf Or TypeOf Ctrl Is ExTableLayoutPanel
-    '    'tf = Ctrl.HasChildren
-
-    '    If tf Then
-    '        For Each ChildControl In Ctrl.Controls
-    '            ControlDict = RecurseFormControls(ChildControl, ControlDict, Exclude)
-    '        Next
-    '    Else
-    '        tf = TypeOf Ctrl Is Button  ' Don't need to save buttons or labels.
-    '        tf = tf Or TypeOf Ctrl Is Label
-    '        If Exclude Then
-    '            tf = tf Or ExcludeControls.Contains(Ctrl.Name)
-    '        End If
-
-    '        If Not tf Then
-    '            ControlDict.Add(Ctrl.Name, Ctrl)
-    '        End If
-    '    End If
-
-    '    Return ControlDict
-    'End Function
-
 
     ' **************** CONTROLS ****************
+
     ' BUTTONS
 
 
@@ -1637,108 +1561,6 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub New_UpdateFileList()
-
-    '    Me.Cursor = Cursors.WaitCursor
-
-    '    Dim GroupTags As New List(Of String)
-    '    Dim BareTopLevelAssembly As Boolean = False
-    '    Dim msg As String
-
-    '    Dim ElapsedTime As Double
-    '    Dim ElapsedTimeText As String
-
-    '    StartTime = Now
-
-
-    '    TextBoxStatus.Text = "Updating list..."
-    '    LabelTimeRemaining.Text = ""
-    '    System.Windows.Forms.Application.DoEvents()
-
-    '    ListViewFiles.BeginUpdate()
-
-    '    ' Remove everything except the "Sources" group.
-    '    For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-    '        If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-    '            ListViewFiles.Items.Item(i).Remove()
-    '        Else
-    '            GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-    '        End If
-    '    Next
-
-    '    If (GroupTags.Contains("ASM_Folder")) And Not (GroupTags.Contains("asm")) Then
-    '        msg = "A top level assembly folder was found with no top level assembly.  "
-    '        msg += "Please add an assembly, or delete the folder(s)."
-    '        ListViewFiles.EndUpdate()
-    '        Me.Cursor = Cursors.Default
-    '        TextBoxStatus.Text = ""
-    '        MsgBox(msg, vbOKOnly)
-    '        Exit Sub
-    '    End If
-
-    '    If (RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(TextBoxFastSearchScopeFilename.Text)) Then
-    '        msg = "Fast search scope file (on Configuration Tab) not found" + Chr(13)
-    '        ListViewFiles.EndUpdate()
-    '        Me.Cursor = Cursors.Default
-    '        TextBoxStatus.Text = ""
-    '        MsgBox(msg, vbOKOnly)
-    '        Exit Sub
-    '    End If
-
-    '    If (GroupTags.Contains("asm")) And Not (GroupTags.Contains("ASM_Folder")) Then
-
-    '        'If CheckBoxWarnBareTLA.Enabled And CheckBoxWarnBareTLA.Checked Then
-    '        If CheckBoxWarnBareTLA.Checked Then
-    '            msg = "A top-level assembly with no top-level folder detected.  "
-    '            msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
-    '            msg += "Click OK to continue, or Cancel to stop." + vbCrLf
-    '            msg += "Disable this message on the Configuration tab."
-    '            Dim result As MsgBoxResult = MsgBox(msg, vbOKCancel)
-    '            If result = MsgBoxResult.Ok Then
-    '                BareTopLevelAssembly = True
-    '            Else
-    '                ListViewFiles.EndUpdate()
-    '                Me.Cursor = Cursors.Default
-    '                TextBoxStatus.Text = ""
-    '                Exit Sub
-    '            End If
-    '        Else
-    '            BareTopLevelAssembly = True
-    '        End If
-    '    End If
-
-    '    Dim UFL As New UtilsFileList(Me, ListViewFiles)
-
-    '    ' Only remaining items should be in the "Sources" group.
-    '    For Each item As ListViewItem In ListViewFiles.Items
-    '        UFL.UpdateListViewFiles(item, BareTopLevelAssembly)
-    '    Next
-
-    '    'DragDropCache.Clear()
-    '    'For Each item As ListViewItem In ListViewFiles.Items
-    '    '    DragDropCache.Add(item)
-    '    'Next
-
-    '    ListViewFiles.EndUpdate()
-
-    '    Me.Cursor = Cursors.Default
-    '    'If TextBoxStatus.Text = "Updating list..." Then
-    '    '    TextBoxStatus.Text = "No files found"
-    '    'End If
-
-    '    ElapsedTime = Now.Subtract(StartTime).TotalMinutes
-    '    If ElapsedTime < 60 Then
-    '        ElapsedTimeText = "in " + ElapsedTime.ToString("0.0") + " min."
-    '    Else
-    '        ElapsedTimeText = "in " + (ElapsedTime / 60).ToString("0.0") + " hr."
-    '    End If
-
-
-    '    Dim filecount As Integer = ListViewFiles.Items.Count - ListViewFiles.Groups.Item("Sources").Items.Count
-    '    TextBoxStatus.Text = String.Format("{0} files found in {1}", filecount, ElapsedTimeText)
-
-
-    'End Sub
 
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
 
@@ -2173,14 +1995,6 @@ Public Class Form_Main
             Next
         End If
 
-        'If CheckBoxProcessAsAvailable.Checked Then
-        'Else
-        '    RadioButtonProcessAsAvailableRevert.Enabled = False
-        '    RadioButtonProcessAsAvailableChange.Enabled = False
-        '    For Each RB In StatusChangeRadioButtons
-        '        RB.Enabled = False
-        '    Next
-        'End If
     End Sub
 
     Private Sub RadioButtonProcessAsAvailableRevert_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonProcessAsAvailableRevert.CheckedChanged
@@ -2906,14 +2720,6 @@ Public Class Form_Main
         ListViewFiles.Columns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
         CLB_Properties.Items.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
-        '###### We don't need to update at each removal, settings are saved on close
-        'Dim tmpListOfColumns As New List(Of PropertyColumn)
-        'For Each PropColumn In Me.ListOfColumns
-        '    tmpListOfColumns.Add(PropColumn)
-        'Next
-        'tmpListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
-        'Me.ListOfColumns = tmpListOfColumns  ' Trigger property update
-
         Me.ListOfColumns.RemoveAt(CInt(BT_DeleteCLBItem.Tag))
 
     End Sub
@@ -2979,13 +2785,6 @@ Public Class Form_Main
     End Sub
 
     Private Sub CLB_Properties_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CLB_Properties.ItemCheck
-
-
-        '######### We don't want to store visibility information each time it change, it is saved on application close
-        'Dim tmpListOfColumns As New List(Of PropertyColumn)
-        'For Each PropColumn In Me.ListOfColumns
-        '    tmpListOfColumns.Add(PropColumn)
-        'Next
 
         For Each item In Me.ListOfColumns ' tmpListOfColumns
 
