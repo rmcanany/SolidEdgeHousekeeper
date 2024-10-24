@@ -425,7 +425,7 @@ Public Class UtilsExecute
                 MsgBox("Status changing not currently working for Structured Storage")
 
                 OldStatus = UC.GetOLEStatus(Path)
-                OldStatus = UC.GetOLEStatus(Path)
+                'OldStatus = UC.GetOLEStatus(Path)
 
                 If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
                     StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
