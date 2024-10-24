@@ -407,8 +407,14 @@ Public Class UtilsExecute
 
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
 
-            ' ###### Temporarily disable OLE processing
-            FMain.UseDMForStatusChanges = True
+            '' ###### Temporarily disable OLE processing
+
+            'Dim tmpDisableOLEPropProcessing As Boolean = False
+
+            'If tmpDisableOLEPropProcessing Then
+            '    FMain.UseDMForStatusChanges = True
+
+            'End If
 
             If FMain.UseDMForStatusChanges Then
                 OldStatus = UC.GetDMStatus(DMApp, Path)
@@ -422,25 +428,31 @@ Public Class UtilsExecute
 
                 SEApp.DoIdle()
             Else
+
                 MsgBox("Status changing not currently working for Structured Storage")
+                'If tmpDisableOLEPropProcessing Then
+                'Else
 
-                'OldStatus = UC.GetOLEStatus(Path)
-                'OldStatus = UC.GetOLEStatus(Path)
+                '    OldStatus = UC.GetOLEStatus(Path)
+                '    OldStatus = UC.GetOLEStatus(Path)
 
-                'If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-                '    If Not StatusChangeSuccessful Then
-                '        ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+                '    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                '        StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+                '        If Not StatusChangeSuccessful Then
+                '            ErrorMessagesCombined("Change status to Available did not succeed") = New List(Of String) From {""}
+                '        End If
                 '    End If
-                'End If
 
-                'Dim tmpProp As SolidEdgeConstants.DocumentStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
-                'tmpProp = UC.GetOLEStatus(Path)
-                'tmpProp = UC.GetOLEStatus(Path)
-                'Dim x = UC.SetOLEPropValue(Path, "System", "Doc_Security", "4")
-                'x = UC.SetOLEPropValue(Path, "System", "Status", "4")
-                'StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
-                'Dim i = 0
+                '    Dim tmpProp As SolidEdgeConstants.DocumentStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                '    tmpProp = UC.GetOLEStatus(Path)
+                '    tmpProp = UC.GetOLEStatus(Path)
+                '    Dim x = UC.SetOLEPropValue(Path, "System", "Doc_Security", "4")
+                '    x = UC.SetOLEPropValue(Path, "System", "Status", "4")
+                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
+                '    Dim i = 0
+
+                ' End If
+
 
             End If
 

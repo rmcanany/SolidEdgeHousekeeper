@@ -1140,102 +1140,102 @@ Public Class UtilsCommon
     End Function
 
 
-    Public Function SetDMPropValueOLD(
-        DMApp As DesignManager.Application,
-        Filename As String,
-        PropertySetNames As List(Of String),
-        PropertyNames As List(Of String),
-        ModelLinkIdx As Integer,
-        AddProp As Boolean,
-        NewValues As List(Of Object)
-        ) As Boolean
+    'Public Function SetDMPropValueOLD(
+    '    DMApp As DesignManager.Application,
+    '    Filename As String,
+    '    PropertySetNames As List(Of String),
+    '    PropertyNames As List(Of String),
+    '    ModelLinkIdx As Integer,
+    '    AddProp As Boolean,
+    '    NewValues As List(Of Object)
+    '    ) As Boolean
 
-        Dim NewWay As Boolean = False
+    '    Dim NewWay As Boolean = False
 
-        If NewWay Then
+    '    If NewWay Then
 
-        Else
-            Dim Success As Boolean = True
+    '    Else
+    '        Dim Success As Boolean = True
 
-            Dim PropertySets As DesignManager.PropertySets
-            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            PropertySets.Open(Filename, False)
+    '        Dim PropertySets As DesignManager.PropertySets
+    '        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+    '        PropertySets.Open(Filename, False)
 
-            Dim PropertySet As DesignManager.Properties = Nothing
-            Dim Prop As DesignManager.Property = Nothing
-            Dim PropertySetActualNames As New List(Of String)
+    '        Dim PropertySet As DesignManager.Properties = Nothing
+    '        Dim Prop As DesignManager.Property = Nothing
+    '        Dim PropertySetActualNames As New List(Of String)
 
-            PropertySetActualNames.Add("SummaryInformation")
-            PropertySetActualNames.Add("ExtendedSummaryInformation")
-            PropertySetActualNames.Add("DocumentSummaryInformation")
-            PropertySetActualNames.Add("ProjectInformation")
-            PropertySetActualNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-            PropertySetActualNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
+    '        PropertySetActualNames.Add("SummaryInformation")
+    '        PropertySetActualNames.Add("ExtendedSummaryInformation")
+    '        PropertySetActualNames.Add("DocumentSummaryInformation")
+    '        PropertySetActualNames.Add("ProjectInformation")
+    '        PropertySetActualNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+    '        PropertySetActualNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
 
-            For i As Integer = 0 To PropertyNames.Count - 1
-                Dim GotAMatch As Boolean = False
+    '        For i As Integer = 0 To PropertyNames.Count - 1
+    '            Dim GotAMatch As Boolean = False
 
-                Try
-                    For Each PropertySetName In PropertySetActualNames
-                        ' Not all files have all PropertySets
-                        Try
-                            PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-                            For j As Integer = 0 To PropertySet.Count - 1
-                                Prop = CType(PropertySet.Item(j), DesignManager.Property)
-                                If Prop.Name.ToLower = PropertyNames(i).ToLower Then
-                                    GotAMatch = True
-                                    Exit For
-                                End If
-                            Next
-                        Catch ex As Exception
-                            ' Not an error.
-                        End Try
+    '            Try
+    '                For Each PropertySetName In PropertySetActualNames
+    '                    ' Not all files have all PropertySets
+    '                    Try
+    '                        PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+    '                        For j As Integer = 0 To PropertySet.Count - 1
+    '                            Prop = CType(PropertySet.Item(j), DesignManager.Property)
+    '                            If Prop.Name.ToLower = PropertyNames(i).ToLower Then
+    '                                GotAMatch = True
+    '                                Exit For
+    '                            End If
+    '                        Next
+    '                    Catch ex As Exception
+    '                        ' Not an error.
+    '                    End Try
 
-                        If GotAMatch Then
-                            Exit For
-                        End If
-                    Next
+    '                    If GotAMatch Then
+    '                        Exit For
+    '                    End If
+    '                Next
 
-                    If (GotAMatch) And (Prop IsNot Nothing) Then
-                        Dim s = Prop.Name
-                        Prop.Value = NewValues(i)
-                        'PropertySet.Save()
-                    Else
-                        Success = False
-                    End If
+    '                If (GotAMatch) And (Prop IsNot Nothing) Then
+    '                    Dim s = Prop.Name
+    '                    Prop.Value = NewValues(i)
+    '                    'PropertySet.Save()
+    '                Else
+    '                    Success = False
+    '                End If
 
-                    If (Not GotAMatch) And (PropertySetNames(i) = "Custom") And (AddProp) Then
-                        ' Can't add a duplicate property
-                        Try
-                            PropertySet = CType(PropertySets.Item("Custom"), DesignManager.Properties)
-                            Prop = CType(PropertySet.Add(PropertyNames(i), ""), DesignManager.Property)
-                            Prop.Value = NewValues(i)
+    '                If (Not GotAMatch) And (PropertySetNames(i) = "Custom") And (AddProp) Then
+    '                    ' Can't add a duplicate property
+    '                    Try
+    '                        PropertySet = CType(PropertySets.Item("Custom"), DesignManager.Properties)
+    '                        Prop = CType(PropertySet.Add(PropertyNames(i), ""), DesignManager.Property)
+    '                        Prop.Value = NewValues(i)
 
-                            PropertySet.Save()
-                            'PropertySets.Save()
-                        Catch ex As Exception
-                            ' Might want to report an error.
-                        End Try
+    '                        PropertySet.Save()
+    '                        'PropertySets.Save()
+    '                    Catch ex As Exception
+    '                        ' Might want to report an error.
+    '                    End Try
 
-                    End If
+    '                End If
 
-                    PropertySets.Save()
+    '                PropertySets.Save()
 
-                Catch ex2 As Exception
-                    Success = False
-                    Exit For
-                End Try
-            Next
+    '            Catch ex2 As Exception
+    '                Success = False
+    '                Exit For
+    '            End Try
+    '        Next
 
-            PropertySets.Save()
-            If PropertySets IsNot Nothing Then
-                PropertySets.Close()
-            End If
+    '        PropertySets.Save()
+    '        If PropertySets IsNot Nothing Then
+    '            PropertySets.Close()
+    '        End If
 
-            Return Success
-        End If
+    '        Return Success
+    '    End If
 
-    End Function
+    'End Function
 
 
     Public Function GetOLEPropValue(

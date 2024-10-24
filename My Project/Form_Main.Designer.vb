@@ -1819,6 +1819,9 @@ Partial Class Form_Main
         '
         Me.CheckBoxUseDMForStatusChanges.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxUseDMForStatusChanges.AutoSize = True
+        Me.CheckBoxUseDMForStatusChanges.Checked = True
+        Me.CheckBoxUseDMForStatusChanges.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxUseDMForStatusChanges.Enabled = False
         Me.CheckBoxUseDMForStatusChanges.Location = New System.Drawing.Point(3, 35)
         Me.CheckBoxUseDMForStatusChanges.Name = "CheckBoxUseDMForStatusChanges"
         Me.CheckBoxUseDMForStatusChanges.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)

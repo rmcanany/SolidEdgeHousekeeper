@@ -276,18 +276,6 @@ Public Class UtilsFileList
                             MsgBox(s, vbOKOnly)
                         End If
 
-                        'Try
-                        '    FoundFiles = FileIO.FileSystem.GetFiles(Source.Name,
-                        '            FileIO.SearchOption.SearchAllSubDirectories,
-                        '            ActiveFileExtensionsList.ToArray)
-                        'Catch ex As Exception
-                        '    Dim s As String = "An error occurred searching for files.  Please rectify the error and try again."
-                        '    s = String.Format("{0}{1}{2}", s, vbCrLf, ex.ToString)
-                        '    MsgBox(s, vbOKOnly)
-                        '    FoundFiles = Nothing
-                        '    'Exit Sub
-                        'End Try
-
                     End If
 
                 Case = "csv", "txt"
@@ -336,65 +324,6 @@ Public Class UtilsFileList
 
 
         End If
-
-        '' Remove problem files
-        'If Not FoundFiles Is Nothing Then
-        '    FoundFiles = RemoveProblemFiles(FoundFiles, ActiveFileExtensionsList)
-        'End If
-
-
-        '' Dependency sort
-        'If Not FoundFiles Is Nothing Then
-        '    If FMain.RadioButtonSortDependency.Checked Then
-        '        FoundFiles = GetDependencySortedFiles(FoundFiles)
-        '    End If
-        'End If
-
-
-        '' Run filters
-        'If Not FoundFiles Is Nothing Then
-
-        '    ' Filter by file wildcard search
-        '    If FMain.CheckBoxEnableFileWildcard.Checked Then
-        '        FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
-        '    End If
-
-        '    ' Filter by properties
-        '    If FMain.CheckBoxEnablePropertyFilter.Checked Then
-        '        System.Threading.Thread.Sleep(1000)
-        '        Dim UPF As New UtilsPropertyFilters(Me.FMain)
-        '        FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
-        '    End If
-
-        '    If FMain.RadioButtonSortAlphabetical.Checked Then
-        '        FoundFiles = SortAlphabetical(FoundFiles)
-        '    End If
-
-        '    If FMain.RadioButtonSortRandomSample.Checked Then
-        '        Dim Fraction As Double = 0.1
-        '        Try
-        '            Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
-        '        Catch ex As Exception
-        '            Fraction = 0.1
-        '            Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
-        '            s = String.Format("{0}Using default {1} instead.", s, Fraction)
-        '            MsgBox(s)
-        '        End Try
-        '        FoundFiles = SortRandomSample(FoundFiles, Fraction)
-        '    End If
-        'End If
-
-        '' Populate ListView
-        'If Not FoundFiles Is Nothing Then
-        '    PopulateListView(FoundFiles)
-
-        'Else
-        '    'TextBoxStatus.Text = "No files found"
-        'End If
-
-
-        'FMain.StopProcess = False
-        'FMain.ButtonCancel.Text = "Cancel"
 
         Return FoundFiles
     End Function
@@ -1157,9 +1086,9 @@ Public Class UtilsFileList
 
         '#### For some reason LVItem.Bounds.Bottom return a wrong value, ListViewCollapsible is the suspect
         'If LVItem.Bounds.IntersectsWith(FMain.ListViewFiles.ClientRectangle) Then
-        Dim x = LVItem.Bounds
-        Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
-        Dim z = FMain.ListViewFiles.ClientRectangle
+        'Dim x = LVItem.Bounds
+        'Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
+        'Dim z = FMain.ListViewFiles.ClientRectangle
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon
