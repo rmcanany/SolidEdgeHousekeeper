@@ -422,10 +422,10 @@ Public Class UtilsExecute
 
                 SEApp.DoIdle()
             Else
-                MsgBox("Status changing not currently working for Structured Storage")
+                'MsgBox("Status changing not currently working for Structured Storage")
 
                 OldStatus = UC.GetOLEStatus(Path)
-                'OldStatus = UC.GetOLEStatus(Path)
+                'OldStatus = UC.GetOLEStatus(Path) '<--------- Why double ?
 
                 If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
                     StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
@@ -436,7 +436,7 @@ Public Class UtilsExecute
 
                 Dim tmpProp As SolidEdgeConstants.DocumentStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased
                 tmpProp = UC.GetOLEStatus(Path)
-                tmpProp = UC.GetOLEStatus(Path)
+                'tmpProp = UC.GetOLEStatus(Path) '<--------- Why double ?
                 Dim x = UC.SetOLEPropValue(Path, "System", "Doc_Security", "4")
                 x = UC.SetOLEPropValue(Path, "System", "Status", "4")
                 StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)

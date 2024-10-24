@@ -885,13 +885,7 @@ Public Class UtilsCommon
                 dsiStream = tmpStorage.GetStream("C3teagxwOttdbfkuIaamtae3Ie")
                 co = dsiStream.AsOLEPropertiesContainer
 
-                '################################################ Insert to avoid DLL dictionary names problem
-                If PropertyNameEnglish = "Status" Then
-                    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & "0x00000007" & "*")
-                Else
-                    OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
-                End If
-
+                OLEProp = co.Properties.FirstOrDefault(Function(Proper) Proper.PropertyName.ToLower Like "*" & PropertyNameEnglish.ToLower & "*")
 
             ElseIf PropertyNameEnglish = "Material" And (PropertySet.ToLower = "system") Then
 
