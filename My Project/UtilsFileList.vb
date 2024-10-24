@@ -504,25 +504,27 @@ Public Class UtilsFileList
                     "Date created: " & tmpFinfo.CreationTime.ToShortDateString() & vbCrLf &
                     "Date modified: " & tmpFinfo.LastWriteTime.ToShortDateString()
 
-                If PopulatePropertyColumns Then
-                    UpdateLVItem(tmpLVItem)
-                End If
-
                 ListViewFiles.Items.Add(tmpLVItem)
+
+                'If PopulatePropertyColumns Then
+                '    UpdateLVItem(tmpLVItem)
+                'End If
 
             End If
 
             NumProcessed += 1
         Next
 
-        'Resetting the columns
-        If ListViewFiles.Columns.Count > 2 Then
-            Do Until ListViewFiles.Columns.Count = 2
-                ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-            Loop
-        End If
+        If PopulatePropertyColumns Then UpdatePropertiesColumns()
 
-        CreateColumns()
+        ''Resetting the columns
+        'If ListViewFiles.Columns.Count > 2 Then
+        '    Do Until ListViewFiles.Columns.Count = 2
+        '        ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
+        '    Loop
+        'End If
+
+        'CreateColumns()
 
         ListViewFiles.EndUpdate()
 
@@ -1157,9 +1159,9 @@ Public Class UtilsFileList
 
         '#### For some reason LVItem.Bounds.Bottom return a wrong value, ListViewCollapsible is the suspect
         'If LVItem.Bounds.IntersectsWith(FMain.ListViewFiles.ClientRectangle) Then
-        Dim x = LVItem.Bounds
-        Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
-        Dim z = FMain.ListViewFiles.ClientRectangle
+        'Dim x = LVItem.Bounds
+        'Dim y = LVItem.GetBounds(ItemBoundsPortion.Entire)
+        'Dim z = FMain.ListViewFiles.ClientRectangle
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon
