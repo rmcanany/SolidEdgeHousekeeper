@@ -216,7 +216,7 @@ Public Class Form_Main
 
                 StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-                'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+                CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
                 If RadioButtonProcessAsAvailableChange.Checked Then
@@ -1986,7 +1986,7 @@ Public Class Form_Main
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+        CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
         If RadioButtonProcessAsAvailableChange.Checked Then
