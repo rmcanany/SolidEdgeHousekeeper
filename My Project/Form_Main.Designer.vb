@@ -187,6 +187,12 @@ Partial Class Form_Main
         Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
         Me.ButtonUpdateTemplateProperties = New System.Windows.Forms.Button()
         Me.LabelUpdateProperties = New System.Windows.Forms.Label()
+        Me.TabPageServerQuery = New System.Windows.Forms.TabPage()
+        Me.ExTableLayoutPanel9 = New Housekeeper.ExTableLayoutPanel()
+        Me.TextBoxServerConnectionString = New System.Windows.Forms.TextBox()
+        Me.TextBoxServerQuery = New System.Windows.Forms.TextBox()
+        Me.LabelServerConnectionString = New System.Windows.Forms.Label()
+        Me.LabelServerQuery = New System.Windows.Forms.Label()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
@@ -220,12 +226,6 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.TabPageServerQuery = New System.Windows.Forms.TabPage()
-        Me.ExTableLayoutPanel9 = New Housekeeper.ExTableLayoutPanel()
-        Me.TextBoxServerConnectionString = New System.Windows.Forms.TextBox()
-        Me.TextBoxServerQuery = New System.Windows.Forms.TextBox()
-        Me.LabelServerConnectionString = New System.Windows.Forms.Label()
-        Me.LabelServerQuery = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -254,13 +254,13 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.SuspendLayout()
         Me.TabPageTemplates.SuspendLayout()
         Me.ExTableLayoutPanel1.SuspendLayout()
+        Me.TabPageServerQuery.SuspendLayout()
+        Me.ExTableLayoutPanel9.SuspendLayout()
         Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
-        Me.TabPageServerQuery.SuspendLayout()
-        Me.ExTableLayoutPanel9.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -2153,6 +2153,75 @@ Partial Class Form_Main
         Me.LabelUpdateProperties.TabIndex = 16
         Me.LabelUpdateProperties.Text = "Update template properties for use in property dialogs"
         '
+        'TabPageServerQuery
+        '
+        Me.TabPageServerQuery.Controls.Add(Me.ExTableLayoutPanel9)
+        Me.TabPageServerQuery.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageServerQuery.Name = "TabPageServerQuery"
+        Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageServerQuery.Size = New System.Drawing.Size(534, 803)
+        Me.TabPageServerQuery.TabIndex = 8
+        Me.TabPageServerQuery.Text = "Server Query"
+        Me.TabPageServerQuery.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel9
+        '
+        Me.ExTableLayoutPanel9.ColumnCount = 1
+        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerQuery, 0, 3)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
+        Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
+        Me.ExTableLayoutPanel9.Name = "ExTableLayoutPanel9"
+        Me.ExTableLayoutPanel9.RowCount = 5
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(528, 797)
+        Me.ExTableLayoutPanel9.TabIndex = 0
+        Me.ExTableLayoutPanel9.Task = Nothing
+        '
+        'TextBoxServerConnectionString
+        '
+        Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
+        Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
+        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(522, 23)
+        Me.TextBoxServerConnectionString.TabIndex = 0
+        '
+        'TextBoxServerQuery
+        '
+        Me.TextBoxServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxServerQuery.Location = New System.Drawing.Point(3, 93)
+        Me.TextBoxServerQuery.Name = "TextBoxServerQuery"
+        Me.TextBoxServerQuery.Size = New System.Drawing.Size(522, 23)
+        Me.TextBoxServerQuery.TabIndex = 1
+        '
+        'LabelServerConnectionString
+        '
+        Me.LabelServerConnectionString.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelServerConnectionString.AutoSize = True
+        Me.LabelServerConnectionString.Location = New System.Drawing.Point(3, 7)
+        Me.LabelServerConnectionString.Name = "LabelServerConnectionString"
+        Me.LabelServerConnectionString.Size = New System.Drawing.Size(135, 15)
+        Me.LabelServerConnectionString.TabIndex = 2
+        Me.LabelServerConnectionString.Text = "Server connection string"
+        '
+        'LabelServerQuery
+        '
+        Me.LabelServerQuery.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelServerQuery.AutoSize = True
+        Me.LabelServerQuery.Location = New System.Drawing.Point(3, 67)
+        Me.LabelServerQuery.Name = "LabelServerQuery"
+        Me.LabelServerQuery.Size = New System.Drawing.Size(39, 15)
+        Me.LabelServerQuery.TabIndex = 3
+        Me.LabelServerQuery.Text = "Query"
+        '
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
@@ -2494,75 +2563,6 @@ Partial Class Form_Main
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'TabPageServerQuery
-        '
-        Me.TabPageServerQuery.Controls.Add(Me.ExTableLayoutPanel9)
-        Me.TabPageServerQuery.Location = New System.Drawing.Point(4, 24)
-        Me.TabPageServerQuery.Name = "TabPageServerQuery"
-        Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageServerQuery.Size = New System.Drawing.Size(534, 803)
-        Me.TabPageServerQuery.TabIndex = 8
-        Me.TabPageServerQuery.Text = "Server Query"
-        Me.TabPageServerQuery.UseVisualStyleBackColor = True
-        '
-        'ExTableLayoutPanel9
-        '
-        Me.ExTableLayoutPanel9.ColumnCount = 1
-        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerQuery, 0, 3)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
-        Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
-        Me.ExTableLayoutPanel9.Name = "ExTableLayoutPanel9"
-        Me.ExTableLayoutPanel9.RowCount = 5
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(528, 797)
-        Me.ExTableLayoutPanel9.TabIndex = 0
-        Me.ExTableLayoutPanel9.Task = Nothing
-        '
-        'TextBoxServerConnectionString
-        '
-        Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
-        Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
-        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(522, 23)
-        Me.TextBoxServerConnectionString.TabIndex = 0
-        '
-        'TextBoxServerQuery
-        '
-        Me.TextBoxServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxServerQuery.Location = New System.Drawing.Point(3, 93)
-        Me.TextBoxServerQuery.Name = "TextBoxServerQuery"
-        Me.TextBoxServerQuery.Size = New System.Drawing.Size(522, 23)
-        Me.TextBoxServerQuery.TabIndex = 1
-        '
-        'LabelServerConnectionString
-        '
-        Me.LabelServerConnectionString.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelServerConnectionString.AutoSize = True
-        Me.LabelServerConnectionString.Location = New System.Drawing.Point(3, 7)
-        Me.LabelServerConnectionString.Name = "LabelServerConnectionString"
-        Me.LabelServerConnectionString.Size = New System.Drawing.Size(135, 15)
-        Me.LabelServerConnectionString.TabIndex = 2
-        Me.LabelServerConnectionString.Text = "Server connection string"
-        '
-        'LabelServerQuery
-        '
-        Me.LabelServerQuery.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelServerQuery.AutoSize = True
-        Me.LabelServerQuery.Location = New System.Drawing.Point(3, 67)
-        Me.LabelServerQuery.Name = "LabelServerQuery"
-        Me.LabelServerQuery.Size = New System.Drawing.Size(39, 15)
-        Me.LabelServerQuery.TabIndex = 3
-        Me.LabelServerQuery.Text = "Query"
-        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -2623,6 +2623,9 @@ Partial Class Form_Main
         Me.TabPageTemplates.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
+        Me.TabPageServerQuery.ResumeLayout(False)
+        Me.ExTableLayoutPanel9.ResumeLayout(False)
+        Me.ExTableLayoutPanel9.PerformLayout()
         Me.TabPageGeneral.ResumeLayout(False)
         Me.ExTableLayoutPanel2.ResumeLayout(False)
         Me.ExTableLayoutPanel2.PerformLayout()
@@ -2631,9 +2634,6 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
-        Me.TabPageServerQuery.ResumeLayout(False)
-        Me.ExTableLayoutPanel9.ResumeLayout(False)
-        Me.ExTableLayoutPanel9.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

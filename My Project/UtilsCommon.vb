@@ -968,47 +968,63 @@ Public Class UtilsCommon
 
         Dim Prop As DesignManager.Property = Nothing
 
-        'Dim ReadOnlyPropertySets As Boolean = True
         Dim PropertySet As DesignManager.Properties
         Dim PropertySetNames As New List(Of String)
         Dim GotAMatch As Boolean = False
 
-        If PropertySetName = "System" Then
-            PropertySetNames.Add("SummaryInformation")
-            PropertySetNames.Add("ExtendedSummaryInformation")
-            PropertySetNames.Add("DocumentSummaryInformation")
-            PropertySetNames.Add("ProjectInformation")
-            PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-        ElseIf PropertySetName = "Custom" Then
-            PropertySetNames.Add("Custom")
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+            If Form_Main.TemplatePropertyDict.Keys.Contains(PropertyName) Then
+                Dim PropertySetActualName As String = Form_Main.TemplatePropertyDict(PropertyName)("PropertySetActualName")
+                If Not PropertySetActualName = "" Then
+                    PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
+                    Try
+                        Prop = CType(PropertySet.Item(PropertyName), DesignManager.Property)
+                    Catch ex As Exception
+                    End Try
+                End If
+            End If
         End If
 
-        'PropertySets.Open(Filename, ReadOnlyPropertySets)
+        If Prop Is Nothing Then
 
-        For Each PropertySetName In PropertySetNames
-            ' Not all files have all PropertySets
-            ' Not all properties have names
-            Try
-                PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-                For i As Integer = 0 To PropertySet.Count - 1
-                    Prop = CType(PropertySet.Item(i), DesignManager.Property)
-                    If Prop.Name.ToLower = PropertyName.ToLower Then
-                        GotAMatch = True
-                        Exit For
-                    End If
-                Next
-            Catch ex As Exception
-            End Try
+            If PropertySetName = "System" Then
+                PropertySetNames.Add("SummaryInformation")
+                PropertySetNames.Add("ExtendedSummaryInformation")
+                PropertySetNames.Add("DocumentSummaryInformation")
+                PropertySetNames.Add("ProjectInformation")
+                PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
+            ElseIf PropertySetName = "Custom" Then
+                PropertySetNames.Add("Custom")
+            End If
+
+            For Each PropertySetName In PropertySetNames
+                ' Not all files have all PropertySets
+                ' Not all properties have names
+                Try
+                    PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
+                    For i As Integer = 0 To PropertySet.Count - 1
+                        Prop = CType(PropertySet.Item(i), DesignManager.Property)
+                        If Prop.Name.ToLower = PropertyName.ToLower Then
+                            GotAMatch = True
+                            Exit For
+                        End If
+                    Next
+                Catch ex As Exception
+                End Try
+
+                If GotAMatch Then
+                    Exit For
+                End If
+            Next
 
             If GotAMatch Then
-                Exit For
+                Return Prop
+            Else
+                Return Nothing
             End If
-        Next
 
-        If GotAMatch Then
-            Return Prop
-        Else
-            Return Nothing
         End If
 
     End Function

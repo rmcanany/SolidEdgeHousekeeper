@@ -44,14 +44,91 @@ Public Class UtilsFileList
 
         ListViewFiles.BeginUpdate()
 
-        ' Remove everything except the "Sources" group.
-        For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-            If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-                ListViewFiles.Items.Item(i).Remove()
-            Else
-                GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-            End If
-        Next
+
+        Dim NewWay As Boolean = True
+
+        If Not NewWay Then
+
+            ' Remove everything except the "Sources" group.
+            For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+                If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
+                    ListViewFiles.Items.Item(i).Remove()
+                Else
+                    GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+                End If
+            Next
+
+        Else
+            ' ###### Initialize tmpLV ######
+
+            Dim tmpListViewFiles As New ListViewExtended.ListViewCollapsible
+
+            Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
+            ListViewGroup1.Name = "Sources"
+            Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
+            ListViewGroup2.Name = "Excluded"
+            Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
+            ListViewGroup3.Name = ".asm"
+            Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
+            ListViewGroup4.Name = ".par"
+            Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
+            ListViewGroup5.Name = ".psm"
+            Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
+            ListViewGroup6.Name = ".dft"
+            tmpListViewFiles.Groups.Add(ListViewGroup1)
+            tmpListViewFiles.Groups.Add(ListViewGroup2)
+            tmpListViewFiles.Groups.Add(ListViewGroup3)
+            tmpListViewFiles.Groups.Add(ListViewGroup4)
+            tmpListViewFiles.Groups.Add(ListViewGroup5)
+            tmpListViewFiles.Groups.Add(ListViewGroup6)
+
+            tmpListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+
+            For i = 0 To ListViewFiles.Items.Count - 1
+
+                If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
+
+                    GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = ListViewFiles.Items.Item(i).Text
+                    tmpItem.SubItems.Add(ListViewFiles.Items.Item(i).Name)
+                    tmpItem.Group = tmpListViewFiles.Groups.Item("Sources")
+                    tmpItem.ImageKey = ListViewFiles.Items.Item(i).ImageKey
+                    tmpItem.Tag = ListViewFiles.Items.Item(i).Tag
+                    tmpItem.Name = ListViewFiles.Items.Item(i).Name
+
+                    If Not tmpListViewFiles.Items.ContainsKey(tmpItem.Name) Then tmpListViewFiles.Items.Add(tmpItem)
+
+                End If
+            Next
+
+            ListViewFiles.Items.Clear()
+
+            For i = 0 To tmpListViewFiles.Items.Count - 1
+
+                If tmpListViewFiles.Items.Item(i).Group.Name = "Sources" Then
+
+                    'GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = tmpListViewFiles.Items.Item(i).Text
+                    tmpItem.SubItems.Add(tmpListViewFiles.Items.Item(i).Name)
+                    tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                    tmpItem.ImageKey = tmpListViewFiles.Items.Item(i).ImageKey
+                    tmpItem.Tag = tmpListViewFiles.Items.Item(i).Tag
+                    tmpItem.Name = tmpListViewFiles.Items.Item(i).Name
+
+                    If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+
+                End If
+            Next
+
+        End If
+
+
 
         If Not GroupTags.Contains("asm") Then
 
@@ -1028,6 +1105,8 @@ Public Class UtilsFileList
             Loop
         End If
 
+        Dim NumProcessed As Integer = 0
+
         For Each tmpLVItem As ListViewItem In ListViewFiles.Items
 
             If tmpLVItem.SubItems.Count > 2 Then
@@ -1044,10 +1123,20 @@ Public Class UtilsFileList
 
             Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
 
-            FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
+            'FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
+            FMain.TextBoxStatus.Text = String.Format("Getting properties {0}", System.IO.Path.GetFileName(FullName))
+            If NumProcessed Mod 100 = 0 Then
+                System.Windows.Forms.Application.DoEvents()
+                If FMain.StopProcess Then
+                    Exit For
+                End If
+
+            End If
+
 
             UpdateLVItem(tmpLVItem)
 
+            NumProcessed += 1
         Next
 
         CreateColumns()

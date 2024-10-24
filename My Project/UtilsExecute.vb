@@ -314,6 +314,7 @@ Public Class UtilsExecute
         End If
 
         Dim DMApp As DesignManager.Application = Nothing
+        ' This should be faster: Dim SEFPPropertySets as SolidEdgeFileProperties.PropertySets = Nothing
         If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (FilesToProcess.Count > 0) Then
             DMApp = New DesignManager.Application
             DMApp.Visible = 1
