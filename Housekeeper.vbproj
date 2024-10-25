@@ -472,6 +472,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\icons8_query_16.png" />
     <None Include="Resources\icons8_table_properties_16.png" />
     <None Include="Resources\TaskPrint.png" />
     <None Include="Resources\TaskOpenSave.png" />

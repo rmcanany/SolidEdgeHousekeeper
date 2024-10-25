@@ -1628,6 +1628,7 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "ASM_folder", My.Resources.ASM_Folder)
         CaricaImmagine16x16(TabPage_ImageList, "list", My.Resources.list)
         CaricaImmagine16x16(TabPage_ImageList, "Tools", My.Resources.Tools)
+        CaricaImmagine16x16(TabPage_ImageList, "Query", My.Resources.Query)
 
     End Sub
 

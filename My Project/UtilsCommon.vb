@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Management.Automation.Runspaces
 Imports System.Reflection
 Imports System.Reflection.Emit
+Imports System.Runtime.CompilerServices
 Imports System.Security.AccessControl
 Imports System.Text.RegularExpressions
 Imports System.Windows
@@ -1313,7 +1314,13 @@ Public Class UtilsCommon
                 Case = VTPropertyType.VT_BOOL
                     OLEProp.Value = CType(PropertyValue, Boolean)
                 Case = VTPropertyType.VT_I4
+
+                    'If PropertyValue = Int(PropertyValue).ToString Then
                     OLEProp.Value = CType(PropertyValue, Integer)
+                    'Else
+                    '    OLEProp.Value = CType(PropertyValue, Double) 'This will lead to an error, it needs to recreate the property with VTType = VT_R8
+                    'End If
+
                 Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
                     OLEProp.Value = PropertyValue
                 Case = VTPropertyType.VT_FILETIME
