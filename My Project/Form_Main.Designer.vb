@@ -408,6 +408,7 @@ Partial Class Form_Main
         Me.TabPage_ImageList.Images.SetKeyName(18, "list")
         Me.TabPage_ImageList.Images.SetKeyName(19, "Tools")
         Me.TabPage_ImageList.Images.SetKeyName(20, "expand")
+        Me.TabPage_ImageList.Images.SetKeyName(21, "Query")
         '
         'ToolStrip_Filter
         '
@@ -2156,6 +2157,7 @@ Partial Class Form_Main
         'TabPageServerQuery
         '
         Me.TabPageServerQuery.Controls.Add(Me.ExTableLayoutPanel9)
+        Me.TabPageServerQuery.ImageKey = "Query"
         Me.TabPageServerQuery.Location = New System.Drawing.Point(4, 24)
         Me.TabPageServerQuery.Name = "TabPageServerQuery"
         Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
