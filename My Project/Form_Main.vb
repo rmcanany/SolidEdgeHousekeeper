@@ -607,6 +607,37 @@ Public Class Form_Main
 
 
 
+    ' ###### SERVER QUERY ######
+
+    Private _ServerConnectionString As String
+    Public Property ServerConnectionString As String
+        Get
+            Return _ServerConnectionString
+        End Get
+        Set(value As String)
+            _ServerConnectionString = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxServerConnectionString.Text = value
+            End If
+        End Set
+    End Property
+
+
+    Private _ServerQuery As String
+    Public Property ServerQuery As String
+        Get
+            Return _ServerQuery
+        End Get
+        Set(value As String)
+            _ServerQuery = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxServerQuery.Text = value
+            End If
+        End Set
+    End Property
+
+
+
     ' ###### GENERAL ######
 
     Private _UseCurrentSession As Boolean
@@ -2941,6 +2972,14 @@ Public Class Form_Main
             ButtonProcess.Text = "Process"
         End If
 
+    End Sub
+
+    Private Sub TextBoxServerConnectionString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerConnectionString.TextChanged
+        ServerConnectionString = TextBoxServerConnectionString.Text
+    End Sub
+
+    Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
+        ServerQuery = TextBoxServerQuery.Text
     End Sub
 
 
