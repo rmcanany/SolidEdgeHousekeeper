@@ -3214,11 +3214,27 @@ Public Class Form_Main
     End Sub
 
     Private Sub ButtonPresetDelete_Click(sender As Object, e As EventArgs) Handles ButtonPresetDelete.Click
-        Dim s As String = ComboBoxPresetName.Text
-        If ComboBoxPresetName.Items.Contains(s) Then
-            ComboBoxPresetName.Items.Remove(s)
+
+        Dim Name As String = ComboBoxPresetName.Text
+        Dim Idx As Integer = -1
+
+        For i As Integer = 0 To Me.PresetsList.Count - 1
+            If Me.PresetsList(i).Name = Name Then
+                Idx = i
+                Exit For
+            End If
+        Next
+
+        If Not Idx = -1 Then
+            Me.PresetsList.RemoveAt(Idx)
+            Me.PresetsList = Me.PresetsList ' Trigger update
+        End If
+
+        If ComboBoxPresetName.Items.Contains(Name) Then
+            ComboBoxPresetName.Items.Remove(Name)
         End If
         ComboBoxPresetName.Text = ""
+
     End Sub
 
 
