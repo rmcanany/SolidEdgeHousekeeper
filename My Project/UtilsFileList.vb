@@ -35,10 +35,10 @@ Public Class UtilsFileList
         FMain.LabelTimeRemaining.Text = ""
         System.Windows.Forms.Application.DoEvents()
 
-        If FMain.new_CheckBoxFilterAsm.Checked Then ActiveFileExtensionsList.Add("*.asm")
-        If FMain.new_CheckBoxFilterPar.Checked Then ActiveFileExtensionsList.Add("*.par")
-        If FMain.new_CheckBoxFilterPsm.Checked Then ActiveFileExtensionsList.Add("*.psm")
-        If FMain.new_CheckBoxFilterDft.Checked Then ActiveFileExtensionsList.Add("*.dft")
+        If FMain.FilterAsm Then ActiveFileExtensionsList.Add("*.asm")
+        If FMain.FilterPar Then ActiveFileExtensionsList.Add("*.par")
+        If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
+        If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
 
 
 
@@ -145,7 +145,7 @@ Public Class UtilsFileList
 
         If GroupTags.Contains("asm") Then
 
-            If (FMain.RadioButtonTLABottomUp.Checked) And (Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text)) Then
+            If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
                 msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
                 ListViewFiles.EndUpdate()
                 FMain.Cursor = Cursors.Default
@@ -156,7 +156,7 @@ Public Class UtilsFileList
 
             If Not (GroupTags.Contains("ASM_Folder")) Then
 
-                If FMain.CheckBoxWarnBareTLA.Checked Then
+                If FMain.WarnBareTLA Then
                     msg = "A top-level assembly with no top-level folder detected.  "
                     msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
                     msg += "Click OK to continue, or Cancel to stop." + vbCrLf
@@ -202,7 +202,7 @@ Public Class UtilsFileList
 
         ' Dependency sort
         If Not FoundFiles Is Nothing Then
-            If FMain.RadioButtonSortDependency.Checked Then
+            If FMain.SortDependency Then
                 FoundFiles = GetDependencySortedFiles(FoundFiles)
             End If
         End If
@@ -212,30 +212,28 @@ Public Class UtilsFileList
         If Not FoundFiles Is Nothing Then
 
             ' Filter by file wildcard search
-            If FMain.CheckBoxEnableFileWildcard.Checked Then
-                FoundFiles = FileWildcardSearch(FoundFiles, FMain.ComboBoxFileWildcard.Text)
+            If FMain.SortDependency Then
+                FoundFiles = FileWildcardSearch(FoundFiles, FMain.FileWildcard)
             End If
 
             ' Filter by properties
-            If FMain.CheckBoxEnablePropertyFilter.Checked Then
+            If FMain.EnablePropertyFilter Then
                 System.Threading.Thread.Sleep(1000)
                 Dim UPF As New UtilsPropertyFilters(Me.FMain)
                 FoundFiles = UPF.PropertyFilter(FoundFiles, FMain.PropertyFilterDict)
             End If
 
-            If FMain.RadioButtonSortAlphabetical.Checked Then
+            If FMain.SortAlphabetical Then
                 FoundFiles = SortAlphabetical(FoundFiles)
             End If
 
-            If FMain.RadioButtonSortRandomSample.Checked Then
+            If FMain.SortRandomSample Then
                 Dim Fraction As Double = 0.1
                 Try
-                    Fraction = CDbl(FMain.TextBoxSortRandomSampleFraction.Text)
+                    Fraction = CDbl(FMain.SortRandomSampleFraction)
                 Catch ex As Exception
                     Fraction = 0.1
-                    Dim s = String.Format("Cannot convert Sample fraction, '{0}', to a number.  ", FMain.TextBoxSortRandomSampleFraction.Text)
-                    s = String.Format("{0}Using default {1} instead.", s, Fraction)
-                    MsgBox(s)
+                    FMain.SortRandomSampleFraction = CStr(Fraction)
                 End Try
                 FoundFiles = SortRandomSample(FoundFiles, Fraction)
             End If
@@ -245,9 +243,6 @@ Public Class UtilsFileList
         ' Populate ListView
         If Not FoundFiles Is Nothing Then
             PopulateListView(FoundFiles)
-
-        Else
-            'TextBoxStatus.Text = "No files found"
         End If
 
 
@@ -289,10 +284,10 @@ Public Class UtilsFileList
         FMain.StopProcess = False
         FMain.ButtonCancel.Text = "Stop"
 
-        If FMain.new_CheckBoxFilterAsm.Checked Then ActiveFileExtensionsList.Add("*.asm")
-        If FMain.new_CheckBoxFilterPar.Checked Then ActiveFileExtensionsList.Add("*.par")
-        If FMain.new_CheckBoxFilterPsm.Checked Then ActiveFileExtensionsList.Add("*.psm")
-        If FMain.new_CheckBoxFilterDft.Checked Then ActiveFileExtensionsList.Add("*.dft")
+        If FMain.FilterAsm Then ActiveFileExtensionsList.Add("*.asm")
+        If FMain.FilterPar Then ActiveFileExtensionsList.Add("*.par")
+        If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
+        If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
 
         If ActiveFileExtensionsList.Count > 0 Then
 
@@ -590,7 +585,7 @@ Public Class UtilsFileList
 
             Dim tmpFoundFiles As New List(Of String)
 
-            If FMain.RadioButtonTLABottomUp.Checked Then
+            If FMain.TLABottomUp Then
                 Dim UTLA As New UtilsTopLevelAssembly(FMain)
 
                 FMain.TextBoxStatus.Text = "Finding all linked files.  This may take some time."
@@ -598,15 +593,15 @@ Public Class UtilsFileList
                 tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
-                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                           FMain.DraftAndModelSameName,
+                                                           FMain.TLAReportUnrelatedFiles))
 
             Else
                 Dim UTLA As New UtilsTopLevelAssembly(FMain)
                 tmpFoundFiles.AddRange(UTLA.GetLinksTopDown(tmpFolders,
                                                        Source.SubItems.Item(1).Text,
                                                        ActiveFileExtensionsList,
-                                                       Report:=FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                       Report:=FMain.TLAReportUnrelatedFiles))
             End If
 
             FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
@@ -629,8 +624,8 @@ Public Class UtilsFileList
             tmpFoundFiles.AddRange(UTLA.GetLinksBottomUp(tmpFolders,
                                                            Source.SubItems.Item(1).Text,
                                                            ActiveFileExtensionsList,
-                                                           FMain.CheckBoxDraftAndModelSameName.Checked,
-                                                           FMain.CheckBoxTLAReportUnrelatedFiles.Checked))
+                                                           FMain.DraftAndModelSameName,
+                                                           FMain.TLAReportUnrelatedFiles))
 
             FoundFiles = CType(tmpFoundFiles, IReadOnlyCollection(Of String))
 
@@ -951,7 +946,7 @@ Public Class UtilsFileList
 
         End While
 
-        If Not FMain.CheckBoxSortIncludeNoDependencies.Checked Then
+        If Not FMain.SortIncludeNoDependencies Then
             For Each Filename In NoDependencies
                 If Outlist.Contains(Filename) Then
                     Outlist.Remove(Filename)
@@ -1123,7 +1118,6 @@ Public Class UtilsFileList
 
             Dim FullName As String = tmpLVItem.SubItems.Item(0).Name
 
-            'FMain.TextBoxStatus.Text = System.IO.Path.GetFileName(FullName)
             FMain.TextBoxStatus.Text = String.Format("Getting properties {0}", System.IO.Path.GetFileName(FullName))
             If NumProcessed Mod 100 = 0 Then
                 System.Windows.Forms.Application.DoEvents()

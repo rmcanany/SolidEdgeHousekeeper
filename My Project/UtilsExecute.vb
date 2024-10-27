@@ -155,8 +155,8 @@ Public Class UtilsExecute
             msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
         End If
 
-        If FMain.RadioButtonTLABottomUp.Checked Then
-            If Not FileIO.FileSystem.FileExists(FMain.TextBoxFastSearchScopeFilename.Text) Then
+        If FMain.TLABottomUp Then
+            If Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename) Then
                 msg += "    Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)" + Chr(13)
             End If
         End If
@@ -188,8 +188,8 @@ Public Class UtilsExecute
             msg += "    Select an input directory with files to process" + Chr(13)
         End If
 
-        If FMain.CheckBoxEnableFileWildcard.Checked Then
-            If FMain.ComboBoxFileWildcard.Text = "" Then
+        If FMain.EnableFileWildcard Then
+            If FMain.FileWildcard = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
             End If
         End If
@@ -242,7 +242,7 @@ Public Class UtilsExecute
             msg = "Please correct the following before continuing" + Chr(13) + msg
         End If
 
-        If (Len(SaveMsg) <> 0) And FMain.CheckBoxWarnSave.Checked Then
+        If (Len(SaveMsg) <> 0) And FMain.WarnSave Then
             Dim s As String = "The following options require the original file to be saved." + Chr(13)
             s += "Please verify you have a backup before continuing."
             SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
@@ -431,7 +431,7 @@ Public Class UtilsExecute
                 End If
 
                 If Proceed Then
-                    If (FMain.CheckBoxRunInBackground.Checked) And (Not Filetype = "Assembly") Then
+                    If (FMain.RunInBackground) And (Not Filetype = "Assembly") Then
                         SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(
                                     Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 

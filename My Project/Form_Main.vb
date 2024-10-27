@@ -2,6 +2,7 @@
 
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+'Imports System.Windows
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
@@ -461,6 +462,7 @@ Public Class Form_Main
             _SortDependency = value
             If Me.TabControl1 IsNot Nothing Then
                 RadioButtonSortDependency.Checked = value
+                CheckBoxSortIncludeNoDependencies.Enabled = value
             End If
         End Set
     End Property
@@ -487,6 +489,7 @@ Public Class Form_Main
             _SortRandomSample = value
             If Me.TabControl1 IsNot Nothing Then
                 RadioButtonSortRandomSample.Checked = value
+                TextBoxSortRandomSampleFraction.Enabled = value
             End If
         End Set
     End Property
@@ -757,6 +760,57 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _PresetsList As List(Of Preset)
+    Public Property PresetsList As List(Of Preset)
+        Get
+            Return _PresetsList
+        End Get
+        Set(value As List(Of Preset))
+            _PresetsList = value
+            If Me.TabControl1 IsNot Nothing Then
+                ComboBoxPresetName.Items.Clear()
+                ComboBoxPresetName.Items.Add("")
+                For Each tmpPreset In PresetsList
+                    ComboBoxPresetName.Items.Add(tmpPreset.Name)
+                Next
+
+                Dim tmpPresetsListJSON As New List(Of String)
+                For Each tmpPreset As Preset In _PresetsList
+                    tmpPresetsListJSON.Add(tmpPreset.ToJSON)
+                Next
+
+                Dim UC As New UtilsCommon
+                If Not UC.CompareListOfJSON(tmpPresetsListJSON, Me.PresetsListJSON) Then
+                    Me.PresetsListJSON = tmpPresetsListJSON
+                End If
+            End If
+        End Set
+    End Property
+
+    Private _PresetsListJSON As List(Of String)
+    Public Property PresetsListJSON As List(Of String)
+        Get
+            Return _PresetsListJSON
+        End Get
+        Set(value As List(Of String))
+            _PresetsListJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                Dim tmpPresetsList As New List(Of Preset)
+                For Each s As String In _PresetsListJSON
+                    Dim tmpPreset As New Preset
+                    tmpPreset.FromJSON(s)
+                    tmpPresetsList.Add(tmpPreset)
+                Next
+
+                Dim UC As New UtilsCommon
+                If Not UC.ComparePresetList(tmpPresetsList, Me.PresetsList) Then
+                    Me.PresetsList = tmpPresetsList
+                End If
+            End If
+        End Set
+    End Property
+
+
 
     '###### HOME TAB ######
 
@@ -818,7 +872,57 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _FilterAsm As Boolean
+    Public Property FilterAsm As Boolean
+        Get
+            Return _FilterAsm
+        End Get
+        Set(value As Boolean)
+            _FilterAsm = value
+            If Me.TabControl1 IsNot Nothing Then
+                new_CheckBoxFilterAsm.Checked = value
+            End If
+        End Set
+    End Property
 
+    Private _FilterPar As Boolean
+    Public Property FilterPar As Boolean
+        Get
+            Return _FilterPar
+        End Get
+        Set(value As Boolean)
+            _FilterPar = value
+            If Me.TabControl1 IsNot Nothing Then
+                new_CheckBoxFilterPar.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FilterPsm As Boolean
+    Public Property FilterPsm As Boolean
+        Get
+            Return _FilterPsm
+        End Get
+        Set(value As Boolean)
+            _FilterPsm = value
+            If Me.TabControl1 IsNot Nothing Then
+                new_CheckBoxFilterPsm.Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FilterDft As Boolean
+    Public Property FilterDft As Boolean
+        Get
+            Return _FilterDft
+        End Get
+        Set(value As Boolean)
+            _FilterDft = value
+            If Me.TabControl1 IsNot Nothing Then
+                new_CheckBoxFilterDft.Checked = value
+            End If
+        End Set
+    End Property
 
     Public Property SolidEdgeRequired As Integer
 
@@ -849,7 +953,7 @@ Public Class Form_Main
                 Next
 
                 Dim UC As New UtilsCommon
-                If Not UC.CompareListOfColumnsJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
+                If Not UC.CompareListOfJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
                     Me.ListOfColumnsJSON = tmpListOfColumnsJSON
                 End If
             End If
@@ -905,26 +1009,25 @@ Public Class Form_Main
 
         Me.Cursor = Cursors.WaitCursor
 
-        'Dim s As String = ""
-        'Dim indent As String = "    "
-        's = String.Format("{0}Reminders{1}", s, vbCrLf)
-        's = String.Format("{0}{1}Update UD.GenerateVersionURL just before release{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}{1}Fix property selection on part number does not match{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}{1}Save as flat pattern should not show dir for unselected file type{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}{1}Countdown timer font{2}", s, indent, vbCrLf)
-        ''s = String.Format("{0}Fix Save As Output file type not detected{1}{2}", s, indent, vbCrLf)
-        'MsgBox(s, vbOKOnly)
-
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
         Dim UC As New UtilsCommon
+
+
+        '###### INITIALIZE PREFERENCES IF NEEDED ######
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
         UP.CreateSavedExpressions()
         UP.CreateInteractiveEditCommands()
 
+
+        '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
+
         UP.GetFormMainSettings(Me)
+
+
+        '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
         If Me.PropertyFilterDict Is Nothing Then
             Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
@@ -940,6 +1043,10 @@ Public Class Form_Main
 
         If Me.ListOfColumns Is Nothing Then
             Me.ListOfColumns = New List(Of PropertyColumn)
+        End If
+
+        If Me.PresetsList Is Nothing Then
+            Me.PresetsList = New List(Of Preset)
         End If
 
         If Me.ListOfColumns.Count = 0 Then
@@ -977,56 +1084,73 @@ Public Class Form_Main
 
         Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList, Me.TemplatePropertyDict)
 
+        Me.PresetsListJSON = UP.GetPresetsListJSON
+        If Me.PresetsListJSON Is Nothing Then
+            Me.PresetsListJSON = New List(Of String)
+        End If
+
         UD.BuildReadmeFile()
 
         CarIcona()
 
-        Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
-        ListViewGroup1.Name = "Sources"
-        Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
-        ListViewGroup2.Name = "Excluded"
-        Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
-        ListViewGroup3.Name = ".asm"
-        Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
-        ListViewGroup4.Name = ".par"
-        Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
-        ListViewGroup5.Name = ".psm"
-        Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
-        ListViewGroup6.Name = ".dft"
-        ListViewFiles.Groups.Add(ListViewGroup1)
-        ListViewFiles.Groups.Add(ListViewGroup2)
-        ListViewFiles.Groups.Add(ListViewGroup3)
-        ListViewFiles.Groups.Add(ListViewGroup4)
-        ListViewFiles.Groups.Add(ListViewGroup5)
-        ListViewFiles.Groups.Add(ListViewGroup6)
+
+        '###### INITIALIZE FILE LIST IF NEEDED ######
+
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+
+            If ListViewFiles.Groups.Count = 0 Then
+
+                Dim GroupHeaderNames As New List(Of String)
+                GroupHeaderNames.AddRange({"Files sources", "Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
+
+                Dim GroupNames As New List(Of String)
+                GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
+
+                For i As Integer = 0 To GroupHeaderNames.Count - 1
+                    Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
+                    LVGroup.Name = GroupNames(i)
+                    ListViewFiles.Groups.Add(LVGroup)
+                Next
+
+            End If
+
+        Else
+            If ListViewFiles.Groups.Count = 0 Then
+
+                Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
+                ListViewGroup1.Name = "Sources"
+                Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
+                ListViewGroup2.Name = "Excluded"
+                Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
+                ListViewGroup3.Name = ".asm"
+                Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
+                ListViewGroup4.Name = ".par"
+                Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
+                ListViewGroup5.Name = ".psm"
+                Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
+                ListViewGroup6.Name = ".dft"
+                ListViewFiles.Groups.Add(ListViewGroup1)
+                ListViewFiles.Groups.Add(ListViewGroup2)
+                ListViewFiles.Groups.Add(ListViewGroup3)
+                ListViewFiles.Groups.Add(ListViewGroup4)
+                ListViewFiles.Groups.Add(ListViewGroup5)
+                ListViewFiles.Groups.Add(ListViewGroup6)
+
+            End If
+
+        End If
 
         ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+
+        ListViewFilesOutOfDate = False
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
-        If Not Me.SortDependency Then
-            CheckBoxSortIncludeNoDependencies.Enabled = False
-        End If
 
-        If Not Me.SortRandomSample Then
-            TextBoxSortRandomSampleFraction.Enabled = False
-        End If
-
-        If Not Me.ProcessAsAvailable Then
-            Dim StatusChangeRadioButtons As New List(Of RadioButton)
-            Dim RB As RadioButton
-
-            StatusChangeRadioButtons = GetStatusChangeRadioButtons()
-
-            RadioButtonProcessAsAvailableRevert.Enabled = False
-            RadioButtonProcessAsAvailableChange.Enabled = False
-            For Each RB In StatusChangeRadioButtons
-                RB.Enabled = False
-            Next
-        End If
-
-        ListViewFilesOutOfDate = False
+        '###### INITIALIZE TASK LIST ######
 
         Me.TaskList = UP.GetTaskList
 
@@ -1039,8 +1163,14 @@ Public Class Form_Main
             End If
         Next
 
+        If NewWay Then
+            tmpTaskPanel.Controls.Clear()
+        End If
+
         For i = TaskList.Count - 1 To 0 Step -1
+
             Dim Task = TaskList(i)
+
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
                 Task.IsSelectedAssembly = False
@@ -1048,6 +1178,7 @@ Public Class Form_Main
                 Task.IsSelectedSheetmetal = False
                 Task.IsSelectedDraft = False
             End If
+
             If Task.RequiresTemplatePropertyDict Then
                 Select Case Task.Name
                     Case "TaskEditProperties"
@@ -1066,6 +1197,7 @@ Public Class Form_Main
                         MsgBox(String.Format("TemplatePropertyDict not added to {0} in Form_Main.Startup()", Task.Name))
                 End Select
             End If
+
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
 
@@ -1075,8 +1207,8 @@ Public Class Form_Main
             UP.CheckForNewerVersion(Me.Version)
         End If
 
-        new_ButtonPropertyFilter.Enabled = CheckBoxEnablePropertyFilter.Checked
-        ComboBoxFileWildcard.Enabled = CheckBoxEnableFileWildcard.Checked
+        'new_ButtonPropertyFilter.Enabled = CheckBoxEnablePropertyFilter.Checked
+        'ComboBoxFileWildcard.Enabled = CheckBoxEnableFileWildcard.Checked
 
         Me.Cursor = Cursors.Default
 
@@ -1088,8 +1220,8 @@ Public Class Form_Main
         ' Set Properties equal to themselves to trigger JSON updates
 
         ' ListOfColumnsJSON
+        ' Updating directly to not trigger an uneeded file list update.
         Me.TextBoxStatus.Text = "Updating JSON ListOfColumns"
-        'Me.ListOfColumns = Me.ListOfColumns  ' Also updates the file list.  Not needed here.  Manually update instead.
 
         Dim tmpListOfColumnsJSON As New List(Of String)
 
@@ -1098,7 +1230,7 @@ Public Class Form_Main
         Next
 
         Dim UC As New UtilsCommon
-        If Not UC.CompareListOfColumnsJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
+        If Not UC.CompareListOfJSON(tmpListOfColumnsJSON, Me.ListOfColumnsJSON) Then
             Me.ListOfColumnsJSON = tmpListOfColumnsJSON
         End If
 
@@ -1108,6 +1240,8 @@ Public Class Form_Main
         Me.TemplatePropertyDict = Me.TemplatePropertyDict
         Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
+        Me.TextBoxStatus.Text = "Updating JSON PresetsList"
+        Me.PresetsList = Me.PresetsList
 
 
         ' Save settings
@@ -1116,7 +1250,10 @@ Public Class Form_Main
         UP.SaveFormMainSettings(Me)
         Me.TextBoxStatus.Text = "Saving tasks"
         UP.SaveTaskList(Me.TaskList)
+        Me.TextBoxStatus.Text = "Saving presets"
+        UP.SavePresetsListJSON(Me.PresetsListJSON)
 
+        Me.TextBoxStatus.Text = ""
 
     End Sub
 
@@ -1211,7 +1348,10 @@ Public Class Form_Main
             SaveSettings()
 
             ' Shut down
-            End
+            Try
+                End
+            Catch ex As Exception
+            End Try
         End If
     End Sub
 
@@ -1224,7 +1364,10 @@ Public Class Form_Main
         'Next
 
         ' Shut down
-        End '########## <------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+        Try
+            End '########## <------- This throws an error if some ListView groups are collapsed 'F.Arfilli
+        Catch ex As Exception
+        End Try
 
         '##### 16/10/24 It seems the error doesn't occur anymore
 
@@ -1339,23 +1482,23 @@ Public Class Form_Main
     End Sub
 
     Private Sub new_CheckBoxFilterAsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterAsm.CheckedChanged
+        Me.FilterAsm = new_CheckBoxFilterAsm.Checked
         ListViewFilesOutOfDate = True
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterPar_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPar.CheckedChanged
+        Me.FilterPar = new_CheckBoxFilterPar.Checked
         ListViewFilesOutOfDate = True
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterPsm_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterPsm.CheckedChanged
+        Me.FilterPsm = new_CheckBoxFilterPsm.Checked
         ListViewFilesOutOfDate = True
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub new_CheckBoxFilterDft_CheckedChanged(sender As Object, e As EventArgs) Handles new_CheckBoxFilterDft.CheckedChanged
+        Me.FilterDft = new_CheckBoxFilterDft.Checked
         ListViewFilesOutOfDate = True
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxRememberTasks_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRememberTasks.CheckedChanged
@@ -1815,10 +1958,10 @@ Public Class Form_Main
             ListViewFiles.BeginUpdate()
 
             Dim extFilter As New List(Of String)
-            If new_CheckBoxFilterAsm.Checked Then extFilter.Add(".asm")
-            If new_CheckBoxFilterPar.Checked Then extFilter.Add(".par")
-            If new_CheckBoxFilterPsm.Checked Then extFilter.Add(".psm")
-            If new_CheckBoxFilterDft.Checked Then extFilter.Add(".dft")
+            If Me.FilterAsm Then extFilter.Add(".asm")
+            If Me.FilterPar Then extFilter.Add(".par")
+            If Me.FilterPsm Then extFilter.Add(".psm")
+            If Me.FilterDft Then extFilter.Add(".dft")
 
             Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             For Each FileName As String In Filenames
@@ -2982,6 +3125,102 @@ Public Class Form_Main
         ServerQuery = TextBoxServerQuery.Text
     End Sub
 
+    Private Sub ComboBoxPresetName_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxPresetName.LostFocus
+        Dim s As String = ComboBoxPresetName.Text
+
+        If Not s = "" Then
+            If Not ComboBoxPresetName.Items.Contains(s) Then
+                ComboBoxPresetName.Items.Add(s)
+            End If
+        End If
+    End Sub
+
+    Private Sub ComboBoxPresetName_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub ButtonPresetLoad_Click(sender As Object, e As EventArgs) Handles ButtonPresetLoad.Click
+
+        Dim Name As String = ComboBoxPresetName.Text
+        Dim tmpPreset As Preset = Nothing
+        Dim GotAMatch As Boolean = False
+
+        If Not Name = "" Then
+            Dim UP As New UtilsPreferences
+
+            For Each tmpPreset In Me.PresetsList
+                If tmpPreset.Name = Name Then
+                    GotAMatch = True
+                    Exit For
+                End If
+            Next
+
+            If GotAMatch Then
+                UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
+                UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
+                UP.SavePresetsListJSON(Me.PresetsListJSON)
+
+                Application.DoEvents()
+                Startup()
+            End If
+
+        Else
+            MsgBox("Enter a name of the preset to load", vbOKOnly)
+        End If
+
+
+    End Sub
+
+    Private Sub ButtonPresetSave_Click(sender As Object, e As EventArgs) Handles ButtonPresetSave.Click
+
+        Dim Name As String = ComboBoxPresetName.Text
+        Dim tmpPreset As Preset = Nothing
+        Dim GotAMatch As Boolean = False
+
+        If Not Name = "" Then
+            Dim UP As New UtilsPreferences
+
+            For Each tmpPreset In Me.PresetsList
+                If tmpPreset.Name = Name Then
+                    Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
+                    If Result = MsgBoxResult.No Then
+                        Exit Sub
+                    Else
+                        GotAMatch = True
+                        Exit For
+                    End If
+                End If
+            Next
+
+            SaveSettings()
+            Application.DoEvents()
+
+            If Not GotAMatch Then
+                tmpPreset = New Preset
+            End If
+
+            tmpPreset.Name = Name
+            tmpPreset.TaskListJSON = UP.GetTaskListJSON()
+            tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
+
+            Me.PresetsList.Add(tmpPreset)
+
+            Me.PresetsList = Me.PresetsList ' Trigger update
+        Else
+            MsgBox("Enter a name for the preset to save", vbOKOnly)
+        End If
+
+
+    End Sub
+
+    Private Sub ButtonPresetDelete_Click(sender As Object, e As EventArgs) Handles ButtonPresetDelete.Click
+        Dim s As String = ComboBoxPresetName.Text
+        If ComboBoxPresetName.Items.Contains(s) Then
+            ComboBoxPresetName.Items.Remove(s)
+        End If
+        ComboBoxPresetName.Text = ""
+    End Sub
+
 
     ' Commands I can never remember
 
@@ -3139,4 +3378,42 @@ Public Class ListViewColumnSorter
             Return OrderOfSort
         End Get
     End Property
+End Class
+
+
+Public Class Preset
+    Public Property Name As String
+    Public Property TaskListJSON As String
+    Public Property FormSettingsJSON As String
+
+    Public Sub New()
+    End Sub
+
+    Public Sub FromJSON(JSONString As String)
+
+        Dim tmpPresetDict As Dictionary(Of String, String)
+
+        tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+        Me.Name = tmpPresetDict("Name")
+        Me.TaskListJSON = tmpPresetDict("TaskListJSON")
+        Me.FormSettingsJSON = tmpPresetDict("FormSettingJSON")
+
+    End Sub
+
+    Public Function ToJSON() As String
+
+        Dim JSONString As String = Nothing
+
+        Dim tmpPresetDict As New Dictionary(Of String, String)
+
+        tmpPresetDict("Name") = Me.Name
+        tmpPresetDict("TaskListJSON") = Me.TaskListJSON
+        tmpPresetDict("FormSettingJSON") = Me.FormSettingsJSON
+
+        JSONString = JsonConvert.SerializeObject(tmpPresetDict)
+
+        Return JSONString
+    End Function
+
 End Class

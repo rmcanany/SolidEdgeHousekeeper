@@ -494,6 +494,27 @@ Public Class UtilsPreferences
         Return TaskList
     End Function
 
+    Public Function GetTaskListJSON() As String
+
+        Dim JSONString As String = ""
+        Dim Filename As String = GetTaskListFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+        End If
+
+        Return JSONString
+    End Function
+
+    Public Sub SaveTaskListJSON(JSONString As String)
+
+        Dim Outfile = GetTaskListFilename(CheckExisting:=False)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+    End Sub
+
+
 
     Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = "form_main_settings.json"
@@ -511,19 +532,23 @@ Public Class UtilsPreferences
 
     End Function
 
-    Public Sub SaveFormMainSettings(_Form_Main As Form_Main)
+    Public Sub SaveFormMainSettings(FMain As Form_Main)
 
         Dim tmpJSONDict As New Dictionary(Of String, String)
         Dim JSONString As String
 
         Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
 
-        Dim FormType As Type = _Form_Main.GetType()
+        Dim FormType As Type = FMain.GetType()
         Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
         Dim Value As String
         Dim PropType As String
 
-
+        ' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
+        Dim ReportIgnoredProperties As Boolean = False
+        Dim MaxIgnoredShowPerPage = 20
+        Dim IgnoredCount As Integer = 0
+        Dim s As String = ""
 
         Dim KeepProps As New List(Of String)
         KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
@@ -539,22 +564,36 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
         KeepProps.AddRange({"Left", "Top", "Width", "Height", "UseDMForStatusChanges"})
         KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
+        KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 
+            PropType = PropInfo.PropertyType.Name.ToLower
+
             If Not KeepProps.Contains(PropInfo.Name) Then
+
+                If ReportIgnoredProperties Then
+                    s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
+                    If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
+                        s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
+                        MsgBox(s, vbOKOnly)
+                        s = ""
+                        IgnoredCount = -1
+                    End If
+                    IgnoredCount += 1
+
+                End If
+
                 Continue For
             End If
-
-            PropType = PropInfo.PropertyType.Name.ToLower
 
             Value = Nothing
 
             Select Case PropType
                 Case "string", "double", "int32", "boolean"
-                    Value = CStr(PropInfo.GetValue(_Form_Main, Nothing))
+                    Value = CStr(PropInfo.GetValue(FMain, Nothing))
                 Case "list`1"
-                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(_Form_Main, Nothing))
+                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
                 Case Else
                     MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
             End Select
@@ -587,14 +626,14 @@ Public Class UtilsPreferences
 
     End Sub
 
-    Public Sub GetFormMainSettings(_Form_Main As Form_Main)
+    Public Sub GetFormMainSettings(FMain As Form_Main)
 
         Dim tmpJSONDict As New Dictionary(Of String, String)
         Dim JSONString As String
 
         Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
 
-        Dim FormType As Type = _Form_Main.GetType()
+        Dim FormType As Type = FMain.GetType()
         Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
         'Dim Value As String
 
@@ -610,16 +649,16 @@ Public Class UtilsPreferences
 
                     Select Case PropInfo.PropertyType.Name.ToLower
                         Case "string"
-                            PropInfo.SetValue(_Form_Main, CStr(tmpJSONDict(PropInfo.Name)))
+                            PropInfo.SetValue(FMain, CStr(tmpJSONDict(PropInfo.Name)))
                         Case "double"
-                            PropInfo.SetValue(_Form_Main, CDbl(tmpJSONDict(PropInfo.Name)))
+                            PropInfo.SetValue(FMain, CDbl(tmpJSONDict(PropInfo.Name)))
                         Case "int32"
-                            PropInfo.SetValue(_Form_Main, CInt(tmpJSONDict(PropInfo.Name)))
+                            PropInfo.SetValue(FMain, CInt(tmpJSONDict(PropInfo.Name)))
                         Case "boolean"
-                            PropInfo.SetValue(_Form_Main, CBool(tmpJSONDict(PropInfo.Name)))
+                            PropInfo.SetValue(FMain, CBool(tmpJSONDict(PropInfo.Name)))
                         Case "list`1"
                             Dim L = JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
-                            PropInfo.SetValue(_Form_Main, L)
+                            PropInfo.SetValue(FMain, L)
                     End Select
 
                 End If
@@ -627,6 +666,73 @@ Public Class UtilsPreferences
         End If
 
     End Sub
+
+    Public Function GetFormMainSettingsJSON() As String
+
+        Dim JSONString As String = ""
+
+        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
+
+        If Not Infile = "" Then
+            JSONString = IO.File.ReadAllText(Infile)
+        End If
+
+        Return JSONString
+    End Function
+
+    Public Sub SaveFormMainSettingsJSON(JSONString As String)
+
+        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+    End Sub
+
+
+
+
+    Public Function GetPresetsListFilename(CheckExisting As Boolean) As String
+        Dim Filename = "presets.json"
+        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Function GetPresetsListJSON() As List(Of String)
+
+        Dim JSONStringList As List(Of String) = Nothing
+        Dim JSONString As String = ""
+        Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
+
+        If Not Filename = "" Then
+            JSONString = IO.File.ReadAllText(Filename)
+        Else
+            JSONString = "[]"
+        End If
+
+        JSONStringList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+        Return JSONStringList
+    End Function
+
+    Public Sub SavePresetsListJSON(JSONStringList As List(Of String))
+
+        Dim JSONString As String = JsonConvert.SerializeObject(JSONStringList)
+        Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+    End Sub
+
 
 
     Public Function GetNewTaskInstance(

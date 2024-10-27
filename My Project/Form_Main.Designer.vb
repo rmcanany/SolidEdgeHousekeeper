@@ -206,6 +206,13 @@ Partial Class Form_Main
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
+        Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
+        Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
+        Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ComboBoxPresetName = New System.Windows.Forms.ToolStripComboBox()
+        Me.ButtonPresetLoad = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetSave = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonPresetDelete = New System.Windows.Forms.ToolStripButton()
         Me.TextBoxStatus = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -259,6 +266,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
+        Me.ToolStripPresets.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
         Me.SuspendLayout()
@@ -2251,6 +2259,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 3)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 4)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 8)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ToolStripPresets, 0, 9)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
@@ -2264,8 +2273,9 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(526, 797)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
@@ -2407,6 +2417,67 @@ Partial Class Form_Main
         Me.CheckBoxCheckForNewerVersion.TabIndex = 74
         Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
         Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
+        '
+        'ToolStripPresets
+        '
+        Me.ToolStripPresets.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.None
+        Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete})
+        Me.ToolStripPresets.Location = New System.Drawing.Point(0, 285)
+        Me.ToolStripPresets.Name = "ToolStripPresets"
+        Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(3)
+        Me.ToolStripPresets.Size = New System.Drawing.Size(526, 29)
+        Me.ToolStripPresets.TabIndex = 75
+        Me.ToolStripPresets.Text = "ToolStrip1"
+        '
+        'LabelPreset
+        '
+        Me.LabelPreset.Image = Global.Housekeeper.My.Resources.Resources.cfg
+        Me.LabelPreset.Name = "LabelPreset"
+        Me.LabelPreset.Size = New System.Drawing.Size(60, 20)
+        Me.LabelPreset.Text = "Presets"
+        '
+        'ToolStripSeparator11
+        '
+        Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(6, 23)
+        '
+        'ComboBoxPresetName
+        '
+        Me.ComboBoxPresetName.Name = "ComboBoxPresetName"
+        Me.ComboBoxPresetName.Size = New System.Drawing.Size(200, 23)
+        Me.ComboBoxPresetName.Sorted = True
+        Me.ComboBoxPresetName.ToolTipText = "Select preset"
+        '
+        'ButtonPresetLoad
+        '
+        Me.ButtonPresetLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetLoad.Image = Global.Housekeeper.My.Resources.Resources.Update
+        Me.ButtonPresetLoad.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetLoad.Name = "ButtonPresetLoad"
+        Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 20)
+        Me.ButtonPresetLoad.Text = "ToolStripButton2"
+        Me.ButtonPresetLoad.ToolTipText = "Load preset"
+        '
+        'ButtonPresetSave
+        '
+        Me.ButtonPresetSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetSave.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.ButtonPresetSave.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetSave.Name = "ButtonPresetSave"
+        Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 20)
+        Me.ButtonPresetSave.Text = "ToolStripButton2"
+        Me.ButtonPresetSave.ToolTipText = "Save preset"
+        '
+        'ButtonPresetDelete
+        '
+        Me.ButtonPresetDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonPresetDelete.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonPresetDelete.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonPresetDelete.Name = "ButtonPresetDelete"
+        Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 20)
+        Me.ButtonPresetDelete.Text = "ToolStripButton2"
+        Me.ButtonPresetDelete.ToolTipText = "Delete preset"
         '
         'TextBoxStatus
         '
@@ -2633,6 +2704,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.PerformLayout()
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel3.PerformLayout()
+        Me.ToolStripPresets.ResumeLayout(False)
+        Me.ToolStripPresets.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
@@ -2841,4 +2914,11 @@ Partial Class Form_Main
     Friend WithEvents TextBoxServerQuery As TextBox
     Friend WithEvents LabelServerConnectionString As Label
     Friend WithEvents LabelServerQuery As Label
+    Friend WithEvents ToolStripPresets As ToolStrip
+    Friend WithEvents ComboBoxPresetName As ToolStripComboBox
+    Friend WithEvents ButtonPresetLoad As ToolStripButton
+    Friend WithEvents ButtonPresetSave As ToolStripButton
+    Friend WithEvents ButtonPresetDelete As ToolStripButton
+    Friend WithEvents LabelPreset As ToolStripLabel
+    Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
 End Class
