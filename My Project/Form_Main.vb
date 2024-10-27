@@ -3206,6 +3206,7 @@ Public Class Form_Main
             Me.PresetsList.Add(tmpPreset)
 
             Me.PresetsList = Me.PresetsList ' Trigger update
+            UP.SavePresetsListJSON(Me.PresetsListJSON)
         Else
             MsgBox("Enter a name for the preset to save", vbOKOnly)
         End If
@@ -3217,6 +3218,7 @@ Public Class Form_Main
 
         Dim Name As String = ComboBoxPresetName.Text
         Dim Idx As Integer = -1
+        Dim UP As New UtilsPreferences
 
         For i As Integer = 0 To Me.PresetsList.Count - 1
             If Me.PresetsList(i).Name = Name Then
@@ -3228,6 +3230,7 @@ Public Class Form_Main
         If Not Idx = -1 Then
             Me.PresetsList.RemoveAt(Idx)
             Me.PresetsList = Me.PresetsList ' Trigger update
+            UP.SavePresetsListJSON(Me.PresetsListJSON)
         End If
 
         If ComboBoxPresetName.Items.Contains(Name) Then
