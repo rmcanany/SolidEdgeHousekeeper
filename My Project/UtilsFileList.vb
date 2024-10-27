@@ -216,7 +216,7 @@ Public Class UtilsFileList
         If Not FoundFiles Is Nothing Then
 
             ' Filter by file wildcard search
-            If FMain.SortDependency Then
+            If FMain.EnableFileWildcard Then
                 FoundFiles = FileWildcardSearch(FoundFiles, FMain.FileWildcard)
             End If
 
