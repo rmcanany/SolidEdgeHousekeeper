@@ -181,7 +181,11 @@ Public Class UtilsFileList
         Dim tmpFoundFiles As New List(Of String)
 
         For Each item As ListViewItem In ListViewFiles.Items
-            tmpFoundFiles.AddRange(FindFiles(item, BareTopLevelAssembly))
+            Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly)
+            If tmptmpFoundFiles IsNot Nothing Then
+                tmpFoundFiles.AddRange(tmptmpFoundFiles)
+
+            End If
         Next
 
         tmpFoundFiles = tmpFoundFiles.Distinct.ToList
