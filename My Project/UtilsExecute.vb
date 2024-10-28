@@ -205,11 +205,14 @@ Public Class UtilsExecute
         For Each Task As Task In FMain.TaskList
             If Task.IsSelectedTask Then
                 SelectedTasksCount += 1
-                'MsgBox("Update task with info from the form")
-                'NoTaskSelected = False
+
                 If Task.RequiresSourceDirectories Then
                     Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
                     Task.SourceDirectories = UFL.GetSourceDirectories()
+                End If
+
+                If Task.RequiresSave And FMain.WarnSave Then
+                    SaveMsg = String.Format("{0}{1}{2}{3}", SaveMsg, indent, Task.Description, vbCrLf)
                 End If
 
                 ' True returns -1 upon conversion
