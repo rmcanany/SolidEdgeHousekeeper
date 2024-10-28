@@ -3442,18 +3442,6 @@ Public Class Preset
     Public Sub New()
     End Sub
 
-    Public Sub FromJSON(JSONString As String)
-
-        Dim tmpPresetDict As Dictionary(Of String, String)
-
-        tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-        Me.Name = tmpPresetDict("Name")
-        Me.TaskListJSON = tmpPresetDict("TaskListJSON")
-        Me.FormSettingsJSON = tmpPresetDict("FormSettingJSON")
-
-    End Sub
-
     Public Function ToJSON() As String
 
         Dim JSONString As String = Nothing
@@ -3468,5 +3456,109 @@ Public Class Preset
 
         Return JSONString
     End Function
+
+    Public Sub FromJSON(JSONString As String)
+
+        Dim tmpPresetDict As Dictionary(Of String, String)
+
+        tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+        Me.Name = tmpPresetDict("Name")
+        Me.TaskListJSON = tmpPresetDict("TaskListJSON")
+        Me.FormSettingsJSON = tmpPresetDict("FormSettingJSON")
+
+    End Sub
+
+End Class
+
+
+Public Class TemplateProperty
+
+    Public Property Name As String
+    Public Property EnglishName As String
+    Public Property PropertySetName As PropertySetNameConstants
+    Public Property PropertySetActualName As PropertySetActualNameConstants
+    Public Property TypeName As TypeNameConstants
+    Public Property AsmPropItemNumber As Integer
+    Public Property ParPropItemNumber As Integer
+    Public Property PsmPropItemNumber As Integer
+    Public Property DftPropItemNumber As Integer
+    Public Property PropertySource As PropertySourceConstants
+    Public Property FavoritesListIdx As Integer
+
+    Public Enum PropertySetNameConstants
+        System
+        Custom
+        'Server
+    End Enum
+
+    Public Enum PropertySetActualNameConstants
+        SummaryInformation
+        ExtendedSummaryInformation
+        DocumentSummaryInformation
+        ProjectInformation
+        MechanicalModeling
+        Custom
+    End Enum
+
+    Public Enum TypeNameConstants
+        Text
+        Number
+        YesNo
+        _Date  ' Date (without the '_') is a VB statement
+    End Enum
+
+    Public Enum PropertySourceConstants
+        Auto
+        Manual
+    End Enum
+
+    Public Sub New()
+
+    End Sub
+
+
+    Public Function ToJSON() As String
+
+        Dim JSONString As String
+
+        Dim tmpDict As New Dictionary(Of String, String)
+
+        tmpDict("Name") = Me.Name
+        tmpDict("EnglishName") = Me.EnglishName
+        tmpDict("PropertySetName") = CStr(CInt(Me.PropertySetName)) ' "0", "1"
+        tmpDict("PropertySetActualName") = CStr(CInt(Me.PropertySetActualName))
+        tmpDict("TypeName") = CStr(CInt(Me.TypeName))
+        tmpDict("AsmPropItemNumber") = CStr(Me.AsmPropItemNumber)
+        tmpDict("ParPropItemNumber") = CStr(Me.ParPropItemNumber)
+        tmpDict("PsmPropItemNumber") = CStr(Me.PsmPropItemNumber)
+        tmpDict("DftPropItemNumber") = CStr(Me.DftPropItemNumber)
+        tmpDict("PropertySource") = CStr(CInt(Me.PropertySource))
+        tmpDict("FavoritesListIdx") = CStr(Me.FavoritesListIdx)
+
+        JSONString = JsonConvert.SerializeObject(tmpDict)
+
+        Return JSONString
+    End Function
+
+    Public Sub FromJSON(JSONString As String)
+
+        Dim tmpDict As Dictionary(Of String, String)
+
+        tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+        Me.Name = tmpDict("Name")
+        Me.EnglishName = tmpDict("EnglishName")
+        Me.PropertySetName = CType(CInt(tmpDict("PropertySetName")), PropertySetNameConstants)
+        Me.PropertySetActualName = CType(CInt(tmpDict("PropertySetActualName")), PropertySetActualNameConstants)
+        Me.TypeName = CType(CInt(tmpDict("TypeName")), TypeNameConstants)
+        Me.AsmPropItemNumber = CInt(tmpDict("AsmPropItemNumber"))
+        Me.ParPropItemNumber = CInt(tmpDict("ParPropItemNumber"))
+        Me.PsmPropItemNumber = CInt(tmpDict("PsmPropItemNumber"))
+        Me.DftPropItemNumber = CInt(tmpDict("DftPropItemNumber"))
+        Me.PropertySource = CType(CInt(tmpDict("PropertySource")), PropertySourceConstants)
+        Me.FavoritesListIdx = CInt(tmpDict("FavoritesListIdx"))
+
+    End Sub
 
 End Class

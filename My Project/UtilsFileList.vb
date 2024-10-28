@@ -184,7 +184,6 @@ Public Class UtilsFileList
             Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly)
             If tmptmpFoundFiles IsNot Nothing Then
                 tmpFoundFiles.AddRange(tmptmpFoundFiles)
-
             End If
         Next
 
@@ -476,6 +475,7 @@ Public Class UtilsFileList
         For Each FoundFile In FoundFiles
 
             FMain.TextBoxStatus.Text = String.Format("Updating List {0}", System.IO.Path.GetFileName(FoundFile))
+
             If NumProcessed Mod 100 = 0 Then
                 System.Windows.Forms.Application.DoEvents()
                 If FMain.StopProcess Then
@@ -511,25 +511,12 @@ Public Class UtilsFileList
 
                 ListViewFiles.Items.Add(tmpLVItem)
 
-                'If PopulatePropertyColumns Then
-                '    UpdateLVItem(tmpLVItem)
-                'End If
-
             End If
 
             NumProcessed += 1
         Next
 
         If PopulatePropertyColumns Then UpdatePropertiesColumns()
-
-        ''Resetting the columns
-        'If ListViewFiles.Columns.Count > 2 Then
-        '    Do Until ListViewFiles.Columns.Count = 2
-        '        ListViewFiles.Columns.RemoveAt(ListViewFiles.Columns.Count - 1)
-        '    Loop
-        'End If
-
-        'CreateColumns()
 
         ListViewFiles.EndUpdate()
 
