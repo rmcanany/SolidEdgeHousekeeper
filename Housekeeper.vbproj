@@ -483,6 +483,9 @@
     <None Include="Resources\SE_dft.png" />
     <None Include="Resources\SE_par.png" />
     <None Include="Resources\SE_psm.png" />
+    <Content Include="My Project\ExampleDb.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Panoramic Data.ico" />
     <None Include="Resources\icons8_Save_16.png" />
     <None Include="Resources\icons8_Pencil_Drawing_16.png" />

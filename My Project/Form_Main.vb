@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Data.OleDb
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 'Imports System.Windows
@@ -3065,6 +3066,8 @@ Public Class Form_Main
 
         editbox.Hide()
 
+        Console.WriteLine(ExecuteQuery)
+
     End Sub
 
     Private Sub editbox_KeyUp(sender As Object, e As KeyEventArgs)
@@ -3239,6 +3242,37 @@ Public Class Form_Main
         ComboBoxPresetName.Text = ""
 
     End Sub
+
+
+    Private Function ExecuteQuery() As String
+
+        ExecuteQuery = ""
+
+        Try
+            'TBD Determine the type of DB, if its a SQL it need a different connection type
+            Dim con As New OleDbConnection(TextBoxServerConnectionString.Text)
+            con.Open()
+
+            Dim cmd As New OleDbCommand(TextBoxServerQuery.Text.Replace("%{System.Title}", "801040034"), con) 'TBD <--- Convert the property formula into text
+            Dim reader As OleDbDataReader = cmd.ExecuteReader()
+
+            If reader.HasRows Then
+                reader.Read()
+
+                ExecuteQuery = reader(0).ToString
+
+            End If
+
+            reader.Close()
+            con.Close()
+
+        Catch ex As Exception
+
+            ExecuteQuery = ex.Message
+
+        End Try
+
+    End Function
 
 
     ' Commands I can never remember
