@@ -3250,10 +3250,10 @@ Public Class Form_Main
 
         Try
             'TBD Determine the type of DB, if its a SQL it need a different connection type
-            Dim con As New OleDbConnection(TextBoxServerConnectionString.Text)
+            Dim con As New OleDbConnection(ServerConnectionString)
             con.Open()
 
-            Dim cmd As New OleDbCommand(TextBoxServerQuery.Text.Replace("%{System.Title}", "801040034"), con) 'TBD <--- Convert the property formula into text
+            Dim cmd As New OleDbCommand(ServerQuery.Replace("%{System.Title}", "801040034"), con) 'TBD <--- Convert the property formula into text
             Dim reader As OleDbDataReader = cmd.ExecuteReader()
 
             If reader.HasRows Then
