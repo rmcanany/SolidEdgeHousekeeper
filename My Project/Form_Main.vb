@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Data.OleDb
+Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
@@ -3254,21 +3255,44 @@ Public Class Form_Main
 
         Try
             'TBD Determine the type of DB, if its a SQL it need a different connection type
-            Dim con As New OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
-            con.Open()
 
-            Dim cmd As New OleDbCommand(Q, con) 'TBD <--- Convert the property formula into text
-            Dim reader As OleDbDataReader = cmd.ExecuteReader()
+            If Form_Main.TextBoxServerConnectionString.Text.Contains("OLEDB") Then
 
-            If reader.HasRows Then
-                reader.Read()
+                Dim con As New OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
+                con.Open()
 
-                ExecuteQuery = reader(0).ToString
+                Dim cmd As New OleDbCommand(Q, con) 'TBD <--- Convert the property formula into text
+                Dim reader As OleDbDataReader = cmd.ExecuteReader()
+
+                If reader.HasRows Then
+                    reader.Read()
+
+                    ExecuteQuery = reader(0).ToString
+
+                End If
+
+                reader.Close()
+                con.Close()
+
+            Else
+
+                Dim con As New SqlConnection(Form_Main.TextBoxServerConnectionString.Text)
+                con.Open()
+
+                Dim cmd As New SqlCommand(Q, con)
+                Dim reader As SqlDataReader = cmd.ExecuteReader()
+
+                If reader.HasRows Then
+                    reader.Read()
+
+                    ExecuteQuery = reader(0).ToString
+
+                End If
+
+                reader.Close()
+                con.Close()
 
             End If
-
-            reader.Close()
-            con.Close()
 
         Catch ex As Exception
 
