@@ -1,12 +1,14 @@
 ﻿Option Strict On
 
 Imports System.Data.OleDb
+Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 'Imports System.Windows
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
+Imports OpenMcdf
 
 Public Class Form_Main
 
@@ -1201,6 +1203,9 @@ Public Class Form_Main
 
             tmpTaskPanel.Controls.Add(Task.TaskControl)
         Next
+
+        AddHandler editbox.Leave, AddressOf editbox_LostFocus
+        AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
 
         UP.CheckVersionFormat(Me.Version)
 
@@ -3019,9 +3024,6 @@ Public Class Form_Main
 
                 editbox.Bounds = hitinfo.SubItem.Bounds
                 editbox.Text = hitinfo.SubItem.Text
-                AddHandler editbox.Leave, AddressOf editbox_LostFocus
-                AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
-
                 editbox.Show()
                 editbox.SelectionStart = editbox.TextLength
                 editbox.SelectedText = ""
@@ -3055,18 +3057,16 @@ Public Class Form_Main
             PropertyNameEnglish = hitinfo.Item.ListView.Columns.Item(columnIndex).Text
         End Try
 
-        'hitinfo.Item.Name 'File to edit
+        Dim FullName As String = hitinfo.Item.Name 'File to edit
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
         'hitinfo.SubItem.Text 'New value
 
-        If UC.SetOLEPropValue(hitinfo.Item.Name, PropertySet, PropertyNameEnglish, editbox.Text) Then
+        If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, editbox.Text) Then
             hitinfo.SubItem.Text = editbox.Text
             hitinfo.SubItem.BackColor = Color.Empty
         End If
 
         editbox.Hide()
-
-        Console.WriteLine(ExecuteQuery)
 
     End Sub
 
@@ -3244,16 +3244,20 @@ Public Class Form_Main
     End Sub
 
 
-    Private Function ExecuteQuery() As String
+    Public Shared Function ExecuteQuery(cf As CompoundFile, FullName As String, Query As String) As String
 
         ExecuteQuery = ""
 
+        Dim UC As New UtilsCommon
+        Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, Query, False, Form_Main.TemplatePropertyDict)
+
+
         Try
             'TBD Determine the type of DB, if its a SQL it need a different connection type
-            Dim con As New OleDbConnection(ServerConnectionString)
+            Dim con As New OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
             con.Open()
 
-            Dim cmd As New OleDbCommand(ServerQuery.Replace("%{System.Title}", "801040034"), con) 'TBD <--- Convert the property formula into text
+            Dim cmd As New OleDbCommand(Q, con) 'TBD <--- Convert the property formula into text
             Dim reader As OleDbDataReader = cmd.ExecuteReader()
 
             If reader.HasRows Then

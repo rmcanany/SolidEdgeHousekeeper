@@ -1480,6 +1480,8 @@ Public Class UtilsCommon
                     tmpValue = FullName
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
                     tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
+                ElseIf PropertyName = "Query1" Then
+                    tmpValue = Form_Main.ExecuteQuery(cf, FullName, Form_Main.ServerQuery)
                 Else
                     If Not IsNothing(SEDoc) Then
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
