@@ -772,11 +772,13 @@ Public Class Form_Main
         Set(value As List(Of Preset))
             _PresetsList = value
             If Me.TabControl1 IsNot Nothing Then
+                Dim TextOld = ComboBoxPresetName.Text
                 ComboBoxPresetName.Items.Clear()
                 ComboBoxPresetName.Items.Add("")
                 For Each tmpPreset In PresetsList
                     ComboBoxPresetName.Items.Add(tmpPreset.Name)
                 Next
+                ComboBoxPresetName.Text = TextOld
 
                 Dim tmpPresetsListJSON As New List(Of String)
                 For Each tmpPreset As Preset In _PresetsList
@@ -1047,10 +1049,6 @@ Public Class Form_Main
 
         If Me.ListOfColumns Is Nothing Then
             Me.ListOfColumns = New List(Of PropertyColumn)
-        End If
-
-        If Me.PresetsList Is Nothing Then
-            Me.PresetsList = New List(Of Preset)
         End If
 
         If Me.ListOfColumns.Count = 0 Then
@@ -3160,9 +3158,10 @@ Public Class Form_Main
             Next
 
             If GotAMatch Then
-                UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
-                UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
-                UP.SavePresetsListJSON(Me.PresetsListJSON)
+                'UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
+                'UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
+                'UP.SavePresetsListJSON(Me.PresetsListJSON)
+                SaveSettings()
 
                 Application.DoEvents()
                 Startup()
@@ -3196,9 +3195,6 @@ Public Class Form_Main
                 End If
             Next
 
-            SaveSettings()
-            Application.DoEvents()
-
             If Not GotAMatch Then
                 tmpPreset = New Preset
             End If
@@ -3207,10 +3203,16 @@ Public Class Form_Main
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
 
-            Me.PresetsList.Add(tmpPreset)
+            If Not GotAMatch Then
+                Me.PresetsList.Add(tmpPreset)
+            End If
 
             Me.PresetsList = Me.PresetsList ' Trigger update
+
+            'SaveSettings()
+            'Application.DoEvents()
             UP.SavePresetsListJSON(Me.PresetsListJSON)
+
         Else
             MsgBox("Enter a name for the preset to save", vbOKOnly)
         End If
@@ -3400,7 +3402,7 @@ Public Class ListViewColumnSorter
         ColumnToSort = 0
 
         ' Initialize the sort order to 'none'.
-        OrderOfSort = SortOrder.None
+        OrderOfSort = SortOrder.Unspecified
 
         ' Initialize the CaseInsensitiveComparer object.
         ObjectCompare = New CaseInsensitiveComparer()
