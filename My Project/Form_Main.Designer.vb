@@ -2419,13 +2419,15 @@ Partial Class Form_Main
         '
         'ToolStripPresets
         '
-        Me.ToolStripPresets.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ToolStripPresets.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel1.SetColumnSpan(Me.ToolStripPresets, 4)
-        Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.None
+        Me.ToolStripPresets.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ToolStripPresets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStripPresets.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LabelPreset, Me.ToolStripSeparator11, Me.ComboBoxPresetName, Me.ButtonPresetLoad, Me.ButtonPresetSave, Me.ButtonPresetDelete})
         Me.ToolStripPresets.Location = New System.Drawing.Point(0, 0)
         Me.ToolStripPresets.Name = "ToolStripPresets"
-        Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(3)
+        Me.ToolStripPresets.Padding = New System.Windows.Forms.Padding(5, 0, 1, 0)
+        Me.ToolStripPresets.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.ToolStripPresets.Size = New System.Drawing.Size(559, 26)
         Me.ToolStripPresets.TabIndex = 75
         Me.ToolStripPresets.Text = "ToolStrip1"
@@ -2434,18 +2436,18 @@ Partial Class Form_Main
         '
         Me.LabelPreset.Image = Global.Housekeeper.My.Resources.Resources.cfg
         Me.LabelPreset.Name = "LabelPreset"
-        Me.LabelPreset.Size = New System.Drawing.Size(60, 17)
+        Me.LabelPreset.Size = New System.Drawing.Size(60, 23)
         Me.LabelPreset.Text = "Presets"
         '
         'ToolStripSeparator11
         '
         Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
-        Me.ToolStripSeparator11.Size = New System.Drawing.Size(6, 20)
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(6, 26)
         '
         'ComboBoxPresetName
         '
         Me.ComboBoxPresetName.Name = "ComboBoxPresetName"
-        Me.ComboBoxPresetName.Size = New System.Drawing.Size(200, 20)
+        Me.ComboBoxPresetName.Size = New System.Drawing.Size(200, 26)
         Me.ComboBoxPresetName.Sorted = True
         Me.ComboBoxPresetName.ToolTipText = "Select preset"
         '
@@ -2455,7 +2457,7 @@ Partial Class Form_Main
         Me.ButtonPresetLoad.Image = Global.Housekeeper.My.Resources.Resources.Update
         Me.ButtonPresetLoad.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetLoad.Name = "ButtonPresetLoad"
-        Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 17)
+        Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 23)
         Me.ButtonPresetLoad.Text = "ToolStripButton2"
         Me.ButtonPresetLoad.ToolTipText = "Load preset"
         '
@@ -2465,7 +2467,7 @@ Partial Class Form_Main
         Me.ButtonPresetSave.Image = Global.Housekeeper.My.Resources.Resources.Save
         Me.ButtonPresetSave.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetSave.Name = "ButtonPresetSave"
-        Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 17)
+        Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 23)
         Me.ButtonPresetSave.Text = "ToolStripButton2"
         Me.ButtonPresetSave.ToolTipText = "Save preset"
         '
@@ -2475,13 +2477,14 @@ Partial Class Form_Main
         Me.ButtonPresetDelete.Image = Global.Housekeeper.My.Resources.Resources.Close
         Me.ButtonPresetDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetDelete.Name = "ButtonPresetDelete"
-        Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 17)
+        Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 23)
         Me.ButtonPresetDelete.Text = "ToolStripButton2"
         Me.ButtonPresetDelete.ToolTipText = "Delete preset"
         '
         'TextBoxStatus
         '
-        Me.TextBoxStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.TextBoxStatus.BackColor = System.Drawing.Color.White
+        Me.TextBoxStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TableLayoutPanel1.SetColumnSpan(Me.TextBoxStatus, 4)
         Me.TextBoxStatus.Dock = System.Windows.Forms.DockStyle.Top
         Me.TextBoxStatus.Location = New System.Drawing.Point(2, 28)
