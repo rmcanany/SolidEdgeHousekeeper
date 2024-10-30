@@ -1513,7 +1513,8 @@ Public Class UtilsCommon
 
                     DocValues.Add(tmpValue)
                 Else
-                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName)) '<--- Instead of Throw an exception the situation should be handled. Throw an exception have an impact on performance
+                    'DocValues.Add("**PROPNOTFOUND**")
                 End If
 
             Next
