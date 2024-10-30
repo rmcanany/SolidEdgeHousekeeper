@@ -3172,10 +3172,10 @@ Public Class Form_Main
             Next
 
             If GotAMatch Then
-                'UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
-                'UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
-                'UP.SavePresetsListJSON(Me.PresetsListJSON)
-                SaveSettings()
+                UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
+                UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
+                UP.SavePresetsListJSON(Me.PresetsListJSON)
+                'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
                 Startup()
