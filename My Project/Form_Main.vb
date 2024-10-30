@@ -3464,6 +3464,47 @@ Public Class ListViewColumnSorter
 End Class
 
 
+Public Class Presets
+
+    Public Property Items As List(Of Preset)
+
+    Public Sub New()
+
+    End Sub
+
+    Public Function ToJSON() As String
+
+        Dim JSONString As String
+
+        Dim tmpList As New List(Of String)
+
+        For Each Item As Preset In Me.Items
+            tmpList.Add(Item.ToJSON)
+        Next
+
+        JSONString = JsonConvert.SerializeObject(tmpList)
+
+        Return JSONString
+    End Function
+
+    Public Sub FromJSON(JSONString As String)
+
+        Dim tmpList As List(Of String)
+
+        tmpList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+        Me.Items.Clear()
+
+        For Each PropertyDataJSONString As String In tmpList
+            Dim Item As New Preset
+            Item.FromJSON(PropertyDataJSONString)
+            Me.Items.Add(Item)
+        Next
+
+    End Sub
+
+End Class
+
 Public Class Preset
     Public Property Name As String
     Public Property TaskListJSON As String
@@ -3502,7 +3543,71 @@ Public Class Preset
 End Class
 
 
-Public Class TemplateProperty
+Public Class PropertyDatas
+
+    Public Property Items As List(Of PropertyData)
+
+    Public Sub New()
+
+    End Sub
+
+    Public Function ToJSON() As String
+
+        Dim JSONString As String
+
+        Dim tmpList As New List(Of String)
+
+        For Each Item As PropertyData In Me.Items
+            tmpList.Add(Item.ToJSON)
+        Next
+
+        JSONString = JsonConvert.SerializeObject(tmpList)
+
+        Return JSONString
+    End Function
+
+    Public Sub FromJSON(JSONString As String)
+
+        Dim tmpList As List(Of String)
+
+        tmpList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+        Me.Items.Clear()
+
+        For Each PropertyDataJSONString As String In tmpList
+            Dim Item As New PropertyData
+            Item.FromJSON(PropertyDataJSONString)
+            Me.Items.Add(Item)
+        Next
+
+    End Sub
+
+    Public Function GetFavoritesList() As List(Of String)
+
+        Dim FavoritesList As New List(Of String)
+        Dim FavoritesArray(Me.Items.Count) As String
+        Dim Idx As Integer
+
+        For Each Item As PropertyData In Me.Items
+            Idx = Item.FavoritesListIdx
+            If Not Idx = -1 Then
+                FavoritesArray(Idx) = Item.Name
+            End If
+        Next
+
+        For i As Integer = 0 To FavoritesArray.Count - 1
+            If Not FavoritesArray(i) = "" Then
+                FavoritesList.Add(FavoritesArray(i))
+            End If
+        Next
+
+        Return FavoritesList
+
+    End Function
+
+End Class
+
+Public Class PropertyData
 
     Public Property Name As String
     Public Property EnglishName As String
