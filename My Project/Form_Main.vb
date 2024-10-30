@@ -1207,6 +1207,15 @@ Public Class Form_Main
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
 
+
+        '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
+        ToolStrip_Filter.Renderer = New MySR()
+        ToolStripPresets.Renderer = New MySR()
+        '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
+
+
+
+
         UP.CheckVersionFormat(Me.Version)
 
         If Me.CheckForNewerVersion Then
@@ -3313,7 +3322,15 @@ Public Class Form_Main
 
     End Sub
 
+    Public Class MySR
+        Inherits ToolStripSystemRenderer
 
+        Public Sub New()
+        End Sub
+
+        Protected Overrides Sub OnRenderToolStripBorder(ByVal e As ToolStripRenderEventArgs)
+        End Sub
+    End Class
 
 
     ' Commands I can never remember
