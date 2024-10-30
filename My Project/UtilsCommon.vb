@@ -977,12 +977,20 @@ Public Class UtilsCommon
 
     Public Function FOA_Storage(CF As CompoundFile) As CFStorage
 
-        Try
-            Dim tmpStorage = CF.RootStorage.GetStorage("Master")
-            Return tmpStorage
-        Catch ex As Exception
+        If CF.RootStorage.ContainsStorage("Master") Then
+
+            Try
+                Dim tmpStorage = CF.RootStorage.GetStorage("Master")
+                Return tmpStorage
+            Catch ex As Exception
+                Return Nothing
+            End Try
+
+        Else
+
             Return Nothing
-        End Try
+
+        End If
 
     End Function
 
