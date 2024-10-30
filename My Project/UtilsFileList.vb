@@ -1168,38 +1168,52 @@ Public Class UtilsFileList
 
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon
-                Try
-                    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                    Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
-                    Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-                    'Adding extra properties data if needed
-                    For Each PropColumn In FMain.ListOfColumns
-                        If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
-                            Dim PropValue As String
-                            Dim tmpColor As Color = Color.White
-                            Try
-                                PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
+            Try
+                Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
+                Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+                'Adding extra properties data if needed
+                For Each PropColumn In FMain.ListOfColumns
+                    If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
+                        Dim PropValue As String
+                        Dim tmpColor As Color = Color.White
+                        Try
+                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
                                                                          ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                            Catch ex As Exception
-                                PropValue = ""
-                                tmpColor = Color.Gainsboro
-                            End Try
-                            LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
-                        End If
-                    Next
-                    cf.Close()
-                    fs.Close()
-                    cf = Nothing
-                    fs = Nothing
-                    Application.DoEvents()
-                Catch ex As Exception
-                    For Each PropColumn In FMain.ListOfColumns
-                        LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
-                    Next
-                End Try
-            Else
-                'Eventually insert code to personalize Sources group
-            End If
+                        Catch ex As Exception
+                            PropValue = ""
+                            tmpColor = Color.Gainsboro
+                        End Try
+
+                        LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
+
+                        'If PropValue <> "**PROPNOTFOUND**" Then
+                        '    LVItem.SubItems.Add(PropValue, Color.Empty, Color.White, LVItem.Font)
+                        'Else
+                        '    LVItem.SubItems.Add("", Color.Empty, Color.Gainsboro, LVItem.Font)
+                        'End If
+
+                    End If
+
+                Next
+                cf.Close()
+                fs.Close()
+                cf = Nothing
+                fs = Nothing
+                Application.DoEvents()
+
+            Catch ex As Exception
+
+                For Each PropColumn In FMain.ListOfColumns
+                    LVItem.SubItems.Add("** Error **", Color.Black, Color.LightPink, LVItem.Font)
+                Next
+
+            End Try
+
+        Else
+            'Eventually insert code to personalize Sources group
+
+        End If
 
         'End If
 

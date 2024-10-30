@@ -190,9 +190,9 @@ Partial Class Form_Main
         Me.TabPageServerQuery = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel9 = New Housekeeper.ExTableLayoutPanel()
         Me.TextBoxServerConnectionString = New System.Windows.Forms.TextBox()
-        Me.TextBoxServerQuery = New System.Windows.Forms.TextBox()
         Me.LabelServerConnectionString = New System.Windows.Forms.Label()
         Me.LabelServerQuery = New System.Windows.Forms.Label()
+        Me.FastColoredServerQuery = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
@@ -263,6 +263,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.SuspendLayout()
         Me.TabPageServerQuery.SuspendLayout()
         Me.ExTableLayoutPanel9.SuspendLayout()
+        CType(Me.FastColoredServerQuery, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
@@ -420,7 +421,7 @@ Partial Class Form_Main
         '
         'ToolStrip_Filter
         '
-        Me.ToolStrip_Filter.BackColor = System.Drawing.SystemColors.Control
+        Me.ToolStrip_Filter.BackColor = System.Drawing.Color.White
         Me.ToolStrip_Filter.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ToolStrip_Filter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Filter.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CheckBoxEnablePropertyFilter, Me.new_ButtonPropertyFilter, Me.ToolStripSeparator6, Me.CheckBoxEnableFileWildcard, Me.ComboBoxFileWildcard, Me.new_ButtonFileSearchDelete, Me.ToolStripSeparator7})
@@ -690,6 +691,7 @@ Partial Class Form_Main
         'TabPageTasks
         '
         Me.TabPageTasks.AutoScroll = True
+        Me.TabPageTasks.BackColor = System.Drawing.Color.White
         Me.TabPageTasks.Controls.Add(Me.TaskPanel)
         Me.TabPageTasks.Controls.Add(Me.TaskFooterPanel)
         Me.TabPageTasks.Controls.Add(Me.TaskHeaderPanel)
@@ -700,7 +702,6 @@ Partial Class Form_Main
         Me.TabPageTasks.Size = New System.Drawing.Size(551, 619)
         Me.TabPageTasks.TabIndex = 7
         Me.TabPageTasks.Text = "Tasks"
-        Me.TabPageTasks.UseVisualStyleBackColor = True
         '
         'TaskPanel
         '
@@ -867,7 +868,7 @@ Partial Class Form_Main
         'TabPageConfiguration
         '
         Me.TabPageConfiguration.AutoScroll = True
-        Me.TabPageConfiguration.BackColor = System.Drawing.SystemColors.Control
+        Me.TabPageConfiguration.BackColor = System.Drawing.Color.White
         Me.TabPageConfiguration.Controls.Add(Me.TabControl2)
         Me.TabPageConfiguration.ImageKey = "Tools"
         Me.TabPageConfiguration.Location = New System.Drawing.Point(4, 24)
@@ -880,21 +881,19 @@ Partial Class Form_Main
         '
         'TabControl2
         '
-        Me.TabControl2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl2.Controls.Add(Me.TabPageTopLevelAssy)
         Me.TabControl2.Controls.Add(Me.TabPageStatus)
         Me.TabControl2.Controls.Add(Me.TabPageSorting)
         Me.TabControl2.Controls.Add(Me.TabPageTemplates)
         Me.TabControl2.Controls.Add(Me.TabPageServerQuery)
         Me.TabControl2.Controls.Add(Me.TabPageGeneral)
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl2.ImageList = Me.TabPage_ImageList
-        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Location = New System.Drawing.Point(4, 3)
         Me.TabControl2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(542, 791)
+        Me.TabControl2.Size = New System.Drawing.Size(543, 613)
         Me.TabControl2.TabIndex = 44
         '
         'TabPageTopLevelAssy
@@ -905,7 +904,7 @@ Partial Class Form_Main
         Me.TabPageTopLevelAssy.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageTopLevelAssy.Name = "TabPageTopLevelAssy"
         Me.TabPageTopLevelAssy.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageTopLevelAssy.Size = New System.Drawing.Size(535, 585)
         Me.TabPageTopLevelAssy.TabIndex = 2
         Me.TabPageTopLevelAssy.Text = "Top Level Assy"
         Me.TabPageTopLevelAssy.UseVisualStyleBackColor = True
@@ -940,7 +939,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(526, 757)
+        Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel4.TabIndex = 22
         Me.ExTableLayoutPanel4.Task = Nothing
         '
@@ -1069,7 +1068,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel5.Name = "ExTableLayoutPanel5"
         Me.ExTableLayoutPanel5.RowCount = 1
         Me.ExTableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel5.Size = New System.Drawing.Size(520, 34)
+        Me.ExTableLayoutPanel5.Size = New System.Drawing.Size(521, 34)
         Me.ExTableLayoutPanel5.TabIndex = 22
         Me.ExTableLayoutPanel5.Task = Nothing
         '
@@ -1090,7 +1089,7 @@ Partial Class Form_Main
         Me.TextBoxFastSearchScopeFilename.Location = New System.Drawing.Point(152, 5)
         Me.TextBoxFastSearchScopeFilename.Margin = New System.Windows.Forms.Padding(2)
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
-        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(366, 23)
+        Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(367, 23)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 15
         '
         'TabPageStatus
@@ -1101,7 +1100,7 @@ Partial Class Form_Main
         Me.TabPageStatus.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageStatus.Name = "TabPageStatus"
         Me.TabPageStatus.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageStatus.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageStatus.Size = New System.Drawing.Size(535, 585)
         Me.TabPageStatus.TabIndex = 3
         Me.TabPageStatus.Text = "Status"
         Me.TabPageStatus.UseVisualStyleBackColor = True
@@ -1125,7 +1124,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(526, 757)
+        Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel6.TabIndex = 97
         Me.ExTableLayoutPanel6.Task = Nothing
         '
@@ -1853,7 +1852,7 @@ Partial Class Form_Main
         Me.TabPageSorting.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageSorting.Name = "TabPageSorting"
         Me.TabPageSorting.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageSorting.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageSorting.Size = New System.Drawing.Size(535, 585)
         Me.TabPageSorting.TabIndex = 4
         Me.TabPageSorting.Text = "Sorting"
         Me.TabPageSorting.UseVisualStyleBackColor = True
@@ -1879,7 +1878,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(526, 757)
+        Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel7.TabIndex = 56
         Me.ExTableLayoutPanel7.Task = Nothing
         '
@@ -1958,7 +1957,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
         Me.ExTableLayoutPanel8.RowCount = 1
         Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(520, 34)
+        Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(521, 34)
         Me.ExTableLayoutPanel8.TabIndex = 54
         Me.ExTableLayoutPanel8.Task = Nothing
         '
@@ -1990,7 +1989,7 @@ Partial Class Form_Main
         Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
         Me.TabPageTemplates.Name = "TabPageTemplates"
         Me.TabPageTemplates.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageTemplates.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageTemplates.Size = New System.Drawing.Size(535, 585)
         Me.TabPageTemplates.TabIndex = 7
         Me.TabPageTemplates.Text = "Templates"
         Me.TabPageTemplates.UseVisualStyleBackColor = True
@@ -2167,9 +2166,10 @@ Partial Class Form_Main
         Me.TabPageServerQuery.Controls.Add(Me.ExTableLayoutPanel9)
         Me.TabPageServerQuery.ImageKey = "Query"
         Me.TabPageServerQuery.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageServerQuery.Margin = New System.Windows.Forms.Padding(0)
         Me.TabPageServerQuery.Name = "TabPageServerQuery"
         Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageServerQuery.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageServerQuery.Size = New System.Drawing.Size(535, 585)
         Me.TabPageServerQuery.TabIndex = 8
         Me.TabPageServerQuery.Text = "Server Query"
         Me.TabPageServerQuery.UseVisualStyleBackColor = True
@@ -2178,21 +2178,21 @@ Partial Class Form_Main
         '
         Me.ExTableLayoutPanel9.ColumnCount = 1
         Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
-        Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerQuery, 0, 3)
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.FastColoredServerQuery, 0, 3)
         Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
+        Me.ExTableLayoutPanel9.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel9.Name = "ExTableLayoutPanel9"
         Me.ExTableLayoutPanel9.RowCount = 5
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(528, 757)
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(529, 579)
         Me.ExTableLayoutPanel9.TabIndex = 0
         Me.ExTableLayoutPanel9.Task = Nothing
         '
@@ -2201,16 +2201,8 @@ Partial Class Form_Main
         Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
         Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
-        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(522, 23)
+        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxServerConnectionString.TabIndex = 0
-        '
-        'TextBoxServerQuery
-        '
-        Me.TextBoxServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBoxServerQuery.Location = New System.Drawing.Point(3, 93)
-        Me.TextBoxServerQuery.Name = "TextBoxServerQuery"
-        Me.TextBoxServerQuery.Size = New System.Drawing.Size(522, 23)
-        Me.TextBoxServerQuery.TabIndex = 1
         '
         'LabelServerConnectionString
         '
@@ -2232,6 +2224,32 @@ Partial Class Form_Main
         Me.LabelServerQuery.TabIndex = 3
         Me.LabelServerQuery.Text = "Query"
         '
+        'FastColoredServerQuery
+        '
+        Me.FastColoredServerQuery.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.FastColoredServerQuery.AutoIndentCharsPatterns = ""
+        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(2, 14)
+        Me.FastColoredServerQuery.BackBrush = Nothing
+        Me.FastColoredServerQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.FastColoredServerQuery.CharHeight = 14
+        Me.FastColoredServerQuery.CharWidth = 8
+        Me.FastColoredServerQuery.CommentPrefix = "--"
+        Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.IsReplaceMode = False
+        Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
+        Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
+        Me.FastColoredServerQuery.Location = New System.Drawing.Point(3, 93)
+        Me.FastColoredServerQuery.Name = "FastColoredServerQuery"
+        Me.FastColoredServerQuery.Paddings = New System.Windows.Forms.Padding(0)
+        Me.FastColoredServerQuery.RightBracket = Global.Microsoft.VisualBasic.ChrW(41)
+        Me.FastColoredServerQuery.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.FastColoredServerQuery.ServiceColors = CType(resources.GetObject("FastColoredServerQuery.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
+        Me.FastColoredServerQuery.Size = New System.Drawing.Size(523, 94)
+        Me.FastColoredServerQuery.TabIndex = 6
+        Me.FastColoredServerQuery.Zoom = 100
+        '
         'TabPageGeneral
         '
         Me.TabPageGeneral.AutoScroll = True
@@ -2241,7 +2259,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPageGeneral.Name = "TabPageGeneral"
         Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.TabPageGeneral.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(535, 585)
         Me.TabPageGeneral.TabIndex = 6
         Me.TabPageGeneral.Text = "General"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
@@ -2275,7 +2293,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(526, 757)
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
@@ -2368,7 +2386,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(520, 34)
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(521, 34)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
         '
@@ -2645,6 +2663,7 @@ Partial Class Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(559, 752)
         Me.Controls.Add(Me.LabelTimeRemaining)
         Me.Controls.Add(Me.TabControl1)
@@ -2704,6 +2723,7 @@ Partial Class Form_Main
         Me.TabPageServerQuery.ResumeLayout(False)
         Me.ExTableLayoutPanel9.ResumeLayout(False)
         Me.ExTableLayoutPanel9.PerformLayout()
+        CType(Me.FastColoredServerQuery, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPageGeneral.ResumeLayout(False)
         Me.ExTableLayoutPanel2.ResumeLayout(False)
         Me.ExTableLayoutPanel2.PerformLayout()
@@ -2916,7 +2936,6 @@ Partial Class Form_Main
     Friend WithEvents TabPageServerQuery As TabPage
     Friend WithEvents ExTableLayoutPanel9 As ExTableLayoutPanel
     Friend WithEvents TextBoxServerConnectionString As TextBox
-    Friend WithEvents TextBoxServerQuery As TextBox
     Friend WithEvents LabelServerConnectionString As Label
     Friend WithEvents LabelServerQuery As Label
     Friend WithEvents ToolStripPresets As ToolStrip
@@ -2926,4 +2945,5 @@ Partial Class Form_Main
     Friend WithEvents ButtonPresetDelete As ToolStripButton
     Friend WithEvents LabelPreset As ToolStripLabel
     Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
+    Friend WithEvents FastColoredServerQuery As FastColoredTextBoxNS.FastColoredTextBox
 End Class

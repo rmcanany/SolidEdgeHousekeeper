@@ -638,7 +638,8 @@ Public Class Form_Main
         Set(value As String)
             _ServerQuery = value
             If Me.TabControl1 IsNot Nothing Then
-                TextBoxServerQuery.Text = value
+                'TextBoxServerQuery.Text = value
+                If FastColoredServerQuery.Text <> value Then FastColoredServerQuery.Text = value  '<---- This may throw an exception due to a weird initialization of the component in Form_Main.Designer.vb
             End If
         End Set
     End Property
@@ -1205,6 +1206,15 @@ Public Class Form_Main
 
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
+
+
+        '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
+        ToolStrip_Filter.Renderer = New MySR()
+        ToolStripPresets.Renderer = New MySR()
+        '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
+
+
+
 
         UP.CheckVersionFormat(Me.Version)
 
@@ -3123,8 +3133,12 @@ Public Class Form_Main
         ServerConnectionString = TextBoxServerConnectionString.Text
     End Sub
 
-    Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
-        ServerQuery = TextBoxServerQuery.Text
+    'Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
+    '    ServerQuery = TextBoxServerQuery.Text
+    'End Sub
+
+    Private Sub FastColoredServerQuery_TextChanged(sender As Object, e As FastColoredTextBoxNS.TextChangedEventArgs) Handles FastColoredServerQuery.TextChanged
+        ServerQuery = FastColoredServerQuery.Text
     End Sub
 
     Private Sub ComboBoxPresetName_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxPresetName.LostFocus
@@ -3303,6 +3317,20 @@ Public Class Form_Main
         End Try
 
     End Function
+
+    Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Public Class MySR
+        Inherits ToolStripSystemRenderer
+
+        Public Sub New()
+        End Sub
+
+        Protected Overrides Sub OnRenderToolStripBorder(ByVal e As ToolStripRenderEventArgs)
+        End Sub
+    End Class
 
 
     ' Commands I can never remember
