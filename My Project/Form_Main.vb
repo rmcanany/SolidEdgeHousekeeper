@@ -3213,6 +3213,8 @@ Public Class Form_Main
                 tmpPreset = New Preset
             End If
 
+            SaveSettings()
+
             tmpPreset.Name = Name
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
