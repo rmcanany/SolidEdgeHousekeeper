@@ -638,7 +638,8 @@ Public Class Form_Main
         Set(value As String)
             _ServerQuery = value
             If Me.TabControl1 IsNot Nothing Then
-                TextBoxServerQuery.Text = value
+                'TextBoxServerQuery.Text = value
+                If FastColoredServerQuery.Text <> value Then FastColoredServerQuery.Text = value  '<---- This may throw an exception due to a weird initialization of the component in Form_Main.Designer.vb
             End If
         End Set
     End Property
@@ -3123,8 +3124,12 @@ Public Class Form_Main
         ServerConnectionString = TextBoxServerConnectionString.Text
     End Sub
 
-    Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
-        ServerQuery = TextBoxServerQuery.Text
+    'Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
+    '    ServerQuery = TextBoxServerQuery.Text
+    'End Sub
+
+    Private Sub FastColoredServerQuery_TextChanged(sender As Object, e As FastColoredTextBoxNS.TextChangedEventArgs) Handles FastColoredServerQuery.TextChanged
+        ServerQuery = FastColoredServerQuery.Text
     End Sub
 
     Private Sub ComboBoxPresetName_LostFocus(sender As Object, e As EventArgs) Handles ComboBoxPresetName.LostFocus
@@ -3303,6 +3308,12 @@ Public Class Form_Main
         End Try
 
     End Function
+
+    Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+
 
 
     ' Commands I can never remember
