@@ -880,21 +880,19 @@ Partial Class Form_Main
         '
         'TabControl2
         '
-        Me.TabControl2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl2.Controls.Add(Me.TabPageTopLevelAssy)
         Me.TabControl2.Controls.Add(Me.TabPageStatus)
         Me.TabControl2.Controls.Add(Me.TabPageSorting)
         Me.TabControl2.Controls.Add(Me.TabPageTemplates)
         Me.TabControl2.Controls.Add(Me.TabPageServerQuery)
         Me.TabControl2.Controls.Add(Me.TabPageGeneral)
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl2.ImageList = Me.TabPage_ImageList
-        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Location = New System.Drawing.Point(4, 3)
         Me.TabControl2.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(542, 791)
+        Me.TabControl2.Size = New System.Drawing.Size(543, 613)
         Me.TabControl2.TabIndex = 44
         '
         'TabPageTopLevelAssy
@@ -2167,9 +2165,10 @@ Partial Class Form_Main
         Me.TabPageServerQuery.Controls.Add(Me.ExTableLayoutPanel9)
         Me.TabPageServerQuery.ImageKey = "Query"
         Me.TabPageServerQuery.Location = New System.Drawing.Point(4, 24)
+        Me.TabPageServerQuery.Margin = New System.Windows.Forms.Padding(0)
         Me.TabPageServerQuery.Name = "TabPageServerQuery"
         Me.TabPageServerQuery.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPageServerQuery.Size = New System.Drawing.Size(534, 763)
+        Me.TabPageServerQuery.Size = New System.Drawing.Size(535, 585)
         Me.TabPageServerQuery.TabIndex = 8
         Me.TabPageServerQuery.Text = "Server Query"
         Me.TabPageServerQuery.UseVisualStyleBackColor = True
@@ -2178,21 +2177,21 @@ Partial Class Form_Main
         '
         Me.ExTableLayoutPanel9.ColumnCount = 1
         Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
         Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerQuery, 0, 3)
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
         Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
+        Me.ExTableLayoutPanel9.Margin = New System.Windows.Forms.Padding(0)
         Me.ExTableLayoutPanel9.Name = "ExTableLayoutPanel9"
         Me.ExTableLayoutPanel9.RowCount = 5
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(528, 757)
+        Me.ExTableLayoutPanel9.Size = New System.Drawing.Size(529, 579)
         Me.ExTableLayoutPanel9.TabIndex = 0
         Me.ExTableLayoutPanel9.Task = Nothing
         '
@@ -2201,15 +2200,16 @@ Partial Class Form_Main
         Me.TextBoxServerConnectionString.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxServerConnectionString.Location = New System.Drawing.Point(3, 33)
         Me.TextBoxServerConnectionString.Name = "TextBoxServerConnectionString"
-        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(522, 23)
+        Me.TextBoxServerConnectionString.Size = New System.Drawing.Size(523, 23)
         Me.TextBoxServerConnectionString.TabIndex = 0
         '
         'TextBoxServerQuery
         '
         Me.TextBoxServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBoxServerQuery.Location = New System.Drawing.Point(3, 93)
+        Me.TextBoxServerQuery.Multiline = True
         Me.TextBoxServerQuery.Name = "TextBoxServerQuery"
-        Me.TextBoxServerQuery.Size = New System.Drawing.Size(522, 23)
+        Me.TextBoxServerQuery.Size = New System.Drawing.Size(523, 94)
         Me.TextBoxServerQuery.TabIndex = 1
         '
         'LabelServerConnectionString
