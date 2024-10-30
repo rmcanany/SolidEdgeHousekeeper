@@ -97,7 +97,9 @@ Public Class FormPropertyPicker
             For Each PropName As String In Me.FavoritesList
                 ComboBoxPropertyName.Items.Add(PropName)
             Next
-            ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
+
+            If ComboBoxPropertyName.Items.Count > 0 Then ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString 'Check the items count in case of PropertyList not populated
+
         End If
 
     End Sub

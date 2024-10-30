@@ -977,12 +977,20 @@ Public Class UtilsCommon
 
     Public Function FOA_Storage(CF As CompoundFile) As CFStorage
 
-        Try
-            Dim tmpStorage = CF.RootStorage.GetStorage("Master")
-            Return tmpStorage
-        Catch ex As Exception
+        If CF.RootStorage.ContainsStorage("Master") Then
+
+            Try
+                Dim tmpStorage = CF.RootStorage.GetStorage("Master")
+                Return tmpStorage
+            Catch ex As Exception
+                Return Nothing
+            End Try
+
+        Else
+
             Return Nothing
-        End Try
+
+        End If
 
     End Function
 
@@ -993,6 +1001,8 @@ Public Class UtilsCommon
         PropertySetName As String,
         PropertyName As String
         ) As DesignManager.Property
+
+        GetDMProp = Nothing
 
         Dim Prop As DesignManager.Property = Nothing
 
@@ -1503,7 +1513,8 @@ Public Class UtilsCommon
 
                     DocValues.Add(tmpValue)
                 Else
-                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName))
+                    Throw New Exception(String.Format("Property '{0}' not found", PropertyName)) '<--- Instead of Throw an exception the situation should be handled. Throw an exception have an impact on performance
+                    'DocValues.Add("**PROPNOTFOUND**")
                 End If
 
             Next
