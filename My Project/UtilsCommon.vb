@@ -994,6 +994,8 @@ Public Class UtilsCommon
         PropertyName As String
         ) As DesignManager.Property
 
+        GetDMProp = Nothing
+
         Dim Prop As DesignManager.Property = Nothing
 
         Dim PropertySet As DesignManager.Properties
