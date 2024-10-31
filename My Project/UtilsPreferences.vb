@@ -691,7 +691,50 @@ Public Class UtilsPreferences
 
 
 
-    Public Function GetPresetsListFilename(CheckExisting As Boolean) As String
+    'Public Function GetPresetsListFilename(CheckExisting As Boolean) As String
+    '    Dim Filename = "presets.json"
+    '    Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+    '    If CheckExisting Then
+    '        If FileIO.FileSystem.FileExists(Filename) Then
+    '            Return Filename
+    '        Else
+    '            Return ""
+    '        End If
+    '    Else
+    '        Return Filename
+    '    End If
+
+    'End Function
+
+    'Public Function GetPresetsListJSON() As List(Of String)
+
+    '    Dim JSONStringList As List(Of String) = Nothing
+    '    Dim JSONString As String = ""
+    '    Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
+
+    '    If Not Filename = "" Then
+    '        JSONString = IO.File.ReadAllText(Filename)
+    '    Else
+    '        JSONString = "[]"
+    '    End If
+
+    '    JSONStringList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+    '    Return JSONStringList
+    'End Function
+
+    'Public Sub SavePresetsListJSON(JSONStringList As List(Of String))
+
+    '    Dim JSONString As String = JsonConvert.SerializeObject(JSONStringList)
+    '    Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
+
+    '    IO.File.WriteAllText(Outfile, JSONString)
+
+    'End Sub
+
+
+    Public Function GetPresetsFilename(CheckExisting As Boolean) As String
         Dim Filename = "presets.json"
         Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
 
@@ -707,31 +750,27 @@ Public Class UtilsPreferences
 
     End Function
 
-    Public Function GetPresetsListJSON() As List(Of String)
+    'Public Function GetPresetsJSON() As String
 
-        Dim JSONStringList As List(Of String) = Nothing
-        Dim JSONString As String = ""
-        Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
+    '    Dim JSONString As String = ""
+    '    Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
 
-        If Not Filename = "" Then
-            JSONString = IO.File.ReadAllText(Filename)
-        Else
-            JSONString = "[]"
-        End If
+    '    If Not Filename = "" Then
+    '        JSONString = IO.File.ReadAllText(Filename)
+    '    Else
+    '        JSONString = "[]"
+    '    End If
 
-        JSONStringList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+    '    Return JSONString
+    'End Function
 
-        Return JSONStringList
-    End Function
+    'Public Sub SavePresetsJSON(JSONString As String)
 
-    Public Sub SavePresetsListJSON(JSONStringList As List(Of String))
+    '    Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
 
-        Dim JSONString As String = JsonConvert.SerializeObject(JSONStringList)
-        Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
+    '    IO.File.WriteAllText(Outfile, JSONString)
 
-        IO.File.WriteAllText(Outfile, JSONString)
-
-    End Sub
+    'End Sub
 
 
 

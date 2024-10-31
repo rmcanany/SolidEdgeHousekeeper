@@ -765,58 +765,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _PresetsList As List(Of Preset)
-    Public Property PresetsList As List(Of Preset)
-        Get
-            Return _PresetsList
-        End Get
-        Set(value As List(Of Preset))
-            _PresetsList = value
-            If Me.TabControl1 IsNot Nothing Then
-                Dim TextOld = ComboBoxPresetName.Text
-                ComboBoxPresetName.Items.Clear()
-                ComboBoxPresetName.Items.Add("")
-                For Each tmpPreset In PresetsList
-                    ComboBoxPresetName.Items.Add(tmpPreset.Name)
-                Next
-                ComboBoxPresetName.Text = TextOld
-
-                Dim tmpPresetsListJSON As New List(Of String)
-                For Each tmpPreset As Preset In _PresetsList
-                    tmpPresetsListJSON.Add(tmpPreset.ToJSON)
-                Next
-
-                Dim UC As New UtilsCommon
-                If Not UC.CompareListOfJSON(tmpPresetsListJSON, Me.PresetsListJSON) Then
-                    Me.PresetsListJSON = tmpPresetsListJSON
-                End If
-            End If
-        End Set
-    End Property
-
-    Private _PresetsListJSON As List(Of String)
-    Public Property PresetsListJSON As List(Of String)
-        Get
-            Return _PresetsListJSON
-        End Get
-        Set(value As List(Of String))
-            _PresetsListJSON = value
-            If Me.TabControl1 IsNot Nothing Then
-                Dim tmpPresetsList As New List(Of Preset)
-                For Each s As String In _PresetsListJSON
-                    Dim tmpPreset As New Preset
-                    tmpPreset.FromJSON(s)
-                    tmpPresetsList.Add(tmpPreset)
-                Next
-
-                Dim UC As New UtilsCommon
-                If Not UC.ComparePresetList(tmpPresetsList, Me.PresetsList) Then
-                    Me.PresetsList = tmpPresetsList
-                End If
-            End If
-        End Set
-    End Property
-
 
 
     '###### HOME TAB ######
@@ -992,6 +940,110 @@ Public Class Form_Main
     End Property
 
 
+    'Private _PresetsList As List(Of Preset)
+    'Public Property PresetsList As List(Of Preset)
+    '    Get
+    '        Return _PresetsList
+    '    End Get
+    '    Set(value As List(Of Preset))
+    '        _PresetsList = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            Dim TextOld = ComboBoxPresetName.Text
+    '            ComboBoxPresetName.Items.Clear()
+    '            ComboBoxPresetName.Items.Add("")
+    '            For Each tmpPreset In PresetsList
+    '                ComboBoxPresetName.Items.Add(tmpPreset.Name)
+    '            Next
+    '            ComboBoxPresetName.Text = TextOld
+
+    '            Dim tmpPresetsListJSON As New List(Of String)
+    '            For Each tmpPreset As Preset In _PresetsList
+    '                tmpPresetsListJSON.Add(tmpPreset.ToJSON)
+    '            Next
+
+    '            Dim UC As New UtilsCommon
+    '            If Not UC.CompareListOfJSON(tmpPresetsListJSON, Me.PresetsListJSON) Then
+    '                Me.PresetsListJSON = tmpPresetsListJSON
+    '            End If
+    '        End If
+    '    End Set
+    'End Property
+
+    'Private _PresetsListJSON As List(Of String)
+    'Public Property PresetsListJSON As List(Of String)
+    '    Get
+    '        Return _PresetsListJSON
+    '    End Get
+    '    Set(value As List(Of String))
+    '        _PresetsListJSON = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            Dim tmpPresetsList As New List(Of Preset)
+    '            For Each s As String In _PresetsListJSON
+    '                Dim tmpPreset As New Preset
+    '                tmpPreset.FromJSON(s)
+    '                tmpPresetsList.Add(tmpPreset)
+    '            Next
+
+    '            Dim UC As New UtilsCommon
+    '            If Not UC.ComparePresetList(tmpPresetsList, Me.PresetsList) Then
+    '                Me.PresetsList = tmpPresetsList
+    '            End If
+    '        End If
+    '    End Set
+    'End Property
+
+
+    Private _Presets As Presets
+    Public Property Presets As Presets
+        Get
+            Return _Presets
+        End Get
+        Set(value As Presets)
+            _Presets = value
+            If Me.TabControl1 IsNot Nothing Then
+
+                Dim TextOld = ComboBoxPresetName.Text
+
+                ComboBoxPresetName.Items.Clear()
+                ComboBoxPresetName.Items.Add("")
+                'For Each tmpPreset In PresetsList
+                '    ComboBoxPresetName.Items.Add(tmpPreset.Name)
+                'Next
+                For Each tmpPreset As Preset In Presets.Items
+                    ComboBoxPresetName.Items.Add(tmpPreset.Name)
+                Next
+
+                ComboBoxPresetName.Text = TextOld
+
+                'Dim tmpPresetsJSON As String = Me.Presets.ToJSON
+
+                'If Not Me.PresetsJSON = tmpPresetsJSON Then
+                '    Me.PresetsJSON = tmpPresetsJSON
+                'End If
+
+            End If
+        End Set
+    End Property
+
+    'Private _PresetsJSON As String
+    'Public Property PresetsJSON As String
+    '    Get
+    '        Return _PresetsJSON
+    '    End Get
+    '    Set(value As String)
+    '        _PresetsJSON = value
+    '        If Me.TabControl1 IsNot Nothing Then
+
+    '            If Not Me.PresetsJSON = Me.Presets.ToJSON Then
+    '                Me.Presets.FromJSON(Me.PresetsJSON)
+    '            End If
+
+    '        End If
+    '    End Set
+    'End Property
+
+
+
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -1087,10 +1139,11 @@ Public Class Form_Main
 
         Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList, Me.TemplatePropertyDict)
 
-        Me.PresetsListJSON = UP.GetPresetsListJSON
-        If Me.PresetsListJSON Is Nothing Then
-            Me.PresetsListJSON = New List(Of String)
-        End If
+        'Me.PresetsListJSON = UP.GetPresetsListJSON
+        'If Me.PresetsListJSON Is Nothing Then
+        '    Me.PresetsListJSON = New List(Of String)
+        'End If
+        Me.Presets = New Presets
 
         UD.BuildReadmeFile()
 
@@ -1256,7 +1309,8 @@ Public Class Form_Main
         Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
-        Me.PresetsList = Me.PresetsList
+        'Me.PresetsList = Me.PresetsList
+        Me.Presets = Me.Presets
 
 
         ' Save settings
@@ -1266,7 +1320,8 @@ Public Class Form_Main
         Me.TextBoxStatus.Text = "Saving tasks"
         UP.SaveTaskList(Me.TaskList)
         Me.TextBoxStatus.Text = "Saving presets"
-        UP.SavePresetsListJSON(Me.PresetsListJSON)
+        'UP.SavePresetsListJSON(Me.PresetsListJSON)
+        Me.Presets.Save()
 
         Me.TextBoxStatus.Text = ""
 
@@ -3164,7 +3219,13 @@ Public Class Form_Main
         If Not Name = "" Then
             Dim UP As New UtilsPreferences
 
-            For Each tmpPreset In Me.PresetsList
+            'For Each tmpPreset In Me.PresetsList
+            '    If tmpPreset.Name = Name Then
+            '        GotAMatch = True
+            '        Exit For
+            '    End If
+            'Next
+            For Each tmpPreset In Me.Presets.Items
                 If tmpPreset.Name = Name Then
                     GotAMatch = True
                     Exit For
@@ -3174,7 +3235,8 @@ Public Class Form_Main
             If GotAMatch Then
                 UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
                 UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
-                UP.SavePresetsListJSON(Me.PresetsListJSON)
+                'UP.SavePresetsListJSON(Me.PresetsListJSON)
+                Presets.Save()
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
@@ -3197,7 +3259,18 @@ Public Class Form_Main
         If Not Name = "" Then
             Dim UP As New UtilsPreferences
 
-            For Each tmpPreset In Me.PresetsList
+            'For Each tmpPreset In Me.PresetsList
+            '    If tmpPreset.Name = Name Then
+            '        Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
+            '        If Result = MsgBoxResult.No Then
+            '            Exit Sub
+            '        Else
+            '            GotAMatch = True
+            '            Exit For
+            '        End If
+            '    End If
+            'Next
+            For Each tmpPreset In Me.Presets.Items
                 If tmpPreset.Name = Name Then
                     Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
                     If Result = MsgBoxResult.No Then
@@ -3213,21 +3286,24 @@ Public Class Form_Main
                 tmpPreset = New Preset
             End If
 
-            SaveSettings()
+            SaveSettings()  ' Updates the task list and form properties to their current state.
 
             tmpPreset.Name = Name
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
 
             If Not GotAMatch Then
-                Me.PresetsList.Add(tmpPreset)
+                'Me.PresetsList.Add(tmpPreset)
+                Me.Presets.Items.Add(tmpPreset)
             End If
 
-            Me.PresetsList = Me.PresetsList ' Trigger update
+            'Me.PresetsList = Me.PresetsList ' Trigger update
+            Me.Presets = Me.Presets ' Trigger update
 
             'SaveSettings()
             'Application.DoEvents()
-            UP.SavePresetsListJSON(Me.PresetsListJSON)
+            'UP.SavePresetsListJSON(Me.PresetsListJSON)
+            Presets.Save()
 
         Else
             MsgBox("Enter a name for the preset to save", vbOKOnly)
@@ -3242,17 +3318,29 @@ Public Class Form_Main
         Dim Idx As Integer = -1
         Dim UP As New UtilsPreferences
 
-        For i As Integer = 0 To Me.PresetsList.Count - 1
-            If Me.PresetsList(i).Name = Name Then
+        'For i As Integer = 0 To Me.PresetsList.Count - 1
+        '    If Me.PresetsList(i).Name = Name Then
+        '        Idx = i
+        '        Exit For
+        '    End If
+        'Next
+        For i As Integer = 0 To Me.Presets.Items.Count - 1
+            If Me.Presets.Items(i).Name = Name Then
                 Idx = i
                 Exit For
             End If
         Next
 
+        'If Not Idx = -1 Then
+        '    Me.PresetsList.RemoveAt(Idx)
+        '    Me.PresetsList = Me.PresetsList ' Trigger update
+        '    UP.SavePresetsListJSON(Me.PresetsListJSON)
+        'End If
         If Not Idx = -1 Then
-            Me.PresetsList.RemoveAt(Idx)
-            Me.PresetsList = Me.PresetsList ' Trigger update
-            UP.SavePresetsListJSON(Me.PresetsListJSON)
+            Me.Presets.Items.RemoveAt(Idx)
+            Me.Presets = Me.Presets ' Trigger update
+            'UP.SavePresetsListJSON(Me.PresetsListJSON)
+            Presets.Save()
         End If
 
         If ComboBoxPresetName.Items.Contains(Name) Then
@@ -3495,44 +3583,45 @@ End Class
 
 
 Public Class Presets
-
     Public Property Items As List(Of Preset)
 
     Public Sub New()
 
-    End Sub
+        Me.Items = New List(Of Preset)
 
-    Public Function ToJSON() As String
+        Dim UP As New UtilsPreferences
 
         Dim JSONString As String
+        Dim Infile As String = UP.GetPresetsFilename(CheckExisting:=True)
+
+        If Not Infile = "" Then
+            JSONString = IO.File.ReadAllText(Infile)
+
+            Dim tmpList As List(Of String) = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
+
+            For Each PresetJSONString As String In tmpList
+                Dim Item As New Preset
+                Item.FromJSON(PresetJSONString)
+                Me.Items.Add(Item)
+            Next
+        End If
+
+    End Sub
+
+    Public Sub Save()
+
+        Dim UP As New UtilsPreferences
+        Dim Outfile As String = UP.GetPresetsFilename(CheckExisting:=False)
 
         Dim tmpList As New List(Of String)
-
         For Each Item As Preset In Me.Items
             tmpList.Add(Item.ToJSON)
         Next
 
-        JSONString = JsonConvert.SerializeObject(tmpList)
-
-        Return JSONString
-    End Function
-
-    Public Sub FromJSON(JSONString As String)
-
-        Dim tmpList As List(Of String)
-
-        tmpList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
-
-        Me.Items.Clear()
-
-        For Each PropertyDataJSONString As String In tmpList
-            Dim Item As New Preset
-            Item.FromJSON(PropertyDataJSONString)
-            Me.Items.Add(Item)
-        Next
+        Dim JSONString As String = JsonConvert.SerializeObject(tmpList)
+        IO.File.WriteAllText(Outfile, JSONString)
 
     End Sub
-
 End Class
 
 Public Class Preset
@@ -3541,6 +3630,7 @@ Public Class Preset
     Public Property FormSettingsJSON As String
 
     Public Sub New()
+
     End Sub
 
     Public Function ToJSON() As String
