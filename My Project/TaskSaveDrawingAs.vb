@@ -164,7 +164,8 @@ Public Class TaskSaveDrawingAs
 
     Public Property PDFPerSheetFileTypeName As String
 
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName
@@ -201,7 +202,8 @@ Public Class TaskSaveDrawingAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-        Me.RequiresTemplatePropertyDict = True
+        'Me.RequiresTemplatePropertyDict = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -221,6 +223,8 @@ Public Class TaskSaveDrawingAs
         Me.WatermarkPositionY = 0
         Me.WatermarkScale = 1
         Me.PDFPerSheetSuppressSheetname = False
+
+        Me.PropertiesData = New PropertiesData
     End Sub
 
     Public Overrides Function Process(
@@ -371,8 +375,10 @@ Public Class TaskSaveDrawingAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
+                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
+                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
                 Catch ex As Exception
                     Success = False
                 End Try
@@ -394,8 +400,10 @@ Public Class TaskSaveDrawingAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
+                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
+                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
                 Catch ex As Exception
                     Success = False
                 End Try

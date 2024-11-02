@@ -773,6 +773,25 @@ Public Class UtilsPreferences
     'End Sub
 
 
+    Public Function GetPropertiesDataFilename(CheckExisting As Boolean) As String
+        Dim Filename = "properties_data.json"
+        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+
+
+
 
     Public Function GetNewTaskInstance(
         AvailableTasks As List(Of Task),

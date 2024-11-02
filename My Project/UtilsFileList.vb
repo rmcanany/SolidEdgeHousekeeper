@@ -1178,8 +1178,10 @@ Public Class UtilsFileList
                         Dim PropValue As String
                         Dim tmpColor As Color = Color.White
                         Try
-                            PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
-                                                                         ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            'PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
+                            '                                             ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
+                            PropValue = UC.SubstitutePropertyFormula(
+                                Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula, ValidFilenameRequired:=False, FMain.PropertiesData)
                         Catch ex As Exception
                             PropValue = ""
                             tmpColor = Color.Gainsboro

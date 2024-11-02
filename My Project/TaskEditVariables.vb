@@ -44,8 +44,9 @@ Public Class TaskEditVariables
         End Set
     End Property
 
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
+    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         Edit
@@ -67,7 +68,8 @@ Public Class TaskEditVariables
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskEditVariables
         Me.Category = "Edit"
-        Me.RequiresTemplatePropertyDict = True
+        'Me.RequiresTemplatePropertyDict = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -78,7 +80,8 @@ Public Class TaskEditVariables
         Me.JSONString = ""
         Me.AutoAddMissingVariable = False
 
-        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        Me.PropertiesData = New PropertiesData
 
     End Sub
 
@@ -213,7 +216,9 @@ Public Class TaskEditVariables
 
                 Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
                 Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
-                Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
+                'Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
+                Formula = UC.SubstitutePropertyFormula(
+                    SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
 
                 Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"

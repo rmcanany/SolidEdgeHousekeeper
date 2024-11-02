@@ -142,7 +142,8 @@ Public MustInherit Class Task
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
 
-    Public Property RequiresTemplatePropertyDict As Boolean = False
+    'Public Property RequiresTemplatePropertyDict As Boolean = False
+    Public Property RequiresPropertiesData As Boolean = False
 
 
 
@@ -460,6 +461,7 @@ Public MustInherit Class Task
         IgnoreProps.AddRange({"SourceDirectories", "ControlsDict", "RequiresAssemblyTemplate", "RequiresPartTemplate"})
         IgnoreProps.AddRange({"RequiresSheetmetalTemplate", "RequiresDraftTemplate", "RequiresMaterialTable", "Category"})
         IgnoreProps.AddRange({"SolidEdgeRequired", "Application", "Document", "IsOptionsHidden"})
+        IgnoreProps.AddRange({"PropertiesData"})
 
         Dim s As String = ""
 

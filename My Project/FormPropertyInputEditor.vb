@@ -25,6 +25,7 @@ Public Class FormPropertyInputEditor
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
+    Public Property PropertiesData As PropertiesData
 
     Private _ShowAllProps As Boolean
     Public Property ShowAllProps As Boolean
@@ -52,36 +53,11 @@ Public Class FormPropertyInputEditor
 
         Dim UC As New UtilsCommon
 
-        'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        Me.PropertiesData = Form_Main.PropertiesData
+        Me.TemplatePropertyList = Me.PropertiesData.GetFavoritesList
 
         Me.UCList = New List(Of UCEditProperties)
-
-        ' Set by TaskEditProperties
-        'Dim UD As New UtilsDocumentation
-        'Dim Tag = "edit-properties"
-        'Me.HelpURL = UD.GenerateVersionURL(Tag)
-
-        '' Check for imported template properties
-        'Dim tf As Boolean
-
-        'tf = Me.TemplatePropertyDict Is Nothing
-        'tf = tf Or Me.TemplatePropertyList Is Nothing
-
-        'If Not tf Then
-        '    tf = Me.TemplatePropertyDict.Count = 0
-        '    tf = tf Or Me.TemplatePropertyList.Count = 0
-        'End If
-
-        ''tf = tf And Form_Main.WarnNoImportedProperties
-
-        'If tf Then
-        '    Dim s = "Template properties required for this command not found. "
-        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
-        '    MsgBox(s, vbOKOnly)
-        '    Me.DialogResult = DialogResult.Cancel
-        'End If
-
 
     End Sub
 
@@ -355,11 +331,13 @@ Public Class FormPropertyInputEditor
         ' Check for imported template properties
         Dim tf As Boolean
 
-        tf = Form_Main.TemplatePropertyDict Is Nothing
+        'tf = Form_Main.TemplatePropertyDict Is Nothing
+        tf = Form_Main.PropertiesData Is Nothing
         tf = tf Or Me.TemplatePropertyList Is Nothing
 
         If Not tf Then
-            tf = Form_Main.TemplatePropertyDict.Count = 0
+            'tf = Form_Main.TemplatePropertyDict.Count = 0
+            tf = Form_Main.PropertiesData.Items.Count = 0
             tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
 
@@ -379,7 +357,8 @@ Public Class FormPropertyInputEditor
 
         If CheckInputs() Then
 
-            Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+            'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
+            Me.PropertiesData = Form_Main.PropertiesData
 
             Dim UP As New UtilsPreferences
             UP.SaveEditPropertiesSavedSettings(Me.SavedSettingsDict)
@@ -549,9 +528,13 @@ Public Class FormPropertyInputEditor
                 PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
-                For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                'For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                '    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                'Next
+                For Each Key As String In Form_Main.PropertiesData.GetAvailableList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next
+
                 UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
                 UCList(i).NotifyPropertyEditor = True
             Next

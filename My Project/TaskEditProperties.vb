@@ -116,38 +116,40 @@ Public Class TaskEditProperties
         End Set
     End Property
 
-    Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-        Get
-            Return _TemplatePropertyDict
-        End Get
-        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-            _TemplatePropertyDict = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
-                If Not Me.TemplatePropertyDictJSON = s Then
-                    Me.TemplatePropertyDictJSON = s
-                End If
-            End If
-        End Set
-    End Property
+    'Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    '    Get
+    '        Return _TemplatePropertyDict
+    '    End Get
+    '    Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+    '        _TemplatePropertyDict = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
+    '            If Not Me.TemplatePropertyDictJSON = s Then
+    '                Me.TemplatePropertyDictJSON = s
+    '            End If
+    '        End If
+    '    End Set
+    'End Property
 
 
-    Private _TemplatePropertyDictJSON As String
-    Public Property TemplatePropertyDictJSON As String
-        Get
-            Return _TemplatePropertyDictJSON
-        End Get
-        Set(value As String)
-            _TemplatePropertyDictJSON = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
-                    Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
-                End If
-            End If
+    'Private _TemplatePropertyDictJSON As String
+    'Public Property TemplatePropertyDictJSON As String
+    '    Get
+    '        Return _TemplatePropertyDictJSON
+    '    End Get
+    '    Set(value As String)
+    '        _TemplatePropertyDictJSON = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
+    '                Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
+    '            End If
+    '        End If
 
-        End Set
-    End Property
+    '    End Set
+    'End Property
+
+    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         Edit
@@ -177,7 +179,8 @@ Public Class TaskEditProperties
         Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
-        Me.RequiresTemplatePropertyDict = True
+        'Me.RequiresTemplatePropertyDict = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -194,7 +197,8 @@ Public Class TaskEditProperties
         'Me.SolidEdgeRequired = False
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
-        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        Me.PropertiesData = New PropertiesData
 
     End Sub
 
@@ -413,19 +417,27 @@ Public Class TaskEditProperties
                 ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
                 ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-                If Not TemplatePropertyDict.Keys.Contains(PropertyName) Then
+                'If Not TemplatePropertyDict.Keys.Contains(PropertyName) Then
+                '    Proceed = False
+                '    ExitStatus = 1
+                '    ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
+                'End If
+
+                Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
+                If tmpPropertyData Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
+                    ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
                 End If
-
 
                 ' ####################### Do formula substitution #######################
 
                 If Proceed Then
                     Try
-                        FindString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False,
-                                                              TemplatePropertyDict)
+                        'FindString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False,
+                        '                                      TemplatePropertyDict)
+                        FindString = UC.SubstitutePropertyFormula(
+                            Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
                     Catch ex As Exception
                         Proceed = False
                         ExitStatus = 1
@@ -434,8 +446,11 @@ Public Class TaskEditProperties
                     End Try
 
                     Try
-                        ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-                                                                 TemplatePropertyDict, ReplaceSearchType = "EX")
+                        'ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
+                        '                                         TemplatePropertyDict, ReplaceSearchType = "EX")
+                        ReplaceString = UC.SubstitutePropertyFormula(
+                            Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
+                            Me.PropertiesData, ReplaceSearchType = "EX")
                     Catch ex As Exception
                         Proceed = False
                         ExitStatus = 1
@@ -463,7 +478,8 @@ Public Class TaskEditProperties
 
                 ' ####################### Get the property object #######################
 
-                Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
+                'Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
+                Dim PropertyNameEnglish = tmpPropertyData.EnglishName
 
                 If Proceed Then
                     OLEProp = UC.GetOLEProp(cf, PropertySetName, PropertyNameEnglish, Me.AutoAddMissingProperty, dsiStream, co)
@@ -631,8 +647,10 @@ Public Class TaskEditProperties
                 Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
 
                 Try
-                    FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False,
-                                                              TemplatePropertyDict)
+                    'FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False,
+                    '                                          TemplatePropertyDict)
+                    FindString = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -641,8 +659,10 @@ Public Class TaskEditProperties
                 End Try
 
                 Try
-                    ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-                                                                 TemplatePropertyDict, ReplaceSearchType = "EX")
+                    'ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
+                    '                                             TemplatePropertyDict, ReplaceSearchType = "EX")
+                    ReplaceString = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False, Me.PropertiesData, ReplaceSearchType = "EX")
                 Catch ex As Exception
                     Proceed = False
                     ExitStatus = 1
@@ -953,7 +973,15 @@ Public Class TaskEditProperties
 
             End If
 
-            If (Not Me.SolidEdgeRequired) And (Me.TemplatePropertyDict.Count = 0) Then
+            'If (Not Me.SolidEdgeRequired) And (Me.TemplatePropertyDict.Count = 0) Then
+            '    If Not ErrorMessageList.Contains(Me.Description) Then
+            '        ErrorMessageList.Add(Me.Description)
+            '    End If
+            '    ExitStatus = 1
+            '    Dim s = String.Format("{0}Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page", Indent)
+            '    ErrorMessageList.Add(s)
+            'End If
+            If (Not Me.SolidEdgeRequired) And (Me.PropertiesData.Items.Count = 0) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
@@ -992,7 +1020,8 @@ Public Class TaskEditProperties
                     TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
                     TextBox.Text = FPIE.JSONString
 
-                    Me.TemplatePropertyDict = FPIE.TemplatePropertyDict
+                    'Me.TemplatePropertyDict = FPIE.TemplatePropertyDict
+                    Me.PropertiesData = FPIE.PropertiesData
 
                 End If
 

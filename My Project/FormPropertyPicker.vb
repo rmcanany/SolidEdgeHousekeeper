@@ -16,7 +16,8 @@ Public Class FormPropertyPicker
         Dim UC As New UtilsCommon
 
         Me.PropertyOnly = True
-        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        'Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
     End Sub
 
@@ -49,18 +50,34 @@ Public Class FormPropertyPicker
 
     Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
 
-        If Form_Main.TemplatePropertyDict IsNot Nothing Then
-            If Form_Main.TemplatePropertyDict.Keys.Contains(ComboBoxPropertyName.Text) Then
-                Dim PropertySet = Form_Main.TemplatePropertyDict(ComboBoxPropertyName.Text)("PropertySet")
-                If PropertySet = "Duplicate" Then
+        'If Form_Main.TemplatePropertyDict IsNot Nothing Then
+        '    If Form_Main.TemplatePropertyDict.Keys.Contains(ComboBoxPropertyName.Text) Then
+        '        Dim PropertySet = Form_Main.TemplatePropertyDict(ComboBoxPropertyName.Text)("PropertySet")
+        '        If PropertySet = "Duplicate" Then
+        '            ComboBoxPropertySet.Text = ""
+        '        ElseIf PropertySet = "Custom" Then
+        '            ComboBoxPropertySet.Text = "Custom"
+        '        Else
+        '            ComboBoxPropertySet.Text = "System"
+        '        End If
+        '    End If
+        'End If
+
+        If Form_Main.PropertiesData IsNot Nothing Then
+            Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(ComboBoxPropertyName.Text)
+            If tmpPropertyData IsNot Nothing Then
+                Dim PropertySet As PropertyData.PropertySetNameConstants = tmpPropertyData.PropertySetName
+                If PropertySet = PropertyData.PropertySetNameConstants.Duplicate Then
                     ComboBoxPropertySet.Text = ""
-                ElseIf PropertySet = "Custom" Then
+                ElseIf PropertySet = PropertyData.PropertySetNameConstants.Custom Then
                     ComboBoxPropertySet.Text = "Custom"
                 Else
                     ComboBoxPropertySet.Text = "System"
                 End If
             End If
         End If
+
+
     End Sub
 
     Private Sub ButtonPropOnly_Click(sender As Object, e As EventArgs) Handles ButtonPropOnly.Click
@@ -86,7 +103,10 @@ Public Class FormPropertyPicker
             ButtonShowAll.Image = My.Resources.Checked
 
             ComboBoxPropertyName.Items.Clear()
-            For Each PropName As String In Form_Main.TemplatePropertyDict.Keys
+            'For Each PropName As String In Form_Main.TemplatePropertyDict.Keys
+            '    ComboBoxPropertyName.Items.Add(PropName)
+            'Next
+            For Each PropName As String In Form_Main.PropertiesData.GetAvailableList
                 ComboBoxPropertyName.Items.Add(PropName)
             Next
             ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
@@ -120,7 +140,8 @@ Public Class FormPropertyPicker
             Dim UC As New UtilsCommon
             Me.FavoritesList = FPLC.FavoritesList
 
-            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, Me.FavoritesList)
+            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, Me.FavoritesList)
+            Form_Main.PropertiesData.UpdateFavorites(Me.FavoritesList)
 
             ComboBoxPropertyName.Items.Clear()
             ComboBoxPropertyName.Items.Add("")

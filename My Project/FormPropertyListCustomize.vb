@@ -62,18 +62,29 @@ Public Class FormPropertyListCustomize
 
         Dim Proceed As Boolean = True
 
-        If Not Form_Main.TemplatePropertyDict Is Nothing Then
-            If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
-                Dim UC As New UtilsCommon
-
-                Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-                Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+        If Not Form_Main.PropertiesData Is Nothing Then
+            If Form_Main.PropertiesData.Items.Count > 0 Then
+                Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
+                Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
             Else
                 Proceed = False
             End If
         Else
             Proceed = False
         End If
+
+        'If Not Form_Main.TemplatePropertyDict Is Nothing Then
+        '    If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
+        '        Dim UC As New UtilsCommon
+
+        '        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        '        Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+        '    Else
+        '        Proceed = False
+        '    End If
+        'Else
+        '    Proceed = False
+        'End If
 
         If Not Proceed Then
             Dim s = "Template properties required for this command not found. "
@@ -278,20 +289,35 @@ Public Class FormPropertyListCustomize
 
             FavoritesList.Add(FPLCM.PropertyName)
 
-            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictAddProp(
-                Form_Main.TemplatePropertyDict,
+            Form_Main.PropertiesData.AddProp(
                 FPLCM.PropertySet,
                 FPLCM.PropertyName,
                 FPLCM.EnglishName,
                 FavoritesList.Count)
 
-            Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, FavoritesList)
+            Form_Main.PropertiesData.UpdateFavorites(FavoritesList)
 
-            Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
             UpdateDataGridViewSource()
 
-            Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+            Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
             UpdateDataGridViewTarget()
+
+
+            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictAddProp(
+            '    Form_Main.TemplatePropertyDict,
+            '    FPLCM.PropertySet,
+            '    FPLCM.PropertyName,
+            '    FPLCM.EnglishName,
+            '    FavoritesList.Count)
+
+            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, FavoritesList)
+
+            'Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            'UpdateDataGridViewSource()
+
+            'Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+            'UpdateDataGridViewTarget()
         End If
 
     End Sub
@@ -404,7 +430,8 @@ Public Class FormPropertyListCustomize
         If CheckBoxSortSourceList.Checked Then
             Me.AvailableList.Sort()
         Else
-            Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            'Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
+            Me.AvailableList = Form_Main.PropertiesData.GetAvailableList
         End If
 
         UpdateDataGridViewSource()

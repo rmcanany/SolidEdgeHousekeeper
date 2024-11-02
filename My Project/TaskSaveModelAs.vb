@@ -189,8 +189,9 @@ Public Class TaskSaveModelAs
 
     Public Property ImageFileTypeNames As New List(Of String)
 
-    Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
+    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
+    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName
@@ -226,7 +227,8 @@ Public Class TaskSaveModelAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-        Me.RequiresTemplatePropertyDict = True
+        'Me.RequiresTemplatePropertyDict = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
         GenerateTaskControl()
@@ -248,7 +250,8 @@ Public Class TaskSaveModelAs
         Me.ChangeViewStyle = False
         Me.ViewStyleName = ""
 
-        Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
+        Me.PropertiesData = New PropertiesData
 
     End Sub
 
@@ -555,8 +558,10 @@ Public Class TaskSaveModelAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
+                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
+                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
                 Catch ex As Exception
                     Success = False
                 End Try
@@ -578,8 +583,10 @@ Public Class TaskSaveModelAs
                 End If
             Else
                 Try
-                    NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                                                                   ValidFilenameRequired:=True, TemplatePropertyDict)
+                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
+                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
+                    NewSubDirectory = UC.SubstitutePropertyFormula(
+                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
                 Catch ex As Exception
                     Success = False
                 End Try

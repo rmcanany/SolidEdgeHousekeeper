@@ -184,8 +184,8 @@ Partial Class Form_Main
         Me.ButtonMaterialTable = New System.Windows.Forms.Button()
         Me.TextBoxMaterialTable = New System.Windows.Forms.TextBox()
         Me.LabelCustomizeTemplatePropertyDict = New System.Windows.Forms.Label()
-        Me.ButtonCustomizeTemplatePropertyDict = New System.Windows.Forms.Button()
-        Me.ButtonUpdateTemplateProperties = New System.Windows.Forms.Button()
+        Me.ButtonCustomizePropertiesData = New System.Windows.Forms.Button()
+        Me.ButtonUpdatePropertiesData = New System.Windows.Forms.Button()
         Me.LabelUpdateProperties = New System.Windows.Forms.Label()
         Me.TabPageServerQuery = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel9 = New Housekeeper.ExTableLayoutPanel()
@@ -2012,8 +2012,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonMaterialTable, 0, 4)
         Me.ExTableLayoutPanel1.Controls.Add(Me.TextBoxMaterialTable, 1, 4)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelCustomizeTemplatePropertyDict, 1, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizeTemplatePropertyDict, 0, 6)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdateTemplateProperties, 0, 5)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonCustomizePropertiesData, 0, 6)
+        Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonUpdatePropertiesData, 0, 5)
         Me.ExTableLayoutPanel1.Controls.Add(Me.LabelUpdateProperties, 1, 5)
         Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(6, 6)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
@@ -2131,25 +2131,25 @@ Partial Class Form_Main
         Me.LabelCustomizeTemplatePropertyDict.TabIndex = 12
         Me.LabelCustomizeTemplatePropertyDict.Text = "Customize selection and order of template properties"
         '
-        'ButtonCustomizeTemplatePropertyDict
+        'ButtonCustomizePropertiesData
         '
-        Me.ButtonCustomizeTemplatePropertyDict.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.ButtonCustomizeTemplatePropertyDict.Location = New System.Drawing.Point(3, 183)
-        Me.ButtonCustomizeTemplatePropertyDict.Name = "ButtonCustomizeTemplatePropertyDict"
-        Me.ButtonCustomizeTemplatePropertyDict.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonCustomizeTemplatePropertyDict.TabIndex = 11
-        Me.ButtonCustomizeTemplatePropertyDict.Text = "Customize"
-        Me.ButtonCustomizeTemplatePropertyDict.UseVisualStyleBackColor = True
+        Me.ButtonCustomizePropertiesData.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.ButtonCustomizePropertiesData.Location = New System.Drawing.Point(3, 183)
+        Me.ButtonCustomizePropertiesData.Name = "ButtonCustomizePropertiesData"
+        Me.ButtonCustomizePropertiesData.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonCustomizePropertiesData.TabIndex = 11
+        Me.ButtonCustomizePropertiesData.Text = "Customize"
+        Me.ButtonCustomizePropertiesData.UseVisualStyleBackColor = True
         '
-        'ButtonUpdateTemplateProperties
+        'ButtonUpdatePropertiesData
         '
-        Me.ButtonUpdateTemplateProperties.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonUpdateTemplateProperties.Location = New System.Drawing.Point(3, 153)
-        Me.ButtonUpdateTemplateProperties.Name = "ButtonUpdateTemplateProperties"
-        Me.ButtonUpdateTemplateProperties.Size = New System.Drawing.Size(94, 24)
-        Me.ButtonUpdateTemplateProperties.TabIndex = 15
-        Me.ButtonUpdateTemplateProperties.Text = "Update"
-        Me.ButtonUpdateTemplateProperties.UseVisualStyleBackColor = True
+        Me.ButtonUpdatePropertiesData.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonUpdatePropertiesData.Location = New System.Drawing.Point(3, 153)
+        Me.ButtonUpdatePropertiesData.Name = "ButtonUpdatePropertiesData"
+        Me.ButtonUpdatePropertiesData.Size = New System.Drawing.Size(94, 24)
+        Me.ButtonUpdatePropertiesData.TabIndex = 15
+        Me.ButtonUpdatePropertiesData.Text = "Update"
+        Me.ButtonUpdatePropertiesData.UseVisualStyleBackColor = True
         '
         'LabelUpdateProperties
         '
@@ -2237,6 +2237,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2909,9 +2910,9 @@ Partial Class Form_Main
     Friend WithEvents TextBoxDraftTemplate As TextBox
     Friend WithEvents ButtonMaterialTable As Button
     Friend WithEvents TextBoxMaterialTable As TextBox
-    Friend WithEvents ButtonCustomizeTemplatePropertyDict As Button
+    Friend WithEvents ButtonCustomizePropertiesData As Button
     Friend WithEvents LabelCustomizeTemplatePropertyDict As Label
-    Friend WithEvents ButtonUpdateTemplateProperties As Button
+    Friend WithEvents ButtonUpdatePropertiesData As Button
     Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
     Friend WithEvents CheckBoxCheckForNewerVersion As CheckBox

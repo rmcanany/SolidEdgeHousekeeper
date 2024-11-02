@@ -154,8 +154,10 @@ Public Class UtilsPropertyFilters
             Comparison = PropertyFilterDict(Key)("Comparison")
 
             Value = PropertyFilterDict(Key)("Value")
-            Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-                                                 FMain.TemplatePropertyDict)
+            'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+            '                                     FMain.TemplatePropertyDict)
+            Value = UC.SubstitutePropertyFormula(
+                Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
 
             DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 

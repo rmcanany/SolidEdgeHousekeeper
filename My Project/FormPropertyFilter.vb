@@ -53,7 +53,8 @@ Public Class FormPropertyFilter
         'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
         'Me.PropertyFilterDict = UP.GetPropertyFilterDict
 
-        Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
 
         Dim UP As New UtilsPreferences
 
@@ -69,11 +70,13 @@ Public Class FormPropertyFilter
         ' Check if the Properties were imported from templates
         Dim tf As Boolean
 
-        tf = Form_Main.TemplatePropertyDict Is Nothing
+        'tf = Form_Main.TemplatePropertyDict Is Nothing
+        tf = Form_Main.PropertiesData Is Nothing
         tf = tf Or Me.TemplatePropertyList Is Nothing
 
         If Not tf Then
-            tf = Form_Main.TemplatePropertyDict.Count = 0
+            'tf = Form_Main.TemplatePropertyDict.Count = 0
+            tf = Form_Main.PropertiesData.Items.Count = 0
             tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
 
@@ -418,32 +421,6 @@ Public Class FormPropertyFilter
             FormatFormula(PropertyFilterDict("0")("Formula"))
         End If
 
-        '' Check if the Properties were imported from templates
-        'Dim tf As Boolean
-
-        'tf = Form_Main.TemplatePropertyDict Is Nothing
-        'tf = tf Or Me.TemplatePropertyList Is Nothing
-
-        'If Not tf Then
-        '    tf = Form_Main.TemplatePropertyDict.Count = 0
-        '    tf = tf Or Me.TemplatePropertyList.Count = 0
-        'End If
-
-        ''tf = tf And Form_Main.WarnNoImportedProperties
-
-        'If tf Then
-        '    'Dim s As String = "Template properties not populated.  This is not an error, "
-        '    's = String.Format("{0}however it means properties must be entered manually.  ", s)
-        '    's = String.Format("{0}They cannot be selected from the drop down list.{1}{2}", s, vbCrLf, vbCrLf)
-        '    's = String.Format("{0}If desired, populate the list on the Configuration Tab -- Templates Page.{1}{2}", s, vbCrLf, vbCrLf)
-        '    's = String.Format("{0}Disable this message on the Configuration Tab -- General Page.", s)
-        '    'MsgBox(s, vbOKOnly)
-
-        '    Dim s = "Template properties required for this command not found. "
-        '    s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
-        '    MsgBox(s, vbOKOnly)
-        '    Exit Sub
-        'End If
 
     End Sub
 
@@ -599,7 +576,10 @@ Public Class FormPropertyFilter
                 PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
-                For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                'For Each Key As String In Form_Main.TemplatePropertyDict.Keys
+                '    UCList(i).ComboBoxPropertyName.Items.Add(Key)
+                'Next
+                For Each Key As String In Form_Main.PropertiesData.GetAvailableList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next
                 UCList(i).ComboBoxPropertyName.Text = PreviousPropertyName
