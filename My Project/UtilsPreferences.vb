@@ -302,6 +302,7 @@ Public Class UtilsPreferences
 
 
     Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
+
         Dim Filename = String.Format("{0}\property_filter_saved_settings.json", GetPreferencesDirectory)
 
         If CheckExisting Then
@@ -339,6 +340,23 @@ Public Class UtilsPreferences
         End If
 
         Return PropertyFilterSavedSettingsDict
+    End Function
+
+
+    Public Function GetPropertyFiltersFilename(CheckExisting As Boolean) As String
+
+        Dim Filename = String.Format("{0}\property_filters.json", GetPreferencesDirectory)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
     End Function
 
 

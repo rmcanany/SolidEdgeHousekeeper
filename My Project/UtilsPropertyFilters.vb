@@ -61,7 +61,7 @@ Public Class UtilsPropertyFilters
 
         DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
 
-        FMain.Activate()
+        FMain.Activate() ' Put the form on top of the Design Manager form.
 
         For Each FoundFile In FoundFiles
             If Form_Main.StopProcess Then
