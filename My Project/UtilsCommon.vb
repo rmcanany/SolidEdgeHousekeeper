@@ -1261,20 +1261,61 @@ Public Class UtilsCommon
 
                 Case = VTPropertyType.VT_BOOL
                     OLEProp.Value = CType(PropertyValue, Boolean)
+
                 Case = VTPropertyType.VT_I4
 
-                    'If PropertyValue = Int(PropertyValue).ToString Then
-                    OLEProp.Value = CType(PropertyValue, Integer)
-                    'Else
-                    '    OLEProp.Value = CType(PropertyValue, Double) 'This will lead to an error, it needs to recreate the property with VTType = VT_R8
-                    'End If
+                    If PropertyValue = Int(PropertyValue).ToString Then
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                    Else
+
+                        Dim tmpID = OLEProp.PropertyIdentifier
+                        co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+                        Try
+
+                            Dim userProperties = co.UserDefinedProperties
+                            Dim newPropertyId As UInteger = tmpID
+
+                            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_R8, newPropertyId)
+                            OLEProp.Value = CType(PropertyValue, Double)
+                            userProperties.AddProperty(OLEProp)
+
+                        Catch ex As Exception
+                        End Try
+
+                    End If
 
                 Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
                     OLEProp.Value = PropertyValue
+
                 Case = VTPropertyType.VT_FILETIME
                     OLEProp.Value = CType(PropertyValue, DateTime)
+
                 Case = VTPropertyType.VT_R8
-                    OLEProp.Value = CType(PropertyValue, Double)
+
+                    If PropertyValue <> Int(PropertyValue).ToString Then
+                        OLEProp.Value = CType(PropertyValue, Double)
+                    Else
+
+                        Dim tmpID = OLEProp.PropertyIdentifier
+                        co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+                        Try
+
+                            Dim userProperties = co.UserDefinedProperties
+                            Dim newPropertyId As UInteger = tmpID
+
+                            userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+                            OLEProp = userProperties.NewProperty(VTPropertyType.VT_I4, newPropertyId)
+                            OLEProp.Value = CType(PropertyValue, Integer)
+                            userProperties.AddProperty(OLEProp)
+
+                        Catch ex As Exception
+                        End Try
+
+                    End If
+
 
             End Select
 
