@@ -1,11 +1,29 @@
 ﻿Option Strict On
 
+Imports System.Management.Automation
 Imports System.Text.RegularExpressions
 Imports Newtonsoft.Json
 
 Public Class FormPropertyFilter
 
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+
+    Private _PropertyFilters As PropertyFilters
+    Public Property PropertyFilters As PropertyFilters
+        Get
+            Return _PropertyFilters
+        End Get
+        Set(value As PropertyFilters)
+            _PropertyFilters = value
+
+            Me.PropertyFilter = Me.PropertyFilters.GetActivePropertyFilter
+        End Set
+    End Property
+
+    Public Property PropertyFilter As PropertyFilter
+
+    Public Property NewWay As Boolean = True
+
     ''{"0":
     ''    {"Variable":"A",
     ''     "PropertySet":"Custom",
@@ -161,6 +179,63 @@ Public Class FormPropertyFilter
         Return tmpPropertyFilterDict
     End Function
 
+    Private Function UpdatePropertyFilterFromForm() As PropertyFilter
+
+        'Dim tmpPropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
+
+        For Each PF As PropertyFilter In Me.PropertyFilters.Items
+            PF.IsActiveFilter = False
+        Next
+
+        Dim tmpPropertyFilter As New PropertyFilter
+        tmpPropertyFilter.Name = ComboBoxSavedSettings.Text
+        tmpPropertyFilter.IsActiveFilter = True
+        tmpPropertyFilter.Formula = UCList(0).Formula
+
+        Dim i = 0
+
+        For Each UC As UCPropertyFilter In UCList
+            If Not UC.PropertyName = "" Then
+
+                Dim C As New PropertyFilterCondition
+
+                tmpPropertyFilter.Conditions.Add(C)
+
+                C.VariableName = UC.Variable
+
+                Select Case UC.PropertySet
+                    Case "System"
+                        C.PropertySetName = PropertyFilterCondition.PropertySetNameConstants.System
+                    Case "Custom"
+                        C.PropertySetName = PropertyFilterCondition.PropertySetNameConstants.Custom
+                End Select
+
+                C.PropertyName = UC.PropertyName
+
+                Select Case UC.Comparison
+                    Case "contains"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.Contains
+                    Case "is_exactly"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.IsExactly
+                    Case "wildcard_match"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.WildcardMatch
+                    Case "regex_match"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.RegexMatch
+                    Case ">"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.GreaterThan
+                    Case "<"
+                        C.Comparison = PropertyFilterCondition.ComparisonConstants.LessThan
+                End Select
+
+                C.Value = UC.Value
+
+
+            End If
+        Next
+
+        Return tmpPropertyFilter
+    End Function
+
     Public Sub PopulateUCList(tmpPropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
 
         Dim NewUC As UCPropertyFilter
@@ -188,6 +263,72 @@ Public Class FormPropertyFilter
 
     End Sub
 
+    Public Sub PopulateUCList(tmpPropertyFilter As PropertyFilter)
+
+        Dim NewUC As UCPropertyFilter
+
+        Me.UCList.Clear()
+
+        'For Each Key As String In tmpPropertyFilterDict.Keys
+        '    NewUC = New UCPropertyFilter(Me)
+        '    NewUC.NotifyPropertyFilter = False
+
+        '    NewUC.Variable = tmpPropertyFilterDict(Key)("Variable")
+        '    NewUC.PropertySet = tmpPropertyFilterDict(Key)("PropertySet")
+        '    NewUC.PropertyName = tmpPropertyFilterDict(Key)("PropertyName")
+        '    NewUC.Comparison = tmpPropertyFilterDict(Key)("Comparison")
+        '    NewUC.Value = tmpPropertyFilterDict(Key)("Value")
+        '    NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
+
+        '    'NewUC.ReconcileFormWithProps()
+
+        '    NewUC.Dock = DockStyle.Fill
+
+        '    UCList.Add(NewUC)
+        '    NewUC.NotifyPropertyFilter = True
+        'Next
+
+        For Each Condition As PropertyFilterCondition In tmpPropertyFilter.Conditions
+            NewUC = New UCPropertyFilter(Me)
+            NewUC.NotifyPropertyFilter = False
+
+            NewUC.Variable = Condition.VariableName
+
+            Select Case Condition.PropertySetName
+                Case PropertyFilterCondition.PropertySetNameConstants.Custom
+                    NewUC.PropertySet = "Custom"
+                Case PropertyFilterCondition.PropertySetNameConstants.System
+                    NewUC.PropertySet = "System"
+            End Select
+
+            NewUC.PropertyName = Condition.PropertyName
+
+            Select Case Condition.Comparison
+                Case PropertyFilterCondition.ComparisonConstants.Contains
+                    NewUC.Comparison = "contains"
+                Case PropertyFilterCondition.ComparisonConstants.IsExactly
+                    NewUC.Comparison = "is_exactly"
+                Case PropertyFilterCondition.ComparisonConstants.WildcardMatch
+                    NewUC.Comparison = "wildcard_match"
+                Case PropertyFilterCondition.ComparisonConstants.RegexMatch
+                    NewUC.Comparison = "regex_match"
+                Case PropertyFilterCondition.ComparisonConstants.GreaterThan
+                    NewUC.Comparison = ">"
+                Case PropertyFilterCondition.ComparisonConstants.LessThan
+                    NewUC.Comparison = "<"
+            End Select
+
+            NewUC.Value = Condition.Value
+            'NewUC.Formula = Condition.f
+
+            NewUC.Dock = DockStyle.Fill
+
+            UCList.Add(NewUC)
+            NewUC.NotifyPropertyFilter = True
+        Next
+
+    End Sub
+
     Public Sub PopulateForm()
 
         'Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
@@ -198,7 +339,13 @@ Public Class FormPropertyFilter
         '    JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
         'End If
 
-        PopulateUCList(Me.PropertyFilterDict)
+        If Me.NewWay Then
+            If Me.PropertyFilter IsNot Nothing Then
+                PopulateUCList(Me.PropertyFilter)
+            End If
+        Else
+            PopulateUCList(Me.PropertyFilterDict)
+        End If
 
         UpdateForm(UpdateFormula:=False)
 
@@ -410,15 +557,43 @@ Public Class FormPropertyFilter
             Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
         End If
 
+        If Me.PropertyFilters Is Nothing Then
+            Me.PropertyFilters = New PropertyFilters
+        End If
+
         PopulateForm()
 
-        ComboBoxSavedSettings.Items.Add("")
-        For Each Key As String In Me.SavedSettingsDict.Keys
-            ComboBoxSavedSettings.Items.Add(Key)
-        Next
+        If Me.NewWay Then
+            Dim ActiveFilterName As String = Nothing
 
-        If Not PropertyFilterDict.Keys.Count = 0 Then
-            FormatFormula(PropertyFilterDict("0")("Formula"))
+            'ComboBoxSavedSettings.Items.Add("")
+            For Each Item As PropertyFilter In Me.PropertyFilters.Items
+                ComboBoxSavedSettings.Items.Add(Item.Name)
+                If Item.IsActiveFilter Then
+                    ActiveFilterName = Item.Name
+                End If
+            Next
+
+            If ActiveFilterName IsNot Nothing Then
+                ComboBoxSavedSettings.Text = ActiveFilterName
+            End If
+
+            If Not PropertyFilters.Items.Count = 0 Then
+                If PropertyFilter IsNot Nothing Then
+                    FormatFormula(PropertyFilter.Formula)
+                End If
+            End If
+
+        Else
+            ComboBoxSavedSettings.Items.Add("")
+            For Each Key As String In Me.SavedSettingsDict.Keys
+                ComboBoxSavedSettings.Items.Add(Key)
+            Next
+
+            If Not PropertyFilterDict.Keys.Count = 0 Then
+                FormatFormula(PropertyFilterDict("0")("Formula"))
+            End If
+
         End If
 
 
@@ -428,6 +603,22 @@ Public Class FormPropertyFilter
 
         If CheckInputs() Then
             Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
+            Me.PropertyFilter = UpdatePropertyFilterFromForm()
+
+            For Each PF As PropertyFilter In Me.PropertyFilters.Items
+                PF.IsActiveFilter = False
+            Next
+
+            Me.PropertyFilter.IsActiveFilter = True
+
+            Dim tmpPropertyFilter As PropertyFilter = Me.PropertyFilters.GetPropertyFilter(Me.PropertyFilter.Name)
+
+            If tmpPropertyFilter Is Nothing Then
+                Me.PropertyFilter.Name = ComboBoxSavedSettings.Text
+                PropertyFilters.Items.Add(Me.PropertyFilter)
+            Else
+                tmpPropertyFilter = Me.PropertyFilter
+            End If
 
             Me.DialogResult = DialogResult.OK
         End If
@@ -490,29 +681,68 @@ Public Class FormPropertyFilter
         End If
 
         If Proceed Then
-            Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
-            JSONDict = UpdatePropertyFilterDictFromForm()
+            If Me.NewWay Then
 
-            SavedSettingsDict(Name) = JSONDict
+                For Each PF As PropertyFilter In Me.PropertyFilters.Items
+                    PF.IsActiveFilter = False
+                Next
+
+                Dim tmpPropertyFilter As PropertyFilter = PropertyFilters.GetPropertyFilter(Name)
+
+                If tmpPropertyFilter Is Nothing Then
+                    tmpPropertyFilter = UpdatePropertyFilterFromForm()
+
+                    tmpPropertyFilter.Name = Name
+                    tmpPropertyFilter.IsActiveFilter = True
+
+                    Me.PropertyFilters.Items.Add(tmpPropertyFilter)
+                Else
+                    tmpPropertyFilter = UpdatePropertyFilterFromForm()
+                    tmpPropertyFilter.IsActiveFilter = True
+                End If
+
+            Else
+                Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
+                JSONDict = UpdatePropertyFilterDictFromForm()
+
+                SavedSettingsDict(Name) = JSONDict
+
+                Dim UP As New UtilsPreferences
+                UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
+
+            End If
 
             If Not ComboBoxSavedSettings.Items.Contains(Name) Then
                 ComboBoxSavedSettings.Items.Add(Name)
             End If
-
-            Dim UP As New UtilsPreferences
-            UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
 
         End If
     End Sub
 
     Private Sub ComboBoxSavedSettings_Click(sender As Object, e As EventArgs) Handles ComboBoxSavedSettings.SelectedIndexChanged
         Dim Name As String = ComboBoxSavedSettings.Text
-        If SavedSettingsDict.Keys.Contains(Name) Then
 
-            PopulateUCList(SavedSettingsDict(Name))
+        If Me.NewWay Then
+            Dim tmpPropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
+            If tmpPropertyFilter IsNot Nothing Then
 
-            UpdateForm(UpdateFormula:=False)
+                For Each PF As PropertyFilter In Me.PropertyFilters.Items
+                    PF.IsActiveFilter = False
+                Next
 
+                tmpPropertyFilter.IsActiveFilter = True
+
+                PopulateUCList(tmpPropertyFilter)
+                UpdateForm(UpdateFormula:=False)
+            End If
+        Else
+            If SavedSettingsDict.Keys.Contains(Name) Then
+
+                PopulateUCList(SavedSettingsDict(Name))
+
+                UpdateForm(UpdateFormula:=False)
+
+            End If
         End If
 
     End Sub

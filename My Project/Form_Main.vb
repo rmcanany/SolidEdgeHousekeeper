@@ -52,39 +52,6 @@ Public Class Form_Main
     Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
 
 
-    Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-        Get
-            Return _PropertyFilterDict
-        End Get
-        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-            _PropertyFilterDict = value
-            If Me.TabControl1 IsNot Nothing Then
-                Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
-                If Not Me.PropertyFilterDictJSON = s Then
-                    Me.PropertyFilterDictJSON = s
-                End If
-            End If
-        End Set
-    End Property
-
-
-    Private _PropertyFilterDictJSON As String
-    Public Property PropertyFilterDictJSON As String
-        Get
-            Return _PropertyFilterDictJSON
-        End Get
-        Set(value As String)
-            _PropertyFilterDictJSON = value
-            If Me.TabControl1 IsNot Nothing Then
-                If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
-                    Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
-                End If
-            End If
-
-        End Set
-    End Property
-
 
 
     Public Property TaskList As List(Of Task)
@@ -1065,6 +1032,43 @@ Public Class Form_Main
     '    -- For a new category, also update Task.SetColorFromCategory().
 
 
+    Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+    Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+        Get
+            Return _PropertyFilterDict
+        End Get
+        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+            _PropertyFilterDict = value
+            If Me.TabControl1 IsNot Nothing Then
+                Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
+                If Not Me.PropertyFilterDictJSON = s Then
+                    Me.PropertyFilterDictJSON = s
+                End If
+            End If
+        End Set
+    End Property
+
+
+    Private _PropertyFilterDictJSON As String
+    Public Property PropertyFilterDictJSON As String
+        Get
+            Return _PropertyFilterDictJSON
+        End Get
+        Set(value As String)
+            _PropertyFilterDictJSON = value
+            If Me.TabControl1 IsNot Nothing Then
+                If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+                    Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+                End If
+            End If
+
+        End Set
+    End Property
+
+
+    Public Property PropertyFilters As PropertyFilters
+
+
     Private Sub Startup()
 
         Me.Cursor = Cursors.WaitCursor
@@ -1147,6 +1151,8 @@ Public Class Form_Main
         '    Me.PresetsListJSON = New List(Of String)
         'End If
         Me.Presets = New Presets
+
+        Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
         UD.BuildReadmeFile()
 
@@ -1331,6 +1337,8 @@ Public Class Form_Main
         Me.Presets.Save()
         Me.TextBoxStatus.Text = "Saving properties data"
         Me.PropertiesData.Save()
+        Me.TextBoxStatus.Text = "Saving property filters"
+        Me.PropertyFilters.Save()
 
         Me.TextBoxStatus.Text = ""
 
@@ -1493,10 +1501,12 @@ Public Class Form_Main
             Dim FPF As New FormPropertyFilter
 
             FPF.PropertyFilterDict = Me.PropertyFilterDict
+            FPF.PropertyFilters = Me.PropertyFilters
             FPF.ShowDialog()
 
             If FPF.DialogResult = DialogResult.OK Then
                 Me.PropertyFilterDict = FPF.PropertyFilterDict
+                Me.PropertyFilters = FPF.PropertyFilters
                 ListViewFilesOutOfDate = True
             End If
         Else
@@ -4291,11 +4301,14 @@ Public Class PropertyFilters
         If Not Infile = "" Then
             JSONString = IO.File.ReadAllText(Infile)
             FromJSON(JSONString)
+        Else
+            Me.Items = New List(Of PropertyFilter)
         End If
 
     End Sub
 
     Public Sub New(JSONString As String)
+        Me.Items = New List(Of PropertyFilter)
         FromJSON(JSONString)
     End Sub
 
@@ -4309,6 +4322,19 @@ Public Class PropertyFilters
 
         IO.File.WriteAllText(Outfile, JSONString)
     End Sub
+
+    Public Function GetActivePropertyFilter() As PropertyFilter
+        Dim tmpPropertyFilter As PropertyFilter = Nothing
+
+        For Each Item As PropertyFilter In Me.Items
+            If Item.IsActiveFilter Then
+                tmpPropertyFilter = Item
+                Exit For
+            End If
+        Next
+
+        Return tmpPropertyFilter
+    End Function
 
     Public Function GetPropertyFilter(Name As String) As PropertyFilter
         Dim tmpPropertyFilter As PropertyFilter = Nothing
@@ -4342,6 +4368,10 @@ Public Class PropertyFilters
 
         tmpItemsList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
 
+        If Me.Items Is Nothing Then
+            Me.Items = New List(Of PropertyFilter)
+        End If
+
         Me.Items.Clear()
 
         For Each ItemJSON In tmpItemsList
@@ -4356,12 +4386,14 @@ Public Class PropertyFilter
     Public Property Name As String
     Public Property Formula As String  ' "A AND NOT ( B OR C )", etc.
     Public Property Conditions As List(Of PropertyFilterCondition)
+    Public Property IsActiveFilter As Boolean
 
     Public Sub New()
-
+        Me.Conditions = New List(Of PropertyFilterCondition)
     End Sub
 
     Public Sub New(JSONString As String)
+        Me.Conditions = New List(Of PropertyFilterCondition)
         FromJSON(JSONString)
     End Sub
 
@@ -4374,6 +4406,7 @@ Public Class PropertyFilter
 
         tmpDict("Name") = Me.Name
         tmpDict("Formula") = Me.Formula
+        tmpDict("IsActiveFilter") = CStr(Me.IsActiveFilter)
 
         For Each Condition As PropertyFilterCondition In Me.Conditions
             tmpConditionsList.Add(Condition.ToJSON)
@@ -4397,6 +4430,7 @@ Public Class PropertyFilter
 
         Me.Name = tmpDict("Name")
         Me.Formula = tmpDict("Formula")
+        Me.IsActiveFilter = CBool(tmpDict("IsActiveFilter"))
 
         tmpConditionsListJSON = tmpDict("ConditionsListJSON")
         tmpConditionsList = JsonConvert.DeserializeObject(Of List(Of String))(tmpConditionsListJSON)
@@ -4493,7 +4527,7 @@ Public Class PropertyFilterCondition
         Dim tmpComparisonDict As New Dictionary(Of String, String)
 
         tmpComparisonDict("VariableName") = Me.VariableName
-        tmpComparisonDict("PropertySetName") = CStr(CInt(Me.PropertyName))
+        tmpComparisonDict("PropertySetName") = CStr(CInt(Me.PropertySetName))
         tmpComparisonDict("PropertySetActualName") = Me.PropertySetActualName
         tmpComparisonDict("PropertyName") = Me.PropertyName
         tmpComparisonDict("EnglishName") = Me.EnglishName

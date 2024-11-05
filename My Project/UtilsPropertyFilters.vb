@@ -7,11 +7,29 @@ Public Class UtilsPropertyFilters
     Public Property FMain As Form_Main
     Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
 
-    Public Sub New(_Form_Main As Form_Main)
+    Private _PropertyFilters As PropertyFilters
+    Public Property PropertyFilters As PropertyFilters
+        Get
+            Return _PropertyFilters
+        End Get
+        Set(value As PropertyFilters)
+            _PropertyFilters = value
+
+            Me.PropertyFilter = Me.PropertyFilters.GetActivePropertyFilter
+        End Set
+    End Property
+
+    Public Property PropertyFilter As PropertyFilter
+
+    Public Property NewWay As Boolean = True
+
+
+    Public Sub New(_Form_Main As Form_Main, _PropertyFilters As PropertyFilters)
         Me.FMain = _Form_Main
+        Me.PropertyFilters = _PropertyFilters
     End Sub
 
-    Public Function PropertyFilter(FoundFiles As IReadOnlyCollection(Of String),
+    Public Function FilterProperties(FoundFiles As IReadOnlyCollection(Of String),
                 PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
                 ) As IReadOnlyCollection(Of String)
 
@@ -31,7 +49,13 @@ Public Class UtilsPropertyFilters
         '...
         '}
 
-        Dim PropertyFilterFormula As String = PropertyFilterDict("0")("Formula")  ' Formula is the same for all entries.  Picking the first one.
+        Dim PropertyFilterFormula As String = ""
+
+        If Me.NewWay Then
+            PropertyFilterFormula = Me.PropertyFilter.Formula
+        Else
+            PropertyFilterFormula = PropertyFilterDict("0")("Formula")  ' Formula is the same for all entries.  Picking the first one.
+        End If
 
         Dim LocalFoundFiles As New List(Of String)
         Dim FilteredFiles As New List(Of String)
@@ -135,7 +159,7 @@ Public Class UtilsPropertyFilters
         Dim Variable As String
         Dim PropertySet As String
         Dim PropertyName As String
-        Dim Comparison As String
+        Dim Comparison As String = ""
         Dim Value As String
         Dim DocValue As String
         Dim tf2 As Boolean
@@ -147,25 +171,74 @@ Public Class UtilsPropertyFilters
         PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
         PropertySets.Open(FoundFile, True)
 
-        For Each Key As String In PropertyFilterDict.Keys
-            Variable = PropertyFilterDict(Key)("Variable")
-            PropertySet = PropertyFilterDict(Key)("PropertySet")
-            PropertyName = PropertyFilterDict(Key)("PropertyName")
-            Comparison = PropertyFilterDict(Key)("Comparison")
+        'Dim NewWay As Boolean = False
 
-            Value = PropertyFilterDict(Key)("Value")
-            'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-            '                                     FMain.TemplatePropertyDict)
-            Value = UC.SubstitutePropertyFormula(
+        If Me.NewWay Then
+            For Each Condition As PropertyFilterCondition In Me.PropertyFilter.Conditions
+
+                Variable = Condition.VariableName
+
+                Select Case Condition.PropertySetName
+                    Case PropertyFilterCondition.PropertySetNameConstants.Custom
+                        PropertySet = "Custom"
+                    Case PropertyFilterCondition.PropertySetNameConstants.System
+                        PropertySet = "System"
+                End Select
+
+                PropertyName = Condition.PropertyName
+
+                Select Case Condition.Comparison
+                    Case PropertyFilterCondition.ComparisonConstants.Contains
+                        Comparison = "contains"
+                    Case PropertyFilterCondition.ComparisonConstants.IsExactly
+                        Comparison = "is_exactly"
+                    Case PropertyFilterCondition.ComparisonConstants.WildcardMatch
+                        Comparison = "wildcard_match"
+                    Case PropertyFilterCondition.ComparisonConstants.RegexMatch
+                        Comparison = "regex_match"
+                    Case PropertyFilterCondition.ComparisonConstants.GreaterThan
+                        Comparison = ">"
+                    Case PropertyFilterCondition.ComparisonConstants.LessThan
+                        Comparison = "<"
+                End Select
+
+                Value = Condition.Value
+
+                'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+                '                                     FMain.TemplatePropertyDict)
+                Value = UC.SubstitutePropertyFormula(
                 Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
 
-            DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
+                DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
-            tf2 = DoComparison(Comparison, Value, DocValue)
+                tf2 = DoComparison(Comparison, Value, DocValue)
 
-            VariableTruthValues.Add(Variable, tf2.ToString)
+                VariableTruthValues.Add(Variable, tf2.ToString)
 
-        Next
+            Next
+
+        Else
+            For Each Key As String In PropertyFilterDict.Keys
+                Variable = PropertyFilterDict(Key)("Variable")
+                PropertySet = PropertyFilterDict(Key)("PropertySet")
+                PropertyName = PropertyFilterDict(Key)("PropertyName")
+                Comparison = PropertyFilterDict(Key)("Comparison")
+
+                Value = PropertyFilterDict(Key)("Value")
+                'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+                '                                     FMain.TemplatePropertyDict)
+                Value = UC.SubstitutePropertyFormula(
+                Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
+
+                DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
+
+                tf2 = DoComparison(Comparison, Value, DocValue)
+
+                VariableTruthValues.Add(Variable, tf2.ToString)
+
+            Next
+
+        End If
 
         'PropertySets.Close()
 
