@@ -1343,12 +1343,20 @@ Public Class UtilsCommon
         Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
 
             Case = VTPropertyType.VT_BOOL
-                OLEProp.Value = CType(PropertyValue, Boolean)
+                Try
+                    OLEProp.Value = CType(PropertyValue, Boolean)
+                Catch ex As Exception
+                    Return False
+                End Try
 
             Case = VTPropertyType.VT_I4
 
                 If PropertyValue = Int(PropertyValue).ToString Then
-                    OLEProp.Value = CType(PropertyValue, Integer)
+                    Try
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                    Catch ex As Exception
+                        Return False
+                    End Try
 
                 Else
 
@@ -1373,10 +1381,18 @@ Public Class UtilsCommon
                 End If
 
             Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
-                OLEProp.Value = PropertyValue
+                Try
+                    OLEProp.Value = PropertyValue
+                Catch ex As Exception
+                    Return False
+                End Try
 
             Case = VTPropertyType.VT_FILETIME
-                OLEProp.Value = CType(PropertyValue, DateTime)
+                Try
+                    OLEProp.Value = CType(PropertyValue, DateTime)
+                Catch ex As Exception
+                    Return False
+                End Try
 
             Case = VTPropertyType.VT_R8
 
