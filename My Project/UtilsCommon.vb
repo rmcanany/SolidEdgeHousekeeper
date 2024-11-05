@@ -1257,31 +1257,73 @@ Public Class UtilsCommon
 
         If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-            Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
+            'Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
 
-                Case = VTPropertyType.VT_BOOL
-                    OLEProp.Value = CType(PropertyValue, Boolean)
-                Case = VTPropertyType.VT_I4
+            '    Case = VTPropertyType.VT_BOOL
+            '        OLEProp.Value = CType(PropertyValue, Boolean)
 
-                    'If PropertyValue = Int(PropertyValue).ToString Then
-                    OLEProp.Value = CType(PropertyValue, Integer)
-                    'Else
-                    '    OLEProp.Value = CType(PropertyValue, Double) 'This will lead to an error, it needs to recreate the property with VTType = VT_R8
-                    'End If
+            '    Case = VTPropertyType.VT_I4
 
-                Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
-                    OLEProp.Value = PropertyValue
-                Case = VTPropertyType.VT_FILETIME
-                    OLEProp.Value = CType(PropertyValue, DateTime)
-                Case = VTPropertyType.VT_R8
-                    OLEProp.Value = CType(PropertyValue, Double)
+            '        If PropertyValue = Int(PropertyValue).ToString Then
+            '            OLEProp.Value = CType(PropertyValue, Integer)
+            '        Else
 
-            End Select
+            '            Dim tmpID = OLEProp.PropertyIdentifier
+            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+            '            Try
+
+            '                Dim userProperties = co.UserDefinedProperties
+            '                Dim newPropertyId As UInteger = tmpID
+
+            '                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+            '                OLEProp = userProperties.NewProperty(VTPropertyType.VT_R8, newPropertyId)
+            '                OLEProp.Value = CType(PropertyValue, Double)
+            '                userProperties.AddProperty(OLEProp)
+
+            '            Catch ex As Exception
+            '            End Try
+
+            '        End If
+
+            '    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+            '        OLEProp.Value = PropertyValue
+
+            '    Case = VTPropertyType.VT_FILETIME
+            '        OLEProp.Value = CType(PropertyValue, DateTime)
+
+            '    Case = VTPropertyType.VT_R8
+
+            '        If PropertyValue <> Int(PropertyValue).ToString Then
+            '            OLEProp.Value = CType(PropertyValue, Double)
+            '        Else
+
+            '            Dim tmpID = OLEProp.PropertyIdentifier
+            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+            '            Try
+
+            '                Dim userProperties = co.UserDefinedProperties
+            '                Dim newPropertyId As UInteger = tmpID
+
+            '                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
+            '                OLEProp = userProperties.NewProperty(VTPropertyType.VT_I4, newPropertyId)
+            '                OLEProp.Value = CType(PropertyValue, Integer)
+            '                userProperties.AddProperty(OLEProp)
+
+            '            Catch ex As Exception
+            '            End Try
+
+            '        End If
+
+
+            'End Select
+
+
+            SetOLEPropValue = SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream) 'TRUE
 
             co.Save(dsiStream)
             cf.Commit()
-
-            SetOLEPropValue = True
 
         End If
 
@@ -1291,6 +1333,100 @@ Public Class UtilsCommon
         fs = Nothing
         System.Windows.Forms.Application.DoEvents()
 
+
+    End Function
+
+    Public Function SetOLEPropValue(OLEProp As OLEProperty, PropertyValue As String, co As OLEPropertiesContainer, cf As CompoundFile, dsiStream As CFStream) As Boolean
+
+        SetOLEPropValue = False
+
+        Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
+
+            Case = VTPropertyType.VT_BOOL
+                Try
+                    OLEProp.Value = CType(PropertyValue, Boolean)
+                Catch ex As Exception
+                    Return False
+                End Try
+
+            Case = VTPropertyType.VT_I4
+
+                If PropertyValue = Int(PropertyValue).ToString Then
+                    Try
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                    Catch ex As Exception
+                        Return False
+                    End Try
+
+                Else
+
+                    Dim newPropertyId As UInteger = OLEProp.PropertyIdentifier
+                    Dim tmpName = OLEProp.PropertyName
+                    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+                    Try
+
+                        Dim userProperties = co.UserDefinedProperties
+
+                        userProperties.PropertyNames(newPropertyId) = tmpName
+                        OLEProp = userProperties.NewProperty(VTPropertyType.VT_R8, newPropertyId)
+                        OLEProp.Value = CType(PropertyValue, Double)
+                        userProperties.AddProperty(OLEProp)
+
+                    Catch ex As Exception
+                        Return False
+
+                    End Try
+
+                End If
+
+            Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                Try
+                    OLEProp.Value = PropertyValue
+                Catch ex As Exception
+                    Return False
+                End Try
+
+            Case = VTPropertyType.VT_FILETIME
+                Try
+                    OLEProp.Value = CType(PropertyValue, DateTime)
+                Catch ex As Exception
+                    Return False
+                End Try
+
+            Case = VTPropertyType.VT_R8
+
+                If PropertyValue <> Int(PropertyValue).ToString Then
+                    OLEProp.Value = CType(PropertyValue, Double)
+
+                Else
+
+                    Dim newPropertyId As UInteger = OLEProp.PropertyIdentifier
+                    Dim tmpName = OLEProp.PropertyName
+                    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+                    Try
+
+                        Dim userProperties = co.UserDefinedProperties
+
+                        userProperties.PropertyNames(newPropertyId) = tmpName
+                        OLEProp = userProperties.NewProperty(VTPropertyType.VT_I4, newPropertyId)
+                        OLEProp.Value = CType(PropertyValue, Integer)
+                        userProperties.AddProperty(OLEProp)
+
+                    Catch ex As Exception
+                        Return False
+
+                    End Try
+
+                End If
+
+        End Select
+
+        'co.Save(dsiStream)
+        'cf.Commit()
+
+        Return True
 
     End Function
 

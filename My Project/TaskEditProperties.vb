@@ -522,7 +522,11 @@ Public Class TaskEditProperties
 
                             '####### set the property here
                             If FindSearchType = "PT" Then
-                                OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                                'OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+
+                                Dim PropertyValue = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+                                UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
+
                             Else
                                 If FindSearchType = "WC" Then
                                     FindString = UC.GlobToRegex(FindString)
@@ -531,7 +535,10 @@ Public Class TaskEditProperties
                                     ' ReplaceString = Regex.Escape(ReplaceString)
                                 End If
 
-                                OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+                                'OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+                                Dim PropertyValue = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+                                UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
 
                             End If
 
