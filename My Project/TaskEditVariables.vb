@@ -216,9 +216,17 @@ Public Class TaskEditVariables
 
                 Dim Formula As String = VariablesToEditDict(RowIndex)("Formula").Trim
                 Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
-                'Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
-                Formula = UC.SubstitutePropertyFormula(
+
+                Dim tmpFormula As String = Formula
+                Try
+                    'Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
+                    Formula = UC.SubstitutePropertyFormula(
                     SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
+                Catch ex As Exception
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Could not process formula '{0}'", tmpFormula))
+                    Continue For
+                End Try
 
                 Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"

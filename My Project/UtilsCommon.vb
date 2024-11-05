@@ -1025,10 +1025,13 @@ Public Class UtilsCommon
         If tmpPropertyData IsNot Nothing Then
             Dim PropertySetActualName As String = tmpPropertyData.PropertySetActualName
             If Not PropertySetActualName = "" Then
-                PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
+                'PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
                 Try
+                    PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
                     Prop = CType(PropertySet.Item(PropertyName), DesignManager.Property)
+                    Return Prop
                 Catch ex As Exception
+                    Dim i = 0
                 End Try
             End If
         End If

@@ -118,6 +118,9 @@ Public Class UtilsPropertyFilters
         Dim LinkedDocuments As DesignManager.LinkedDocuments
         Dim LinkedDocument As DesignManager.Document
 
+        Dim ModelExtensions As New List(Of String)
+        ModelExtensions.AddRange({".asm", ".par", ".psm"})
+
         System.Windows.Forms.Application.DoEvents()
         If Form_Main.StopProcess Then
             Return False
@@ -137,7 +140,9 @@ Public Class UtilsPropertyFilters
 
             If FMain.CheckBoxPropertyFilterIncludeDraftModel.Checked Then
                 For Each LinkedDocument In LinkedDocuments
-                    tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
+                    If ModelExtensions.Contains(System.IO.Path.GetExtension(LinkedDocument.FullName)) Then
+                        tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
+                    End If
                 Next
             End If
         Else
@@ -204,10 +209,14 @@ Public Class UtilsPropertyFilters
 
                 Value = Condition.Value
 
-                'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-                '                                     FMain.TemplatePropertyDict)
-                Value = UC.SubstitutePropertyFormula(
-                Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
+                Try
+                    'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+                    '                                     FMain.TemplatePropertyDict)
+                    Value = UC.SubstitutePropertyFormula(
+                        Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
+                Catch ex As Exception
+                    Return False
+                End Try
 
                 DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
@@ -225,10 +234,15 @@ Public Class UtilsPropertyFilters
                 Comparison = PropertyFilterDict(Key)("Comparison")
 
                 Value = PropertyFilterDict(Key)("Value")
-                'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-                '                                     FMain.TemplatePropertyDict)
-                Value = UC.SubstitutePropertyFormula(
-                Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
+
+                Try
+                    'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
+                    '                                     FMain.TemplatePropertyDict)
+                    Value = UC.SubstitutePropertyFormula(
+                        Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
+                Catch ex As Exception
+                    Return False
+                End Try
 
                 DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
 
@@ -241,6 +255,11 @@ Public Class UtilsPropertyFilters
         End If
 
         'PropertySets.Close()
+        PropertySets.Close()
+
+        If PropertySets IsNot Nothing Then
+            PropertySets = Nothing
+        End If
 
         BooleanExpression = DoSubstitution(PropertyFilterFormula, VariableTruthValues)
 

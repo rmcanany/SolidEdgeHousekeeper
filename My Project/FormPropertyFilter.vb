@@ -187,10 +187,19 @@ Public Class FormPropertyFilter
             PF.IsActiveFilter = False
         Next
 
-        Dim tmpPropertyFilter As New PropertyFilter
-        tmpPropertyFilter.Name = ComboBoxSavedSettings.Text
+        Dim Name As String = ComboBoxSavedSettings.Text
+
+        Dim tmpPropertyFilter As PropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
+
+        If tmpPropertyFilter Is Nothing Then
+            tmpPropertyFilter = New PropertyFilter
+            tmpPropertyFilter.Name = ComboBoxSavedSettings.Text
+        End If
+
         tmpPropertyFilter.IsActiveFilter = True
         tmpPropertyFilter.Formula = UCList(0).Formula
+
+        tmpPropertyFilter.Conditions.Clear()
 
         Dim i = 0
 
@@ -269,25 +278,6 @@ Public Class FormPropertyFilter
 
         Me.UCList.Clear()
 
-        'For Each Key As String In tmpPropertyFilterDict.Keys
-        '    NewUC = New UCPropertyFilter(Me)
-        '    NewUC.NotifyPropertyFilter = False
-
-        '    NewUC.Variable = tmpPropertyFilterDict(Key)("Variable")
-        '    NewUC.PropertySet = tmpPropertyFilterDict(Key)("PropertySet")
-        '    NewUC.PropertyName = tmpPropertyFilterDict(Key)("PropertyName")
-        '    NewUC.Comparison = tmpPropertyFilterDict(Key)("Comparison")
-        '    NewUC.Value = tmpPropertyFilterDict(Key)("Value")
-        '    NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
-
-        '    'NewUC.ReconcileFormWithProps()
-
-        '    NewUC.Dock = DockStyle.Fill
-
-        '    UCList.Add(NewUC)
-        '    NewUC.NotifyPropertyFilter = True
-        'Next
-
         For Each Condition As PropertyFilterCondition In tmpPropertyFilter.Conditions
             NewUC = New UCPropertyFilter(Me)
             NewUC.NotifyPropertyFilter = False
@@ -319,7 +309,7 @@ Public Class FormPropertyFilter
             End Select
 
             NewUC.Value = Condition.Value
-            'NewUC.Formula = Condition.f
+            NewUC.Formula = tmpPropertyFilter.Formula
 
             NewUC.Dock = DockStyle.Fill
 
@@ -576,6 +566,8 @@ Public Class FormPropertyFilter
 
             If ActiveFilterName IsNot Nothing Then
                 ComboBoxSavedSettings.Text = ActiveFilterName
+            Else
+                ComboBoxSavedSettings.Text = ""
             End If
 
             If Not PropertyFilters.Items.Count = 0 Then
@@ -719,7 +711,7 @@ Public Class FormPropertyFilter
         End If
     End Sub
 
-    Private Sub ComboBoxSavedSettings_Click(sender As Object, e As EventArgs) Handles ComboBoxSavedSettings.SelectedIndexChanged
+    Private Sub ComboBoxSavedSettings_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSavedSettings.SelectedIndexChanged
         Dim Name As String = ComboBoxSavedSettings.Text
 
         If Me.NewWay Then
