@@ -3478,6 +3478,12 @@ Public Class Form_Main
         End Sub
     End Class
 
+    Private Sub CheckBoxGroupFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxGroupFiles.CheckedChanged
+
+        ListViewFiles.ShowGroups = CheckBoxGroupFiles.Checked
+
+    End Sub
+
 
     ' Commands I can never remember
 

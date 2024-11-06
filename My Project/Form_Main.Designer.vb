@@ -193,6 +193,7 @@ Partial Class Form_Main
         Me.LabelServerConnectionString = New System.Windows.Forms.Label()
         Me.LabelServerQuery = New System.Windows.Forms.Label()
         Me.FastColoredServerQuery = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxUseCurrentSession = New System.Windows.Forms.CheckBox()
@@ -206,6 +207,7 @@ Partial Class Form_Main
         Me.LabelFontSize = New System.Windows.Forms.Label()
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxGroupFiles = New System.Windows.Forms.CheckBox()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -233,7 +235,6 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -2230,7 +2231,7 @@ Partial Class Form_Main
         '
         Me.FastColoredServerQuery.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
         Me.FastColoredServerQuery.AutoIndentCharsPatterns = ""
-        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(2, 14)
         Me.FastColoredServerQuery.BackBrush = Nothing
         Me.FastColoredServerQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.FastColoredServerQuery.CharHeight = 14
@@ -2239,7 +2240,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2252,6 +2252,16 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Size = New System.Drawing.Size(523, 94)
         Me.FastColoredServerQuery.TabIndex = 6
         Me.FastColoredServerQuery.Zoom = 100
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 200)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(387, 105)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'TabPageGeneral
         '
@@ -2272,14 +2282,15 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 0)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 8)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnSave, 0, 1)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 6)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 7)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 2)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 6)
         Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 3)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 4)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 8)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 9)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 4)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
@@ -2287,91 +2298,90 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel2.TabIndex = 74
         Me.ExTableLayoutPanel2.Task = Nothing
         '
         'CheckBoxUseCurrentSession
         '
-        Me.CheckBoxUseCurrentSession.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxUseCurrentSession.AutoSize = True
-        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 5)
+        Me.CheckBoxUseCurrentSession.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxUseCurrentSession.Location = New System.Drawing.Point(3, 3)
         Me.CheckBoxUseCurrentSession.Name = "CheckBoxUseCurrentSession"
         Me.CheckBoxUseCurrentSession.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(230, 19)
+        Me.CheckBoxUseCurrentSession.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxUseCurrentSession.TabIndex = 72
         Me.CheckBoxUseCurrentSession.Text = "Use current Solid Edge session (if any)"
         Me.CheckBoxUseCurrentSession.UseVisualStyleBackColor = True
         '
         'CheckBoxPropertyFilterIncludeDraftItself
         '
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxPropertyFilterIncludeDraftItself.AutoSize = True
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 225)
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 243)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Name = "CheckBoxPropertyFilterIncludeDraftItself"
         Me.CheckBoxPropertyFilterIncludeDraftItself.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(306, 19)
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxPropertyFilterIncludeDraftItself.TabIndex = 73
         Me.CheckBoxPropertyFilterIncludeDraftItself.Text = "Property Filter -- Include the Draft file itself in search"
         Me.CheckBoxPropertyFilterIncludeDraftItself.UseVisualStyleBackColor = True
         '
         'CheckBoxWarnSave
         '
-        Me.CheckBoxWarnSave.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxWarnSave.AutoSize = True
         Me.CheckBoxWarnSave.Checked = True
         Me.CheckBoxWarnSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 35)
+        Me.CheckBoxWarnSave.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxWarnSave.Location = New System.Drawing.Point(3, 33)
         Me.CheckBoxWarnSave.Name = "CheckBoxWarnSave"
         Me.CheckBoxWarnSave.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(192, 19)
+        Me.CheckBoxWarnSave.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxWarnSave.TabIndex = 70
         Me.CheckBoxWarnSave.Text = "Warn me if file save is required"
         Me.CheckBoxWarnSave.UseVisualStyleBackColor = True
         '
         'CheckBoxPropertyFilterIncludeDraftModel
         '
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxPropertyFilterIncludeDraftModel.AutoSize = True
         Me.CheckBoxPropertyFilterIncludeDraftModel.Checked = True
         Me.CheckBoxPropertyFilterIncludeDraftModel.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 195)
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 213)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Name = "CheckBoxPropertyFilterIncludeDraftModel"
         Me.CheckBoxPropertyFilterIncludeDraftModel.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(358, 19)
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxPropertyFilterIncludeDraftModel.TabIndex = 52
         Me.CheckBoxPropertyFilterIncludeDraftModel.Text = "Property Filter -- Include Draft file model documents in search"
         Me.CheckBoxPropertyFilterIncludeDraftModel.UseVisualStyleBackColor = True
         '
         'CheckBoxNoUpdateMRU
         '
-        Me.CheckBoxNoUpdateMRU.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxNoUpdateMRU.AutoSize = True
-        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 65)
+        Me.CheckBoxNoUpdateMRU.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxNoUpdateMRU.Location = New System.Drawing.Point(3, 63)
         Me.CheckBoxNoUpdateMRU.Name = "CheckBoxNoUpdateMRU"
         Me.CheckBoxNoUpdateMRU.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(316, 19)
+        Me.CheckBoxNoUpdateMRU.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxNoUpdateMRU.TabIndex = 71
         Me.CheckBoxNoUpdateMRU.Text = "Do not show processed files in Most Recently Used list"
         Me.CheckBoxNoUpdateMRU.UseVisualStyleBackColor = True
         '
         'CheckBoxRunInBackground
         '
-        Me.CheckBoxRunInBackground.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxRunInBackground.AutoSize = True
-        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 165)
+        Me.CheckBoxRunInBackground.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 183)
         Me.CheckBoxRunInBackground.Name = "CheckBoxRunInBackground"
         Me.CheckBoxRunInBackground.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(253, 19)
+        Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxRunInBackground.TabIndex = 49
         Me.CheckBoxRunInBackground.Text = "Process tasks in background (no graphics)"
         Me.CheckBoxRunInBackground.UseVisualStyleBackColor = True
@@ -2388,55 +2398,70 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(521, 34)
+        Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(521, 24)
         Me.ExTableLayoutPanel3.TabIndex = 73
         Me.ExTableLayoutPanel3.Task = Nothing
         '
         'TextBoxFileListFontSize
         '
-        Me.TextBoxFileListFontSize.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxFileListFontSize.Location = New System.Drawing.Point(4, 5)
-        Me.TextBoxFileListFontSize.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.TextBoxFileListFontSize.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxFileListFontSize.Location = New System.Drawing.Point(5, 1)
+        Me.TextBoxFileListFontSize.Margin = New System.Windows.Forms.Padding(5, 1, 4, 3)
         Me.TextBoxFileListFontSize.Name = "TextBoxFileListFontSize"
-        Me.TextBoxFileListFontSize.Size = New System.Drawing.Size(42, 23)
+        Me.TextBoxFileListFontSize.Size = New System.Drawing.Size(41, 23)
         Me.TextBoxFileListFontSize.TabIndex = 54
         Me.TextBoxFileListFontSize.Text = "9"
         '
         'LabelFontSize
         '
-        Me.LabelFontSize.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelFontSize.AutoSize = True
-        Me.LabelFontSize.Location = New System.Drawing.Point(54, 9)
+        Me.LabelFontSize.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelFontSize.Location = New System.Drawing.Point(54, 0)
         Me.LabelFontSize.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelFontSize.Name = "LabelFontSize"
-        Me.LabelFontSize.Size = New System.Drawing.Size(90, 15)
+        Me.LabelFontSize.Size = New System.Drawing.Size(463, 24)
         Me.LabelFontSize.TabIndex = 55
         Me.LabelFontSize.Text = "File list font size"
+        Me.LabelFontSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'CheckBoxRememberTasks
         '
-        Me.CheckBoxRememberTasks.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxRememberTasks.AutoSize = True
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 135)
+        Me.CheckBoxRememberTasks.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 153)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(258, 19)
+        Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxRememberTasks.TabIndex = 48
         Me.CheckBoxRememberTasks.Text = "Remember selected tasks between sessions"
         Me.CheckBoxRememberTasks.UseVisualStyleBackColor = True
         '
         'CheckBoxCheckForNewerVersion
         '
-        Me.CheckBoxCheckForNewerVersion.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxCheckForNewerVersion.AutoSize = True
-        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 255)
+        Me.CheckBoxCheckForNewerVersion.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 273)
         Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
         Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
-        Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(211, 19)
+        Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxCheckForNewerVersion.TabIndex = 74
         Me.CheckBoxCheckForNewerVersion.Text = "Check for newer version at startup"
         Me.CheckBoxCheckForNewerVersion.UseVisualStyleBackColor = True
+        '
+        'CheckBoxGroupFiles
+        '
+        Me.CheckBoxGroupFiles.AutoSize = True
+        Me.CheckBoxGroupFiles.Checked = True
+        Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxGroupFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 123)
+        Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
+        Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
+        Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(521, 24)
+        Me.CheckBoxGroupFiles.TabIndex = 75
+        Me.CheckBoxGroupFiles.Text = "Group files by type"
+        Me.CheckBoxGroupFiles.UseVisualStyleBackColor = True
         '
         'ToolStripPresets
         '
@@ -2661,16 +2686,6 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(3, 200)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(387, 105)
-        Me.Label1.TabIndex = 7
-        Me.Label1.Text = resources.GetString("Label1.Text")
         '
         'Form_Main
         '
@@ -2960,4 +2975,5 @@ Partial Class Form_Main
     Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
     Friend WithEvents FastColoredServerQuery As FastColoredTextBoxNS.FastColoredTextBox
     Friend WithEvents Label1 As Label
+    Friend WithEvents CheckBoxGroupFiles As CheckBox
 End Class
