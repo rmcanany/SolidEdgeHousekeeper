@@ -4221,7 +4221,7 @@ Public Class PropertyData
         System
         Custom
         Duplicate
-        'Server
+        Server
     End Enum
 
     'Public Enum PropertySetActualNameConstants
@@ -4510,6 +4510,7 @@ Public Class PropertyFilterCondition
         Custom
         System
         Duplicate
+        Server
     End Enum
 
     Public Enum ComparisonConstants
