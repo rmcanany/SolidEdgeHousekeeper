@@ -1520,14 +1520,16 @@ Public Class UtilsCommon
                 PropertyName = PropNameFromFormula(Formula)
                 ModelIdx = ModelIdxFromFormula(Formula)
 
-                If Not ((PropertySet = "System") Or (PropertySet = "Custom")) Then
+                If Not ((PropertySet = "System") Or (PropertySet = "Custom") Or (PropertySet = "Server")) Then
                     Proceed = False
                 End If
 
                 'Not supported by Direct Structured Storage
                 If Not cf Is Nothing Then
                     If Not ModelIdx = 0 Then
-                        Return "[ERROR]" & PropertyName
+                        If Not PropertySet = "Server" Then
+                            Return "[ERROR]" & PropertyName
+                        End If
                     End If
                 End If
 
@@ -1541,8 +1543,8 @@ Public Class UtilsCommon
                     tmpValue = FullName
                 ElseIf PropertyName.ToLower = "File Name (no extension)".ToLower Then
                     tmpValue = System.IO.Path.GetFileNameWithoutExtension(FullName)  ' C:\project\part.par -> part
-                ElseIf PropertyName = "Query1" Then
-                    tmpValue = Form_Main.ExecuteQuery(cf, FullName, Form_Main.ServerQuery)
+                ElseIf PropertyName = "Query" And PropertySet = "Server" Then
+                    tmpValue = Form_Main.ExecuteQuery(cf, FullName, Form_Main.ServerQuery, ModelIdx)
                 Else
                     If Not IsNothing(SEDoc) Then
                         FoundProp = GetProp(SEDoc, PropertySet, PropertyName, ModelIdx, False)
@@ -1618,7 +1620,7 @@ Public Class UtilsCommon
         Matches = Regex.Matches(Instring, Pattern)
         If Matches.Count > 0 Then
             For Each MatchString In Matches
-                If Not ((MatchString.Value.Contains("%{System.")) Or (MatchString.Value.Contains("%{Custom."))) Then
+                If Not ((MatchString.Value.Contains("%{System.")) Or (MatchString.Value.Contains("%{Custom.")) Or (MatchString.Value.Contains("%{Server."))) Then
                     Valid = False
                     Exit For
                 End If
@@ -2386,7 +2388,10 @@ Public Class UtilsCommon
         PropName = PropFormula
         PropName = PropName.Replace("%{System.", "") ' '%{System.Title}' -> 'Title}'
         PropName = PropName.Replace("%{Custom.", "") ' '%{Custom.Donut|R12}' -> 'Donut|R12}'
+        PropName = PropName.Replace("%{Server.", "") ' '%{Server.Query|R1}' -> 'Query|R1}'
         PropName = PropName.Replace("}", "") ' 'Donut|R12}' -> 'Donut|R12',  'Title}' -> 'Title'
+
+        If PropName.StartsWith("Query") Then PropName = "Query"
 
         Pattern = "^(.*)(\|R[0-9]+)$"
         Matches = Regex.Matches(PropName, Pattern)
