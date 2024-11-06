@@ -364,6 +364,7 @@ Partial Class FormVariableInputEditor
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormVariableInputEditor"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Variable Input Editor"
         Me.PanelHeader.ResumeLayout(False)
         Me.ExTableLayoutPanel1.ResumeLayout(False)

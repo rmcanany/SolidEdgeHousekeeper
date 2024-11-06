@@ -28,11 +28,11 @@ Partial Class FormPropertyPicker
         Me.ButtonPropAndIndex = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ButtonShowAll = New System.Windows.Forms.ToolStripButton()
+        Me.ButtonAddProp = New System.Windows.Forms.ToolStripButton()
         Me.ComboBoxPropertyName = New System.Windows.Forms.ComboBox()
         Me.ButtonOK = New System.Windows.Forms.Button()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
-        Me.ButtonAddProp = New System.Windows.Forms.ToolStripButton()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,6 +85,15 @@ Partial Class FormPropertyPicker
         Me.ButtonShowAll.Size = New System.Drawing.Size(106, 22)
         Me.ButtonShowAll.Text = "Show All Props"
         '
+        'ButtonAddProp
+        '
+        Me.ButtonAddProp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ButtonAddProp.Image = CType(resources.GetObject("ButtonAddProp.Image"), System.Drawing.Image)
+        Me.ButtonAddProp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonAddProp.Name = "ButtonAddProp"
+        Me.ButtonAddProp.Size = New System.Drawing.Size(61, 22)
+        Me.ButtonAddProp.Text = "Add Prop"
+        '
         'ComboBoxPropertyName
         '
         Me.ComboBoxPropertyName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -126,15 +135,6 @@ Partial Class FormPropertyPicker
         Me.ComboBoxPropertySet.Size = New System.Drawing.Size(84, 23)
         Me.ComboBoxPropertySet.TabIndex = 4
         '
-        'ButtonAddProp
-        '
-        Me.ButtonAddProp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.ButtonAddProp.Image = CType(resources.GetObject("ButtonAddProp.Image"), System.Drawing.Image)
-        Me.ButtonAddProp.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ButtonAddProp.Name = "ButtonAddProp"
-        Me.ButtonAddProp.Size = New System.Drawing.Size(61, 22)
-        Me.ButtonAddProp.Text = "Add Prop"
-        '
         'FormPropertyPicker
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -149,6 +149,7 @@ Partial Class FormPropertyPicker
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyPicker"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Property Selector"
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()

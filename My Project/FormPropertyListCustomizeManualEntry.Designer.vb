@@ -205,6 +205,7 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyListCustomizeManualEntry"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Add Property Manually"
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel4.ResumeLayout(False)

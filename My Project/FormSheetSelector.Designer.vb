@@ -125,6 +125,7 @@ Partial Class FormSheetSelector
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormSheetSelector"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Sheet Selector"
         Me.ResumeLayout(False)
         Me.PerformLayout()

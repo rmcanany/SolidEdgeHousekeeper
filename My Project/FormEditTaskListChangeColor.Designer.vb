@@ -149,6 +149,7 @@ Partial Class FormEditTaskListChangeColor
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormEditTaskListChangeColor"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Change Color"
         CType(Me.NumericUpDownSaturation, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDownBrightness, System.ComponentModel.ISupportInitialize).EndInit()

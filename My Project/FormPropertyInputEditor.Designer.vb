@@ -475,6 +475,7 @@ Partial Class FormPropertyInputEditor
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "FormPropertyInputEditor"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Property Input Editor"
         Me.ToolStripEditProperties.ResumeLayout(False)
         Me.ToolStripEditProperties.PerformLayout()

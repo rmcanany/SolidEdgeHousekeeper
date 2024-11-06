@@ -222,6 +222,7 @@ Partial Class FormEditTaskList
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormEditTaskList"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Edit Task List"
         Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.TaskListBindingSource, System.ComponentModel.ISupportInitialize).EndInit()

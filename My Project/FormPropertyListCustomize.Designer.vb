@@ -237,6 +237,7 @@ Partial Class FormPropertyListCustomize
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Name = "FormPropertyListCustomize"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Customize Property List"
         Me.ContextMenuStrip1.ResumeLayout(False)
         CType(Me.TaskListBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
