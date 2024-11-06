@@ -3405,18 +3405,18 @@ Public Class Form_Main
     End Sub
 
 
-    Public Shared Function ExecuteQuery(cf As CompoundFile, FullName As String, Query As String) As String
+    Public Shared Function ExecuteQuery(cf As CompoundFile, FullName As String, Query As String, ResultIndex As Integer) As String
 
         ExecuteQuery = ""
 
         Dim UC As New UtilsCommon
         'Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, Query, False, Form_Main.TemplatePropertyDict)
-        Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, Query, False, Form_Main.PropertiesData)
+        Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, Query, False, Form_Main.PropertiesData).Replace(vbCrLf, " ")
 
 
         Try
-            'TBD Determine the type of DB, if its a SQL it need a different connection type
 
+            'OLEDB Connections lile ACCESS and EXCEL file
             If Form_Main.TextBoxServerConnectionString.Text.Contains("OLEDB") Then
 
                 Dim con As New OleDbConnection(Form_Main.TextBoxServerConnectionString.Text)
@@ -3428,7 +3428,7 @@ Public Class Form_Main
                 If reader.HasRows Then
                     reader.Read()
 
-                    ExecuteQuery = reader(0).ToString
+                    ExecuteQuery = reader(ResultIndex - 1).ToString
 
                 End If
 
@@ -3437,6 +3437,7 @@ Public Class Form_Main
 
             Else
 
+                'I suppose it is a SQL connection
                 Dim con As New SqlConnection(Form_Main.TextBoxServerConnectionString.Text)
                 con.Open()
 
@@ -3446,7 +3447,7 @@ Public Class Form_Main
                 If reader.HasRows Then
                     reader.Read()
 
-                    ExecuteQuery = reader(0).ToString
+                    ExecuteQuery = reader(ResultIndex - 1).ToString
 
                 End If
 

@@ -233,6 +233,7 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -2182,6 +2183,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerConnectionString, 0, 0)
         Me.ExTableLayoutPanel9.Controls.Add(Me.LabelServerQuery, 0, 2)
         Me.ExTableLayoutPanel9.Controls.Add(Me.FastColoredServerQuery, 0, 3)
+        Me.ExTableLayoutPanel9.Controls.Add(Me.Label1, 0, 4)
         Me.ExTableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel9.Location = New System.Drawing.Point(3, 3)
         Me.ExTableLayoutPanel9.Margin = New System.Windows.Forms.Padding(0)
@@ -2228,7 +2230,7 @@ Partial Class Form_Main
         '
         Me.FastColoredServerQuery.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
         Me.FastColoredServerQuery.AutoIndentCharsPatterns = ""
-        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(2, 14)
+        Me.FastColoredServerQuery.AutoScrollMinSize = New System.Drawing.Size(27, 14)
         Me.FastColoredServerQuery.BackBrush = Nothing
         Me.FastColoredServerQuery.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.FastColoredServerQuery.CharHeight = 14
@@ -2660,6 +2662,16 @@ Partial Class Form_Main
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 200)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(3, 10, 3, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(387, 105)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = resources.GetString("Label1.Text")
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -2947,4 +2959,5 @@ Partial Class Form_Main
     Friend WithEvents LabelPreset As ToolStripLabel
     Friend WithEvents ToolStripSeparator11 As ToolStripSeparator
     Friend WithEvents FastColoredServerQuery As FastColoredTextBoxNS.FastColoredTextBox
+    Friend WithEvents Label1 As Label
 End Class
