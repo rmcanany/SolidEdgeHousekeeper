@@ -10,6 +10,7 @@ Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 Imports OpenMcdf
+Imports SolidEdgeAssembly
 
 Public Class Form_Main
 
@@ -3179,8 +3180,21 @@ Public Class Form_Main
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
         'hitinfo.SubItem.Text 'New value
 
-        If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, editbox.Text) Then
-            hitinfo.SubItem.Text = editbox.Text
+        '###############    Test, pass the cf to SetOLEPropValue if available?
+        Dim fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, editbox.Text, False, PropertiesData)
+
+        cf.Close()
+        cf = Nothing
+        fs.Close()
+        fs = Nothing
+        '###############
+
+        If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, Q) Then
+            hitinfo.SubItem.Text = Q
             hitinfo.SubItem.BackColor = Color.Empty
         End If
 
