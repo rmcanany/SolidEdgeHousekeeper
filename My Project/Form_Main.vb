@@ -1679,14 +1679,16 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
+
         End If
 
     End Sub
@@ -1700,14 +1702,15 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder with subfolders"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1741,10 +1744,12 @@ Public Class Form_Main
             End Select
 
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
 
             tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
         End If
 
@@ -1759,11 +1764,13 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level assembly"
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "asm"
             tmpItem.Tag = "asm"
             tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             If CheckBoxTLAAutoIncludeTLF.Checked Then
                 Dim Folder As String = System.IO.Path.GetDirectoryName(tmpFileDialog.FileName)
@@ -1771,15 +1778,17 @@ Public Class Form_Main
                 Dim tmpItem2 As New ListViewItem
                 tmpItem2.Text = "Top level asm folder"
                 tmpItem2.SubItems.Add(Folder)
-                tmpItem2.Group = ListViewFiles.Groups.Item("Sources")
+                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem2.ImageKey = "ASM_Folder"
                 tmpItem2.Tag = "ASM_Folder"
                 tmpItem2.Name = Folder
-                If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
+                'If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
+                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2)
+
             End If
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1794,14 +1803,15 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level asm folder"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "ASM_Folder"
             tmpItem.Tag = "ASM_Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
