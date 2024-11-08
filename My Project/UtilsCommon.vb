@@ -1322,7 +1322,6 @@ Public Class UtilsCommon
 
             'End Select
 
-
             SetOLEPropValue = SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream) 'TRUE
 
             co.Save(dsiStream)
