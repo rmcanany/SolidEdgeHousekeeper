@@ -121,6 +121,7 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
         Me.LabelTLAListOptions = New System.Windows.Forms.Label()
         Me.CheckBoxTLAAutoIncludeTLF = New System.Windows.Forms.CheckBox()
@@ -259,6 +260,10 @@ Partial Class Form_Main
         Me.ToolStripPresets.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.ExTableLayoutPanel4.SuspendLayout()
         Me.ExTableLayoutPanel5.SuspendLayout()
         Me.ExTableLayoutPanel6.SuspendLayout()
@@ -296,8 +301,7 @@ Partial Class Form_Main
         '
         Me.TabPageHome.BackColor = System.Drawing.Color.White
         Me.TabPageHome.Controls.Add(Me.ColumnSelectionPanel)
-        Me.TabPageHome.Controls.Add(Me.ListViewFiles)
-        Me.TabPageHome.Controls.Add(Me.ListViewSources)
+        Me.TabPageHome.Controls.Add(Me.SplitContainer1)
         Me.TabPageHome.Controls.Add(Me.ToolStrip_Filter)
         Me.TabPageHome.Controls.Add(Me.ToolStrip_List)
         Me.TabPageHome.ImageKey = "list"
@@ -379,11 +383,11 @@ Partial Class Form_Main
         Me.ListViewFiles.FullRowSelect = True
         Me.ListViewFiles.GridLines = True
         Me.ListViewFiles.HideSelection = False
-        Me.ListViewFiles.Location = New System.Drawing.Point(2, 125)
+        Me.ListViewFiles.Location = New System.Drawing.Point(0, 0)
         Me.ListViewFiles.Margin = New System.Windows.Forms.Padding(0)
         Me.ListViewFiles.Name = "ListViewFiles"
         Me.ListViewFiles.ShowItemToolTips = True
-        Me.ListViewFiles.Size = New System.Drawing.Size(547, 469)
+        Me.ListViewFiles.Size = New System.Drawing.Size(547, 437)
         Me.ListViewFiles.SmallImageList = Me.TabPage_ImageList
         Me.ListViewFiles.TabIndex = 32
         Me.ListViewFiles.UseCompatibleStateImageBehavior = False
@@ -430,18 +434,18 @@ Partial Class Form_Main
         '
         Me.ListViewSources.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
-        Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
         ListViewGroup1.Header = "File sources"
         ListViewGroup1.Name = "Sources"
         Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
-        Me.ListViewSources.Location = New System.Drawing.Point(2, 27)
+        Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
         Me.ListViewSources.Margin = New System.Windows.Forms.Padding(0)
         Me.ListViewSources.Name = "ListViewSources"
-        Me.ListViewSources.ShowGroups = False
         Me.ListViewSources.ShowItemToolTips = True
-        Me.ListViewSources.Size = New System.Drawing.Size(547, 98)
+        Me.ListViewSources.Size = New System.Drawing.Size(547, 126)
         Me.ListViewSources.SmallImageList = Me.TabPage_ImageList
         Me.ListViewSources.TabIndex = 37
         Me.ListViewSources.UseCompatibleStateImageBehavior = False
@@ -1235,6 +1239,24 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.Location = New System.Drawing.Point(2, 27)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ListViewSources)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.ListViewFiles)
+        Me.SplitContainer1.Size = New System.Drawing.Size(547, 567)
+        Me.SplitContainer1.SplitterDistance = 126
+        Me.SplitContainer1.TabIndex = 38
         '
         'ExTableLayoutPanel4
         '
@@ -2514,7 +2536,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2766,6 +2787,10 @@ Partial Class Form_Main
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         Me.Menu_ListViewFile.ResumeLayout(False)
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
         Me.ExTableLayoutPanel4.ResumeLayout(False)
         Me.ExTableLayoutPanel4.PerformLayout()
         Me.ExTableLayoutPanel5.ResumeLayout(False)
@@ -3016,4 +3041,5 @@ Partial Class Form_Main
     Friend WithEvents ListViewSources As ListView
     Friend WithEvents ColumnHeader1 As ColumnHeader
     Friend WithEvents ColumnHeader2 As ColumnHeader
+    Friend WithEvents SplitContainer1 As SplitContainer
 End Class

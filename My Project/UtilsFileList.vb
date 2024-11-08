@@ -8,12 +8,14 @@ Imports System.Threading
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView
+    Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible)
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible, ListViewSources As ListView)
         Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
+        Me.ListViewSources = ListViewSources
     End Sub
 
     Public Sub New_UpdateFileList()
@@ -45,18 +47,20 @@ Public Class UtilsFileList
         ListViewFiles.BeginUpdate()
 
 
-        Dim NewWay As Boolean = True
+        Dim NewWay As Boolean = False
 
         If Not NewWay Then
 
-            ' Remove everything except the "Sources" group.
-            For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-                If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-                    ListViewFiles.Items.Item(i).Remove()
-                Else
-                    GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-                End If
-            Next
+            '' Remove everything except the "Sources" group.
+            'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+            '    If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
+            '        ListViewFiles.Items.Item(i).Remove()
+            '    Else
+            '        GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+            '    End If
+            'Next
+
+            ListViewFiles.Items.Clear()
 
         Else
             ' ###### Initialize tmpLV ######
@@ -180,7 +184,7 @@ Public Class UtilsFileList
         ' Only remaining items should be in the "Sources" group.
         Dim tmpFoundFiles As New List(Of String)
 
-        For Each item As ListViewItem In ListViewFiles.Items
+        For Each item As ListViewItem In ListViewSources.Items
             Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly)
             If tmptmpFoundFiles IsNot Nothing Then
                 tmpFoundFiles.AddRange(tmptmpFoundFiles)

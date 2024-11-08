@@ -865,7 +865,7 @@ Public Class Form_Main
                     End If
                 Next
 
-                Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
                 Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
                 Me.Cursor = Cursors.Default
@@ -1686,7 +1686,7 @@ Public Class Form_Main
             tmpItem.Tag = "Folder"
             tmpItem.Name = tmpFolderDialog.FileName
             'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
 
@@ -1709,7 +1709,7 @@ Public Class Form_Main
             tmpItem.Tag = "Folders"
             tmpItem.Name = tmpFolderDialog.FileName
             'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
 
@@ -1750,7 +1750,7 @@ Public Class Form_Main
 
             tmpItem.Name = tmpFileDialog.FileName
             'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
         End If
 
@@ -1771,7 +1771,7 @@ Public Class Form_Main
             tmpItem.Tag = "asm"
             tmpItem.Name = tmpFileDialog.FileName
             'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             If CheckBoxTLAAutoIncludeTLF.Checked Then
                 Dim Folder As String = System.IO.Path.GetDirectoryName(tmpFileDialog.FileName)
@@ -1785,7 +1785,7 @@ Public Class Form_Main
                 tmpItem2.Tag = "ASM_Folder"
                 tmpItem2.Name = Folder
                 'If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
-                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2)
+                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             End If
 
@@ -1810,7 +1810,7 @@ Public Class Form_Main
             tmpItem.Tag = "ASM_Folder"
             tmpItem.Name = tmpFolderDialog.FileName
             'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
 
@@ -1819,6 +1819,8 @@ Public Class Form_Main
     End Sub
 
     Private Sub BT_DeleteAll_Click(sender As Object, e As EventArgs) Handles BT_DeleteAll.Click
+
+        ListViewSources.Items.Clear()
 
         ListViewFiles.BeginUpdate()
         ListViewFiles.Items.Clear()
@@ -1834,11 +1836,29 @@ Public Class Form_Main
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
 
-        Dim UFL As New UtilsFileList(Me, ListViewFiles)
+        Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
         UFL.New_UpdateFileList()
 
     End Sub
 
+    Private Sub ListViewSources_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewSources.KeyUp
+
+        If e.KeyCode = Keys.Escape Then ListViewSources.SelectedItems.Clear()
+        If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
+
+            For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+
+                Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+                If tmpItem.Group.Name = "Sources" Then
+                    tmpItem.Remove()
+                    ListViewFilesOutOfDate = True
+                End If
+
+            Next
+
+        End If
+
+    End Sub
 
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
 
@@ -2004,6 +2024,14 @@ Public Class Form_Main
             End If
 
         Next
+
+        For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+            tmpItem.Remove()
+
+        Next
+
     End Sub
 
 
@@ -3026,7 +3054,7 @@ Public Class Form_Main
                 tmpListOfColumns.Add(PropColumn)
             Next
             Me.ListOfColumns = tmpListOfColumns  ' Trigger update
-            Dim UFL As New UtilsFileList(Me, ListViewFiles)
+            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
             Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
             Me.Cursor = Cursors.Default
