@@ -2730,6 +2730,11 @@ Public Class Form_Main
 
     End Sub
 
+    Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
+        Dim tmp As New FormTeamCenterAdd(Me)
+        tmp.ShowDialog()
+    End Sub
+
 
     ' Commands I can never remember
 

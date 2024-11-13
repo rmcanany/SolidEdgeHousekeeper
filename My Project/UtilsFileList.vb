@@ -246,6 +246,12 @@ Public Class UtilsFileList
 
                     End If
 
+                Case = "TC"
+                    Dim tmpFoundFiles As New List(Of String)
+                    tmpFoundFiles.Add(Source.Name)
+
+                    FoundFiles = tmpFoundFiles
+
                 Case Else
                     FoundFiles = Nothing
                     FMain.TextBoxStatus.Text = "No files found"

@@ -178,6 +178,12 @@
     <Compile Include="My Project\ExTableLayoutPanel.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="My Project\FormTeamCenterAdd.Designer.vb">
+      <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormTeamCenterAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormNewVersionAvailable.Designer.vb">
       <DependentUpon>FormNewVersionAvailable.vb</DependentUpon>
     </Compile>
@@ -353,6 +359,9 @@
   <ItemGroup>
     <EmbeddedResource Include="My Project\FormPropertyPicker.resx">
       <DependentUpon>FormPropertyPicker.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormTeamCenterAdd.resx">
+      <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormTextPrompt.resx">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>
