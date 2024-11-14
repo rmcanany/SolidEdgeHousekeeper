@@ -1932,7 +1932,7 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "Up", My.Resources.up)
         CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
 
-        Dim Image As Image = Nothing
+        Dim Image As Image = New Bitmap(16, 16)
         CaricaImmagine16x16(TabPage_ImageList, "Empty", Image)
 
     End Sub
