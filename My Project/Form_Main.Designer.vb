@@ -39,6 +39,7 @@ Partial Class Form_Main
         Me.new_ButtonFileSearchDelete = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip_List = New System.Windows.Forms.ToolStrip()
+        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
@@ -210,7 +211,6 @@ Partial Class Form_Main
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ToolStrip_Filter.SuspendLayout()
@@ -405,6 +405,15 @@ Partial Class Form_Main
         Me.ToolStrip_List.Size = New System.Drawing.Size(545, 25)
         Me.ToolStrip_List.TabIndex = 33
         Me.ToolStrip_List.Text = "ToolStrip1"
+        '
+        'BT_AddTeamCenter
+        '
+        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddTeamCenter.Image = CType(resources.GetObject("BT_AddTeamCenter.Image"), System.Drawing.Image)
+        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
+        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddTeamCenter.Text = "Add TeamCenter Item"
         '
         'BT_AddFolder
         '
@@ -2384,15 +2393,6 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'BT_AddTeamCenter
-        '
-        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddTeamCenter.Image = CType(resources.GetObject("BT_AddTeamCenter.Image"), System.Drawing.Image)
-        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
-        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddTeamCenter.Text = "Add TeamCenter Item"
         '
         'Form_Main
         '

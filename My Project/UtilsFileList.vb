@@ -30,10 +30,12 @@ Public Class UtilsFileList
 
         ListViewFiles.BeginUpdate()
 
-        ' Remove everything except the "Sources" group.
+        ' Remove everything except the "Sources" group and TC files.
         For i = ListViewFiles.Items.Count - 1 To 0 Step -1
             If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-                ListViewFiles.Items.Item(i).Remove()
+                If Not ListViewFiles.Items.Item(i).Name.Contains(My.Settings.cachePathTC) Then
+                    ListViewFiles.Items.Item(i).Remove()
+                End If
             Else
                 GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
             End If

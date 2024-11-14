@@ -516,20 +516,14 @@ Public Class UtilsExecute
 
             End If
 
-            'Check in documents if the file path has TC cache path
-            Dim TCE As SolidEdgeFramework.SolidEdgeTCE
-            TCE = SEApp.SolidEdgeTCE
-            Dim cachePath As String = Nothing
-            TCE.GetPDMCachePath(cachePath)
-
-            ' Assuming Path is a string variable containing the file path
-            Dim filePath As String = Path
-
-            If filePath.Contains(cachePath) Then
+            'Check in documents if the file path has TC cache path, TODO: Reduce conversions if possible
+            If Path.Contains(My.Settings.cachePathTC) Then
                 Dim filePaths As New List(Of Object)()
-                filePaths.Add(filePath)
+                filePaths.Add(Path)
 
                 If filePaths.Count > 0 Then
+                    Dim TCE As SolidEdgeFramework.SolidEdgeTCE
+                    TCE = SEApp.SolidEdgeTCE
                     Dim filesToCheckIn As Array = filePaths.ToArray()
                     Dim bOnlyUpload As Boolean = False
                     TCE.CheckInDocumentsToTeamCenterServer(filesToCheckIn, bOnlyUpload)

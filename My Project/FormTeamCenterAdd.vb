@@ -6,7 +6,6 @@ Imports System.Text.RegularExpressions
 
 Public Class FormTeamCenterAdd
     Private _mainForm As Form_Main
-    Dim cachePath As String = Nothing
 
     Public Sub New(mainForm As Form_Main)
         InitializeComponent()
@@ -19,12 +18,13 @@ Public Class FormTeamCenterAdd
 
     Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
         Dim objApp As SolidEdgeFramework.Application = Nothing
-        Dim objSEEC As SolidEdgeFramework.SolidEdgeTCE = Nothing
+        Dim TCE As SolidEdgeFramework.SolidEdgeTCE = Nothing
         Dim objDocuments As SolidEdgeFramework.Documents = Nothing
 
         Try
             Cursor.Current = Cursors.WaitCursor
             ' Connect to Solid Edge, if not open then Open Solid Edge
+
             Try
                 LabelSearchStatus.Text = "Connecting to Solid Edge..."
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -33,8 +33,14 @@ Public Class FormTeamCenterAdd
                 objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
                 objApp.Visible = True
             End Try
-            objSEEC = objApp.SolidEdgeTCE
+
+            TCE = objApp.SolidEdgeTCE
             objDocuments = objApp.Documents
+
+            'Save Cache Path to settings.settings
+            Dim cachePath As String = Nothing
+            TCE.GetPDMCachePath(cachePath)
+            My.Settings.cachePathTC = cachePath
 
             LabelSearchStatus.Text = "Searching..."
 
@@ -52,7 +58,7 @@ Public Class FormTeamCenterAdd
                     Dim revision As String = columns(1).Trim()
                     Dim tempFiles As Object = Nothing
                     Dim tempNumOfFiles As Integer = 0
-                    objSEEC.GetListOfFilesFromTeamcenterServer(itemID, revision, tempFiles, tempNumOfFiles)
+                    TCE.GetListOfFilesFromTeamcenterServer(itemID, revision, tempFiles, tempNumOfFiles)
                     If tempNumOfFiles > 0 Then
                         If TypeOf tempFiles Is Array Then
                             For Each file As Object In CType(tempFiles, Object())
@@ -110,8 +116,16 @@ Public Class FormTeamCenterAdd
         Dim fileItemID As String = selectedItem.SubItems(1).Text
         Dim fileItemRevID As String = selectedItem.SubItems(2).Text
 
+        ' Check if the item is already in ListViewDownloadedFiles
+        For Each item As ListViewItem In ListViewDownloadedFiles.Items
+            If item.Text = fileName AndAlso item.SubItems(1).Text = fileItemID AndAlso item.SubItems(2).Text = fileItemRevID Then
+                MessageBox.Show(fileName + " is already downloaded", "File Already Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+        Next
+
         Dim objApp As SolidEdgeFramework.Application = Nothing
-        Dim objSEEC As SolidEdgeFramework.SolidEdgeTCE = Nothing
+        Dim TCE As SolidEdgeFramework.SolidEdgeTCE = Nothing
 
         Try
             Cursor.Current = Cursors.WaitCursor
@@ -123,16 +137,28 @@ Public Class FormTeamCenterAdd
                 objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
                 objApp.Visible = True
             End Try
-            objSEEC = objApp.SolidEdgeTCE
+            TCE = objApp.SolidEdgeTCE
 
-            'Download the selected item
+            ' Check if the item is already in ListViewDownloadedFiles
+            Dim alreadyDownloaded As Boolean = False
+            For Each downloadedItem As ListViewItem In ListViewDownloadedFiles.Items
+                If downloadedItem.Text = fileName Then
+                    alreadyDownloaded = True
+                    Exit For
+                End If
+            Next
+
+            If alreadyDownloaded Then
+                MessageBox.Show(fileName + " is already downloaded", "File Already Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            ' Download the selected item
             Dim temp(,) As Object = New Object(1, 1) {}
-            objSEEC.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
+            TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
 
-            'Get cache path and add the filename and file path to listview
-            objSEEC.GetPDMCachePath(cachePath)
-            My.Settings.cachePathTC = cachePath
-            Dim filePath As String = System.IO.Path.Combine(cachePath, fileName)
+            ' Get cache path and add the filename and file path to listview
+            Dim filePath As String = System.IO.Path.Combine(My.Settings.cachePathTC, fileName)
 
             ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
 
@@ -146,7 +172,7 @@ Public Class FormTeamCenterAdd
 
     Private Sub ButtonDownloadAll_Click(sender As Object, e As EventArgs) Handles ButtonDownloadAll.Click
         Dim objApp As SolidEdgeFramework.Application = Nothing
-        Dim objSEEC As SolidEdgeFramework.SolidEdgeTCE = Nothing
+        Dim TCE As SolidEdgeFramework.SolidEdgeTCE = Nothing
 
         Try
             Cursor.Current = Cursors.WaitCursor
@@ -158,17 +184,31 @@ Public Class FormTeamCenterAdd
                 objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
                 objApp.Visible = True
             End Try
-            objSEEC = objApp.SolidEdgeTCE
+            TCE = objApp.SolidEdgeTCE
 
-            'Download each file in listview
+            ' Download each file in listview
             For Each item As ListViewItem In ListViewTeamCenterItems.Items
                 Dim fileName As String = item.Text
                 Dim fileItemID As String = item.SubItems(1).Text
                 Dim fileItemRevID As String = item.SubItems(2).Text
+
+                ' Check if the item is already in ListViewDownloadedFiles
+                Dim alreadyDownloaded As Boolean = False
+                For Each downloadedItem As ListViewItem In ListViewDownloadedFiles.Items
+                    If downloadedItem.Text = fileName Then
+                        alreadyDownloaded = True
+                        Exit For
+                    End If
+                Next
+
+                If alreadyDownloaded Then
+                    MessageBox.Show("File Already Downloaded", fileName + " is already downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Continue For
+                End If
+
                 Dim temp(,) As Object = New Object(1, 1) {}
-                objSEEC.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
-                objSEEC.GetPDMCachePath(cachePath)
-                Dim filePath As String = System.IO.Path.Combine(cachePath, fileName)
+                TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
+                Dim filePath As String = System.IO.Path.Combine(My.Settings.cachePathTC, fileName)
                 ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
             Next
 
@@ -179,6 +219,7 @@ Public Class FormTeamCenterAdd
             Cursor.Current = Cursors.Default
         End Try
     End Sub
+
 
     Private Sub CloseSolidEdge()
         Dim objApp As SolidEdgeFramework.Application = Nothing
@@ -207,7 +248,7 @@ Public Class FormTeamCenterAdd
         End If
         For Each item As ListViewItem In ListViewDownloadedFiles.Items
             Dim fileName As String = item.Text
-            Dim filePath As String = System.IO.Path.Combine(cachePath, fileName)
+            Dim filePath As String = System.IO.Path.Combine(My.Settings.cachePathTC, fileName)
 
             ' Add the file to the ListView in the main form
             Dim tmpItem As New ListViewItem
