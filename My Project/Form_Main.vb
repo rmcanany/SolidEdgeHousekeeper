@@ -1932,9 +1932,6 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "Up", My.Resources.up)
         CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
 
-        Dim Image As Image = New Bitmap(16, 16)
-        CaricaImmagine16x16(TabPage_ImageList, "Empty", Image)
-
     End Sub
 
     Private Sub CaricaImmagine16x16(IL As ImageList, Key As String, Immagine As Image)
@@ -1944,10 +1941,7 @@ Public Class Form_Main
         g.FillRectangle(New SolidBrush(Color.Transparent), 0, 0, 16, 16)
         g.DrawImage(Immagine, 0, 0, 16, 16)
 
-        Try
-            IL.Images.Add(Key, b)
-        Catch ex As Exception
-        End Try
+        IL.Images.Add(Key, b)
 
     End Sub
 
@@ -3267,7 +3261,7 @@ Public Class Form_Main
 
         If (e.Column = lvwColumnSorter.SortColumn) Then
             ' Reverse the current sort direction for this column.
-            If (lvwColumnSorter.Order = SortOrder.Ascending) Then
+            If lvwColumnSorter.Order = SortOrder.Ascending Then
                 lvwColumnSorter.Order = SortOrder.Descending
                 ListViewFiles.Columns(e.Column).ImageKey = "Down"
             Else
@@ -3282,7 +3276,7 @@ Public Class Form_Main
         End If
 
         For i = 0 To ListViewFiles.Columns.Count - 1
-            If i <> e.Column Then ListViewFiles.Columns(i).ImageKey = "Empty"
+            If i <> e.Column Then ListViewFiles.Columns(i).ImageKey = "" : ListViewFiles.Columns(i).TextAlign = HorizontalAlignment.Left
         Next
 
         ' Perform the sort with these new sort options.
