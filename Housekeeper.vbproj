@@ -116,13 +116,11 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OpenMcdf, Version=2.2.1.12, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>My Project\OpenMcdf.dll</HintPath>
+    <Reference Include="OpenMcdf, Version=2.4.0.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
+      <HintPath>packages\OpenMcdf.2.4.0\lib\net40\OpenMcdf.dll</HintPath>
     </Reference>
     <Reference Include="OpenMcdf.Extensions, Version=2.3.2.0, Culture=neutral, PublicKeyToken=fdbb1629d7c00800, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>My Project\OpenMcdf.Extensions.dll</HintPath>
+      <HintPath>packages\OpenMcdf.Extensions.2.4.0\lib\net40\OpenMcdf.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="PanoramicData.NCalcExtensions, Version=1.20.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\PanoramicData.NCalcExtensions.1.20.146\lib\netstandard2.0\PanoramicData.NCalcExtensions.dll</HintPath>
