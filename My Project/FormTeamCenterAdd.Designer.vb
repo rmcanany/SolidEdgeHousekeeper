@@ -49,17 +49,19 @@ Partial Class FormTeamCenterAdd
         '
         'TextBoxItems
         '
-        Me.TextBoxItems.Location = New System.Drawing.Point(12, 49)
+        Me.TextBoxItems.Location = New System.Drawing.Point(16, 60)
+        Me.TextBoxItems.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TextBoxItems.Multiline = True
         Me.TextBoxItems.Name = "TextBoxItems"
-        Me.TextBoxItems.Size = New System.Drawing.Size(281, 62)
+        Me.TextBoxItems.Size = New System.Drawing.Size(373, 75)
         Me.TextBoxItems.TabIndex = 0
         '
         'ButtonSearch
         '
-        Me.ButtonSearch.Location = New System.Drawing.Point(224, 113)
+        Me.ButtonSearch.Location = New System.Drawing.Point(299, 139)
+        Me.ButtonSearch.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonSearch.Name = "ButtonSearch"
-        Me.ButtonSearch.Size = New System.Drawing.Size(69, 23)
+        Me.ButtonSearch.Size = New System.Drawing.Size(92, 28)
         Me.ButtonSearch.TabIndex = 1
         Me.ButtonSearch.Text = "Search"
         Me.ButtonSearch.UseVisualStyleBackColor = True
@@ -70,9 +72,10 @@ Partial Class FormTeamCenterAdd
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ListViewTeamCenterItems.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.fileName, Me.itemID, Me.revision})
         Me.ListViewTeamCenterItems.HideSelection = False
-        Me.ListViewTeamCenterItems.Location = New System.Drawing.Point(12, 142)
+        Me.ListViewTeamCenterItems.Location = New System.Drawing.Point(16, 175)
+        Me.ListViewTeamCenterItems.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ListViewTeamCenterItems.Name = "ListViewTeamCenterItems"
-        Me.ListViewTeamCenterItems.Size = New System.Drawing.Size(279, 258)
+        Me.ListViewTeamCenterItems.Size = New System.Drawing.Size(371, 317)
         Me.ListViewTeamCenterItems.TabIndex = 3
         Me.ListViewTeamCenterItems.UseCompatibleStateImageBehavior = False
         Me.ListViewTeamCenterItems.View = System.Windows.Forms.View.Details
@@ -96,11 +99,12 @@ Partial Class FormTeamCenterAdd
         '
         Me.ButtonDownload.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonDownload.Location = New System.Drawing.Point(297, 340)
+        Me.ButtonDownload.Location = New System.Drawing.Point(396, 418)
+        Me.ButtonDownload.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonDownload.Name = "ButtonDownload"
-        Me.ButtonDownload.Size = New System.Drawing.Size(127, 23)
+        Me.ButtonDownload.Size = New System.Drawing.Size(169, 28)
         Me.ButtonDownload.TabIndex = 4
-        Me.ButtonDownload.Text = "Download Selected"
+        Me.ButtonDownload.Text = "Add selected to cache"
         Me.ButtonDownload.UseVisualStyleBackColor = True
         '
         'ListViewDownloadedFiles
@@ -109,9 +113,10 @@ Partial Class FormTeamCenterAdd
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListViewDownloadedFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.fileNam, Me.filePath})
         Me.ListViewDownloadedFiles.HideSelection = False
-        Me.ListViewDownloadedFiles.Location = New System.Drawing.Point(430, 142)
+        Me.ListViewDownloadedFiles.Location = New System.Drawing.Point(573, 175)
+        Me.ListViewDownloadedFiles.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ListViewDownloadedFiles.Name = "ListViewDownloadedFiles"
-        Me.ListViewDownloadedFiles.Size = New System.Drawing.Size(170, 259)
+        Me.ListViewDownloadedFiles.Size = New System.Drawing.Size(225, 318)
         Me.ListViewDownloadedFiles.TabIndex = 5
         Me.ListViewDownloadedFiles.UseCompatibleStateImageBehavior = False
         Me.ListViewDownloadedFiles.View = System.Windows.Forms.View.Details
@@ -128,38 +133,43 @@ Partial Class FormTeamCenterAdd
         '
         'LabelDownloadStatus
         '
-        Me.LabelDownloadStatus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LabelDownloadStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.LabelDownloadStatus.AutoSize = True
-        Me.LabelDownloadStatus.Location = New System.Drawing.Point(297, 279)
+        Me.LabelDownloadStatus.Location = New System.Drawing.Point(401, 395)
+        Me.LabelDownloadStatus.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelDownloadStatus.Name = "LabelDownloadStatus"
-        Me.LabelDownloadStatus.Size = New System.Drawing.Size(0, 13)
+        Me.LabelDownloadStatus.Size = New System.Drawing.Size(0, 16)
         Me.LabelDownloadStatus.TabIndex = 6
         Me.LabelDownloadStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(10, 7)
+        Me.Label1.Location = New System.Drawing.Point(13, 9)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(389, 39)
+        Me.Label1.Size = New System.Drawing.Size(737, 32)
         Me.Label1.TabIndex = 7
-        Me.Label1.Text = resources.GetString("Label1.Text")
+        Me.Label1.Text = "Enter an Item ID and Revision in between a tab per line (CTRL + Tab adds a tab). " &
+    "You can easily copy and paste from excell" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Note: You may need to login to TeamCe" &
+    "nter when search is clicked."
         '
         'LabelSearchStatus
         '
         Me.LabelSearchStatus.AutoSize = True
-        Me.LabelSearchStatus.Location = New System.Drawing.Point(294, 94)
+        Me.LabelSearchStatus.Location = New System.Drawing.Point(396, 147)
+        Me.LabelSearchStatus.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelSearchStatus.Name = "LabelSearchStatus"
-        Me.LabelSearchStatus.Size = New System.Drawing.Size(0, 13)
+        Me.LabelSearchStatus.Size = New System.Drawing.Size(0, 16)
         Me.LabelSearchStatus.TabIndex = 9
         '
         'ButtonAddAndClose
         '
         Me.ButtonAddAndClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonAddAndClose.Location = New System.Drawing.Point(514, 412)
+        Me.ButtonAddAndClose.Location = New System.Drawing.Point(685, 507)
+        Me.ButtonAddAndClose.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonAddAndClose.Name = "ButtonAddAndClose"
-        Me.ButtonAddAndClose.Size = New System.Drawing.Size(85, 23)
+        Me.ButtonAddAndClose.Size = New System.Drawing.Size(113, 28)
         Me.ButtonAddAndClose.TabIndex = 10
         Me.ButtonAddAndClose.Text = "Add and close"
         Me.ButtonAddAndClose.UseVisualStyleBackColor = True
@@ -168,18 +178,19 @@ Partial Class FormTeamCenterAdd
         '
         Me.ToolStrip_List.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip_List.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.CheckBoxAsm, Me.CheckBoxPar, Me.CheckBoxPsm, Me.CheckBoxDft})
-        Me.ToolStrip_List.Location = New System.Drawing.Point(14, 113)
+        Me.ToolStrip_List.Location = New System.Drawing.Point(19, 139)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip_List.Size = New System.Drawing.Size(150, 25)
+        Me.ToolStrip_List.Size = New System.Drawing.Size(189, 27)
         Me.ToolStrip_List.TabIndex = 34
         Me.ToolStrip_List.Text = "ToolStrip1"
         '
         'ToolStripLabel1
         '
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(55, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(70, 24)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'CheckBoxAsm
@@ -191,7 +202,7 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxAsm.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
         Me.CheckBoxAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxAsm.Name = "CheckBoxAsm"
-        Me.CheckBoxAsm.Size = New System.Drawing.Size(23, 22)
+        Me.CheckBoxAsm.Size = New System.Drawing.Size(29, 24)
         Me.CheckBoxAsm.Text = "Filter ASM"
         '
         'CheckBoxPar
@@ -204,7 +215,7 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxPar.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxPar.Name = "CheckBoxPar"
         Me.CheckBoxPar.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.CheckBoxPar.Size = New System.Drawing.Size(23, 22)
+        Me.CheckBoxPar.Size = New System.Drawing.Size(29, 24)
         Me.CheckBoxPar.Text = "Filter PAR"
         '
         'CheckBoxPsm
@@ -216,7 +227,7 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxPsm.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
         Me.CheckBoxPsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxPsm.Name = "CheckBoxPsm"
-        Me.CheckBoxPsm.Size = New System.Drawing.Size(23, 22)
+        Me.CheckBoxPsm.Size = New System.Drawing.Size(29, 24)
         Me.CheckBoxPsm.Text = "Filter PSM"
         '
         'CheckBoxDft
@@ -228,25 +239,26 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxDft.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
         Me.CheckBoxDft.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxDft.Name = "CheckBoxDft"
-        Me.CheckBoxDft.Size = New System.Drawing.Size(23, 22)
+        Me.CheckBoxDft.Size = New System.Drawing.Size(29, 24)
         Me.CheckBoxDft.Text = "Filter DFT"
         '
         'ButtonDownloadAll
         '
         Me.ButtonDownloadAll.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonDownloadAll.Location = New System.Drawing.Point(297, 377)
+        Me.ButtonDownloadAll.Location = New System.Drawing.Point(396, 464)
+        Me.ButtonDownloadAll.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ButtonDownloadAll.Name = "ButtonDownloadAll"
-        Me.ButtonDownloadAll.Size = New System.Drawing.Size(127, 23)
+        Me.ButtonDownloadAll.Size = New System.Drawing.Size(169, 28)
         Me.ButtonDownloadAll.TabIndex = 35
-        Me.ButtonDownloadAll.Text = "Download All"
+        Me.ButtonDownloadAll.Text = "Add all to cache"
         Me.ButtonDownloadAll.UseVisualStyleBackColor = True
         '
         'FormTeamCenterAdd
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(608, 446)
+        Me.ClientSize = New System.Drawing.Size(811, 549)
         Me.Controls.Add(Me.ButtonDownloadAll)
         Me.Controls.Add(Me.ToolStrip_List)
         Me.Controls.Add(Me.ButtonAddAndClose)
@@ -259,6 +271,7 @@ Partial Class FormTeamCenterAdd
         Me.Controls.Add(Me.ButtonSearch)
         Me.Controls.Add(Me.TextBoxItems)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "FormTeamCenterAdd"
         Me.Text = "Add TeamCenter Item"
         Me.ToolStrip_List.ResumeLayout(False)

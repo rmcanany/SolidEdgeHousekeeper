@@ -34,6 +34,7 @@ Public Class FormTeamCenterAdd
                 objApp.Visible = True
             End Try
 
+            LabelSearchStatus.Text = "Connecting to TeamCenter...(You may need to sign in)"
             TCE = objApp.SolidEdgeTCE
             objDocuments = objApp.Documents
 
@@ -50,26 +51,60 @@ Public Class FormTeamCenterAdd
             Dim files As New List(Of Tuple(Of String, String, String))
             Dim numOfFiles As Integer = 0
 
-            'Get the Item ID and revison from each line
+            'Get the Item ID and revision from each line
             For Each line As String In lines
                 Dim columns() As String = line.Split(vbTab)
-                If columns.Length >= 2 Then
-                    Dim itemID As String = columns(0).Trim()
-                    Dim revision As String = columns(1).Trim()
-                    Dim tempFiles As Object = Nothing
-                    Dim tempNumOfFiles As Integer = 0
-                    TCE.GetListOfFilesFromTeamcenterServer(itemID, revision, tempFiles, tempNumOfFiles)
-                    If tempNumOfFiles > 0 Then
-                        If TypeOf tempFiles Is Array Then
-                            For Each file As Object In CType(tempFiles, Object())
-                                files.Add(Tuple.Create(file.ToString(), itemID, revision))
-                            Next
+                If columns.Length <> 2 Then
+                    Throw New ApplicationException($"Invalid format: '{line}'. Each line must contain exactly 2 columns separated by a tab.")
+                End If
+
+                Dim itemID As String = columns(0).Trim()
+                Dim revision As String = columns(1).Trim()
+
+                ' Validate item ID and revision
+                If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
+                    Throw New ApplicationException($"Invalid Item ID: {itemID}. It should be 8 digits.")
+                End If
+
+                If String.IsNullOrEmpty(revision) Then
+                    Throw New ApplicationException($"Invalid Revision for Item ID: {itemID}. Revision cannot be blank or null.")
+                End If
+
+                ' Validate if revision exists
+                Dim MFKAttributes(0, 1) As Object
+                Dim RevIdAndUIDs As Object = Nothing
+
+                MFKAttributes(0, 0) = "item_id"
+                MFKAttributes(0, 1) = itemID
+
+                TCE.GetAllRevisions(MFKAttributes, "MFK9Item1", RevIdAndUIDs)
+
+                Dim revisionExists As Boolean = False
+                If RevIdAndUIDs IsNot Nothing Then
+                    For i As Integer = 0 To RevIdAndUIDs.GetLength(0) - 1
+                        If RevIdAndUIDs(i, 0).ToString() = revision Then
+                            revisionExists = True
+                            Exit For
                         End If
-                        numOfFiles += tempNumOfFiles
+                    Next
+                End If
+
+                If Not revisionExists Then
+                    Throw New ApplicationException($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.")
+                End If
+
+                Dim tempFiles As Object = Nothing
+                Dim tempNumOfFiles As Integer = 0
+                TCE.GetListOfFilesFromTeamcenterServer(itemID, revision, tempFiles, tempNumOfFiles)
+                If tempNumOfFiles > 0 Then
+                    If TypeOf tempFiles Is Array Then
+                        For Each file As Object In CType(tempFiles, Object())
+                            files.Add(Tuple.Create(file.ToString(), itemID, revision))
+                        Next
                     End If
+                    numOfFiles += tempNumOfFiles
                 End If
             Next
-
 
             ListViewTeamCenterItems.Items.Clear()
 
@@ -80,10 +115,10 @@ Public Class FormTeamCenterAdd
                 Dim revision As String = fileTuple.Item3
                 Dim extension As String = System.IO.Path.GetExtension(fileName).ToLower()
                 If extension = ".pdf" Or extension = ".jt" OrElse
-                   (Not CheckBoxAsm.Checked AndAlso extension = ".asm") OrElse
-                   (Not CheckBoxPar.Checked AndAlso extension = ".par") OrElse
-                   (Not CheckBoxDft.Checked AndAlso extension = ".dft") OrElse
-                   (Not CheckBoxPsm.Checked AndAlso extension = ".psm") Then
+           (Not CheckBoxAsm.Checked AndAlso extension = ".asm") OrElse
+           (Not CheckBoxPar.Checked AndAlso extension = ".par") OrElse
+           (Not CheckBoxDft.Checked AndAlso extension = ".dft") OrElse
+           (Not CheckBoxPsm.Checked AndAlso extension = ".psm") Then
                     Continue For
                 End If
                 Dim listViewItem As New ListViewItem(fileName)
@@ -98,8 +133,12 @@ Public Class FormTeamCenterAdd
                 LabelSearchStatus.Text = numOfFiles.ToString + " files found, filtered down to " + ListViewTeamCenterItems.Items.Count.ToString
             End If
 
+        Catch ex As ApplicationException
+            MessageBox.Show(ex.Message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            LabelSearchStatus.Text = "Search failed!"
         Catch ex As Exception
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            LabelSearchStatus.Text = "Search failed!"
         Finally
             Cursor.Current = Cursors.Default
         End Try
@@ -107,7 +146,7 @@ Public Class FormTeamCenterAdd
 
     Private Sub ButtonDownload_Click(sender As Object, e As EventArgs) Handles ButtonDownload.Click
         If ListViewTeamCenterItems.SelectedItems.Count = 0 Then
-            MessageBox.Show("Please select a file to download.", "No File Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please select a file to add to cache.", "No File Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
@@ -118,8 +157,9 @@ Public Class FormTeamCenterAdd
 
         ' Check if the item is already in ListViewDownloadedFiles
         For Each item As ListViewItem In ListViewDownloadedFiles.Items
-            If item.Text = fileName AndAlso item.SubItems(1).Text = fileItemID AndAlso item.SubItems(2).Text = fileItemRevID Then
-                MessageBox.Show(fileName + " is already downloaded", "File Already Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If item.Text = fileName Then
+                LabelDownloadStatus.Text = "Item already in cache!"
+                MessageBox.Show(fileName + " is already in the cache folder", "File Already In Cache", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
         Next
@@ -129,7 +169,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelDownloadStatus.Text = "Downloading..."
+            LabelDownloadStatus.Text = "Adding to cache..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -138,20 +178,6 @@ Public Class FormTeamCenterAdd
                 objApp.Visible = True
             End Try
             TCE = objApp.SolidEdgeTCE
-
-            ' Check if the item is already in ListViewDownloadedFiles
-            Dim alreadyDownloaded As Boolean = False
-            For Each downloadedItem As ListViewItem In ListViewDownloadedFiles.Items
-                If downloadedItem.Text = fileName Then
-                    alreadyDownloaded = True
-                    Exit For
-                End If
-            Next
-
-            If alreadyDownloaded Then
-                MessageBox.Show(fileName + " is already downloaded", "File Already Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Return
-            End If
 
             ' Download the selected item
             Dim temp(,) As Object = New Object(1, 1) {}
@@ -162,8 +188,9 @@ Public Class FormTeamCenterAdd
 
             ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
 
-            LabelDownloadStatus.Text = "Download complete!"
+            LabelDownloadStatus.Text = "Added to cache!"
         Catch ex As Exception
+            LabelDownloadStatus.Text = "Item already in cache!"
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             Cursor.Current = Cursors.Default
@@ -176,7 +203,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelDownloadStatus.Text = "Downloading..."
+            LabelDownloadStatus.Text = "Adding to cache..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -202,7 +229,7 @@ Public Class FormTeamCenterAdd
                 Next
 
                 If alreadyDownloaded Then
-                    MessageBox.Show("File Already Downloaded", fileName + " is already downloaded", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    MessageBox.Show("File Already In Cache", fileName + " is already in the cache folder", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Continue For
                 End If
 
@@ -212,14 +239,13 @@ Public Class FormTeamCenterAdd
                 ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
             Next
 
-            LabelDownloadStatus.Text = "Download complete!"
+            LabelDownloadStatus.Text = "Added to cache!"
         Catch ex As Exception
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             Cursor.Current = Cursors.Default
         End Try
     End Sub
-
 
     Private Sub CloseSolidEdge()
         Dim objApp As SolidEdgeFramework.Application = Nothing
@@ -246,23 +272,37 @@ Public Class FormTeamCenterAdd
             Me.Close()
             Return
         End If
+
         For Each item As ListViewItem In ListViewDownloadedFiles.Items
             Dim fileName As String = item.Text
             Dim filePath As String = System.IO.Path.Combine(My.Settings.cachePathTC, fileName)
 
-            ' Add the file to the ListView in the main form
-            Dim tmpItem As New ListViewItem
-            tmpItem.Text = fileName
-            tmpItem.SubItems.Add(filePath)
-            tmpItem.ImageKey = "Unchecked"
-            tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
-            tmpItem.Name = filePath
-            tmpItem.Group = _mainForm.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
-            _mainForm.ListViewFiles.Items.Add(tmpItem)
+            ' Check if the file already exists in the ListView
+            Dim exists As Boolean = False
+            For Each existingItem As ListViewItem In _mainForm.ListViewFiles.Items
+                If existingItem.Name = filePath Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+
+            ' Add the file to the ListView in the main form if it doesn't already exist
+            If Not exists Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = fileName
+                tmpItem.SubItems.Add(filePath)
+                tmpItem.ImageKey = "Unchecked"
+                tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
+                tmpItem.Name = filePath
+                tmpItem.Group = _mainForm.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
+                _mainForm.ListViewFiles.Items.Add(tmpItem)
+            End If
         Next
 
         Me.Close()
     End Sub
+
+    'Was supposed to add a tab key when the tab key is pressed instead of changing selected object but doesn't work
     Private Sub TextBoxPastedData_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxItems.KeyDown
         If e.KeyCode = Keys.Tab Then
             Dim textBox As TextBox = CType(sender, TextBox)
