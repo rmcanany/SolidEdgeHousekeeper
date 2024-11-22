@@ -1931,6 +1931,7 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "Query", My.Resources.Query)
         CaricaImmagine16x16(TabPage_ImageList, "Up", My.Resources.up)
         CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
+        CaricaImmagine16x16(TabPage_ImageList, "Files", My.Resources.Files)
 
     End Sub
 
@@ -3605,6 +3606,47 @@ Public Class Form_Main
 
     Private Sub ListViewFiles_DrawSubItem(sender As Object, e As DrawListViewSubItemEventArgs) Handles ListViewFiles.DrawSubItem
         e.DrawDefault = True
+    End Sub
+
+    Private Sub BT_AddSingleFiles_Click(sender As Object, e As EventArgs) Handles BT_AddSingleFiles.Click
+
+        Dim tmpFolderDialog As New OpenFileDialog
+        tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.Filter =
+                                "Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
+                                "Assembly (*.asm)|*.asm|" +
+                                "Part (*.par)|*.par|" +
+                                "Sheet Metal (*.psm)|*.psm|" +
+                                "Draft (*.dft)|*.dft"
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+
+
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Files selection"
+            tmpItem.ImageKey = "Files"
+            tmpItem.Tag = "Files"
+
+            Dim FileLists As String = ""
+            For Each tmpFile As String In tmpFolderDialog.FileNames
+                FileLists = FileLists & tmpFile & ","
+            Next
+            FileLists = FileLists.Remove(FileLists.Length - 1)
+
+            tmpItem.SubItems.Add(FileLists)
+
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+            tmpItem.Name = FileLists
+
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+            ListViewFilesOutOfDate = True
+
+        End If
+
+
+
     End Sub
 
 
