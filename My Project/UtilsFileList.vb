@@ -577,7 +577,8 @@ Public Class UtilsFileList
         If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
             Dim tmpFolders As New List(Of String)
 
-            For Each item As ListViewItem In ListViewFiles.Items
+            'For Each item As ListViewItem In ListViewFiles.Items
+            For Each item As ListViewItem In ListViewSources.Items
                 If item.Tag.ToString = "ASM_Folder" Then
                     If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
                 End If
