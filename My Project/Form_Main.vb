@@ -5,11 +5,14 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.VisualStyles
+
 'Imports System.Windows
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 Imports OpenMcdf
+Imports SolidEdgeAssembly
 
 Public Class Form_Main
 
@@ -864,7 +867,7 @@ Public Class Form_Main
                     End If
                 Next
 
-                Dim UFL As New UtilsFileList(Me, ListViewFiles)
+                Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
                 Me.Cursor = Cursors.WaitCursor
                 UFL.UpdatePropertiesColumns()
                 Me.Cursor = Cursors.Default
@@ -1679,14 +1682,16 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
+
         End If
 
     End Sub
@@ -1700,14 +1705,15 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Folder with subfolders"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1741,10 +1747,12 @@ Public Class Form_Main
             End Select
 
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
 
             tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
         End If
 
@@ -1759,11 +1767,13 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level assembly"
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "asm"
             tmpItem.Tag = "asm"
             tmpItem.Name = tmpFileDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             If CheckBoxTLAAutoIncludeTLF.Checked Then
                 Dim Folder As String = System.IO.Path.GetDirectoryName(tmpFileDialog.FileName)
@@ -1771,15 +1781,17 @@ Public Class Form_Main
                 Dim tmpItem2 As New ListViewItem
                 tmpItem2.Text = "Top level asm folder"
                 tmpItem2.SubItems.Add(Folder)
-                tmpItem2.Group = ListViewFiles.Groups.Item("Sources")
+                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem2.ImageKey = "ASM_Folder"
                 tmpItem2.Tag = "ASM_Folder"
                 tmpItem2.Name = Folder
-                If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
+                'If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
+                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
             End If
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
@@ -1794,20 +1806,23 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level asm folder"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "ASM_Folder"
             tmpItem.Tag = "ASM_Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
 
         End If
 
     End Sub
 
     Private Sub BT_DeleteAll_Click(sender As Object, e As EventArgs) Handles BT_DeleteAll.Click
+
+        ListViewSources.Items.Clear()
 
         ListViewFiles.BeginUpdate()
         ListViewFiles.Items.Clear()
@@ -1823,11 +1838,29 @@ Public Class Form_Main
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
 
-        Dim UFL As New UtilsFileList(Me, ListViewFiles)
+        Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
         UFL.New_UpdateFileList()
 
     End Sub
 
+    Private Sub ListViewSources_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewSources.KeyUp
+
+        If e.KeyCode = Keys.Escape Then ListViewSources.SelectedItems.Clear()
+        If e.KeyCode = Keys.Back Or e.KeyCode = Keys.Delete Then
+
+            For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+
+                Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+                If tmpItem.Group.Name = "Sources" Then
+                    tmpItem.Remove()
+                    ListViewFilesOutOfDate = True
+                End If
+
+            Next
+
+        End If
+
+    End Sub
 
     Private Sub ListViewFiles_KeyUp(sender As Object, e As KeyEventArgs) Handles ListViewFiles.KeyUp
 
@@ -1896,6 +1929,9 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "list", My.Resources.list)
         CaricaImmagine16x16(TabPage_ImageList, "Tools", My.Resources.Tools)
         CaricaImmagine16x16(TabPage_ImageList, "Query", My.Resources.Query)
+        CaricaImmagine16x16(TabPage_ImageList, "Up", My.Resources.up)
+        CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
+        CaricaImmagine16x16(TabPage_ImageList, "Files", My.Resources.Files)
 
     End Sub
 
@@ -1906,10 +1942,7 @@ Public Class Form_Main
         g.FillRectangle(New SolidBrush(Color.Transparent), 0, 0, 16, 16)
         g.DrawImage(Immagine, 0, 0, 16, 16)
 
-        Try
-            IL.Images.Add(Key, b)
-        Catch ex As Exception
-        End Try
+        IL.Images.Add(Key, b)
 
     End Sub
 
@@ -1993,6 +2026,14 @@ Public Class Form_Main
             End If
 
         Next
+
+        For i = ListViewSources.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewSources.SelectedItems.Item(i)
+            tmpItem.Remove()
+
+        Next
+
     End Sub
 
 
@@ -3015,7 +3056,7 @@ Public Class Form_Main
                 tmpListOfColumns.Add(PropColumn)
             Next
             Me.ListOfColumns = tmpListOfColumns  ' Trigger update
-            Dim UFL As New UtilsFileList(Me, ListViewFiles)
+            Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
             Me.Cursor = Cursors.WaitCursor
             UFL.UpdatePropertiesColumns()
             Me.Cursor = Cursors.Default
@@ -3179,8 +3220,21 @@ Public Class Form_Main
         'hitinfo.Item.SubItems.IndexOf(hitinfo.SubItem) 'Property index to edit
         'hitinfo.SubItem.Text 'New value
 
-        If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, editbox.Text) Then
-            hitinfo.SubItem.Text = editbox.Text
+        '###############    Test, pass the cf to SetOLEPropValue if available?
+        Dim fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+        Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+        Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, editbox.Text, False, PropertiesData)
+
+        cf.Close()
+        cf = Nothing
+        fs.Close()
+        fs = Nothing
+        '###############
+
+        If UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, Q) Then
+            hitinfo.SubItem.Text = Q
             hitinfo.SubItem.BackColor = Color.Empty
         End If
 
@@ -3208,16 +3262,23 @@ Public Class Form_Main
 
         If (e.Column = lvwColumnSorter.SortColumn) Then
             ' Reverse the current sort direction for this column.
-            If (lvwColumnSorter.Order = SortOrder.Ascending) Then
+            If lvwColumnSorter.Order = SortOrder.Ascending Then
                 lvwColumnSorter.Order = SortOrder.Descending
+                ListViewFiles.Columns(e.Column).ImageKey = "Down"
             Else
                 lvwColumnSorter.Order = SortOrder.Ascending
+                ListViewFiles.Columns(e.Column).ImageKey = "Up"
             End If
         Else
             ' Set the column number that is to be sorted; default to ascending.
             lvwColumnSorter.SortColumn = e.Column
             lvwColumnSorter.Order = SortOrder.Ascending
+            ListViewFiles.Columns(e.Column).ImageKey = "Up"
         End If
+
+        For i = 0 To ListViewFiles.Columns.Count - 1
+            If i <> e.Column Then ListViewFiles.Columns(i).ImageKey = "" : ListViewFiles.Columns(i).TextAlign = HorizontalAlignment.Left
+        Next
 
         ' Perform the sort with these new sort options.
         ListViewFiles.Sort()
@@ -3481,6 +3542,110 @@ Public Class Form_Main
     Private Sub CheckBoxGroupFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxGroupFiles.CheckedChanged
 
         ListViewFiles.ShowGroups = CheckBoxGroupFiles.Checked
+
+    End Sub
+
+    Private Sub ListViewFiles_DrawColumnHeader(sender As Object, e As DrawListViewColumnHeaderEventArgs) Handles ListViewFiles.DrawColumnHeader
+
+        e.DrawDefault = True  ' Set ownerdraw.  ######## SET TO FALSE TO USE EXPERIMENTAL CODE
+
+        '####### Scope is to have better column header style (the default has the vertical line missalligned
+        '####### Second scope is to show the sorting order arrow on header
+
+
+        '############## Experimental number 1 ##################################################################################################
+        'e.Graphics.FillRectangle(SystemBrushes.Menu, e.Bounds)
+        'e.Graphics.DrawRectangle(SystemPens.GradientInactiveCaption, New Rectangle(e.Bounds.X, 0, e.Bounds.Width, e.Bounds.Height))
+
+
+        ''TEXT
+
+        'Dim textAlign As HorizontalAlignment = e.Header.TextAlign
+        'Dim flags As TextFormatFlags = If((textAlign = HorizontalAlignment.Left), TextFormatFlags.GlyphOverhangPadding, If((textAlign = HorizontalAlignment.Center), TextFormatFlags.HorizontalCenter, TextFormatFlags.Right))
+
+        ''(I added this line)
+        'flags = (flags Or TextFormatFlags.VerticalCenter)
+
+        'Dim text As String = e.Header.Text
+        'Dim width As Integer = TextRenderer.MeasureText(" ", e.Font).Width
+        'Bounds = Rectangle.Inflate(e.Bounds, -width, 0)
+        'TextRenderer.DrawText(e.Graphics, [text], e.Font, bounds, e.ForeColor, flags)
+        '############################################################################################################################################
+
+
+
+
+        '############## Experimental number 2 ##################################################################################################
+        'Dim state = If(e.State = ListViewItemStates.Selected, VisualStyleElement.Header.Item.Hot, VisualStyleElement.Header.Item.Normal)
+        'Dim sortOrder = If(lvwColumnSorter.Order = Windows.Forms.SortOrder.Descending, VisualStyleElement.Header.SortArrow.SortedUp, VisualStyleElement.Header.SortArrow.SortedDown)
+        'Dim itemRenderer = New VisualStyleRenderer(state)
+        'Dim sortRenderer = New VisualStyleRenderer(sortOrder)
+        'Dim r = e.Bounds
+        'r.X += 1
+
+        'itemRenderer.DrawBackground(e.Graphics, r)
+        'r.Inflate(-2, 0)
+        'Dim flags1 = TextFormatFlags.Left Or TextFormatFlags.VerticalCenter Or TextFormatFlags.SingleLine
+        'itemRenderer.DrawText(e.Graphics, r, e.Header.Text, False, flags1)
+        'Dim d = SystemInformation.VerticalScrollBarWidth
+
+        'If Not IsNothing(lvwColumnSorter) Then
+        '    If e.ColumnIndex = lvwColumnSorter.SortColumn Then sortRenderer.DrawBackground(e.Graphics, New Rectangle(r.Right - d, r.Top, d, r.Height))
+        'End If
+        '############################################################################################################################################
+
+
+
+
+
+    End Sub
+
+    Private Sub ListViewFiles_DrawItem(sender As Object, e As DrawListViewItemEventArgs) Handles ListViewFiles.DrawItem
+        e.DrawDefault = True
+    End Sub
+
+    Private Sub ListViewFiles_DrawSubItem(sender As Object, e As DrawListViewSubItemEventArgs) Handles ListViewFiles.DrawSubItem
+        e.DrawDefault = True
+    End Sub
+
+    Private Sub BT_AddSingleFiles_Click(sender As Object, e As EventArgs) Handles BT_AddSingleFiles.Click
+
+        Dim tmpFolderDialog As New OpenFileDialog
+        tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.Filter =
+                                "Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
+                                "Assembly (*.asm)|*.asm|" +
+                                "Part (*.par)|*.par|" +
+                                "Sheet Metal (*.psm)|*.psm|" +
+                                "Draft (*.dft)|*.dft"
+
+        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+
+
+            Dim tmpItem As New ListViewItem
+            tmpItem.Text = "Files selection"
+            tmpItem.ImageKey = "Files"
+            tmpItem.Tag = "Files"
+
+            Dim FileLists As String = ""
+            For Each tmpFile As String In tmpFolderDialog.FileNames
+                FileLists = FileLists & tmpFile & ","
+            Next
+            FileLists = FileLists.Remove(FileLists.Length - 1)
+
+            tmpItem.SubItems.Add(FileLists)
+
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
+
+            tmpItem.Name = FileLists
+
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+            ListViewFilesOutOfDate = True
+
+        End If
+
+
 
     End Sub
 

@@ -8,12 +8,14 @@ Imports System.Threading
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView
+    Public Property ListViewSources As ListView
     Public Property FMain As Form_Main
 
 
-    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible)
+    Public Sub New(_Form_Main As Form_Main, ListViewFiles As ListViewCollapsible, ListViewSources As ListView)
         Me.FMain = _Form_Main
         Me.ListViewFiles = ListViewFiles
+        Me.ListViewSources = ListViewSources
     End Sub
 
     Public Sub New_UpdateFileList()
@@ -45,18 +47,20 @@ Public Class UtilsFileList
         ListViewFiles.BeginUpdate()
 
 
-        Dim NewWay As Boolean = True
+        Dim NewWay As Boolean = False
 
         If Not NewWay Then
 
-            ' Remove everything except the "Sources" group.
-            For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-                If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-                    ListViewFiles.Items.Item(i).Remove()
-                Else
-                    GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-                End If
-            Next
+            '' Remove everything except the "Sources" group.
+            'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+            '    If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
+            '        ListViewFiles.Items.Item(i).Remove()
+            '    Else
+            '        GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+            '    End If
+            'Next
+
+            ListViewFiles.Items.Clear()
 
         Else
             ' ###### Initialize tmpLV ######
@@ -180,7 +184,7 @@ Public Class UtilsFileList
         ' Only remaining items should be in the "Sources" group.
         Dim tmpFoundFiles As New List(Of String)
 
-        For Each item As ListViewItem In ListViewFiles.Items
+        For Each item As ListViewItem In ListViewSources.Items
             Dim tmptmpFoundFiles = FindFiles(item, BareTopLevelAssembly)
             If tmptmpFoundFiles IsNot Nothing Then
                 tmpFoundFiles.AddRange(tmptmpFoundFiles)
@@ -383,6 +387,11 @@ Public Class UtilsFileList
                     Next
                     FoundFiles = tmpFoundFiles
 
+                Case = "Files"
+                    Dim tmpFoundFiles As New List(Of String)
+                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    FoundFiles = tmpFoundFiles
+
                 Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
 
@@ -568,7 +577,8 @@ Public Class UtilsFileList
         If (Not BareTopLevelAssembly) And (FileIO.FileSystem.FileExists(Source.Name)) Then
             Dim tmpFolders As New List(Of String)
 
-            For Each item As ListViewItem In ListViewFiles.Items
+            'For Each item As ListViewItem In ListViewFiles.Items
+            For Each item As ListViewItem In ListViewSources.Items
                 If item.Tag.ToString = "ASM_Folder" Then
                     If Not tmpFolders.Contains(item.Name) Then tmpFolders.Add(item.Name)
                 End If

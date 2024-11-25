@@ -212,14 +212,19 @@ Public Class UtilsTopLevelAssembly
 
             LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
 
-            For Each LinkedDoc In LinkedDocs
-                CorrectedFilename = GetCorrectedFilename(LinkDict, LinkedDoc.FullName)
-                If Not LinkDict(Filename)("Contains").Contains(CorrectedFilename) Then
-                    If CorrectedFilename <> "" Then
-                        LinkedDocsNames.Add(CorrectedFilename)
+            If Not IsNothing(LinkedDocs) Then
+                For Each LinkedDoc In LinkedDocs
+                    CorrectedFilename = GetCorrectedFilename(LinkDict, LinkedDoc.FullName)
+                    If Not LinkDict(Filename)("Contains").Contains(CorrectedFilename) Then
+                        If CorrectedFilename <> "" Then
+                            LinkedDocsNames.Add(CorrectedFilename)
+                        End If
                     End If
-                End If
-            Next
+                Next
+            Else
+                'LinkedDocsNames.Add(ErrorFlag)
+            End If
+
         Catch ex As Exception
             LinkedDocsNames.Add(ErrorFlag)
         End Try

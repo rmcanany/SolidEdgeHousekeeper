@@ -47,7 +47,7 @@ Public Class UtilsExecute
             End If
         End If
 
-        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
+        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
 
         FilesToProcessTotal = UFL.GetTotalFilesToProcess()
         FilesToProcessCompleted = 0
@@ -207,7 +207,7 @@ Public Class UtilsExecute
                 SelectedTasksCount += 1
 
                 If Task.RequiresSourceDirectories Then
-                    Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
+                    Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
                     Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
 
@@ -300,7 +300,7 @@ Public Class UtilsExecute
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
 
-        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles)
+        Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
 
         If Filetype = "Assembly" Then
             FilesToProcess = UFL.GetFileNames("*.asm")
