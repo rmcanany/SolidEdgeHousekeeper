@@ -5,14 +5,14 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
-Imports System.Windows.Forms.VisualStyles
+'Imports System.Windows.Forms.VisualStyles
 
 'Imports System.Windows
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 Imports OpenMcdf
-Imports SolidEdgeAssembly
+'Imports SolidEdgeAssembly
 
 Public Class Form_Main
 
