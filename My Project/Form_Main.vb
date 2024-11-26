@@ -191,7 +191,7 @@ Public Class Form_Main
 
                 StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-                CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+                'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
                 RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
                 If RadioButtonProcessAsAvailableChange.Checked Then
@@ -203,18 +203,18 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _UseDMForStatusChanges As Boolean
-    Public Property UseDMForStatusChanges As Boolean
-        Get
-            Return _UseDMForStatusChanges
-        End Get
-        Set(value As Boolean)
-            _UseDMForStatusChanges = value
-            If Me.TabControl1 IsNot Nothing Then
-                CheckBoxUseDMForStatusChanges.Checked = value
-            End If
-        End Set
-    End Property
+    'Private _UseDMForStatusChanges As Boolean
+    'Public Property UseDMForStatusChanges As Boolean
+    '    Get
+    '        Return _UseDMForStatusChanges
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UseDMForStatusChanges = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            CheckBoxUseDMForStatusChanges.Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
     Private _ProcessAsAvailableRevert As Boolean
     Public Property ProcessAsAvailableRevert As Boolean
@@ -2295,7 +2295,7 @@ Public Class Form_Main
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
+        'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
         If RadioButtonProcessAsAvailableChange.Checked Then
@@ -3285,8 +3285,8 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub CheckBoxUseDMForStatusChanges_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxUseDMForStatusChanges.CheckedChanged
-        Me.UseDMForStatusChanges = CheckBoxUseDMForStatusChanges.Checked
+    Private Sub CheckBoxUseDMForStatusChanges_CheckedChanged(sender As Object, e As EventArgs)
+        'Me.UseDMForStatusChanges = CheckBoxUseDMForStatusChanges.Checked
     End Sub
 
     Private Sub ListViewFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListViewFiles.SelectedIndexChanged

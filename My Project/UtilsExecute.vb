@@ -316,13 +316,13 @@ Public Class UtilsExecute
             End
         End If
 
-        Dim DMApp As DesignManager.Application = Nothing
-        ' This should be faster: Dim SEFPPropertySets as SolidEdgeFileProperties.PropertySets = Nothing
-        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (FilesToProcess.Count > 0) Then
-            DMApp = New DesignManager.Application
-            DMApp.Visible = 1
-            SEApp.Activate()
-        End If
+        'Dim DMApp As DesignManager.Application = Nothing
+        '' This should be faster: Dim SEFPPropertySets as SolidEdgeFileProperties.PropertySets = Nothing
+        'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (FilesToProcess.Count > 0) Then
+        '    DMApp = New DesignManager.Application
+        '    DMApp.Visible = 1
+        '    SEApp.Activate()
+        'End If
 
         For Each FileToProcess In FilesToProcess
 
@@ -336,9 +336,9 @@ Public Class UtilsExecute
             System.Windows.Forms.Application.DoEvents()
             If FMain.StopProcess Then
                 FMain.TextBoxStatus.Text = "Processing aborted"
-                If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
-                    DMApp.Quit()
-                End If
+                'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
+                '    DMApp.Quit()
+                'End If
                 Exit Sub
             End If
 
@@ -348,7 +348,8 @@ Public Class UtilsExecute
             msg += System.IO.Path.GetFileName(FileToProcess)
             FMain.TextBoxStatus.Text = msg
 
-            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype, DMApp)
+            'ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype, DMApp)
+            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
 
             If ErrorMessagesCombined.Count > 0 Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)
@@ -363,16 +364,20 @@ Public Class UtilsExecute
 
         Next
 
-        If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (DMApp IsNot Nothing) Then
-            DMApp.Quit()
-        End If
+        'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (DMApp IsNot Nothing) Then
+        '    DMApp.Quit()
+        'End If
 
     End Sub
 
+    'Public Function ProcessFile(
+    '    ByVal Path As String,
+    '    ByVal Filetype As String,
+    '    DMApp As DesignManager.Application
+    '    ) As Dictionary(Of String, List(Of String))
     Public Function ProcessFile(
         ByVal Path As String,
-        ByVal Filetype As String,
-        DMApp As DesignManager.Application
+        ByVal Filetype As String
         ) As Dictionary(Of String, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -405,13 +410,18 @@ Public Class UtilsExecute
 
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
 
-            If FMain.UseDMForStatusChanges Then
-                OldStatus = UC.GetDMStatus(DMApp, Path)
-            Else
-                OldStatus = UC.GetOLEStatus(Path)
-            End If
+            'If FMain.UseDMForStatusChanges Then
+            '    OldStatus = UC.GetDMStatus(DMApp, Path)
+            'Else
+            '    OldStatus = UC.GetOLEStatus(Path)
+            'End If
+            OldStatus = UC.GetOLEStatus(Path)
 
-            Dim s As String = SetStartingStatus(OldStatus, DMApp, Path)
+            'Dim s As String = SetStartingStatus(OldStatus, DMApp, Path)
+            'If Not s = "" Then
+            '    ErrorMessagesCombined(s) = New List(Of String) From {""}
+            'End If
+            Dim s As String = SetStartingStatus(OldStatus, Path)
             If Not s = "" Then
                 ErrorMessagesCombined(s) = New List(Of String) From {""}
             End If
@@ -509,12 +519,17 @@ Public Class UtilsExecute
 
                 '###### DOCUMENT STATUS ######
 
+                'If FMain.ProcessAsAvailable Then
+                '    Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
+                '    If Not s = "" Then
+                '        ErrorMessagesCombined(s) = New List(Of String) From {""}
+                '    End If
+                'End If
                 If FMain.ProcessAsAvailable Then
-                    Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
+                    Dim s As String = SetEndingStatus(OldStatus, Path)
                     If Not s = "" Then
                         ErrorMessagesCombined(s) = New List(Of String) From {""}
                     End If
-
                 End If
 
             End If
@@ -586,9 +601,40 @@ Public Class UtilsExecute
         Return IsOK
     End Function
 
+    'Private Function SetStartingStatus(
+    '    OldStatus As SolidEdgeConstants.DocumentStatus,
+    '    DMApp As DesignManager.Application,
+    '    Path As String) As String
+
+    '    Dim ErrorMessage As String = ""
+    '    Dim StatusChangeSuccessful As Boolean = True
+
+    '    Dim UC As New UtilsCommon
+
+    '    If FMain.UseDMForStatusChanges Then
+
+    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+    '            StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+    '        End If
+
+    '        SEApp.DoIdle()
+
+    '    Else
+
+    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+    '            StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+    '        End If
+
+    '    End If
+
+    '    If Not StatusChangeSuccessful Then
+    '        ErrorMessage = "Change status to 'Available' did not succeed"
+    '    End If
+
+    '    Return ErrorMessage
+    'End Function
     Private Function SetStartingStatus(
         OldStatus As SolidEdgeConstants.DocumentStatus,
-        DMApp As DesignManager.Application,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
@@ -596,20 +642,23 @@ Public Class UtilsExecute
 
         Dim UC As New UtilsCommon
 
-        If FMain.UseDMForStatusChanges Then
+        'If FMain.UseDMForStatusChanges Then
 
-            If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-            End If
+        '    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+        '        StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+        '    End If
 
-            SEApp.DoIdle()
+        '    SEApp.DoIdle()
 
-        Else
+        'Else
 
-            If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-            End If
+        '    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+        '        StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+        '    End If
 
+        'End If
+        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+            StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
         End If
 
         If Not StatusChangeSuccessful Then
@@ -619,9 +668,48 @@ Public Class UtilsExecute
         Return ErrorMessage
     End Function
 
+    'Private Function SetEndingStatus(
+    '    OldStatus As SolidEdgeConstants.DocumentStatus,
+    '    DMApp As DesignManager.Application,
+    '    Path As String) As String
+
+    '    Dim ErrorMessage As String = ""
+    '    Dim StatusChangeSuccessful As Boolean = True
+
+    '    Dim UC As New UtilsCommon
+
+    '    If FMain.ProcessAsAvailableRevert Then
+    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+    '            If FMain.UseDMForStatusChanges Then
+    '                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
+    '            Else
+    '                StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
+    '            End If
+    '        End If
+    '    End If
+
+    '    If FMain.ProcessAsAvailableChange Then
+    '        Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
+
+    '        If Not OldStatus = NewStatus Then
+    '            If FMain.UseDMForStatusChanges Then
+    '                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
+    '            Else
+    '                StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
+    '            End If
+    '        End If
+
+    '    End If
+
+    '    If Not StatusChangeSuccessful Then
+    '        ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+    '    End If
+
+    '    Return ErrorMessage
+
+    'End Function
     Private Function SetEndingStatus(
         OldStatus As SolidEdgeConstants.DocumentStatus,
-        DMApp As DesignManager.Application,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
@@ -631,11 +719,12 @@ Public Class UtilsExecute
 
         If FMain.ProcessAsAvailableRevert Then
             If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                If FMain.UseDMForStatusChanges Then
-                    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
-                Else
-                    StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
-                End If
+                'If FMain.UseDMForStatusChanges Then
+                '    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
+                'Else
+                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
+                'End If
+                StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
             End If
         End If
 
@@ -643,11 +732,12 @@ Public Class UtilsExecute
             Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
 
             If Not OldStatus = NewStatus Then
-                If FMain.UseDMForStatusChanges Then
-                    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
-                Else
-                    StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
-                End If
+                'If FMain.UseDMForStatusChanges Then
+                '    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
+                'Else
+                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
+                'End If
+                StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
             End If
 
         End If
