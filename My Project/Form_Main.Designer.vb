@@ -408,12 +408,12 @@ Partial Class Form_Main
         '
         'BT_AddTeamCenter
         '
-        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.BT_AddTeamCenter.Image = CType(resources.GetObject("BT_AddTeamCenter.Image"), System.Drawing.Image)
         Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
-        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
-        Me.BT_AddTeamCenter.Text = "Add TeamCenter Item"
+        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(90, 22)
+        Me.BT_AddTeamCenter.Text = "TeamCenter"
+        Me.BT_AddTeamCenter.ToolTipText = "Add TeamCenter Item"
         '
         'BT_AddFolder
         '
