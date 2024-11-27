@@ -197,6 +197,7 @@
     <Compile Include="My Project\FormTextPrompt.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
     <Compile Include="My Project\UtilsFeatures.vb" />
@@ -472,6 +473,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\TaskSetDocumentStatus.png" />
     <None Include="Resources\icons8_versions_16.png" />
     <None Include="Resources\icons8_one_page_16.png" />
     <None Include="Resources\icons8_file_16.png" />

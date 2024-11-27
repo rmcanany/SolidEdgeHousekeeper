@@ -144,6 +144,7 @@ Public MustInherit Class Task
 
     'Public Property RequiresTemplatePropertyDict As Boolean = False
     Public Property RequiresPropertiesData As Boolean = False
+    Public Property CompatibleWithOtherTasks As Boolean = True
 
 
 

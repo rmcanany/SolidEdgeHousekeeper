@@ -1129,11 +1129,6 @@ Public Class TaskEditProperties
     End Sub
 
 
-    'Public Overrides Sub ReconcileFormWithProps()
-    '    ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
-    'End Sub
-
-
     Private Function GetHelpText() As String
         Dim HelpString As String
 

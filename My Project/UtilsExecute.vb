@@ -201,6 +201,7 @@ Public Class UtilsExecute
 
         FMain.SolidEdgeRequired = 0
         Dim SelectedTasksCount As Integer = 0
+        Dim IncompatibleTaskNamesList As New List(Of String)
 
         For Each Task As Task In FMain.TaskList
             If Task.IsSelectedTask Then
@@ -218,17 +219,29 @@ Public Class UtilsExecute
                 ' True returns -1 upon conversion
                 FMain.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
 
+                If Not Task.CompatibleWithOtherTasks Then
+                    IncompatibleTaskNamesList.Add(Task.Name)
+                End If
+
                 ErrorMessage = Task.CheckStartConditions(ErrorMessage)
             End If
         Next
 
         If FMain.SolidEdgeRequired <> 0 Then
             If SelectedTasksCount <> FMain.SolidEdgeRequired Then
-                msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
+                'msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
+                msg += String.Format("    Cannot run some Tasks with SE and others without{0}", vbCrLf)
                 ExitStatus += 1
             End If
         End If
 
+        If (IncompatibleTaskNamesList.Count > 0) And (Not SelectedTasksCount = 1) Then
+            Dim s2 As String = ""
+            For Each s As String In IncompatibleTaskNamesList
+                s2 = String.Format("{0} '{1}', ", s2, s)
+            Next
+            msg += String.Format("    Listed Task(s): {0} cannot be run with other tasks enabled{1}", s2, vbCrLf)
+        End If
 
         If SelectedTasksCount = 0 Then
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)

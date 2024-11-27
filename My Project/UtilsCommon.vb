@@ -1010,17 +1010,6 @@ Public Class UtilsCommon
         Dim PropertySetNames As New List(Of String)
         Dim GotAMatch As Boolean = False
 
-        'If Form_Main.TemplatePropertyDict.Keys.Contains(PropertyName) Then
-        '    Dim PropertySetActualName As String = Form_Main.TemplatePropertyDict(PropertyName)("PropertySetActualName")
-        '    If Not PropertySetActualName = "" Then
-        '        PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
-        '        Try
-        '            Prop = CType(PropertySet.Item(PropertyName), DesignManager.Property)
-        '        Catch ex As Exception
-        '        End Try
-        '    End If
-        'End If
-
         Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(PropertyName)
         If tmpPropertyData IsNot Nothing Then
             Dim PropertySetActualName As String = tmpPropertyData.PropertySetActualName
@@ -1031,7 +1020,6 @@ Public Class UtilsCommon
                     Prop = CType(PropertySet.Item(PropertyName), DesignManager.Property)
                     Return Prop
                 Catch ex As Exception
-                    Dim i = 0
                 End Try
             End If
         End If
@@ -1087,76 +1075,23 @@ Public Class UtilsCommon
         ModelLinkIdx As Integer
         ) As Object
 
-        Dim NewWay As Boolean = True
+        Dim Prop As DesignManager.Property
+        Dim PropValue As Object = Nothing
+        Dim OpenReadOnly As Boolean = True
+        Dim PropertySets As DesignManager.PropertySets
 
-        If NewWay Then
-            Dim Prop As DesignManager.Property
-            Dim PropValue As Object = Nothing
-            Dim OpenReadOnly As Boolean = True
-            Dim PropertySets As DesignManager.PropertySets
+        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
+        PropertySets.Open(Filename, OpenReadOnly)
+        Prop = GetDMProp(PropertySets, PropertySetName, PropertyName)
 
-            PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            PropertySets.Open(Filename, OpenReadOnly)
-            Prop = GetDMProp(PropertySets, PropertySetName, PropertyName)
-
-            If Prop IsNot Nothing Then
-                PropValue = Prop.Value
-            End If
-
-            PropertySets.Close()
-
-            Return PropValue
-
-        Else
-            'Dim PropValue As Object = Nothing
-
-            'Dim PropertySets As DesignManager.PropertySets
-            'PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-            'PropertySets.Open(Filename, True)
-
-            'Dim PropertySet As DesignManager.Properties
-            'Dim Prop As DesignManager.Property = Nothing
-            'Dim PropertySetNames As New List(Of String)
-
-            'PropertySetNames.Add("SummaryInformation")
-            'PropertySetNames.Add("ExtendedSummaryInformation")
-            'PropertySetNames.Add("DocumentSummaryInformation")
-            'PropertySetNames.Add("ProjectInformation")
-            'PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-            'PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
-
-            'Dim GotAMatch As Boolean = False
-
-            'For Each PropertySetName In PropertySetNames
-            '    ' Not all files have all PropertySets
-            '    Try
-            '        PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-            '        For i As Integer = 0 To PropertySet.Count - 1
-            '            Prop = CType(PropertySet.Item(i), DesignManager.Property)
-            '            If Prop.Name.ToLower = PropertyName.ToLower Then
-            '                GotAMatch = True
-            '                Exit For
-            '            End If
-            '        Next
-            '    Catch ex As Exception
-            '    End Try
-
-            '    If GotAMatch Then
-            '        Exit For
-            '    End If
-            'Next
-
-            'If GotAMatch Then
-            '    PropValue = Prop.Value
-            'End If
-
-            'If PropertySets IsNot Nothing Then
-            '    PropertySets.Close()
-            'End If
-
-            'Return PropValue
-
+        If Prop IsNot Nothing Then
+            PropValue = Prop.Value
         End If
+
+        PropertySets.Close()
+
+        Return PropValue
+
     End Function
 
     Public Function SetDMPropValue(

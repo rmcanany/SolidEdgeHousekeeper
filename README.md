@@ -501,6 +501,17 @@ Uses GitHub's API to get the most recent version and compares it to the running 
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
+### Set document status
+Sets document status. Select the new status on the Options pane. 
+
+![SetDocumentStatus](My%20Project/media/task_set_document_status.png)
+
+There are a couple of things to know about this command. 
+
+- For performance reasons, the command only runs in Structured Storage mode (i.e. Outside Solid Edge). 
+- To avoid issues with Read Only conditions, it cannot run with other Tasks enabled. 
+- To eliminate potential confusion, it cannot run with the `Process as available` option on the **Configuration Tab -- Status Page**. 
+
 ### Open save
 Opens a document and saves in the current version.
 
@@ -786,7 +797,7 @@ Checks if the file name contains the part number.
 
 ![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)
 
-Enter the property name that holds part number on the Options panel. A `Property set`, either `System` or `Custom`, is required. For more information, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
+Enter the property formula that holds part number on the Options panel. For more information, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
 
 The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 

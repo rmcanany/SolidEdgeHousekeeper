@@ -836,6 +836,7 @@ Public Class UtilsPreferences
         Dim KnownTasks As New List(Of String)
 
         ' Update
+        TaskList.Add(New TaskSetDocumentStatus)
         TaskList.Add(New TaskOpenSave)
         TaskList.Add(New TaskActivateAndUpdateAll)
         TaskList.Add(New TaskUpdateMaterialFromMaterialTable)
