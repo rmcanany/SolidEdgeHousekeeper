@@ -19,6 +19,32 @@ Public Class TaskSaveDrawingAs
         End Set
     End Property
 
+    Private _ChangeFilename As Boolean
+    Public Property ChangeFilename As Boolean
+        Get
+            Return _ChangeFilename
+        End Get
+        Set(value As Boolean)
+            _ChangeFilename = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.ChangeFilename.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FilenameFormula As String
+    Public Property FilenameFormula As String
+        Get
+            Return _FilenameFormula
+        End Get
+        Set(value As String)
+            _FilenameFormula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.FilenameFormula.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
     Private _SaveInOriginalDirectory As Boolean
     Public Property SaveInOriginalDirectory As Boolean
         Get
@@ -170,6 +196,8 @@ Public Class TaskSaveDrawingAs
     Enum ControlNames
         NewFileTypeName
         NewFileTypeLabel
+        ChangeFilename
+        FilenameFormula
         SaveInOriginalDirectory
         BrowseNewDir
         NewDir
@@ -212,6 +240,8 @@ Public Class TaskSaveDrawingAs
 
         ' Options
         Me.NewFileTypeName = ""
+        Me.ChangeFilename = False
+        Me.FilenameFormula = ""
         Me.SaveInOriginalDirectory = False
         Me.NewDir = ""
         Me.UseSubdirectoryFormula = False
@@ -342,88 +372,80 @@ Public Class TaskSaveDrawingAs
         ' Suffix: "Member1"
         ' "C:\Projects\assembly.asm!Master" -> "C:\Projects\assembly-Member1.png"
 
-        Dim NewFilename As String = ""
-        Dim NewDirectory As String = ""
-        Dim NewSubDirectory As String = ""
-
-        Dim s As String
-
-        Dim Success As Boolean = True
-
-        Dim OldFullFilename As String = ""   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
-        Dim OldDirectoryName As String = ""  ' "C:\Projects"
-        Dim OldFilenameWOExt As String = ""  ' "part"
-        Dim OldExtension As String = ""      ' ".par"
-
-        Dim SplitDict As New Dictionary(Of String, String)
-
         Dim UC As New UtilsCommon
         Dim UFC As New UtilsFilenameCharmap()
 
-        OldFullFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
+        Dim Success As Boolean = True
 
-        OldDirectoryName = System.IO.Path.GetDirectoryName(OldFullFilename)
-        OldFilenameWOExt = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)
-        OldExtension = IO.Path.GetExtension(OldFullFilename)
+        Dim OldFullFilename As String = UC.SplitFOAName(SEDoc.FullName)("Filename")   ' "C:\Projects\part.par", "C:\Projects\assembly.asm!Master"
 
+        Dim OldDirectoryName As String = System.IO.Path.GetDirectoryName(OldFullFilename)             ' "C:\Projects"
+        Dim OldFilenameWOExt As String = System.IO.Path.GetFileNameWithoutExtension(OldFullFilename)  ' "part"
+        Dim OldExtension As String = IO.Path.GetExtension(OldFullFilename)                            ' ".par"
+
+        Dim NewFullFilename As String
+
+        Dim NewDirectoryName As String
+        Dim NewSubDirectoryName As String = ""
+        Dim NewFilenameWOExt As String = ""
+        Dim NewSuffix As String
+
+
+        ' ###### ROOT DIRECTORY ######
         If Me.SaveInOriginalDirectory Then
-            If Not Me.UseSubdirectoryFormula Then
-                If Suffix = "" Then
-                    NewFilename = System.IO.Path.ChangeExtension(OldFullFilename, NewExtension)
-                Else
-                    NewFilename = String.Format("{0}\{1}-{2}{3}", OldDirectoryName, OldFilenameWOExt, Suffix, NewExtension)
-                End If
-            Else
-                Try
-                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
-                    NewSubDirectory = UC.SubstitutePropertyFormula(
-                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
-                Catch ex As Exception
-                    Success = False
-                End Try
-
-                If Suffix = "" Then
-                    NewFilename = String.Format("{0}\{1}\{2}{3}", OldDirectoryName, NewSubDirectory, OldFilenameWOExt, NewExtension)
-                Else
-                    NewFilename = String.Format("{0}\{1}\{2}-{3}{4}", OldDirectoryName, NewSubDirectory, OldFilenameWOExt, Suffix, NewExtension)
-                End If
-            End If
+            NewDirectoryName = String.Format("{0}\", OldDirectoryName)
         Else
-            NewDirectory = Me.NewDir
-
-            If Not Me.UseSubdirectoryFormula Then
-                If Suffix = "" Then
-                    NewFilename = String.Format("{0}\{1}{2}", NewDirectory, OldFilenameWOExt, NewExtension)
-                Else
-                    NewFilename = String.Format("{0}\{1}-{2}{3}", NewDirectory, OldFilenameWOExt, Suffix, NewExtension)
-                End If
-            Else
-                Try
-                    'NewSubDirectory = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula,
-                    '                                               ValidFilenameRequired:=True, TemplatePropertyDict)
-                    NewSubDirectory = UC.SubstitutePropertyFormula(
-                        SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
-                Catch ex As Exception
-                    Success = False
-                End Try
-
-                If Suffix = "" Then
-                    NewFilename = String.Format("{0}\{1}\{2}{3}", NewDirectory, NewSubDirectory, OldFilenameWOExt, NewExtension)
-                Else
-                    NewFilename = String.Format("{0}\{1}\{2}-{3}{4}", NewDirectory, NewSubDirectory, OldFilenameWOExt, Suffix, NewExtension)
-                End If
+            NewDirectoryName = Me.NewDir
+            If Not NewDirectoryName(Len(NewDirectoryName) - 1) = "\" Then
+                NewDirectoryName = String.Format("{0}\", NewDirectoryName)
             End If
         End If
 
-        s = System.IO.Path.GetFileNameWithoutExtension(NewFilename)
-        NewFilename = NewFilename.Replace(s, UFC.SubstituteIllegalCharacters(s))
 
+        ' ###### SUBDIRECTORY ######
+        If Not Me.UseSubdirectoryFormula Then
+            NewSubDirectoryName = ""
+        Else
+            Try
+                NewSubDirectoryName = UC.SubstitutePropertyFormula(
+                    SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+            Catch ex As Exception
+                Success = False
+            End Try
+        End If
+
+
+        ' ###### BASE FILENAME ######
+        If Not Me.ChangeFilename Then
+            NewFilenameWOExt = OldFilenameWOExt
+        Else
+            Try
+                NewFilenameWOExt = UC.SubstitutePropertyFormula(
+                    SEDoc, Nothing, Nothing, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
+            Catch ex As Exception
+                Success = False
+            End Try
+        End If
+
+
+        ' ###### SUFFIX ######
+        If Suffix = "" Then
+            NewSuffix = Suffix
+        Else
+            NewSuffix = String.Format("-{0}", Suffix)
+        End If
+
+
+        ' ###### FULL FILENAME ######
         If Success Then
-            Return NewFilename
+            NewFullFilename = String.Format("{0}{1}{2}{3}{4}", NewDirectoryName, NewSubDirectoryName, NewFilenameWOExt, NewSuffix, NewExtension)
         Else
-            Return ""
+            NewFullFilename = ""
         End If
+
+
+        Return NewFullFilename
+
     End Function
 
     Private Function AddWatermarkToSheets(
@@ -611,12 +633,8 @@ Public Class TaskSaveDrawingAs
         Dim Button As Button
         Dim ControlWidth As Integer = 150
         Dim NewFileTypeLabelText = ""
-        'Dim Ctrl As Control
-
-        'Dim IU As New InterfaceUtilities
 
         FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 12, 75, 75)
-        'tmpTLPOptions.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
 
         RowIndex = 0
 
@@ -639,6 +657,25 @@ Public Class TaskSaveDrawingAs
         tmpTLPOptions.SetColumnSpan(CheckBox, 3)
         CheckBox.Visible = False
         ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.ChangeFilename.ToString, "Change filename")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 3)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        TextBox = FormatOptionsTextBox(ControlNames.FilenameFormula.ToString, "")
+        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_TextChanged
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
+        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(TextBox, 3)
+        TextBox.Visible = False
+        ControlsDict(TextBox.Name) = TextBox
 
         RowIndex += 1
 
@@ -935,17 +972,16 @@ Public Class TaskSaveDrawingAs
         Dim Name = CheckBox.Name
 
         Select Case Name
+            Case ControlNames.ChangeFilename.ToString
+                Me.ChangeFilename = CheckBox.Checked
+
+                CType(ControlsDict(ControlNames.FilenameFormula.ToString), TextBox).Visible = Me.ChangeFilename
+
             Case ControlNames.SaveInOriginalDirectory.ToString
                 Me.SaveInOriginalDirectory = CheckBox.Checked
 
                 CType(ControlsDict(ControlNames.BrowseNewDir.ToString), Button).Visible = Not Me.SaveInOriginalDirectory
                 CType(ControlsDict(ControlNames.NewDir.ToString), TextBox).Visible = Not Me.SaveInOriginalDirectory
-
-                'Dim CheckBox2 = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
-                'CheckBox2.Visible = Not Me.SaveInOriginalDirectory
-                'Dim tf = (CheckBox2.Checked) And (Not Me.SaveInOriginalDirectory)
-                'CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Visible = tf
-
 
             Case ControlNames.UseSubdirectoryFormula.ToString
                 Me.UseSubdirectoryFormula = CheckBox.Checked
@@ -1011,6 +1047,9 @@ Public Class TaskSaveDrawingAs
 
             Case ControlNames.NewFileTypeName.ToString
                 Me.NewFileTypeName = TextBox.Text
+
+            Case ControlNames.FilenameFormula.ToString
+                Me.FilenameFormula = TextBox.Text
 
             Case ControlNames.NewDir.ToString
                 Me.NewDir = TextBox.Text
