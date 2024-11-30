@@ -478,7 +478,7 @@ Public Class TaskSetDocumentStatus
 
         RowIndex += 1
 
-        Label = FormatOptionsLabel(ControlNames.PropertyLabel.ToString, "Property (blanks ignored)")
+        Label = FormatOptionsLabel(ControlNames.PropertyLabel.ToString, "Property (blank entries ignored)")
         tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
         Label.Visible = False
         ControlsDict(Label.Name) = Label
