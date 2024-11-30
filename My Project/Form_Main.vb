@@ -1265,6 +1265,9 @@ Public Class Form_Main
                         Dim T = CType(Task, TaskSaveModelAs)
                         'T.TemplatePropertyDict = Me.TemplatePropertyDict
                         T.PropertiesData = Me.PropertiesData
+                    Case "TaskSetDocumentStatus"
+                        Dim T = CType(Task, TaskSetDocumentStatus)
+                        T.PropertiesData = Me.PropertiesData
                     Case Else
                         MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.Startup()", Task.Name))
                 End Select
