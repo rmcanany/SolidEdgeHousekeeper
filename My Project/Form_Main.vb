@@ -5,14 +5,11 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
-'Imports System.Windows.Forms.VisualStyles
-
-'Imports System.Windows
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
 Imports OpenMcdf
-'Imports SolidEdgeAssembly
+
 
 Public Class Form_Main
 
@@ -53,8 +50,6 @@ Public Class Form_Main
 
 
     Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
-
-
 
 
     Public Property TaskList As List(Of Task)
@@ -977,42 +972,16 @@ Public Class Form_Main
 
                 ComboBoxPresetName.Items.Clear()
                 ComboBoxPresetName.Items.Add("")
-                'For Each tmpPreset In PresetsList
-                '    ComboBoxPresetName.Items.Add(tmpPreset.Name)
-                'Next
+
                 For Each tmpPreset As Preset In Presets.Items
                     ComboBoxPresetName.Items.Add(tmpPreset.Name)
                 Next
 
                 ComboBoxPresetName.Text = TextOld
 
-                'Dim tmpPresetsJSON As String = Me.Presets.ToJSON
-
-                'If Not Me.PresetsJSON = tmpPresetsJSON Then
-                '    Me.PresetsJSON = tmpPresetsJSON
-                'End If
-
             End If
         End Set
     End Property
-
-    'Private _PresetsJSON As String
-    'Public Property PresetsJSON As String
-    '    Get
-    '        Return _PresetsJSON
-    '    End Get
-    '    Set(value As String)
-    '        _PresetsJSON = value
-    '        If Me.TabControl1 IsNot Nothing Then
-
-    '            If Not Me.PresetsJSON = Me.Presets.ToJSON Then
-    '                Me.Presets.FromJSON(Me.PresetsJSON)
-    '            End If
-
-    '        End If
-    '    End Set
-    'End Property
-
 
 
 
@@ -1100,10 +1069,6 @@ Public Class Form_Main
             Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
         End If
 
-        'If Me.TemplatePropertyDict Is Nothing Then
-        '    Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
-        'End If
-
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
         End If
@@ -1131,9 +1096,6 @@ Public Class Form_Main
             }
             tmpListOfColumns.Add(PathColumn)
 
-            'CLB_Properties.SetItemChecked(0, True)
-            'CLB_Properties.SetItemChecked(1, True)
-
             Me.ListOfColumns = tmpListOfColumns ' Triggers a Property update
 
         End If
@@ -1145,15 +1107,9 @@ Public Class Form_Main
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
-        'Me.TemplatePropertyDict = UC.TemplatePropertyDictPopulate(TemplateList, Me.TemplatePropertyDict)
-
         Me.PropertiesData = New PropertiesData  ' Automatically loads saved settings if any.
 
-        'Me.PresetsListJSON = UP.GetPresetsListJSON
-        'If Me.PresetsListJSON Is Nothing Then
-        '    Me.PresetsListJSON = New List(Of String)
-        'End If
-        Me.Presets = New Presets
+        Me.Presets = New Presets  ' Automatically loads saved settings if any.
 
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
@@ -1164,49 +1120,19 @@ Public Class Form_Main
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
 
-        Dim NewWay As Boolean = True
+        If ListViewFiles.Groups.Count = 0 Then
 
-        If NewWay Then
+            Dim GroupHeaderNames As New List(Of String)
+            GroupHeaderNames.AddRange({"Files sources", "Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
 
-            If ListViewFiles.Groups.Count = 0 Then
+            Dim GroupNames As New List(Of String)
+            GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
-                Dim GroupHeaderNames As New List(Of String)
-                GroupHeaderNames.AddRange({"Files sources", "Excluded files", "Assemblies", "Parts", "Sheetmetals", "Drafts"})
-
-                Dim GroupNames As New List(Of String)
-                GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
-
-                For i As Integer = 0 To GroupHeaderNames.Count - 1
-                    Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
-                    LVGroup.Name = GroupNames(i)
-                    ListViewFiles.Groups.Add(LVGroup)
-                Next
-
-            End If
-
-        Else
-            'If ListViewFiles.Groups.Count = 0 Then
-
-            '    Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
-            '    ListViewGroup1.Name = "Sources"
-            '    Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
-            '    ListViewGroup2.Name = "Excluded"
-            '    Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
-            '    ListViewGroup3.Name = ".asm"
-            '    Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
-            '    ListViewGroup4.Name = ".par"
-            '    Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
-            '    ListViewGroup5.Name = ".psm"
-            '    Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
-            '    ListViewGroup6.Name = ".dft"
-            '    ListViewFiles.Groups.Add(ListViewGroup1)
-            '    ListViewFiles.Groups.Add(ListViewGroup2)
-            '    ListViewFiles.Groups.Add(ListViewGroup3)
-            '    ListViewFiles.Groups.Add(ListViewGroup4)
-            '    ListViewFiles.Groups.Add(ListViewGroup5)
-            '    ListViewFiles.Groups.Add(ListViewGroup6)
-
-            'End If
+            For i As Integer = 0 To GroupHeaderNames.Count - 1
+                Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
+                LVGroup.Name = GroupNames(i)
+                ListViewFiles.Groups.Add(LVGroup)
+            Next
 
         End If
 
@@ -1231,9 +1157,7 @@ Public Class Form_Main
             End If
         Next
 
-        If NewWay Then
-            tmpTaskPanel.Controls.Clear()
-        End If
+        tmpTaskPanel.Controls.Clear()
 
         For i = TaskList.Count - 1 To 0 Step -1
 
@@ -1294,9 +1218,6 @@ Public Class Form_Main
             UP.CheckForNewerVersion(Me.Version)
         End If
 
-        'new_ButtonPropertyFilter.Enabled = CheckBoxEnablePropertyFilter.Checked
-        'ComboBoxFileWildcard.Enabled = CheckBoxEnableFileWildcard.Checked
-
         Me.Cursor = Cursors.Default
 
     End Sub
@@ -1324,11 +1245,9 @@ Public Class Form_Main
 
         ' Other JSON
         Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
-        'Me.TemplatePropertyDict = Me.TemplatePropertyDict
         Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
-        'Me.PresetsList = Me.PresetsList
         Me.Presets = Me.Presets
 
 
@@ -1339,7 +1258,6 @@ Public Class Form_Main
         Me.TextBoxStatus.Text = "Saving tasks"
         UP.SaveTaskList(Me.TaskList)
         Me.TextBoxStatus.Text = "Saving presets"
-        'UP.SavePresetsListJSON(Me.PresetsListJSON)
         Me.Presets.Save()
         Me.TextBoxStatus.Text = "Saving properties data"
         Me.PropertiesData.Save()
@@ -3337,12 +3255,6 @@ Public Class Form_Main
         If Not Name = "" Then
             Dim UP As New UtilsPreferences
 
-            'For Each tmpPreset In Me.PresetsList
-            '    If tmpPreset.Name = Name Then
-            '        GotAMatch = True
-            '        Exit For
-            '    End If
-            'Next
             For Each tmpPreset In Me.Presets.Items
                 If tmpPreset.Name = Name Then
                     GotAMatch = True
@@ -3377,17 +3289,6 @@ Public Class Form_Main
         If Not Name = "" Then
             Dim UP As New UtilsPreferences
 
-            'For Each tmpPreset In Me.PresetsList
-            '    If tmpPreset.Name = Name Then
-            '        Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
-            '        If Result = MsgBoxResult.No Then
-            '            Exit Sub
-            '        Else
-            '            GotAMatch = True
-            '            Exit For
-            '        End If
-            '    End If
-            'Next
             For Each tmpPreset In Me.Presets.Items
                 If tmpPreset.Name = Name Then
                     Dim Result As MsgBoxResult = MsgBox(String.Format("The preset '{0}' already exists.  Do you want to overwrite it?", Name), vbYesNo)
@@ -3411,16 +3312,13 @@ Public Class Form_Main
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
 
             If Not GotAMatch Then
-                'Me.PresetsList.Add(tmpPreset)
                 Me.Presets.Items.Add(tmpPreset)
             End If
 
-            'Me.PresetsList = Me.PresetsList ' Trigger update
             Me.Presets = Me.Presets ' Trigger update
 
             'SaveSettings()
             'Application.DoEvents()
-            'UP.SavePresetsListJSON(Me.PresetsListJSON)
             Presets.Save()
 
         Else
@@ -3436,12 +3334,6 @@ Public Class Form_Main
         Dim Idx As Integer = -1
         Dim UP As New UtilsPreferences
 
-        'For i As Integer = 0 To Me.PresetsList.Count - 1
-        '    If Me.PresetsList(i).Name = Name Then
-        '        Idx = i
-        '        Exit For
-        '    End If
-        'Next
         For i As Integer = 0 To Me.Presets.Items.Count - 1
             If Me.Presets.Items(i).Name = Name Then
                 Idx = i
@@ -3449,15 +3341,9 @@ Public Class Form_Main
             End If
         Next
 
-        'If Not Idx = -1 Then
-        '    Me.PresetsList.RemoveAt(Idx)
-        '    Me.PresetsList = Me.PresetsList ' Trigger update
-        '    UP.SavePresetsListJSON(Me.PresetsListJSON)
-        'End If
         If Not Idx = -1 Then
             Me.Presets.Items.RemoveAt(Idx)
             Me.Presets = Me.Presets ' Trigger update
-            'UP.SavePresetsListJSON(Me.PresetsListJSON)
             Presets.Save()
         End If
 
@@ -3653,57 +3539,6 @@ Public Class Form_Main
     End Sub
 
 
-    ' Commands I can never remember
-
-    ' System.Windows.Forms.Application.DoEvents()
-
-    ' tf = FileIO.FileSystem.FileExists(Filename)
-
-    ' tf = Not FileIO.FileSystem.DirectoryExists(Dirname)
-
-    ' If Not FileIO.FileSystem.DirectoryExists(Dirname) Then
-    '     FileIO.FileSystem.CreateDirectory(Dirname)
-    ' End If
-
-    ' Extension = IO.Path.GetExtension(WhereUsedFile)
-    ' C:\project\part.par -> .par
-
-    ' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)
-    ' C:\project\part.par -> C:\project
-
-    ' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)
-    ' C:\project\part.par -> part
-
-    ' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
-    ' C:\project\part.par -> part.par
-
-    ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
-
-    ' System.Threading.Thread.Sleep(100)
-
-    ' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
-
-    ' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-
-    ' Dim Defaults As String() = Nothing
-    ' Defaults = IO.File.ReadAllLines(DefaultsFilename)
-
-    ' Dim Defaults As New List(Of String)
-    ' IO.File.WriteAllLines(DefaultsFilename, Defaults)
-
-    ' Iterate through an Enum
-    ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
-
-    'Me.Cursor = Cursors.WaitCursor
-    'Me.Cursor = Cursors.Default
-
-    'ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
-
-    'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
-
-    '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
-
-    'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
 
 End Class
 
@@ -4730,3 +4565,55 @@ Public Class PropertyFilterCondition
 
     End Sub
 End Class
+
+' Commands I can never remember
+
+' System.Windows.Forms.Application.DoEvents()
+
+' tf = FileIO.FileSystem.FileExists(Filename)
+
+' tf = Not FileIO.FileSystem.DirectoryExists(Dirname)
+
+' If Not FileIO.FileSystem.DirectoryExists(Dirname) Then
+'     FileIO.FileSystem.CreateDirectory(Dirname)
+' End If
+
+' Extension = IO.Path.GetExtension(WhereUsedFile)
+' C:\project\part.par -> .par
+
+' DirName = System.IO.Path.GetDirectoryName(SEDoc.FullName)
+' C:\project\part.par -> C:\project
+
+' BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)
+' C:\project\part.par -> part
+
+' BaseFilename = System.IO.Path.GetFileName(SEDoc.FullName)
+' C:\project\part.par -> part.par
+
+' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
+
+' System.Threading.Thread.Sleep(100)
+
+' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
+
+' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+
+' Dim Defaults As String() = Nothing
+' Defaults = IO.File.ReadAllLines(DefaultsFilename)
+
+' Dim Defaults As New List(Of String)
+' IO.File.WriteAllLines(DefaultsFilename, Defaults)
+
+' Iterate through an Enum
+' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+
+'Me.Cursor = Cursors.WaitCursor
+'Me.Cursor = Cursors.Default
+
+'ActiveWindow.WindowState = 2  '0 normal, 1 minimized, 2 maximized
+
+'System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
+
+'_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+
+'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)

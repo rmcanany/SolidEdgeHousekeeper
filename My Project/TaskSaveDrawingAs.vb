@@ -409,6 +409,9 @@ Public Class TaskSaveDrawingAs
             Try
                 NewSubDirectoryName = UC.SubstitutePropertyFormula(
                     SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+                If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
+                    NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
+                End If
             Catch ex As Exception
                 Success = False
             End Try

@@ -7,6 +7,7 @@ Imports System.Reflection
 Imports System.Reflection.Emit
 Imports System.Runtime.CompilerServices
 Imports System.Security.AccessControl
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Windows
 Imports ExcelDataReader
@@ -883,17 +884,13 @@ Public Class UtilsCommon
         Dim tmpStorage As CFStorage = FOA_Storage(cf)
         If IsNothing(tmpStorage) Then tmpStorage = cf.RootStorage
 
+        ''testing
+        'FindOleLinks(cf)
+
         Try
             If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
                 dsiStream = tmpStorage.GetStream("SummaryInformation")
                 co = dsiStream.AsOLEPropertiesContainer
-
-                'Dim PropNamesDict = co.PropertyNames  ' ###### Nothing
-
-                'For Each key In PropNamesDict.Keys
-                '    Dim s = co.PropertyNames(key)
-                '    Dim i As Integer = 0
-                'Next
 
                 OLEProp = co.Properties.First(Function(Proper) Proper.PropertyName = "PIDSI_" & PropertyNameEnglish.ToUpper)
 
@@ -973,7 +970,103 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Sub FindOleLinks(cf As CompoundFile)
 
+        ''testing
+        'Dim dsiStorage = tmpStorage.GetStorage("JSite2359")
+        Dim dsiStorages As New List(Of String)
+        Dim dsiStreams As New List(Of String)
+        cf.RootStorage.VisitEntries(Sub(item) dsiStorages.Add(item.Name), recursive:=False)
+
+        For Each s As String In dsiStorages
+            If (s Like "JSite*") And (Not s = "JSitesList") Then
+                dsiStreams.Clear()
+                Dim A As CFStorage = cf.RootStorage.GetStorage(s)
+                A.VisitEntries(Sub(item) dsiStreams.Add(item.Name), recursive:=False)
+                If dsiStreams.Contains(String.Format("{0}Ole", ChrW(1))) Then
+                    Dim B = GetOleLinkFromStorage(A)
+                    'MsgBox(B)
+                End If
+            End If
+        Next
+        'dsiStream = dsiStorage.GetStream(ChrW(1) & "Ole")
+        'Dim dsiValue = dsiStream.GetData
+        ''dsiStream = dsiStorage.GetStream("|Ole")
+        'co = dsiStream.AsOLEPropertiesContainer
+        'Dim ii = 0
+
+
+        'Dim A As CFStorage = cf.RootStorage.GetStorage("JSite18446")
+        'Console.WriteLine(GetOleLinkFromStorage(A))
+
+    End Sub
+
+    Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As String
+
+        Dim ST2 = ""
+
+        Dim B As CFStream = CFStorage.GetStream(ChrW(1) & "Ole")
+        Dim D = B.GetData()
+
+        Dim idx = 1
+        Dim ByteString As String = ""
+        Dim IndexString As String = ""
+        For Each Entry As Byte In D
+            IndexString = String.Format("{0}, {1}", IndexString, idx)
+            ByteString = String.Format("{0}, {1:x2}", ByteString, Entry)
+            idx += 1
+        Next
+
+        Dim ST As String
+
+
+        Dim AsciiString As String = ""
+        Dim CharcodesString As String = ""
+        ST = Encoding.ASCII.GetString(D)
+        For Each c As Char In ST
+            AsciiString = String.Format("{0}, {1}", AsciiString, c)
+            CharcodesString = String.Format("{0}, {1}", CharcodesString, AscW(c))
+        Next
+
+        Dim UnicodeString As String = ""
+        ST = Encoding.Unicode.GetString(D)
+        For Each c As Char In ST
+            UnicodeString = String.Format("{0}, , {1}", UnicodeString, c)
+        Next
+
+        'Dim CharcodesString As String = ""
+        'For Each c As Char In AsciiString
+        '    CharcodesString = String.Format("{0}, {1}", CharcodesString, AscW(c))
+        'Next
+
+        'MsgBox(ST)
+        'Dim B_Start = ST.IndexOf(ChrW(3))
+        'Dim B_End = ST.IndexOf(ChrW(1))
+        'ST2 = ST.Substring(B_Start + 1, B_End - B_Start - 1)
+
+        Dim Outfile As String = ".\ole_links.txt"
+        'Return ST2
+        Try
+            Using writer As New IO.StreamWriter(Outfile, True)
+                writer.WriteLine("IndexString")
+                writer.WriteLine(IndexString)
+                writer.WriteLine("ByteString")
+                writer.WriteLine(ByteString)
+                writer.WriteLine("AsciiString")
+                writer.WriteLine(AsciiString)
+                writer.WriteLine("UnicodeString")
+                writer.WriteLine(UnicodeString)
+                'writer.WriteLine("CharcodesString")
+                'writer.WriteLine(CharcodesString)
+                writer.WriteLine("")
+            End Using
+        Catch ex As Exception
+            MsgBox("Error saving Outfile")
+        End Try
+
+        Return ST
+
+    End Function
 
     Public Function FOA_Storage(CF As CompoundFile) As CFStorage
 
@@ -1150,8 +1243,8 @@ Public Class UtilsCommon
 
         Dim PropValue As String = Nothing
 
-        Dim dsiStream As CFStream = Nothing
-        Dim co As OLEPropertiesContainer = Nothing
+        Dim dsiStream As CFStream = Nothing  ' Populated in GetOLEProp
+        Dim co As OLEPropertiesContainer = Nothing  ' Populated in GetOLEProp
         Dim OLEProp As OLEProperty = Nothing
 
         OLEProp = GetOLEProp(cf, PropertySet, PropertyNameEnglish, AddProp:=False, dsiStream, co)
@@ -1167,7 +1260,12 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function SetOLEPropValue(FullName As String, PropertySet As String, PropertyNameEnglish As String, PropertyValue As String) As Boolean
+    Public Function SetOLEPropValue(
+        FullName As String,
+        PropertySet As String,
+        PropertyNameEnglish As String,
+        PropertyValue As String
+        ) As Boolean
 
 
         SetOLEPropValue = False
@@ -1195,68 +1293,6 @@ Public Class UtilsCommon
 
         If Not IsNothing(OLEProp) Then      ' ####### The property may not exists in the file, example is System.Material is not present in ASM and DFT, also if its a custom property and we don't want to add it 
 
-            'Select Case OLEProp.VTType      ' There is something wrong here because everytime I edit a property in the listviewfiles this Function is called more than one time
-
-            '    Case = VTPropertyType.VT_BOOL
-            '        OLEProp.Value = CType(PropertyValue, Boolean)
-
-            '    Case = VTPropertyType.VT_I4
-
-            '        If PropertyValue = Int(PropertyValue).ToString Then
-            '            OLEProp.Value = CType(PropertyValue, Integer)
-            '        Else
-
-            '            Dim tmpID = OLEProp.PropertyIdentifier
-            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-
-            '            Try
-
-            '                Dim userProperties = co.UserDefinedProperties
-            '                Dim newPropertyId As UInteger = tmpID
-
-            '                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-            '                OLEProp = userProperties.NewProperty(VTPropertyType.VT_R8, newPropertyId)
-            '                OLEProp.Value = CType(PropertyValue, Double)
-            '                userProperties.AddProperty(OLEProp)
-
-            '            Catch ex As Exception
-            '            End Try
-
-            '        End If
-
-            '    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
-            '        OLEProp.Value = PropertyValue
-
-            '    Case = VTPropertyType.VT_FILETIME
-            '        OLEProp.Value = CType(PropertyValue, DateTime)
-
-            '    Case = VTPropertyType.VT_R8
-
-            '        If PropertyValue <> Int(PropertyValue).ToString Then
-            '            OLEProp.Value = CType(PropertyValue, Double)
-            '        Else
-
-            '            Dim tmpID = OLEProp.PropertyIdentifier
-            '            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-
-            '            Try
-
-            '                Dim userProperties = co.UserDefinedProperties
-            '                Dim newPropertyId As UInteger = tmpID
-
-            '                userProperties.PropertyNames(newPropertyId) = PropertyNameEnglish
-            '                OLEProp = userProperties.NewProperty(VTPropertyType.VT_I4, newPropertyId)
-            '                OLEProp.Value = CType(PropertyValue, Integer)
-            '                userProperties.AddProperty(OLEProp)
-
-            '            Catch ex As Exception
-            '            End Try
-
-            '        End If
-
-
-            'End Select
-
             SetOLEPropValue = SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream) 'TRUE
 
             co.Save(dsiStream)
@@ -1270,10 +1306,15 @@ Public Class UtilsCommon
         fs = Nothing
         System.Windows.Forms.Application.DoEvents()
 
-
     End Function
 
-    Public Function SetOLEPropValue(OLEProp As OLEProperty, PropertyValue As String, co As OLEPropertiesContainer, cf As CompoundFile, dsiStream As CFStream) As Boolean
+    Public Function SetOLEPropValue(
+        OLEProp As OLEProperty,
+        PropertyValue As String,
+        co As OLEPropertiesContainer,
+        cf As CompoundFile,
+        dsiStream As CFStream
+        ) As Boolean
 
         SetOLEPropValue = False
 
