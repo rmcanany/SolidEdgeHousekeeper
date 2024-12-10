@@ -1179,22 +1179,21 @@ Public Class Form_Main
                 Select Case Task.Name
                     Case "TaskEditProperties"
                         Dim T = CType(Task, TaskEditProperties)
-                        'T.TemplatePropertyDict = Me.TemplatePropertyDict
                         T.PropertiesData = Me.PropertiesData
                     Case "TaskEditVariables"
                         Dim T = CType(Task, TaskEditVariables)
-                        'T.TemplatePropertyDict = Me.TemplatePropertyDict
                         T.PropertiesData = Me.PropertiesData
                     Case "TaskSaveDrawingAs"
                         Dim T = CType(Task, TaskSaveDrawingAs)
-                        'T.TemplatePropertyDict = Me.TemplatePropertyDict
                         T.PropertiesData = Me.PropertiesData
                     Case "TaskSaveModelAs"
                         Dim T = CType(Task, TaskSaveModelAs)
-                        'T.TemplatePropertyDict = Me.TemplatePropertyDict
                         T.PropertiesData = Me.PropertiesData
                     Case "TaskSetDocumentStatus"
                         Dim T = CType(Task, TaskSetDocumentStatus)
+                        T.PropertiesData = Me.PropertiesData
+                    Case "TaskCheckPartNumberDoesNotMatchFilename"
+                        Dim T = CType(Task, TaskCheckPartNumberDoesNotMatchFilename)
                         T.PropertiesData = Me.PropertiesData
                     Case Else
                         MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.Startup()", Task.Name))

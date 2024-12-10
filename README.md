@@ -6,7 +6,7 @@
 </div>
 
 **Contributors:**
-@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet, @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007)
+@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github)
 
 **Beta Testers:**
 @JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702

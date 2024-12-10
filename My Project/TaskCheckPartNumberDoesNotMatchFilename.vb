@@ -12,6 +12,8 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
     Public Property PropertyName As String
 
+    Public Property PropertyNameEnglish As String
+
     Private _PropertyFormula As String
     Public Property PropertyFormula As String
         Get
@@ -25,6 +27,16 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                 Dim UC As New UtilsCommon
                 Me.PropertySet = UC.PropSetFromFormula(value)
                 Me.PropertyName = UC.PropNameFromFormula(value)
+
+                If Me.PropertiesData IsNot Nothing Then
+                    Dim PropertyData = Me.PropertiesData.GetPropertyData(Me.PropertyName)
+                    If PropertyData IsNot Nothing Then
+                        Me.PropertyNameEnglish = PropertyData.EnglishName
+                    Else
+                        Me.PropertyNameEnglish = ""
+                    End If
+
+                End If
             End If
         End Set
     End Property
@@ -85,6 +97,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End Set
     End Property
 
+    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         'PropertySet
@@ -111,6 +124,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
         Me.Category = "Check"
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
         Me.SolidEdgeRequired = False
 
@@ -125,7 +139,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.DraftsCheckModels = False
         Me.DraftsCheckDraftItself = False
         Me.StructuredStorageEdit = False
-        'Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
+
+        Me.PropertiesData = New PropertiesData
+
 
     End Sub
 
@@ -155,7 +171,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        'ErrorMessage = ProcessInternal(FileName)
+        ErrorMessage = ProcessInternal(FileName)
 
         Return ErrorMessage
 
@@ -311,6 +327,8 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim PartNumber As String = ""
         Dim PartNumberFound As Boolean
 
+        Dim Filename As String = IO.Path.GetFileName(FullName)
+
         Dim ExtensionParent As String = IO.Path.GetExtension(FullName)
         Dim ExtensionChild As String
 
@@ -320,6 +338,10 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim cfParent As CompoundFile = Nothing
         Dim fsChild As FileStream = Nothing
         Dim cfChild As CompoundFile = Nothing
+        Dim dsiStream As CFStream = Nothing
+        Dim co As OLEPropertiesContainer = Nothing
+        Dim OLEProp As OLEProperty = Nothing
+
 
         If PropertyName = "" Then
             Proceed = False
@@ -327,20 +349,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
             ErrorMessageList.Add("Missing part number property name")
         End If
 
-        Select Case ExtensionParent
-            Case ".asm", ".par", ".psm"
-                'PartNumber = UC.GetOLEProp()
-
-            Case ".dft"
-
-            Case Else
-                MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
-
-        End Select
-
         If Proceed Then
             Try
-                fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+                fsParent = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
@@ -351,13 +362,100 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         If Proceed Then
             Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+            cfParent = New CompoundFile(fsParent, CFSUpdateMode.Update, cfg)
 
-            Dim dsiStream As CFStream = Nothing
-            Dim co As OLEPropertiesContainer = Nothing
-            Dim OLEProp As OLEProperty = Nothing
         End If
 
+        If Proceed Then
+
+            Select Case ExtensionParent
+                Case ".asm", ".par", ".psm"
+
+                    PartNumber = UC.GetOLEPropValue(cfParent, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
+
+                    If PartNumber Is Nothing Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                                         Me.PropertyName, Me.PropertySet))
+                    End If
+
+                    If ExitStatus = 0 Then
+                        PartNumber = PartNumber.Trim
+                        If PartNumber = "" Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add("Part number not assigned")
+                        End If
+                    End If
+
+                    If ExitStatus = 0 Then
+                        If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                        End If
+                    End If
+
+
+                Case ".dft"
+
+                    If Me.DraftsCheckDraftItself Then
+
+                        PartNumber = UC.GetOLEPropValue(cfParent, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
+
+                        If PartNumber Is Nothing Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                                         Me.PropertyName, Me.PropertySet))
+                        End If
+
+                        If ExitStatus = 0 Then
+                            PartNumber = PartNumber.Trim
+                            If PartNumber = "" Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Part number not assigned")
+                            End If
+                        End If
+
+                        If ExitStatus = 0 Then
+                            If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                            End If
+                        End If
+
+                    End If
+
+                    'If Me.DraftsCheckModels Then
+                    '    If Proceed Then
+                    '        Dim ChildName As String
+
+                    '        Dim something = UC.GetOleLinkFromStorage(cfParent)
+
+
+                    '        Try
+                    '            fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
+                    '        Catch ex As Exception
+                    '            Proceed = False
+                    '            ExitStatus = 1
+                    '            ErrorMessageList.Add("Unable to open file")
+                    '        End Try
+                    '    End If
+
+
+                    '    If Proceed Then
+                    '        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                    '        cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+
+                    '    End If
+
+
+                    'End If
+
+                Case Else
+                    MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
+
+            End Select
+
+        End If
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
