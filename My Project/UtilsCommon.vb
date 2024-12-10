@@ -868,14 +868,14 @@ Public Class UtilsCommon
 
         Dim Proceed As Boolean = True
 
-        'Dim dsiStream As CFStream = Nothing
-        'Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
         Dim SIList = GetSIList()
         Dim DSIList = GetDSIList()
         Dim FunnyList = GetFunnyList()
         Dim ExtendedList = GetExtendedList()
+
+        'Dim Success As Boolean
 
         If Not PropertySet = "Custom" Then
             PropertySet = "System"
@@ -884,8 +884,24 @@ Public Class UtilsCommon
         Dim tmpStorage As CFStorage = FOA_Storage(cf)
         If IsNothing(tmpStorage) Then tmpStorage = cf.RootStorage
 
-        ''testing
-        'FindOleLinks(cf)
+        '' temporary testing only
+        'Dim TestOLELinks As Boolean = True
+        'If TestOLELinks Then
+        '    If (Not FindOleLinks(cf)) And (Not Fullname = "") Then
+        '        ' ###### OUTPUT FOR DEBUGGING ######
+        '        Dim Outfile As String = ".\ole_links.txt"
+
+        '        Try
+        '            Using writer As New IO.StreamWriter(Outfile, True)
+        '                writer.WriteLine(Fullname)
+        '            End Using
+        '        Catch ex As Exception
+        '            MsgBox("Error saving Outfile")
+        '        End Try
+
+        '    End If
+
+        'End If
 
         Try
             If (SIList.Contains(PropertyNameEnglish)) And (PropertySet.ToLower = "system") Then
@@ -970,10 +986,9 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Sub FindOleLinks(cf As CompoundFile)
+    Public Function FindOleLinks(cf As CompoundFile) As Boolean
 
-        ''testing
-        'Dim dsiStorage = tmpStorage.GetStorage("JSite2359")
+        Dim Success As Boolean = True
         Dim dsiStorages As New List(Of String)
         Dim dsiStreams As New List(Of String)
         cf.RootStorage.VisitEntries(Sub(item) dsiStorages.Add(item.Name), recursive:=False)
@@ -984,88 +999,233 @@ Public Class UtilsCommon
                 Dim A As CFStorage = cf.RootStorage.GetStorage(s)
                 A.VisitEntries(Sub(item) dsiStreams.Add(item.Name), recursive:=False)
                 If dsiStreams.Contains(String.Format("{0}Ole", ChrW(1))) Then
-                    Dim B = GetOleLinkFromStorage(A)
-                    'MsgBox(B)
+                    Success = GetOleLinkFromStorage(A)
                 End If
             End If
         Next
-        'dsiStream = dsiStorage.GetStream(ChrW(1) & "Ole")
-        'Dim dsiValue = dsiStream.GetData
-        ''dsiStream = dsiStorage.GetStream("|Ole")
-        'co = dsiStream.AsOLEPropertiesContainer
-        'Dim ii = 0
+
+        Return Success
+
+    End Function
+
+    Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As Boolean
+
+        ' The OLE stream stores three filename formats, or none if the drawing view doesn't have a model link.
+
+        ' EXAMPLE
+        ' Index  000 001 ... 033 034 035 036 ... 145 146 147 148 149 150 ... 183 184 185 186 187 188 ... 413 414 415 416
+        ' Indicator               <>                              <>          <    >                              <    >
+        ' Byte    56  57      00  44  3a  5c ...  2e  70  61  72  00  ff ...  03  00  44  00  3a  00 ...  72  00  01  00
+        ' Ascii    ?   ?       ?   D   :   \ ...   .   p   a   r   ?   ? ...   ?   ?   D   ?   :   ? ...   ?   ?   ?   ?  
+        ' Var                    iS1                         iE1                     iS2                      iE2
+
+        ' EXAMPLE (cont)
+        ' Index   ... 434 435 436 437 438 439 440 441 442 ... 476 477 478 479 480 481
+        ' Indicator    <>  <>(relative motion)                                 <>
+        ' Byte    ...  46  01  00  28  00  00  00  5c  44 ...  2e  70  61  72  00  ff
+        ' Ascii   ...   ?   ?   ?   ?   ?   ?   ?   \   D ...   .   p   a   r   ?   ?
+        ' Var                                     iS3                     iE3
+
+        ' FIRST FILENAME: Full path filename, Ascii format, sometimes in DOS 8.3 format, Start index: 34
+        ' SECOND FILENAME: Full path filename, UTF16 format, normal format
+        ' THIRD FILENAME: Relative path filename, Ascii format, need to convert to UTF16 for possible unicode characters
+        '                 Based on relative motion value, need to prepend '.\' or the correct number of '..\' to the filename
 
 
-        'Dim A As CFStorage = cf.RootStorage.GetStorage("JSite18446")
-        'Console.WriteLine(GetOleLinkFromStorage(A))
+        Dim OLEStream As CFStream = CFStorage.GetStream(ChrW(1) & "Ole")
+        Dim ByteArray = OLEStream.GetData()
+        Dim tmpByteList As New List(Of Byte)
 
-    End Sub
+        Dim AsciiFullname As String = ""
+        Dim UnicodeFullname As String = ""
+        Dim RelativeFullname As String = ""
+        Dim RelativeMotion As Integer
 
-    Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As String
+        Dim iS1 As Integer
+        Dim iE1 As Integer
+        Dim iS2 As Integer
+        Dim iE2 As Integer
+        Dim iS3 As Integer
+        Dim iE3 As Integer
 
-        Dim ST2 = ""
+        Dim ByteStringList As New List(Of String)
+        Dim IndicatorList As New List(Of String)
+        Dim Proceed As Boolean = True
 
-        Dim B As CFStream = CFStorage.GetStream(ChrW(1) & "Ole")
-        Dim D = B.GetData()
-
-        Dim idx = 1
-        Dim ByteString As String = ""
-        Dim IndexString As String = ""
-        For Each Entry As Byte In D
-            IndexString = String.Format("{0}, {1}", IndexString, idx)
-            ByteString = String.Format("{0}, {1:x2}", ByteString, Entry)
-            idx += 1
+        ' ###### CREATE BYTE STRING LIST ######
+        For Each Entry As Byte In ByteArray
+            ByteStringList.Add(String.Format("{0:x}", Entry))
         Next
 
-        Dim ST As String
+        ' ###### FIRST FILENAME START IDX ######
+        iS1 = 34
+
+        ' ###### CHECK FOR DRAWING VIEWS WITH NO MODEL ######
+        If ByteArray.Count <= iS1 Then
+            Proceed = False
+            AsciiFullname = "no model links found"
+            UnicodeFullname = "no model links found"
+            RelativeFullname = "no model links found"
+        End If
+
+        ' ###### FIRST FILENAME END IDX ######
+        If Proceed Then
+            IndicatorList.Clear()
+            IndicatorList.AddRange({"0"})
+            iE1 = FindIndicatorIdx(StartIdx:=iS1, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) - 1
+            If iE1 < 0 Then Proceed = False
+        End If
+
+        ' ###### SECOND FILENAME START IDX ######
+        If Proceed Then
+            IndicatorList.Clear()
+            IndicatorList.AddRange({"3", "0"})
+            iS2 = FindIndicatorIdx(StartIdx:=iE1 + 1, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) + 2
+            If iS2 < 0 Then Proceed = False
+        End If
+
+        ' ###### SECOND FILENAME END IDX ######
+        If Proceed Then
+            IndicatorList.Clear()
+            IndicatorList.AddRange({"1", "0"})
+            iE2 = FindIndicatorIdx(StartIdx:=iS2, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) - 1
+            If iE2 < 0 Then Proceed = False
+        End If
+
+        ' ###### THIRD FILENAME START IDX ######
+        If Proceed Then
+            IndicatorList.Clear()
+            IndicatorList.AddRange({"46"})
+            iS3 = FindIndicatorIdx(StartIdx:=iE2 + 2, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) + 7
+            If iS3 < 0 Then Proceed = False
+        End If
+
+        ' ###### THIRD FILENAME END IDX ######
+        If Proceed Then
+            IndicatorList.Clear()
+            IndicatorList.AddRange({"0"})
+            iE3 = FindIndicatorIdx(StartIdx:=iS3, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) - 1
+            If iE3 < 0 Then Proceed = False
+        End If
+
+        ' ###### FIRST FILENAME EXTRACT ######
+        If Proceed Then
+            tmpByteList.Clear()
+            For idx As Integer = iS1 To iE1
+                tmpByteList.Add(ByteArray(idx))
+            Next
+            Try
+                AsciiFullname = Encoding.ASCII.GetString(tmpByteList.ToArray)
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        End If
+
+        ' ###### SECOND FILENAME EXTRACT ######
+        If Proceed Then
+            tmpByteList.Clear()
+            For idx As Integer = iS2 To iE2
+                tmpByteList.Add(ByteArray(idx))
+            Next
+            Try
+                UnicodeFullname = Encoding.Unicode.GetString(tmpByteList.ToArray)
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        End If
+
+        ' ###### THIRD FILENAME EXTRACT AND PREPEND RELATIVE DIRECTORY TOKENS ######
+        If Proceed Then
+            RelativeMotion = CInt(ByteStringList(iS3 - 6))
+            Dim Prefix As String = ""
+
+            If RelativeMotion = 1 Then
+                Prefix = ".\"
+            Else
+                For i = 0 To RelativeMotion - 1
+                    Prefix = String.Format("{0}..\", Prefix)
+                Next
+            End If
+
+            tmpByteList.Clear()
+            For idx As Integer = iS3 To iE3
+                tmpByteList.Add(ByteArray(idx))
+                tmpByteList.Add(0)  ' Converting from ascii to unicode
+            Next
+            Try
+                RelativeFullname = Encoding.Unicode.GetString(tmpByteList.ToArray)
+                If RelativeFullname(0) = "\" Then
+                    RelativeFullname = RelativeFullname.Substring(1, RelativeFullname.Count - 1)
+                End If
+                RelativeFullname = String.Format("{0}{1}", Prefix, RelativeFullname)  ' Does this preserve unicode format?
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        End If
+
+        '' ###### OUTPUT FOR DEBUGGING ######
+        'Dim Outfile As String = ".\ole_links.txt"
+
+        'Try
+        '    Using writer As New IO.StreamWriter(Outfile, True)
+        '        writer.WriteLine("AsciiFullname")
+        '        writer.WriteLine(AsciiFullname)
+        '        writer.WriteLine("UnicodeFullname")
+        '        writer.WriteLine(UnicodeFullname)
+        '        writer.WriteLine("RelativeFullname")
+        '        writer.WriteLine(RelativeFullname)
+        '        writer.WriteLine("RelativeMotion")
+        '        writer.WriteLine(RelativeMotion)
+        '        'writer.WriteLine("Encoding.ASCII.GetString(ByteArray)")
+        '        'writer.WriteLine(Encoding.ASCII.GetString(ByteArray))
+        '        'writer.WriteLine("String.Join("", ByteStringList)")
+        '        'writer.WriteLine(String.Join(",", ByteStringList))
+        '        writer.WriteLine("")
+        '    End Using
+        'Catch ex As Exception
+        '    MsgBox("Error saving Outfile")
+        'End Try
 
 
-        Dim AsciiString As String = ""
-        Dim CharcodesString As String = ""
-        ST = Encoding.ASCII.GetString(D)
-        For Each c As Char In ST
-            AsciiString = String.Format("{0}, {1}", AsciiString, c)
-            CharcodesString = String.Format("{0}, {1}", CharcodesString, AscW(c))
-        Next
+        ' Missing model link not an actual error.
+        If ByteArray.Count <= iS1 Then
+            Proceed = True
+        End If
 
-        Dim UnicodeString As String = ""
-        ST = Encoding.Unicode.GetString(D)
-        For Each c As Char In ST
-            UnicodeString = String.Format("{0}, , {1}", UnicodeString, c)
-        Next
+        Return Proceed
 
-        'Dim CharcodesString As String = ""
-        'For Each c As Char In AsciiString
-        '    CharcodesString = String.Format("{0}, {1}", CharcodesString, AscW(c))
-        'Next
+    End Function
 
-        'MsgBox(ST)
-        'Dim B_Start = ST.IndexOf(ChrW(3))
-        'Dim B_End = ST.IndexOf(ChrW(1))
-        'ST2 = ST.Substring(B_Start + 1, B_End - B_Start - 1)
+    Public Function FindIndicatorIdx(
+        StartIdx As Integer,
+        IndicatorList As List(Of String),
+        ByteStringList As List(Of String)
+        ) As Integer
 
-        Dim Outfile As String = ".\ole_links.txt"
-        'Return ST2
-        Try
-            Using writer As New IO.StreamWriter(Outfile, True)
-                writer.WriteLine("IndexString")
-                writer.WriteLine(IndexString)
-                writer.WriteLine("ByteString")
-                writer.WriteLine(ByteString)
-                writer.WriteLine("AsciiString")
-                writer.WriteLine(AsciiString)
-                writer.WriteLine("UnicodeString")
-                writer.WriteLine(UnicodeString)
-                'writer.WriteLine("CharcodesString")
-                'writer.WriteLine(CharcodesString)
-                writer.WriteLine("")
-            End Using
-        Catch ex As Exception
-            MsgBox("Error saving Outfile")
-        End Try
+        ' Start index: iS2 = FindIndicatorIdx(StartIdx:= iE1 + 1, IndicatorList:= {"3", "0"}, ByteStringList:= ByteStringList) + 2
 
-        Return ST
+        Dim IndicatorIdx As Integer = -1000000
+        Dim CurrentIdx As Integer = StartIdx
+        Dim GotAMatch As Boolean = False
 
+        While IndicatorIdx = -1000000
+            If CurrentIdx + IndicatorList.Count > ByteStringList.Count Then
+                Exit While
+            End If
+            For i = 0 To IndicatorList.Count - 1
+                GotAMatch = ByteStringList(CurrentIdx + i) = IndicatorList(i)
+                If Not GotAMatch Then
+                    Exit For
+                End If
+            Next
+            If GotAMatch Then
+                IndicatorIdx = CurrentIdx
+                Exit While
+            End If
+            CurrentIdx += 1
+        End While
+
+        Return IndicatorIdx
     End Function
 
     Public Function FOA_Storage(CF As CompoundFile) As CFStorage
@@ -1158,7 +1318,6 @@ Public Class UtilsCommon
         End If
 
     End Function
-
 
     Public Function GetDMPropValue(
         DMApp As DesignManager.Application,

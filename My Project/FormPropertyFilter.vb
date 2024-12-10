@@ -6,6 +6,7 @@ Imports Newtonsoft.Json
 
 Public Class FormPropertyFilter
 
+    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Private _PropertyFilters As PropertyFilters
@@ -334,6 +335,7 @@ Public Class FormPropertyFilter
                 PopulateUCList(Me.PropertyFilter)
             End If
         Else
+            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
             PopulateUCList(Me.PropertyFilterDict)
         End If
 
@@ -543,6 +545,7 @@ Public Class FormPropertyFilter
 
         'Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
 
+        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
         If Me.PropertyFilterDict Is Nothing Then
             Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
         End If
@@ -582,6 +585,7 @@ Public Class FormPropertyFilter
                 ComboBoxSavedSettings.Items.Add(Key)
             Next
 
+            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
             If Not PropertyFilterDict.Keys.Count = 0 Then
                 FormatFormula(PropertyFilterDict("0")("Formula"))
             End If
@@ -594,6 +598,7 @@ Public Class FormPropertyFilter
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
         If CheckInputs() Then
+            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
             Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
             Me.PropertyFilter = UpdatePropertyFilterFromForm()
 
@@ -694,6 +699,7 @@ Public Class FormPropertyFilter
                 End If
 
             Else
+                ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
                 Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
                 JSONDict = UpdatePropertyFilterDictFromForm()
 

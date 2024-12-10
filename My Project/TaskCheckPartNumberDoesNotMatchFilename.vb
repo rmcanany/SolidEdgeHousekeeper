@@ -1,5 +1,7 @@
 ﻿Option Strict On
 Imports System.IO
+Imports OpenMcdf
+Imports OpenMcdf.Extensions.OLEProperties
 'Imports OpenMcdf
 'Imports OpenMcdf.Extensions.OLEProperties
 
@@ -27,18 +29,45 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End Set
     End Property
 
-    'Private _StructuredStorageEdit As Boolean
-    'Public Property StructuredStorageEdit As Boolean
-    '    Get
-    '        Return _StructuredStorageEdit
-    '    End Get
-    '    Set(value As Boolean)
-    '        _StructuredStorageEdit = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
-    '        End If
-    '    End Set
-    'End Property
+    Private _DraftsCheckModels As Boolean
+    Public Property DraftsCheckModels As Boolean
+        Get
+            Return _DraftsCheckModels
+        End Get
+        Set(value As Boolean)
+            _DraftsCheckModels = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftsCheckModels.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DraftsCheckDraftItself As Boolean
+    Public Property DraftsCheckDraftItself As Boolean
+        Get
+            Return _DraftsCheckDraftItself
+        End Get
+        Set(value As Boolean)
+            _DraftsCheckDraftItself = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DraftsCheckDraftItself.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+                Me.SolidEdgeRequired = Not value
+            End If
+        End Set
+    End Property
 
 
 
@@ -62,7 +91,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         'PropertySetLabel
         PropertyFormula
         PropertyFormulaLabel
-        'StructuredStorageEdit
+        DraftsCheckModels
+        DraftsCheckDraftItself
+        StructuredStorageEdit
         AutoHideOptions
     End Enum
 
@@ -81,6 +112,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
         Me.Category = "Check"
         SetColorFromCategory(Me)
+        Me.SolidEdgeRequired = False
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -90,8 +122,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.PropertySet = ""
         Me.PropertyName = ""
         Me.PropertyFormula = ""
-        'Me.StructuredStorageEdit = False
-        ''Me.SolidEdgeRequired = False
+        Me.DraftsCheckModels = False
+        Me.DraftsCheckDraftItself = False
+        Me.StructuredStorageEdit = False
         'Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
     End Sub
@@ -128,7 +161,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
     End Function
 
-    Private Function ProcessInternal(
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -184,37 +217,78 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                     End If
 
                 Case = "dft"
-                    Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-                    Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
-                    Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
-                    Dim ModelLinkFilenames As New List(Of String)
-                    Dim ModelLinkFilename As String
+                    If Me.DraftsCheckDraftItself Then
+                        Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                        If Prop Is Nothing Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                                         Me.PropertyName, Me.PropertySet))
+                        End If
 
-                    'Get the bare file name without directory information or extension
-                    Filename = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName)
+                        If ExitStatus = 0 Then
+                            PartNumber = CStr(Prop.Value).Trim
+                            If PartNumber = "" Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Part number not assigned")
+                            End If
+                        End If
 
-                    ModelLinks = tmpSEDoc.ModelLinks
+                        If ExitStatus = 0 Then
+                            If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                            End If
+                        End If
+                    End If
 
-                    For Each ModelLink In ModelLinks
-                        ModelLinkFilenames.Add(System.IO.Path.GetFileNameWithoutExtension(ModelLink.FileName))
-                    Next
+                    If Me.DraftsCheckModels Then
+                        Dim tmpSEDoc As SolidEdgeDraft.DraftDocument = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-                    PartNumberFound = False
+                        Dim ModelLinks As SolidEdgeDraft.ModelLinks = Nothing
+                        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
+                        Dim ModelLinkFilenames As New List(Of String)
+                        Dim ModelLinkFilename As String
+                        Dim ModelLinkDoc As SolidEdgeFramework.SolidEdgeDocument
 
-                    If ModelLinkFilenames.Count > 0 Then
-                        For Each ModelLinkFilename In ModelLinkFilenames
-                            If Filename = ModelLinkFilename Then
-                                PartNumberFound = True
+                        Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
+                        Dim Extension As String
+
+                        ModelLinks = tmpSEDoc.ModelLinks
+
+                        PartNumberFound = False
+
+                        For Each ModelLink In ModelLinks
+                            ModelLinkFilename = UC.SplitFOAName(ModelLink.FileName)("Filename")
+                            Extension = IO.Path.GetExtension(ModelLinkFilename)
+
+                            If (IO.File.Exists(ModelLinkFilename)) And (ValidExtensionsList.Contains(Extension)) Then
+
+                                ModelLinkFilenames.Add(System.IO.Path.GetFileName(ModelLinkFilename))
+                                ModelLinkDoc = CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
+
+                                Prop = UC.GetProp(ModelLinkDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                                If Prop IsNot Nothing Then
+                                    PartNumber = CStr(Prop.Value).Trim
+                                    If Not PartNumber = "" Then
+                                        If Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                            PartNumberFound = True
+                                            Exit For
+                                        End If
+                                    End If
+
+                                End If
                             End If
                         Next
-                        If Not PartNumberFound Then
+
+                        If (Not PartNumberFound) And (ModelLinkFilenames.Count > 0) Then
                             ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Drawing file name '{0}' not the same as any model file name:", Filename))
+                            ErrorMessageList.Add(String.Format("Part number in the following models not found in filename '{0}'", Filename))
                             For Each ModelLinkFilename In ModelLinkFilenames
-                                ErrorMessageList.Add(String.Format("    '{0}'", ModelLinkFilename))
+                                ErrorMessageList.Add(String.Format("    {0}", ModelLinkFilename))
                             Next
                         End If
+
                     End If
 
                 Case Else
@@ -227,268 +301,67 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Return ErrorMessage
     End Function
 
-    'Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
-    '    ' Structured Storage
-    '    ' https://github.com/ironfede/openmcdf
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '    ' Convert glob to regex 
-    '    ' https://stackoverflow.com/questions/74683013/regex-to-glob-and-vice-versa-conversion
-    '    ' https://stackoverflow.com/questions/11276909/how-to-convert-between-a-glob-pattern-and-a-regexp-pattern-in-ruby
-    '    ' https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/operators/like-operator
+        Dim Proceed As Boolean = True
+        Dim PartNumber As String = ""
+        Dim PartNumberFound As Boolean
 
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ExtensionParent As String = IO.Path.GetExtension(FullName)
+        Dim ExtensionChild As String
 
-    '    Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim UC As New UtilsCommon
 
-    '    Dim PropertySetName As String = ""
-    '    Dim PropertyName As String = ""
-    '    Dim FindString As String = ""
-    '    Dim ReplaceString As String = ""
-    '    Dim FindSearchType As String = ""
-    '    Dim ReplaceSearchType As String = ""
+        Dim fsParent As FileStream = Nothing
+        Dim cfParent As CompoundFile = Nothing
+        Dim fsChild As FileStream = Nothing
+        Dim cfChild As CompoundFile = Nothing
 
-    '    Dim PropertyFound As Boolean = False
+        If PropertyName = "" Then
+            Proceed = False
+            ExitStatus = 1
+            ErrorMessageList.Add("Missing part number property name")
+        End If
 
-    '    Dim Proceed As Boolean = True
-    '    Dim s As String
+        Select Case ExtensionParent
+            Case ".asm", ".par", ".psm"
+                'PartNumber = UC.GetOLEProp()
 
-    '    Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
-    '    Dim PropertiesToEdit As String = ""
-    '    Dim RowIndexString As String
+            Case ".dft"
 
-    '    Dim UC As New UtilsCommon
+            Case Else
+                MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
 
-    '    PropertiesToEdit = Me.JSONString
+        End Select
 
-    '    If Not PropertiesToEdit = "" Then
-    '        PropertiesToEditDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(PropertiesToEdit)
-    '    Else
-    '        Proceed = False
-    '        ExitStatus = 1
-    '        ErrorMessageList.Add("No properties provided")
-    '    End If
-
-    '    Dim fs As FileStream = Nothing
-
-    '    If Proceed Then
-    '        Try
-    '            fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-    '        Catch ex As Exception
-    '            Proceed = False
-    '            ExitStatus = 1
-    '            ErrorMessageList.Add("Unable to open file")
-    '        End Try
-    '    End If
-
-    '    Dim cf As CompoundFile = Nothing
-
-    '    If Proceed Then
-    '        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-    '        cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-    '        Dim dsiStream As CFStream = Nothing
-    '        Dim co As OLEPropertiesContainer = Nothing
-    '        Dim OLEProp As OLEProperty = Nothing
-
-    '        For Each RowIndexString In PropertiesToEditDict.Keys
-
-    '            ' ####################### Get parameters #######################
-
-    '            PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
-    '            PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
-    '            FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
-    '            FindString = PropertiesToEditDict(RowIndexString)("FindString")
-    '            ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
-    '            ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
-
-    '            'If Not TemplatePropertyDict.Keys.Contains(PropertyName) Then
-    '            '    Proceed = False
-    '            '    ExitStatus = 1
-    '            '    ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
-    '            'End If
-
-    '            Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
-    '            If tmpPropertyData Is Nothing Then
-    '                Proceed = False
-    '                ExitStatus = 1
-    '                ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
-    '            End If
-
-    '            ' ####################### Do formula substitution #######################
-
-    '            If Proceed Then
-    '                Try
-    '                    'FindString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False,
-    '                    '                                      TemplatePropertyDict)
-    '                    FindString = UC.SubstitutePropertyFormula(
-    '                        Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
-    '                Catch ex As Exception
-    '                    Proceed = False
-    '                    ExitStatus = 1
-    '                    s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
-    '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                End Try
-
-    '                Try
-    '                    'ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-    '                    '                                         TemplatePropertyDict, ReplaceSearchType = "EX")
-    '                    ReplaceString = UC.SubstitutePropertyFormula(
-    '                        Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-    '                        Me.PropertiesData, ReplaceSearchType = "EX")
-    '                Catch ex As Exception
-    '                    Proceed = False
-    '                    ExitStatus = 1
-    '                    s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-    '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                End Try
-    '            End If
-
-    '            'Direct properties editing doesn't support linked files |Rx sintax: " & PropertyName
-    '            If Proceed Then
-    '                If FindString.StartsWith("[ERROR]") Then
-    '                    Proceed = False
-    '                    ExitStatus = 1
-    '                    s = String.Format("Direct edit doesn't support links in Find text '{0}' for property '{1}'", FindString.Replace("[ERROR]", ""), PropertyName)
-    '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                End If
-    '                If ReplaceString.StartsWith("[ERROR]") Then
-    '                    Proceed = False
-    '                    ExitStatus = 1
-    '                    s = String.Format("Direct edit doesn't support links in Replace text '{0}' for property '{1}'", ReplaceString.Replace("[ERROR]", ""), PropertyName)
-    '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                End If
-    '            End If
+        If Proceed Then
+            Try
+                fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to open file")
+            End Try
+        End If
 
 
-    '            ' ####################### Get the property object #######################
+        If Proceed Then
+            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+            cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
-    '            'Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
-    '            Dim PropertyNameEnglish = tmpPropertyData.EnglishName
+            Dim dsiStream As CFStream = Nothing
+            Dim co As OLEPropertiesContainer = Nothing
+            Dim OLEProp As OLEProperty = Nothing
+        End If
 
-    '            If Proceed Then
-    '                OLEProp = UC.GetOLEProp(cf, PropertySetName, PropertyNameEnglish, Me.AutoAddMissingProperty, dsiStream, co)
-    '            End If
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
 
-    '            If IsNothing(OLEProp) Then
-    '                Proceed = False
-    '                ExitStatus = 1
-    '                If PropertyName = PropertyNameEnglish Then
-    '                    s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
-    '                Else
-    '                    s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
-    '                End If
-    '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '            End If
-
-
-    '            ' ####################### Delete or do the replacement #######################
-
-    '            If Proceed Then
-
-    '                If FindSearchType = "X" Then
-    '                    Try
-    '                        '############ delete the property here
-    '                        co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-
-    '                    Catch ex As Exception
-    '                        Proceed = False
-    '                        ExitStatus = 1
-    '                        If PropertyName = PropertyNameEnglish Then
-    '                            s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
-    '                        Else
-    '                            s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
-    '                        End If
-    '                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                    End Try
-
-    '                Else
-    '                    Try
-
-    '                        '####### set the property here
-    '                        If FindSearchType = "PT" Then
-    '                            'OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-
-    '                            Dim PropertyValue = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-    '                            UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
-
-    '                        Else
-    '                            If FindSearchType = "WC" Then
-    '                                FindString = UC.GlobToRegex(FindString)
-    '                            End If
-    '                            If ReplaceSearchType = "PT" Then
-    '                                ' ReplaceString = Regex.Escape(ReplaceString)
-    '                            End If
-
-    '                            'OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-
-    '                            Dim PropertyValue = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-    '                            UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
-
-    '                        End If
-
-    '                    Catch ex As Exception
-    '                        Proceed = False
-    '                        ExitStatus = 1
-    '                        If PropertyName = PropertyNameEnglish Then
-    '                            s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
-    '                        Else
-    '                            s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
-    '                        End If
-    '                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                    End Try
-
-
-    '                End If
-
-
-    '            End If
-
-
-    '            ' ####################### Save the properties #######################
-
-    '            If Proceed Then
-    '                Try
-
-    '                    '############ save the properties here (!)
-    '                    co.Save(dsiStream)
-
-    '                Catch ex As Exception
-    '                    Proceed = False
-    '                    ExitStatus = 1
-    '                    s = "Problem accessing or saving Property."
-    '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '                End Try
-    '            End If
-
-    '        Next
-
-    '    End If
-
-    '    ' ###### In case of error, don't save anything. ######
-    '    If ExitStatus = 0 Then
-    '        '############ save the properties here (!)
-    '        cf.Commit()
-    '    Else
-    '        s = "Errors encountered.  No changes made."
-    '        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-    '    End If
-
-    '    If cf IsNot Nothing Then
-    '        cf.Close()
-    '    End If
-
-    '    If fs IsNot Nothing Then
-    '        fs.Close()
-    '        System.Windows.Forms.Application.DoEvents()
-    '    End If
-
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-
-    'End Function
+    End Function
 
 
 
@@ -507,17 +380,11 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         RowIndex = 0
 
-        'ComboBox = FormatOptionsComboBox(ControlNames.PropertySet.ToString, ComboBoxItems, "DropDownList")
-        'ComboBox.Width = ControlWidth
-        'AddHandler ComboBox.SelectedIndexChanged, AddressOf ComboBoxOptions_SelectedIndexChanged
-        'tmpTLPOptions.Controls.Add(ComboBox, 0, RowIndex)
-        'ControlsDict(ComboBox.Name) = ComboBox
+        Label = FormatOptionsLabel(ControlNames.PropertyFormulaLabel.ToString, "Part number property")
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        ControlsDict(Label.Name) = Label
 
-        'Label = FormatOptionsLabel(ControlNames.PropertySetLabel.ToString, "Part number prop set")
-        'tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
-        'ControlsDict(Label.Name) = Label
-
-        'RowIndex += 1
+        RowIndex += 1
 
         TextBox = FormatOptionsTextBox(ControlNames.PropertyFormula.ToString, "")
         TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
@@ -527,17 +394,27 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
 
-        Label = FormatOptionsLabel(ControlNames.PropertyFormulaLabel.ToString, "Part number prop")
-        tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
-        ControlsDict(Label.Name) = Label
+        RowIndex += 1
 
-        'RowIndex += 1
+        CheckBox = FormatOptionsCheckBox(ControlNames.DraftsCheckModels.ToString, "Drafts -- Check model files for part number")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        RowIndex += 1
 
-        'CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run outside of Solid Edge")
-        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox = FormatOptionsCheckBox(ControlNames.DraftsCheckDraftItself.ToString, "Drafts -- Check draft itself for part number")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run task without Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
 
@@ -581,6 +458,14 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                 ErrorMessageList.Add(String.Format("{0}Select the property that contains the part number", Indent))
             End If
 
+            If (Not Me.DraftsCheckModels) And (Not Me.DraftsCheckDraftItself) And (Me.IsSelectedDraft) Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Select at least one Draft process option", Indent))
+            End If
+
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
@@ -611,10 +496,17 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim Name = Checkbox.Name
 
         Select Case Name
-            'Case ControlNames.StructuredStorageEdit.ToString
-            '    Me.StructuredStorageEdit = Checkbox.Checked
-            '    Me.RequiresSave = Not Checkbox.Checked
-            '    Me.SolidEdgeRequired = Not Checkbox.Checked
+
+            Case ControlNames.DraftsCheckModels.ToString
+                Me.DraftsCheckModels = Checkbox.Checked
+
+            Case ControlNames.DraftsCheckDraftItself.ToString
+                Me.DraftsCheckDraftItself = Checkbox.Checked
+
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -636,7 +528,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Select Case Name
             Case ControlNames.PropertyFormula.ToString
-                Me.PropertyFormula = TextBox.Text
+                Me.PropertyFormula = TextBox.Text  ' PropertySet and PropertyName extracted in PropertyFormula.Set()
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select

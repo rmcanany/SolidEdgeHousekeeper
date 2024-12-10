@@ -54,6 +54,7 @@ Public Class UtilsPropertyFilters
         If Me.NewWay Then
             PropertyFilterFormula = Me.PropertyFilter.Formula
         Else
+            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
             PropertyFilterFormula = PropertyFilterDict("0")("Formula")  ' Formula is the same for all entries.  Picking the first one.
         End If
 

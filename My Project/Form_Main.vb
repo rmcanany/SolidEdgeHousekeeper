@@ -1005,6 +1005,8 @@ Public Class Form_Main
 
 
     Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+
+    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
     Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
         Get
             Return _PropertyFilterDict
@@ -1020,6 +1022,7 @@ Public Class Form_Main
         End Set
     End Property
 
+    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
 
     Private _PropertyFilterDictJSON As String
     Public Property PropertyFilterDictJSON As String
@@ -1065,6 +1068,7 @@ Public Class Form_Main
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
+        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
         If Me.PropertyFilterDict Is Nothing Then
             Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
         End If
@@ -1245,6 +1249,7 @@ Public Class Form_Main
 
         ' Other JSON
         Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
+        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
         Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
         Me.PropertyFilterDict = Me.PropertyFilterDict
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
@@ -1424,11 +1429,13 @@ Public Class Form_Main
         If Not tf Then
             Dim FPF As New FormPropertyFilter
 
+            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
             FPF.PropertyFilterDict = Me.PropertyFilterDict
             FPF.PropertyFilters = Me.PropertyFilters
             FPF.ShowDialog()
 
             If FPF.DialogResult = DialogResult.OK Then
+                ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
                 Me.PropertyFilterDict = FPF.PropertyFilterDict
                 Me.PropertyFilters = FPF.PropertyFilters
                 ListViewFilesOutOfDate = True
@@ -4489,6 +4496,7 @@ Public Class PropertyFilter
 End Class
 
 Public Class PropertyFilterCondition
+    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
     ' PropertyFilterDict format:
     '{"0":
     '    {"Variable":"A",
