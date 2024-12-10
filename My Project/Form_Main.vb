@@ -1991,7 +1991,7 @@ Public Class Form_Main
             Dim DragDropGroupPresent As Boolean
 
             DragDropGroupPresent = False
-            For Each g As ListViewGroup In ListViewFiles.Groups
+            For Each g As ListViewGroup In ListViewSources.Groups 'ListViewFiles.Groups
                 If g.Name = "DragDrop" Then
                     DragDropGroupPresent = True
                     Exit For
@@ -2002,11 +2002,11 @@ Public Class Form_Main
                 Dim tmpItem As New ListViewItem
                 tmpItem.Text = "DragDrop"
                 'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "ASM_Folder"
                 tmpItem.Tag = "DragDrop"
                 tmpItem.Name = "DragDrop"
-                If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             End If
 
