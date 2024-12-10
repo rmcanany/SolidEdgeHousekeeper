@@ -5,6 +5,8 @@ Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Text
+
 'Imports System.Windows.Forms.VisualStyles
 
 'Imports System.Windows
@@ -2070,7 +2072,7 @@ Public Class Form_Main
             Dim DragDropGroupPresent As Boolean
 
             DragDropGroupPresent = False
-            For Each g As ListViewGroup In ListViewFiles.Groups
+            For Each g As ListViewGroup In ListViewSources.Groups 'ListViewFiles.Groups
                 If g.Name = "DragDrop" Then
                     DragDropGroupPresent = True
                     Exit For
@@ -2081,11 +2083,13 @@ Public Class Form_Main
                 Dim tmpItem As New ListViewItem
                 tmpItem.Text = "DragDrop"
                 'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem.ImageKey = "ASM_Folder"
                 tmpItem.Tag = "DragDrop"
                 tmpItem.Name = "DragDrop"
-                If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+                'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
 
             End If
 
@@ -3225,6 +3229,10 @@ Public Class Form_Main
         Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
         Dim cf As CompoundFile = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
+#If DEBUG Then
+        FindOleLinks(cf)
+#End If
+
         Dim Q = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, editbox.Text, False, PropertiesData)
 
         cf.Close()
@@ -3241,6 +3249,68 @@ Public Class Form_Main
         editbox.Hide()
 
     End Sub
+
+    Private Sub FindOleLinks(cf As CompoundFile)
+
+        Dim A As CFStorage = cf.RootStorage.GetStorage("JSite18446")
+        Console.WriteLine(GetOleLinkFromStorage(A))
+
+    End Sub
+
+    Private Function GetOleLinkFromStorage(CFStorage As CFStorage) As String
+
+        Dim ST2 = ""
+
+        Dim B As CFStream = CFStorage.GetStream(ChrW(1) & "Ole")
+        Dim D = B.GetData()
+        Dim ST = Encoding.Unicode.GetString(D)
+        Dim B_Start = ST.IndexOf(ChrW(3))
+        Dim B_End = ST.IndexOf(ChrW(1))
+        ST2 = ST.Substring(B_Start + 1, B_End - B_Start - 1)
+
+        Return ST2
+
+    End Function
+
+
+
+
+    Private Shared Sub AddNodes(node As TreeNode, storage As CFStorage)
+        Dim va As Action(Of CFItem) = Sub(item As CFItem)
+                                          Dim childNode As TreeNode = node.Nodes.Add(
+                                           item.Name,
+                                           item.Name & If(item.IsStream, " (" & item.Size & " bytes )", ""))
+
+                                          childNode.Tag = item
+
+                                          If TypeOf item Is CFStorage Then
+                                              ' Storage
+                                              childNode.ImageIndex = 0
+                                              childNode.SelectedImageIndex = 0
+
+                                              ' Recursion into the storage
+                                              AddNodes(childNode, CType(item, CFStorage))
+                                          Else
+                                              ' Stream
+                                              childNode.ImageIndex = 1
+                                              childNode.SelectedImageIndex = 1
+                                          End If
+                                      End Sub
+
+        ' Visit NON-recursively (first level only)
+        storage.VisitEntries(va, False)
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
 
     Private Sub editbox_KeyUp(sender As Object, e As KeyEventArgs)
 
