@@ -434,8 +434,6 @@ Public Class TaskEditProperties
 
                 If Proceed Then
                     Try
-                        'FindString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False,
-                        '                                      TemplatePropertyDict)
                         FindString = UC.SubstitutePropertyFormula(
                             Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
                     Catch ex As Exception

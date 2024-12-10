@@ -68,28 +68,6 @@ Public Class UtilsTopLevelAssembly
 
         If Report Then
             ReportUnrelatedFiles(TopLevelFolders, FoundFiles)
-
-            'If UnrelatedFiles.Count > 0 Then
-            '    Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
-            '    Dim LogfileName As String
-            '    'Dim msg As String
-            '    LogfileName = IO.Path.GetTempPath + "\Housekeeper_" + Timestamp + "_Unrelated_Files.log"
-
-            '    Try
-            '        Using writer As New IO.StreamWriter(LogfileName, True)
-            '            For Each Filename In UnrelatedFiles
-            '                ' Filename = Filename.Replace(TopLevelFolder, "")
-            '                writer.WriteLine(String.Format(Filename))
-            '            Next
-            '        End Using
-
-            '        Process.Start("Notepad.exe", LogfileName)
-
-            '    Catch ex As Exception
-            '    End Try
-
-            'End If
-
         End If
 
         DMApp.Quit()
@@ -566,10 +544,6 @@ Public Class UtilsTopLevelAssembly
         ' Deal with FOA files
         Dim UC As New UtilsCommon
         Filename = UC.SplitFOAName(Filename)("Filename")
-        'If Filename.Contains("!") Then
-        '    Filename = Filename.Split("!"c)(0)  ' c:\project\foa.asm!Member1 > c:\project\foa.asm
-        'End If
-
 
         If FileIO.FileSystem.FileExists(Filename) Then
             tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)
@@ -582,7 +556,6 @@ Public Class UtilsTopLevelAssembly
                 Try
 
                     ' Get any draft files containing this file.
-                    ' WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, DMDoc.FullName, IsDriveIndexed, DraftAndModelSameName)
                     WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, Filename, IsDriveIndexed, DraftAndModelSameName)
                     For Each WhereUsedFile In WhereUsedFiles
                         Extension = IO.Path.GetExtension(WhereUsedFile)
@@ -617,15 +590,10 @@ Public Class UtilsTopLevelAssembly
                                     LinkedDocName = LinkedDoc.FullName
 
                                     LinkedDocName = UC.SplitFOAName(LinkedDocName)("Filename")
-                                    'If LinkedDocName.Contains("!") Then
-                                    '    LinkedDocName = LinkedDocName.Split("!"c)(0)
-                                    'End If
 
                                     Extension = IO.Path.GetExtension(LinkedDocName)
 
                                     If ValidExtensions.Contains(Extension) Then
-                                        'AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDocName, AllLinkedFilenames,
-                                        '                                         TopLevelFolder, AllFilenames, IsDriveIndexed)
                                         AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
                                                                              TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
                                     End If
@@ -755,7 +723,6 @@ Public Class UtilsTopLevelAssembly
 
     Private Function GetIndexedDrives() As List(Of String)
 
-        'Dim SearchScopeFilename As String = _mainInstance.TextBoxFastSearchScopeFilename.Text
         Dim SearchScopeFilename As String = FMain.TextBoxFastSearchScopeFilename.Text
 
         Dim SearchScope As String() = Nothing

@@ -50,19 +50,6 @@ Public Class FormPropertyPicker
 
     Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
 
-        'If Form_Main.TemplatePropertyDict IsNot Nothing Then
-        '    If Form_Main.TemplatePropertyDict.Keys.Contains(ComboBoxPropertyName.Text) Then
-        '        Dim PropertySet = Form_Main.TemplatePropertyDict(ComboBoxPropertyName.Text)("PropertySet")
-        '        If PropertySet = "Duplicate" Then
-        '            ComboBoxPropertySet.Text = ""
-        '        ElseIf PropertySet = "Custom" Then
-        '            ComboBoxPropertySet.Text = "Custom"
-        '        Else
-        '            ComboBoxPropertySet.Text = "System"
-        '        End If
-        '    End If
-        'End If
-
         If Form_Main.PropertiesData IsNot Nothing Then
             Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(ComboBoxPropertyName.Text)
             If tmpPropertyData IsNot Nothing Then
@@ -94,7 +81,6 @@ Public Class FormPropertyPicker
         ButtonPropOnly.Image = My.Resources.Unchecked
         ButtonPropAndIndex.Image = My.Resources.Checked
 
-        'Me.PropertyString = String.Format("%{{{0}}}", ComboBoxProperties.Text)
     End Sub
 
     Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAll.Click
@@ -103,13 +89,12 @@ Public Class FormPropertyPicker
             ButtonShowAll.Image = My.Resources.Checked
 
             ComboBoxPropertyName.Items.Clear()
-            'For Each PropName As String In Form_Main.TemplatePropertyDict.Keys
-            '    ComboBoxPropertyName.Items.Add(PropName)
-            'Next
+
             For Each PropName As String In Form_Main.PropertiesData.GetAvailableList
                 ComboBoxPropertyName.Items.Add(PropName)
             Next
-            ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
+
+            'ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString
         Else
             ButtonShowAll.Image = My.Resources.Unchecked
 
@@ -118,9 +103,9 @@ Public Class FormPropertyPicker
                 ComboBoxPropertyName.Items.Add(PropName)
             Next
 
-            If ComboBoxPropertyName.Items.Count > 0 Then ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString 'Check the items count in case of PropertyList not populated
-
         End If
+
+        If ComboBoxPropertyName.Items.Count > 0 Then ComboBoxPropertyName.Text = ComboBoxPropertyName.Items(0).ToString 'Check the items count in case of PropertyList not populated
 
     End Sub
 

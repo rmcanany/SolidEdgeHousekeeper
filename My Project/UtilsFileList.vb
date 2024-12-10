@@ -420,6 +420,9 @@ Public Class UtilsFileList
 
         Dim tmpList As New List(Of String)
 
+        ' 20241129 adding top level folder to directory search list.  RM
+        tmpList.Add(Path)
+
         GetMyDirectories(Path, tmpList)
 
         Return tmpList
