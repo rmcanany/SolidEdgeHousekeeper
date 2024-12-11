@@ -986,29 +986,118 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function FindOleLinks(cf As CompoundFile) As Boolean
+    Public Function FindOleLinks(cf As CompoundFile, FullName As String) As List(Of Dictionary(Of String, String))
 
-        Dim Success As Boolean = True
+        ' Returned LinkDict format
+        ' {
+        '   {"DOSName": ""}          MSDos 8.3 format (always?)
+        '   {"AbsoluteName": ""}     Unicode format, full path file name.
+        '   {"RelativeName": ""}     Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"ContainerName": ""}    Unicode format, eg. ".\part1.par"
+        ' }
+
+        Dim LinkList As New List(Of Dictionary(Of String, String))
+
+        Dim Proceed As Boolean = True
+
+        'Dim fs As FileStream = Nothing
+        'Dim cf As CompoundFile = Nothing
+        Dim dsiStream As CFStream = Nothing
+
         Dim dsiStorages As New List(Of String)
         Dim dsiStreams As New List(Of String)
-        cf.RootStorage.VisitEntries(Sub(item) dsiStorages.Add(item.Name), recursive:=False)
 
-        For Each s As String In dsiStorages
-            If (s Like "JSite*") And (Not s = "JSitesList") Then
-                dsiStreams.Clear()
-                Dim A As CFStorage = cf.RootStorage.GetStorage(s)
-                A.VisitEntries(Sub(item) dsiStreams.Add(item.Name), recursive:=False)
-                If dsiStreams.Contains(String.Format("{0}Ole", ChrW(1))) Then
-                    Success = GetOleLinkFromStorage(A)
+        'If Proceed Then
+        '    Try
+        '        fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+        '    Catch ex As Exception
+        '        Proceed = False
+        '    End Try
+        'End If
+
+        If Proceed Then
+            'Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+            'cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+            Dim tmpStorage As CFStorage = FOA_Storage(cf)
+            If IsNothing(tmpStorage) Then tmpStorage = cf.RootStorage
+
+            tmpStorage.VisitEntries(Sub(item) dsiStorages.Add(item.Name), recursive:=False)
+
+            For Each s As String In dsiStorages
+                If (s Like "JSite*") And (Not s = "JSitesList") Then
+                    dsiStreams.Clear()
+                    Dim A As CFStorage = tmpStorage.GetStorage(s)
+                    A.VisitEntries(Sub(item) dsiStreams.Add(item.Name), recursive:=False)
+                    If dsiStreams.Contains(String.Format("{0}Ole", ChrW(1))) Then
+                        Dim LinkDict As Dictionary(Of String, String) = GetOleLinkFromStorage(A)
+                        LinkDict = SubstituteRelativePath(LinkDict, FullName)
+                        LinkList.Add(LinkDict)
+                    End If
                 End If
-            End If
-        Next
+            Next
 
-        Return Success
+        End If
+
+        Return LinkList
 
     End Function
 
-    Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As Boolean
+    Private Function SubstituteRelativePath(
+        LinkDict As Dictionary(Of String, String),
+        FullName As String
+        ) As Dictionary(Of String, String)
+
+        ' LinkDict format
+        ' {
+        '   {"DOSName": ""}          MSDos 8.3 format (always?)
+        '   {"AbsoluteName": ""}     Unicode format, full path file name.
+        '   {"RelativeName": ""}     Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"ContainerName": ""}    Unicode format, eg. ".\part1.par"
+        ' }
+
+        ' Examples
+
+        ' The full name is the container file with the links being processed
+        ' Note the extension.  Currently only dft files are processed.
+        ' FullName = "C:\projects\project1\part1.dft"
+
+        ' LinkDict("RelativeName") = "..\..\common\fasteners\part1.par
+        ' NewRelativeName = "C:\common\fasteners\part1.par"
+        ' ContainerName = ".\part1.par"
+
+        ' LinkDict("RelativeName") = ".\part1.par"
+        ' NewRelativeName = "C:\projects\project1\part1.par"
+        ' ContainerName = ".\part1.par"
+
+        Dim FullNameDirectory As String = IO.Path.GetDirectoryName(FullName) ' C:\project\part.dft -> C:\project
+
+        Dim LinkFilename As String = Nothing
+        Dim RelativeName As String = LinkDict("RelativeName")
+        Dim NewRelativeName As String
+        Dim ContainerName As String
+
+        If Not LinkDict("AbsoluteName") = "" Then
+            LinkFilename = IO.Path.GetFileName(LinkDict("AbsoluteName"))
+        ElseIf Not LinkDict("RelativeName") = "" Then
+            LinkFilename = IO.Path.GetFileName(LinkDict("RelativeName"))
+        End If
+
+        If LinkFilename IsNot Nothing Then
+            ContainerName = String.Format(".\", LinkFilename)
+
+
+        End If
+        ' Modify RelativeName as required
+        MsgBox("Implement relative and container names")
+
+        LinkDict("RelativeName") = NewRelativeName
+        LinkDict("ContainerName") = ContainerName
+
+        Return LinkDict
+    End Function
+
+    Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As Dictionary(Of String, String)
 
         ' The OLE stream stores three filename formats, or none if the drawing view doesn't have a model link.
 
@@ -1031,14 +1120,16 @@ Public Class UtilsCommon
         ' THIRD FILENAME: Relative path filename, Ascii format, need to convert to UTF16 for possible unicode characters
         '                 Based on relative motion value, need to prepend '.\' or the correct number of '..\' to the filename
 
+        Dim LinkDict As New Dictionary(Of String, String)
 
         Dim OLEStream As CFStream = CFStorage.GetStream(ChrW(1) & "Ole")
         Dim ByteArray = OLEStream.GetData()
         Dim tmpByteList As New List(Of Byte)
 
-        Dim AsciiFullname As String = ""
-        Dim UnicodeFullname As String = ""
-        Dim RelativeFullname As String = ""
+        Dim DOSName As String = ""
+        Dim AbsoluteName As String = ""
+        Dim RelativeName As String = ""
+        Dim ContainerName As String = ""
         Dim RelativeMotion As Integer
 
         Dim iS1 As Integer
@@ -1063,9 +1154,9 @@ Public Class UtilsCommon
         ' ###### CHECK FOR DRAWING VIEWS WITH NO MODEL ######
         If ByteArray.Count <= iS1 Then
             Proceed = False
-            AsciiFullname = "no model links found"
-            UnicodeFullname = "no model links found"
-            RelativeFullname = "no model links found"
+            DOSName = "no model links found"
+            AbsoluteName = "no model links found"
+            RelativeName = "no model links found"
         End If
 
         ' ###### FIRST FILENAME END IDX ######
@@ -1115,7 +1206,7 @@ Public Class UtilsCommon
                 tmpByteList.Add(ByteArray(idx))
             Next
             Try
-                AsciiFullname = Encoding.ASCII.GetString(tmpByteList.ToArray)
+                DOSName = Encoding.ASCII.GetString(tmpByteList.ToArray)
             Catch ex As Exception
                 Proceed = False
             End Try
@@ -1128,7 +1219,7 @@ Public Class UtilsCommon
                 tmpByteList.Add(ByteArray(idx))
             Next
             Try
-                UnicodeFullname = Encoding.Unicode.GetString(tmpByteList.ToArray)
+                AbsoluteName = Encoding.Unicode.GetString(tmpByteList.ToArray)
             Catch ex As Exception
                 Proceed = False
             End Try
@@ -1153,11 +1244,11 @@ Public Class UtilsCommon
                 tmpByteList.Add(0)  ' Converting from ascii to unicode
             Next
             Try
-                RelativeFullname = Encoding.Unicode.GetString(tmpByteList.ToArray)
-                If RelativeFullname(0) = "\" Then
-                    RelativeFullname = RelativeFullname.Substring(1, RelativeFullname.Count - 1)
+                RelativeName = Encoding.Unicode.GetString(tmpByteList.ToArray)
+                If RelativeName(0) = "\" Then
+                    RelativeName = RelativeName.Substring(1, RelativeName.Count - 1)
                 End If
-                RelativeFullname = String.Format("{0}{1}", Prefix, RelativeFullname)  ' Does this preserve unicode format?
+                RelativeName = String.Format("{0}{1}", Prefix, RelativeName)  ' Does this preserve unicode format?
             Catch ex As Exception
                 Proceed = False
             End Try
@@ -1187,12 +1278,19 @@ Public Class UtilsCommon
         'End Try
 
 
-        ' Missing model link not an actual error.
-        If ByteArray.Count <= iS1 Then
-            Proceed = True
-        End If
+        '' Missing model link not an actual error.
+        'If ByteArray.Count <= iS1 Then
+        '    Proceed = True
+        'End If
 
-        Return Proceed
+        'Return Proceed
+
+        LinkDict("DOSName") = DOSName
+        LinkDict("AbsoluteName") = AbsoluteName
+        LinkDict("RelativeName") = RelativeName
+        LinkDict("ContainerName") = ContainerName
+
+        Return LinkDict
 
     End Function
 

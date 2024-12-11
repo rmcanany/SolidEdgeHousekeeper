@@ -424,31 +424,31 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
                     End If
 
-                    'If Me.DraftsCheckModels Then
-                    '    If Proceed Then
-                    '        Dim ChildName As String
+                    If Me.DraftsCheckModels Then
+                        If Proceed Then
+                            Dim ChildName As String
 
-                    '        Dim something = UC.GetOleLinkFromStorage(cfParent)
-
-
-                    '        Try
-                    '            fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
-                    '        Catch ex As Exception
-                    '            Proceed = False
-                    '            ExitStatus = 1
-                    '            ErrorMessageList.Add("Unable to open file")
-                    '        End Try
-                    '    End If
+                            Dim something = UC.FindOleLinks(cfParent, FullName)
 
 
-                    '    If Proceed Then
-                    '        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                    '        cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+                            Try
+                                fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
+                            Catch ex As Exception
+                                Proceed = False
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Unable to open file")
+                            End Try
+                        End If
 
-                    '    End If
+
+                        If Proceed Then
+                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                            cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+
+                        End If
 
 
-                    'End If
+                    End If
 
                 Case Else
                     MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
