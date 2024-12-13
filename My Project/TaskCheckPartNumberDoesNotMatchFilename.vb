@@ -81,7 +81,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End Set
     End Property
 
-
+    Public Property LinkManagementOrder As List(Of String)
 
 
     Private _AutoHideOptions As Boolean
@@ -141,6 +141,12 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.StructuredStorageEdit = False
 
         Me.PropertiesData = New PropertiesData
+
+        If Form_Main IsNot Nothing Then
+            If Form_Main.LinkManagementOrder IsNot Nothing Then
+                Me.LinkManagementOrder = Form_Main.LinkManagementOrder
+            End If
+        End If
 
 
     End Sub
@@ -430,7 +436,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
                     If Me.DraftsCheckModels Then
 
-                        Dim LinkList = UC.FindOleLinks(cfParent, FullName)
+                        Dim LinkList = UC.FindOleLinks(cfParent, FullName)  ' Format defined in FindOleLinks()
 
                         If LinkList.Count > 0 Then
 
@@ -450,7 +456,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                                 Catch ex As Exception
                                     Proceed = False
                                     ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Unable to open model {0}", ChildName))
+                                    ErrorMessageList.Add(String.Format("Unable to open model '{0}'", ChildName))
                                 End Try
 
                                 If Proceed Then
@@ -620,6 +626,14 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Select at least one Draft process option", Indent))
+            End If
+
+            If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder Is Nothing) Then
+                If Not ErrorMessageList.Contains(Me.Description) Then
+                    ErrorMessageList.Add(Me.Description)
+                End If
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("{0}Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page", Indent))
             End If
 
         End If

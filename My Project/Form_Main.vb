@@ -174,6 +174,9 @@ Public Class Form_Main
         End Set
     End Property
 
+    Public Property LinkManagementOrder As List(Of String)
+
+
 
     ' ###### DOCUMENT STATUS ######
 
@@ -1226,9 +1229,12 @@ Public Class Form_Main
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
 
+        If IO.File.Exists(Me.LinkManagementFilename) Then
+            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+        End If
 
 
-        UP.CheckVersionFormat(Me.Version)
+        UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 
         If Me.CheckForNewerVersion Then
             UP.CheckForNewerVersion(Me.Version)
@@ -1421,6 +1427,7 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.LinkManagementFilename = tmpFileDialog.FileName
+
         End If
 
     End Sub

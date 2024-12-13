@@ -570,7 +570,11 @@ Public Class UtilsPreferences
 
         Dim KeepProps As New List(Of String)
         KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
-        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "LinkManagementFilename", "TLAIgnoreIncludeInReports"})
+        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
+
+        'KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
+        KeepProps.AddRange({"LinkManagementFilename"})
+
         KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
         KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
         KeepProps.AddRange({"SortNone", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
@@ -806,6 +810,45 @@ Public Class UtilsPreferences
         End If
 
     End Function
+
+
+
+    Public Function GetLinkManagementOrder() As List(Of String)
+
+        Dim LinkManagementFilename As String = Form_Main.TextBoxLinkManagementFilename.Text
+
+        Dim Contents As String() = Nothing
+        Dim CommentString As String = "\\ "
+        Dim Line As String
+        Dim LinkManagementOrder As New List(Of String)
+        Dim msg As String = ""
+
+        Dim ValidOrders As New List(Of String)
+        ValidOrders.AddRange({"CONTAINER", "RELATIVE", "ABSOLUTE"})
+
+        Try
+            Contents = IO.File.ReadAllLines(LinkManagementFilename)
+        Catch ex As Exception
+            msg = String.Format("LinkMgmt.txt file '{0}' (on Configuration Tab) not found.{1}", LinkManagementFilename, vbCrLf)
+            MsgBox(msg)
+            'Exit Function
+        End Try
+
+        If Contents IsNot Nothing Then
+            If Contents.Count > 0 Then
+                For Each item As String In Contents
+                    Line = item.Trim.ToUpper
+                    If ValidOrders.Contains(Line) Then
+                        LinkManagementOrder.Add(Line)
+                    End If
+                Next
+            End If
+
+        End If
+
+        Return LinkManagementOrder
+    End Function
+
 
 
 
