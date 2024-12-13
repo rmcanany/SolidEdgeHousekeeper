@@ -25,7 +25,7 @@ Partial Class Form_Main
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
+        Dim ListViewGroup2 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
@@ -104,6 +104,9 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel5 = New Housekeeper.ExTableLayoutPanel()
         Me.ButtonFastSearchScopeFilename = New System.Windows.Forms.Button()
         Me.TextBoxFastSearchScopeFilename = New System.Windows.Forms.TextBox()
+        Me.ExTableLayoutPanel10 = New Housekeeper.ExTableLayoutPanel()
+        Me.ButtonLinkManagementFilename = New System.Windows.Forms.Button()
+        Me.TextBoxLinkManagementFilename = New System.Windows.Forms.TextBox()
         Me.TabPageStatus = New System.Windows.Forms.TabPage()
         Me.ExTableLayoutPanel6 = New Housekeeper.ExTableLayoutPanel()
         Me.CheckBoxProcessAsAvailable = New System.Windows.Forms.CheckBox()
@@ -258,6 +261,7 @@ Partial Class Form_Main
         Me.TabPageTopLevelAssy.SuspendLayout()
         Me.ExTableLayoutPanel4.SuspendLayout()
         Me.ExTableLayoutPanel5.SuspendLayout()
+        Me.ExTableLayoutPanel10.SuspendLayout()
         Me.TabPageStatus.SuspendLayout()
         Me.ExTableLayoutPanel6.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -397,9 +401,9 @@ Partial Class Form_Main
         Me.ListViewSources.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListViewSources.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewSources.FullRowSelect = True
-        ListViewGroup1.Header = "File sources"
-        ListViewGroup1.Name = "Sources"
-        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup1})
+        ListViewGroup2.Header = "File sources"
+        ListViewGroup2.Name = "Sources"
+        Me.ListViewSources.Groups.AddRange(New System.Windows.Forms.ListViewGroup() {ListViewGroup2})
         Me.ListViewSources.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListViewSources.HideSelection = False
         Me.ListViewSources.Location = New System.Drawing.Point(0, 0)
@@ -993,10 +997,11 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLABottomUp, 0, 7)
         Me.ExTableLayoutPanel4.Controls.Add(Me.RadioButtonTLATopDown, 0, 6)
         Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel5, 0, 9)
+        Me.ExTableLayoutPanel4.Controls.Add(Me.ExTableLayoutPanel10, 0, 10)
         Me.ExTableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel4.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel4.Name = "ExTableLayoutPanel4"
-        Me.ExTableLayoutPanel4.RowCount = 11
+        Me.ExTableLayoutPanel4.RowCount = 12
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -1007,8 +1012,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel4.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel4.TabIndex = 22
         Me.ExTableLayoutPanel4.Task = Nothing
@@ -1161,6 +1166,41 @@ Partial Class Form_Main
         Me.TextBoxFastSearchScopeFilename.Name = "TextBoxFastSearchScopeFilename"
         Me.TextBoxFastSearchScopeFilename.Size = New System.Drawing.Size(367, 23)
         Me.TextBoxFastSearchScopeFilename.TabIndex = 15
+        '
+        'ExTableLayoutPanel10
+        '
+        Me.ExTableLayoutPanel10.ColumnCount = 2
+        Me.ExTableLayoutPanel10.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.ExTableLayoutPanel10.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel10.Controls.Add(Me.ButtonLinkManagementFilename, 0, 0)
+        Me.ExTableLayoutPanel10.Controls.Add(Me.TextBoxLinkManagementFilename, 1, 0)
+        Me.ExTableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel10.Location = New System.Drawing.Point(3, 333)
+        Me.ExTableLayoutPanel10.Name = "ExTableLayoutPanel10"
+        Me.ExTableLayoutPanel10.RowCount = 1
+        Me.ExTableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.ExTableLayoutPanel10.Size = New System.Drawing.Size(521, 34)
+        Me.ExTableLayoutPanel10.TabIndex = 23
+        Me.ExTableLayoutPanel10.Task = Nothing
+        '
+        'ButtonLinkManagementFilename
+        '
+        Me.ButtonLinkManagementFilename.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtonLinkManagementFilename.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonLinkManagementFilename.Name = "ButtonLinkManagementFilename"
+        Me.ButtonLinkManagementFilename.Size = New System.Drawing.Size(144, 28)
+        Me.ButtonLinkManagementFilename.TabIndex = 0
+        Me.ButtonLinkManagementFilename.Text = "LinkMgmt.txt"
+        Me.ButtonLinkManagementFilename.UseVisualStyleBackColor = True
+        '
+        'TextBoxLinkManagementFilename
+        '
+        Me.TextBoxLinkManagementFilename.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBoxLinkManagementFilename.Location = New System.Drawing.Point(153, 5)
+        Me.TextBoxLinkManagementFilename.Name = "TextBoxLinkManagementFilename"
+        Me.TextBoxLinkManagementFilename.Size = New System.Drawing.Size(365, 23)
+        Me.TextBoxLinkManagementFilename.TabIndex = 1
         '
         'TabPageStatus
         '
@@ -2783,6 +2823,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel4.PerformLayout()
         Me.ExTableLayoutPanel5.ResumeLayout(False)
         Me.ExTableLayoutPanel5.PerformLayout()
+        Me.ExTableLayoutPanel10.ResumeLayout(False)
+        Me.ExTableLayoutPanel10.PerformLayout()
         Me.TabPageStatus.ResumeLayout(False)
         Me.ExTableLayoutPanel6.ResumeLayout(False)
         Me.ExTableLayoutPanel6.PerformLayout()
@@ -3040,4 +3082,7 @@ Partial Class Form_Main
     Friend WithEvents ColumnHeader2 As ColumnHeader
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents BT_AddSingleFiles As ToolStripButton
+    Friend WithEvents ExTableLayoutPanel10 As ExTableLayoutPanel
+    Friend WithEvents ButtonLinkManagementFilename As Button
+    Friend WithEvents TextBoxLinkManagementFilename As TextBox
 End Class

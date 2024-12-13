@@ -329,8 +329,12 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Dim Filename As String = IO.Path.GetFileName(FullName)
 
+        Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
         Dim ExtensionParent As String = IO.Path.GetExtension(FullName)
-        Dim ExtensionChild As String
+        'Dim ExtensionChild As String
+
+        Dim ChildNames As New List(Of String)
+        Dim ChildName As String
 
         Dim UC As New UtilsCommon
 
@@ -425,28 +429,67 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                     End If
 
                     If Me.DraftsCheckModels Then
-                        If Proceed Then
-                            Dim ChildName As String
 
-                            Dim something = UC.FindOleLinks(cfParent, FullName)
+                        Dim LinkList = UC.FindOleLinks(cfParent, FullName)
 
+                        If LinkList.Count > 0 Then
 
-                            Try
-                                fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
-                            Catch ex As Exception
-                                Proceed = False
+                            For Each LinkDict As Dictionary(Of String, String) In LinkList
+
+                                Proceed = True
+
+                                ChildName = LinkDict("RelativeName")
+                                ChildNames.Add(ChildName)
+
+                                'If Not UC.FilenameIsOK(ChildName) Then
+                                '    MsgBox(ChildName)
+                                'End If
+
+                                Try
+                                    fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
+                                Catch ex As Exception
+                                    Proceed = False
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Unable to open model {0}", ChildName))
+                                End Try
+
+                                If Proceed Then
+                                    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                                    cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+                                End If
+
+                                Proceed = Proceed And IO.File.Exists(ChildName)
+                                Proceed = Proceed And ValidExtensionsList.Contains(IO.Path.GetExtension(ChildName))
+
+                                If Proceed Then
+                                    PartNumber = UC.GetOLEPropValue(cfChild, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
+                                    If PartNumber IsNot Nothing Then  ' Not an error, but no match possible.
+                                        If Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                            PartNumberFound = True
+                                            Exit For
+                                        End If
+                                    End If
+
+                                End If
+
+                                If cfChild IsNot Nothing Then
+                                    cfChild.Close()
+                                End If
+                                If fsChild IsNot Nothing Then
+                                    fsChild.Close()
+                                End If
+
+                            Next
+
+                            If (Not PartNumberFound) And (ChildNames.Count > 0) Then
                                 ExitStatus = 1
-                                ErrorMessageList.Add("Unable to open file")
-                            End Try
-                        End If
-
-
-                        If Proceed Then
-                            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                            cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+                                ErrorMessageList.Add(String.Format("Part number in the following models not found in filename '{0}'", Filename))
+                                For Each ChildName In ChildNames
+                                    ErrorMessageList.Add(String.Format("    {0}", ChildName))
+                                Next
+                            End If
 
                         End If
-
 
                     End If
 
@@ -456,6 +499,21 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
             End Select
 
         End If
+
+        If cfChild IsNot Nothing Then
+            cfChild.Close()
+        End If
+        If fsChild IsNot Nothing Then
+            fsChild.Close()
+        End If
+
+        If cfParent IsNot Nothing Then
+            cfParent.Close()
+        End If
+        If fsParent IsNot Nothing Then
+            fsParent.Close()
+        End If
+
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 

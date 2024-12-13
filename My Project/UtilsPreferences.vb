@@ -570,7 +570,7 @@ Public Class UtilsPreferences
 
         Dim KeepProps As New List(Of String)
         KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
-        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
+        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "LinkManagementFilename", "TLAIgnoreIncludeInReports"})
         KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
         KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
         KeepProps.AddRange({"SortNone", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})

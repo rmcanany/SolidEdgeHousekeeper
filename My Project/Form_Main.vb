@@ -161,6 +161,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _LinkManagementFilename As String
+    Public Property LinkManagementFilename As String
+        Get
+            Return _LinkManagementFilename
+        End Get
+        Set(value As String)
+            _LinkManagementFilename = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxLinkManagementFilename.Text = value
+            End If
+        End Set
+    End Property
+
 
     ' ###### DOCUMENT STATUS ######
 
@@ -1396,10 +1409,22 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.FastSearchScopeFilename = tmpFileDialog.FileName
         End If
-        ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
+        'ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
         'ReconcileFormChanges()
 
     End Sub
+
+    Private Sub ButtonLinkManagementFilename_Click(sender As Object, e As EventArgs) Handles ButtonLinkManagementFilename.Click
+        Dim tmpFileDialog As New OpenFileDialog
+        tmpFileDialog.Title = "Select a link management file"
+        tmpFileDialog.Filter = "Link Management Documents|*.txt"
+
+        If tmpFileDialog.ShowDialog() = DialogResult.OK Then
+            Me.LinkManagementFilename = tmpFileDialog.FileName
+        End If
+
+    End Sub
+
 
     Private Sub new_ButtonFileSearchDelete_Click(sender As Object, e As EventArgs) Handles new_ButtonFileSearchDelete.Click
         If Not ComboBoxFileWildcard.Text = "" Then
@@ -3543,8 +3568,6 @@ Public Class Form_Main
 
 
     End Sub
-
-
 
 End Class
 
