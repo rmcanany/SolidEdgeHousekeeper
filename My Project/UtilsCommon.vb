@@ -990,34 +990,24 @@ Public Class UtilsCommon
 
         ' Returned LinkDict format
         ' {
-        '   {"DOSName": ""}          MSDos 8.3 format (always?)
-        '   {"AbsoluteName": ""}     Unicode format, full path file name.
-        '   {"RelativeName": ""}     Unicode format.  A full-path file name is returned.  Relative differences handled here.
-        '   {"ContainerName": ""}    Unicode format, eg. ".\part1.par"
+        '   {"DOSName": ""}       MSDos 8.3 format (always?)
+        '   {"ABSOLUTE": ""}      Unicode format, full path file name.
+        '   {"RELATIVE": ""}      Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"CONTAINER": ""}     Unicode format, eg. ".\part1.par"
+        '   {"ExitStatus": ""}    0 or 1
+        '   {"ErrorMessage": ""}  Some text:::More text:::More text
         ' }
 
         Dim LinkList As New List(Of Dictionary(Of String, String))
 
         Dim Proceed As Boolean = True
 
-        'Dim fs As FileStream = Nothing
-        'Dim cf As CompoundFile = Nothing
         Dim dsiStream As CFStream = Nothing
 
         Dim dsiStorages As New List(Of String)
         Dim dsiStreams As New List(Of String)
 
-        'If Proceed Then
-        '    Try
-        '        fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-        '    Catch ex As Exception
-        '        Proceed = False
-        '    End Try
-        'End If
-
         If Proceed Then
-            'Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            'cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
 
             Dim tmpStorage As CFStorage = FOA_Storage(cf)
             If IsNothing(tmpStorage) Then tmpStorage = cf.RootStorage
@@ -1029,14 +1019,20 @@ Public Class UtilsCommon
                     dsiStreams.Clear()
                     Dim A As CFStorage = tmpStorage.GetStorage(s)
                     A.VisitEntries(Sub(item) dsiStreams.Add(item.Name), recursive:=False)
-                    If dsiStreams.Contains(String.Format("{0}Ole", ChrW(1))) Then
-                        Dim LinkDict As Dictionary(Of String, String) = GetOleLinkFromStorage(A)
-                        If LinkDict IsNot Nothing Then
-                            LinkDict = SubstituteRelativePath(LinkDict, FullName)
+
+                    If (dsiStreams.Contains(String.Format("{0}Ole", ChrW(1)))) And (dsiStreams.Contains("JProperties")) Then
+                        If CheckJProperties(A) Then
+                            Dim LinkDict As Dictionary(Of String, String) = GetOleLinkFromStorage(A)
+                            If LinkDict IsNot Nothing Then
+                                LinkDict = SubstituteRelativePath(LinkDict, FullName)
+                            End If
+                            If LinkDict IsNot Nothing Then
+                                LinkList.Add(LinkDict)
+                            End If
+                        Else
+                            'MsgBox(String.Format("JProperties unrecognized format in '{0}'", FullName))
                         End If
-                        If LinkDict IsNot Nothing Then
-                            LinkList.Add(LinkDict)
-                        End If
+
                     End If
                 End If
             Next
@@ -1047,6 +1043,39 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function CheckJProperties(CFStorage As CFStorage) As Boolean
+
+        ' Checks if the JProperties stream contains the following byte array
+        ' 4F 4C 45 53 40 00 01 00
+
+        ' The JProperties stream for Non-SE links appears to have different values
+
+        Dim ValidStream As Boolean = True
+
+        Dim OLEStream As CFStream = CFStorage.GetStream("JProperties")
+        Dim ByteArray As Byte() = OLEStream.GetData()
+
+        Dim ValidArray As Byte() = {&H4F, &H4C, &H45, &H53, &H40, &H0, &H1, &H0}
+
+        If Not ByteArray.Count = ValidArray.Count Then
+            ValidStream = False
+        End If
+
+        If ValidStream Then
+            ' Note the last ValidArray byte is not checked.
+            ' It appears to be some sort of file counter
+            'For i = 0 To ValidArray.Count - 1
+            For i = 0 To ValidArray.Count - 2
+                If Not ByteArray(i) = ValidArray(i) Then
+                    ValidStream = False
+                    Exit For
+                End If
+            Next
+        End If
+
+        Return ValidStream
+    End Function
+
     Private Function SubstituteRelativePath(
         LinkDict As Dictionary(Of String, String),
         FullName As String
@@ -1054,10 +1083,12 @@ Public Class UtilsCommon
 
         ' LinkDict format
         ' {
-        '   {"DOSName": ""}          MSDos 8.3 format (always?)
-        '   {"AbsoluteName": ""}     Unicode format, full path file name.
-        '   {"RelativeName": ""}     Unicode format.  A full-path file name is returned.  Relative differences handled here.
-        '   {"ContainerName": ""}    Unicode format, eg. ".\part1.par"
+        '   {"DOSName": ""}       MSDos 8.3 format (always?)
+        '   {"ABSOLUTE": ""}      Unicode format, full path file name.
+        '   {"RELATIVE": ""}      Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"CONTAINER": ""}     Unicode format, eg. ".\part1.par"
+        '   {"ExitStatus": ""}    0 or 1
+        '   {"ErrorMessage": ""}  Some text:::More text
         ' }
 
         ' Examples
@@ -1075,54 +1106,36 @@ Public Class UtilsCommon
         ' NewRelativeName = "C:\common\fasteners\part1.par"
         ' ContainerName = ".\part1.par"
 
-
-        '' testing
-        'Dim testing As Boolean = False
-        'If testing Then
-        '    Dim P1 = "C:\projects\project1"
-        '    Dim P2 = ".\part1.par"
-        '    Dim P3 = Path.GetFullPath(Path.Combine(P1, P2))
-
-        '    P2 = "..\..\common\fasteners\part1.par"
-        '    P3 = Path.GetFullPath(Path.Combine(P1, P2))
-        '    Dim i = 0
-
-        '    P2 = ".\sub\part1.par"
-        '    P3 = Path.GetFullPath(Path.Combine(P1, P2))
-        '    i = 0
-        'End If
-
-
         Dim Success As Boolean = True
         Dim tf As Boolean
 
         Dim FullNameDirectory As String = IO.Path.GetDirectoryName(FullName) ' C:\project\part.dft -> C:\project
 
         Dim LinkFilename As String = Nothing
-        Dim OldRelativeName As String = LinkDict("RelativeName")
+        Dim OldRelativeName As String = LinkDict("RELATIVE")
         Dim NewRelativeName As String = ""
         Dim ContainerName As String = ""
 
-        ' ###### Eventually need guidance from LinkMgmt.txt for order ######
-        ' Assuming the relative name is usable for the filename manipulations
-        'If Not FilenameIsOK(LinkDict("AbsoluteName")) Then
-        '    MsgBox(LinkDict("AbsoluteName"))
-        'End If
-        If Not LinkDict("AbsoluteName") = "" Then
-            LinkFilename = IO.Path.GetFileName(LinkDict("AbsoluteName"))
-        ElseIf Not LinkDict("RelativeName") = "" Then
-            LinkFilename = IO.Path.GetFileName(LinkDict("RelativeName"))
+        ' The link's base filename should be the same, no matter the source.  Hopefully.
+        If Not LinkDict("ABSOLUTE") = "" Then
+            LinkFilename = IO.Path.GetFileName(LinkDict("ABSOLUTE"))
+        ElseIf Not LinkDict("RELATIVE") = "" Then
+            LinkFilename = IO.Path.GetFileName(LinkDict("RELATIVE"))
         End If
 
         If LinkFilename IsNot Nothing Then
             ContainerName = String.Format(".\{0}", LinkFilename)
 
+            ' Check for leading ".\" or ".."
             If Not OldRelativeName = "" Then
                 tf = OldRelativeName(1) = "."
                 tf = tf Or OldRelativeName(1) = "\"
                 tf = tf And OldRelativeName(0) = "."
                 If tf Then
+                    ' Creates a full path to the file, taking into account relative motion of OldRelativeName
                     NewRelativeName = Path.GetFullPath(Path.Combine(FullNameDirectory, OldRelativeName))
+                Else
+                    ' Probably should be an error.
                 End If
 
             End If
@@ -1131,8 +1144,8 @@ Public Class UtilsCommon
         End If
 
         If Success Then
-            LinkDict("RelativeName") = NewRelativeName
-            LinkDict("ContainerName") = ContainerName
+            LinkDict("RELATIVE") = NewRelativeName
+            LinkDict("CONTAINER") = ContainerName
             Return LinkDict
         Else
             Return Nothing
@@ -1143,6 +1156,8 @@ Public Class UtilsCommon
     Public Function GetOleLinkFromStorage(CFStorage As CFStorage) As Dictionary(Of String, String)
 
         ' The OLE stream stores three filename formats, or none if the drawing view doesn't have a model link.
+
+        ' ###### Needs changes to handle FOA and non-SE linked files ######
 
         ' EXAMPLE
         ' Index  000 001 ... 033 034 035 036 ... 145 146 147 148 149 150 ... 183 184 185 186 187 188 ... 413 414 415 416
@@ -1162,6 +1177,16 @@ Public Class UtilsCommon
         ' SECOND FILENAME: Full path filename, UTF16 format, normal format
         ' THIRD FILENAME: Relative path filename, Ascii format, need to convert to UTF16 for possible unicode characters
         '                 Based on relative motion value, need to prepend '.\' or the correct number of '..\' to the filename
+
+        ' LinkDict format
+        ' {
+        '   {"DOSName": ""}       MSDos 8.3 format (always?)
+        '   {"ABSOLUTE": ""}      Unicode format, full path file name.
+        '   {"RELATIVE": ""}      Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"CONTAINER": ""}     Unicode format, eg. ".\part1.par"
+        '   {"ExitStatus": ""}    0 or 1
+        '   {"ErrorMessage": ""}  Some text:::More text:::Even more text
+        ' }
 
         Dim LinkDict As New Dictionary(Of String, String)
 
@@ -1188,6 +1213,10 @@ Public Class UtilsCommon
 
         Dim NoModelsFound As Boolean = False
 
+        Dim ExitStatus As String = "0"
+        Dim ErrorMessage As String = ""
+
+
         ' ###### CREATE BYTE STRING LIST ######
         For Each Entry As Byte In ByteArray
             ByteStringList.Add(String.Format("{0:x}", Entry))
@@ -1200,6 +1229,26 @@ Public Class UtilsCommon
         If ByteArray.Count <= iS1 Then
             Proceed = False
             NoModelsFound = True
+            ExitStatus = "1"
+            If ErrorMessage = "" Then
+                ErrorMessage = "No models found"
+            Else
+                ErrorMessage = String.Format("{0}:::No models found", ErrorMessage)
+            End If
+        End If
+
+        ' ###### CHECK FOR UNRECOGNIZED LINK STREAM FORMAT ######
+        ' FOA and non-SE links fail this test
+        ' For FOA, may want to check the byte array for &H21 ("!") instead.
+
+        If (ByteStringList(iS1) = "0") And (Not NoModelsFound) Then
+            Proceed = False
+            ExitStatus = "1"
+            If ErrorMessage = "" Then
+                ErrorMessage = "Unrecognized link stream format"
+            Else
+                ErrorMessage = String.Format("{0}:::Unrecognized link stream format", ErrorMessage)
+            End If
         End If
 
         ' ###### FIRST FILENAME END IDX ######
@@ -1207,7 +1256,9 @@ Public Class UtilsCommon
             IndicatorList.Clear()
             IndicatorList.AddRange({"0"})
             iE1 = FindIndicatorIdx(StartIdx:=iS1, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) - 1
-            If iE1 < 0 Then Proceed = False
+            If iE1 < 0 Then
+                Proceed = False
+            End If
         End If
 
         ' ###### SECOND FILENAME START IDX ######
@@ -1215,7 +1266,15 @@ Public Class UtilsCommon
             IndicatorList.Clear()
             IndicatorList.AddRange({"3", "0"})
             iS2 = FindIndicatorIdx(StartIdx:=iE1 + 1, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) + 2
-            If iS2 < 0 Then Proceed = False
+            If iS2 < 0 Then
+                Proceed = False
+                ExitStatus = "1"
+                If ErrorMessage = "" Then
+                    ErrorMessage = "ABSOLUTE filename not found"
+                Else
+                    ErrorMessage = String.Format("{0}:::ABSOLUTE filename not found", ErrorMessage)
+                End If
+            End If
         End If
 
         ' ###### SECOND FILENAME END IDX ######
@@ -1223,7 +1282,9 @@ Public Class UtilsCommon
             IndicatorList.Clear()
             IndicatorList.AddRange({"1", "0"})
             iE2 = FindIndicatorIdx(StartIdx:=iS2, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) - 1
-            If iE2 < 0 Then Proceed = False
+            If iE2 < 0 Then
+                Proceed = False
+            End If
         End If
 
         ' ###### THIRD FILENAME START IDX ######
@@ -1231,7 +1292,15 @@ Public Class UtilsCommon
             IndicatorList.Clear()
             IndicatorList.AddRange({"46"})
             iS3 = FindIndicatorIdx(StartIdx:=iE2 + 2, IndicatorList:=IndicatorList, ByteStringList:=ByteStringList) + 7
-            If iS3 < 0 Then Proceed = False
+            If iS3 < 0 Then
+                Proceed = False
+                ExitStatus = "1"
+                If ErrorMessage = "" Then
+                    ErrorMessage = "RELATIVE filename not found"
+                Else
+                    ErrorMessage = String.Format("{0}:::RELATIVE filename not found", ErrorMessage)
+                End If
+            End If
         End If
 
         ' ###### THIRD FILENAME END IDX ######
@@ -1310,7 +1379,10 @@ Public Class UtilsCommon
         '        Using writer As New IO.StreamWriter(Outfile, True)
         '            writer.WriteLine(RelativeName)
 
-        '            s = FormatByteString(ByteStringList, 0, iS1)
+        '            's = FormatByteString(ByteStringList, 0, iS1)
+        '            'If Not s = "" Then writer.WriteLine(s)
+
+        '            s = FormatByteString(ByteStringList, 0, EndIdx)
         '            If Not s = "" Then writer.WriteLine(s)
 
         '            's = FormatByteString(ByteStringList, iE1, iS2)
@@ -1333,9 +1405,11 @@ Public Class UtilsCommon
 
 
         LinkDict("DOSName") = DOSName
-        LinkDict("AbsoluteName") = AbsoluteName
-        LinkDict("RelativeName") = RelativeName
-        LinkDict("ContainerName") = ContainerName
+        LinkDict("ABSOLUTE") = AbsoluteName
+        LinkDict("RELATIVE") = RelativeName
+        LinkDict("CONTAINER") = ContainerName
+        LinkDict("ExitStatus") = ExitStatus
+        LinkDict("ErrorMessage") = ErrorMessage
 
         If NoModelsFound Then
             Return Nothing

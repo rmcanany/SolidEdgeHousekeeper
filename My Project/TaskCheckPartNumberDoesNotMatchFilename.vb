@@ -142,11 +142,11 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Me.PropertiesData = New PropertiesData
 
-        If Form_Main IsNot Nothing Then
-            If Form_Main.LinkManagementOrder IsNot Nothing Then
-                Me.LinkManagementOrder = Form_Main.LinkManagementOrder
-            End If
-        End If
+        'If Form_Main IsNot Nothing Then
+        '    If Form_Main.LinkManagementOrder IsNot Nothing Then
+        '        Me.LinkManagementOrder = Form_Main.LinkManagementOrder
+        '    End If
+        'End If
 
 
     End Sub
@@ -337,10 +337,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Dim ValidExtensionsList As List(Of String) = ".asm .par .psm".Split(CChar(" ")).ToList
         Dim ExtensionParent As String = IO.Path.GetExtension(FullName)
-        'Dim ExtensionChild As String
 
         Dim ChildNames As New List(Of String)
-        Dim ChildName As String
+        Dim ChildName As String = ""
 
         Dim UC As New UtilsCommon
 
@@ -351,13 +350,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim dsiStream As CFStream = Nothing
         Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
-
-
-        If PropertyName = "" Then
-            Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add("Missing part number property name")
-        End If
 
         If Proceed Then
             Try
@@ -442,21 +434,51 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
                             For Each LinkDict As Dictionary(Of String, String) In LinkList
 
+                                If LinkDict("ExitStatus") = "1" Then
+                                    ExitStatus = 1
+                                    Dim EML = LinkDict("ErrorMessage").Split(CChar("."))
+                                    For Each s As String In EML
+                                        ErrorMessageList.Add(s)
+                                    Next
+
+                                End If
+
                                 Proceed = True
 
-                                ChildName = LinkDict("RelativeName")
-                                ChildNames.Add(ChildName)
+                                ChildName = ""
 
-                                'If Not UC.FilenameIsOK(ChildName) Then
-                                '    MsgBox(ChildName)
-                                'End If
+                                For Each Order As String In Me.LinkManagementOrder
+                                    Select Case Order
+                                        Case "CONTAINER"
+                                            If IO.File.Exists(LinkDict("CONTAINER")) Then
+                                                ChildName = LinkDict("CONTAINER")
+                                                Exit For
+                                            End If
+                                        Case "RELATIVE"
+                                            If IO.File.Exists(LinkDict("RELATIVE")) Then
+                                                ChildName = LinkDict("RELATIVE")
+                                                Exit For
+                                            End If
+                                        Case "ABSOLUTE"
+                                            If IO.File.Exists(LinkDict("ABSOLUTE")) Then
+                                                ChildName = LinkDict("ABSOLUTE")
+                                                Exit For
+                                            End If
+                                    End Select
+                                Next
+
+                                If ChildName = "" Then
+                                    Continue For
+                                End If
+
+                                ChildNames.Add(ChildName)
 
                                 Try
                                     fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
                                 Catch ex As Exception
                                     Proceed = False
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Unable to open model '{0}'", ChildName))
+                                    'ExitStatus = 1
+                                    'ErrorMessageList.Add(String.Format("Unable to open model '{0}'", ChildName))
                                 End Try
 
                                 If Proceed Then
@@ -469,7 +491,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
                                 If Proceed Then
                                     PartNumber = UC.GetOLEPropValue(cfChild, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
-                                    If PartNumber IsNot Nothing Then  ' Not an error, but no match possible.
+                                    If PartNumber IsNot Nothing Then  ' Nothing is not an error, but no match possible.
                                         If Filename.ToLower.Contains(PartNumber.ToLower) Then
                                             PartNumberFound = True
                                             Exit For
@@ -603,7 +625,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim Indent = "    "
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
+
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
@@ -628,12 +650,26 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                 ErrorMessageList.Add(String.Format("{0}Select at least one Draft process option", Indent))
             End If
 
+
+            Me.LinkManagementOrder = Form_Main.LinkManagementOrder
+
             If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder Is Nothing) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)
                 End If
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0}Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page", Indent))
+            End If
+
+            If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder IsNot Nothing) Then
+                If Me.LinkManagementOrder.Count = 0 Then
+                    If Not ErrorMessageList.Contains(Me.Description) Then
+                        ErrorMessageList.Add(Me.Description)
+                    End If
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("{0}LinkMgmt.txt file does not contain any search order information", Indent))
+
+                End If
             End If
 
         End If
