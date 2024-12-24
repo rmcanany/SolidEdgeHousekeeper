@@ -161,9 +161,12 @@ Public Class UtilsExecute
             End If
         End If
 
+        FMain.ListViewFiles.BeginUpdate()
+
         For Each Filename As ListViewItem In FMain.ListViewFiles.Items 'L-istBoxFiles.Items
 
-            FMain.ListViewFiles.BeginUpdate()
+            FMain.TextBoxStatus.Text = String.Format("Checking files: {0}", IO.Path.GetFileName(Filename.Name))
+            Application.DoEvents()
 
             If Filename.Group.Name <> "Sources" Then
 
@@ -178,9 +181,9 @@ Public Class UtilsExecute
 
             End If
 
-            FMain.ListViewFiles.EndUpdate()
-
         Next
+
+        FMain.ListViewFiles.EndUpdate()
 
         If FMain.ListViewFilesOutOfDate Then
             'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
@@ -247,6 +250,15 @@ Public Class UtilsExecute
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
         End If
 
+        Try
+            Dim i = CInt(FMain.ListViewUpdateFrequency)
+            If i <= 0 Then
+                msg += String.Format("    Enter a valid number for the file list update frequency on the Configuration Tab -- General Page{0}", vbCrLf)
+            End If
+        Catch ex As Exception
+            msg += String.Format("    Enter a valid number for the file list update frequency on the Configuration Tab -- General Page{0}", vbCrLf)
+        End Try
+
         ExitStatus = ErrorMessage.Keys(0)
         If ExitStatus > 0 Then
             For Each s As String In ErrorMessage(ExitStatus)
@@ -266,6 +278,8 @@ Public Class UtilsExecute
         Else
             SaveMsg = ""
         End If
+
+        FMain.TextBoxStatus.Text = ""
 
         Return SaveMsg + msg
     End Function
@@ -339,12 +353,14 @@ Public Class UtilsExecute
 
         For Each FileToProcess In FilesToProcess
 
-            For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
-                If tmpItem.Name = FileToProcess Then
-                    tmpItem.EnsureVisible()
-                    Exit For
-                End If
-            Next
+            If (FilesToProcessCompleted > 0) And (FilesToProcessCompleted Mod CInt(FMain.ListViewUpdateFrequency) = 0) Then
+                For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
+                    If tmpItem.Name = FileToProcess Then
+                        tmpItem.EnsureVisible()
+                        Exit For
+                    End If
+                Next
+            End If
 
             System.Windows.Forms.Application.DoEvents()
             If FMain.StopProcess Then

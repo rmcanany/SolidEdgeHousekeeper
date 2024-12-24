@@ -986,13 +986,13 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function FindOleLinks(cf As CompoundFile, FullName As String) As List(Of Dictionary(Of String, String))
+    Public Function GetOleLinks(cf As CompoundFile, FullName As String) As List(Of Dictionary(Of String, String))
 
         ' Returned LinkDict format
         ' {
         '   {"DOSName": ""}       MSDos 8.3 format (always?)
         '   {"ABSOLUTE": ""}      Unicode format, full path file name.
-        '   {"RELATIVE": ""}      Unicode format.  A full-path file name is returned.  Relative differences handled here.
+        '   {"RELATIVE": ""}      Unicode format.  A full-path file name is returned.  This code converts Relative path to full path.
         '   {"CONTAINER": ""}     Unicode format, eg. ".\part1.par"
         '   {"ExitStatus": ""}    0 or 1
         '   {"ErrorMessage": ""}  Some text:::More text:::More text
@@ -1212,6 +1212,7 @@ Public Class UtilsCommon
         Dim Proceed As Boolean = True
 
         Dim NoModelsFound As Boolean = False
+        Dim IsFOA As Boolean = False
 
         Dim ExitStatus As String = "0"
         Dim ErrorMessage As String = ""
@@ -1220,6 +1221,14 @@ Public Class UtilsCommon
         ' ###### CREATE BYTE STRING LIST ######
         For Each Entry As Byte In ByteArray
             ByteStringList.Add(String.Format("{0:x}", Entry))
+
+            ' Check for FOA (Assumes &H21 ("!") not legal otherwise.)
+            If Entry = &H21 Then
+                Proceed = False
+                IsFOA = True
+                ExitStatus = "1"
+                ErrorMessage = "FOA found"
+            End If
         Next
 
         ' ###### FIRST FILENAME START IDX ######
@@ -1238,10 +1247,10 @@ Public Class UtilsCommon
         End If
 
         ' ###### CHECK FOR UNRECOGNIZED LINK STREAM FORMAT ######
-        ' FOA and non-SE links fail this test
-        ' For FOA, may want to check the byte array for &H21 ("!") instead.
+        ' Non-SE links fail this test.  Possibly not needed because of the
+        ' ByteArray and JProperties checks
 
-        If (ByteStringList(iS1) = "0") And (Not NoModelsFound) Then
+        If (ByteStringList(iS1) = "0") And (Not NoModelsFound) And (Not IsFOA) Then
             Proceed = False
             ExitStatus = "1"
             If ErrorMessage = "" Then
@@ -1511,7 +1520,6 @@ Public Class UtilsCommon
         If tmpPropertyData IsNot Nothing Then
             Dim PropertySetActualName As String = tmpPropertyData.PropertySetActualName
             If Not PropertySetActualName = "" Then
-                'PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
                 Try
                     PropertySet = CType(PropertySets.Item(PropertySetActualName), DesignManager.Properties)
                     Prop = CType(PropertySet.Item(PropertyName), DesignManager.Property)
@@ -1813,8 +1821,8 @@ Public Class UtilsCommon
 
     Public Function GetSIList() As List(Of String)
         Dim SIList As New List(Of String)
-        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Doc_Security"})
         'SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Security"})
+        SIList.AddRange({"Title", "Subject", "Author", "Keywords", "Comments", "Doc_Security"})
         Return SIList
     End Function
 

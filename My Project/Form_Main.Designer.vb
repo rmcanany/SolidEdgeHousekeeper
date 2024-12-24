@@ -216,6 +216,9 @@ Partial Class Form_Main
         Me.CheckBoxRememberTasks = New System.Windows.Forms.CheckBox()
         Me.CheckBoxCheckForNewerVersion = New System.Windows.Forms.CheckBox()
         Me.CheckBoxGroupFiles = New System.Windows.Forms.CheckBox()
+        Me.ExTableLayoutPanel11 = New Housekeeper.ExTableLayoutPanel()
+        Me.TextBoxListViewUpdateFrequency = New System.Windows.Forms.TextBox()
+        Me.LabelListViewUpdateFrequency = New System.Windows.Forms.Label()
         Me.ToolStripPresets = New System.Windows.Forms.ToolStrip()
         Me.LabelPreset = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
@@ -282,6 +285,7 @@ Partial Class Form_Main
         Me.TabPageGeneral.SuspendLayout()
         Me.ExTableLayoutPanel2.SuspendLayout()
         Me.ExTableLayoutPanel3.SuspendLayout()
+        Me.ExTableLayoutPanel11.SuspendLayout()
         Me.ToolStripPresets.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Menu_ListViewFile.SuspendLayout()
@@ -2335,6 +2339,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2377,19 +2382,21 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 0)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 8)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftItself, 0, 9)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxWarnSave, 0, 1)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxPropertyFilterIncludeDraftModel, 0, 8)
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxNoUpdateMRU, 0, 2)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 6)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 3)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 5)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 9)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 4)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRunInBackground, 0, 7)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 4)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxRememberTasks, 0, 6)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxCheckForNewerVersion, 0, 10)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxGroupFiles, 0, 5)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel11, 0, 3)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(4, 3)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 11
+        Me.ExTableLayoutPanel2.RowCount = 12
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -2421,7 +2428,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxPropertyFilterIncludeDraftItself.AutoSize = True
         Me.CheckBoxPropertyFilterIncludeDraftItself.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 243)
+        Me.CheckBoxPropertyFilterIncludeDraftItself.Location = New System.Drawing.Point(3, 273)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Name = "CheckBoxPropertyFilterIncludeDraftItself"
         Me.CheckBoxPropertyFilterIncludeDraftItself.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterIncludeDraftItself.Size = New System.Drawing.Size(521, 24)
@@ -2449,7 +2456,7 @@ Partial Class Form_Main
         Me.CheckBoxPropertyFilterIncludeDraftModel.Checked = True
         Me.CheckBoxPropertyFilterIncludeDraftModel.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxPropertyFilterIncludeDraftModel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 213)
+        Me.CheckBoxPropertyFilterIncludeDraftModel.Location = New System.Drawing.Point(3, 243)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Name = "CheckBoxPropertyFilterIncludeDraftModel"
         Me.CheckBoxPropertyFilterIncludeDraftModel.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxPropertyFilterIncludeDraftModel.Size = New System.Drawing.Size(521, 24)
@@ -2473,7 +2480,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRunInBackground.AutoSize = True
         Me.CheckBoxRunInBackground.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 183)
+        Me.CheckBoxRunInBackground.Location = New System.Drawing.Point(3, 213)
         Me.CheckBoxRunInBackground.Name = "CheckBoxRunInBackground"
         Me.CheckBoxRunInBackground.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRunInBackground.Size = New System.Drawing.Size(521, 24)
@@ -2489,7 +2496,7 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel3.Controls.Add(Me.TextBoxFileListFontSize, 0, 0)
         Me.ExTableLayoutPanel3.Controls.Add(Me.LabelFontSize, 1, 0)
         Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 93)
+        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 123)
         Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -2524,7 +2531,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxRememberTasks.AutoSize = True
         Me.CheckBoxRememberTasks.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 153)
+        Me.CheckBoxRememberTasks.Location = New System.Drawing.Point(3, 183)
         Me.CheckBoxRememberTasks.Name = "CheckBoxRememberTasks"
         Me.CheckBoxRememberTasks.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxRememberTasks.Size = New System.Drawing.Size(521, 24)
@@ -2536,7 +2543,7 @@ Partial Class Form_Main
         '
         Me.CheckBoxCheckForNewerVersion.AutoSize = True
         Me.CheckBoxCheckForNewerVersion.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 273)
+        Me.CheckBoxCheckForNewerVersion.Location = New System.Drawing.Point(3, 303)
         Me.CheckBoxCheckForNewerVersion.Name = "CheckBoxCheckForNewerVersion"
         Me.CheckBoxCheckForNewerVersion.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxCheckForNewerVersion.Size = New System.Drawing.Size(521, 24)
@@ -2550,13 +2557,50 @@ Partial Class Form_Main
         Me.CheckBoxGroupFiles.Checked = True
         Me.CheckBoxGroupFiles.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxGroupFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 123)
+        Me.CheckBoxGroupFiles.Location = New System.Drawing.Point(3, 153)
         Me.CheckBoxGroupFiles.Name = "CheckBoxGroupFiles"
         Me.CheckBoxGroupFiles.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.CheckBoxGroupFiles.Size = New System.Drawing.Size(521, 24)
         Me.CheckBoxGroupFiles.TabIndex = 75
         Me.CheckBoxGroupFiles.Text = "Group files by type"
         Me.CheckBoxGroupFiles.UseVisualStyleBackColor = True
+        '
+        'ExTableLayoutPanel11
+        '
+        Me.ExTableLayoutPanel11.ColumnCount = 2
+        Me.ExTableLayoutPanel11.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.ExTableLayoutPanel11.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel11.Controls.Add(Me.TextBoxListViewUpdateFrequency, 0, 0)
+        Me.ExTableLayoutPanel11.Controls.Add(Me.LabelListViewUpdateFrequency, 1, 0)
+        Me.ExTableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExTableLayoutPanel11.Location = New System.Drawing.Point(3, 93)
+        Me.ExTableLayoutPanel11.Name = "ExTableLayoutPanel11"
+        Me.ExTableLayoutPanel11.RowCount = 1
+        Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.ExTableLayoutPanel11.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24.0!))
+        Me.ExTableLayoutPanel11.Size = New System.Drawing.Size(521, 24)
+        Me.ExTableLayoutPanel11.TabIndex = 76
+        Me.ExTableLayoutPanel11.Task = Nothing
+        '
+        'TextBoxListViewUpdateFrequency
+        '
+        Me.TextBoxListViewUpdateFrequency.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBoxListViewUpdateFrequency.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxListViewUpdateFrequency.Name = "TextBoxListViewUpdateFrequency"
+        Me.TextBoxListViewUpdateFrequency.Size = New System.Drawing.Size(44, 23)
+        Me.TextBoxListViewUpdateFrequency.TabIndex = 0
+        Me.TextBoxListViewUpdateFrequency.Text = "1"
+        '
+        'LabelListViewUpdateFrequency
+        '
+        Me.LabelListViewUpdateFrequency.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelListViewUpdateFrequency.AutoSize = True
+        Me.LabelListViewUpdateFrequency.Location = New System.Drawing.Point(54, 4)
+        Me.LabelListViewUpdateFrequency.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.LabelListViewUpdateFrequency.Name = "LabelListViewUpdateFrequency"
+        Me.LabelListViewUpdateFrequency.Size = New System.Drawing.Size(304, 15)
+        Me.LabelListViewUpdateFrequency.TabIndex = 1
+        Me.LabelListViewUpdateFrequency.Text = "When processing, update the file list after this many files"
         '
         'ToolStripPresets
         '
@@ -2858,6 +2902,8 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel2.PerformLayout()
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel3.PerformLayout()
+        Me.ExTableLayoutPanel11.ResumeLayout(False)
+        Me.ExTableLayoutPanel11.PerformLayout()
         Me.ToolStripPresets.ResumeLayout(False)
         Me.ToolStripPresets.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -3084,4 +3130,7 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel10 As ExTableLayoutPanel
     Friend WithEvents ButtonLinkManagementFilename As Button
     Friend WithEvents TextBoxLinkManagementFilename As TextBox
+    Friend WithEvents ExTableLayoutPanel11 As ExTableLayoutPanel
+    Friend WithEvents TextBoxListViewUpdateFrequency As TextBox
+    Friend WithEvents LabelListViewUpdateFrequency As Label
 End Class

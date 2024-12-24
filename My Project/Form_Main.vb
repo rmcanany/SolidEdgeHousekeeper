@@ -669,6 +669,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _ListViewUpdateFrequency As String
+    Public Property ListViewUpdateFrequency As String
+        Get
+            Return _ListViewUpdateFrequency
+        End Get
+        Set(value As String)
+            _ListViewUpdateFrequency = value
+            If Me.TabControl1 IsNot Nothing Then
+                TextBoxListViewUpdateFrequency.Text = value
+            End If
+        End Set
+    End Property
+
     Private _FileListFontSize As String
     Public Property FileListFontSize As String
         Get
@@ -1995,6 +2008,24 @@ Public Class Form_Main
 
     End Sub
 
+
+    Private Sub TextBoxListViewUpdateFrequency_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxListViewUpdateFrequency.KeyDown
+
+        If e.KeyCode = Keys.Enter Then
+            Me.ActiveControl = Nothing
+            e.Handled = True
+            e.SuppressKeyPress = True
+        End If
+
+    End Sub
+
+    Private Sub TextBoxListViewUpdateFrequency_Leave(sender As Object, e As EventArgs) Handles TextBoxListViewUpdateFrequency.Leave
+
+        If Not IsNumeric(TextBoxListViewUpdateFrequency.Text) Then TextBoxListViewUpdateFrequency.Text = "1"
+        If TextBoxListViewUpdateFrequency.Text = "0" Then TextBoxListViewUpdateFrequency.Text = "1"
+        Me.ListViewUpdateFrequency = TextBoxListViewUpdateFrequency.Text
+
+    End Sub
 
     Private Sub TextBoxFontSize_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxFileListFontSize.KeyDown
 

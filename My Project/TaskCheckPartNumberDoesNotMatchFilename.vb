@@ -351,6 +351,96 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim co As OLEPropertiesContainer = Nothing
         Dim OLEProp As OLEProperty = Nothing
 
+
+        ''
+        'Dim TestStructuredStorageClass As Boolean = True
+        'If TestStructuredStorageClass Then
+        '    Proceed = False
+
+        '    Dim TestSS As Boolean = True
+        '    Dim TestDMDoc As Boolean = False
+        '    Dim TestDMProp As Boolean = False
+        '    Dim TestFProp As Boolean = False
+
+        '    If TestSS Then
+        '        Dim SMDoc As HelperStructuredStorageDocument = Nothing
+        '        Try
+        '            SMDoc = New HelperStructuredStorageDocument(FullName)
+        '            ''Dim PropertySets As HelperStructuredStorageDocument.PropertySets = Nothing
+        '            ''Dim PropertySet As HelperStructuredStorageDocument.Properties = Nothing
+        '            ''Dim Prop = SMDoc.GetProp("System", "hmk_Part_Number")
+        '            ''Dim TypeName = SMDoc.GetPropTypeName("System", "lastsave_dtm")
+        '            'Dim Success2 = SMDoc.SetPropValue("Custom", "hmk_Fab-Pur", "test 5", AddProperty:=False)
+        '            'Dim Success = SMDoc.SetPropValue("System", "Category", "test 5", AddProperty:=False)
+        '            'Dim tf2 = SMDoc.AddProp("Custom", "Garbage", "delicious")
+        '            'Dim tf1 = SMDoc.DeleteProp("Custom", "hmk_Date")
+        '            'SMDoc.Save()
+        '            'SMDoc.OutputPropList()
+        '            SMDoc.Close()
+
+        '        Catch ex As Exception
+        '            If SMDoc IsNot Nothing Then
+        '                SMDoc.Close()
+        '            End If
+        '        End Try
+
+        '    End If
+        '    If TestDMDoc Then
+        '        Dim DMApp As DesignManager.Application = Nothing
+        '        Dim DMDoc As DesignManager.Document = Nothing
+        '        Try
+        '            DMApp = New DesignManager.Application
+        '            DMDoc = CType(DMApp.Open(FullName), DesignManager.Document)
+        '            DMDoc.Close()
+        '            DMApp.Quit()
+
+        '        Catch ex As Exception
+        '            If DMDoc IsNot Nothing Then
+        '                DMDoc.Close()
+        '            End If
+        '            If DMApp IsNot Nothing Then
+        '                DMApp.Quit()
+        '            End If
+        '        End Try
+
+        '    End If
+        '    If TestDMProp Then
+        '        Dim DMApp As DesignManager.Application = Nothing
+        '        Dim DMProps As DesignManager.PropertySets = Nothing
+        '        Try
+        '            DMApp = New DesignManager.Application
+        '            DMProps = CType(DMApp.Open(FullName), DesignManager.PropertySets)
+        '            DMProps.Close()
+        '            DMApp.Quit()
+
+        '        Catch ex As Exception
+        '            If DMProps IsNot Nothing Then
+        '                DMProps.Close()
+        '            End If
+        '            If DMApp IsNot Nothing Then
+        '                DMApp.Quit()
+        '            End If
+        '        End Try
+
+        '    End If
+        '    If TestFProp Then
+        '        Dim FPDoc As SolidEdgeFileProperties.PropertySets = Nothing
+        '        Try
+        '            FPDoc = New SolidEdgeFileProperties.PropertySets
+        '            FPDoc.Open(FullName)
+        '            FPDoc.Close()
+
+        '        Catch ex As Exception
+        '            If FPDoc IsNot Nothing Then
+        '                FPDoc.Close()
+        '            End If
+
+        '        End Try
+        '    End If
+
+        'End If
+
+
         If Proceed Then
             Try
                 fsParent = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
@@ -428,7 +518,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
                     If Me.DraftsCheckModels Then
 
-                        Dim LinkList = UC.FindOleLinks(cfParent, FullName)  ' Format defined in FindOleLinks()
+                        Dim LinkList = UC.GetOleLinks(cfParent, FullName)  ' Format defined in FindOleLinks()
 
                         If LinkList.Count > 0 Then
 
