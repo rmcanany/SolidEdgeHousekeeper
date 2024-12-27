@@ -351,15 +351,22 @@ Public Class UtilsExecute
         '    SEApp.Activate()
         'End If
 
+        Dim LVItemReverseLUT As New Dictionary(Of String, ListViewItem)
+        For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
+            LVItemReverseLUT(tmpItem.Name) = tmpItem
+        Next
+
         For Each FileToProcess In FilesToProcess
 
             If (FilesToProcessCompleted > 0) And (FilesToProcessCompleted Mod CInt(FMain.ListViewUpdateFrequency) = 0) Then
-                For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
-                    If tmpItem.Name = FileToProcess Then
-                        tmpItem.EnsureVisible()
-                        Exit For
-                    End If
-                Next
+                'For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
+                '    If tmpItem.Name = FileToProcess Then
+                '        tmpItem.EnsureVisible()
+                '        Exit For
+                '    End If
+                'Next
+                LVItemReverseLUT(FileToProcess).EnsureVisible()
+
             End If
 
             System.Windows.Forms.Application.DoEvents()

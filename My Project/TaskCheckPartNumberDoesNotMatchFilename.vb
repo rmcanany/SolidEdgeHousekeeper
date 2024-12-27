@@ -81,8 +81,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End Set
     End Property
 
-    Public Property LinkManagementOrder As List(Of String)
-
 
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
@@ -127,6 +125,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
         Me.SolidEdgeRequired = False
+        Me.RequiresLinkManagementOrder = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -141,13 +140,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.StructuredStorageEdit = False
 
         Me.PropertiesData = New PropertiesData
-
-        'If Form_Main IsNot Nothing Then
-        '    If Form_Main.LinkManagementOrder IsNot Nothing Then
-        '        Me.LinkManagementOrder = Form_Main.LinkManagementOrder
-        '    End If
-        'End If
-
 
     End Sub
 
@@ -352,30 +344,17 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim OLEProp As OLEProperty = Nothing
 
 
-        ''
+        '
         'Dim TestStructuredStorageClass As Boolean = True
         'If TestStructuredStorageClass Then
         '    Proceed = False
 
         '    Dim TestSS As Boolean = True
-        '    Dim TestDMDoc As Boolean = False
-        '    Dim TestDMProp As Boolean = False
-        '    Dim TestFProp As Boolean = False
 
         '    If TestSS Then
         '        Dim SMDoc As HelperStructuredStorageDocument = Nothing
         '        Try
-        '            SMDoc = New HelperStructuredStorageDocument(FullName)
-        '            ''Dim PropertySets As HelperStructuredStorageDocument.PropertySets = Nothing
-        '            ''Dim PropertySet As HelperStructuredStorageDocument.Properties = Nothing
-        '            ''Dim Prop = SMDoc.GetProp("System", "hmk_Part_Number")
-        '            ''Dim TypeName = SMDoc.GetPropTypeName("System", "lastsave_dtm")
-        '            'Dim Success2 = SMDoc.SetPropValue("Custom", "hmk_Fab-Pur", "test 5", AddProperty:=False)
-        '            'Dim Success = SMDoc.SetPropValue("System", "Category", "test 5", AddProperty:=False)
-        '            'Dim tf2 = SMDoc.AddProp("Custom", "Garbage", "delicious")
-        '            'Dim tf1 = SMDoc.DeleteProp("Custom", "hmk_Date")
-        '            'SMDoc.Save()
-        '            'SMDoc.OutputPropList()
+        '            SMDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=True, NeedLinks:=True, Me.LinkManagementOrder)
         '            SMDoc.Close()
 
         '        Catch ex As Exception
@@ -384,58 +363,6 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         '            End If
         '        End Try
 
-        '    End If
-        '    If TestDMDoc Then
-        '        Dim DMApp As DesignManager.Application = Nothing
-        '        Dim DMDoc As DesignManager.Document = Nothing
-        '        Try
-        '            DMApp = New DesignManager.Application
-        '            DMDoc = CType(DMApp.Open(FullName), DesignManager.Document)
-        '            DMDoc.Close()
-        '            DMApp.Quit()
-
-        '        Catch ex As Exception
-        '            If DMDoc IsNot Nothing Then
-        '                DMDoc.Close()
-        '            End If
-        '            If DMApp IsNot Nothing Then
-        '                DMApp.Quit()
-        '            End If
-        '        End Try
-
-        '    End If
-        '    If TestDMProp Then
-        '        Dim DMApp As DesignManager.Application = Nothing
-        '        Dim DMProps As DesignManager.PropertySets = Nothing
-        '        Try
-        '            DMApp = New DesignManager.Application
-        '            DMProps = CType(DMApp.Open(FullName), DesignManager.PropertySets)
-        '            DMProps.Close()
-        '            DMApp.Quit()
-
-        '        Catch ex As Exception
-        '            If DMProps IsNot Nothing Then
-        '                DMProps.Close()
-        '            End If
-        '            If DMApp IsNot Nothing Then
-        '                DMApp.Quit()
-        '            End If
-        '        End Try
-
-        '    End If
-        '    If TestFProp Then
-        '        Dim FPDoc As SolidEdgeFileProperties.PropertySets = Nothing
-        '        Try
-        '            FPDoc = New SolidEdgeFileProperties.PropertySets
-        '            FPDoc.Open(FullName)
-        '            FPDoc.Close()
-
-        '        Catch ex As Exception
-        '            If FPDoc IsNot Nothing Then
-        '                FPDoc.Close()
-        '            End If
-
-        '        End Try
         '    End If
 
         'End If

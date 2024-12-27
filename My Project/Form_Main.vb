@@ -1150,6 +1150,10 @@ Public Class Form_Main
 
         CarIcona()
 
+        If IO.File.Exists(Me.LinkManagementFilename) Then
+            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+        End If
+
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
 
@@ -1204,6 +1208,9 @@ Public Class Form_Main
                 Task.IsSelectedDraft = False
             End If
 
+            If Task.RequiresLinkManagementOrder Then
+                Task.LinkManagementOrder = Me.LinkManagementOrder
+            End If
             If Task.RequiresPropertiesData Then
                 Select Case Task.Name
                     Case "TaskEditProperties"
@@ -1240,11 +1247,6 @@ Public Class Form_Main
         ToolStrip_Filter.Renderer = New MySR()
         ToolStripPresets.Renderer = New MySR()
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
-
-
-        If IO.File.Exists(Me.LinkManagementFilename) Then
-            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
-        End If
 
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.

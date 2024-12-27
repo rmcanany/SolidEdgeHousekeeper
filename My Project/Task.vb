@@ -146,6 +146,8 @@ Public MustInherit Class Task
     Public Property RequiresPropertiesData As Boolean = False
     Public Property CompatibleWithOtherTasks As Boolean = True
 
+    Public Property RequiresLinkManagementOrder As Boolean = False
+    Public Property LinkManagementOrder As List(Of String) = Nothing
 
 
 
