@@ -335,88 +335,168 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
 
         Dim UC As New UtilsCommon
 
-        Dim fsParent As FileStream = Nothing
-        Dim cfParent As CompoundFile = Nothing
-        Dim fsChild As FileStream = Nothing
-        Dim cfChild As CompoundFile = Nothing
-        Dim dsiStream As CFStream = Nothing
-        Dim co As OLEPropertiesContainer = Nothing
-        Dim OLEProp As OLEProperty = Nothing
+        Dim NewWay As Boolean = True
 
-
-        '
-        'Dim TestStructuredStorageClass As Boolean = True
-        'If TestStructuredStorageClass Then
-        '    Proceed = False
-
-        '    Dim TestSS As Boolean = True
-
-        '    If TestSS Then
-        '        Dim SMDoc As HelperStructuredStorageDocument = Nothing
-        '        Try
-        '            SMDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=True, NeedLinks:=True, Me.LinkManagementOrder)
-        '            SMDoc.Close()
-
-        '        Catch ex As Exception
-        '            If SMDoc IsNot Nothing Then
-        '                SMDoc.Close()
-        '            End If
-        '        End Try
-
-        '    End If
-
-        'End If
-
-
-        If Proceed Then
+        If NewWay Then
+            Dim SSParentDoc As HelperStructuredStorageDocument = Nothing
+            'SSParentDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=True, NeedLinks:=True, Me.LinkManagementOrder)
             Try
-                fsParent = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+                SSParentDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=True, NeedLinks:=True, Me.LinkManagementOrder)
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
-                ErrorMessageList.Add("Unable to open file")
+                ErrorMessageList.Add(ex.Message)
             End Try
-        End If
 
+            If Proceed Then
 
-        If Proceed Then
-            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            cfParent = New CompoundFile(fsParent, CFSUpdateMode.Update, cfg)
+                Select Case ExtensionParent
+                    Case ".asm", ".par", ".psm"
 
-        End If
+                        PartNumber = CStr(SSParentDoc.GetPropValue(Me.PropertySet, Me.PropertyNameEnglish))
 
-        If Proceed Then
-
-            Select Case ExtensionParent
-                Case ".asm", ".par", ".psm"
-
-                    PartNumber = UC.GetOLEPropValue(cfParent, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
-
-                    If PartNumber Is Nothing Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                        If PartNumber Is Nothing Then
+                            ExitStatus = 1
+                            ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
                                          Me.PropertyName, Me.PropertySet))
-                    End If
-
-                    If ExitStatus = 0 Then
-                        PartNumber = PartNumber.Trim
-                        If PartNumber = "" Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Part number not assigned")
                         End If
-                    End If
 
-                    If ExitStatus = 0 Then
-                        If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                        If ExitStatus = 0 Then
+                            PartNumber = PartNumber.Trim
+                            If PartNumber = "" Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Part number not assigned")
+                            End If
                         End If
-                    End If
+
+                        If ExitStatus = 0 Then
+                            If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                            End If
+                        End If
 
 
-                Case ".dft"
+                    Case ".dft"
 
-                    If Me.DraftsCheckDraftItself Then
+                        If Me.DraftsCheckDraftItself Then
+
+                            PartNumber = CStr(SSParentDoc.GetPropValue(Me.PropertySet, Me.PropertyNameEnglish))
+
+                            If PartNumber Is Nothing Then
+                                ExitStatus = 1
+                                ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                                         Me.PropertyName, Me.PropertySet))
+                            End If
+
+                            If ExitStatus = 0 Then
+                                PartNumber = PartNumber.Trim
+                                If PartNumber = "" Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Part number not assigned")
+                                End If
+                            End If
+
+                            If ExitStatus = 0 Then
+                                If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                                End If
+                            End If
+
+                        End If
+
+                        If Me.DraftsCheckModels Then
+
+                            ChildNames = SSParentDoc.GetLinkNames
+
+                            If (ChildNames IsNot Nothing) AndAlso (ChildNames.Count > 0) Then
+
+                                For Each ChildName In ChildNames
+
+                                    If Not ValidExtensionsList.Contains(IO.Path.GetExtension(ChildName)) Then
+                                        Continue For
+                                    End If
+
+                                    Dim SSChildDoc As HelperStructuredStorageDocument = Nothing
+
+                                    Try
+                                        SSChildDoc = New HelperStructuredStorageDocument(ChildName, NeedProperties:=True, NeedLinks:=False, Nothing)
+
+                                        PartNumber = CStr(SSChildDoc.GetPropValue(Me.PropertySet, Me.PropertyNameEnglish))
+
+                                        If PartNumber IsNot Nothing Then  ' Nothing is not an error, but no match possible.
+                                            If Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                                PartNumberFound = True
+                                                Exit For
+                                            End If
+                                        End If
+
+                                    Catch ex As Exception
+                                        If ex.Message.Contains("FOA") Then
+                                            ExitStatus = 1
+                                            ErrorMessageList.Add(String.Format("FOA file '{0}' not processed", IO.Path.GetFileName(ChildName)))
+                                        End If
+                                    End Try
+
+                                    If SSChildDoc IsNot Nothing Then SSChildDoc.Close()
+
+                                Next
+
+                                If (Not PartNumberFound) And (ChildNames.Count > 0) Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Part number in the following models not found in filename '{0}'", Filename))
+                                    For Each ChildName In ChildNames
+                                        ErrorMessageList.Add(String.Format("    {0}", IO.Path.GetFileName(ChildName)))
+                                    Next
+                                End If
+
+                            End If
+
+                        End If
+
+                    Case Else
+                        MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
+
+                End Select
+
+            End If
+
+            If SSParentDoc IsNot Nothing Then
+                SSParentDoc.Close()
+            End If
+
+        Else
+            Dim fsParent As FileStream = Nothing
+            Dim cfParent As CompoundFile = Nothing
+            Dim fsChild As FileStream = Nothing
+            Dim cfChild As CompoundFile = Nothing
+            Dim dsiStream As CFStream = Nothing
+            Dim co As OLEPropertiesContainer = Nothing
+            Dim OLEProp As OLEProperty = Nothing
+
+
+            If Proceed Then
+                Try
+                    fsParent = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+                Catch ex As Exception
+                    Proceed = False
+                    ExitStatus = 1
+                    ErrorMessageList.Add("Unable to open file")
+                End Try
+            End If
+
+
+            If Proceed Then
+                Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                cfParent = New CompoundFile(fsParent, CFSUpdateMode.Update, cfg)
+
+            End If
+
+            If Proceed Then
+
+                Select Case ExtensionParent
+                    Case ".asm", ".par", ".psm"
 
                         PartNumber = UC.GetOLEPropValue(cfParent, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
 
@@ -441,122 +521,151 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                             End If
                         End If
 
-                    End If
 
-                    If Me.DraftsCheckModels Then
+                    Case ".dft"
 
-                        Dim LinkList = UC.GetOleLinks(cfParent, FullName)  ' Format defined in FindOleLinks()
+                        If Me.DraftsCheckDraftItself Then
 
-                        If LinkList.Count > 0 Then
+                            PartNumber = UC.GetOLEPropValue(cfParent, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
 
-                            For Each LinkDict As Dictionary(Of String, String) In LinkList
-
-                                If LinkDict("ExitStatus") = "1" Then
-                                    ExitStatus = 1
-                                    Dim EML = LinkDict("ErrorMessage").Split(CChar("."))
-                                    For Each s As String In EML
-                                        ErrorMessageList.Add(s)
-                                    Next
-
-                                End If
-
-                                Proceed = True
-
-                                ChildName = ""
-
-                                For Each Order As String In Me.LinkManagementOrder
-                                    Select Case Order
-                                        Case "CONTAINER"
-                                            If IO.File.Exists(LinkDict("CONTAINER")) Then
-                                                ChildName = LinkDict("CONTAINER")
-                                                Exit For
-                                            End If
-                                        Case "RELATIVE"
-                                            If IO.File.Exists(LinkDict("RELATIVE")) Then
-                                                ChildName = LinkDict("RELATIVE")
-                                                Exit For
-                                            End If
-                                        Case "ABSOLUTE"
-                                            If IO.File.Exists(LinkDict("ABSOLUTE")) Then
-                                                ChildName = LinkDict("ABSOLUTE")
-                                                Exit For
-                                            End If
-                                    End Select
-                                Next
-
-                                If ChildName = "" Then
-                                    Continue For
-                                End If
-
-                                ChildNames.Add(ChildName)
-
-                                Try
-                                    fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
-                                Catch ex As Exception
-                                    Proceed = False
-                                    'ExitStatus = 1
-                                    'ErrorMessageList.Add(String.Format("Unable to open model '{0}'", ChildName))
-                                End Try
-
-                                If Proceed Then
-                                    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                                    cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
-                                End If
-
-                                Proceed = Proceed And IO.File.Exists(ChildName)
-                                Proceed = Proceed And ValidExtensionsList.Contains(IO.Path.GetExtension(ChildName))
-
-                                If Proceed Then
-                                    PartNumber = UC.GetOLEPropValue(cfChild, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
-                                    If PartNumber IsNot Nothing Then  ' Nothing is not an error, but no match possible.
-                                        If Filename.ToLower.Contains(PartNumber.ToLower) Then
-                                            PartNumberFound = True
-                                            Exit For
-                                        End If
-                                    End If
-
-                                End If
-
-                                If cfChild IsNot Nothing Then
-                                    cfChild.Close()
-                                End If
-                                If fsChild IsNot Nothing Then
-                                    fsChild.Close()
-                                End If
-
-                            Next
-
-                            If (Not PartNumberFound) And (ChildNames.Count > 0) Then
+                            If PartNumber Is Nothing Then
                                 ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Part number in the following models not found in filename '{0}'", Filename))
-                                For Each ChildName In ChildNames
-                                    ErrorMessageList.Add(String.Format("    {0}", ChildName))
-                                Next
+                                ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                                         Me.PropertyName, Me.PropertySet))
+                            End If
+
+                            If ExitStatus = 0 Then
+                                PartNumber = PartNumber.Trim
+                                If PartNumber = "" Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Part number not assigned")
+                                End If
+                            End If
+
+                            If ExitStatus = 0 Then
+                                If Not Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Part number '{0}' not found in filename '{1}'", PartNumber, Filename))
+                                End If
                             End If
 
                         End If
 
-                    End If
+                        If Me.DraftsCheckModels Then
 
-                Case Else
-                    MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
+                            Dim LinkList = UC.GetOleLinks(cfParent, FullName)  ' Format defined in FindOleLinks()
 
-            End Select
+                            If LinkList.Count > 0 Then
 
-        End If
+                                For Each LinkDict As Dictionary(Of String, String) In LinkList
 
-        If cfChild IsNot Nothing Then
-            cfChild.Close()
-        End If
-        If fsChild IsNot Nothing Then
-            fsChild.Close()
-        End If
+                                    If LinkDict("ExitStatus") = "1" Then
+                                        ExitStatus = 1
+                                        Dim EML = LinkDict("ErrorMessage").Split(CChar("."))
+                                        For Each s As String In EML
+                                            ErrorMessageList.Add(s)
+                                        Next
 
-        If cfParent IsNot Nothing Then
-            cfParent.Close()
-        End If
-        If fsParent IsNot Nothing Then
-            fsParent.Close()
+                                    End If
+
+                                    Proceed = True
+
+                                    ChildName = ""
+
+                                    For Each Order As String In Me.LinkManagementOrder
+                                        Select Case Order
+                                            Case "CONTAINER"
+                                                If IO.File.Exists(LinkDict("CONTAINER")) Then
+                                                    ChildName = LinkDict("CONTAINER")
+                                                    Exit For
+                                                End If
+                                            Case "RELATIVE"
+                                                If IO.File.Exists(LinkDict("RELATIVE")) Then
+                                                    ChildName = LinkDict("RELATIVE")
+                                                    Exit For
+                                                End If
+                                            Case "ABSOLUTE"
+                                                If IO.File.Exists(LinkDict("ABSOLUTE")) Then
+                                                    ChildName = LinkDict("ABSOLUTE")
+                                                    Exit For
+                                                End If
+                                        End Select
+                                    Next
+
+                                    If ChildName = "" Then
+                                        Continue For
+                                    End If
+
+                                    ChildNames.Add(ChildName)
+
+                                    Try
+                                        fsChild = New FileStream(ChildName, FileMode.Open, FileAccess.ReadWrite)
+                                    Catch ex As Exception
+                                        Proceed = False
+                                        'ExitStatus = 1
+                                        'ErrorMessageList.Add(String.Format("Unable to open model '{0}'", ChildName))
+                                    End Try
+
+                                    If Proceed Then
+                                        Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                                        cfChild = New CompoundFile(fsChild, CFSUpdateMode.Update, cfg)
+                                    End If
+
+                                    Proceed = Proceed And IO.File.Exists(ChildName)
+                                    Proceed = Proceed And ValidExtensionsList.Contains(IO.Path.GetExtension(ChildName))
+
+                                    If Proceed Then
+                                        PartNumber = UC.GetOLEPropValue(cfChild, Me.PropertySet, Me.PropertyNameEnglish, AddProp:=False)
+                                        If PartNumber IsNot Nothing Then  ' Nothing is not an error, but no match possible.
+                                            If Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                                PartNumberFound = True
+                                                Exit For
+                                            End If
+                                        End If
+
+                                    End If
+
+                                    If cfChild IsNot Nothing Then
+                                        cfChild.Close()
+                                    End If
+                                    If fsChild IsNot Nothing Then
+                                        fsChild.Close()
+                                    End If
+
+                                Next
+
+                                If (Not PartNumberFound) And (ChildNames.Count > 0) Then
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add(String.Format("Part number in the following models not found in filename '{0}'", Filename))
+                                    For Each ChildName In ChildNames
+                                        ErrorMessageList.Add(String.Format("    {0}", ChildName))
+                                    Next
+                                End If
+
+                            End If
+
+                        End If
+
+                    Case Else
+                        MsgBox(String.Format("{0} Extension '{1}' not recognized", Me.Name, ExtensionParent))
+
+                End Select
+
+            End If
+
+            If cfChild IsNot Nothing Then
+                cfChild.Close()
+            End If
+            If fsChild IsNot Nothing Then
+                fsChild.Close()
+            End If
+
+            If cfParent IsNot Nothing Then
+                cfParent.Close()
+            End If
+            If fsParent IsNot Nothing Then
+                fsParent.Close()
+            End If
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList

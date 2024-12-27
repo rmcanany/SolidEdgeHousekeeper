@@ -27,7 +27,7 @@ Public Class HelperStructuredStorageDocument
         Try
             Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
         Catch ex As Exception
-            Throw New Exception(String.Format("Unable to open '{0}'", Me.FullName))
+            Throw New Exception("Unable to open file")
         End Try
 
         Me.cf = Nothing
@@ -37,12 +37,12 @@ Public Class HelperStructuredStorageDocument
         Catch ex As Exception
             Me.fs.Close()
             Me.fs = Nothing
-            Throw New Exception(String.Format("Unable to open '{0}'", Me.FullName))
+            Throw New Exception("Unable to open file")
         End Try
 
-        'If IsFOA(cf) Then
-        '    Throw New Exception(String.Format("Unable to process FOA file '{0}'", Me.FullName))
-        'End If
+        If IsFOA(cf) Then
+            Throw New Exception("FOA files currently not supported")
+        End If
 
         If NeedProperties Then
             Me.PropSets = New PropertySets(cf)
@@ -352,14 +352,17 @@ Public Class HelperStructuredStorageDocument
             Dim cs As CFStream = Nothing
             Dim co As OLEPropertiesContainer = Nothing
 
+            Dim PropertySetNamesInFile As New List(Of String)
+
             For Each PropertySetName As String In Me.PropertySetNames
                 If Not PropertySetName = "Custom" Then
 
                     'Some files don't have every possible PropertySet
                     Try
                         Me.Items.Add(New PropertySet(Me.cf, PropertySetName))
+                        PropertySetNamesInFile.Add(PropertySetName)
                     Catch ex As Exception
-                        'Not an error
+                        'Not an error, but need to update PropertySetNames after the loop.
                     End Try
 
                     If PropertySetName = "DocumentSummaryInformation" Then
@@ -369,23 +372,13 @@ Public Class HelperStructuredStorageDocument
                 Else
                     ' The Custom PropertySet needs the same cs and co as DocumentSummaryInformation, not copies.
                     Me.Items.Add(New PropertySet(Me.cf, PropertySetName, cs, co))
+                    PropertySetNamesInFile.Add(PropertySetName)
                 End If
 
             Next
 
-            'Dim P1 = GetItem("DocumentSummaryInformation")
-            'Dim P2 = GetItem("Custom")
+            PropertySetNames = PropertySetNamesInFile
 
-            'If P1.cs Is P2.cs Then
-            '    Dim i = 0
-            'Else
-            '    Dim i = 0
-            'End If
-            'If P1.co Is P2.co Then
-            '    Dim i = 0
-            'Else
-            '    Dim i = 0
-            'End If
         End Sub
 
         Public Function PrepOutput(InList As List(Of String), FullName As String) As List(Of String)
@@ -933,6 +926,7 @@ Public Class HelperStructuredStorageDocument
             Next
 
             Dim UnicodeStartIndicators As New List(Of Byte) From {&H3, &H0}
+            Dim UnicodeStartIndicatorsAlt As New List(Of Byte) From {&H0, &H0}
             Dim UnicodeMatch As Boolean
             Dim UnicodeEndIdx As Integer
             Dim UnicodeStartIdx As Integer
@@ -1008,14 +1002,22 @@ Public Class HelperStructuredStorageDocument
                     ' Checks to see if the stop indicator is present just ahead of the current index
 
                     Dim StartIndicatorMatch As Boolean = True
+                    Dim StartIndicatorMatchAlt As Boolean = True
+
                     For i = 0 To UnicodeStartIndicators.Count - 1
                         If Not UnicodeStartIndicators(UnicodeStartIndicators.Count - 1 - i) = ByteArray(CurrentIdx - 1 - i) Then
                             StartIndicatorMatch = False
                             Exit For
                         End If
                     Next
+                    For i = 0 To UnicodeStartIndicatorsAlt.Count - 1
+                        If Not UnicodeStartIndicatorsAlt(UnicodeStartIndicatorsAlt.Count - 1 - i) = ByteArray(CurrentIdx - 1 - i) Then
+                            StartIndicatorMatchAlt = False
+                            Exit For
+                        End If
+                    Next
 
-                    If StartIndicatorMatch Then
+                    If StartIndicatorMatch Or StartIndicatorMatchAlt Then
                         UnicodeStartIdx = CurrentIdx
                         StartIdxs.Add(CurrentIdx)
                         UnicodeMatch = False
