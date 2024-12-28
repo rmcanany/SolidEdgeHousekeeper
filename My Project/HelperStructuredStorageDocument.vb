@@ -994,6 +994,11 @@ Public Class HelperStructuredStorageDocument
                             ByteList.Add(ByteArray(j))
                         Next
                         FilenamesList.Add(System.Text.Encoding.ASCII.GetString(ByteList.ToArray))
+                        'For j = AsciiStartIdx To AsciiEndIdx
+                        '    ByteList.Add(ByteArray(j))
+                        '    ByteList.Add(&H0)
+                        'Next
+                        'FilenamesList.Add(System.Text.Encoding.Unicode.GetString(ByteList.ToArray))
                     End If
                 End If
 
@@ -1037,11 +1042,14 @@ Public Class HelperStructuredStorageDocument
                 Return Nothing
             End If
 
+            Dim ContainerFileDirectory = IO.Path.GetDirectoryName(Me.ContainingFileFullName)
+
             Dim ABSOLUTE = FilenamesList(FilenamesList.Count - 2)
 
             FilenamesDict("ABSOLUTE") = ABSOLUTE
 
             Dim CONTAINER = String.Format(".\{0}", IO.Path.GetFileName(ABSOLUTE))
+            CONTAINER = Path.GetFullPath(Path.Combine(ContainerFileDirectory, CONTAINER))
 
             FilenamesDict("CONTAINER") = CONTAINER
 
@@ -1072,8 +1080,12 @@ Public Class HelperStructuredStorageDocument
             RELATIVE = String.Format("{0}{1}", Prefix, RELATIVE)
 
             'Create full path from relative path
-            Dim ContainerFileDirectory = IO.Path.GetDirectoryName(Me.ContainingFileFullName)
+            'Dim OLD = RELATIVE
             RELATIVE = Path.GetFullPath(Path.Combine(ContainerFileDirectory, RELATIVE))
+            'Try
+            'Catch ex As Exception
+            '    Dim i = 0
+            'End Try
 
             FilenamesDict("RELATIVE") = RELATIVE
 

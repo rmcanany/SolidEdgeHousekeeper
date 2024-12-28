@@ -30,6 +30,20 @@ Public Class TaskCheckLinks
         End Set
     End Property
 
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+                Me.SolidEdgeRequired = Not value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -47,6 +61,7 @@ Public Class TaskCheckLinks
     Enum ControlNames
         CheckMissingLinks
         CheckMisplacedLinks
+        StructuredStorageEdit
         AutoHideOptions
     End Enum
 
@@ -65,6 +80,8 @@ Public Class TaskCheckLinks
         Me.RequiresSourceDirectories = True
         Me.Category = "Check"
         SetColorFromCategory(Me)
+        Me.SolidEdgeRequired = False
+        Me.RequiresLinkManagementOrder = True
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -104,11 +121,13 @@ Public Class TaskCheckLinks
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        ErrorMessage = ProcessInternal(FileName)
+
         Return ErrorMessage
 
     End Function
 
-    Private Function ProcessInternal(
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -285,6 +304,97 @@ Public Class TaskCheckLinks
 
     End Function
 
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Proceed As Boolean = True
+        Dim LinkNames As List(Of String)
+        Dim BadLinkNames As List(Of String)
+        Dim MisplacedLinkNames As New List(Of String)
+        Dim Indent As String = "    "
+        Dim Directory As String
+        Dim Filename As String
+
+        Dim SSDoc As HelperStructuredStorageDocument = Nothing
+
+        Try
+            SSDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=False, NeedLinks:=True, Me.LinkManagementOrder)
+        Catch ex As Exception
+            Proceed = False
+            ExitStatus = 1
+            ErrorMessageList.Add(ex.Message)
+        End Try
+
+        If Proceed Then
+            LinkNames = SSDoc.GetLinkNames
+            BadLinkNames = SSDoc.GetBadLinkNames
+
+            If (LinkNames Is Nothing) Or (BadLinkNames Is Nothing) Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to read file links")
+            End If
+
+            If Proceed Then
+                ' Build a list of misplaced links
+                For Each LinkName As String In LinkNames
+                    If BadLinkNames.Contains(LinkName) Then
+                        Continue For
+                    End If
+
+                    Dim tf As Boolean = False
+                    For Each SourceDirectory In Me.SourceDirectories
+                        If LinkName.Contains(SourceDirectory) Then
+                            tf = True
+                            Exit For
+                        End If
+                    Next
+                    If Not tf Then
+                        MisplacedLinkNames.Add(LinkName)
+                    End If
+                Next
+
+                If Me.CheckMissingLinks Then
+                    If BadLinkNames.Count > 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Missing Links")
+                        For Each BadLinkName As String In BadLinkNames
+                            Directory = IO.Path.GetDirectoryName(BadLinkName)
+                            Filename = IO.Path.GetFileName(BadLinkName)
+                            Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
+                            ErrorMessageList.Add(s)
+                        Next
+                    End If
+                End If
+
+                If Me.CheckMisplacedLinks Then
+                    If MisplacedLinkNames.Count > 0 Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Misplaced Links")
+                        For Each MisplacedLinkName As String In MisplacedLinkNames
+                            Directory = IO.Path.GetDirectoryName(MisplacedLinkName)
+                            Filename = IO.Path.GetFileName(MisplacedLinkName)
+                            Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
+                            ErrorMessageList.Add(s)
+                        Next
+                    End If
+                End If
+
+            End If
+        End If
+
+        If SSDoc IsNot Nothing Then
+            SSDoc.Close()
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+    End Function
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
@@ -307,6 +417,14 @@ Public Class TaskCheckLinks
         RowIndex += 1
 
         CheckBox = FormatOptionsCheckBox(ControlNames.CheckMisplacedLinks.ToString, "Check misplaced links")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run task without Solid Edge")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
@@ -397,6 +515,11 @@ Public Class TaskCheckLinks
 
             Case ControlNames.CheckMisplacedLinks.ToString
                 Me.CheckMisplacedLinks = Checkbox.Checked
+
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                'Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

@@ -1068,7 +1068,7 @@ Public Class UtilsFileList
         Dim TagName As String
         Dim s As String
 
-        For Each Item As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
+        For Each Item As ListViewItem In ListViewSources.Items
 
             If Item.Group.Name = "Sources" Then
 
@@ -1085,6 +1085,24 @@ Public Class UtilsFileList
             End If
 
         Next
+
+        'For Each Item As ListViewItem In ListViewFiles.Items 'L-istBoxFiles.Items
+
+        '    If Item.Group.Name = "Sources" Then
+
+        '        TagName = CType(Item.Tag, String)
+
+        '        If TagName.ToLower.Contains("folder") Then
+        '            s = Item.Name
+        '            If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
+        '        ElseIf TagName.ToLower = "asm" Then
+        '            s = System.IO.Path.GetDirectoryName(Item.Name)
+        '            If Not SourceDirectories.Contains(s) Then SourceDirectories.Add(s)
+        '        End If
+
+        '    End If
+
+        'Next
 
         Return SourceDirectories
     End Function

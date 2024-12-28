@@ -1211,6 +1211,7 @@ Public Class Form_Main
             If Task.RequiresLinkManagementOrder Then
                 Task.LinkManagementOrder = Me.LinkManagementOrder
             End If
+
             If Task.RequiresPropertiesData Then
                 Select Case Task.Name
                     Case "TaskEditProperties"
