@@ -320,13 +320,19 @@ Public Class TaskCheckLinks
 
         Dim SSDoc As HelperStructuredStorageDocument = Nothing
 
-        Try
+        Dim ShowException As Boolean = True
+        If ShowException Then
             SSDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=False, NeedLinks:=True, Me.LinkManagementOrder)
-        Catch ex As Exception
-            Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add(ex.Message)
-        End Try
+        Else
+            Try
+                SSDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=False, NeedLinks:=True, Me.LinkManagementOrder)
+            Catch ex As Exception
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add(ex.Message)
+            End Try
+        End If
+
 
         If Proceed Then
             LinkNames = SSDoc.GetLinkNames

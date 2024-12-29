@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.IO
+Imports System.Text
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
@@ -748,6 +749,27 @@ Public Class HelperStructuredStorageDocument
             Dim AllStorages As New List(Of CFStorage)
             Dim JSiteStorages As New List(Of CFStorage)
 
+            ' For assemblies, get all filenames in the Attachments stream.
+            ' It is needed because some JSite* OLE streams have filenames not in the assembly.
+            ' Ideally we could parse the Attachments stream directly, but its format is messy.
+
+            Dim AttachmentNamesList As New List(Of String)
+            If IO.Path.GetExtension(Me.ContainingFileFullName).ToLower = ".asm" Then
+                Dim AllStreams As New List(Of CFStream)
+                Dim Attachments As CFStream = Nothing
+                RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+                For Each AllStream As CFStream In AllStreams
+                    If AllStream.Name = "Attachments" Then
+                        Attachments = AllStream
+                    End If
+                Next
+                Dim AttachmentsDict As Dictionary(Of String, String) = ExtractFilenamesFromByteArray(Attachments.GetData, IsAttachmentsStream:=True)
+                For Each Key As String In AttachmentsDict.Keys
+                    AttachmentNamesList.Add(Key)
+                Next
+
+            End If
+
             RootStorage.VisitEntries(Sub(item) If item.IsStorage Then AllStorages.Add(CType(item, CFStorage)), recursive:=False)
 
             For Each AllStorage As CFStorage In AllStorages
@@ -771,7 +793,7 @@ Public Class HelperStructuredStorageDocument
                 If (JSiteStreamNames.Contains(OLEName)) And (JSiteStreamNames.Contains("JProperties")) Then
                     If CheckJProperties(JSiteStorage.GetStream("JProperties")) Then
 
-                        Dim FullName As String = GetFullNameFromOLEStream(JSiteStorage.GetStream(String.Format("{0}Ole", ChrW(1))))
+                        Dim FullName As String = GetFullNameFromOLEStream(JSiteStorage.GetStream(OLEName), AttachmentNamesList)
 
                         If FullName IsNot Nothing Then
                             If Not FullNames.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
@@ -787,7 +809,10 @@ Public Class HelperStructuredStorageDocument
             Return FullNames
         End Function
 
-        Private Function GetFullNameFromOLEStream(OLEStream As CFStream) As String
+        Private Function GetFullNameFromOLEStream(
+            OLEStream As CFStream,
+            AttachmentNamesList As List(Of String)
+            ) As String
 
             ' The OLE stream stores three filename formats, or none if the drawing view doesn't have a model link.
 
@@ -821,34 +846,12 @@ Public Class HelperStructuredStorageDocument
 
             Dim ByteArray As Byte() = OLEStream.GetData
 
-            Dim FilenamesDict = ExtractFilenamesFromByteArray(ByteArray)
+            Dim FilenamesDict = ExtractFilenamesFromByteArray(ByteArray, IsAttachmentsStream:=False)
 
             If FilenamesDict IsNot Nothing Then
                 ABSOLUTE = FilenamesDict("ABSOLUTE")
                 RELATIVE = FilenamesDict("RELATIVE")
                 CONTAINER = FilenamesDict("CONTAINER")
-
-                '' ###### OUTPUT FOR DEBUGGING ######
-                'Dim Outfile As String = ".\ole_links.csv"
-
-                'Dim Valids = {&H3A, &H5C} ' ":", "\"
-                'If ByteArray.Count > 56 Then
-                '    If Not Valids.Contains(ByteArray(35)) Then
-                '        If Not Valids.Contains(ByteArray(55)) Then
-                '            Try
-                '                Using writer As New IO.StreamWriter(Outfile, True)
-                '                    writer.WriteLine(Me.ContainingFileFullName)
-                '                    writer.WriteLine(FormatByteString(ByteArray, False))
-                '                    writer.WriteLine(FormatByteString(ByteArray, True))
-                '                    writer.WriteLine("")
-                '                End Using
-                '            Catch ex As Exception
-                '            End Try
-
-                '        End If
-
-                '    End If
-                'End If
 
                 For Each Target As String In Me.LinkManagementOrder
                     Select Case Target.ToUpper
@@ -870,9 +873,32 @@ Public Class HelperStructuredStorageDocument
                     End Select
                 Next
 
-                If (FullName Is Nothing) And (Not ABSOLUTE = "") Then
-                    If Not Me.BadLinks.Contains(ABSOLUTE, StringComparer.OrdinalIgnoreCase) Then
-                        BadLinks.Add(ABSOLUTE)
+                ' If the filename is in the attachments list, add it to the BadLinks list.  Otherwise ignore.
+                If (FullName Is Nothing) Then
+                    Dim BadName As String = Nothing
+                    For Each Target As String In Me.LinkManagementOrder
+                        Select Case Target.ToUpper
+                            Case "ABSOLUTE"
+                                If AttachmentNamesList.Contains(ABSOLUTE) Then
+                                    BadName = ABSOLUTE
+                                    Exit For
+                                End If
+                            Case "RELATIVE"
+                                If AttachmentNamesList.Contains(RELATIVE) Then
+                                    BadName = RELATIVE
+                                    Exit For
+                                End If
+                            Case "CONTAINER"
+                                If AttachmentNamesList.Contains(CONTAINER) Then
+                                    BadName = CONTAINER
+                                    Exit For
+                                End If
+                        End Select
+                    Next
+                    If BadName IsNot Nothing Then
+                        If Not Me.BadLinks.Contains(BadName, StringComparer.OrdinalIgnoreCase) Then
+                            BadLinks.Add(BadName)
+                        End If
                     End If
                 End If
 
@@ -881,7 +907,7 @@ Public Class HelperStructuredStorageDocument
             Return FullName
         End Function
 
-        Private Function ExtractFilenamesFromByteArray(ByteArray As Byte()) As Dictionary(Of String, String)
+        Private Function ExtractFilenamesFromByteArray(ByteArray As Byte(), IsAttachmentsStream As Boolean) As Dictionary(Of String, String)
             ' Searches the OLE byte string for model file extensions (.par, .psm, .asm, .PAR, .PSM, .ASM)
             ' Returns a dictionary
             ' {
@@ -894,9 +920,13 @@ Public Class HelperStructuredStorageDocument
             ' The search starts at the end of the byte array.  If an extension is detected,
             ' it proceeds towards the start until a filename start indicator is reached.
             ' For Ascii strings the indicator is &H00.  For Unicode it is &H03 &H00
+            '
+            ' The IsAttachmentsStream flag simply populates the dictionary keys with
+            ' all filenames found.
 
             Dim FilenamesDict As New Dictionary(Of String, String)
             Dim FilenamesList As New List(Of String)
+            Dim Filename As String
             Dim StartIdxs As New List(Of Integer)
             Dim CurrentIdx As Integer
 
@@ -930,6 +960,9 @@ Public Class HelperStructuredStorageDocument
             Dim UnicodeMatch As Boolean
             Dim UnicodeEndIdx As Integer
             Dim UnicodeStartIdx As Integer
+
+            Dim RelativeMotionIdx As Integer
+            Dim RelativeMotion As Integer
 
             CurrentIdx = ByteArray.Count - 1
             AsciiMatch = False
@@ -990,21 +1023,30 @@ Public Class HelperStructuredStorageDocument
                         StartIdxs.Add(CurrentIdx)
                         AsciiMatch = False
                         Dim ByteList As New List(Of Byte)
+
                         For j = AsciiStartIdx To AsciiEndIdx
                             ByteList.Add(ByteArray(j))
                         Next
-                        FilenamesList.Add(System.Text.Encoding.ASCII.GetString(ByteList.ToArray))
-                        'For j = AsciiStartIdx To AsciiEndIdx
-                        '    ByteList.Add(ByteArray(j))
-                        '    ByteList.Add(&H0)
-                        'Next
-                        'FilenamesList.Add(System.Text.Encoding.Unicode.GetString(ByteList.ToArray))
+
+                        'Filename = System.Text.Encoding.ASCII.GetString(ByteList.ToArray)
+                        Filename = Encoding.Default.GetString(ByteList.ToArray)
+
+                        ' Check for RELATIVE filename
+                        If ByteArray(AsciiStartIdx - 7) = &H46 Then
+                            RelativeMotion = CInt(ByteArray(AsciiStartIdx - 6))
+                            Filename = ProcessRelativeFilename(Filename, RelativeMotion)
+                        End If
+
+                        If Filename IsNot Nothing Then
+                            FilenamesList.Add(Filename)
+                        End If
+
                     End If
                 End If
 
                 If UnicodeMatch Then
 
-                    ' Checks to see if the stop indicator is present just ahead of the current index
+                    ' Checks to see if either stop indicator is present just ahead of the current index
 
                     Dim StartIndicatorMatch As Boolean = True
                     Dim StartIndicatorMatchAlt As Boolean = True
@@ -1030,13 +1072,32 @@ Public Class HelperStructuredStorageDocument
                         For j = UnicodeStartIdx To UnicodeEndIdx
                             ByteList.Add(ByteArray(j))
                         Next
-                        FilenamesList.Add(System.Text.Encoding.Unicode.GetString(ByteList.ToArray))
+
+                        Filename = System.Text.Encoding.Unicode.GetString(ByteList.ToArray)
+
+                        ' Check for RELATIVE filename
+                        If ByteArray(UnicodeStartIdx - 7) = &H46 Then
+                            RelativeMotion = CInt(ByteArray(UnicodeStartIdx - 6))
+                            Filename = ProcessRelativeFilename(Filename, RelativeMotion)
+                        End If
+
+                        If Filename IsNot Nothing Then
+                            FilenamesList.Add(Filename)
+                        End If
+
                     End If
                 End If
 
                 CurrentIdx -= 1
 
             End While
+
+            If IsAttachmentsStream Then
+                For Each Filename In FilenamesList
+                    FilenamesDict(Filename) = Filename
+                Next
+                Return FilenamesDict
+            End If
 
             If Not FilenamesList.Count >= 3 Then
                 Return Nothing
@@ -1055,83 +1116,55 @@ Public Class HelperStructuredStorageDocument
 
             Dim RELATIVE = FilenamesList(FilenamesList.Count - 3)
 
-            'Strip off leading "\" if present
-            If RELATIVE(0) = "\" Then
-                RELATIVE = RELATIVE.Substring(1, RELATIVE.Count - 1)
-            End If
-
-            'Create relative motion prefix eg. "..\..\"
-            Dim Prefix As String = ""
-
-            Dim RelativeMotionIdx As Integer = StartIdxs(StartIdxs.Count - 3) - 6
-            Dim RelativeMotion As Integer = CInt(ByteArray(RelativeMotionIdx))
-
-            If RelativeMotion = 1 Then
-                Prefix = ".\"
-            Else
-                'For i = 0 To RelativeMotion - 1
-                '    Prefix = String.Format("{0}..\", Prefix)
-                'Next
-                For j = 0 To RelativeMotion - 2
-                    Prefix = String.Format("{0}..\", Prefix)
-                Next
-            End If
-
-            RELATIVE = String.Format("{0}{1}", Prefix, RELATIVE)
-
-            'Create full path from relative path
-            'Dim OLD = RELATIVE
-            RELATIVE = Path.GetFullPath(Path.Combine(ContainerFileDirectory, RELATIVE))
-            'Try
-            'Catch ex As Exception
-            '    Dim i = 0
-            'End Try
-
             FilenamesDict("RELATIVE") = RELATIVE
 
             Return FilenamesDict
 
         End Function
 
-        Private Function ProcessRelativeFilename(tmpByteList As List(Of Byte), RelativeMotion As Integer) As String
-            Dim RELATIVE As String = ""
+        Private Function ProcessRelativeFilename(
+            Filename As String,
+            RelativeMotion As Integer
+            ) As String
 
-            'Convert ASCII to Unicode
-            Dim tmptmpByteList As New List(Of Byte)
-            For i = 0 To tmpByteList.Count - 1
-                tmptmpByteList.Add(tmpByteList(i))
-                tmptmpByteList.Add(&H0)
-            Next
-
-            RELATIVE = System.Text.Encoding.Unicode.GetString(tmptmpByteList.ToArray)
-
-            'Strip off leading "\" if present
-            If RELATIVE(0) = "\" Then
-                RELATIVE = RELATIVE.Substring(1, RELATIVE.Count - 1)
-            End If
-
-            'Create relative motion prefix eg. "..\..\"
-            Dim Prefix As String = ""
-
-            If RelativeMotion = 1 Then
-                Prefix = ".\"
+            If RelativeMotion = 0 Then
+                ' Seems to indicate a full-path filename.  Return unmodified filename.
             Else
-                'For i = 0 To RelativeMotion - 1
-                '    Prefix = String.Format("{0}..\", Prefix)
-                'Next
-                For j = 0 To RelativeMotion - 2
-                    Prefix = String.Format("{0}..\", Prefix)
-                Next
+                'Strip off leading "\" if present
+                If Filename(0) = "\" Then
+                    Filename = Filename.Substring(1, Filename.Count - 1)
+                End If
+
+                'Create relative motion prefix eg. "..\..\"
+                Dim Prefix As String = ""
+
+                If RelativeMotion = 1 Then
+                    Prefix = ".\"
+                Else
+                    'For i = 0 To RelativeMotion - 1
+                    '    Prefix = String.Format("{0}..\", Prefix)
+                    'Next
+                    For j = 0 To RelativeMotion - 2
+                        Prefix = String.Format("{0}..\", Prefix)
+                    Next
+                End If
+
+                Filename = String.Format("{0}{1}", Prefix, Filename)
+
+                'Create full path from relative path
+                Dim ContainerFileDirectory = IO.Path.GetDirectoryName(Me.ContainingFileFullName)
+
+                Dim OLD = Filename
+                Try
+                    Filename = Path.GetFullPath(Path.Combine(ContainerFileDirectory, Filename))
+                Catch ex As Exception
+                    Filename = Nothing
+                End Try
+
             End If
 
-            RELATIVE = String.Format("{0}{1}", Prefix, RELATIVE)  ' Does this preserve unicode format?
 
-            'Create full path from relative path
-            Dim ContainerFileDirectory = IO.Path.GetDirectoryName(Me.ContainingFileFullName)
-
-            RELATIVE = Path.GetFullPath(Path.Combine(ContainerFileDirectory, RELATIVE))
-
-            Return RELATIVE
+            Return Filename
         End Function
 
         Public Function FindIndicatorIdx(
