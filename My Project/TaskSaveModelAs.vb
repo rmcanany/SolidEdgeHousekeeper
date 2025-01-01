@@ -217,7 +217,7 @@ Public Class TaskSaveModelAs
 
     'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
 
-    Public Property PropertiesData As PropertiesData
+    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName

@@ -175,7 +175,7 @@ Public Class TaskSetDocumentStatus
         End Set
     End Property
 
-    Public Property PropertiesData As PropertiesData
+    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewStatus

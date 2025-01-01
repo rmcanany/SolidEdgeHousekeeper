@@ -165,7 +165,7 @@ Public Class UtilsExecute
 
         For Each Filename As ListViewItem In FMain.ListViewFiles.Items 'L-istBoxFiles.Items
 
-            FMain.TextBoxStatus.Text = String.Format("Checking files: {0}", IO.Path.GetFileName(Filename.Name))
+            FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
             Application.DoEvents()
 
             If Filename.Group.Name <> "Sources" Then

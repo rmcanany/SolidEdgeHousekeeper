@@ -116,40 +116,6 @@ Public Class TaskEditProperties
         End Set
     End Property
 
-    'Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    '    Get
-    '        Return _TemplatePropertyDict
-    '    End Get
-    '    Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-    '        _TemplatePropertyDict = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
-    '            If Not Me.TemplatePropertyDictJSON = s Then
-    '                Me.TemplatePropertyDictJSON = s
-    '            End If
-    '        End If
-    '    End Set
-    'End Property
-
-
-    'Private _TemplatePropertyDictJSON As String
-    'Public Property TemplatePropertyDictJSON As String
-    '    Get
-    '        Return _TemplatePropertyDictJSON
-    '    End Get
-    '    Set(value As String)
-    '        _TemplatePropertyDictJSON = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
-    '                Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
-    '            End If
-    '        End If
-
-    '    End Set
-    'End Property
-
-    Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         Edit
@@ -198,7 +164,7 @@ Public Class TaskEditProperties
         Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
-        Me.PropertiesData = New PropertiesData
+        'Me.PropertiesData = New PropertiesData
 
     End Sub
 

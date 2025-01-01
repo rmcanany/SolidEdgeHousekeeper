@@ -30,6 +30,20 @@ Public Class TaskCheckMaterialNotInMaterialTable
         End Set
     End Property
 
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+                Me.SolidEdgeRequired = Not value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -50,6 +64,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         UseConfigurationPageTemplates
         Browse
         MaterialTable
+        StructuredStorageEdit
         AutoHideOptions
     End Enum
 
@@ -58,7 +73,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.Description = GenerateLabelText()
         Me.HelpText = GetHelpText()
         Me.RequiresSave = True
-        Me.AppliesToAssembly = False
+        Me.AppliesToAssembly = True
         Me.AppliesToPart = True
         Me.AppliesToSheetmetal = True
         Me.AppliesToDraft = False
@@ -67,7 +82,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.Image = My.Resources.TaskCheckMaterialNotInMaterialTable
         Me.Category = "Check"
         Me.RequiresMaterialTable = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
+        Me.SolidEdgeRequired = False
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -104,11 +121,13 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        ErrorMessage = ProcessInternal(FileName)
+
         Return ErrorMessage
 
     End Function
 
-    Private Function ProcessInternal(
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -120,13 +139,71 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
-            Case = "par", "psm"
+            Case "asm", "par", "psm"
                 Dim UM As New UtilsMaterials
                 ErrorMessage = UM.MaterialNotInMaterialTable(SEDoc, Me.MaterialTable, SEApp)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
 
+        Return ErrorMessage
+
+    End Function
+
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Proceed As Boolean = True
+        Dim Matl As String = ""
+
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
+        Dim SSMatTable As HCStructuredStorageDoc = Nothing
+
+        Try
+            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSMatTable = New HCStructuredStorageDoc(Me.MaterialTable)
+        Catch ex As Exception
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+            If SSMatTable IsNot Nothing Then SSMatTable.Close()
+            Proceed = False
+            ExitStatus = 1
+            ErrorMessageList.Add(ex.Message)
+        End Try
+
+        If Proceed Then
+            SSDoc.ReadProperties(Me.PropertiesData)
+            SSMatTable.ReadMaterialTable()
+
+            Matl = CType(SSDoc.GetPropValue("System", "Material"), String)
+
+            If (Matl Is Nothing) Or (SSDoc.IsFileEmpty) Then
+                Proceed = False  ' Empty files or ones without a Material property are not errors.
+            End If
+        End If
+
+        If Proceed Then
+            If Matl.Trim = "" Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Material 'None' not in material table")
+            End If
+        End If
+
+        If Proceed Then
+            If Not SSMatTable.MaterialInTable(Matl) Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Material '{0}' not in material table", Matl))
+            End If
+        End If
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
+        If SSMatTable IsNot Nothing Then SSMatTable.Close()
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
     End Function
@@ -167,6 +244,14 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run task without Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
@@ -177,17 +262,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Return tmpTLPOptions
     End Function
 
-    'Private Sub InitializeOptionProperties()
-    '    Dim CheckBox As CheckBox
-    '    Dim TextBox As TextBox
-
-    '    TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
-    '    Me.MaterialTable = TextBox.Text
-
-    '    CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-    '    Me.AutoHideOptions = CheckBox.Checked
-
-    'End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -275,6 +349,11 @@ Public Class TaskCheckMaterialNotInMaterialTable
                     CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = True
 
                 End If
+
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                'Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

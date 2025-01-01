@@ -191,7 +191,7 @@ Public Class TaskSaveDrawingAs
     Public Property PDFPerSheetFileTypeName As String
 
     'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    Public Property PropertiesData As PropertiesData
+    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName

@@ -78,6 +78,7 @@ Public Class TaskCheckLinks
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckLinks
         Me.RequiresSourceDirectories = True
+        Me.RequiresPropertiesData = True
         Me.Category = "Check"
         SetColorFromCategory(Me)
         Me.SolidEdgeRequired = False
@@ -318,14 +319,14 @@ Public Class TaskCheckLinks
         Dim Directory As String
         Dim Filename As String
 
-        Dim SSDoc As HelperStructuredStorageDocument = Nothing
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Dim ShowException As Boolean = True
         If ShowException Then
-            SSDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=False, NeedLinks:=True, Me.LinkManagementOrder)
+            SSDoc = New HCStructuredStorageDoc(FullName)
         Else
             Try
-                SSDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=False, NeedLinks:=True, Me.LinkManagementOrder)
+                SSDoc = New HCStructuredStorageDoc(FullName)
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
@@ -335,6 +336,8 @@ Public Class TaskCheckLinks
 
 
         If Proceed Then
+
+            SSDoc.ReadLinks(Me.LinkManagementOrder)
             LinkNames = SSDoc.GetLinkNames
             BadLinkNames = SSDoc.GetBadLinkNames
 
@@ -448,19 +451,6 @@ Public Class TaskCheckLinks
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.CheckMissingLinks.ToString), CheckBox)
-        Me.CheckMissingLinks = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.CheckMisplacedLinks.ToString), CheckBox)
-        Me.CheckMisplacedLinks = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

@@ -40,29 +40,15 @@ Public Class UtilsMaterials
             Case "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
+            Case "asm"
+                'Hopefully, nothing to do here.
         End Select
 
-        If Models.Count > 0 Then
+        If (DocType = "asm") OrElse (Models.Count > 0) Then
 
             MatTable = SEApp.GetMaterialTable()
             MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
-
-            ''Make sure the ActiveMaterialLibrary in settings.txt is present
-            'For Each MatTableMaterial In CType(MaterialLibList, System.Array)
-            '    If MatTableMaterial.ToString = ActiveMaterialLibrary Then
-            '        ActiveMaterialLibraryPresent = True
-            '        Exit For
-            '    End If
-            'Next
-
-            'If Not ActiveMaterialLibraryPresent Then
-            '    msg = String.Format("Active material library '{0}' not found.  Exiting...{1}", ActiveMaterialLibrary, Chr(13))
-            '    msg += "Please update the Material Table on the Configuration tab." + Chr(13)
-            '    MsgBox(msg)
-            '    SEApp.Quit()
-            '    End
-            'End If
 
             'See if the CurrentMaterialName is in the ActiveLibrary
             MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
@@ -139,18 +125,14 @@ Public Class UtilsMaterials
 
         End Select
 
-        'Models = SEDoc.Models
-
         Dim MaxModelCount As Integer = 10
 
         If (Models.Count > 0) And (Models.Count <= MaxModelCount) Then
 
-            '' This function populates 'CurrentMaterialName'
-            'MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
-
             ' This function populates 'MaterialLibList' and 'NumMaterialLibraries'
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
 
+            'This should now be handled already in CheckStartConditions.
             'Make sure the ActiveMaterialLibrary exists
             If Not IsActiveMaterialLibraryPresent(MaterialLibList, ActiveMaterialLibrary) Then
                 msg = String.Format("Active material library '{0}' not found.  Exiting...{1}", ActiveMaterialLibrary, Chr(13))

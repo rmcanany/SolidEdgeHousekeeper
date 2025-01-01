@@ -1213,28 +1213,29 @@ Public Class Form_Main
             End If
 
             If Task.RequiresPropertiesData Then
-                Select Case Task.Name
-                    Case "TaskEditProperties"
-                        Dim T = CType(Task, TaskEditProperties)
-                        T.PropertiesData = Me.PropertiesData
-                    Case "TaskEditVariables"
-                        Dim T = CType(Task, TaskEditVariables)
-                        T.PropertiesData = Me.PropertiesData
-                    Case "TaskSaveDrawingAs"
-                        Dim T = CType(Task, TaskSaveDrawingAs)
-                        T.PropertiesData = Me.PropertiesData
-                    Case "TaskSaveModelAs"
-                        Dim T = CType(Task, TaskSaveModelAs)
-                        T.PropertiesData = Me.PropertiesData
-                    Case "TaskSetDocumentStatus"
-                        Dim T = CType(Task, TaskSetDocumentStatus)
-                        T.PropertiesData = Me.PropertiesData
-                    Case "TaskCheckPartNumberDoesNotMatchFilename"
-                        Dim T = CType(Task, TaskCheckPartNumberDoesNotMatchFilename)
-                        T.PropertiesData = Me.PropertiesData
-                    Case Else
-                        MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.Startup()", Task.Name))
-                End Select
+                Task.PropertiesData = Me.PropertiesData
+                'Select Case Task.Name
+                '    Case "TaskEditProperties"
+                '        Dim T = CType(Task, TaskEditProperties)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case "TaskEditVariables"
+                '        Dim T = CType(Task, TaskEditVariables)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case "TaskSaveDrawingAs"
+                '        Dim T = CType(Task, TaskSaveDrawingAs)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case "TaskSaveModelAs"
+                '        Dim T = CType(Task, TaskSaveModelAs)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case "TaskSetDocumentStatus"
+                '        Dim T = CType(Task, TaskSetDocumentStatus)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case "TaskCheckPartNumberDoesNotMatchFilename"
+                '        Dim T = CType(Task, TaskCheckPartNumberDoesNotMatchFilename)
+                '        T.PropertiesData = Me.PropertiesData
+                '    Case Else
+                '        MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.Startup()", Task.Name))
+                'End Select
             End If
 
             tmpTaskPanel.Controls.Add(Task.TaskControl)

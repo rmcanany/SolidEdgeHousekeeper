@@ -94,7 +94,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         End Set
     End Property
 
-    Public Property PropertiesData As PropertiesData
+    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         'PropertySet
@@ -138,7 +138,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.DraftsCheckDraftItself = False
         Me.StructuredStorageEdit = False
 
-        Me.PropertiesData = New PropertiesData
+        'Me.PropertiesData = New PropertiesData
 
     End Sub
 
@@ -337,10 +337,13 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim NewWay As Boolean = True
 
         If NewWay Then
-            Dim SSParentDoc As HelperStructuredStorageDocument = Nothing
+            Dim SSParentDoc As HCStructuredStorageDoc = Nothing
 
             Try
-                SSParentDoc = New HelperStructuredStorageDocument(FullName, NeedProperties:=True, NeedLinks:=True, Me.LinkManagementOrder)
+                SSParentDoc = New HCStructuredStorageDoc(FullName)
+                SSParentDoc.ReadProperties(Me.PropertiesData)
+                SSParentDoc.ReadLinks(Me.LinkManagementOrder)
+
             Catch ex As Exception
                 Proceed = False
                 ExitStatus = 1
@@ -419,10 +422,11 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                                         Continue For
                                     End If
 
-                                    Dim SSChildDoc As HelperStructuredStorageDocument = Nothing
+                                    Dim SSChildDoc As HCStructuredStorageDoc = Nothing
 
                                     Try
-                                        SSChildDoc = New HelperStructuredStorageDocument(ChildName, NeedProperties:=True, NeedLinks:=False, Nothing)
+                                        SSChildDoc = New HCStructuredStorageDoc(ChildName)
+                                        SSChildDoc.ReadProperties(Me.PropertiesData)
 
                                         PartNumber = CStr(SSChildDoc.GetPropValue(Me.PropertySet, Me.PropertyNameEnglish))
 

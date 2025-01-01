@@ -43,6 +43,20 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Set
     End Property
 
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+                Me.SolidEdgeRequired = Not value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -57,12 +71,12 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Property
 
 
-
     Enum ControlNames
         UseConfigurationPageTemplates
         Browse
         MaterialTable
         RemoveFaceStyleOverrides
+        StructuredStorageEdit
         AutoHideOptions
     End Enum
 
@@ -80,7 +94,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.Image = My.Resources.TaskUpdateMaterialFromMaterialTable
         Me.Category = "Update"
         Me.RequiresMaterialTable = True
+        Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
+        Me.SolidEdgeRequired = False
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -118,11 +134,13 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        ErrorMessage = ProcessInternal(FileName)
+
         Return ErrorMessage
 
     End Function
 
-    Private Function ProcessInternal(
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -137,7 +155,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
-            Case = "par", "psm"
+            Case "par", "psm"
                 Dim UM As New UtilsMaterials
                 SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
@@ -153,6 +171,76 @@ Public Class TaskUpdateMaterialFromMaterialTable
             SEDoc.Save()
             SEApp.DoIdle()
         End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+    End Function
+
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim Proceed As Boolean = True
+        Dim Matl As String = ""
+
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
+        Dim SSMatTable As HCStructuredStorageDoc = Nothing
+
+        Try
+            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSMatTable = New HCStructuredStorageDoc(Me.MaterialTable)
+        Catch ex As Exception
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+            If SSMatTable IsNot Nothing Then SSMatTable.Close()
+            Proceed = False
+            ExitStatus = 1
+            ErrorMessageList.Add(ex.Message)
+        End Try
+
+        If Proceed Then
+            SSDoc.ReadProperties(Me.PropertiesData)
+            SSMatTable.ReadMaterialTable()
+
+            Matl = CType(SSDoc.GetPropValue("System", "Material"), String)
+
+            If (Matl Is Nothing) Or (SSDoc.IsFileEmpty) Then
+                Proceed = False  ' Empty files or ones without a Material property are not errors.
+            End If
+        End If
+
+        If Proceed Then
+            If Matl.Trim = "" Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Material 'None' not in material table")
+            End If
+        End If
+
+        If Proceed Then
+            If Not SSMatTable.MaterialInTable(Matl) Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add(String.Format("Material '{0}' not in material table", Matl))
+            End If
+        End If
+
+        If Proceed Then
+            If Not SSMatTable.UpdateMaterial(SSDoc) Then
+                Proceed = False
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to update material")
+            End If
+        End If
+
+        If Proceed Then
+            SSDoc.Save()
+        End If
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
+        If SSMatTable IsNot Nothing Then SSMatTable.Close()
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -192,6 +280,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
         AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run task without Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
 
         RowIndex += 1
 
@@ -276,6 +372,13 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
+
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                'Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Not Me.StructuredStorageEdit
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

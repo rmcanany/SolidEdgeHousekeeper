@@ -2,11 +2,12 @@
 
 Imports System.IO
 Imports System.Text
+Imports System.Xml
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 
-Public Class HelperStructuredStorageDocument
+Public Class HCStructuredStorageDoc
 
     Public Property FullName As String
 
@@ -15,15 +16,13 @@ Public Class HelperStructuredStorageDocument
     Private Property cf As CompoundFile
     Private Property LinkNames As LinkFullNames
     Private Property LinkManagementOrder As List(Of String)
+    Private Property PropertiesData As PropertiesData
+    Private Property MatTable As MaterialTable
+    Private Property DocType As String 'asm, dft, par, psm, mat
 
-    Public Sub New(
-        _FullName As String,
-        NeedProperties As Boolean,
-        NeedLinks As Boolean,
-        _LinkManagementOrder As List(Of String))
+    Public Sub New(_FullName As String)
 
         Me.FullName = _FullName
-        Me.LinkManagementOrder = _LinkManagementOrder
 
         Try
             Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
@@ -45,45 +44,46 @@ Public Class HelperStructuredStorageDocument
             Throw New Exception("FOA files currently not supported")
         End If
 
-        If NeedProperties Then
-            Me.PropSets = New PropertySets(cf)
-        End If
-
-        If NeedLinks Then
-            If Me.LinkManagementOrder Is Nothing Then
-                Throw New Exception("NeedLinks option requires LinkManagementOrder list")
-            Else
-                Me.LinkNames = New LinkFullNames(cf, IsFOA(Me.cf), Me.LinkManagementOrder, Me.FullName)
-            End If
-        End If
+        Me.DocType = IO.Path.GetExtension(FullName).ToLower.Replace(".", "")
 
     End Sub
 
-    Public Function IsFOA(cf As CompoundFile) As Boolean
-        If cf.RootStorage.ContainsStorage("Master") Then
-            Return True
-        Else
-            Return False
-        End If
+    Public Sub ReadProperties(_PropertiesData As PropertiesData)
+        Me.PropertiesData = _PropertiesData
+        Me.PropSets = New PropertySets(Me.cf, Me.FullName)
+    End Sub
 
+    Public Sub ReadLinks(_LinkManagementOrder As List(Of String))
+        Me.LinkManagementOrder = _LinkManagementOrder
+        Me.LinkNames = New LinkFullNames(cf, IsFOA(Me.cf), Me.LinkManagementOrder, Me.FullName)
+    End Sub
+
+    Public Sub ReadMaterialTable()
+        Me.MatTable = New MaterialTable(Me.cf)
+    End Sub
+
+    Public Function IsFOA(cf As CompoundFile) As Boolean
+        Return cf.RootStorage.ContainsStorage("Master")
     End Function
 
-    Public Function IsFOP(cf As CompoundFile) As Boolean
-        If cf.RootStorage.ContainsStorage("FamilyOfParts") Then
-            Return True
-        Else
-            Return False
-        End If
+    Public Function IsFOPMaster(cf As CompoundFile) As Boolean
+        Return cf.RootStorage.ContainsStorage("FamilyOfParts")
+    End Function
 
+    Public Function IsMaterialTable(cf As CompoundFile) As Boolean
+        Return cf.RootStorage.ContainsStream("MaterialDataEx")
     End Function
 
     Public Sub Save()
-        For Each PropSet In Me.PropSets.Items
-            ' The Custom stream gets saved with DocumentSummaryInformation
-            If Not PropSet.Name.ToLower = "custom" Then
-                PropSet.Save()
-            End If
-        Next
+
+        If Me.PropSets IsNot Nothing Then
+            For Each PropSet In Me.PropSets.Items
+                ' The Custom stream gets saved with DocumentSummaryInformation
+                If Not PropSet.Name.ToLower = "custom" Then
+                    PropSet.Save()
+                End If
+            Next
+        End If
 
         Me.cf.Commit()
 
@@ -101,6 +101,10 @@ Public Class HelperStructuredStorageDocument
         ' Return Nothing if a value is not found
 
         Dim Value As Object = Nothing
+
+        If Me.PropSets Is Nothing Then
+            Throw New Exception("Properties not initialized")
+        End If
 
         PropNameEnglish = PropNameEnglish.ToLower
 
@@ -122,6 +126,10 @@ Public Class HelperStructuredStorageDocument
         Dim TypeName As String = Nothing
         Dim VTType As VTPropertyType = Nothing
 
+        If Me.PropSets Is Nothing Then
+            Throw New Exception("Properties not initialized")
+        End If
+
         PropNameEnglish = PropNameEnglish.ToLower
 
         'TypeName = ProcessSpecialProperty(PropSetName, PropNameEnglish)
@@ -142,7 +150,7 @@ Public Class HelperStructuredStorageDocument
                 Case = VTPropertyType.VT_R8
                     TypeName = "Double"
                 Case Else
-                    Dim s = GetType(HelperStructuredStorageDocument).FullName
+                    Dim s = GetType(HCStructuredStorageDoc).FullName
                     MsgBox(String.Format("In {0}: Property type {1} not recognized", s, VTType.ToString))
             End Select
         End If
@@ -156,11 +164,8 @@ Public Class HelperStructuredStorageDocument
         Dim Success As Boolean = False
 
         If Me.PropSets Is Nothing Then
-            Return False
+            Throw New Exception("Properties not initialized")
         End If
-
-        'Dim PropSets As PropertySets = Nothing
-        'Dim PropSet As PropertySet = Nothing
 
         PropNameEnglish = PropNameEnglish.ToLower
 
@@ -188,7 +193,7 @@ Public Class HelperStructuredStorageDocument
         Dim Success As Boolean = False
 
         If Me.PropSets Is Nothing Then
-            Return False
+            Throw New Exception("Properties not initialized")
         End If
 
         Dim PropSet As PropertySet = Me.PropSets.GetItem(PropSetName)
@@ -209,7 +214,7 @@ Public Class HelperStructuredStorageDocument
         Dim Success As Boolean = False
 
         If Me.PropSets Is Nothing Then
-            Return False
+            Throw New Exception("Properties not initialized")
         End If
 
         Dim PropSet As PropertySet = Me.PropSets.GetItem(PropSetName)
@@ -225,6 +230,24 @@ Public Class HelperStructuredStorageDocument
 
         Return Success
     End Function
+
+    Public Function SubstitutePropertyFormulas(InString As String) As String
+        ' Replaces property formulas in a string
+        ' "Material: %{System.Material}, Engineer: %{Custom.Engineer}" --> "Material: STEEL, Engineer: FRED"
+        ' "%{System.Titulo}" -> "Va bene!"
+
+        If Me.PropSets Is Nothing Then
+            Throw New Exception("Properties not initialized")
+        End If
+
+
+        Dim OutString As String = Nothing
+
+
+
+        Return OutString
+    End Function
+
 
     Private Function GetProp(
         PropSetName As String,
@@ -293,7 +316,7 @@ Public Class HelperStructuredStorageDocument
 
     Private Sub OutputPropList()
         Dim Outfile As String = ".\ole_props.csv"
-        Dim s As String
+        'Dim s As String
         'Dim InList As New List(Of String)
         Dim OutList As New List(Of String)
 
@@ -316,69 +339,110 @@ Public Class HelperStructuredStorageDocument
 
     End Sub
 
+    Public Function IsFileEmpty() As Boolean
+        Dim IsEmpty As Boolean
+
+        Select Case Me.DocType
+            Case "par", "psm"
+                Dim ParasolidStorage As CFStorage = Me.cf.RootStorage.GetStorage("PARASOLID")
+                Dim StreamList As New List(Of CFStream)
+                ParasolidStorage.VisitEntries(Sub(item) If item.IsStream Then StreamList.Add(CType(item, CFStream)), recursive:=False)
+                IsEmpty = StreamList.Count = 0
+            Case "asm", "dft"
+                If Me.LinkNames IsNot Nothing Then
+                    IsEmpty = (Me.LinkNames.Items.Count = 0) And (Me.LinkNames.BadLinks.Count = 0)
+                Else
+                    Dim tmpLinkManagmentOrder As List(Of String) = {"CONTAINER", "RELATIVE", "ABSOLUTE"}.ToList
+                    Dim tmpLinkNames = New LinkFullNames(Me.cf, IsFOA(Me.cf), tmpLinkManagmentOrder, Me.FullName)
+                    IsEmpty = (tmpLinkNames.Items.Count = 0) And (tmpLinkNames.BadLinks.Count = 0)
+                End If
+        End Select
+
+        Return IsEmpty
+    End Function
+
     Public Function GetLinkNames() As List(Of String)
-        If Me.LinkNames IsNot Nothing Then
-            Return Me.LinkNames.Items
-        Else
-            Return Nothing
+        If Me.LinkNames Is Nothing Then
+            Throw New Exception("Links not initialized")
         End If
+
+        Return Me.LinkNames.Items
     End Function
 
     Public Function GetBadLinkNames() As List(Of String)
-        If Me.LinkNames IsNot Nothing Then
-            Return Me.LinkNames.BadLinks
-        Else
-            Return Nothing
+        If Me.LinkNames Is Nothing Then
+            Throw New Exception("Links not initialized")
         End If
+
+        Return Me.LinkNames.BadLinks
     End Function
 
+
+    Public Function MaterialInTable(Name As String) As Boolean
+        If Me.MatTable Is Nothing Then
+            Throw New Exception("Material table is not initialized")
+        End If
+
+        Return MatTable.GetMaterial(Name) IsNot Nothing
+    End Function
+
+    Public Function MaterialUpToDate(SSDoc As HCStructuredStorageDoc) As Boolean
+        Return Me.MatTable.MaterialUpToDate(SSDoc)
+    End Function
+
+    Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
+        Return Me.MatTable.UpdateMaterial(SSDoc)
+    End Function
 
 
     Private Class PropertySets
         Public Property Items As List(Of PropertySet)
 
         Private Property cf As CompoundFile
+        Private Property FullName As String
         Private Property PropertySetNames As List(Of String)
 
-        Public Sub New(_cf As CompoundFile)
+        Public Sub New(_cf As CompoundFile, _FullName As String)
             Me.cf = _cf
+            Me.FullName = _FullName
 
             Me.Items = New List(Of PropertySet)
 
+
             Me.PropertySetNames = New List(Of String)
 
-            Me.PropertySetNames.AddRange({"SummaryInformation", "DocumentSummaryInformation", "ExtendedSummaryInformation"})
-            Me.PropertySetNames.AddRange({"ProjectInformation", "MechanicalModeling", "Custom"})
+            Dim tmpPropertySetNames As New List(Of String)
+
+            tmpPropertySetNames.AddRange({"SummaryInformation", "DocumentSummaryInformation", "ExtendedSummaryInformation"})
+            tmpPropertySetNames.AddRange({"ProjectInformation", "MechanicalModeling", "Custom"})
 
             Dim cs As CFStream = Nothing
             Dim co As OLEPropertiesContainer = Nothing
 
-            Dim PropertySetNamesInFile As New List(Of String)
-
-            For Each PropertySetName As String In Me.PropertySetNames
+            For Each PropertySetName As String In tmpPropertySetNames
                 If Not PropertySetName = "Custom" Then
 
-                    'Some files don't have every possible PropertySet
+                    'Not all files have every PropertySet
+                    'Properties of Some very old files appear to be organized differently
                     Try
                         Me.Items.Add(New PropertySet(Me.cf, PropertySetName))
-                        PropertySetNamesInFile.Add(PropertySetName)
+                        Me.PropertySetNames.Add(PropertySetName)
                     Catch ex As Exception
-                        'Not an error, but need to update PropertySetNames after the loop.
                     End Try
 
-                    If PropertySetName = "DocumentSummaryInformation" Then
+                    If (PropertySetName = "DocumentSummaryInformation") And (PropertySetNames.Contains(PropertySetName)) Then
                         cs = GetItem("DocumentSummaryInformation").cs
                         co = GetItem("DocumentSummaryInformation").co
                     End If
                 Else
                     ' The Custom PropertySet needs the same cs and co as DocumentSummaryInformation, not copies.
-                    Me.Items.Add(New PropertySet(Me.cf, PropertySetName, cs, co))
-                    PropertySetNamesInFile.Add(PropertySetName)
+                    If (cs IsNot Nothing) And (cs IsNot Nothing) Then
+                        Me.Items.Add(New PropertySet(Me.cf, PropertySetName, cs, co))
+                        PropertySetNames.Add(PropertySetName)
+                    End If
                 End If
 
             Next
-
-            PropertySetNames = PropertySetNamesInFile
 
         End Sub
 
@@ -913,7 +977,7 @@ Public Class HelperStructuredStorageDocument
             ' {
             ' "ABSOLUTE": Full path filename,
             ' "RELATIVE": Full path filename,
-            ' "CONTAINER": .\filename
+            ' "CONTAINER": Full path filename
             ' }
             ' Assumes the order is DOSNAME, ABSOLUTE, RELATIVE.  Ignores any matches after those.
             ' 
@@ -922,7 +986,7 @@ Public Class HelperStructuredStorageDocument
             ' For Ascii strings the indicator is &H00.  For Unicode it is &H03 &H00
             '
             ' The IsAttachmentsStream flag simply populates the dictionary keys with
-            ' all filenames found.
+            ' all filenames found in the Root/Attachments stream.
 
             Dim FilenamesDict As New Dictionary(Of String, String)
             Dim FilenamesList As New List(Of String)
@@ -1033,7 +1097,8 @@ Public Class HelperStructuredStorageDocument
 
                         ' Check for RELATIVE filename
                         If ByteArray(AsciiStartIdx - 7) = &H46 Then
-                            RelativeMotion = CInt(ByteArray(AsciiStartIdx - 6))
+                            RelativeMotionIdx = AsciiStartIdx - 6
+                            RelativeMotion = CInt(ByteArray(RelativeMotionIdx))
                             Filename = ProcessRelativeFilename(Filename, RelativeMotion)
                         End If
 
@@ -1077,7 +1142,8 @@ Public Class HelperStructuredStorageDocument
 
                         ' Check for RELATIVE filename
                         If ByteArray(UnicodeStartIdx - 7) = &H46 Then
-                            RelativeMotion = CInt(ByteArray(UnicodeStartIdx - 6))
+                            RelativeMotionIdx = UnicodeStartIdx - 6
+                            RelativeMotion = CInt(ByteArray(RelativeMotionIdx))
                             Filename = ProcessRelativeFilename(Filename, RelativeMotion)
                         End If
 
@@ -1266,6 +1332,284 @@ Public Class HelperStructuredStorageDocument
 
     End Class
 
+
+    Private Class MaterialTable
+        Public Property Materials As List(Of Material)
+        Public Property Gages As List(Of Gage)
+
+        ' This is for material table files *.mat only
+
+        Public Sub New(cf As CompoundFile)
+            Dim ByteArray As Byte()
+            Dim AllStreams As New List(Of CFStream)
+            Dim MaterialStream As CFStream = Nothing
+            Dim RawMaterialTable As String
+
+            Materials = New List(Of Material)
+            Gages = New List(Of Gage)
+
+            cf.RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
+
+            For Each AllStream As CFStream In AllStreams
+                If AllStream.Name = "MaterialDataEx" Then
+                    MaterialStream = AllStream
+                End If
+            Next
+
+            ByteArray = MaterialStream.GetData
+
+            RawMaterialTable = System.Text.Encoding.Unicode.GetString(ByteArray)
+            RawMaterialTable = RawMaterialTable.Substring(2, Len(RawMaterialTable) - 2)
+
+            Dim XmlDoc As New XmlDocument
+            XmlDoc.LoadXml(RawMaterialTable)
+
+            TraverseNodes(XmlDoc)  'Populates Me.Materials and Me.Gages
+
+        End Sub
+
+        Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
+            Dim IsUpToDate As Boolean
+            Dim Matl As String = Nothing
+            Dim MatTableMatl As Material = Nothing
+            Dim Proceed As Boolean = True
+            Dim tf As Boolean
+
+            If SSDoc.PropSets Is Nothing Then
+                Throw New Exception(String.Format("Properties not initialized in '{0}'", IO.Path.GetFileName(SSDoc.FullName)))
+            End If
+
+            If MaterialUpToDate(SSDoc) Then
+                Proceed = False
+                IsUpToDate = True
+            End If
+
+            If Proceed Then
+                Matl = CStr(SSDoc.GetPropValue("System", "Material"))
+
+                MatTableMatl = GetMaterial(Matl)
+
+                If MatTableMatl Is Nothing Then
+                    Proceed = False
+                    IsUpToDate = False
+                End If
+            End If
+
+            If Proceed Then
+                Try
+                    tf = SSDoc.SetPropValue("System", "Material", Matl, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Face Style", MatTableMatl.FaceStyle, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Fill Style", MatTableMatl.FillStyle, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Virtual Style", MatTableMatl.VirtualStyle, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Coef. of Thermal Exp", MatTableMatl.CoefOfThermalExp, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Thermal Conductivity", MatTableMatl.ThermalConductivity, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Specific Heat", MatTableMatl.SpecificHeat, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Modulus of Elasticity", MatTableMatl.ModulusOfElasticity, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Poisson's Ratio", MatTableMatl.PoissonsRatio, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Yield Stress", MatTableMatl.YieldStress, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Ultimate Stress", MatTableMatl.UltimateStress, AddProperty:=False)
+                    tf = tf And SSDoc.SetPropValue("System", "Elongation", MatTableMatl.Elongation, AddProperty:=False)
+
+                    IsUpToDate = tf
+                Catch ex As Exception
+                    IsUpToDate = False
+                End Try
+
+            End If
+
+            Return IsUpToDate
+        End Function
+
+        Public Function MaterialUpToDate(SSDoc As HCStructuredStorageDoc) As Boolean
+            Dim IsUpToDate As Boolean
+            Dim Matl As String
+            Dim MatTableMatl As Material
+            Dim tf As Boolean
+            Dim Threshold As Double = 0.001
+
+            If SSDoc.PropSets Is Nothing Then
+                Throw New Exception(String.Format("Properties not initialized in '{0}'", IO.Path.GetFileName(SSDoc.FullName)))
+            End If
+
+            Matl = CStr(SSDoc.GetPropValue("System", "Material"))
+
+            MatTableMatl = GetMaterial(Matl)
+
+            If MatTableMatl Is Nothing Then
+                IsUpToDate = False
+            Else
+                tf = MatTableMatl.FaceStyle = CStr(SSDoc.GetPropValue("System", "Face Style"))
+                tf = tf And MatTableMatl.FillStyle = CStr(SSDoc.GetPropValue("System", "Fill Style"))
+                'tf = tf And MatTableMatl.VirtualStyle = CStr(SSDoc.GetPropValue("System", "Virtual Style"))
+                tf = tf And CloseEnough(MatTableMatl.CoefOfThermalExp, CDbl(SSDoc.GetPropValue("System", "Coef. of Thermal Exp")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.ThermalConductivity, CDbl(SSDoc.GetPropValue("System", "Thermal Conductivity")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.SpecificHeat, CDbl(SSDoc.GetPropValue("System", "Specific Heat")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.ModulusOfElasticity, CDbl(SSDoc.GetPropValue("System", "Modulus of Elasticity")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.PoissonsRatio, CDbl(SSDoc.GetPropValue("System", "Poisson's Ratio")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.YieldStress, CDbl(SSDoc.GetPropValue("System", "Yield Stress")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.UltimateStress, CDbl(SSDoc.GetPropValue("System", "Ultimate Stress")), Threshold)
+                tf = tf And CloseEnough(MatTableMatl.Elongation, CDbl(SSDoc.GetPropValue("System", "Elongation")), Threshold)
+
+                IsUpToDate = tf
+            End If
+
+            Return IsUpToDate
+        End Function
+
+        Public Function GetMaterial(Name As String) As Material
+            Dim Matl As Material = Nothing
+
+            For Each Item As Material In Me.Materials
+                If Item.Name.ToLower = Name.ToLower Then
+                    Matl = Item
+                    Exit For
+                End If
+            Next
+
+            Return Matl
+        End Function
+
+        Public Function GetGage(Name As String) As Gage
+            Dim Gage As Gage = Nothing
+
+            For Each Item As Gage In Me.Gages
+                If Item.Name.ToLower = Name.ToLower Then
+                    Gage = Item
+                    Exit For
+                End If
+            Next
+
+            Return Gage
+        End Function
+
+
+        Private Sub TraverseNodes(RootNode As Xml.XmlNode)
+            For Each ChildNode As XmlElement In RootNode
+                If ChildNode.Name.ToLower = "material" Then
+                    Dim Matl As New Material
+                    If ChildNode.HasAttributes Then
+                        Matl.Name = ChildNode.Attributes(0).Value
+                    End If
+                    For Each PropertyNode As XmlElement In ChildNode.ChildNodes
+                        If PropertyNode.HasAttributes Then
+                            Dim Name As String = ""
+                            Dim Value As String = ""
+                            For Each Attribute As XmlAttribute In PropertyNode.Attributes
+                                If Attribute.Name = "Name" Then
+                                    Name = Attribute.Value
+                                ElseIf Attribute.Name = "Value" Then
+                                    Value = Attribute.Value
+                                End If
+                            Next
+                            Select Case Name
+                                Case "Face Style"
+                                    Matl.FaceStyle = Value
+                                Case "Fill Style"
+                                    Matl.FillStyle = Value
+                                Case "VSPlus Style"
+                                    Matl.VirtualStyle = Value
+                                Case "Coef. of Thermal Exp"
+                                    Matl.CoefOfThermalExp = CDbl(Value)
+                                Case "Thermal Conductivity"
+                                    Matl.ThermalConductivity = CDbl(Value)
+                                Case "Specific Heat"
+                                    Matl.SpecificHeat = CDbl(Value)
+                                Case "Modulus of Elasticity"
+                                    Matl.ModulusOfElasticity = CDbl(Value)
+                                Case "Poisson's Ratio"
+                                    Matl.PoissonsRatio = CDbl(Value)
+                                Case "Yield Stress"
+                                    Matl.YieldStress = CDbl(Value)
+                                Case "Ultimate Stress"
+                                    Matl.UltimateStress = CDbl(Value)
+                                Case "Elongation"
+                                    Matl.Elongation = CDbl(Value)
+                            End Select
+
+                        End If
+                    Next
+                    Me.Materials.Add(Matl)
+
+                ElseIf ChildNode.Name.ToLower = "psmgauge" Then
+                    Dim Gage As New Gage
+                    If ChildNode.HasAttributes Then
+                        Gage.Name = ChildNode.Attributes(0).Value
+                    End If
+                    For Each PropertyNode As XmlElement In ChildNode.ChildNodes
+                        If PropertyNode.HasAttributes Then
+                            Dim Name As String = ""
+                            Dim Value As String = ""
+                            For Each Attribute As XmlAttribute In PropertyNode.Attributes
+                                If Attribute.Name = "Name" Then
+                                    Name = Attribute.Value
+                                ElseIf Attribute.Name = "Value" Then
+                                    Value = Attribute.Value
+                                End If
+                            Next
+                            Select Case Name
+                                Case "SMetal Thickness"
+                                    Gage.Thickness = CDbl(Value)
+                                Case "SMetal Bend Radius"
+                                    Gage.BendRadius = CDbl(Value)
+                                Case "SMetal Relief Width"
+                                    Gage.ReliefWidth = CDbl(Value)
+                                Case "SMetal Relief Length"
+                                    Gage.ReliefLength = CDbl(Value)
+                                Case "SMetal Neutral Factor"
+                                    Gage.NeutralFactor = CDbl(Value)
+                                Case "SMetal Bend Param Type"
+                                    Gage.BendParamType = CDbl(Value)
+                                Case "SMetal Bend Equation"
+                                    Gage.BendEquation = Value
+                            End Select
+
+                        End If
+                    Next
+                    Me.Gages.Add(Gage)
+                Else
+                    If ChildNode.HasChildNodes Then
+                        TraverseNodes(ChildNode)
+                    End If
+                End If
+            Next
+        End Sub
+
+        Private Function CloseEnough(X As Double, Y As Double, Threshold As Double) As Boolean
+            Dim Epsilon As Double = 0.000000001
+            Dim Value As Double = Math.Abs((X - Y) / (X + Epsilon))
+            Return (Value = 0) Or (1 - Threshold < Value)
+        End Function
+
+
+    End Class
+
+    Private Class Material
+        Public Property Name As String
+        Public Property FaceStyle As String
+        Public Property FillStyle As String
+        Public Property VirtualStyle As String
+        Public Property CoefOfThermalExp As Double
+        Public Property ThermalConductivity As Double
+        Public Property SpecificHeat As Double
+        Public Property ModulusOfElasticity As Double
+        Public Property PoissonsRatio As Double
+        Public Property YieldStress As Double
+        Public Property UltimateStress As Double
+        Public Property Elongation As Double
+
+    End Class
+
+    Private Class Gage
+        Public Property Name As String
+        Public Property Thickness As Double
+        Public Property BendRadius As Double
+        Public Property ReliefWidth As Double
+        Public Property ReliefLength As Double
+        Public Property NeutralFactor As Double
+        Public Property BendParamType As Double
+        Public Property BendEquation As String
+
+    End Class
 
 End Class
 

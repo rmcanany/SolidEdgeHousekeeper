@@ -197,7 +197,7 @@
     <Compile Include="My Project\FormTextPrompt.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="My Project\HelperStructuredStorageDocument.vb" />
+    <Compile Include="My Project\HCStructuredStorageDoc.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
