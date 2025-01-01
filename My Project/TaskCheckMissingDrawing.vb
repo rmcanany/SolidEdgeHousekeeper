@@ -4,32 +4,63 @@ Public Class TaskCheckMissingDrawing
 
     Inherits Task
 
+    Private _StructuredStorageEdit As Boolean
+    Public Property StructuredStorageEdit As Boolean
+        Get
+            Return _StructuredStorageEdit
+        End Get
+        Set(value As Boolean)
+            _StructuredStorageEdit = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.StructuredStorageEdit.ToString), CheckBox).Checked = value
+                Me.SolidEdgeRequired = Not value
+            End If
+        End Set
+    End Property
+
+    Private _AutoHideOptions As Boolean
+    Public Property AutoHideOptions As Boolean
+        Get
+            Return _AutoHideOptions
+        End Get
+        Set(value As Boolean)
+            _AutoHideOptions = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Enum ControlNames
+        StructuredStorageEdit
+        AutoHideOptions
+    End Enum
+
+
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
         Me.HelpText = GetHelpText()
-        Me.RequiresSave = True
+        Me.RequiresSave = False
         Me.AppliesToAssembly = True
         Me.AppliesToPart = True
         Me.AppliesToSheetmetal = True
         Me.AppliesToDraft = False
-        Me.HasOptions = False
+        Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskCheckMissingDrawing
         Me.Category = "Check"
         SetColorFromCategory(Me)
+        Me.SolidEdgeRequired = False
 
         GenerateTaskControl()
+        TaskOptionsTLP = GenerateTaskOptionsTLP()
+        Me.TaskControl.AddTaskOptionsTLP(TaskOptionsTLP)
 
         ' Options
 
     End Sub
 
-    'Public Sub New(Task As TaskCheckMissingDrawing)
-
-    '    'Options
-
-    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -52,14 +83,18 @@ Public Class TaskCheckMissingDrawing
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        ErrorMessage = ProcessInternal(FileName)
+
         Return ErrorMessage
 
     End Function
-    Private Function ProcessInternal(
+
+    Private Overloads Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
@@ -76,10 +111,6 @@ Public Class TaskCheckMissingDrawing
 
         ModelFilename = UC.SplitFOAName(SEDoc.FullName)("Filename")
 
-        'If ModelFilename.Contains("!") Then
-        '    ModelFilename = ModelFilename.Split("!"c)(0)
-        'End If
-
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
@@ -92,22 +123,62 @@ Public Class TaskCheckMissingDrawing
         Return ErrorMessage
     End Function
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
+    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
-    '    Dim IU As New InterfaceUtilities
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
+        Dim ModelFilename As String
+        Dim DrawingFilename As String
 
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
+        Dim UC As New UtilsCommon
 
-    '    Return Me.TLPTask
-    'End Function
+        ModelFilename = UC.SplitFOAName(FullName)("Filename")
+
+        DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
+
+        If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("Drawing {0} not found", DrawingFilename))
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+    End Function
+
+
+    Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
+        Dim tmpTLPOptions = New ExTableLayoutPanel
+
+        Dim RowIndex As Integer
+        Dim CheckBox As CheckBox
+        'Dim TextBox As TextBox
+        'Dim Button As Button
+
+        FormatTLPOptions(tmpTLPOptions, "TLPOptions", 2)
+
+        RowIndex = 0
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.StructuredStorageEdit.ToString, "Run task without Solid Edge")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
+        'CheckBox.Checked = True
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        Return tmpTLPOptions
+    End Function
+
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
@@ -140,6 +211,29 @@ Public Class TaskCheckMissingDrawing
         End If
 
     End Function
+
+    Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
+        Dim Checkbox = CType(sender, CheckBox)
+        Dim Name = Checkbox.Name
+
+        Select Case Name
+
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                'Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
+
+            Case ControlNames.AutoHideOptions.ToString
+                Me.TaskControl.AutoHideOptions = Checkbox.Checked
+                If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
+                    Me.AutoHideOptions = Checkbox.Checked
+                End If
+
+            Case Else
+                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+        End Select
+
+    End Sub
 
 
     Private Function GetHelpText() As String

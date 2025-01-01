@@ -58,8 +58,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
     End Property
 
 
-
-
     Enum ControlNames
         UseConfigurationPageTemplates
         Browse
@@ -382,10 +380,6 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
     End Sub
 
-
-    'Public Overrides Sub ReconcileFormWithProps()
-    '    ControlsDict(ControlNames.MaterialTable.ToString).Text = Me.MaterialTable
-    'End Sub
 
 
     Private Function GetHelpText() As String
