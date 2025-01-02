@@ -2,10 +2,12 @@
 
 Imports System.IO
 Imports System.Text
+Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
+Imports PanoramicData.NCalcExtensions
 
 Public Class HCStructuredStorageDoc
 
@@ -231,23 +233,167 @@ Public Class HCStructuredStorageDoc
         Return Success
     End Function
 
-    Public Function SubstitutePropertyFormulas(InString As String) As String
-        ' Replaces property formulas in a string
+    Public Function SubstitutePropertyFormulas(
+         InString As String,
+         ValidFilenameRequired As Boolean,
+         Optional IsExpression As Boolean = False
+         ) As String
+
+        ' Replaces property formulas in a string.
+        ' Returns Nothing if an error occurs
+
+        ' Examples
         ' "Material: %{System.Material}, Engineer: %{Custom.Engineer}" --> "Material: STEEL, Engineer: FRED"
-        ' "%{System.Titulo}" -> "Va bene!"
+        ' "%{System.Titulo}"                                           --> "Ciao Pizza!"
+        ' "%{Custom.Engineer|R1}"                                      --> "Fred" (From index reference 1)
 
         If Me.PropSets Is Nothing Then
             Throw New Exception("Properties not initialized")
         End If
 
-
         Dim OutString As String = Nothing
 
+        Dim UC As New UtilsCommon
+        'Dim UFC As New UtilsFilenameCharmap
+
+        Dim Proceed As Boolean = True
+
+        Dim DocValues As New List(Of String)
+        Dim DocValue As String
+
+        Dim Formulas As New List(Of String)
+        Dim Formula As String
+
+        Dim Matches As MatchCollection
+        Dim MatchString As Match
+        Dim Pattern As String
+
+
+        ' Any number of substrings that start with "%{" and end with the first encountered "}".
+        Pattern = "%{[^}]*}"
+        Matches = Regex.Matches(InString, Pattern)
+        If Matches.Count = 0 Then
+            OutString = InString
+            Proceed = False
+        Else
+            For Each MatchString In Matches
+                Formulas.Add(MatchString.Value)
+            Next
+        End If
+
+        If Proceed Then
+            For Each Formula In Formulas
+                DocValue = ProcessFormula(Formula, ValidFilenameRequired)
+                If DocValue Is Nothing Then
+                    Return Nothing
+                Else
+                    DocValues.Add(DocValue)
+                End If
+            Next
+        End If
+
+        If Proceed Then
+            OutString = InString
+
+            For i = 0 To DocValues.Count - 1
+                OutString = OutString.Replace(Formulas(i), DocValues(i))
+            Next
+
+        End If
+
+        If Proceed Then
+            If IsExpression Then
+
+                Dim nCalcExpression As New ExtendedExpression(OutString)
+
+                Try
+                    Dim A = nCalcExpression.Evaluate()
+
+                    OutString = A.ToString
+
+                Catch ex As Exception
+
+                    OutString = ex.Message.Replace(vbCrLf, "-")
+
+                End Try
+
+            End If
+        End If
 
 
         Return OutString
     End Function
 
+
+    Private Function ProcessFormula(Formula As String, ValidFilenameRequired As Boolean) As String
+        Dim DocValue As String = Nothing
+
+        Dim UC As New UtilsCommon
+        Dim UFC As New UtilsFilenameCharmap
+
+        Dim PropertySetName As String
+        Dim PropertyName As String
+        Dim PropertyNameEnglish As String
+        Dim ModelIdx As Integer
+
+        Dim LinkName As String
+
+
+        PropertySetName = UC.PropSetFromFormula(Formula)
+        PropertyName = UC.PropNameFromFormula(Formula)
+        ModelIdx = UC.ModelIdxFromFormula(Formula)
+
+        PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
+
+        If Not ((PropertySetName = "System") Or (PropertySetName = "Custom") Or (PropertySetName = "Server")) Then
+            Return Nothing
+        End If
+
+        If ModelIdx = 0 Then
+            DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
+            If DocValue Is Nothing Then
+                Return Nothing
+            Else
+                If ValidFilenameRequired Then
+                    DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                End If
+            End If
+
+        Else
+            If Me.LinkNames Is Nothing Then
+                Throw New Exception("LinkNames not initialized")
+            End If
+
+            If ModelIdx > Me.LinkNames.Items.Count - 1 Then
+                Return Nothing
+            End If
+
+            LinkName = Me.LinkNames.Items(ModelIdx - 1)
+
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+            Try
+                SSDoc = New HCStructuredStorageDoc(LinkName)
+                SSDoc.ReadProperties(Me.PropertiesData)
+            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
+                Return Nothing
+            End Try
+
+            DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+            If DocValue Is Nothing Then
+                SSDoc.Close()
+                Return Nothing
+            Else
+                If ValidFilenameRequired Then
+                    DocValue = UFC.SubstituteIllegalCharacters(DocValue)
+                End If
+            End If
+
+            SSDoc.Close()
+        End If
+
+        Return DocValue
+    End Function
 
     Private Function GetProp(
         PropSetName As String,
@@ -283,7 +429,9 @@ Public Class HCStructuredStorageDoc
 
         Else
             PropSet = Me.PropSets.GetItem(PropSetName)
-            Prop = PropSet.GetItem(PropNameEnglish)
+            If PropSet IsNot Nothing Then
+                Prop = PropSet.GetItem(PropNameEnglish)
+            End If
 
         End If
 
@@ -960,6 +1108,9 @@ Public Class HCStructuredStorageDoc
                         End Select
                     Next
                     If BadName IsNot Nothing Then
+
+                        FullName = BadName 'The Items list needs this for index references to work correctly
+
                         If Not Me.BadLinks.Contains(BadName, StringComparer.OrdinalIgnoreCase) Then
                             BadLinks.Add(BadName)
                         End If
@@ -986,7 +1137,7 @@ Public Class HCStructuredStorageDoc
             ' For Ascii strings the indicator is &H00.  For Unicode it is &H03 &H00
             '
             ' The IsAttachmentsStream flag simply populates the dictionary keys with
-            ' all filenames found in the Root/Attachments stream.
+            ' all filenames (and other garbage) found in the Root/Attachments stream.
 
             Dim FilenamesDict As New Dictionary(Of String, String)
             Dim FilenamesList As New List(Of String)

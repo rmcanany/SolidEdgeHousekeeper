@@ -5,58 +5,18 @@ Imports System.Text.RegularExpressions
 Public Class UtilsPropertyFilters
 
     Public Property FMain As Form_Main
-    Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
-
-    Private _PropertyFilters As PropertyFilters
-    Public Property PropertyFilters As PropertyFilters
-        Get
-            Return _PropertyFilters
-        End Get
-        Set(value As PropertyFilters)
-            _PropertyFilters = value
-
-            Me.PropertyFilter = Me.PropertyFilters.GetActivePropertyFilter
-        End Set
-    End Property
-
     Public Property PropertyFilter As PropertyFilter
+    'Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
 
-    Public Property NewWay As Boolean = True
 
-
-    Public Sub New(_Form_Main As Form_Main, _PropertyFilters As PropertyFilters)
+    Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
-        Me.PropertyFilters = _PropertyFilters
+        Me.PropertyFilter = FMain.PropertyFilters.GetActivePropertyFilter
     End Sub
 
-    Public Function FilterProperties(FoundFiles As IReadOnlyCollection(Of String),
-                PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-                ) As IReadOnlyCollection(Of String)
-
-        ' PropertyFilterFormula is a string containing the desired boolean expression
-        ' e.g., " A AND ( B OR C ) "
-        ' Each variable is separated by whitespace from any parenthesis character or operator
-
-        ' PropertyFilterDict format:
-        '{"0":
-        '    {"Variable":"A",
-        '     "PropertySet":"Custom",
-        '     "PropertyName":"hmk_Part_Number",
-        '     "Comparison":"contains",
-        '     "Value":"aluminum",
-        '     "Formula":" A AND B "},
-        ' "1":
-        '...
-        '}
-
-        Dim PropertyFilterFormula As String = ""
-
-        If Me.NewWay Then
-            PropertyFilterFormula = Me.PropertyFilter.Formula
-        Else
-            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            PropertyFilterFormula = PropertyFilterDict("0")("Formula")  ' Formula is the same for all entries.  Picking the first one.
-        End If
+    Public Function FilterProperties(
+        FoundFiles As IReadOnlyCollection(Of String)
+        ) As IReadOnlyCollection(Of String)
 
         Dim LocalFoundFiles As New List(Of String)
         Dim FilteredFiles As New List(Of String)
@@ -66,61 +26,50 @@ Public Class UtilsPropertyFilters
             LocalFoundFiles.Add(FoundFile)
         Next
 
-        FilteredFiles = ProcessFiles(LocalFoundFiles, PropertyFilterDict, PropertyFilterFormula)
+        FilteredFiles = ProcessFiles(LocalFoundFiles)
 
         FMain.TextBoxStatus.Text = ""
 
         Return FilteredFiles
     End Function
 
-
-    Private Function ProcessFiles(FoundFiles As List(Of String),
-                PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
-                PropertyFilterFormula As String) As List(Of String)
+    Private Function ProcessFiles(
+        FoundFiles As List(Of String)
+        ) As List(Of String)
 
         Dim FoundFile As String
         Dim FilteredFiles As New List(Of String)
-        Dim tf As Boolean
-        Dim DMApp As New DesignManager.Application
-        Dim msg As String
-
-        DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
-
-        FMain.Activate() ' Put the form on top of the Design Manager form.
+        Dim GotAMatch As Boolean
 
         For Each FoundFile In FoundFiles
             If Form_Main.StopProcess Then
                 Exit For
             End If
 
-            msg = System.IO.Path.GetFileName(FoundFile)
-            FMain.TextBoxStatus.Text = String.Format("Property Filter {0}", msg)
+            FMain.TextBoxStatus.Text = String.Format("Property Filter {0}", System.IO.Path.GetFileName(FoundFile))
 
-            tf = ProcessFile(DMApp, FoundFile, PropertyFilterDict, PropertyFilterFormula)
-            If tf Then
+            GotAMatch = ProcessFile(FoundFile)
+            If GotAMatch Then
                 FilteredFiles.Add(FoundFile)
             End If
         Next
 
-        DMApp.Quit()
-
         Return FilteredFiles
     End Function
 
-    Public Function ProcessFile(DMApp As DesignManager.Application, FoundFile As String,
-                PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
-                PropertyFilterFormula As String) As Boolean
+    Public Function ProcessFile(
+        FoundFile As String
+        ) As Boolean
 
         ' Returns True if a match is found
 
-        Dim tf As Boolean
-        Dim DMDoc As DesignManager.Document
+        Dim GotAMatch As Boolean
         Dim Extension As String
-        Dim LinkedDocuments As DesignManager.LinkedDocuments
-        Dim LinkedDocument As DesignManager.Document
 
         Dim ModelExtensions As New List(Of String)
         ModelExtensions.AddRange({".asm", ".par", ".psm"})
+
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         System.Windows.Forms.Application.DoEvents()
         If Form_Main.StopProcess Then
@@ -129,41 +78,48 @@ Public Class UtilsPropertyFilters
 
         Extension = System.IO.Path.GetExtension(FoundFile)
 
-        If Extension = ".dft" Then
-            DMDoc = CType(DMApp.Open(FoundFile), DesignManager.Document)
-            LinkedDocuments = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
-
-            If FMain.CheckBoxPropertyFilterIncludeDraftItself.Checked Then
-                tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
-            Else
-                tf = False
-            End If
-
-            If FMain.CheckBoxPropertyFilterIncludeDraftModel.Checked Then
-                For Each LinkedDocument In LinkedDocuments
-                    If ModelExtensions.Contains(System.IO.Path.GetExtension(LinkedDocument.FullName)) Then
-                        tf = tf Or ProcessFile(DMApp, LinkedDocument.FullName, PropertyFilterDict, PropertyFilterFormula)
-                    End If
-                Next
-            End If
+        If Not Extension = ".dft" Then
+            GotAMatch = ProcessProperties(FoundFile)
         Else
-            tf = ProcessProperties(FoundFile, DMApp, PropertyFilterDict, PropertyFilterFormula, Extension)
+            If FMain.PropertyFilterIncludeDraftItself Then
+                GotAMatch = ProcessProperties(FoundFile)
+            Else
+                GotAMatch = False
+            End If
+
+            If FMain.PropertyFilterIncludeDraftModel Then
+                Try
+                    SSDoc = New HCStructuredStorageDoc(FoundFile)
+                    SSDoc.ReadLinks(FMain.LinkManagementOrder)
+
+                    For Each LinkFilename As String In SSDoc.GetLinkNames
+                        If ModelExtensions.Contains(System.IO.Path.GetExtension(LinkFilename)) Then
+                            If IO.File.Exists(LinkFilename) Then
+                                GotAMatch = GotAMatch Or ProcessFile(LinkFilename)
+                            End If
+                        End If
+                    Next
+
+                    SSDoc.Close()
+                Catch ex As Exception
+                    If SSDoc IsNot Nothing Then SSDoc.Close()
+                    GotAMatch = False
+                End Try
+
+            End If
         End If
 
-        Return tf
+        Return GotAMatch
 
     End Function
 
-    Public Function ProcessProperties(FoundFile As String,
-        DMApp As DesignManager.Application,
-        PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)),
-        PropertyFilterFormula As String,
-        Extension As String) As Boolean
+    Public Function ProcessProperties(
+        FoundFile As String
+        ) As Boolean
 
-        Dim tf As Boolean
-        Dim PropertySets As DesignManager.PropertySets
+        Dim GotAMatch As Boolean
         Dim Variable As String
-        Dim PropertySet As String
+        Dim PropertySetName As String = ""
         Dim PropertyName As String
         Dim Comparison As String = ""
         Dim Value As String
@@ -172,101 +128,83 @@ Public Class UtilsPropertyFilters
         Dim VariableTruthValues As New Dictionary(Of String, String)
         Dim BooleanExpression As String
 
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
+
         Dim UC As New UtilsCommon
 
-        PropertySets = CType(DMApp.PropertySets, DesignManager.PropertySets)
-        PropertySets.Open(FoundFile, True)
+        Try
+            SSDoc = New HCStructuredStorageDoc(FoundFile)
+            SSDoc.ReadProperties(FMain.PropertiesData)
+            SSDoc.ReadLinks(FMain.LinkManagementOrder)
+        Catch ex As Exception
+            If SSDoc IsNot Nothing Then SSDoc.Close()
+            Return False
+        End Try
 
-        'Dim NewWay As Boolean = False
+        For Each Condition As PropertyFilterCondition In Me.PropertyFilter.Conditions
 
-        If Me.NewWay Then
-            For Each Condition As PropertyFilterCondition In Me.PropertyFilter.Conditions
+            Variable = Condition.VariableName
 
-                Variable = Condition.VariableName
+            Select Case Condition.PropertySetName
+                Case PropertyFilterCondition.PropertySetNameConstants.Custom
+                    PropertySetName = "Custom"
+                Case PropertyFilterCondition.PropertySetNameConstants.System
+                    PropertySetName = "System"
+            End Select
 
-                Select Case Condition.PropertySetName
-                    Case PropertyFilterCondition.PropertySetNameConstants.Custom
-                        PropertySet = "Custom"
-                    Case PropertyFilterCondition.PropertySetNameConstants.System
-                        PropertySet = "System"
-                End Select
+            PropertyName = Condition.PropertyName
 
-                PropertyName = Condition.PropertyName
+            Select Case Condition.Comparison
+                Case PropertyFilterCondition.ComparisonConstants.Contains
+                    Comparison = "contains"
+                Case PropertyFilterCondition.ComparisonConstants.IsExactly
+                    Comparison = "is_exactly"
+                Case PropertyFilterCondition.ComparisonConstants.WildcardMatch
+                    Comparison = "wildcard_match"
+                Case PropertyFilterCondition.ComparisonConstants.RegexMatch
+                    Comparison = "regex_match"
+                Case PropertyFilterCondition.ComparisonConstants.GreaterThan
+                    Comparison = ">"
+                Case PropertyFilterCondition.ComparisonConstants.LessThan
+                    Comparison = "<"
+            End Select
 
-                Select Case Condition.Comparison
-                    Case PropertyFilterCondition.ComparisonConstants.Contains
-                        Comparison = "contains"
-                    Case PropertyFilterCondition.ComparisonConstants.IsExactly
-                        Comparison = "is_exactly"
-                    Case PropertyFilterCondition.ComparisonConstants.WildcardMatch
-                        Comparison = "wildcard_match"
-                    Case PropertyFilterCondition.ComparisonConstants.RegexMatch
-                        Comparison = "regex_match"
-                    Case PropertyFilterCondition.ComparisonConstants.GreaterThan
-                        Comparison = ">"
-                    Case PropertyFilterCondition.ComparisonConstants.LessThan
-                        Comparison = "<"
-                End Select
+            Value = Condition.Value
 
-                Value = Condition.Value
+            Value = SSDoc.SubstitutePropertyFormulas(Value, ValidFilenameRequired:=False)
 
-                Try
-                    'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-                    '                                     FMain.TemplatePropertyDict)
-                    Value = UC.SubstitutePropertyFormula(
-                        Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
-                Catch ex As Exception
-                    Return False
-                End Try
+            If Value Is Nothing Then
+                SSDoc.Close()
+                Return False
+            End If
 
-                DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
+            DocValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyName))
 
-                tf2 = DoComparison(Comparison, Value, DocValue)
+            If DocValue Is Nothing Then
+                'DocValue = Me.PropNotFoundString
 
-                VariableTruthValues.Add(Variable, tf2.ToString)
+                ''DocValue Is Nothing' occurs when the property doesn't exist in the file.
+                'Comparing Me.PropNotFoundString to any real value will become FALSE.
+                'With a negated formula, like 'NOT ( A )', the evaluation will be TRUE.
+                'Not sure about the comparison 'is_not', which is itself negated.
+                'For now it seems better to give up on the file and say no match.
 
-            Next
+                Return False
+            End If
 
-        Else
-            For Each Key As String In PropertyFilterDict.Keys
-                Variable = PropertyFilterDict(Key)("Variable")
-                PropertySet = PropertyFilterDict(Key)("PropertySet")
-                PropertyName = PropertyFilterDict(Key)("PropertyName")
-                Comparison = PropertyFilterDict(Key)("Comparison")
+            tf2 = DoComparison(Comparison, Value, DocValue)
 
-                Value = PropertyFilterDict(Key)("Value")
+            VariableTruthValues.Add(Variable, tf2.ToString)
 
-                Try
-                    'Value = UC.SubstitutePropertyFormula(Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False,
-                    '                                     FMain.TemplatePropertyDict)
-                    Value = UC.SubstitutePropertyFormula(
-                        Nothing, Nothing, DMApp, FoundFile, Value, ValidFilenameRequired:=False, FMain.PropertiesData)
-                Catch ex As Exception
-                    Return False
-                End Try
+        Next
 
-                DocValue = SearchProperties(PropertySets, PropertyName, FoundFile)
+        SSDoc.Close()
 
-                tf2 = DoComparison(Comparison, Value, DocValue)
+        BooleanExpression = DoSubstitution(Me.PropertyFilter.Formula, VariableTruthValues)
 
-                VariableTruthValues.Add(Variable, tf2.ToString)
+        GotAMatch = EvaluateBoolean(BooleanExpression)
 
-            Next
-
-        End If
-
-        'PropertySets.Close()
-        PropertySets.Close()
-
-        If PropertySets IsNot Nothing Then
-            PropertySets = Nothing
-        End If
-
-        BooleanExpression = DoSubstitution(PropertyFilterFormula, VariableTruthValues)
-
-        tf = EvaluateBoolean(BooleanExpression)
-
-        Return tf
+        Return GotAMatch
 
     End Function
 
@@ -291,33 +229,33 @@ Public Class UtilsPropertyFilters
 
         Dim tf As Boolean = False
 
-        If Not DocValue = Me.PropNotFoundString Then  ' Can't match a prop that doesn't exist
+        'If Not DocValue = Me.PropNotFoundString Then  ' Can't match a prop that doesn't exist
+        'End If
 
-            If Comparison = "contains" Then
-                tf = DocValue.ToLower.Contains(Value.ToLower)
-            ElseIf Comparison = "is_exactly" Then
-                tf = DocValue.ToLower = Value.ToLower
-            ElseIf Comparison = "is_not" Then
-                tf = DocValue.ToLower <> Value.ToLower
-            ElseIf Comparison = "wildcard_match" Then
-                tf = DocValue.ToLower Like Value.ToLower
-            ElseIf Comparison = "regex_match" Then
-                tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
-            ElseIf Comparison = ">" Then
-                Try
-                    tf = TextToDouble(DocValue) > TextToDouble(Value)
-                Catch ex As Exception
-                    tf = DocValue.ToLower > Value.ToLower
-                End Try
-            ElseIf Comparison = "<" Then
-                Try
-                    tf = TextToDouble(DocValue) < TextToDouble(Value)
-                Catch ex As Exception
-                    tf = DocValue.ToLower < Value.ToLower
-                End Try
-            End If
-
+        If Comparison = "contains" Then
+            tf = DocValue.ToLower.Contains(Value.ToLower)
+        ElseIf Comparison = "is_exactly" Then
+            tf = DocValue.ToLower = Value.ToLower
+        ElseIf Comparison = "is_not" Then
+            tf = DocValue.ToLower <> Value.ToLower
+        ElseIf Comparison = "wildcard_match" Then
+            tf = DocValue.ToLower Like Value.ToLower
+        ElseIf Comparison = "regex_match" Then
+            tf = Regex.IsMatch(DocValue, Value, RegexOptions.IgnoreCase)
+        ElseIf Comparison = ">" Then
+            Try
+                tf = TextToDouble(DocValue) > TextToDouble(Value)
+            Catch ex As Exception
+                tf = DocValue.ToLower > Value.ToLower
+            End Try
+        ElseIf Comparison = "<" Then
+            Try
+                tf = TextToDouble(DocValue) < TextToDouble(Value)
+            Catch ex As Exception
+                tf = DocValue.ToLower < Value.ToLower
+            End Try
         End If
+
 
         Return tf
     End Function
@@ -337,7 +275,7 @@ Public Class UtilsPropertyFilters
         ' If that fails, try to strip a unit from the end of the text, then convert.
         ' If that fails, either because a unit match was not found, or the conversion still didn't work, 
         ' try to treat it as a date and convert
-        ' If that fails, raise a FormatException for the function caller.
+        ' If that fails, Convert.ToDateTime raises a FormatException.
 
         Try
             DoubleNumber = CDbl(Text)
@@ -363,75 +301,6 @@ Public Class UtilsPropertyFilters
 
     End Function
 
-
-    Public Function SearchProperties(PropertySets As DesignManager.PropertySets,
-                                     PropertyName As String,
-                                     FoundFile As String) As String
-
-        Dim DocValue As String = Me.PropNotFoundString
-        Dim PropertySet As DesignManager.Properties
-        Dim Prop As DesignManager.Property
-        Dim PropertySetNames As New List(Of String)
-        Dim PropertySetName As String
-
-        Dim FilePropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
-
-        If FilePropNames.Contains(PropertyName) Then
-            Select Case PropertyName
-                Case "File Name"
-                    DocValue = System.IO.Path.GetFileName(FoundFile)  ' C:\project\part.par -> part.par
-                Case "File Name (full path)"
-                    DocValue = FoundFile  ' C:\project\part.par -> C:\project\part.par
-                Case "File Name (no extension)"
-                    DocValue = System.IO.Path.GetFileNameWithoutExtension(FoundFile)  ' C:\project\part.par -> part
-            End Select
-
-        Else
-            Dim DateTime As DateTime
-
-            PropertySetNames.Add("SummaryInformation")
-            PropertySetNames.Add("ExtendedSummaryInformation")
-            PropertySetNames.Add("DocumentSummaryInformation")
-            PropertySetNames.Add("ProjectInformation")
-            PropertySetNames.Add("MechanicalModeling") ' Not in Draft or non-weldment Assemblies.
-            PropertySetNames.Add("Custom") ' Checked last.  In case of duplicate names, system properties get assigned.
-
-            Dim TypeName As String
-
-            Dim GotAMatch As Boolean = False
-
-            For Each PropertySetName In PropertySetNames
-                ' Not all files have all PropertySets
-                Try
-                    PropertySet = CType(PropertySets.Item(PropertySetName), DesignManager.Properties)
-                    For i As Integer = 0 To PropertySet.Count - 1
-                        Prop = CType(PropertySet.Item(i), DesignManager.Property)
-                        If Prop.Name.ToLower = PropertyName.ToLower Then
-                            TypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-                            DocValue = Prop.Value.ToString
-                            If TypeName.ToLower = "date" Then
-                                DateTime = Convert.ToDateTime(DocValue, Globalization.CultureInfo.CurrentCulture)
-                                DocValue = String.Format("{0}{1}{2}", DateTime.Year, DateTime.Month, DateTime.Day)
-                            End If
-                            GotAMatch = True
-                            Exit For
-                        End If
-                    Next
-                Catch ex As Exception
-                End Try
-
-                If GotAMatch Then
-                    Exit For
-                End If
-            Next
-
-        End If
-
-
-
-        Return DocValue
-    End Function
-
     Public Function EvaluateBoolean(Formula As String) As Boolean
         Dim tf As Boolean
 
@@ -451,18 +320,6 @@ Public Class UtilsPropertyFilters
 
         Return tf
 
-        '' https://stackoverflow.com/questions/49005926/conversion-from-string-to-boolean-vb-net
-        'Dim sc As New MSScriptControl.ScriptControl
-        ''SET LANGUAGE TO VBSCRIPT
-        'sc.Language = "VBSCRIPT"
-        ''ATTEMPT MATH
-        'Try
-        '    Return Convert.ToBoolean(sc.Eval(formula))
-        'Catch ex As Exception
-        '    'SHOW THAT IT WAS INVALID
-        '    MsgBox(String.Format("Unable to evaluate boolean expression: {0}", formula))
-        '    Return (False)
-        'End Try
     End Function
 
     Public Function FormulaToPSSyntax(Formula As String) As String
@@ -486,4 +343,6 @@ Public Class UtilsPropertyFilters
 
         Return s1.Trim
     End Function
+
+
 End Class

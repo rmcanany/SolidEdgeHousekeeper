@@ -226,8 +226,10 @@ Public Class UtilsFileList
             ' Filter by properties
             If FMain.EnablePropertyFilter Then
                 System.Threading.Thread.Sleep(1000)
-                Dim UPF As New UtilsPropertyFilters(Me.FMain, FMain.PropertyFilters)
-                FoundFiles = UPF.FilterProperties(FoundFiles, FMain.PropertyFilterDict)
+                'Dim UPF As New UtilsPropertyFilters(Me.FMain, FMain.PropertyFilters)
+                Dim UPF As New UtilsPropertyFilters(Me.FMain)
+                'FoundFiles = UPF.FilterProperties(FoundFiles, FMain.PropertyFilterDict)
+                FoundFiles = UPF.FilterProperties(FoundFiles)
             End If
 
             If FMain.SortAlphabetical Then
