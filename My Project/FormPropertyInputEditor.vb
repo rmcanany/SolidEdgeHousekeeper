@@ -25,7 +25,7 @@ Public Class FormPropertyInputEditor
     Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
     Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
-    Public Property PropertiesData As PropertiesData
+    Public Property PropertiesData As HCPropertiesData
 
     Private _ShowAllProps As Boolean
     Public Property ShowAllProps As Boolean

@@ -54,7 +54,7 @@ Public Class FormPropertyPicker
             Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(ComboBoxPropertyName.Text)
             If tmpPropertyData IsNot Nothing Then
                 Dim PropertySet As PropertyData.PropertySetNameConstants = tmpPropertyData.PropertySetName
-                If PropertySet = PropertyData.PropertySetNameConstants.Duplicate Then
+                If tmpPropertyData.IsDuplicate Then
                     ComboBoxPropertySet.Text = ""
                 ElseIf PropertySet = PropertyData.PropertySetNameConstants.Custom Then
                     ComboBoxPropertySet.Text = "Custom"

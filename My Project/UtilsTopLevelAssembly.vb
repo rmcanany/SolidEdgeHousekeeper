@@ -356,7 +356,6 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
-
     Private Sub ReportUnrelatedFiles(
                TopLevelFolders As List(Of String),
                Foundfiles As List(Of String))
@@ -415,6 +414,7 @@ Public Class UtilsTopLevelAssembly
     End Sub
 
 
+
     Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
                              TopLevelAssembly As String,
                              ActiveFileExtensionsList As List(Of String),
@@ -435,8 +435,6 @@ Public Class UtilsTopLevelAssembly
         Dim tmpAllLinkedFilename As String
 
         Dim TLADoc As DesignManager.Document
-
-        ' TODO: Deal with a mix of indexed and non-indexed drives
 
         ' Passing in an empty TopLevelFolders signifies a bare top level assy.  Don't need an indexed drive for that case.
         If Not TopLevelFolders.Count = 0 Then
@@ -613,8 +611,6 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
-
-
     Private Function GetWhereUsedBottomUp(
                      DMApp As DesignManager.Application,
                      TopLevelFolder As String,
@@ -644,7 +640,6 @@ Public Class UtilsTopLevelAssembly
         End If
 
         If DraftAndModelSameName Then
-            'DraftFilename = String.Format("{0}{1}", System.IO.Path.GetFileNameWithoutExtension(Filename), ".dft")
             DraftFilename = System.IO.Path.ChangeExtension(Filename, ".dft")
             AllWhereUsedFileNames.Add(DraftFilename)
             Return AllWhereUsedFileNames

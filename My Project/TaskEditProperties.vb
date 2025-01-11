@@ -6,6 +6,7 @@ Imports OpenMcdf
 Imports OpenMcdf.Extensions
 Imports OpenMcdf.Extensions.OLEProperties
 Imports System.IO
+Imports System.ServiceModel.MsmqIntegration
 Imports System.Text.RegularExpressions
 
 Public Class TaskEditProperties
@@ -321,6 +322,7 @@ Public Class TaskEditProperties
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim SupplementalExitStatus As Integer
 
         Dim PropertySetName As String = ""
         Dim PropertyName As String = ""
@@ -329,10 +331,15 @@ Public Class TaskEditProperties
         Dim FindSearchType As String = ""
         Dim ReplaceSearchType As String = ""
 
+        Dim PropertyNameEnglish As String
+
+        Dim AutoAdd As Boolean
+
         Dim PropertyFound As Boolean = False
 
         Dim Proceed As Boolean = True
         Dim s As String
+        Dim tf As Boolean
 
         Dim PropertiesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim PropertiesToEdit As String = ""
@@ -350,216 +357,310 @@ Public Class TaskEditProperties
             ErrorMessageList.Add("No properties provided")
         End If
 
-        Dim fs As FileStream = Nothing
+        Dim NewWay As Boolean = True
 
-        If Proceed Then
+        If NewWay Then
+            Dim SSDoc As HCStructuredStorageDoc = Nothing
+
             Try
-                fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+                SSDoc = New HCStructuredStorageDoc(FullName)
             Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
                 Proceed = False
                 ExitStatus = 1
-                ErrorMessageList.Add("Unable to open file")
+                ErrorMessageList.Add(ex.Message)
             End Try
-        End If
 
-        Dim cf As CompoundFile = Nothing
+            If Proceed Then
+                SSDoc.ReadProperties(Me.PropertiesData)
 
-        If Proceed Then
-            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+                For Each RowIndexString In PropertiesToEditDict.Keys
 
-            Dim dsiStream As CFStream = Nothing
-            Dim co As OLEPropertiesContainer = Nothing
-            Dim OLEProp As OLEProperty = Nothing
+                    ' The loop continues even in case of error.
+                    ' The resulting error message is more complete that way.
 
-            For Each RowIndexString In PropertiesToEditDict.Keys
+                    ' ####################### Get parameters #######################
 
-                ' ####################### Get parameters #######################
+                    PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+                    PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+                    FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
+                    FindString = PropertiesToEditDict(RowIndexString)("FindString")
+                    ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
+                    ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
 
-                PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
-                PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
-                FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
-                FindString = PropertiesToEditDict(RowIndexString)("FindString")
-                ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
-                ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
-
-                'If Not TemplatePropertyDict.Keys.Contains(PropertyName) Then
-                '    Proceed = False
-                '    ExitStatus = 1
-                '    ErrorMessageList.Add(String.Format("Property '{0}' not found in template dictionary", PropertyName))
-                'End If
-
-                Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
-                If tmpPropertyData Is Nothing Then
-                    Proceed = False
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
-                End If
-
-                ' ####################### Do formula substitution #######################
-
-                If Proceed Then
-                    Try
-                        FindString = UC.SubstitutePropertyFormula(
-                            Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
-                    Catch ex As Exception
+                    Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
+                    If tmpPropertyData Is Nothing Then
                         Proceed = False
                         ExitStatus = 1
-                        s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                    End Try
-
-                    Try
-                        'ReplaceString = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-                        '                                         TemplatePropertyDict, ReplaceSearchType = "EX")
-                        ReplaceString = UC.SubstitutePropertyFormula(
-                            Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-                            Me.PropertiesData, ReplaceSearchType = "EX")
-                    Catch ex As Exception
-                        Proceed = False
-                        ExitStatus = 1
-                        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                    End Try
-                End If
-
-                'Direct properties editing doesn't support linked files |Rx sintax: " & PropertyName
-                If Proceed Then
-                    If FindString.StartsWith("[ERROR]") Then
-                        Proceed = False
-                        ExitStatus = 1
-                        s = String.Format("Direct edit doesn't support links in Find text '{0}' for property '{1}'", FindString.Replace("[ERROR]", ""), PropertyName)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                        ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
                     End If
-                    If ReplaceString.StartsWith("[ERROR]") Then
-                        Proceed = False
-                        ExitStatus = 1
-                        s = String.Format("Direct edit doesn't support links in Replace text '{0}' for property '{1}'", ReplaceString.Replace("[ERROR]", ""), PropertyName)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    AutoAdd = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
+
+                    ' ####################### Do formula substitution #######################
+
+                    If Proceed Then
+                        SupplementalErrorMessage = DoFormulaSubstitution(SSDoc, PropertyName, ReplaceSearchType, FindString, ReplaceString)
+
+                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                        SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                        If SupplementalExitStatus > 0 Then Proceed = False
+
                     End If
-                End If
 
+                    PropertyNameEnglish = tmpPropertyData.EnglishName
 
-                ' ####################### Get the property object #######################
+                    ' ####################### Check for existence of property #######################
+                    ' Not an error if AutoAdd = TRUE
 
-                'Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
-                Dim PropertyNameEnglish = tmpPropertyData.EnglishName
-
-                If Proceed Then
-                    OLEProp = UC.GetOLEProp(cf, PropertySetName, PropertyNameEnglish, Me.AutoAddMissingProperty, dsiStream, co)
-                End If
-
-                If IsNothing(OLEProp) Then
-                    Proceed = False
-                    ExitStatus = 1
-                    If PropertyName = PropertyNameEnglish Then
-                        s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
-                    Else
-                        s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
-                    End If
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End If
-
-
-                ' ####################### Delete or do the replacement #######################
-
-                If Proceed Then
-
-                    If FindSearchType = "X" Then
-                        Try
-                            '############ delete the property here
-                            co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
-
-                        Catch ex As Exception
+                    If Proceed Then
+                        tf = (SSDoc.ExistsProp(PropertySetName, PropertyNameEnglish)) Or (AutoAdd)
+                        If Not tf Then
                             Proceed = False
                             ExitStatus = 1
+
                             If PropertyName = PropertyNameEnglish Then
-                                s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                                s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
                             Else
-                                s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                                s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
                             End If
                             If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                        End Try
-
-                    Else
-                        Try
-
-                            '####### set the property here
-                            If FindSearchType = "PT" Then
-                                'OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-
-                                Dim PropertyValue = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
-                                UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
-
-                            Else
-                                If FindSearchType = "WC" Then
-                                    FindString = UC.GlobToRegex(FindString)
-                                End If
-                                If ReplaceSearchType = "PT" Then
-                                    ' ReplaceString = Regex.Escape(ReplaceString)
-                                End If
-
-                                'OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-
-                                Dim PropertyValue = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
-                                UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
-
-                            End If
-
-                        Catch ex As Exception
-                            Proceed = False
-                            ExitStatus = 1
-                            If PropertyName = PropertyNameEnglish Then
-                                s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
-                            Else
-                                s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
-                            End If
-                            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                        End Try
-
+                        End If
 
                     End If
 
+                    ' ####################### Delete or do the replacement #######################
 
+                    If Proceed Then
+                        SupplementalErrorMessage = DoReplacement(SSDoc, PropertySetName, PropertyName, PropertyNameEnglish,
+                                                                 FindSearchType, FindString, ReplaceSearchType, ReplaceString)
+
+                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+                        SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+                        If SupplementalExitStatus > 0 Then Proceed = False
+
+                    End If
+                Next
+
+            End If
+
+            If ExitStatus = 0 Then
+                If SSDoc IsNot Nothing Then
+                    SSDoc.Save()
+                    SSDoc.Close()
                 End If
+            Else
+                s = "Errors encountered.  No changes made."
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            End If
 
-
-                ' ####################### Save the properties #######################
-
-                If Proceed Then
-                    Try
-
-                        '############ save the properties here (!)
-                        co.Save(dsiStream)
-
-                    Catch ex As Exception
-                        Proceed = False
-                        ExitStatus = 1
-                        s = "Problem accessing or saving Property."
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                    End Try
-                End If
-
-            Next
-
-        End If
-
-        ' ###### In case of error, don't save anything. ######
-        If ExitStatus = 0 Then
-            '############ save the properties here (!)
-            cf.Commit()
         Else
-            s = "Errors encountered.  No changes made."
-            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-        End If
+            'Dim fs As FileStream = Nothing
 
-        If cf IsNot Nothing Then
-            cf.Close()
-        End If
+            'If Proceed Then
+            '    Try
+            '        fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
+            '    Catch ex As Exception
+            '        Proceed = False
+            '        ExitStatus = 1
+            '        ErrorMessageList.Add("Unable to open file")
+            '    End Try
+            'End If
 
-        If fs IsNot Nothing Then
-            fs.Close()
-            System.Windows.Forms.Application.DoEvents()
+            'Dim cf As CompoundFile = Nothing
+
+            'If Proceed Then
+            '    Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+            '    cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+            '    Dim dsiStream As CFStream = Nothing
+            '    Dim co As OLEPropertiesContainer = Nothing
+            '    Dim OLEProp As OLEProperty = Nothing
+
+            '    For Each RowIndexString In PropertiesToEditDict.Keys
+
+            '        ' ####################### Get parameters #######################
+
+            '        PropertyName = PropertiesToEditDict(RowIndexString)("PropertyName")
+            '        PropertySetName = PropertiesToEditDict(RowIndexString)("PropertySet")
+            '        FindSearchType = PropertiesToEditDict(RowIndexString)("FindSearch")
+            '        FindString = PropertiesToEditDict(RowIndexString)("FindString")
+            '        ReplaceSearchType = PropertiesToEditDict(RowIndexString)("ReplaceSearch")
+            '        ReplaceString = PropertiesToEditDict(RowIndexString)("ReplaceString")
+
+            '        Dim tmpPropertyData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
+            '        If tmpPropertyData Is Nothing Then
+            '            Proceed = False
+            '            ExitStatus = 1
+            '            ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
+            '        End If
+
+            '        ' ####################### Do formula substitution #######################
+
+            '        If Proceed Then
+            '            Try
+            '                FindString = UC.SubstitutePropertyFormula(
+            '                Nothing, cf, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
+            '            Catch ex As Exception
+            '                Proceed = False
+            '                ExitStatus = 1
+            '                s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+            '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '            End Try
+
+            '            Try
+            '                ReplaceString = UC.SubstitutePropertyFormula(
+            '                Nothing, cf, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
+            '                Me.PropertiesData, ReplaceSearchType = "EX")
+            '            Catch ex As Exception
+            '                Proceed = False
+            '                ExitStatus = 1
+            '                s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+            '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '            End Try
+            '        End If
+
+            '        'Direct properties editing doesn't support linked files |Rx sintax: " & PropertyName
+            '        If Proceed Then
+            '            If FindString.StartsWith("[ERROR]") Then
+            '                Proceed = False
+            '                ExitStatus = 1
+            '                s = String.Format("Direct edit doesn't support links in Find text '{0}' for property '{1}'", FindString.Replace("[ERROR]", ""), PropertyName)
+            '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '            End If
+            '            If ReplaceString.StartsWith("[ERROR]") Then
+            '                Proceed = False
+            '                ExitStatus = 1
+            '                s = String.Format("Direct edit doesn't support links in Replace text '{0}' for property '{1}'", ReplaceString.Replace("[ERROR]", ""), PropertyName)
+            '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '            End If
+            '        End If
+
+
+            '        ' ####################### Get the property object #######################
+
+            '        'Dim PropertyNameEnglish = TemplatePropertyDict(PropertyName)("EnglishName")
+            '        PropertyNameEnglish = tmpPropertyData.EnglishName
+
+            '        If Proceed Then
+            '            OLEProp = UC.GetOLEProp(cf, PropertySetName, PropertyNameEnglish, Me.AutoAddMissingProperty, dsiStream, co)
+            '        End If
+
+            '        If IsNothing(OLEProp) Then
+            '            Proceed = False
+            '            ExitStatus = 1
+            '            If PropertyName = PropertyNameEnglish Then
+            '                s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+            '            Else
+            '                s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+            '            End If
+            '            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '        End If
+
+
+            '        ' ####################### Delete or do the replacement #######################
+
+            '        If Proceed Then
+
+            '            If FindSearchType = "X" Then
+            '                Try
+            '                    '############ delete the property here
+            '                    co.UserDefinedProperties.RemoveProperty(OLEProp.PropertyIdentifier)
+
+            '                Catch ex As Exception
+            '                    Proceed = False
+            '                    ExitStatus = 1
+            '                    If PropertyName = PropertyNameEnglish Then
+            '                        s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+            '                    Else
+            '                        s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+            '                    End If
+            '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '                End Try
+
+            '            Else
+            '                Try
+
+            '                    '####### set the property here
+            '                    If FindSearchType = "PT" Then
+            '                        'OLEProp.Value = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+
+            '                        Dim PropertyValue = Replace(CType(OLEProp.Value, String), FindString, ReplaceString, 1, -1, vbTextCompare)
+            '                        UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
+
+            '                    Else
+            '                        If FindSearchType = "WC" Then
+            '                            FindString = UC.GlobToRegex(FindString)
+            '                        End If
+            '                        If ReplaceSearchType = "PT" Then
+            '                            ' ReplaceString = Regex.Escape(ReplaceString)
+            '                        End If
+
+            '                        'OLEProp.Value = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+
+            '                        Dim PropertyValue = Regex.Replace(CType(OLEProp.Value, String), FindString, ReplaceString, RegexOptions.IgnoreCase)
+            '                        UC.SetOLEPropValue(OLEProp, PropertyValue, co, cf, dsiStream)
+
+            '                    End If
+
+            '                Catch ex As Exception
+            '                    Proceed = False
+            '                    ExitStatus = 1
+            '                    If PropertyName = PropertyNameEnglish Then
+            '                        s = String.Format("Unable to replace property value '{0}'.  This command only works on text type properties.", PropertyName)
+            '                    Else
+            '                        s = String.Format("Unable to replace property value '{0}({1})'.  This command only works on text type properties.", PropertyName, PropertyNameEnglish)
+            '                    End If
+            '                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '                End Try
+
+
+            '            End If
+
+
+            '        End If
+
+
+            '        ' ####################### Save the properties #######################
+
+            '        If Proceed Then
+            '            Try
+
+            '                '############ save the properties here (!)
+            '                co.Save(dsiStream)
+
+            '            Catch ex As Exception
+            '                Proceed = False
+            '                ExitStatus = 1
+            '                s = "Problem accessing or saving Property."
+            '                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '            End Try
+            '        End If
+
+            '    Next
+
+            'End If
+
+            '' ###### In case of error, don't save anything. ######
+            'If ExitStatus = 0 Then
+            '    '############ save the properties here (!)
+            '    cf.Commit()
+            'Else
+            '    s = "Errors encountered.  No changes made."
+            '    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            'End If
+
+            'If cf IsNot Nothing Then
+            '    cf.Close()
+            'End If
+
+            'If fs IsNot Nothing Then
+            '    fs.Close()
+            '    System.Windows.Forms.Application.DoEvents()
+            'End If
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -567,6 +668,172 @@ Public Class TaskEditProperties
 
     End Function
 
+
+    Private Function DoReplacement(
+        SSDoc As HCStructuredStorageDoc,
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        FindSearchType As String,
+        FindString As String,
+        ReplaceSearchType As String,
+        ReplaceString As String
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim UC As New UtilsCommon
+
+        Dim tf As Boolean
+        Dim Proceed As Boolean = True
+        Dim s As String
+        Dim AddProp As Boolean
+        'Dim UpdateMatl As Boolean
+
+        AddProp = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
+        'UpdateMatl = (Me.AutoUpdateMaterial) And (PropertySetName.ToLower = "system") And (PropertyName.ToLower = "material")
+
+        If FindSearchType = "X" Then
+            tf = SSDoc.DeleteProp(PropertySetName, PropertyNameEnglish)
+
+            If Not tf Then
+                Proceed = False
+                ExitStatus = 1
+                If PropertyName = PropertyNameEnglish Then
+                    s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
+                Else
+                    s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
+                End If
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            End If
+
+        Else
+            Dim PropertyValue As String = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+            If PropertyValue Is Nothing Then
+                Proceed = False
+                ExitStatus = 1
+                If PropertyName = PropertyNameEnglish Then
+                    s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                Else
+                    s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                End If
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+            End If
+
+            If Proceed Then
+                If FindSearchType = "PT" Then
+                    PropertyValue = PropertyValue.Replace(FindString, ReplaceString)
+                    tf = SSDoc.SetPropValue(PropertySetName, PropertyNameEnglish, PropertyValue, AddProperty:=AddProp)
+
+                Else
+                    If FindSearchType = "WC" Then
+                        FindString = UC.GlobToRegex(FindString)
+                    End If
+                    If ReplaceSearchType = "PT" Then
+                        ' ReplaceString = Regex.Escape(ReplaceString)
+                    End If
+
+                    PropertyValue = Regex.Replace(PropertyValue, FindString, ReplaceString, RegexOptions.IgnoreCase)
+                    tf = SSDoc.SetPropValue(PropertySetName, PropertyNameEnglish, PropertyValue, AddProperty:=AddProp)
+
+                End If
+
+                If Not tf Then
+                    Proceed = False
+                    ExitStatus = 1
+                    If PropertyName = PropertyNameEnglish Then
+                        s = String.Format("Unable to replace property value '{0}'.", PropertyName)
+                    Else
+                        s = String.Format("Unable to replace property value '{0}({1})'.", PropertyName, PropertyNameEnglish)
+                    End If
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                End If
+
+            End If
+
+            'If Proceed Then
+            '    If UpdateMatl Then
+            '        Dim SSMatTable As New HCStructuredStorageDoc(Me.MaterialTable)
+            '        SSMatTable.ReadMaterialTable()
+            '        tf = SSMatTable.UpdateMaterial(SSDoc)
+
+            '        SSMatTable.Close()
+
+            '        If Not tf Then
+            '            Proceed = False
+            '            ExitStatus = 1
+            '            If PropertyName = PropertyNameEnglish Then
+            '                s = String.Format("Unable to update '{0}'.", PropertyName)
+            '            Else
+            '                s = String.Format("Unable to update '{0}({1})'.", PropertyName, PropertyNameEnglish)
+            '            End If
+            '            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            '        End If
+
+            '    End If
+            'End If
+        End If
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
+
+    Private Sub AddErrorMessage(
+        PropertySetName As String,
+        PropertyName As String,
+        PropertyNameEnglish As String,
+        ErrorString As String,
+        ByRef ErrorMessageList As List(Of String))
+
+        Dim s As String
+
+        If PropertyName = PropertyNameEnglish Then
+            s = String.Format(ErrorString, PropertyName)
+        Else
+            ErrorString = ErrorString.Replace("{0}", "{0}({1})")
+            s = String.Format(ErrorString, PropertyName, PropertyNameEnglish)
+        End If
+
+        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+    End Sub
+
+    Private Function DoFormulaSubstitution(
+        SSDoc As HCStructuredStorageDoc,
+        PropertyName As String,
+        ReplaceSearchType As String,
+        ByRef FindString As String,
+        ByRef ReplaceString As String
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Dim s As String
+
+        FindString = SSDoc.SubstitutePropertyFormulas(FindString, ValidFilenameRequired:=False)
+        If FindString Is Nothing Then
+            ExitStatus = 1
+            s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+        End If
+
+        ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
+        If ReplaceString Is Nothing Then
+            ExitStatus = 1
+            s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+        End If
+
+
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
     Private Function DoFindReplace(
         SEApp As SolidEdgeFramework.Application,
@@ -617,29 +884,21 @@ Public Class TaskEditProperties
             If Proceed Then
                 Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
 
-                Try
-                    'FindString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False,
-                    '                                          TemplatePropertyDict)
-                    FindString = UC.SubstitutePropertyFormula(
-                        SEDoc, Nothing, Nothing, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
-                Catch ex As Exception
+                FindString = UC.SubstitutePropertyFormula(SEDoc, FullName, FindString, ValidFilenameRequired:=False, Me.PropertiesData)
+                If FindString Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
                     s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
+                End If
 
-                Try
-                    'ReplaceString = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False,
-                    '                                             TemplatePropertyDict, ReplaceSearchType = "EX")
-                    ReplaceString = UC.SubstitutePropertyFormula(
-                        SEDoc, Nothing, Nothing, FullName, ReplaceString, ValidFilenameRequired:=False, Me.PropertiesData, ReplaceSearchType = "EX")
-                Catch ex As Exception
+                ReplaceString = UC.SubstitutePropertyFormula(SEDoc, FullName, ReplaceString, ValidFilenameRequired:=False, Me.PropertiesData, ReplaceSearchType = "EX")
+                If ReplaceString Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
                     s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                End Try
+                End If
             End If
 
             ' ####################### Get the property object from the file #######################
@@ -944,14 +1203,6 @@ Public Class TaskEditProperties
 
             End If
 
-            'If (Not Me.SolidEdgeRequired) And (Me.TemplatePropertyDict.Count = 0) Then
-            '    If Not ErrorMessageList.Contains(Me.Description) Then
-            '        ErrorMessageList.Add(Me.Description)
-            '    End If
-            '    ExitStatus = 1
-            '    Dim s = String.Format("{0}Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page", Indent)
-            '    ErrorMessageList.Add(s)
-            'End If
             If (Not Me.SolidEdgeRequired) And (Me.PropertiesData.Items.Count = 0) Then
                 If Not ErrorMessageList.Contains(Me.Description) Then
                     ErrorMessageList.Add(Me.Description)

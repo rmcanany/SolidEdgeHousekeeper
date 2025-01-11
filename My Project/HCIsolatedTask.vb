@@ -11,7 +11,7 @@ Imports System.Reflection
 Imports System.Text
 
 
-Public NotInheritable Class IsolatedTask(Of T As IsolatedTaskProxy)
+Public NotInheritable Class HCIsolatedTask(Of T As HCIsolatedTaskProxy)
     Implements IDisposable
 
     Private _proxyType As Type = Nothing

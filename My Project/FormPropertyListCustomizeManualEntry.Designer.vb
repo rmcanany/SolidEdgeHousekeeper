@@ -30,11 +30,11 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.LabelPropertySet = New System.Windows.Forms.Label()
         Me.LabelEnglishName = New System.Windows.Forms.Label()
         Me.ComboBoxPropertySet = New System.Windows.Forms.ComboBox()
-        Me.TextBoxEnglishName = New System.Windows.Forms.TextBox()
         Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
         Me.ExTableLayoutPanel4 = New Housekeeper.ExTableLayoutPanel()
         Me.ExTableLayoutPanel5 = New Housekeeper.ExTableLayoutPanel()
         Me.ExTableLayoutPanel6 = New Housekeeper.ExTableLayoutPanel()
+        Me.ComboBoxEnglishName = New System.Windows.Forms.ComboBox()
         Me.ExTableLayoutPanel3.SuspendLayout()
         Me.ExTableLayoutPanel4.SuspendLayout()
         Me.ExTableLayoutPanel5.SuspendLayout()
@@ -111,14 +111,6 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.ComboBoxPropertySet.Size = New System.Drawing.Size(94, 23)
         Me.ComboBoxPropertySet.TabIndex = 2
         '
-        'TextBoxEnglishName
-        '
-        Me.TextBoxEnglishName.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxEnglishName.Location = New System.Drawing.Point(273, 3)
-        Me.TextBoxEnglishName.Name = "TextBoxEnglishName"
-        Me.TextBoxEnglishName.Size = New System.Drawing.Size(164, 23)
-        Me.TextBoxEnglishName.TabIndex = 3
-        '
         'ExTableLayoutPanel3
         '
         Me.ExTableLayoutPanel3.ColumnCount = 1
@@ -164,9 +156,9 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.ExTableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.ExTableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.ExTableLayoutPanel5.Controls.Add(Me.TextBoxEnglishName, 2, 0)
         Me.ExTableLayoutPanel5.Controls.Add(Me.TextBoxPropertyName, 1, 0)
         Me.ExTableLayoutPanel5.Controls.Add(Me.ComboBoxPropertySet, 0, 0)
+        Me.ExTableLayoutPanel5.Controls.Add(Me.ComboBoxEnglishName, 2, 0)
         Me.ExTableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel5.Location = New System.Drawing.Point(3, 33)
         Me.ExTableLayoutPanel5.Name = "ExTableLayoutPanel5"
@@ -194,6 +186,15 @@ Partial Class FormPropertyListCustomizeManualEntry
         Me.ExTableLayoutPanel6.Size = New System.Drawing.Size(440, 34)
         Me.ExTableLayoutPanel6.TabIndex = 2
         Me.ExTableLayoutPanel6.Task = Nothing
+        '
+        'ComboBoxEnglishName
+        '
+        Me.ComboBoxEnglishName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBoxEnglishName.FormattingEnabled = True
+        Me.ComboBoxEnglishName.Location = New System.Drawing.Point(273, 3)
+        Me.ComboBoxEnglishName.Name = "ComboBoxEnglishName"
+        Me.ComboBoxEnglishName.Size = New System.Drawing.Size(164, 23)
+        Me.ComboBoxEnglishName.TabIndex = 3
         '
         'FormPropertyListCustomizeManualEntry
         '
@@ -224,9 +225,9 @@ Partial Class FormPropertyListCustomizeManualEntry
     Friend WithEvents LabelPropertySet As Label
     Friend WithEvents LabelEnglishName As Label
     Friend WithEvents ComboBoxPropertySet As ComboBox
-    Friend WithEvents TextBoxEnglishName As TextBox
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel4 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel5 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel6 As ExTableLayoutPanel
+    Friend WithEvents ComboBoxEnglishName As ComboBox
 End Class

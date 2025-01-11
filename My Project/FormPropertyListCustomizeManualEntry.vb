@@ -6,6 +6,23 @@ Public Class FormPropertyListCustomizeManualEntry
     Public Property PropertyName As String
     Public Property EnglishName As String
 
+    Private Property LocalizedEnglishNames As List(Of String)
+
+    Public Sub New(_PropertiesData As HCPropertiesData)
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        Me.LocalizedEnglishNames = _PropertiesData.GetLocalizedEnglishNames()
+
+        ComboBoxEnglishName.Items.Add("")
+        For Each Item As String In Me.LocalizedEnglishNames
+            ComboBoxEnglishName.Items.Add(Item)
+        Next
+    End Sub
+
     Private Function CheckInputs() As Boolean
         Dim InputsOK As Boolean = True
         Dim s As String = ""
@@ -31,7 +48,7 @@ Public Class FormPropertyListCustomizeManualEntry
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Me.PropertySet = ComboBoxPropertySet.Text
         Me.PropertyName = TextBoxPropertyName.Text
-        Me.EnglishName = TextBoxEnglishName.Text
+        Me.EnglishName = ComboBoxEnglishName.Text
 
         If CheckInputs() Then
             If Me.PropertySet = "Custom" Then
@@ -52,7 +69,7 @@ Public Class FormPropertyListCustomizeManualEntry
     End Sub
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
-        TextBoxEnglishName.Enabled = Not ComboBoxPropertySet.Text = "Custom"
+        ComboBoxEnglishName.Enabled = Not ComboBoxPropertySet.Text = "Custom"
     End Sub
 
 End Class

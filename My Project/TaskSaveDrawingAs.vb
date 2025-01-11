@@ -254,7 +254,7 @@ Public Class TaskSaveDrawingAs
         Me.WatermarkScale = 1
         Me.PDFPerSheetSuppressSheetname = False
 
-        Me.PropertiesData = New PropertiesData
+        Me.PropertiesData = New HCPropertiesData
     End Sub
 
     Public Overrides Function Process(
@@ -406,15 +406,15 @@ Public Class TaskSaveDrawingAs
         If Not Me.UseSubdirectoryFormula Then
             NewSubDirectoryName = ""
         Else
-            Try
-                NewSubDirectoryName = UC.SubstitutePropertyFormula(
-                    SEDoc, Nothing, Nothing, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+            NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
+            If NewSubDirectoryName Is Nothing Then
+                Success = False
+            End If
+            If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
                     NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
                 End If
-            Catch ex As Exception
-                Success = False
-            End Try
+            End If
         End If
 
 
@@ -422,12 +422,10 @@ Public Class TaskSaveDrawingAs
         If Not Me.ChangeFilename Then
             NewFilenameWOExt = OldFilenameWOExt
         Else
-            Try
-                NewFilenameWOExt = UC.SubstitutePropertyFormula(
-                    SEDoc, Nothing, Nothing, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
-            Catch ex As Exception
+            NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
+            If NewFilenameWOExt Is Nothing Then
                 Success = False
-            End Try
+            End If
         End If
 
 

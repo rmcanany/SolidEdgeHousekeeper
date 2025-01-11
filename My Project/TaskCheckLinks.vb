@@ -81,7 +81,8 @@ Public Class TaskCheckLinks
         Me.RequiresPropertiesData = True
         Me.Category = "Check"
         SetColorFromCategory(Me)
-        Me.SolidEdgeRequired = False
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
         Me.RequiresLinkManagementOrder = True
 
         GenerateTaskControl()

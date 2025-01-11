@@ -73,19 +73,6 @@ Public Class FormPropertyListCustomize
             Proceed = False
         End If
 
-        'If Not Form_Main.TemplatePropertyDict Is Nothing Then
-        '    If Form_Main.TemplatePropertyDict.Keys.Count > 0 Then
-        '        Dim UC As New UtilsCommon
-
-        '        Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        '        Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
-        '    Else
-        '        Proceed = False
-        '    End If
-        'Else
-        '    Proceed = False
-        'End If
-
         If Not Proceed Then
             Dim s = "Template properties required for this command not found. "
             s = String.Format("{0}Populate them on the Configuration Tab -- Templates Page.", s)
@@ -280,8 +267,8 @@ Public Class FormPropertyListCustomize
     End Sub
 
     Private Sub CustomizeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CustomizeToolStripMenuItem.Click
-        Dim FPLCM As New FormPropertyListCustomizeManualEntry
-        Dim UC As New UtilsCommon
+        Dim FPLCM As New FormPropertyListCustomizeManualEntry(Form_Main.PropertiesData)
+        'Dim UC As New UtilsCommon
 
         Dim Result = FPLCM.ShowDialog()
 
@@ -303,21 +290,6 @@ Public Class FormPropertyListCustomize
             Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
             UpdateDataGridViewTarget()
 
-
-            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictAddProp(
-            '    Form_Main.TemplatePropertyDict,
-            '    FPLCM.PropertySet,
-            '    FPLCM.PropertyName,
-            '    FPLCM.EnglishName,
-            '    FavoritesList.Count)
-
-            'Form_Main.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Form_Main.TemplatePropertyDict, FavoritesList)
-
-            'Me.AvailableList = UC.TemplatePropertyGetAvailableList(Form_Main.TemplatePropertyDict)
-            'UpdateDataGridViewSource()
-
-            'Me.FavoritesList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-            'UpdateDataGridViewTarget()
         End If
 
     End Sub

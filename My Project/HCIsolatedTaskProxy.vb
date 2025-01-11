@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 Imports System.Runtime.Remoting
 Imports System.Text
 
-Public MustInherit Class IsolatedTaskProxy
+Public MustInherit Class HCIsolatedTaskProxy
     Inherits MarshalByRefObject
 
     Private _application As SolidEdgeFramework.Application

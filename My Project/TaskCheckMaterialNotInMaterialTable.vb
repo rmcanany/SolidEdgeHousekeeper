@@ -82,7 +82,8 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Me.RequiresMaterialTable = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
-        Me.SolidEdgeRequired = False
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

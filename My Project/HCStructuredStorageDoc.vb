@@ -18,9 +18,9 @@ Public Class HCStructuredStorageDoc
     Private Property cf As CompoundFile
     Private Property LinkNames As LinkFullNames
     Private Property LinkManagementOrder As List(Of String)
-    Private Property PropertiesData As PropertiesData
+    Private Property PropertiesData As HCPropertiesData
     Private Property MatTable As MaterialTable
-    Private Property DocType As String 'asm, dft, par, psm, mat
+    Private Property DocType As String 'asm, dft, par, psm, mtl
 
     Public Sub New(_FullName As String)
 
@@ -50,7 +50,7 @@ Public Class HCStructuredStorageDoc
 
     End Sub
 
-    Public Sub ReadProperties(_PropertiesData As PropertiesData)
+    Public Sub ReadProperties(_PropertiesData As HCPropertiesData)
         Me.PropertiesData = _PropertiesData
         Me.PropSets = New PropertySets(Me.cf, Me.FullName)
     End Sub
@@ -61,8 +61,15 @@ Public Class HCStructuredStorageDoc
     End Sub
 
     Public Sub ReadMaterialTable()
+        Dim Extension As String = IO.Path.GetExtension(Me.FullName)
+
+        If Not Extension = ".mtl" Then
+            Throw New Exception(String.Format("'{0}' is not a material table file", IO.Path.GetFileName(Me.FullName)))
+        End If
+
         Me.MatTable = New MaterialTable(Me.cf)
     End Sub
+
 
     Public Function IsFOA(cf As CompoundFile) As Boolean
         Return cf.RootStorage.ContainsStorage("Master")
@@ -92,10 +99,10 @@ Public Class HCStructuredStorageDoc
     End Sub
 
     Public Sub Close()
-        Me.cf.Close()
+        If Me.cf IsNot Nothing Then Me.cf.Close()
         Me.cf = Nothing
 
-        Me.fs.Close()
+        If Me.fs IsNot Nothing Then Me.fs.Close()
         Me.fs = Nothing
     End Sub
 
@@ -172,14 +179,12 @@ Public Class HCStructuredStorageDoc
         PropNameEnglish = PropNameEnglish.ToLower
 
         If ProcessSpecialProperty(PropSetName, PropNameEnglish) Is Nothing Then
-            'Dim Prop = GetProp(PropSetName, PropNameEnglish, PropSets, PropSet)
             Dim Prop = GetProp(PropSetName, PropNameEnglish)
 
             If Prop IsNot Nothing Then
                 Prop.Value = Value
 
                 If Prop.Value.ToString = Value.ToString Then
-                    'PropSet.Save()
                     Success = True
                 End If
 
@@ -233,6 +238,44 @@ Public Class HCStructuredStorageDoc
         Return Success
     End Function
 
+    Public Function ExistsProp(PropSetName As String, PropNameEnglish As String) As Boolean
+        Dim Success As Boolean = False
+
+        If Me.PropSets Is Nothing Then
+            Throw New Exception("Properties not initialized")
+        End If
+
+        PropNameEnglish = PropNameEnglish.ToLower
+
+        If ProcessSpecialProperty(PropSetName, PropNameEnglish) Is Nothing Then
+            Dim Prop = GetProp(PropSetName, PropNameEnglish)
+
+            Success = Prop IsNot Nothing
+        Else
+            Success = True
+        End If
+
+        Return Success
+    End Function
+
+
+
+    Public Function GetPropNames() As List(Of String)
+        Dim PropNames As New List(Of String)
+
+        For Each _PropSet As PropertySet In Me.PropSets.Items
+            If Not _PropSet.Name = "Custom" Then
+                For Each _Prop As Prop In _PropSet.Items
+                    If Not PropNames.Contains(_Prop.Name) Then PropNames.Add(String.Format("{0}, {1}, {2}", _PropSet.Name, CStr(_Prop.PropertyIdentifier), _Prop.Name))
+                Next
+            End If
+        Next
+
+        Return PropNames
+    End Function
+
+
+
     Public Function SubstitutePropertyFormulas(
          InString As String,
          ValidFilenameRequired As Boolean,
@@ -246,6 +289,7 @@ Public Class HCStructuredStorageDoc
         ' "Material: %{System.Material}, Engineer: %{Custom.Engineer}" --> "Material: STEEL, Engineer: FRED"
         ' "%{System.Titulo}"                                           --> "Ciao Pizza!"
         ' "%{Custom.Engineer|R1}"                                      --> "Fred" (From index reference 1)
+        ' "%{Server.Query|R3}"                                         --> "Some response from server" (From server query 3)
 
         If Me.PropSets Is Nothing Then
             Throw New Exception("Properties not initialized")
@@ -343,11 +387,15 @@ Public Class HCStructuredStorageDoc
         PropertyName = UC.PropNameFromFormula(Formula)
         ModelIdx = UC.ModelIdxFromFormula(Formula)
 
-        PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
-
         If Not ((PropertySetName = "System") Or (PropertySetName = "Custom") Or (PropertySetName = "Server")) Then
             Return Nothing
         End If
+
+        If (PropertySetName = "Server") And (PropertyName = "Query") Then
+            Return Form_Main.ExecuteQuery(FullName, Form_Main.ServerQuery, ModelIdx).Replace(vbCrLf, " ")
+        End If
+
+        PropertyNameEnglish = Me.PropertiesData.GetPropertyData(PropertyName).EnglishName
 
         If ModelIdx = 0 Then
             DocValue = CStr(GetPropValue(PropertySetName, PropertyNameEnglish))
@@ -535,12 +583,20 @@ Public Class HCStructuredStorageDoc
     End Function
 
     Public Function MaterialUpToDate(SSDoc As HCStructuredStorageDoc) As Boolean
+        If Me.MatTable Is Nothing Then
+            Throw New Exception("Material table is not initialized")
+        End If
+
         Return Me.MatTable.MaterialUpToDate(SSDoc)
     End Function
 
-    Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
-        Return Me.MatTable.UpdateMaterial(SSDoc)
-    End Function
+    'Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
+    '    If Me.MatTable Is Nothing Then
+    '        Throw New Exception("Material table is not initialized")
+    '    End If
+
+    '    Return Me.MatTable.UpdateMaterial(SSDoc)
+    'End Function
 
 
     Private Class PropertySets
@@ -556,7 +612,6 @@ Public Class HCStructuredStorageDoc
 
             Me.Items = New List(Of PropertySet)
 
-
             Me.PropertySetNames = New List(Of String)
 
             Dim tmpPropertySetNames As New List(Of String)
@@ -571,7 +626,7 @@ Public Class HCStructuredStorageDoc
                 If Not PropertySetName = "Custom" Then
 
                     'Not all files have every PropertySet
-                    'Properties of Some very old files appear to be organized differently
+                    'Properties of some very old files appear to be organized differently
                     Try
                         Me.Items.Add(New PropertySet(Me.cf, PropertySetName))
                         Me.PropertySetNames.Add(PropertySetName)
@@ -669,7 +724,7 @@ Public Class HCStructuredStorageDoc
             If PropertySetName.ToLower = "custom" Then
                 If co.HasUserDefinedProperties Then
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
-                        CorrectedName = FixOLEPropName(OLEProp.PropertyName, PropertySetName)
+                        CorrectedName = CorrectOLEPropName(OLEProp.PropertyName, PropertySetName)
                         Me.PropNames.Add(CorrectedName)
                         Me.Items.Add(New Prop(OLEProp, CorrectedName))
                     Next
@@ -677,13 +732,12 @@ Public Class HCStructuredStorageDoc
 
             Else
                 For Each OLEProp As OLEProperty In co.Properties
-                    CorrectedName = FixOLEPropName(OLEProp.PropertyName, PropertySetName)
+                    CorrectedName = CorrectOLEPropName(OLEProp.PropertyName, PropertySetName)
                     Me.PropNames.Add(CorrectedName)
                     Me.Items.Add(New Prop(OLEProp, CorrectedName))
                 Next
 
             End If
-
 
         End Sub
 
@@ -735,7 +789,7 @@ Public Class HCStructuredStorageDoc
                 UserProperties = co.UserDefinedProperties
 
                 If UserProperties.PropertyNames.Keys.Count = 0 Then
-                    ' Accounting for a hidden property in the Container or some other weirdness.
+                    ' The first two PropertyIDs (0 and 1) are reserved.  (Saw a reference to this somewhere in the OpenMCDF source code.)
                     NewPropertyId = 2
                 Else
                     ' Could possibly find an unused ID number.  Going with .Max() + 1 for now.
@@ -791,7 +845,7 @@ Public Class HCStructuredStorageDoc
             Return Success
         End Function
 
-        Private Function FixOLEPropName(OLEPropName As String, PropertySetName As String) As String
+        Private Function CorrectOLEPropName(OLEPropName As String, PropertySetName As String) As String
             Dim CorrectedName As String = ""
 
             Select Case PropertySetName
@@ -870,7 +924,8 @@ Public Class HCStructuredStorageDoc
                 Case = VTPropertyType.VT_BOOL
                     RequiredType = "Boolean"
                     Try
-                        OLEProp.Value = CType(PropertyValue, Boolean)
+                        'OLEProp.Value = CType(PropertyValue, Boolean)
+                        OLEProp.Value = CBool(PropertyValue)
                     Catch ex As Exception
                         Success = False
                     End Try
@@ -878,7 +933,8 @@ Public Class HCStructuredStorageDoc
                 Case = VTPropertyType.VT_I4
                     RequiredType = "Integer"
                     Try
-                        OLEProp.Value = CType(PropertyValue, Integer)
+                        'OLEProp.Value = CType(PropertyValue, Integer)
+                        OLEProp.Value = CInt(PropertyValue)
                     Catch ex As Exception
                         Success = False
                     End Try
@@ -902,7 +958,8 @@ Public Class HCStructuredStorageDoc
                 Case = VTPropertyType.VT_R8
                     RequiredType = "Double"
                     Try
-                        OLEProp.Value = CType(PropertyValue, Double)
+                        'OLEProp.Value = CType(PropertyValue, Double)
+                        OLEProp.Value = CDbl(PropertyValue)
                     Catch ex As Exception
                         Success = False
                     End Try
@@ -916,6 +973,7 @@ Public Class HCStructuredStorageDoc
         End Sub
 
     End Class
+
 
     Private Class LinkFullNames
         Public Property Items As New List(Of String)

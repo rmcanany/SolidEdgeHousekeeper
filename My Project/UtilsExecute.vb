@@ -18,6 +18,16 @@ Public Class UtilsExecute
 
     Public Property TextBoxStatus As TextBox
 
+    Public Enum StatusSecurityMapping
+        ssmAvailable = 0
+        ssmInWork = 0
+        ssmInReview = 0
+        ssmReleased = 4
+        ssmBaselined = 4
+        ssmObsolete = 4
+    End Enum
+
+
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
@@ -32,7 +42,7 @@ Public Class UtilsExecute
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
-        FMain.SaveSettings()  ' Updates JSON Properties and saves settings
+        FMain.SaveSettings(SavingPresets:=False)  ' Updates JSON Properties and saves settings
 
         ErrorMessage = CheckStartConditions()
 
@@ -431,8 +441,6 @@ Public Class UtilsExecute
 
         Dim Proceed As Boolean = True
 
-        Dim OldStatus As SolidEdgeConstants.DocumentStatus
-
 
         '###### EXCEPTION ACCOUNTING ######
 
@@ -444,19 +452,13 @@ Public Class UtilsExecute
 
         ' ###### DOCUMENT STATUS ######
 
+        Dim OldStatus As SolidEdgeConstants.DocumentStatus
+
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
 
-            'If FMain.UseDMForStatusChanges Then
-            '    OldStatus = UC.GetDMStatus(DMApp, Path)
-            'Else
-            '    OldStatus = UC.GetOLEStatus(Path)
-            'End If
-            OldStatus = UC.GetOLEStatus(Path)
+            'SetStartingStatus populates OldStatus
+            'OldStatus = CType(CInt(GetOLEPropValue(cf, "System", "Status", AddProp:=False)), SolidEdgeConstants.DocumentStatus)
 
-            'Dim s As String = SetStartingStatus(OldStatus, DMApp, Path)
-            'If Not s = "" Then
-            '    ErrorMessagesCombined(s) = New List(Of String) From {""}
-            'End If
             Dim s As String = SetStartingStatus(OldStatus, Path)
             If Not s = "" Then
                 ErrorMessagesCombined(s) = New List(Of String) From {""}
@@ -555,12 +557,6 @@ Public Class UtilsExecute
 
                 '###### DOCUMENT STATUS ######
 
-                'If FMain.ProcessAsAvailable Then
-                '    Dim s As String = SetEndingStatus(OldStatus, DMApp, Path)
-                '    If Not s = "" Then
-                '        ErrorMessagesCombined(s) = New List(Of String) From {""}
-                '    End If
-                'End If
                 If FMain.ProcessAsAvailable Then
                     Dim s As String = SetEndingStatus(OldStatus, Path)
                     If Not s = "" Then
@@ -637,150 +633,93 @@ Public Class UtilsExecute
         Return IsOK
     End Function
 
-    'Private Function SetStartingStatus(
-    '    OldStatus As SolidEdgeConstants.DocumentStatus,
-    '    DMApp As DesignManager.Application,
-    '    Path As String) As String
-
-    '    Dim ErrorMessage As String = ""
-    '    Dim StatusChangeSuccessful As Boolean = True
-
-    '    Dim UC As New UtilsCommon
-
-    '    If FMain.UseDMForStatusChanges Then
-
-    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-    '            StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-    '        End If
-
-    '        SEApp.DoIdle()
-
-    '    Else
-
-    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-    '            StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-    '        End If
-
-    '    End If
-
-    '    If Not StatusChangeSuccessful Then
-    '        ErrorMessage = "Change status to 'Available' did not succeed"
-    '    End If
-
-    '    Return ErrorMessage
-    'End Function
     Private Function SetStartingStatus(
-        OldStatus As SolidEdgeConstants.DocumentStatus,
+        ByRef OldStatus As SolidEdgeConstants.DocumentStatus,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
-        Dim StatusChangeSuccessful As Boolean = True
+        Dim Proceed As Boolean = True
 
-        Dim UC As New UtilsCommon
+        Dim NewSecurity As StatusSecurityMapping
 
-        'If FMain.UseDMForStatusChanges Then
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-        '    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-        '        StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-        '    End If
+        Try
+            SSDoc = New HCStructuredStorageDoc(Path)
+            SSDoc.ReadProperties(FMain.PropertiesData)
+        Catch ex As Exception
+            Proceed = False
+        End Try
 
-        '    SEApp.DoIdle()
+        If Proceed Then
+            OldStatus = CType(CInt(SSDoc.GetPropValue("System", "Status")), SolidEdgeConstants.DocumentStatus)
 
-        'Else
+            If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                NewSecurity = StatusSecurityMapping.ssmAvailable
 
-        '    If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-        '        StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
-        '    End If
+                Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
+                Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(SolidEdgeConstants.DocumentStatus.igStatusAvailable), AddProperty:=False)
 
-        'End If
-        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-            StatusChangeSuccessful = UC.SetOLEStatus(Path, SolidEdgeConstants.DocumentStatus.igStatusAvailable)
+            End If
         End If
 
-        If Not StatusChangeSuccessful Then
+        If Not Proceed Then
             ErrorMessage = "Change status to 'Available' did not succeed"
+        Else
+            If SSDoc IsNot Nothing Then SSDoc.Save()
         End If
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
 
         Return ErrorMessage
     End Function
 
-    'Private Function SetEndingStatus(
-    '    OldStatus As SolidEdgeConstants.DocumentStatus,
-    '    DMApp As DesignManager.Application,
-    '    Path As String) As String
-
-    '    Dim ErrorMessage As String = ""
-    '    Dim StatusChangeSuccessful As Boolean = True
-
-    '    Dim UC As New UtilsCommon
-
-    '    If FMain.ProcessAsAvailableRevert Then
-    '        If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-    '            If FMain.UseDMForStatusChanges Then
-    '                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
-    '            Else
-    '                StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
-    '            End If
-    '        End If
-    '    End If
-
-    '    If FMain.ProcessAsAvailableChange Then
-    '        Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
-
-    '        If Not OldStatus = NewStatus Then
-    '            If FMain.UseDMForStatusChanges Then
-    '                StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
-    '            Else
-    '                StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
-    '            End If
-    '        End If
-
-    '    End If
-
-    '    If Not StatusChangeSuccessful Then
-    '        ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
-    '    End If
-
-    '    Return ErrorMessage
-
-    'End Function
     Private Function SetEndingStatus(
         OldStatus As SolidEdgeConstants.DocumentStatus,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
-        Dim StatusChangeSuccessful As Boolean = True
+        Dim Proceed As Boolean = True
 
-        Dim UC As New UtilsCommon
+        Dim NewStatus As SolidEdgeConstants.DocumentStatus
+        Dim NewSecurity As StatusSecurityMapping
 
-        If FMain.ProcessAsAvailableRevert Then
-            If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                'If FMain.UseDMForStatusChanges Then
-                '    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, OldStatus)
-                'Else
-                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
-                'End If
-                StatusChangeSuccessful = UC.SetOLEStatus(Path, OldStatus)
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
+
+        Try
+            SSDoc = New HCStructuredStorageDoc(Path)
+            SSDoc.ReadProperties(FMain.PropertiesData)
+        Catch ex As Exception
+            Proceed = False
+        End Try
+
+        If Proceed Then
+            If FMain.ProcessAsAvailableRevert Then
+                If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+                    NewSecurity = GetNewSecurity(OldStatus)
+
+                    Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
+                    Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(OldStatus), AddProperty:=False)
+                End If
+
+            ElseIf FMain.ProcessAsAvailableChange Then
+                NewStatus = GetNewStatus(OldStatus)
+                NewSecurity = GetNewSecurity(NewStatus)
+
+                If Not OldStatus = NewStatus Then
+                    Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
+                    Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatus), AddProperty:=False)
+                End If
             End If
         End If
 
-        If FMain.ProcessAsAvailableChange Then
-            Dim NewStatus As SolidEdgeConstants.DocumentStatus = GetNewStatus(OldStatus)
-
-            If Not OldStatus = NewStatus Then
-                'If FMain.UseDMForStatusChanges Then
-                '    StatusChangeSuccessful = UC.SetDMStatus(DMApp, Path, NewStatus)
-                'Else
-                '    StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
-                'End If
-                StatusChangeSuccessful = UC.SetOLEStatus(Path, NewStatus)
-            End If
-
-        End If
-
-        If Not StatusChangeSuccessful Then
+        If Not Proceed Then
             ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
+        Else
+            If SSDoc IsNot Nothing Then SSDoc.Save()
         End If
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
 
         Return ErrorMessage
 
@@ -809,6 +748,31 @@ Public Class UtilsExecute
         End If
 
         Return NewStatus
+    End Function
+
+    Private Function GetNewSecurity(NewStatus As SolidEdgeConstants.DocumentStatus) As StatusSecurityMapping
+        Dim NewSecurity As StatusSecurityMapping
+
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+            NewSecurity = StatusSecurityMapping.ssmAvailable
+        End If
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+            NewSecurity = StatusSecurityMapping.ssmBaselined
+        End If
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+            NewSecurity = StatusSecurityMapping.ssmInReview
+        End If
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+            NewSecurity = StatusSecurityMapping.ssmInWork
+        End If
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+            NewSecurity = StatusSecurityMapping.ssmObsolete
+        End If
+        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+            NewSecurity = StatusSecurityMapping.ssmReleased
+        End If
+
+        Return NewSecurity
     End Function
 
 End Class

@@ -550,7 +550,7 @@ Public Class UtilsPreferences
 
     End Function
 
-    Public Sub SaveFormMainSettings(FMain As Form_Main)
+    Public Sub SaveFormMainSettings(FMain As Form_Main, SavingPresets As Boolean)
 
         Dim tmpJSONDict As New Dictionary(Of String, String)
         Dim JSONString As String
@@ -585,9 +585,10 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
         KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
         KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
-        KeepProps.AddRange({"Left", "Top", "Width", "Height", "UseDMForStatusChanges"})
         KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
         KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
+
+        If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
 
         For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
 

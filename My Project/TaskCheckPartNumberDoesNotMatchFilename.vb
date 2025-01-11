@@ -123,7 +123,8 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Me.Category = "Check"
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
-        Me.SolidEdgeRequired = False
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
         Me.RequiresLinkManagementOrder = True
 
         GenerateTaskControl()

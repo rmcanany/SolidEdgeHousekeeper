@@ -1,6 +1,7 @@
 ﻿Option Strict On
 Imports System.Security.AccessControl
 Imports System.Windows
+Imports FastColoredTextBoxNS
 
 Public Class UCEditProperties
 
@@ -246,7 +247,7 @@ Public Class UCEditProperties
     Private Function FilterPropertyNames() As List(Of String)
         Dim FilteredList = New List(Of String)
         Dim PropSet As String = ""
-        Dim PropSetConstant As PropertyData.PropertySetNameConstants
+        'Dim PropSetConstant As PropertyData.PropertySetNameConstants
 
         Dim tmpPropList As New List(Of String)
 
@@ -282,16 +283,14 @@ Public Class UCEditProperties
 
             Dim tmpPropertyData = Form_Main.PropertiesData.GetPropertyData(PropName)
             If tmpPropertyData IsNot Nothing Then
-                PropSetConstant = tmpPropertyData.PropertySetName
 
-                Select Case PropSetConstant
-                    Case PropertyData.PropertySetNameConstants.Custom
-                        PropSet = "Custom"
-                    Case PropertyData.PropertySetNameConstants.Duplicate
-                        PropSet = Me.PropertySet
-                    Case PropertyData.PropertySetNameConstants.System
-                        PropSet = "System"
-                End Select
+                If tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom Then
+                    PropSet = "Custom"
+                ElseIf tmpPropertyData.IsDuplicate Then
+                    PropSet = Me.PropertySet
+                ElseIf tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.System Then
+                    PropSet = "System"
+                End If
 
             Else
                 PropSet = ""
@@ -310,7 +309,7 @@ Public Class UCEditProperties
 
     Private Sub UpdatePropertySet()
         Dim PropSet As String = ""
-        Dim PropSetConstant As PropertyData.PropertySetNameConstants
+        'Dim PropSetConstant As PropertyData.PropertySetNameConstants
 
         'If Not IsNothing(Form_Main.TemplatePropertyDict) Then
         '    If Form_Main.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
@@ -333,16 +332,14 @@ Public Class UCEditProperties
         If Form_Main.PropertiesData IsNot Nothing Then
             Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(Me.PropertyName)
             If tmpPropertyData IsNot Nothing Then
-                PropSetConstant = tmpPropertyData.PropertySetName
 
-                Select Case PropSetConstant
-                    Case PropertyData.PropertySetNameConstants.Custom
-                        PropSet = "Custom"
-                    Case PropertyData.PropertySetNameConstants.Duplicate
-                        PropSet = Me.PropertySet
-                    Case PropertyData.PropertySetNameConstants.System
-                        PropSet = "System"
-                End Select
+                If tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom Then
+                    PropSet = "Custom"
+                ElseIf tmpPropertyData.IsDuplicate Then
+                    PropSet = Me.PropertySet
+                ElseIf tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.System Then
+                    PropSet = "System"
+                End If
 
             Else
                 PropSet = ""

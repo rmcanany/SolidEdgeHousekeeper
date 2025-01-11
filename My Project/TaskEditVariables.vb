@@ -81,7 +81,7 @@ Public Class TaskEditVariables
         Me.AutoAddMissingVariable = False
 
         'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
-        Me.PropertiesData = New PropertiesData
+        Me.PropertiesData = New HCPropertiesData
 
     End Sub
 
@@ -218,15 +218,13 @@ Public Class TaskEditVariables
                 Dim FullName As String = UC.SplitFOAName(SEDoc.FullName)("Filename")
 
                 Dim tmpFormula As String = Formula
-                Try
-                    'Formula = UC.SubstitutePropertyFormula(SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.TemplatePropertyDict)
-                    Formula = UC.SubstitutePropertyFormula(
-                    SEDoc, Nothing, Nothing, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
-                Catch ex As Exception
+
+                Formula = UC.SubstitutePropertyFormula(SEDoc, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
+                If Formula Is Nothing Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Could not process formula '{0}'", tmpFormula))
                     Continue For
-                End Try
+                End If
 
                 Dim UnitType As SolidEdgeConstants.UnitTypeConstants = UC.GetUnitType(VariablesToEditDict(RowIndex)("UnitType").Trim)
                 Dim Expose As Boolean = VariablesToEditDict(RowIndex)("Expose").Trim.ToLower = "true"

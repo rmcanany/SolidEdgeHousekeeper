@@ -32,135 +32,135 @@ Public Class TaskSetDocumentStatus
         End Set
     End Property
 
-    Private _UpdateAdditionalProperties As Boolean
-    Public Property UpdateAdditionalProperties As Boolean
-        Get
-            Return _UpdateAdditionalProperties
-        End Get
-        Set(value As Boolean)
-            _UpdateAdditionalProperties = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.UpdateAdditionalProperties.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
+    'Private _UpdateAdditionalProperties As Boolean
+    'Public Property UpdateAdditionalProperties As Boolean
+    '    Get
+    '        Return _UpdateAdditionalProperties
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UpdateAdditionalProperties = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.UpdateAdditionalProperties.ToString), CheckBox).Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AutoAddMissingProperty As Boolean
-    Public Property AutoAddMissingProperty As Boolean
-        Get
-            Return _AutoAddMissingProperty
-        End Get
-        Set(value As Boolean)
-            _AutoAddMissingProperty = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
+    'Private _AutoAddMissingProperty As Boolean
+    'Public Property AutoAddMissingProperty As Boolean
+    '    Get
+    '        Return _AutoAddMissingProperty
+    '    End Get
+    '    Set(value As Boolean)
+    '        _AutoAddMissingProperty = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxProperty1 As String
-    Public Property AuxProperty1 As String
-        Get
-            Return _AuxProperty1
-        End Get
-        Set(value As String)
-            _AuxProperty1 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxProperty1 As String
+    'Public Property AuxProperty1 As String
+    '    Get
+    '        Return _AuxProperty1
+    '    End Get
+    '    Set(value As String)
+    '        _AuxProperty1 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxValue1 As String
-    Public Property AuxValue1 As String
-        Get
-            Return _AuxValue1
-        End Get
-        Set(value As String)
-            _AuxValue1 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxValue1 As String
+    'Public Property AuxValue1 As String
+    '    Get
+    '        Return _AuxValue1
+    '    End Get
+    '    Set(value As String)
+    '        _AuxValue1 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxProperty2 As String
-    Public Property AuxProperty2 As String
-        Get
-            Return _AuxProperty2
-        End Get
-        Set(value As String)
-            _AuxProperty2 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxProperty2 As String
+    'Public Property AuxProperty2 As String
+    '    Get
+    '        Return _AuxProperty2
+    '    End Get
+    '    Set(value As String)
+    '        _AuxProperty2 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxValue2 As String
-    Public Property AuxValue2 As String
-        Get
-            Return _AuxValue2
-        End Get
-        Set(value As String)
-            _AuxValue2 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxValue2 As String
+    'Public Property AuxValue2 As String
+    '    Get
+    '        Return _AuxValue2
+    '    End Get
+    '    Set(value As String)
+    '        _AuxValue2 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxProperty3 As String
-    Public Property AuxProperty3 As String
-        Get
-            Return _AuxProperty3
-        End Get
-        Set(value As String)
-            _AuxProperty3 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxProperty3 As String
+    'Public Property AuxProperty3 As String
+    '    Get
+    '        Return _AuxProperty3
+    '    End Get
+    '    Set(value As String)
+    '        _AuxProperty3 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxValue3 As String
-    Public Property AuxValue3 As String
-        Get
-            Return _AuxValue3
-        End Get
-        Set(value As String)
-            _AuxValue3 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxValue3 As String
+    'Public Property AuxValue3 As String
+    '    Get
+    '        Return _AuxValue3
+    '    End Get
+    '    Set(value As String)
+    '        _AuxValue3 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxProperty4 As String
-    Public Property AuxProperty4 As String
-        Get
-            Return _AuxProperty4
-        End Get
-        Set(value As String)
-            _AuxProperty4 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxProperty4 As String
+    'Public Property AuxProperty4 As String
+    '    Get
+    '        Return _AuxProperty4
+    '    End Get
+    '    Set(value As String)
+    '        _AuxProperty4 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
-    Private _AuxValue4 As String
-    Public Property AuxValue4 As String
-        Get
-            Return _AuxValue4
-        End Get
-        Set(value As String)
-            _AuxValue4 = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Text = value
-            End If
-        End Set
-    End Property
+    'Private _AuxValue4 As String
+    'Public Property AuxValue4 As String
+    '    Get
+    '        Return _AuxValue4
+    '    End Get
+    '    Set(value As String)
+    '        _AuxValue4 = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Text = value
+    '        End If
+    '    End Set
+    'End Property
 
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
@@ -175,26 +175,35 @@ Public Class TaskSetDocumentStatus
         End Set
     End Property
 
-    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewStatus
         NewStatusLabel
         StructuredStorageEdit
-        UpdateAdditionalProperties
-        AutoAddMissingProperty
-        PropertyLabel
-        ValueLabel
-        AuxProperty1
-        AuxValue1
-        AuxProperty2
-        AuxValue2
-        AuxProperty3
-        AuxValue3
-        AuxProperty4
-        AuxValue4
+        'UpdateAdditionalProperties
+        'AutoAddMissingProperty
+        'PropertyLabel
+        'ValueLabel
+        'AuxProperty1
+        'AuxValue1
+        'AuxProperty2
+        'AuxValue2
+        'AuxProperty3
+        'AuxValue3
+        'AuxProperty4
+        'AuxValue4
         AutoHideOptions
     End Enum
+
+    Public Enum StatusSecurityMapping
+        ssmAvailable = 0
+        ssmInWork = 0
+        ssmInReview = 0
+        ssmReleased = 4
+        ssmBaselined = 4
+        ssmObsolete = 4
+    End Enum
+
 
 
     Public Sub New()
@@ -213,7 +222,7 @@ Public Class TaskSetDocumentStatus
         SetColorFromCategory(Me)
         Me.RequiresPropertiesData = True
         Me.SolidEdgeRequired = False
-        Me.CompatibleWithOtherTasks = False
+        'Me.CompatibleWithOtherTasks = False
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -222,16 +231,16 @@ Public Class TaskSetDocumentStatus
         ' Options
         Me.NewStatus = ""
         Me.StructuredStorageEdit = True
-        Me.UpdateAdditionalProperties = False
-        Me.AutoAddMissingProperty = False
-        Me.AuxProperty1 = ""
-        Me.AuxValue1 = ""
-        Me.AuxProperty2 = ""
-        Me.AuxValue2 = ""
-        Me.AuxProperty3 = ""
-        Me.AuxValue3 = ""
-        Me.AuxProperty4 = ""
-        Me.AuxValue4 = ""
+        'Me.UpdateAdditionalProperties = False
+        'Me.AutoAddMissingProperty = False
+        'Me.AuxProperty1 = ""
+        'Me.AuxValue1 = ""
+        'Me.AuxProperty2 = ""
+        'Me.AuxValue2 = ""
+        'Me.AuxProperty3 = ""
+        'Me.AuxValue3 = ""
+        'Me.AuxProperty4 = ""
+        'Me.AuxValue4 = ""
 
     End Sub
 
@@ -267,20 +276,20 @@ Public Class TaskSetDocumentStatus
 
     End Function
 
-    'Private Overloads Function ProcessInternal(
-    '    ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    ByVal Configuration As Dictionary(Of String, String),
-    '    ByVal SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
+    Private Overloads Function ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
 
-    '    Dim ErrorMessageList As New List(Of String)
-    '    Dim ExitStatus As Integer = 0
-    '    Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
 
-    '    ErrorMessage(ExitStatus) = ErrorMessageList
-    '    Return ErrorMessage
-    'End Function
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+    End Function
 
     Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
@@ -289,138 +298,60 @@ Public Class TaskSetDocumentStatus
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
-        Dim Proceed As Boolean
+        Dim NewSecurity As StatusSecurityMapping
+        Dim Proceed As Boolean = True
         Dim UC As New UtilsCommon
 
-        Select Case Me.NewStatus
-            Case "Available"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-            Case "Baselined"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-            Case "InReview"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
-            Case "InWork"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
-            Case "Obsolete"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-            Case "Released"
-                NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
-        End Select
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-        Proceed = UC.SetOLEStatus(FullName, NewStatusConstant)
-
-        If Not Proceed Then
+        Try
+            SSDoc = New HCStructuredStorageDoc(FullName)
+            SSDoc.ReadProperties(Me.PropertiesData)
+        Catch ex As Exception
+            Proceed = False
             ExitStatus = 1
-            ErrorMessageList.Add("Unable to change document status")
-        Else
-            If Me.UpdateAdditionalProperties Then
+            ErrorMessageList.Add("Unable to open file")
+        End Try
 
-                Dim AuxProperties As New List(Of String)
-                AuxProperties.AddRange({Me.AuxProperty1, Me.AuxProperty2, Me.AuxProperty3, Me.AuxProperty4})
+        If Proceed Then
+            Select Case Me.NewStatus
+                Case "Available"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                    NewSecurity = StatusSecurityMapping.ssmAvailable
+                Case "Baselined"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                    NewSecurity = StatusSecurityMapping.ssmBaselined
+                Case "InReview"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
+                    NewSecurity = StatusSecurityMapping.ssmInReview
+                Case "InWork"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
+                    NewSecurity = StatusSecurityMapping.ssmInWork
+                Case "Obsolete"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                    NewSecurity = StatusSecurityMapping.ssmObsolete
+                Case "Released"
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                    NewSecurity = StatusSecurityMapping.ssmReleased
+            End Select
 
-                Dim s As String
+            Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
+            Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatusConstant), AddProperty:=False)
 
-                Dim Substitutions As List(Of String) = GetSubstitutions(FullName)
-
-                If Substitutions Is Nothing Then
-                    Proceed = False
-                    ExitStatus = 1
-                    s = "Problem processing additional property values"
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
-                Else
-                    For i As Integer = 0 To AuxProperties.Count - 1
-                        If (Proceed) And (Not AuxProperties(i).Trim = "") Then
-
-                            ' ###### UPDATE PROPERTY ######
-                            Dim PropertyName As String = UC.PropNameFromFormula(AuxProperties(i))
-                            Dim PropData As PropertyData = Me.PropertiesData.GetPropertyData(PropertyName)
-
-                            Dim PropertySetConstant As PropertyData.PropertySetNameConstants = PropData.PropertySetName
-                            Dim PropertyNameEnglish As String = PropData.EnglishName
-                            Dim PropertySet As String = ""
-
-                            Select Case PropertySetConstant
-                                Case PropertyData.PropertySetNameConstants.Custom
-                                    PropertySet = "Custom"
-                                Case PropertyData.PropertySetNameConstants.System
-                                    PropertySet = "System"
-                                Case PropertyData.PropertySetNameConstants.Duplicate
-                                    PropertySet = "System"
-                            End Select
-
-
-                            If Not UC.SetOLEPropValue(FullName, PropertySet, PropertyNameEnglish, Substitutions(i)) Then
-                                'Proceed = False
-                                ExitStatus = 1
-                                s = String.Format("Unable to update property '{0}' to '{1}'", AuxProperties(i), Substitutions(i))
-                                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                            End If
-
-                        End If
-                    Next
-                End If
+            If Not Proceed Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Unable to change document status")
             End If
+
         End If
+
+        If Proceed Then SSDoc.Save()
+
+        If SSDoc IsNot Nothing Then SSDoc.Close()
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
-    End Function
-
-    Private Function GetSubstitutions(FullName As String) As List(Of String)
-        Dim Substitutions As New List(Of String)
-        Substitutions.AddRange({"", "", "", ""})
-
-        Dim AuxProperties As New List(Of String)
-        AuxProperties.AddRange({Me.AuxProperty1, Me.AuxProperty2, Me.AuxProperty3, Me.AuxProperty4})
-        Dim AuxValues As New List(Of String)
-        AuxValues.AddRange({Me.AuxValue1, Me.AuxValue2, Me.AuxValue3, Me.AuxValue4})
-
-        Dim Proceed As Boolean = True
-        Dim UC As New UtilsCommon
-        Dim fs As FileStream = Nothing
-        Dim cf As CompoundFile = Nothing
-
-        Try
-            fs = New FileStream(FullName, FileMode.Open, FileAccess.ReadWrite)
-        Catch ex As Exception
-            Proceed = False
-        End Try
-
-        If Proceed Then
-            Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-            cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
-
-            For i As Integer = 0 To AuxProperties.Count - 1
-                If Not AuxProperties(i).Trim = "" Then
-
-                    Try
-                        Substitutions(i) = UC.SubstitutePropertyFormula(
-                            Nothing, cf, Nothing, FullName, AuxValues(i), ValidFilenameRequired:=False, Me.PropertiesData)
-                    Catch ex As Exception
-                        Proceed = False
-                        Exit For
-                    End Try
-
-                End If
-            Next
-        End If
-
-        If cf IsNot Nothing Then
-            cf.Close()
-        End If
-
-        If fs IsNot Nothing Then
-            fs.Close()
-            System.Windows.Forms.Application.DoEvents()
-        End If
-
-        If Proceed Then
-            Return Substitutions
-        Else
-            Return Nothing
-        End If
     End Function
 
 
@@ -431,7 +362,7 @@ Public Class TaskSetDocumentStatus
         Dim CheckBox As CheckBox
         Dim ComboBox As ComboBox
         Dim ComboBoxItems As List(Of String) = Split("Available Baselined InReview InWork Obsolete Released", " ").ToList
-        Dim TextBox As TextBox
+        'Dim TextBox As TextBox
         Dim Label As Label
         Dim ControlWidth As Integer = 225
 
@@ -458,109 +389,6 @@ Public Class TaskSetDocumentStatus
         CheckBox.Checked = True
         CheckBox.Enabled = False
         ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
-        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateAdditionalProperties.ToString, "Update additional properties")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'CheckBox.Checked = True
-        ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
-        CheckBox = FormatOptionsCheckBox(ControlNames.AutoAddMissingProperty.ToString, "Add any property not already in the file")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        'CheckBox.Checked = True
-        CheckBox.Visible = False
-        ControlsDict(CheckBox.Name) = CheckBox
-
-        RowIndex += 1
-
-        Label = FormatOptionsLabel(ControlNames.PropertyLabel.ToString, "Property (blank entries ignored)")
-        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
-        Label.Visible = False
-        ControlsDict(Label.Name) = Label
-
-        Label = FormatOptionsLabel(ControlNames.ValueLabel.ToString, "Value")
-        tmpTLPOptions.Controls.Add(Label, 1, RowIndex)
-        Label.Visible = False
-        ControlsDict(Label.Name) = Label
-
-        RowIndex += 1
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxProperty1.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxValue1.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        RowIndex += 1
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxProperty2.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxValue2.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        RowIndex += 1
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxProperty3.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxValue3.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        RowIndex += 1
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxProperty4.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
-
-        TextBox = FormatOptionsTextBox(ControlNames.AuxValue4.ToString, "")
-        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
-        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
-        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
-        tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
-        ControlsDict(TextBox.Name) = TextBox
-        TextBox.Visible = False
 
         RowIndex += 1
 
@@ -647,26 +475,26 @@ Public Class TaskSetDocumentStatus
                 'Me.RequiresSave = Not Checkbox.Checked
                 'Me.SolidEdgeRequired = Not Checkbox.Checked
 
-            Case ControlNames.UpdateAdditionalProperties.ToString
-                Me.UpdateAdditionalProperties = Checkbox.Checked
+            'Case ControlNames.UpdateAdditionalProperties.ToString
+            '    Me.UpdateAdditionalProperties = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Visible = Me.UpdateAdditionalProperties
 
-                CType(ControlsDict(ControlNames.PropertyLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.ValueLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.PropertyLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.ValueLabel.ToString), Label).Visible = Me.UpdateAdditionalProperties
 
-                CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
-                CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
+            '    CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Visible = Me.UpdateAdditionalProperties
 
 
-            Case ControlNames.AutoAddMissingProperty.ToString
-                Me.AutoAddMissingProperty = Checkbox.Checked
+            'Case ControlNames.AutoAddMissingProperty.ToString
+            '    Me.AutoAddMissingProperty = Checkbox.Checked
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -686,34 +514,34 @@ Public Class TaskSetDocumentStatus
 
         Dim UC As New UtilsCommon
 
-        Select Case Name
-            Case ControlNames.AuxProperty1.ToString
-                Me.AuxProperty1 = TextBox.Text
+        'Select Case Name
+        '    Case ControlNames.AuxProperty1.ToString
+        '        Me.AuxProperty1 = TextBox.Text
 
-            Case ControlNames.AuxValue1.ToString
-                Me.AuxValue1 = TextBox.Text
+        '    Case ControlNames.AuxValue1.ToString
+        '        Me.AuxValue1 = TextBox.Text
 
-            Case ControlNames.AuxProperty2.ToString
-                Me.AuxProperty2 = TextBox.Text
+        '    Case ControlNames.AuxProperty2.ToString
+        '        Me.AuxProperty2 = TextBox.Text
 
-            Case ControlNames.AuxValue2.ToString
-                Me.AuxValue2 = TextBox.Text
+        '    Case ControlNames.AuxValue2.ToString
+        '        Me.AuxValue2 = TextBox.Text
 
-            Case ControlNames.AuxProperty3.ToString
-                Me.AuxProperty3 = TextBox.Text
+        '    Case ControlNames.AuxProperty3.ToString
+        '        Me.AuxProperty3 = TextBox.Text
 
-            Case ControlNames.AuxValue3.ToString
-                Me.AuxValue3 = TextBox.Text
+        '    Case ControlNames.AuxValue3.ToString
+        '        Me.AuxValue3 = TextBox.Text
 
-            Case ControlNames.AuxProperty4.ToString
-                Me.AuxProperty4 = TextBox.Text
+        '    Case ControlNames.AuxProperty4.ToString
+        '        Me.AuxProperty4 = TextBox.Text
 
-            Case ControlNames.AuxValue4.ToString
-                Me.AuxValue4 = TextBox.Text
+        '    Case ControlNames.AuxValue4.ToString
+        '        Me.AuxValue4 = TextBox.Text
 
-            Case Else
-                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-        End Select
+        '    Case Else
+        '        MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+        'End Select
 
 
     End Sub

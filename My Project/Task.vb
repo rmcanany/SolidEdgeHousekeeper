@@ -6,7 +6,7 @@ Imports Newtonsoft.Json
 'Imports SolidEdgeConstants
 
 Public MustInherit Class Task
-    Inherits IsolatedTaskProxy
+    Inherits HCIsolatedTaskProxy
 
     Public Property Name As String
 
@@ -144,7 +144,7 @@ Public MustInherit Class Task
 
     'Public Property RequiresTemplatePropertyDict As Boolean = False
     Public Property RequiresPropertiesData As Boolean = False
-    Public Property PropertiesData As PropertiesData
+    Public Property PropertiesData As HCPropertiesData
     Public Property CompatibleWithOtherTasks As Boolean = True
 
     Public Property RequiresLinkManagementOrder As Boolean = False

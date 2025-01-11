@@ -51,7 +51,8 @@ Public Class TaskCheckMissingDrawing
         Me.Image = My.Resources.TaskCheckMissingDrawing
         Me.Category = "Check"
         SetColorFromCategory(Me)
-        Me.SolidEdgeRequired = False
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()

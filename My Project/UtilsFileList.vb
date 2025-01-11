@@ -1202,19 +1202,31 @@ Public Class UtilsFileList
         If (LVItem.Group.Name <> "Sources") And (FMain.ListOfColumns.Count > 2) Then
                 Dim UC As New UtilsCommon
             Try
-                Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
-                Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
-                Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
                 'Adding extra properties data if needed
                 For Each PropColumn In FMain.ListOfColumns
                     If PropColumn.Name <> "Name" And PropColumn.Name <> "Path" Then
                         Dim PropValue As String
                         Dim tmpColor As Color = Color.White
                         Try
-                            'PropValue = UC.SubstitutePropertyFormula(Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula,
-                            '                                             ValidFilenameRequired:=False, FMain.TemplatePropertyDict)
-                            PropValue = UC.SubstitutePropertyFormula(
-                                Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula, ValidFilenameRequired:=False, FMain.PropertiesData)
+                            'Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
+                            'Dim fs As FileStream = New FileStream(LVItem.Name, FileMode.Open, FileAccess.Read)
+                            'Dim cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
+
+                            'PropValue = UC.SubstitutePropertyFormula(
+                            '    Nothing, cf, Nothing, LVItem.Name, PropColumn.Formula, ValidFilenameRequired:=False, FMain.PropertiesData)
+
+                            'cf.Close()
+                            'fs.Close()
+                            'cf = Nothing
+                            'fs = Nothing
+
+                            Dim SSDoc As New HCStructuredStorageDoc(LVItem.Name)
+                            SSDoc.ReadProperties(FMain.PropertiesData)
+
+                            PropValue = SSDoc.SubstitutePropertyFormulas(PropColumn.Formula, ValidFilenameRequired:=False)
+
+                            SSDoc.Close()
+
                         Catch ex As Exception
                             PropValue = ""
                             tmpColor = Color.Gainsboro
@@ -1222,19 +1234,9 @@ Public Class UtilsFileList
 
                         LVItem.SubItems.Add(PropValue, Color.Empty, tmpColor, LVItem.Font)
 
-                        'If PropValue <> "**PROPNOTFOUND**" Then
-                        '    LVItem.SubItems.Add(PropValue, Color.Empty, Color.White, LVItem.Font)
-                        'Else
-                        '    LVItem.SubItems.Add("", Color.Empty, Color.Gainsboro, LVItem.Font)
-                        'End If
-
                     End If
 
                 Next
-                cf.Close()
-                fs.Close()
-                cf = Nothing
-                fs = Nothing
                 Application.DoEvents()
 
             Catch ex As Exception
