@@ -22,6 +22,16 @@ Public Class HCStructuredStorageDoc
     Private Property MatTable As MaterialTable
     Private Property DocType As String 'asm, dft, par, psm, mtl
 
+    Public Enum StatusSecurityMapping
+        ssmAvailable = 0
+        ssmInWork = 0
+        ssmInReview = 0
+        ssmReleased = 4
+        ssmBaselined = 4
+        ssmObsolete = 4
+    End Enum
+
+
     Public Sub New(_FullName As String)
 
         Me.FullName = _FullName
@@ -182,11 +192,12 @@ Public Class HCStructuredStorageDoc
             Dim Prop = GetProp(PropSetName, PropNameEnglish)
 
             If Prop IsNot Nothing Then
-                Prop.Value = Value
-
-                If Prop.Value.ToString = Value.ToString Then
+                Try
+                    Prop.Value = Value
                     Success = True
-                End If
+                Catch ex As Exception
+                    Success = False
+                End Try
 
             ElseIf AddProperty Then
                 Success = AddProp(PropSetName, PropNameEnglish, Value)
@@ -258,6 +269,70 @@ Public Class HCStructuredStorageDoc
         Return Success
     End Function
 
+    Public Function GetStatus() As String
+        Dim Status As String = Nothing
+        Dim StatusConstant As SolidEdgeConstants.DocumentStatus
+
+        StatusConstant = CType(GetPropValue("System", "Status"), SolidEdgeConstants.DocumentStatus)
+
+        Select Case StatusConstant
+            Case SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                Status = "Available"
+            Case SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                Status = "Baselined"
+            Case SolidEdgeConstants.DocumentStatus.igStatusInReview
+                Status = "InReview"
+            Case SolidEdgeConstants.DocumentStatus.igStatusInWork
+                Status = "InWork"
+            Case SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                Status = "Obsolete"
+            Case SolidEdgeConstants.DocumentStatus.igStatusReleased
+                Status = "Released"
+        End Select
+
+        Return Status
+    End Function
+
+    Public Function SetStatus(Status As String) As Boolean
+        Dim Success As Boolean
+
+        Dim CurrentStatus As String
+
+        Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
+        Dim NewSecurity As StatusSecurityMapping
+
+        CurrentStatus = GetStatus()
+
+        If Status.ToLower = CurrentStatus.ToLower Then
+            Success = True
+        Else
+            Select Case Status.ToLower
+                Case "Available".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+                    NewSecurity = StatusSecurityMapping.ssmAvailable
+                Case "Baselined".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+                    NewSecurity = StatusSecurityMapping.ssmBaselined
+                Case "InReview".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
+                    NewSecurity = StatusSecurityMapping.ssmInReview
+                Case "InWork".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
+                    NewSecurity = StatusSecurityMapping.ssmInWork
+                Case "Obsolete".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+                    NewSecurity = StatusSecurityMapping.ssmObsolete
+                Case "Released".ToLower
+                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
+                    NewSecurity = StatusSecurityMapping.ssmReleased
+            End Select
+
+            Success = SetPropValue("System", "Doc_Security", NewSecurity, AddProperty:=False)
+            Success = Success And SetPropValue("System", "Status", NewStatusConstant, AddProperty:=False)
+        End If
+
+        Return Success
+    End Function
 
 
     Public Function GetPropNames() As List(Of String)
@@ -724,7 +799,7 @@ Public Class HCStructuredStorageDoc
             If PropertySetName.ToLower = "custom" Then
                 If co.HasUserDefinedProperties Then
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
-                        CorrectedName = CorrectOLEPropName(OLEProp.PropertyName, PropertySetName)
+                        CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
                         Me.Items.Add(New Prop(OLEProp, CorrectedName))
                     Next
@@ -732,7 +807,7 @@ Public Class HCStructuredStorageDoc
 
             Else
                 For Each OLEProp As OLEProperty In co.Properties
-                    CorrectedName = CorrectOLEPropName(OLEProp.PropertyName, PropertySetName)
+                    CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
                     Me.PropNames.Add(CorrectedName)
                     Me.Items.Add(New Prop(OLEProp, CorrectedName))
                 Next
@@ -740,6 +815,45 @@ Public Class HCStructuredStorageDoc
             End If
 
         End Sub
+
+        Private Function CorrectOLEPropName(PropertySetName As String, OLEProp As OLEProperty) As String
+            Dim CorrectedName As String = ""
+
+            Select Case PropertySetName
+                Case "SummaryInformation"
+                    CorrectedName = OLEProp.PropertyName.Replace("PIDSI_", "")
+                Case "DocumentSummaryInformation"
+                    CorrectedName = OLEProp.PropertyName.Replace("PIDDSI_", "")
+                Case "ExtendedSummaryInformation"
+                    Select Case OLEProp.PropertyIdentifier
+                        ' These properties have names like '0x00000019' in Structured Storage
+                        Case 19
+                            CorrectedName = "StatusChangeDate"
+                        Case 20
+                            CorrectedName = "FriendlyUserName"
+                        Case 22
+                            CorrectedName = "User Profile Name (created by)"
+                        Case 23
+                            CorrectedName = "User Profile Initials (created by)"
+                        Case 24
+                            CorrectedName = "User Profile Mailing address (created by)"
+                        Case 25
+                            CorrectedName = "User Profile Name (modified by)"
+                        Case 26
+                            CorrectedName = "User Profile Initials (modified by)"
+                        Case 27
+                            CorrectedName = "User Profile Mailing address (modified by)"
+                        Case Else
+                            CorrectedName = OLEProp.PropertyName
+                    End Select
+                Case Else
+                    CorrectedName = OLEProp.PropertyName
+            End Select
+
+            CorrectedName = CorrectedName.ToLower
+
+            Return CorrectedName
+        End Function
 
         Public Function PrepOutput() As List(Of String)
             Dim OutList As New List(Of String)
@@ -843,23 +957,6 @@ Public Class HCStructuredStorageDoc
             End If
 
             Return Success
-        End Function
-
-        Private Function CorrectOLEPropName(OLEPropName As String, PropertySetName As String) As String
-            Dim CorrectedName As String = ""
-
-            Select Case PropertySetName
-                Case "SummaryInformation"
-                    CorrectedName = OLEPropName.Replace("PIDSI_", "")
-                Case "DocumentSummaryInformation"
-                    CorrectedName = OLEPropName.Replace("PIDDSI_", "")
-                Case Else
-                    CorrectedName = OLEPropName
-            End Select
-
-            CorrectedName = CorrectedName.ToLower
-
-            Return CorrectedName
         End Function
 
 

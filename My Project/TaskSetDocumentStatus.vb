@@ -297,10 +297,10 @@ Public Class TaskSetDocumentStatus
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
-        Dim NewSecurity As StatusSecurityMapping
+        'Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
+        'Dim NewSecurity As StatusSecurityMapping
         Dim Proceed As Boolean = True
-        Dim UC As New UtilsCommon
+        'Dim UC As New UtilsCommon
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -314,29 +314,32 @@ Public Class TaskSetDocumentStatus
         End Try
 
         If Proceed Then
-            Select Case Me.NewStatus
-                Case "Available"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-                    NewSecurity = StatusSecurityMapping.ssmAvailable
-                Case "Baselined"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-                    NewSecurity = StatusSecurityMapping.ssmBaselined
-                Case "InReview"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
-                    NewSecurity = StatusSecurityMapping.ssmInReview
-                Case "InWork"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
-                    NewSecurity = StatusSecurityMapping.ssmInWork
-                Case "Obsolete"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-                    NewSecurity = StatusSecurityMapping.ssmObsolete
-                Case "Released"
-                    NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
-                    NewSecurity = StatusSecurityMapping.ssmReleased
-            End Select
 
-            Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
-            Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatusConstant), AddProperty:=False)
+            'Select Case Me.NewStatus
+            '    Case "Available"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
+            '        NewSecurity = StatusSecurityMapping.ssmAvailable
+            '    Case "Baselined"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
+            '        NewSecurity = StatusSecurityMapping.ssmBaselined
+            '    Case "InReview"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
+            '        NewSecurity = StatusSecurityMapping.ssmInReview
+            '    Case "InWork"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
+            '        NewSecurity = StatusSecurityMapping.ssmInWork
+            '    Case "Obsolete"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
+            '        NewSecurity = StatusSecurityMapping.ssmObsolete
+            '    Case "Released"
+            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
+            '        NewSecurity = StatusSecurityMapping.ssmReleased
+            'End Select
+
+            'Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
+            'Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatusConstant), AddProperty:=False)
+
+            Proceed = SSDoc.SetStatus(Me.NewStatus)
 
             If Not Proceed Then
                 ExitStatus = 1

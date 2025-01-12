@@ -452,14 +452,11 @@ Public Class UtilsExecute
 
         ' ###### DOCUMENT STATUS ######
 
-        Dim OldStatus As SolidEdgeConstants.DocumentStatus
+        Dim OldStatus As String = ""
 
         If FMain.ProcessAsAvailable And FMain.SolidEdgeRequired > 0 Then
 
-            'SetStartingStatus populates OldStatus
-            'OldStatus = CType(CInt(GetOLEPropValue(cf, "System", "Status", AddProp:=False)), SolidEdgeConstants.DocumentStatus)
-
-            Dim s As String = SetStartingStatus(OldStatus, Path)
+            Dim s As String = SetStartingStatus(OldStatus, Path) 'SetStartingStatus populates OldStatus
             If Not s = "" Then
                 ErrorMessagesCombined(s) = New List(Of String) From {""}
             End If
@@ -470,8 +467,6 @@ Public Class UtilsExecute
         '###### PROCESS ######
 
         Try
-
-
             '###### OPEN FILE ######
 
             If FMain.SolidEdgeRequired > 0 Then
@@ -606,7 +601,8 @@ Public Class UtilsExecute
 
     Private Function CheckVersion(SEApp As SolidEdgeFramework.Application, Filename As String) As Boolean
         ' Checks if the file to be processed is of the same or earlier version than the version installed on the machine.
-        ' On at lease some corrupted files, generates an exception which is interpreted as not possible to open
+        ' On at least some corrupted files, generates an exception which is interpreted as not possible to open
+        ' Don't yet have a way to check Commercial, Academic, Community
 
         Dim IsOK As Boolean = True
 
@@ -634,13 +630,13 @@ Public Class UtilsExecute
     End Function
 
     Private Function SetStartingStatus(
-        ByRef OldStatus As SolidEdgeConstants.DocumentStatus,
+        ByRef OldStatus As String,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
         Dim Proceed As Boolean = True
 
-        Dim NewSecurity As StatusSecurityMapping
+        'Dim NewSecurity As StatusSecurityMapping
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -652,14 +648,10 @@ Public Class UtilsExecute
         End Try
 
         If Proceed Then
-            OldStatus = CType(CInt(SSDoc.GetPropValue("System", "Status")), SolidEdgeConstants.DocumentStatus)
+            OldStatus = SSDoc.GetStatus()
 
-            If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                NewSecurity = StatusSecurityMapping.ssmAvailable
-
-                Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
-                Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(SolidEdgeConstants.DocumentStatus.igStatusAvailable), AddProperty:=False)
-
+            If (Not OldStatus = Nothing) AndAlso (Not OldStatus.ToLower = "Available".ToLower) Then
+                Proceed = SSDoc.SetStatus("Available")
             End If
         End If
 
@@ -675,14 +667,14 @@ Public Class UtilsExecute
     End Function
 
     Private Function SetEndingStatus(
-        OldStatus As SolidEdgeConstants.DocumentStatus,
+        OldStatus As String,
         Path As String) As String
 
         Dim ErrorMessage As String = ""
         Dim Proceed As Boolean = True
 
-        Dim NewStatus As SolidEdgeConstants.DocumentStatus
-        Dim NewSecurity As StatusSecurityMapping
+        Dim NewStatus As String = ""
+        'Dim NewSecurity As StatusSecurityMapping
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -695,27 +687,26 @@ Public Class UtilsExecute
 
         If Proceed Then
             If FMain.ProcessAsAvailableRevert Then
-                If Not OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-                    NewSecurity = GetNewSecurity(OldStatus)
-
-                    Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
-                    Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(OldStatus), AddProperty:=False)
+                If Not OldStatus.ToLower = "Available".ToLower Then
+                    Proceed = SSDoc.SetStatus(OldStatus)
+                    If Not Proceed Then
+                        ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus)
+                    End If
                 End If
 
             ElseIf FMain.ProcessAsAvailableChange Then
                 NewStatus = GetNewStatus(OldStatus)
-                NewSecurity = GetNewSecurity(NewStatus)
-
-                If Not OldStatus = NewStatus Then
-                    Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
-                    Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatus), AddProperty:=False)
+                If Not NewStatus.ToLower = "Available".ToLower Then
+                    Proceed = SSDoc.SetStatus(NewStatus)
+                    If Not Proceed Then
+                        ErrorMessage = String.Format("Change status to '{0}' did not succeed", NewStatus)
+                    End If
                 End If
             End If
+
         End If
 
-        If Not Proceed Then
-            ErrorMessage = String.Format("Change status to '{0}' did not succeed", OldStatus.ToString)
-        Else
+        If Proceed Then
             If SSDoc IsNot Nothing Then SSDoc.Save()
         End If
 
@@ -725,54 +716,54 @@ Public Class UtilsExecute
 
     End Function
 
-    Private Function GetNewStatus(OldStatus As SolidEdgeConstants.DocumentStatus) As SolidEdgeConstants.DocumentStatus
-        Dim NewStatus As SolidEdgeConstants.DocumentStatus
+    Private Function GetNewStatus(OldStatus As String) As String
+        Dim NewStatus As String = Nothing
 
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-            NewStatus = CType(FMain.StatusAtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "Available" Then
+            NewStatus = FMain.StatusAtoX
         End If
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-            NewStatus = CType(FMain.StatusBtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "Baselined" Then
+            NewStatus = FMain.StatusBtoX
         End If
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-            NewStatus = CType(FMain.StatusIRtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "InReview" Then
+            NewStatus = FMain.StatusIRtoX
         End If
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-            NewStatus = CType(FMain.StatusIWtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "InWork" Then
+            NewStatus = FMain.StatusIWtoX
         End If
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-            NewStatus = CType(FMain.StatusOtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "Obsolete" Then
+            NewStatus = FMain.StatusOtoX
         End If
-        If OldStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-            NewStatus = CType(FMain.StatusRtoX, SolidEdgeConstants.DocumentStatus)
+        If OldStatus = "Released" Then
+            NewStatus = FMain.StatusRtoX
         End If
 
         Return NewStatus
     End Function
 
-    Private Function GetNewSecurity(NewStatus As SolidEdgeConstants.DocumentStatus) As StatusSecurityMapping
-        Dim NewSecurity As StatusSecurityMapping
+    'Private Function GetNewSecurity(NewStatus As SolidEdgeConstants.DocumentStatus) As StatusSecurityMapping
+    '    Dim NewSecurity As StatusSecurityMapping
 
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-            NewSecurity = StatusSecurityMapping.ssmAvailable
-        End If
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-            NewSecurity = StatusSecurityMapping.ssmBaselined
-        End If
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-            NewSecurity = StatusSecurityMapping.ssmInReview
-        End If
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-            NewSecurity = StatusSecurityMapping.ssmInWork
-        End If
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-            NewSecurity = StatusSecurityMapping.ssmObsolete
-        End If
-        If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-            NewSecurity = StatusSecurityMapping.ssmReleased
-        End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
+    '        NewSecurity = StatusSecurityMapping.ssmAvailable
+    '    End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
+    '        NewSecurity = StatusSecurityMapping.ssmBaselined
+    '    End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
+    '        NewSecurity = StatusSecurityMapping.ssmInReview
+    '    End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
+    '        NewSecurity = StatusSecurityMapping.ssmInWork
+    '    End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
+    '        NewSecurity = StatusSecurityMapping.ssmObsolete
+    '    End If
+    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
+    '        NewSecurity = StatusSecurityMapping.ssmReleased
+    '    End If
 
-        Return NewSecurity
-    End Function
+    '    Return NewSecurity
+    'End Function
 
 End Class
