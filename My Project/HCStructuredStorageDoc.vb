@@ -39,7 +39,8 @@ Public Class HCStructuredStorageDoc
         Try
             Me.fs = New FileStream(Me.FullName, FileMode.Open, FileAccess.ReadWrite)
         Catch ex As Exception
-            Throw New Exception("Unable to open file")
+            Dim L As Integer = Me.FullName.Count
+            Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 
         Me.cf = Nothing
@@ -47,14 +48,14 @@ Public Class HCStructuredStorageDoc
             Dim cfg As CFSConfiguration = CFSConfiguration.SectorRecycle Or CFSConfiguration.EraseFreeSectors
             Me.cf = New CompoundFile(fs, CFSUpdateMode.Update, cfg)
         Catch ex As Exception
-            Me.fs.Close()
+            If Me.fs IsNot Nothing Then Me.fs.Close()
             Me.fs = Nothing
-            Throw New Exception("Unable to open file")
+            Throw New Exception(String.Format("Unable to open file.  {0}", ex.Message))
         End Try
 
-        If IsFOA(cf) Then
-            Throw New Exception("FOA files currently not supported")
-        End If
+        'If IsFOA() Then
+        '    Throw New Exception("FOA files currently not supported")
+        'End If
 
         Me.DocType = IO.Path.GetExtension(FullName).ToLower.Replace(".", "")
 
@@ -67,7 +68,7 @@ Public Class HCStructuredStorageDoc
 
     Public Sub ReadLinks(_LinkManagementOrder As List(Of String))
         Me.LinkManagementOrder = _LinkManagementOrder
-        Me.LinkNames = New LinkFullNames(cf, IsFOA(Me.cf), Me.LinkManagementOrder, Me.FullName)
+        Me.LinkNames = New LinkFullNames(cf, IsFOA(), Me.LinkManagementOrder, Me.FullName)
     End Sub
 
     Public Sub ReadMaterialTable()
@@ -81,12 +82,16 @@ Public Class HCStructuredStorageDoc
     End Sub
 
 
-    Public Function IsFOA(cf As CompoundFile) As Boolean
-        Return cf.RootStorage.ContainsStorage("Master")
+    Public Function IsFOA() As Boolean
+        If IO.Path.GetExtension(Me.FullName) = ".asm" Then
+            Return Me.cf.RootStorage.ContainsStorage("Master")
+        Else
+            Return False
+        End If
     End Function
 
-    Public Function IsFOPMaster(cf As CompoundFile) As Boolean
-        Return cf.RootStorage.ContainsStorage("FamilyOfParts")
+    Public Function IsFOPMaster() As Boolean
+        Return Me.cf.RootStorage.ContainsStorage("FamilyOfParts")
     End Function
 
     Public Function IsMaterialTable(cf As CompoundFile) As Boolean
@@ -192,13 +197,7 @@ Public Class HCStructuredStorageDoc
             Dim Prop = GetProp(PropSetName, PropNameEnglish)
 
             If Prop IsNot Nothing Then
-                Try
-                    Prop.Value = Value
-                    Success = True
-                Catch ex As Exception
-                    Success = False
-                End Try
-
+                Success = Prop.SetValue(Value)
             ElseIf AddProperty Then
                 Success = AddProp(PropSetName, PropNameEnglish, Value)
             End If
@@ -624,7 +623,7 @@ Public Class HCStructuredStorageDoc
                     IsEmpty = (Me.LinkNames.Items.Count = 0) And (Me.LinkNames.BadLinks.Count = 0)
                 Else
                     Dim tmpLinkManagmentOrder As List(Of String) = {"CONTAINER", "RELATIVE", "ABSOLUTE"}.ToList
-                    Dim tmpLinkNames = New LinkFullNames(Me.cf, IsFOA(Me.cf), tmpLinkManagmentOrder, Me.FullName)
+                    Dim tmpLinkNames = New LinkFullNames(Me.cf, IsFOA(), tmpLinkManagmentOrder, Me.FullName)
                     IsEmpty = (tmpLinkNames.Items.Count = 0) And (tmpLinkNames.BadLinks.Count = 0)
                 End If
         End Select
@@ -787,7 +786,11 @@ Public Class HCStructuredStorageDoc
             Dim StreamName As String = Me.PropertySetNameToStreamName(PropertySetName)
 
             If Not Me.Name.ToLower = "custom" Then
-                Me.cs = Me.cf.RootStorage.GetStream(StreamName)
+                If Me.cf.RootStorage.ContainsStorage("Master") Then
+                    Me.cs = Me.cf.RootStorage.GetStorage("Master").GetStream(StreamName)
+                Else
+                    Me.cs = Me.cf.RootStorage.GetStream(StreamName)
+                End If
                 Me.co = Me.cs.AsOLEPropertiesContainer
             Else
                 Me.cs = _cs
@@ -801,7 +804,7 @@ Public Class HCStructuredStorageDoc
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
                         CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
-                        Me.Items.Add(New Prop(OLEProp, CorrectedName))
+                        Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
                     Next
                 End If
 
@@ -809,7 +812,7 @@ Public Class HCStructuredStorageDoc
                 For Each OLEProp As OLEProperty In co.Properties
                     CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
                     Me.PropNames.Add(CorrectedName)
-                    Me.Items.Add(New Prop(OLEProp, CorrectedName))
+                    Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
                 Next
 
             End If
@@ -900,7 +903,7 @@ Public Class HCStructuredStorageDoc
             End If
 
             Try
-                UserProperties = co.UserDefinedProperties
+                UserProperties = Me.co.UserDefinedProperties
 
                 If UserProperties.PropertyNames.Keys.Count = 0 Then
                     ' The first two PropertyIDs (0 and 1) are reserved.  (Saw a reference to this somewhere in the OpenMCDF source code.)
@@ -911,8 +914,11 @@ Public Class HCStructuredStorageDoc
                 End If
 
                 UserProperties.PropertyNames(NewPropertyId) = PropertyNameEnglish
+
+                ' ###### TODO: Maybe don't assume string, but check the actual property type and proceed accordingly. ######
                 OLEProp = UserProperties.NewProperty(VTPropertyType.VT_LPSTR, NewPropertyId)
                 OLEProp.Value = Value.ToString
+
                 UserProperties.AddProperty(OLEProp)
 
             Catch ex As Exception
@@ -925,7 +931,7 @@ Public Class HCStructuredStorageDoc
 
             If Success Then
                 PropNames.Add(PropertyNameEnglish)
-                Dim Prop = New Prop(OLEProp, PropertyNameEnglish)
+                Dim Prop = New Prop(co, OLEProp, PropertyNameEnglish)
                 Items.Add(Prop)
             End If
 
@@ -965,26 +971,28 @@ Public Class HCStructuredStorageDoc
     Private Class Prop
         Public Property Name As String
 
-        Public Property Value As Object
+        Public ReadOnly Property Value As Object
             Get
                 Return Me.OLEProp.Value
             End Get
-            Set(value As Object)
-                UpdatePropValue(value)
-            End Set
+            'Set(value As Object)
+            '    SetValue(value)
+            'End Set
         End Property
 
         Public Property VTType As VTPropertyType
         Public Property PropertyIdentifier As UInteger
 
+        Private co As OLEPropertiesContainer
         Private Property OLEProp As OLEProperty
 
-        Public Sub New(_OLEProp As OLEProperty, CorrectedName As String)
+        Public Sub New(_co As OLEPropertiesContainer, _OLEProp As OLEProperty, CorrectedName As String)
+            Me.co = _co
             Me.OLEProp = _OLEProp
             Me.Name = CorrectedName
-            Me.Value = Me.OLEProp.Value
-            Me.VTType = Me.OLEProp.VTType
             Me.PropertyIdentifier = Me.OLEProp.PropertyIdentifier
+            Me.VTType = Me.OLEProp.VTType
+            Me.SetValue(Me.OLEProp.Value)
         End Sub
 
         Public Function PrepOutput(InList As List(Of String)) As List(Of String)
@@ -1009,65 +1017,117 @@ Public Class HCStructuredStorageDoc
             Return InList
         End Function
 
-        Private Sub UpdatePropValue(PropertyValue As Object)
+        Private Function MaybeChangePropType(PropertyValue As Object) As Boolean
+            Dim Success As Boolean = True
+
+            Dim ToTypeName As String = Nothing
+            Dim ChangeNeeded As Boolean = False
+            Dim tmpName As String
+            Dim tmpPropertyIdentifier As UInteger
+            Dim UDP As OLEPropertiesContainer
+
+            If Not Me.co.HasUserDefinedProperties Then
+                Success = False
+            End If
+
+            If Success Then
+                If CStr(PropertyValue) = CInt(PropertyValue).ToString Then
+                    ToTypeName = "int32"
+                Else
+                    ToTypeName = "double"
+                End If
+
+                If (Me.VTType = VTPropertyType.VT_I4 And ToTypeName = "double") Or (Me.VTType = VTPropertyType.VT_R8 And ToTypeName = "int32") Then
+                    ChangeNeeded = True
+                End If
+            End If
+
+            If Success And ChangeNeeded Then
+
+                tmpName = Me.OLEProp.PropertyName
+                tmpPropertyIdentifier = Me.OLEProp.PropertyIdentifier
+
+                UDP = co.UserDefinedProperties
+
+                Try
+                    UDP.RemoveProperty(tmpPropertyIdentifier)
+                    UDP.PropertyNames(tmpPropertyIdentifier) = tmpName
+
+                    Select Case ToTypeName
+                        Case "int32"
+                            Me.OLEProp = UDP.NewProperty(VTPropertyType.VT_I4, tmpPropertyIdentifier)
+                        Case "double"
+                            Me.OLEProp = UDP.NewProperty(VTPropertyType.VT_R8, tmpPropertyIdentifier)
+                    End Select
+
+                    UDP.AddProperty(Me.OLEProp)
+
+                    Me.VTType = Me.OLEProp.VTType
+
+                Catch ex As Exception
+                    Success = False
+                End Try
+
+            End If
+
+            Return Success
+        End Function
+
+        Public Function SetValue(PropertyValue As Object) As Boolean
 
             ' VTPropertyType enum: https://github.com/ironfede/openmcdf/blob/master/OpenMcdf.Ole/VTPropertyType.cs
 
             Dim Success As Boolean = True
-            Dim RequiredType As String = ""
 
-            Select Case OLEProp.VTType
+            ' EditProperties currently always passes in the new value as a string
 
-                Case = VTPropertyType.VT_BOOL
-                    RequiredType = "Boolean"
-                    Try
-                        'OLEProp.Value = CType(PropertyValue, Boolean)
-                        OLEProp.Value = CBool(PropertyValue)
-                    Catch ex As Exception
-                        Success = False
-                    End Try
-
-                Case = VTPropertyType.VT_I4
-                    RequiredType = "Integer"
-                    Try
-                        'OLEProp.Value = CType(PropertyValue, Integer)
-                        OLEProp.Value = CInt(PropertyValue)
-                    Catch ex As Exception
-                        Success = False
-                    End Try
-
-                Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
-                    RequiredType = "String"
-                    Try
-                        OLEProp.Value = PropertyValue.ToString
-                    Catch ex As Exception
-                        Success = False
-                    End Try
-
-                Case = VTPropertyType.VT_FILETIME
-                    RequiredType = "Date"
-                    Try
-                        OLEProp.Value = CType(PropertyValue, DateTime)
-                    Catch ex As Exception
-                        Success = False
-                    End Try
-
-                Case = VTPropertyType.VT_R8
-                    RequiredType = "Double"
-                    Try
-                        'OLEProp.Value = CType(PropertyValue, Double)
-                        OLEProp.Value = CDbl(PropertyValue)
-                    Catch ex As Exception
-                        Success = False
-                    End Try
-
-            End Select
-
-            If Not Success Then
-                Throw New Exception(String.Format("In property '{0}': Could not convert '{1}' to type '{2}'", Me.Name, Value.ToString, RequiredType))
+            If (Me.VTType = VTPropertyType.VT_I4) Or (Me.VTType = VTPropertyType.VT_R8) Then
+                Success = MaybeChangePropType(PropertyValue)
             End If
 
-        End Sub
+            If Success Then
+                Select Case Me.OLEProp.VTType
+
+                    Case = VTPropertyType.VT_BOOL
+                        Try
+                            OLEProp.Value = CBool(PropertyValue)
+                        Catch ex As Exception
+                            Success = False
+                        End Try
+
+                    Case = VTPropertyType.VT_I4
+                        Try
+                            OLEProp.Value = CInt(PropertyValue)
+                        Catch ex As Exception
+                            Success = False
+                        End Try
+
+                    Case = VTPropertyType.VT_LPSTR, VTPropertyType.VT_LPWSTR
+                        Try
+                            OLEProp.Value = PropertyValue.ToString
+                        Catch ex As Exception
+                            Success = False
+                        End Try
+
+                    Case = VTPropertyType.VT_FILETIME
+                        Try
+                            OLEProp.Value = CType(PropertyValue, DateTime)
+                        Catch ex As Exception
+                            Success = False
+                        End Try
+
+                    Case = VTPropertyType.VT_R8
+                        Try
+                            OLEProp.Value = CDbl(PropertyValue)
+                        Catch ex As Exception
+                            Success = False
+                        End Try
+
+                End Select
+            End If
+
+            Return Success
+        End Function
 
     End Class
 

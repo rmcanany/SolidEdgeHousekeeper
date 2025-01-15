@@ -506,10 +506,7 @@ Sets document status. Select the new status on the Options pane.
 
 ![SetDocumentStatus](My%20Project/media/task_set_document_status.png)
 
-There are a couple of things to know about this command. 
-
 - For performance reasons, the command only runs in Structured Storage mode (i.e. Outside Solid Edge). 
-- To avoid issues with Read Only conditions, it cannot run with other Tasks enabled. 
 - To eliminate potential confusion, it cannot run with the `Process as available` option on the **Configuration Tab -- Status Page**. 
 
 ### Open save

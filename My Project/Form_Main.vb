@@ -1973,6 +1973,10 @@ Public Class Form_Main
     End Sub
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
+        If Me.SortRandomSample Then
+            Dim Result As MsgBoxResult = MsgBox("INFO: Sort Random Sample enabled.  Select Cancel to quit.", vbOKCancel)
+            If Result = MsgBoxResult.Cancel Then Exit Sub
+        End If
 
         Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
         UFL.New_UpdateFileList()

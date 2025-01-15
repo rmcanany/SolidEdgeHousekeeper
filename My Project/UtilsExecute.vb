@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-Imports OpenMcdf
-Imports OpenMcdf.Extensions.OLEProperties
 Imports SolidEdgeCommunity
 
 Public Class UtilsExecute
@@ -9,7 +7,6 @@ Public Class UtilsExecute
     Public Property FMain As Form_Main
     Public Property FilesToProcessTotal As Integer
     Public Property FilesToProcessCompleted As Integer
-    'Public Property StopProcess As Boolean
     Public Property UtilsLogFile As UtilsLogFile
     Public Property TotalAborts As Double
     Public Property TotalAbortsMaximum As Integer = 4
@@ -26,7 +23,6 @@ Public Class UtilsExecute
         ssmBaselined = 4
         ssmObsolete = 4
     End Enum
-
 
 
     Public Sub New(_Form_Main As Form_Main)
@@ -353,14 +349,6 @@ Public Class UtilsExecute
             End
         End If
 
-        'Dim DMApp As DesignManager.Application = Nothing
-        '' This should be faster: Dim SEFPPropertySets as SolidEdgeFileProperties.PropertySets = Nothing
-        'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (FilesToProcess.Count > 0) Then
-        '    DMApp = New DesignManager.Application
-        '    DMApp.Visible = 1
-        '    SEApp.Activate()
-        'End If
-
         Dim LVItemReverseLUT As New Dictionary(Of String, ListViewItem)
         For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
             LVItemReverseLUT(tmpItem.Name) = tmpItem
@@ -369,12 +357,6 @@ Public Class UtilsExecute
         For Each FileToProcess In FilesToProcess
 
             If (FilesToProcessCompleted > 0) And (FilesToProcessCompleted Mod CInt(FMain.ListViewUpdateFrequency) = 0) Then
-                'For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
-                '    If tmpItem.Name = FileToProcess Then
-                '        tmpItem.EnsureVisible()
-                '        Exit For
-                '    End If
-                'Next
                 LVItemReverseLUT(FileToProcess).EnsureVisible()
 
             End If
@@ -382,9 +364,6 @@ Public Class UtilsExecute
             System.Windows.Forms.Application.DoEvents()
             If FMain.StopProcess Then
                 FMain.TextBoxStatus.Text = "Processing aborted"
-                'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) Then
-                '    DMApp.Quit()
-                'End If
                 Exit Sub
             End If
 
@@ -394,7 +373,6 @@ Public Class UtilsExecute
             msg += System.IO.Path.GetFileName(FileToProcess)
             FMain.TextBoxStatus.Text = msg
 
-            'ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype, DMApp)
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
 
             If ErrorMessagesCombined.Count > 0 Then
@@ -410,17 +388,8 @@ Public Class UtilsExecute
 
         Next
 
-        'If (FMain.ProcessAsAvailable) And (FMain.UseDMForStatusChanges) And (DMApp IsNot Nothing) Then
-        '    DMApp.Quit()
-        'End If
-
     End Sub
 
-    'Public Function ProcessFile(
-    '    ByVal Path As String,
-    '    ByVal Filetype As String,
-    '    DMApp As DesignManager.Application
-    '    ) As Dictionary(Of String, List(Of String))
     Public Function ProcessFile(
         ByVal Path As String,
         ByVal Filetype As String
@@ -636,8 +605,6 @@ Public Class UtilsExecute
         Dim ErrorMessage As String = ""
         Dim Proceed As Boolean = True
 
-        'Dim NewSecurity As StatusSecurityMapping
-
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
         Try
@@ -674,7 +641,6 @@ Public Class UtilsExecute
         Dim Proceed As Boolean = True
 
         Dim NewStatus As String = ""
-        'Dim NewSecurity As StatusSecurityMapping
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -740,30 +706,5 @@ Public Class UtilsExecute
 
         Return NewStatus
     End Function
-
-    'Private Function GetNewSecurity(NewStatus As SolidEdgeConstants.DocumentStatus) As StatusSecurityMapping
-    '    Dim NewSecurity As StatusSecurityMapping
-
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusAvailable Then
-    '        NewSecurity = StatusSecurityMapping.ssmAvailable
-    '    End If
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusBaselined Then
-    '        NewSecurity = StatusSecurityMapping.ssmBaselined
-    '    End If
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInReview Then
-    '        NewSecurity = StatusSecurityMapping.ssmInReview
-    '    End If
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusInWork Then
-    '        NewSecurity = StatusSecurityMapping.ssmInWork
-    '    End If
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusObsolete Then
-    '        NewSecurity = StatusSecurityMapping.ssmObsolete
-    '    End If
-    '    If NewStatus = SolidEdgeConstants.DocumentStatus.igStatusReleased Then
-    '        NewSecurity = StatusSecurityMapping.ssmReleased
-    '    End If
-
-    '    Return NewSecurity
-    'End Function
 
 End Class

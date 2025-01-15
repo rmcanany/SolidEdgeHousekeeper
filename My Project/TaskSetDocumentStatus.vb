@@ -1,8 +1,5 @@
 ﻿Option Strict On
 
-Imports System.IO
-Imports OpenMcdf
-
 Public Class TaskSetDocumentStatus
     Inherits Task
 
@@ -32,136 +29,6 @@ Public Class TaskSetDocumentStatus
         End Set
     End Property
 
-    'Private _UpdateAdditionalProperties As Boolean
-    'Public Property UpdateAdditionalProperties As Boolean
-    '    Get
-    '        Return _UpdateAdditionalProperties
-    '    End Get
-    '    Set(value As Boolean)
-    '        _UpdateAdditionalProperties = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.UpdateAdditionalProperties.ToString), CheckBox).Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AutoAddMissingProperty As Boolean
-    'Public Property AutoAddMissingProperty As Boolean
-    '    Get
-    '        Return _AutoAddMissingProperty
-    '    End Get
-    '    Set(value As Boolean)
-    '        _AutoAddMissingProperty = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AutoAddMissingProperty.ToString), CheckBox).Checked = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxProperty1 As String
-    'Public Property AuxProperty1 As String
-    '    Get
-    '        Return _AuxProperty1
-    '    End Get
-    '    Set(value As String)
-    '        _AuxProperty1 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxProperty1.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxValue1 As String
-    'Public Property AuxValue1 As String
-    '    Get
-    '        Return _AuxValue1
-    '    End Get
-    '    Set(value As String)
-    '        _AuxValue1 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxValue1.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxProperty2 As String
-    'Public Property AuxProperty2 As String
-    '    Get
-    '        Return _AuxProperty2
-    '    End Get
-    '    Set(value As String)
-    '        _AuxProperty2 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxProperty2.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxValue2 As String
-    'Public Property AuxValue2 As String
-    '    Get
-    '        Return _AuxValue2
-    '    End Get
-    '    Set(value As String)
-    '        _AuxValue2 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxValue2.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxProperty3 As String
-    'Public Property AuxProperty3 As String
-    '    Get
-    '        Return _AuxProperty3
-    '    End Get
-    '    Set(value As String)
-    '        _AuxProperty3 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxProperty3.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxValue3 As String
-    'Public Property AuxValue3 As String
-    '    Get
-    '        Return _AuxValue3
-    '    End Get
-    '    Set(value As String)
-    '        _AuxValue3 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxValue3.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxProperty4 As String
-    'Public Property AuxProperty4 As String
-    '    Get
-    '        Return _AuxProperty4
-    '    End Get
-    '    Set(value As String)
-    '        _AuxProperty4 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxProperty4.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _AuxValue4 As String
-    'Public Property AuxValue4 As String
-    '    Get
-    '        Return _AuxValue4
-    '    End Get
-    '    Set(value As String)
-    '        _AuxValue4 = value
-    '        If Me.TaskOptionsTLP IsNot Nothing Then
-    '            CType(ControlsDict(ControlNames.AuxValue4.ToString), TextBox).Text = value
-    '        End If
-    '    End Set
-    'End Property
-
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -180,30 +47,8 @@ Public Class TaskSetDocumentStatus
         NewStatus
         NewStatusLabel
         StructuredStorageEdit
-        'UpdateAdditionalProperties
-        'AutoAddMissingProperty
-        'PropertyLabel
-        'ValueLabel
-        'AuxProperty1
-        'AuxValue1
-        'AuxProperty2
-        'AuxValue2
-        'AuxProperty3
-        'AuxValue3
-        'AuxProperty4
-        'AuxValue4
         AutoHideOptions
     End Enum
-
-    Public Enum StatusSecurityMapping
-        ssmAvailable = 0
-        ssmInWork = 0
-        ssmInReview = 0
-        ssmReleased = 4
-        ssmBaselined = 4
-        ssmObsolete = 4
-    End Enum
-
 
 
     Public Sub New()
@@ -231,18 +76,9 @@ Public Class TaskSetDocumentStatus
         ' Options
         Me.NewStatus = ""
         Me.StructuredStorageEdit = True
-        'Me.UpdateAdditionalProperties = False
-        'Me.AutoAddMissingProperty = False
-        'Me.AuxProperty1 = ""
-        'Me.AuxValue1 = ""
-        'Me.AuxProperty2 = ""
-        'Me.AuxValue2 = ""
-        'Me.AuxProperty3 = ""
-        'Me.AuxValue3 = ""
-        'Me.AuxProperty4 = ""
-        'Me.AuxValue4 = ""
 
     End Sub
+
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -315,40 +151,18 @@ Public Class TaskSetDocumentStatus
 
         If Proceed Then
 
-            'Select Case Me.NewStatus
-            '    Case "Available"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusAvailable
-            '        NewSecurity = StatusSecurityMapping.ssmAvailable
-            '    Case "Baselined"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusBaselined
-            '        NewSecurity = StatusSecurityMapping.ssmBaselined
-            '    Case "InReview"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInReview
-            '        NewSecurity = StatusSecurityMapping.ssmInReview
-            '    Case "InWork"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusInWork
-            '        NewSecurity = StatusSecurityMapping.ssmInWork
-            '    Case "Obsolete"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusObsolete
-            '        NewSecurity = StatusSecurityMapping.ssmObsolete
-            '    Case "Released"
-            '        NewStatusConstant = SolidEdgeConstants.DocumentStatus.igStatusReleased
-            '        NewSecurity = StatusSecurityMapping.ssmReleased
-            'End Select
-
-            'Proceed = SSDoc.SetPropValue("System", "Doc_Security", CStr(NewSecurity), AddProperty:=False)
-            'Proceed = Proceed And SSDoc.SetPropValue("System", "Status", CStr(NewStatusConstant), AddProperty:=False)
-
             Proceed = SSDoc.SetStatus(Me.NewStatus)
 
             If Not Proceed Then
                 ExitStatus = 1
-                ErrorMessageList.Add("Unable to change document status")
+                ErrorMessageList.Add(String.Format("Unable to change status to '{0}'", Me.NewStatus))
             End If
 
         End If
 
-        If Proceed Then SSDoc.Save()
+        If Proceed Then
+            If SSDoc IsNot Nothing Then SSDoc.Save()
+        End If
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 
@@ -556,12 +370,8 @@ Public Class TaskSetDocumentStatus
 
         HelpString += vbCrLf + vbCrLf + "![SetDocumentStatus](My%20Project/media/task_set_document_status.png)"
 
-        HelpString += vbCrLf + vbCrLf + "There are a couple of things to know about this command. "
-
         HelpString += vbCrLf + vbCrLf + "- For performance reasons, the command only runs in "
         HelpString += "Structured Storage mode (i.e. Outside Solid Edge). "
-        HelpString += vbCrLf + "- To avoid issues with Read Only conditions, "
-        HelpString += "it cannot run with other Tasks enabled. "
         HelpString += vbCrLf + "- To eliminate potential confusion, it cannot run with the "
         HelpString += "`Process as available` option on the **Configuration Tab -- Status Page**. "
 
