@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-
 Public Class UtilsTopLevelAssembly
     Public Property FMain As Form_Main
 
@@ -669,11 +668,297 @@ Public Class UtilsTopLevelAssembly
 
 
 
+    'Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
+    '                         TopLevelAssembly As String,
+    '                         ActiveFileExtensionsList As List(Of String),
+    '                         DraftAndModelSameName As Boolean,
+    '                         Report As Boolean) As List(Of String)
+
+    '    Dim AllLinkedFilenames As New List(Of String)
+    '    Dim tmpAllLinkedFilenames As New List(Of String)
+    '    Dim FoundFiles As New List(Of String)
+    '    Dim FileExtension As String
+    '    Dim AllFilenames As New Dictionary(Of String, String)
+    '    Dim tf As Boolean
+    '    Dim IndexedDrives As New List(Of String)
+    '    Dim IsDriveIndexed As Boolean = False
+
+    '    Dim TopLevelFolder As String
+    '    Dim tmpAllLinkedFilename As String
+
+
+    '    Dim DMApp As New DesignManager.Application
+    '    Dim TLADoc As DesignManager.Document
+
+    '    'DMApp.Visible = 0
+    '    DMApp.Visible = 1
+    '    DMApp.DisplayAlerts = 0
+
+    '    FMain.Activate()
+
+    '    FMain.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
+
+    '    TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
+
+    '    If TopLevelFolders.Count > 0 Then
+    '        IndexedDrives = GetIndexedDrives()
+
+    '        For Each TopLevelFolder In TopLevelFolders
+
+    '            IsDriveIndexed = False
+    '            If IndexedDrives.Count > 0 Then
+    '                For Each IndexedDrive In IndexedDrives
+    '                    If TopLevelFolder.ToLower().StartsWith(IndexedDrive.ToLower()) Then
+    '                        IsDriveIndexed = True
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+
+    '            tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+    '                                             TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+
+    '            For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+    '                If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
+    '                    AllLinkedFilenames.Add(tmpAllLinkedFilename)
+    '                End If
+    '            Next
+
+    '        Next
+    '    Else
+    '        ' Bare top level assy.  Call FollowLinksBottomUp with TopLevelFolder = ""
+    '        ' Since there are no folders to process, indexed drives are not relevant.
+
+    '        tmpAllLinkedFilenames = FollowLinksBottomUp(DMApp, TLADoc, AllLinkedFilenames,
+    '                                             "", AllFilenames, IsDriveIndexed:=False, DraftAndModelSameName)
+
+    '        For Each tmpAllLinkedFilename In tmpAllLinkedFilenames
+    '            If Not AllLinkedFilenames.Contains(tmpAllLinkedFilename, StringComparer.OrdinalIgnoreCase) Then
+    '                AllLinkedFilenames.Add(tmpAllLinkedFilename)
+    '            End If
+    '        Next
+
+    '    End If
+
+    '    DMApp.Quit()
+
+    '    For Each Filename In AllLinkedFilenames
+    '        FileExtension = System.IO.Path.GetExtension(Filename).Replace(".", "*.")
+    '        tf = ActiveFileExtensionsList.Contains(FileExtension)
+    '        tf = tf And (Not FoundFiles.Contains(Filename, StringComparer.OrdinalIgnoreCase))
+    '        If tf Then
+    '            FoundFiles.Add(Filename)
+    '        End If
+    '    Next
+
+    '    If Report Then
+    '        ReportUnrelatedFilesOLD(TopLevelFolders, FoundFiles)
+
+    '    End If
+
+    '    Return FoundFiles
+
+    'End Function
+
+    'Private Function FollowLinksBottomUp(DMApp As DesignManager.Application,
+    '                                     DMDoc As DesignManager.Document,
+    '                                     AllLinkedFilenames As List(Of String),
+    '                                     TopLevelFolder As String,
+    '                                     AllFilenames As Dictionary(Of String, String),
+    '                                     IsDriveIndexed As Boolean,
+    '                                     DraftAndModelSameName As Boolean
+    '                                     ) As List(Of String)
+
+    '    Dim LinkedDocs As DesignManager.LinkedDocuments
+    '    Dim LinkedDoc As DesignManager.Document
+    '    Dim LinkedDocName As String
+    '    Dim ValidExtensions As New List(Of String)
+    '    Dim Extension As String
+    '    Dim WhereUsedFiles As New List(Of String)
+    '    Dim WhereUsedFile As String
+    '    Dim tf As Boolean
+
+    '    Dim Filename As String
+
+    '    If CheckInterruptRequest() Then
+    '        Return AllLinkedFilenames
+    '    End If
+
+    '    ValidExtensions.Add(".asm")
+    '    ValidExtensions.Add(".par")
+    '    ValidExtensions.Add(".psm")
+    '    ValidExtensions.Add(".dft")
+
+    '    Filename = DMDoc.FullName
+
+    '    ' 20230730
+    '    ' Deal with FOA files
+    '    Dim UC As New UtilsCommon
+    '    Filename = UC.SplitFOAName(Filename)("Filename")
+
+    '    If FileIO.FileSystem.FileExists(Filename) Then
+    '        tf = Not AllLinkedFilenames.Contains(Filename, StringComparer.OrdinalIgnoreCase)
+    '        If tf Then
+    '            AllLinkedFilenames.Add(Filename)
+
+    '            UpdateStatus("Follow Links", Filename)
+
+    '            ' In case of corrupted file or other problem
+    '            Try
+
+    '                ' Get any draft files containing this file.
+    '                WhereUsedFiles = GetWhereUsedBottomUp(DMApp, TopLevelFolder, Filename, IsDriveIndexed, DraftAndModelSameName)
+    '                For Each WhereUsedFile In WhereUsedFiles
+    '                    Extension = IO.Path.GetExtension(WhereUsedFile)
+    '                    If Extension = ".dft" Then
+    '                        If Not AllLinkedFilenames.Contains(WhereUsedFile, StringComparer.OrdinalIgnoreCase) Then
+    '                            AllLinkedFilenames.Add(WhereUsedFile)
+    '                        End If
+    '                    End If
+    '                Next
+
+    '                If FMain.CheckBoxTLAIncludePartCopies.Checked Then
+    '                    tf = System.IO.Path.GetExtension(Filename) <> ".dft"
+    '                Else
+    '                    tf = System.IO.Path.GetExtension(Filename) = ".asm"
+    '                End If
+
+    '                ' Follow links contained by this file, if any.
+    '                If tf Then
+    '                    LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+    '                    If LinkedDocs.Count > 0 Then
+    '                        For Each LinkedDoc In LinkedDocs
+
+    '                            ' Get FOP status
+    '                            Dim FOPStatus As Integer
+    '                            LinkedDoc.IsDocumentFOP(FOPStatus)
+
+    '                            ' FOP Masters can have links to many unrelated files.  For example, a fastener.  
+    '                            ' Do not include them, or follow their links.
+    '                            If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
+    '                                LinkedDocName = LinkedDoc.FullName
+
+    '                                LinkedDocName = UC.SplitFOAName(LinkedDocName)("Filename")
+
+    '                                Extension = IO.Path.GetExtension(LinkedDocName)
+
+    '                                If ValidExtensions.Contains(Extension) Then
+    '                                    AllLinkedFilenames = FollowLinksBottomUp(DMApp, LinkedDoc, AllLinkedFilenames,
+    '                                                                         TopLevelFolder, AllFilenames, IsDriveIndexed, DraftAndModelSameName)
+    '                                End If
+    '                            End If
+    '                        Next
+
+    '                    End If
+
+    '                End If
+    '            Catch ex As Exception
+    '            End Try
+    '        End If
+    '    End If
+
+
+    '    Return AllLinkedFilenames
+
+    'End Function
+
+    'Private Function GetWhereUsedBottomUp(
+    '                 DMApp As DesignManager.Application,
+    '                 TopLevelFolder As String,
+    '                 Filename As String,
+    '                 IsDriveIndexed As Boolean,
+    '                 DraftAndModelSameName As Boolean) As List(Of String)
+
+    '    Dim AllWhereUsedFileNames As New List(Of String)
+    '    ' Dim msg As String
+    '    Dim Extension As String
+
+    '    Dim WhereUsedDocuments As New List(Of DesignManager.Document)
+    '    Dim WhereUsedDocument As DesignManager.Document
+
+    '    Dim arrDocUsed As Object = Nothing
+
+    '    Dim DraftFilename As String
+
+    '    UpdateStatus("Where Used", Filename)
+
+    '    If TopLevelFolder = "" Then
+    '        Return AllWhereUsedFileNames
+    '    End If
+
+    '    If CheckInterruptRequest() Then
+    '        Return AllWhereUsedFileNames
+    '    End If
+
+    '    If DraftAndModelSameName Then
+    '        DraftFilename = System.IO.Path.ChangeExtension(Filename, ".dft")
+    '        AllWhereUsedFileNames.Add(DraftFilename)
+    '        Return AllWhereUsedFileNames
+    '    End If
+
+    '    Extension = IO.Path.GetExtension(Filename)
+
+    '    If Not Extension = ".dft" Then  ' Draft files are not "Used" anywhere.
+    '        If Not IsDriveIndexed Then
+    '            'This "resets" DMApp.FindWhereUsed().  Somehow.
+    '            DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
+
+    '            'Finds the first WhereUsed Document, if any.
+    '            WhereUsedDocument = CType(
+    '            DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)),
+    '            DesignManager.Document)
+
+    '            While Not WhereUsedDocument Is Nothing
+    '                If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName, StringComparer.OrdinalIgnoreCase) Then
+    '                    ' For bottom_up search, the only applicable where used results are draft files
+    '                    If IO.Path.GetExtension(WhereUsedDocument.FullName) = ".dft" Then
+    '                        AllWhereUsedFileNames.Add(WhereUsedDocument.FullName)
+    '                    End If
+    '                End If
+    '                'Finds the next WhereUsed document, if any.
+    '                WhereUsedDocument = CType(DMApp.FindWhereUsed(), DesignManager.Document)
+    '            End While
+
+    '        Else  'It is indexed
+    '            Try
+    '                DMApp.WhereUsedCriteria(Nothing, True) = TopLevelFolder
+
+    '                DMApp.FindWhereUsedDocuments(FileIO.FileSystem.GetFileInfo(Filename), arrDocUsed)
+
+    '                For Each item As String In DirectCast(arrDocUsed, Array)
+    '                    If Not AllWhereUsedFileNames.Contains(item, StringComparer.OrdinalIgnoreCase) Then
+    '                        ' For bottom_up search, the only applicable where used results are draft files
+    '                        If IO.Path.GetExtension(item) = ".dft" Then
+    '                            AllWhereUsedFileNames.Add(item)
+    '                        End If
+    '                    End If
+    '                Next
+
+    '            Catch ex As Exception
+    '                MsgBox(ex.ToString)
+    '            End Try
+
+    '        End If
+
+    '    End If
+
+    '    Return AllWhereUsedFileNames
+
+    'End Function
+
+
+
+    '
+
     Public Function GetLinksBottomUp(TopLevelFolders As List(Of String),
                              TopLevelAssembly As String,
                              ActiveFileExtensionsList As List(Of String),
                              DraftAndModelSameName As Boolean,
                              Report As Boolean) As List(Of String)
+
+        ' ###### Changed all references from DesignManager to RevisionManager RM 20250115 ######
+        ' Code with DesignManager references is commented out above.
+        ' Affected Functions: GetLinksBottomUp, FollowLinksBottomUp, GetWhereUsedBottomUp.
 
         Dim AllLinkedFilenames As New List(Of String)
         Dim tmpAllLinkedFilenames As New List(Of String)
@@ -688,8 +973,8 @@ Public Class UtilsTopLevelAssembly
         Dim tmpAllLinkedFilename As String
 
 
-        Dim DMApp As New DesignManager.Application
-        Dim TLADoc As DesignManager.Document
+        Dim DMApp As New RevisionManager.Application
+        Dim TLADoc As RevisionManager.Document
 
         'DMApp.Visible = 0
         DMApp.Visible = 1
@@ -699,7 +984,7 @@ Public Class UtilsTopLevelAssembly
 
         FMain.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
 
-        TLADoc = CType(DMApp.OpenFileInDesignManager(TopLevelAssembly), DesignManager.Document)
+        TLADoc = CType(DMApp.OpenFileInRevisionManager(TopLevelAssembly), RevisionManager.Document)
 
         If TopLevelFolders.Count > 0 Then
             IndexedDrives = GetIndexedDrives()
@@ -761,8 +1046,8 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
-    Private Function FollowLinksBottomUp(DMApp As DesignManager.Application,
-                                         DMDoc As DesignManager.Document,
+    Private Function FollowLinksBottomUp(DMApp As RevisionManager.Application,
+                                         DMDoc As RevisionManager.Document,
                                          AllLinkedFilenames As List(Of String),
                                          TopLevelFolder As String,
                                          AllFilenames As Dictionary(Of String, String),
@@ -770,8 +1055,8 @@ Public Class UtilsTopLevelAssembly
                                          DraftAndModelSameName As Boolean
                                          ) As List(Of String)
 
-        Dim LinkedDocs As DesignManager.LinkedDocuments
-        Dim LinkedDoc As DesignManager.Document
+        Dim LinkedDocs As RevisionManager.LinkedDocuments
+        Dim LinkedDoc As RevisionManager.Document
         Dim LinkedDocName As String
         Dim ValidExtensions As New List(Of String)
         Dim Extension As String
@@ -826,7 +1111,7 @@ Public Class UtilsTopLevelAssembly
 
                     ' Follow links contained by this file, if any.
                     If tf Then
-                        LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+                        LinkedDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
                         If LinkedDocs.Count > 0 Then
                             For Each LinkedDoc In LinkedDocs
 
@@ -836,7 +1121,7 @@ Public Class UtilsTopLevelAssembly
 
                                 ' FOP Masters can have links to many unrelated files.  For example, a fastener.  
                                 ' Do not include them, or follow their links.
-                                If Not (FOPStatus = DesignManager.DocFOPStatus.FOPMasterDocument) Then
+                                If Not (FOPStatus = RevisionManager.DocFOPStatus.FOPMasterDocument) Then
                                     LinkedDocName = LinkedDoc.FullName
 
                                     LinkedDocName = UC.SplitFOAName(LinkedDocName)("Filename")
@@ -864,7 +1149,7 @@ Public Class UtilsTopLevelAssembly
     End Function
 
     Private Function GetWhereUsedBottomUp(
-                     DMApp As DesignManager.Application,
+                     DMApp As RevisionManager.Application,
                      TopLevelFolder As String,
                      Filename As String,
                      IsDriveIndexed As Boolean,
@@ -874,8 +1159,8 @@ Public Class UtilsTopLevelAssembly
         ' Dim msg As String
         Dim Extension As String
 
-        Dim WhereUsedDocuments As New List(Of DesignManager.Document)
-        Dim WhereUsedDocument As DesignManager.Document
+        Dim WhereUsedDocuments As New List(Of RevisionManager.Document)
+        Dim WhereUsedDocument As RevisionManager.Document
 
         Dim arrDocUsed As Object = Nothing
 
@@ -907,7 +1192,7 @@ Public Class UtilsTopLevelAssembly
                 'Finds the first WhereUsed Document, if any.
                 WhereUsedDocument = CType(
                 DMApp.FindWhereUsed(FileIO.FileSystem.GetFileInfo(Filename)),
-                DesignManager.Document)
+                RevisionManager.Document)
 
                 While Not WhereUsedDocument Is Nothing
                     If Not AllWhereUsedFileNames.Contains(WhereUsedDocument.FullName, StringComparer.OrdinalIgnoreCase) Then
@@ -917,7 +1202,7 @@ Public Class UtilsTopLevelAssembly
                         End If
                     End If
                     'Finds the next WhereUsed document, if any.
-                    WhereUsedDocument = CType(DMApp.FindWhereUsed(), DesignManager.Document)
+                    WhereUsedDocument = CType(DMApp.FindWhereUsed(), RevisionManager.Document)
                 End While
 
             Else  'It is indexed
@@ -946,6 +1231,7 @@ Public Class UtilsTopLevelAssembly
         Return AllWhereUsedFileNames
 
     End Function
+
 
 
 

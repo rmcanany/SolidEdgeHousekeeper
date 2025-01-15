@@ -1,13 +1,7 @@
 ﻿Option Strict On
 
-Imports Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties
-Imports Newtonsoft.Json
-Imports OpenMcdf
-Imports OpenMcdf.Extensions
-Imports OpenMcdf.Extensions.OLEProperties
-Imports System.IO
-Imports System.ServiceModel.MsmqIntegration
 Imports System.Text.RegularExpressions
+Imports Newtonsoft.Json
 
 Public Class TaskEditProperties
     Inherits Task
@@ -24,7 +18,6 @@ Public Class TaskEditProperties
             End If
         End Set
     End Property
-
 
     Private _JSONString As String
     Public Property JSONString As String
@@ -571,25 +564,25 @@ Public Class TaskEditProperties
         Return ErrorMessage
     End Function
 
-    Private Sub AddErrorMessage(
-        PropertySetName As String,
-        PropertyName As String,
-        PropertyNameEnglish As String,
-        ErrorString As String,
-        ByRef ErrorMessageList As List(Of String))
+    'Private Sub AddErrorMessage(
+    '    PropertySetName As String,
+    '    PropertyName As String,
+    '    PropertyNameEnglish As String,
+    '    ErrorString As String,
+    '    ByRef ErrorMessageList As List(Of String))
 
-        Dim s As String
+    '    Dim s As String
 
-        If PropertyName = PropertyNameEnglish Then
-            s = String.Format(ErrorString, PropertyName)
-        Else
-            ErrorString = ErrorString.Replace("{0}", "{0}({1})")
-            s = String.Format(ErrorString, PropertyName, PropertyNameEnglish)
-        End If
+    '    If PropertyName = PropertyNameEnglish Then
+    '        s = String.Format(ErrorString, PropertyName)
+    '    Else
+    '        ErrorString = ErrorString.Replace("{0}", "{0}({1})")
+    '        s = String.Format(ErrorString, PropertyName, PropertyNameEnglish)
+    '    End If
 
-        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+    '    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
-    End Sub
+    'End Sub
 
     Private Function DoFormulaSubstitution(
         SSDoc As HCStructuredStorageDoc,
@@ -769,9 +762,11 @@ Public Class TaskEditProperties
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
                                 'Try
-                                '    Prop.Value = CInt(PropValue)
+                                '    Dim i As Integer = CInt(PropValue)
+                                '    Prop.Value = i
                                 'Catch ex2 As Exception
-                                '    Prop.Value = CDbl(PropValue)
+                                '    Dim d As Double = CDbl(PropValue)
+                                '    Prop.Value = d
                                 'End Try
 
                             Case "double"
@@ -782,7 +777,8 @@ Public Class TaskEditProperties
                                 s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
-                                'Prop.Value = CDbl(PropValue)
+                                'Dim d As Double = CDbl(PropValue)
+                                'Prop.Value = d
 
                             Case "date"
                                 SETypeName = "Date"
