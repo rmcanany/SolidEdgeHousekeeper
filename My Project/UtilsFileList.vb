@@ -736,9 +736,9 @@ Public Class UtilsFileList
         Dim MissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
         Dim Filename As String
-        Dim DMDoc As DesignManager.Document
+        Dim DMDoc As RevisionManager.Document
 
-        Dim DMApp As New DesignManager.Application
+        Dim DMApp As New RevisionManager.Application
         DMApp.Visible = 1
 
         FMain.Activate()
@@ -747,7 +747,7 @@ Public Class UtilsFileList
 
             FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
 
-            DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
+            DMDoc = CType(DMApp.Open(Filename), RevisionManager.Document)
 
             Dim tmpDependencyDict As New Dictionary(Of String, List(Of String))
 
@@ -794,14 +794,14 @@ Public Class UtilsFileList
     End Function
 
     Private Function GetLinks(
-        DMDoc As DesignManager.Document,
+        DMDoc As RevisionManager.Document,
         LinkDict As Dictionary(Of String, List(Of String)),
         MissingFilesList As List(Of String)
         ) As Dictionary(Of String, List(Of String))
 
         'Dim LinkDict As New Dictionary(Of String, List(Of String))
-        Dim LinkDoc As DesignManager.Document
-        Dim LinkDocs As DesignManager.LinkedDocuments
+        Dim LinkDoc As RevisionManager.Document
+        Dim LinkDocs As RevisionManager.LinkedDocuments
         Dim DMDocName As String
         Dim LinkDocName As String
         'Dim Filename As String
@@ -826,7 +826,7 @@ Public Class UtilsFileList
             DMDoc.IsDocumentFOP(FOPStatus)
 
             If Not FOPStatus = 2 Then
-                LinkDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+                LinkDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
                 If Not LinkDocs Is Nothing Then
                     If LinkDocs.Count > 0 Then
                         For Each LinkDoc In LinkDocs

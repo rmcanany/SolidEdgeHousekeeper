@@ -166,10 +166,10 @@ Public Class UtilsSEApp
     End Function
 
     Public Function DMIsRunning() As Boolean
-        Dim DMApp As DesignManager.Application = Nothing
+        Dim DMApp As RevisionManager.Application = Nothing
 
         Try
-            DMApp = CType(GetObject(, "DesignManager.Application"), DesignManager.Application)
+            DMApp = CType(GetObject(, "RevisionManager.Application"), RevisionManager.Application)
         Catch ex As Exception
         End Try
 

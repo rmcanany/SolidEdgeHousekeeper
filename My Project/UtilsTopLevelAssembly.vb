@@ -68,65 +68,65 @@ Public Class UtilsTopLevelAssembly
             Return FoundFiles
 
         Else
-            Dim DMApp As New DesignManager.Application
-            Dim AllLinkedFilenames As New List(Of String)
-            Dim FoundFiles As New List(Of String)
-            Dim FileExtension As String
-            Dim AllFilenames As New Dictionary(Of String, String)
-            Dim tmpAllFilenames As New Dictionary(Of String, String)
-            Dim LinkDict As New Dictionary(Of String, Dictionary(Of String, List(Of String)))
-            Dim UnrelatedFiles As New List(Of String)
-            Dim K As String
-            Dim V As String
+            'Dim DMApp As New DesignManager.Application
+            'Dim AllLinkedFilenames As New List(Of String)
+            'Dim FoundFiles As New List(Of String)
+            'Dim FileExtension As String
+            'Dim AllFilenames As New Dictionary(Of String, String)
+            'Dim tmpAllFilenames As New Dictionary(Of String, String)
+            'Dim LinkDict As New Dictionary(Of String, Dictionary(Of String, List(Of String)))
+            'Dim UnrelatedFiles As New List(Of String)
+            'Dim K As String
+            'Dim V As String
 
-            DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
-            'DMApp.Visible = 0
+            'DMApp.Visible = 1  ' So it can be seen and closed in case of program malfunction.
+            ''DMApp.Visible = 0
 
-            FMain.Activate()
+            'FMain.Activate()
 
-            For Each TopLevelFolder In TopLevelFolders
-                tmpAllFilenames = GetAllFilenamesTopDownOLD(TopLevelFolder)
-                For Each K In tmpAllFilenames.Keys
-                    V = tmpAllFilenames(K)
-                    If Not AllFilenames.Keys.Contains(K) Then
-                        AllFilenames.Add(K, V)
-                    End If
-                Next
-            Next
+            'For Each TopLevelFolder In TopLevelFolders
+            '    tmpAllFilenames = GetAllFilenamesTopDownOLD(TopLevelFolder)
+            '    For Each K In tmpAllFilenames.Keys
+            '        V = tmpAllFilenames(K)
+            '        If Not AllFilenames.Keys.Contains(K) Then
+            '            AllFilenames.Add(K, V)
+            '        End If
+            '    Next
+            'Next
 
-            If Not AllFilenames.Keys.Contains(TopLevelAssembly.ToLower) Then
-                AllFilenames.Add(TopLevelAssembly.ToLower, TopLevelAssembly)
-            End If
+            'If Not AllFilenames.Keys.Contains(TopLevelAssembly.ToLower) Then
+            '    AllFilenames.Add(TopLevelAssembly.ToLower, TopLevelAssembly)
+            'End If
 
-            LinkDict = CreateLinkDict(AllFilenames, LinkDict)
+            'LinkDict = CreateLinkDict(AllFilenames, LinkDict)
 
-            LinkDict = PopulateLinkDict(DMApp, LinkDict, TopLevelAssembly)
+            'LinkDict = PopulateLinkDict(DMApp, LinkDict, TopLevelAssembly)
 
-            If CheckInterruptRequest() Then
-                DMApp.Quit()
-                Return FoundFiles
-            End If
+            'If CheckInterruptRequest() Then
+            '    DMApp.Quit()
+            '    Return FoundFiles
+            'End If
 
-            LinkDict = VisitLinksOLD(TopLevelAssembly, LinkDict)
+            'LinkDict = VisitLinksOLD(TopLevelAssembly, LinkDict)
 
-            For Each Filename In LinkDict.Keys
-                FileExtension = System.IO.Path.GetExtension(Filename).Replace(".", "*.")
-                If ActiveFileExtensionsList.Contains(FileExtension) Then
-                    If LinkDict(Filename)("Visited")(0) = "True" Then
-                        FoundFiles.Add(Filename)
-                    Else
-                        UnrelatedFiles.Add(Filename)
-                    End If
-                End If
-            Next
+            'For Each Filename In LinkDict.Keys
+            '    FileExtension = System.IO.Path.GetExtension(Filename).Replace(".", "*.")
+            '    If ActiveFileExtensionsList.Contains(FileExtension) Then
+            '        If LinkDict(Filename)("Visited")(0) = "True" Then
+            '            FoundFiles.Add(Filename)
+            '        Else
+            '            UnrelatedFiles.Add(Filename)
+            '        End If
+            '    End If
+            'Next
 
-            If Report Then
-                ReportUnrelatedFilesOLD(TopLevelFolders, FoundFiles)
-            End If
+            'If Report Then
+            '    ReportUnrelatedFilesOLD(TopLevelFolders, FoundFiles)
+            'End If
 
-            DMApp.Quit()
+            'DMApp.Quit()
 
-            Return FoundFiles
+            'Return FoundFiles
         End If
 
 
@@ -329,216 +329,216 @@ Public Class UtilsTopLevelAssembly
     End Sub
 
 
-    Private Function CreateLinkDict(
-         AllFilenames As Dictionary(Of String, String),
-         LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
-         ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    'Private Function CreateLinkDict(
+    '     AllFilenames As Dictionary(Of String, String),
+    '     LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    '     ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
 
-        Dim FilenameLowerCase As String
-        Dim Filename As String
+    '    Dim FilenameLowerCase As String
+    '    Dim Filename As String
 
-        For Each FilenameLowerCase In AllFilenames.Keys
-            Filename = AllFilenames(FilenameLowerCase)
+    '    For Each FilenameLowerCase In AllFilenames.Keys
+    '        Filename = AllFilenames(FilenameLowerCase)
 
-            LinkDict.Add(Filename, New Dictionary(Of String, List(Of String)))
+    '        LinkDict.Add(Filename, New Dictionary(Of String, List(Of String)))
 
-            LinkDict(Filename).Add("Visited", New List(Of String))
-            LinkDict(Filename)("Visited").Add("False")
+    '        LinkDict(Filename).Add("Visited", New List(Of String))
+    '        LinkDict(Filename)("Visited").Add("False")
 
-            LinkDict(Filename).Add("Contains", New List(Of String))
+    '        LinkDict(Filename).Add("Contains", New List(Of String))
 
-            LinkDict(Filename).Add("ContainedBy", New List(Of String))
-        Next
+    '        LinkDict(Filename).Add("ContainedBy", New List(Of String))
+    '    Next
 
-        Return LinkDict
-    End Function
+    '    Return LinkDict
+    'End Function
 
-    Private Function PopulateLinkDict(
-         DMApp As DesignManager.Application,
-         LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-         TopLevelAssembly As String
-         ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    'Private Function PopulateLinkDict(
+    '     DMApp As DesignManager.Application,
+    '     LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
+    '     TopLevelAssembly As String
+    '     ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
 
-        Dim Filename As String
+    '    Dim Filename As String
 
-        Dim LinkedDocsName As String
-        Dim ErrorFlag As String = "HousekeeperErrorFile"
-        Dim msg As String = ""
-        Dim tf As Boolean
-        Dim Extension As String
+    '    Dim LinkedDocsName As String
+    '    Dim ErrorFlag As String = "HousekeeperErrorFile"
+    '    Dim msg As String = ""
+    '    Dim tf As Boolean
+    '    Dim Extension As String
 
-        Dim ActiveFileExtensionsList As New List(Of String)
-
-
-        For Each Filename In LinkDict.Keys
-
-            If CheckInterruptRequest() Then
-                Return LinkDict
-            End If
-
-            Dim LinkedDocsNames As New List(Of String)
-
-            LinkedDocsNames = GetContainsOLD(DMApp, LinkDict, Filename, ErrorFlag)
-
-            If LinkedDocsNames.Contains(ErrorFlag) Then
-                If msg = "" Then
-                    msg = String.Format("{0}{1}", "Design Manager could not process the following file(s)", vbCrLf)
-                    msg = String.Format("{0}{1}{2}{2}", msg, "Will continue processing, but please verify results", vbCrLf)
-                End If
-                msg = String.Format("{0}{1}{2}", msg, Filename, vbCrLf)
-            Else
-                tf = FMain.CheckBoxTLAIncludePartCopies.Checked
-                If tf Then
-                    For Each LinkedDocsName In LinkedDocsNames
-                        LinkDict(Filename)("Contains").Add(LinkedDocsName)
-                    Next
-                Else  ' Don't include part copies
-                    Extension = IO.Path.GetExtension(Filename)
-                    tf = Extension = ".par"
-                    tf = (tf) Or (Extension = ".psm")
-                    If Not tf Then
-                        For Each LinkedDocsName In LinkedDocsNames
-                            LinkDict(Filename)("Contains").Add(LinkedDocsName)
-                        Next
-                    End If
-                End If
-            End If
-        Next
-
-        If msg <> "" Then
-            MsgBox(msg, vbOKOnly)
-        End If
-
-        LinkDict = GetContainedByOLD(LinkDict)
-
-        Return LinkDict
-    End Function
-
-    Private Function GetContainsOLD(
-        DMApp As DesignManager.Application,
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-        Filename As String,
-        ErrorFlag As String
-         ) As List(Of String)
-
-        Dim DMDoc As DesignManager.Document
-        Dim LinkedDocs As DesignManager.LinkedDocuments
-        Dim LinkedDoc As DesignManager.Document
-        Dim CorrectedFilename As String
-
-        Dim LinkedDocsNames As New List(Of String)
-        Dim msg As String = ""
-
-        If CheckInterruptRequest() Then
-            Return LinkedDocsNames
-        End If
-
-        UpdateStatus("Follow Links", Filename)
-
-        'DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
-
-        ' Some files are corrrupt or have other problems
-        Try
-            DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
-
-            LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
-
-            If Not IsNothing(LinkedDocs) Then
-                For Each LinkedDoc In LinkedDocs
-                    CorrectedFilename = GetCorrectedFilename(LinkDict, LinkedDoc.FullName)
-                    If Not LinkDict(Filename)("Contains").Contains(CorrectedFilename) Then
-                        If CorrectedFilename <> "" Then
-                            LinkedDocsNames.Add(CorrectedFilename)
-                        End If
-                    End If
-                Next
-            Else
-                'LinkedDocsNames.Add(ErrorFlag)
-            End If
-
-        Catch ex As Exception
-            LinkedDocsNames.Add(ErrorFlag)
-        End Try
+    '    Dim ActiveFileExtensionsList As New List(Of String)
 
 
-        Return LinkedDocsNames
-    End Function
+    '    For Each Filename In LinkDict.Keys
 
-    Private Function GetContainedByOLD(
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
-         ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    '        If CheckInterruptRequest() Then
+    '            Return LinkDict
+    '        End If
 
-        Dim Filename As String
-        Dim ContainsFilename As String
+    '        Dim LinkedDocsNames As New List(Of String)
 
-        For Each Filename In LinkDict.Keys
-            UpdateStatus("Contained By", Filename)
-            For Each ContainsFilename In LinkDict(Filename)("Contains")
-                LinkDict(ContainsFilename)("ContainedBy").Add(Filename)
-            Next
-        Next
+    '        LinkedDocsNames = GetContainsOLD(DMApp, LinkDict, Filename, ErrorFlag)
 
-        Return LinkDict
-    End Function
+    '        If LinkedDocsNames.Contains(ErrorFlag) Then
+    '            If msg = "" Then
+    '                msg = String.Format("{0}{1}", "Design Manager could not process the following file(s)", vbCrLf)
+    '                msg = String.Format("{0}{1}{2}{2}", msg, "Will continue processing, but please verify results", vbCrLf)
+    '            End If
+    '            msg = String.Format("{0}{1}{2}", msg, Filename, vbCrLf)
+    '        Else
+    '            tf = FMain.CheckBoxTLAIncludePartCopies.Checked
+    '            If tf Then
+    '                For Each LinkedDocsName In LinkedDocsNames
+    '                    LinkDict(Filename)("Contains").Add(LinkedDocsName)
+    '                Next
+    '            Else  ' Don't include part copies
+    '                Extension = IO.Path.GetExtension(Filename)
+    '                tf = Extension = ".par"
+    '                tf = (tf) Or (Extension = ".psm")
+    '                If Not tf Then
+    '                    For Each LinkedDocsName In LinkedDocsNames
+    '                        LinkDict(Filename)("Contains").Add(LinkedDocsName)
+    '                    Next
+    '                End If
+    '            End If
+    '        End If
+    '    Next
 
-    Private Function VisitLinksOLD(
-        Filename As String,
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
-        ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    '    If msg <> "" Then
+    '        MsgBox(msg, vbOKOnly)
+    '    End If
 
-        Dim LinkedFilename As String
-        Dim ContainedByFilename As String
-        Dim Extension As String
+    '    LinkDict = GetContainedByOLD(LinkDict)
 
-        UpdateStatus("Visit Links", Filename)
+    '    Return LinkDict
+    'End Function
 
-        LinkDict(Filename)("Visited")(0) = "True"
-        For Each ContainedByFilename In LinkDict(Filename)("ContainedBy")
-            Extension = IO.Path.GetExtension(ContainedByFilename)
-            If Extension = ".dft" Then
-                LinkDict(ContainedByFilename)("Visited")(0) = "True"
-            End If
-        Next
+    'Private Function GetContainsOLD(
+    '    DMApp As DesignManager.Application,
+    '    LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
+    '    Filename As String,
+    '    ErrorFlag As String
+    '     ) As List(Of String)
 
-        For Each LinkedFilename In LinkDict(Filename)("Contains")
-            If Not LinkDict(LinkedFilename)("Visited")(0) = "True" Then
-                LinkDict(LinkedFilename)("Visited")(0) = "True"
-                For Each ContainedByFilename In LinkDict(LinkedFilename)("ContainedBy")
-                    Extension = IO.Path.GetExtension(ContainedByFilename)
-                    If Extension = ".dft" Then
-                        LinkDict(ContainedByFilename)("Visited")(0) = "True"
-                    End If
-                Next
-                LinkDict = VisitLinksOLD(LinkedFilename, LinkDict)
-            End If
-        Next
+    '    Dim DMDoc As DesignManager.Document
+    '    Dim LinkedDocs As DesignManager.LinkedDocuments
+    '    Dim LinkedDoc As DesignManager.Document
+    '    Dim CorrectedFilename As String
 
-        Return LinkDict
-    End Function
+    '    Dim LinkedDocsNames As New List(Of String)
+    '    Dim msg As String = ""
 
-    Private Function GetCorrectedFilename(
-        LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
-        Filename As String
-        ) As String
+    '    If CheckInterruptRequest() Then
+    '        Return LinkedDocsNames
+    '    End If
 
-        ' The CorrectFilename respects the capitalization as it is on disk
-        ' which may not match the capitilization of the link
+    '    UpdateStatus("Follow Links", Filename)
 
-        Dim CorrectFilename As String = ""
+    '    'DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
-        For Each CorrectFilename In LinkDict.Keys
-            If Filename.Contains("!") Then
-                If CorrectFilename.ToLower = Filename.ToLower.Split("!"c)(0) Then
-                    Return CorrectFilename
-                End If
-            End If
-            If CorrectFilename.ToLower = Filename.ToLower Then
-                Return CorrectFilename
-            End If
-        Next
+    '    ' Some files are corrrupt or have other problems
+    '    Try
+    '        DMDoc = CType(DMApp.Open(Filename), DesignManager.Document)
 
-        Return ""
-    End Function
+    '        LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+
+    '        If Not IsNothing(LinkedDocs) Then
+    '            For Each LinkedDoc In LinkedDocs
+    '                CorrectedFilename = GetCorrectedFilename(LinkDict, LinkedDoc.FullName)
+    '                If Not LinkDict(Filename)("Contains").Contains(CorrectedFilename) Then
+    '                    If CorrectedFilename <> "" Then
+    '                        LinkedDocsNames.Add(CorrectedFilename)
+    '                    End If
+    '                End If
+    '            Next
+    '        Else
+    '            'LinkedDocsNames.Add(ErrorFlag)
+    '        End If
+
+    '    Catch ex As Exception
+    '        LinkedDocsNames.Add(ErrorFlag)
+    '    End Try
+
+
+    '    Return LinkedDocsNames
+    'End Function
+
+    'Private Function GetContainedByOLD(
+    '    LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    '     ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+
+    '    Dim Filename As String
+    '    Dim ContainsFilename As String
+
+    '    For Each Filename In LinkDict.Keys
+    '        UpdateStatus("Contained By", Filename)
+    '        For Each ContainsFilename In LinkDict(Filename)("Contains")
+    '            LinkDict(ContainsFilename)("ContainedBy").Add(Filename)
+    '        Next
+    '    Next
+
+    '    Return LinkDict
+    'End Function
+
+    'Private Function VisitLinksOLD(
+    '    Filename As String,
+    '    LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+    '    ) As Dictionary(Of String, Dictionary(Of String, List(Of String)))
+
+    '    Dim LinkedFilename As String
+    '    Dim ContainedByFilename As String
+    '    Dim Extension As String
+
+    '    UpdateStatus("Visit Links", Filename)
+
+    '    LinkDict(Filename)("Visited")(0) = "True"
+    '    For Each ContainedByFilename In LinkDict(Filename)("ContainedBy")
+    '        Extension = IO.Path.GetExtension(ContainedByFilename)
+    '        If Extension = ".dft" Then
+    '            LinkDict(ContainedByFilename)("Visited")(0) = "True"
+    '        End If
+    '    Next
+
+    '    For Each LinkedFilename In LinkDict(Filename)("Contains")
+    '        If Not LinkDict(LinkedFilename)("Visited")(0) = "True" Then
+    '            LinkDict(LinkedFilename)("Visited")(0) = "True"
+    '            For Each ContainedByFilename In LinkDict(LinkedFilename)("ContainedBy")
+    '                Extension = IO.Path.GetExtension(ContainedByFilename)
+    '                If Extension = ".dft" Then
+    '                    LinkDict(ContainedByFilename)("Visited")(0) = "True"
+    '                End If
+    '            Next
+    '            LinkDict = VisitLinksOLD(LinkedFilename, LinkDict)
+    '        End If
+    '    Next
+
+    '    Return LinkDict
+    'End Function
+
+    'Private Function GetCorrectedFilename(
+    '    LinkDict As Dictionary(Of String, Dictionary(Of String, List(Of String))),
+    '    Filename As String
+    '    ) As String
+
+    '    ' The CorrectFilename respects the capitalization as it is on disk
+    '    ' which may not match the capitilization of the link
+
+    '    Dim CorrectFilename As String = ""
+
+    '    For Each CorrectFilename In LinkDict.Keys
+    '        If Filename.Contains("!") Then
+    '            If CorrectFilename.ToLower = Filename.ToLower.Split("!"c)(0) Then
+    '                Return CorrectFilename
+    '            End If
+    '        End If
+    '        If CorrectFilename.ToLower = Filename.ToLower Then
+    '            Return CorrectFilename
+    '        End If
+    '    Next
+
+    '    Return ""
+    'End Function
 
     'Private Function FollowLinksTopDown(LinkedDocument As DesignManager.Document,
     '                             AllLinkedFilenames As List(Of String)) As List(Of String)

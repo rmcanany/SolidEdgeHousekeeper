@@ -22,15 +22,15 @@ Public Class UtilsCommon
     End Function
 
 
-    Public Sub FindLinked(DMDoc As DesignManager.Document)
+    Public Sub FindLinked(DMDoc As RevisionManager.Document)
 
         Dim Filename As String
 
-        Dim LinkedDocs As DesignManager.LinkedDocuments
-        Dim LinkedDoc As DesignManager.Document
+        Dim LinkedDocs As RevisionManager.LinkedDocuments
+        Dim LinkedDoc As RevisionManager.Document
 
         ' Loop through the items in the assembly
-        LinkedDocs = CType(DMDoc.LinkedDocuments, DesignManager.LinkedDocuments)
+        LinkedDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
 
         If Not IsNothing(LinkedDocs) Then
             For Each LinkedDoc In LinkedDocs
