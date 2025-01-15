@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports Newtonsoft.Json
-'Imports SolidEdgeConstants
 
 Public Class FormVariableInputEditor
     'Private ColumnsDict As New Dictionary(Of Integer, Dictionary(Of String, String))

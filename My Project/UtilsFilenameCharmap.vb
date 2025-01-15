@@ -1,4 +1,6 @@
-﻿Public Class UtilsFilenameCharmap
+﻿Option Strict On
+
+Public Class UtilsFilenameCharmap
     Private Charmap As New Dictionary(Of String, String)
 
     Public Sub New()

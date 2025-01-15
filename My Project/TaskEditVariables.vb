@@ -1,4 +1,5 @@
 ﻿Option Strict On
+
 Imports Newtonsoft.Json
 
 Public Class TaskEditVariables

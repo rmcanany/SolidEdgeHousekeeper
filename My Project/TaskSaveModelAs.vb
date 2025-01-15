@@ -1,4 +1,5 @@
 ﻿Option Strict On
+
 Imports Microsoft.WindowsAPICodePack.Dialogs
 
 Public Class TaskSaveModelAs

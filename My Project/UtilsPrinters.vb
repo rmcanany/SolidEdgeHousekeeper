@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-
 Public Class UtilsPrinters
 
     Public Function GetInstalledPrinterNames() As List(Of String)

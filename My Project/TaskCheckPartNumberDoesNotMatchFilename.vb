@@ -1,9 +1,5 @@
 ﻿Option Strict On
 
-Imports System.IO
-'Imports OpenMcdf
-'Imports OpenMcdf.Extensions.OLEProperties
-
 Public Class TaskCheckPartNumberDoesNotMatchFilename
 
     Inherits Task

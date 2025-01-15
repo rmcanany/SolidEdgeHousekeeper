@@ -154,7 +154,7 @@ Public Class UtilsExecute
         End If
 
         If USEA.DMIsRunning() Then
-            msg += "    Close Design Manager" + Chr(13)
+            msg += "    Close Revision Manager" + Chr(13)
         End If
 
         If FMain.ListViewFilesOutOfDate Then

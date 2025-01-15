@@ -1,10 +1,7 @@
 ﻿Option Strict On
-Imports ListViewExtended
-Imports OpenMcdf
-Imports OpenMcdf.Extensions
-Imports OpenMcdf.Extensions.OLEProperties
+
 Imports System.IO
-Imports System.Threading
+Imports ListViewExtended
 
 Public Class UtilsFileList
     Public Property ListViewFiles As ListView

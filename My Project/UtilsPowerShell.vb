@@ -4,8 +4,6 @@ Imports System.Collections.ObjectModel
 Imports System.Management.Automation
 Imports System.Management.Automation.Runspaces
 
-
-
 Public Class UtilsPowerShell
     ' https://www.codeproject.com/Articles/18229/How-to-run-PowerShell-scripts-from-C
 

@@ -1,8 +1,8 @@
 ﻿Option Strict On
 
+Imports System.Text.RegularExpressions
 Imports FastColoredTextBoxNS
 Imports PanoramicData.NCalcExtensions
-Imports System.Text.RegularExpressions
 
 Public Class FormNCalc
 

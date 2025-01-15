@@ -2,7 +2,6 @@
 
 Imports Newtonsoft.Json
 
-
 Public Class UtilsPreferences
 
     Public Property RememberTaskSelections As Boolean

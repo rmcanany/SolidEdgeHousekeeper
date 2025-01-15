@@ -2,8 +2,6 @@
 
 Imports System.Reflection
 Imports Newtonsoft.Json
-'Imports SolidEdgeFramework
-'Imports SolidEdgeConstants
 
 Public MustInherit Class Task
     Inherits HCIsolatedTaskProxy

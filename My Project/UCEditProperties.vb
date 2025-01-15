@@ -1,7 +1,4 @@
 ﻿Option Strict On
-Imports System.Security.AccessControl
-Imports System.Windows
-Imports FastColoredTextBoxNS
 
 Public Class UCEditProperties
 

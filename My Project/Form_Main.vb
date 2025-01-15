@@ -2,13 +2,10 @@
 
 Imports System.Data.OleDb
 Imports System.Data.SqlClient
-Imports System.IO
-Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports ListViewExtended
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Newtonsoft.Json
-Imports OpenMcdf
 
 
 Public Class Form_Main

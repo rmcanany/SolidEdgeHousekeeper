@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-
 Public Class UtilsFeatures
 
     Public Function GetName(Feature As Object) As String

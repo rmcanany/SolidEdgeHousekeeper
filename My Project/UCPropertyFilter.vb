@@ -1,8 +1,4 @@
 ﻿Option Strict On
-Imports System.Security.AccessControl
-
-
-'Imports System.Net.NetworkInformation
 
 Public Class UCPropertyFilter
     Public Property PropertyFilter As FormPropertyFilter

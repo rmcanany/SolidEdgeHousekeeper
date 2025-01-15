@@ -4,12 +4,8 @@
 
 Option Strict On
 
-Imports System
-Imports System.Collections.Generic
-Imports System.Linq
 Imports System.Runtime.InteropServices
 Imports System.Runtime.Remoting
-Imports System.Text
 
 Public MustInherit Class HCIsolatedTaskProxy
     Inherits MarshalByRefObject

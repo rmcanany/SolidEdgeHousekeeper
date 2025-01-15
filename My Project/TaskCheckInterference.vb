@@ -1,7 +1,5 @@
 ﻿Option Strict On
 
-'Imports SolidEdgeConstants
-
 Public Class TaskCheckInterference
 
     Inherits Task

@@ -1,4 +1,6 @@
-﻿Public Class FormTextPrompt
+﻿Option Strict On
+
+Public Class FormTextPrompt
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         Me.DialogResult = DialogResult.Cancel
     End Sub

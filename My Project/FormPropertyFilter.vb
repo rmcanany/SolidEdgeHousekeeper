@@ -1,9 +1,5 @@
 ﻿Option Strict On
 
-Imports System.Management.Automation
-Imports System.Text.RegularExpressions
-Imports Newtonsoft.Json
-
 Public Class FormPropertyFilter
 
     ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
