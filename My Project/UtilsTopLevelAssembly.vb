@@ -14,12 +14,13 @@ Public Class UtilsTopLevelAssembly
          Report As Boolean
          ) As List(Of String)
 
+        Dim FoundFiles As New List(Of String)
+
         Dim NewWay As Boolean = True
 
         If NewWay Then
             Dim AllFilenames As New List(Of String)
             Dim FileLinksContainer As New FileLinksContainer
-            Dim FoundFiles As New List(Of String)
             Dim UnrelatedFiles As New List(Of String)
 
             '###### Get filenames in top level folders ######

@@ -2320,46 +2320,46 @@ Public Class Form_Main
         Exit Sub
 
 
-        Dim DMApp As New DesignManager.Application
-        Dim DMDoc As DesignManager.Document
+        'Dim DMApp As New DesignManager.Application
+        'Dim DMDoc As DesignManager.Document
 
-        Dim UC As New UtilsCommon
+        'Dim UC As New UtilsCommon
 
-        For Each item As ListViewItem In ListViewFiles.SelectedItems
+        'For Each item As ListViewItem In ListViewFiles.SelectedItems
 
-            DMDoc = CType(DMApp.Open(item.Name), DesignManager.Document)
+        '    DMDoc = CType(DMApp.Open(item.Name), DesignManager.Document)
 
-            UC.tmpList = New Collection
-            UC.FindLinked(DMDoc)
+        '    UC.tmpList = New Collection
+        '    UC.FindLinked(DMDoc)
 
-            For Each FoundFile In UC.tmpList
-                If UC.FilenameIsOK(FoundFile.ToString) Then
+        '    For Each FoundFile In UC.tmpList
+        '        If UC.FilenameIsOK(FoundFile.ToString) Then
 
-                    If IO.File.Exists(FoundFile.ToString) Then
+        '            If IO.File.Exists(FoundFile.ToString) Then
 
-                        If Not ListViewFiles.Items.ContainsKey(FoundFile.ToString) Then
+        '                If Not ListViewFiles.Items.ContainsKey(FoundFile.ToString) Then
 
-                            Dim tmpLVItem As New ListViewItem
-                            tmpLVItem.Text = IO.Path.GetFileName(FoundFile.ToString)
-                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile.ToString))
-                            tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = IO.Path.GetExtension(FoundFile.ToString).ToLower 'Backup gruppo
-                            tmpLVItem.Name = FoundFile.ToString
-                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile.ToString).ToLower)
-                            ListViewFiles.Items.Add(tmpLVItem)
+        '                    Dim tmpLVItem As New ListViewItem
+        '                    tmpLVItem.Text = IO.Path.GetFileName(FoundFile.ToString)
+        '                    tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FoundFile.ToString))
+        '                    tmpLVItem.ImageKey = "Unchecked"
+        '                    tmpLVItem.Tag = IO.Path.GetExtension(FoundFile.ToString).ToLower 'Backup gruppo
+        '                    tmpLVItem.Name = FoundFile.ToString
+        '                    tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FoundFile.ToString).ToLower)
+        '                    ListViewFiles.Items.Add(tmpLVItem)
 
-                        End If
+        '                End If
 
-                    End If
+        '            End If
 
-                End If
-            Next
+        '        End If
+        '    Next
 
-        Next
+        'Next
 
-        UC.tmpList = Nothing
+        'UC.tmpList = Nothing
 
-        DMApp.Quit()
+        'DMApp.Quit()
 
     End Sub
 
