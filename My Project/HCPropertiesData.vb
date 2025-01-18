@@ -10,6 +10,9 @@ Public Class HCPropertiesData
 
         Items = New List(Of PropertyData)
 
+
+        '###### Load saved PropertiesData, if any ######
+
         Dim UP As New UtilsPreferences
         Dim Infile As String = UP.GetPropertiesDataFilename(CheckExisting:=True)
 
@@ -77,15 +80,17 @@ Public Class HCPropertiesData
         Next
 
         Return AvailableList
-
     End Function
 
-    Public Function GetPropertyData(Name As String, Optional tmpItems As List(Of PropertyData) = Nothing) As PropertyData
+    Public Function GetPropertyData(
+        Name As String,
+        Optional tmpItems As List(Of PropertyData) = Nothing
+        ) As PropertyData
 
         Dim tmpProperty As PropertyData = Nothing
 
         If tmpItems Is Nothing Then
-            For Each Item As PropertyData In Items
+            For Each Item As PropertyData In Me.Items
                 If Item.Name.ToLower = Name.ToLower Then
                     tmpProperty = Item
                     Exit For
@@ -103,187 +108,235 @@ Public Class HCPropertiesData
         Return tmpProperty
     End Function
 
+    Public Function GetPropertyData(
+        PropertySetActualName As String,
+        PropID As Integer,
+        Optional tmpItems As List(Of PropertyData) = Nothing
+        ) As PropertyData
+
+        Dim tmpPropertyData As PropertyData = Nothing
+
+        If tmpItems Is Nothing Then
+            For Each Item As PropertyData In Items
+                If (Item.PropertySetActualName = PropertySetActualName) And (Item.PropID = PropID) Then
+                    tmpPropertyData = Item
+                    Exit For
+                End If
+            Next
+        Else
+            For Each Item As PropertyData In tmpItems
+                If (Item.PropertySetActualName = PropertySetActualName) And (Item.PropID = PropID) Then
+                    tmpPropertyData = Item
+                    Exit For
+                End If
+            Next
+        End If
+
+        Return tmpPropertyData
+    End Function
+
+    Private Function UpdateFromTemplates(
+         TemplateList As List(Of String),
+         tmpItems As List(Of PropertyData),
+         KnownSystemProps As List(Of String)
+         ) As List(Of PropertyData)
+
+        ' ###### PROCESS TEMPLATES FOR CUSTOM PROPERTIES AND LOCALIZED NAMES ######
+        ' This needs to use SE, not SSDoc, so that localized names can be found
+
+        Dim PropertySets As SolidEdgeFileProperties.PropertySets
+        Dim PropertySet As SolidEdgeFileProperties.Properties
+        Dim Prop As SolidEdgeFileProperties.Property = Nothing
+        Dim PropertySetHousekeeperName As PropertyData.PropertySetNameConstants
+        Dim PropName As String = ""
+
+        Dim PropertySetActualNames As New List(Of String)
+        PropertySetActualNames.AddRange({"SummaryInformation", "DocumentSummaryInformation", "ExtendedSummaryInformation"})
+        PropertySetActualNames.AddRange({"ProjectInformation", "MechanicalModeling"})
+        ' Do Custom last to deal with duplicates
+        PropertySetActualNames.Add("Custom")
+
+        Dim tmpPropertyData As PropertyData
+
+        Dim tf As Boolean
+        Dim PropID As Integer
+
+        PropertySets = New SolidEdgeFileProperties.PropertySets
+
+
+        ' ###### PROCESS TEMPLATES ######
+
+        For Each TemplateName As String In TemplateList
+
+            tf = Not TemplateName = ""
+            tf = tf And FileIO.FileSystem.FileExists(TemplateName)
+            If Not tf Then
+                Continue For
+            End If
+
+            Dim OpenReadOnly As Boolean = True
+
+            PropertySets.Open(TemplateName, OpenReadOnly)
+
+
+            ' ###### PROCESS PROPERTY SETS ######
+
+            For Each PropertySetActualName In PropertySetActualNames
+
+                ' Not all files have all property sets.
+                Try
+                    PropertySet = CType(PropertySets.Item(PropertySetActualName), SolidEdgeFileProperties.Properties)
+                Catch ex As Exception
+                    Continue For
+                End Try
+
+                If PropertySetActualName = "Custom" Then
+                    PropertySetHousekeeperName = PropertyData.PropertySetNameConstants.Custom
+                Else
+                    PropertySetHousekeeperName = PropertyData.PropertySetNameConstants.System
+                End If
+
+
+                ' ###### PROCESS PROPERTIES ######
+
+                For i = 0 To PropertySet.Count - 1
+                    Try
+                        Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
+                        PropName = Prop.Name
+                        PropID = Prop.ID
+                    Catch ex As Exception
+                        Dim s = "Error building PropertiesData: "
+                        s = String.Format("{0} PropertySetName '{1}', Item Number '{2}', PropName '{3}'", s, PropertySetActualName, PropID, PropName)
+                        MsgBox(s, vbOKOnly)
+                    End Try
+
+
+                    ' ###### LOCALIZED NAME CHECK ######
+
+                    tmpPropertyData = GetPropertyData(PropertySetActualName, PropID, tmpItems)
+
+                    If tmpPropertyData IsNot Nothing Then
+                        If Not tmpPropertyData.Name = PropName Then
+                            If Not PropName = Nothing Then  ' Not all properties have names.  Happens with User Profile entries and others.
+                                tmpPropertyData.Name = PropName
+                            Else
+                                PropName = tmpPropertyData.Name
+                            End If
+                        End If
+                    End If
+
+
+                    ' ###### DUPLICATE NAME CHECK ######
+
+                    tmpPropertyData = GetPropertyData(PropName, tmpItems)
+
+                    If tmpPropertyData IsNot Nothing Then
+                        tf = PropertySetActualName = "Custom"
+                        tf = tf And (Not tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom)
+                        If tf Then
+                            tmpPropertyData.IsDuplicate = True
+                        End If
+                    End If
+
+
+                    ' ###### PROPERTY NOT FOUND CHECK ######
+
+                    If tmpPropertyData Is Nothing Then
+
+                        tf = PropertySetActualName = "Custom"
+                        tf = tf Or KnownSystemProps.Contains(PropName)  ' Keep from adding unwanted items like Creation Locale, etc.
+                        If tf Then
+
+                            tmpPropertyData = New PropertyData
+                            tmpItems.Add(tmpPropertyData)
+
+                            tmpPropertyData.Name = PropName
+                            tmpPropertyData.PropertySetName = PropertySetHousekeeperName
+                            tmpPropertyData.EnglishName = PropName
+                            tmpPropertyData.SSName = PropName
+                            tmpPropertyData.PropertySetActualName = PropertySetActualName
+                            If PropertySetActualName = "Custom" Then
+                                tmpPropertyData.PropID = -1
+                            Else
+                                tmpPropertyData.PropID = PropID
+                            End If
+                            tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Auto
+                            tmpPropertyData.FavoritesListIdx = -1
+
+                            Dim PropTypeName As String = Prop.Value.GetType().Name
+
+                            Select Case PropTypeName
+                                Case "String"
+                                    tmpPropertyData.TypeName = PropertyData.TypeNameConstants._String
+                                Case "Int32"
+                                    tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Integer
+                                Case "Double"
+                                    tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Double
+                                Case "Boolean"
+                                    tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Boolean
+                                Case "DateTime"
+                                    tmpPropertyData.TypeName = PropertyData.TypeNameConstants._DateTime
+                                Case Else
+                                    Dim s As String = String.Format("In PropertiesDataPopulate, PropTypeName '{0}' not recognized", PropTypeName)
+                                    MsgBox(s, vbOKOnly)
+                            End Select
+                        End If
+                    End If
+
+                Next
+            Next
+
+        Next
+
+        Return tmpItems
+    End Function
+
     Public Sub Populate(TemplateList As List(Of String))
 
-        'Dim tmpPropertiesData As New PropertiesData
         Dim tmpItems As New List(Of PropertyData)
 
         Dim PreviousFavoritesList As List(Of String) = GetFavoritesList()
 
-        Dim PropertySets As SolidEdgeFileProperties.PropertySets
-        Dim PropertySet As SolidEdgeFileProperties.Properties
-        Dim Prop As SolidEdgeFileProperties.Property
-        PropertySets = New SolidEdgeFileProperties.PropertySets
         Dim PropertySetActualName As String
-        Dim PropertySetHousekeeperName As String
-        Dim PropName As String = ""
-        Dim PropID As Integer
-        Dim PropTypeName As String
 
         Dim tf As Boolean
 
         Dim tmpPropertyData As PropertyData
         Dim tmpPreviousPropertyData As PropertyData
 
-        ' ###### PROPERTIES TO PROCESS ######
+        Dim KnownSystemProps As New List(Of String)
 
-        Dim KeepDict As New Dictionary(Of String, List(Of String))
-        KeepDict("SummaryInformation") = {"Title", "Subject", "Author", "Keywords", "Comments", "Last Author", "Origin Date", "Last Save Date"}.ToList
-        KeepDict("DocumentSummaryInformation") = {"Category", "Manager", "Company"}.ToList
-        KeepDict("ExtendedSummaryInformation") = {"Status", "Username", "Hardware", "StatusChangeDate", "FriendlyUserName"}.ToList
-        KeepDict("ProjectInformation") = {"Document Number", "Revision", "Project Name"}.ToList
-        KeepDict("MechanicalModeling") = {"Material", "Sheet Metal Gage"}.ToList
-
+        Dim PropertySetActualNames As New List(Of String)
+        PropertySetActualNames.AddRange({"SummaryInformation", "DocumentSummaryInformation", "ExtendedSummaryInformation"})
+        PropertySetActualNames.AddRange({"ProjectInformation", "MechanicalModeling"})
         ' Do Custom last to deal with duplicates
-        KeepDict("Custom") = New List(Of String)
+        PropertySetActualNames.Add("Custom")
+        Dim PropID As Integer
+        Dim PropName As String
 
-        ' ###### PROCESS TEMPLATES ######
 
-        For Each TemplateName As String In TemplateList
-            tf = Not TemplateName = ""
-            tf = tf And FileIO.FileSystem.FileExists(TemplateName)
-            If tf Then
+        ' ###### GET KNOWN SYSTEM PROPERTIES ######
 
-                PropertySets.Open(TemplateName, True)
-
-                ' ###### PROCESS PROPERTY SETS ######
-
-                For Each PropertySetActualName In KeepDict.Keys
-
-                    ' Not all files have all property sets.
-                    Try
-                        PropertySet = CType(PropertySets.Item(PropertySetActualName), SolidEdgeFileProperties.Properties)
-                    Catch ex As Exception
-                        Continue For
-                    End Try
-
-                    If PropertySetActualName = "Custom" Then
-                        PropertySetHousekeeperName = "Custom"
-                    Else
-                        PropertySetHousekeeperName = "System"
-                    End If
-
-                    For i = 0 To PropertySet.Count - 1
-
-                        ' ###### PROCESS PROPERTY ######
-
-                        Try
-                            ' ###### GET THE PROPERTY OBJECT ######
-
-                            Prop = CType(PropertySet.Item(i), SolidEdgeFileProperties.Property)
-                            PropName = Prop.Name
-                            PropID = Prop.ID
-                            If PropertySetActualName = "Custom" Then PropID = -1
-
-                            Dim EnglishName As String = PropLocalizedToEnglishOrSS(PropertySetActualName, IDNumber:=PropID, WhichName:="English")
-                            If EnglishName = Nothing Then EnglishName = PropName
-
-                            ' Skip unwanted properties
-                            tf = Not PropertySetActualName = "Custom"
-                            tf = tf And KeepDict.Keys.Contains(PropertySetActualName)
-                            tf = tf And Not KeepDict(PropertySetActualName).Contains(EnglishName)
-                            If tf Then
-                                Continue For
-                            End If
-
-                            PropTypeName = Microsoft.VisualBasic.Information.TypeName(Prop.Value)
-
-                            tmpPropertyData = GetPropertyData(PropName, tmpItems)
-
-                            If tmpPropertyData Is Nothing Then
-                                ' ###### PROPERTY NOT FOUND: ADD AND POPULATE IT ######
-
-                                tmpPropertyData = New PropertyData
-                                tmpItems.Add(tmpPropertyData)
-
-                                tmpPropertyData.Name = PropName
-
-                                Select Case PropertySetHousekeeperName
-                                    Case "System"
-                                        tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.System
-                                    Case "Custom"
-                                        tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom
-                                    Case Else
-                                        Dim s As String = String.Format("In PropertiesDataPopulate, PropertySet '{0}' not recognized", PropertySetHousekeeperName)
-                                        MsgBox(s, vbOKOnly)
-                                End Select
-
-                                tmpPropertyData.EnglishName = EnglishName
-                                tmpPropertyData.PropertySetActualName = PropertySetActualName
-                                tmpPropertyData.PropID = PropID
-                                tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Auto
-                                tmpPropertyData.FavoritesListIdx = -1
-
-                                Select Case PropTypeName
-                                    Case "String"
-                                        tmpPropertyData.TypeName = PropertyData.TypeNameConstants._String
-                                    Case "Integer"
-                                        tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Integer
-                                    Case "Boolean"
-                                        tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Boolean
-                                    Case "Date"
-                                        tmpPropertyData.TypeName = PropertyData.TypeNameConstants._Date
-                                    Case Else
-                                        Dim s As String = String.Format("In PropertiesDataPopulate, PropTypeName '{0}' not recognized", PropTypeName)
-                                        MsgBox(s, vbOKOnly)
-                                End Select
-
-                            Else
-                                ' ###### PROPERTY FOUND: CHECK IF DUPLICATE ######
-
-                                tf = PropertySetActualName = "Custom"
-                                tf = tf And (Not tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom)
-                                If tf Then
-                                    tmpPropertyData.IsDuplicate = True
-                                End If
-
-                            End If
-
-                        Catch ex As Exception
-                            Dim s = "Error building PropertiesData: "
-                            s = String.Format("{0} PropertySetName '{1}', Item Number '{2}', PropName '{3}'", s, PropertySetActualName, PropID, PropName)
-                            MsgBox(s, vbOKOnly)
-                        End Try
-                    Next
-                Next
-
-                PropertySets.Close()
-
-            End If
+        For Each PropertySetActualName In PropertySetActualNames
+            For PropID = 0 To 50  ' Current max not including Custom is 27
+                tmpPropertyData = New PropertyData(PropertySetActualName, PropID)
+                If tmpPropertyData.Name IsNot Nothing Then
+                    tmpItems.Add(tmpPropertyData)
+                    KnownSystemProps.Add(tmpPropertyData.Name)
+                End If
+            Next
         Next
 
 
-        ' ###### ADD OTHER KNOWN AND SPECIAL PROPERTIES ######
+        '' ###### PROCESS TEMPLATES FOR CUSTOM PROPERTIES AND LOCALIZED NAMES ######
 
-        ' Sheet Metal Gage
-
-        PropName = "Sheet Metal Gage"
-
-        tmpPropertyData = GetPropertyData(PropName)
-
-        If tmpPropertyData Is Nothing Then
-
-            tmpPropertyData = New PropertyData
-            tmpItems.Add(tmpPropertyData)
-
-            tmpPropertyData.Name = PropName
-            tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.System
-            tmpPropertyData.PropertySetActualName = "MechanicalModeling"
-            tmpPropertyData.PropID = 19
-            tmpPropertyData.EnglishName = PropName
-            tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Auto
-            tmpPropertyData.FavoritesListIdx = -1
-            tmpPropertyData.TypeName = PropertyData.TypeNameConstants._String
-
-        Else
-            tmpItems.Add(tmpPropertyData)
-
-        End If
+        tmpItems = UpdateFromTemplates(TemplateList, tmpItems, KnownSystemProps)
 
 
-        ' Special File Properties
+        '' ###### ADD SPECIAL PROPERTIES ######
 
-        Dim PropNames = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
+        Dim PropNames As List(Of String) = {"File Name", "File Name (full path)", "File Name (no extension)"}.ToList
+
         For Each PropName In PropNames
 
             tmpPropertyData = GetPropertyData(PropName)
@@ -298,6 +351,7 @@ Public Class HCPropertiesData
                 tmpPropertyData.PropertySetActualName = "System"
                 tmpPropertyData.PropID = -1
                 tmpPropertyData.EnglishName = PropName
+                tmpPropertyData.SSName = ""
                 tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Auto
                 tmpPropertyData.FavoritesListIdx = -1
                 tmpPropertyData.TypeName = PropertyData.TypeNameConstants._String
@@ -333,6 +387,7 @@ Public Class HCPropertiesData
                     tmpPropertyData.PropertySetActualName = tmpPreviousPropertyData.PropertySetActualName
                     tmpPropertyData.PropID = tmpPreviousPropertyData.PropID
                     tmpPropertyData.EnglishName = tmpPreviousPropertyData.EnglishName
+                    tmpPropertyData.SSName = tmpPreviousPropertyData.SSName
                     tmpPropertyData.PropertySource = tmpPreviousPropertyData.PropertySource
                     tmpPropertyData.TypeName = tmpPreviousPropertyData.TypeName
                     tmpPropertyData.FavoritesListIdx = i
@@ -418,7 +473,10 @@ Public Class HCPropertiesData
                     tmpPropertyData.PropertySource = PropertyData.PropertySourceConstants.Manual
                     tmpPropertyData.FavoritesListIdx = FavoritesListIdx
                 End If
-
+            Else
+                s = String.Format("The list already contains '{0}' in the '{1}' property set. ", PropertyName, OriginalPropertySet)
+                s = String.Format("{0}Adding that one instead.", s)
+                MsgBox(s, vbOKOnly)
             End If
         End If
 
@@ -426,413 +484,22 @@ Public Class HCPropertiesData
 
     Public Function GetLocalizedEnglishNames() As List(Of String)
         Dim Names As New List(Of String)
-        Dim Name As String
-        Dim PropertySetActualNames As List(Of String) =
-            "SummaryInformation DocumentSummaryInformation ExtendedSummaryInformation ProjectInformation MechanicalModeling".Split(CChar(" ")).ToList
-        Dim UsedInSe As String
-        Dim LocalizedInSE As String
+        Dim EnglishName As String
 
-        For Each PropertySetActualName As String In PropertySetActualNames
-            For i = 1 To 50
-                UsedInSe = PropLocalizedToEnglishOrSS(PropertySetActualName, i, "UsedInSE")
-                LocalizedInSE = PropLocalizedToEnglishOrSS(PropertySetActualName, i, "LocalizedInSE")
-                If (Not UsedInSe = Nothing) And (Not LocalizedInSE = Nothing) Then
-                    If (UsedInSe.ToLower = "true") And (LocalizedInSE.ToLower = "true") Then
-                        Name = PropLocalizedToEnglishOrSS(PropertySetActualName, i, "English")
-                        If Not Name = Nothing Then
-                            Names.Add(Name)
-                        End If
-                    End If
-
+        For Each tmpPropertyData As PropertyData In Me.Items
+            ' Not adding names from Custom properties
+            If Not tmpPropertyData.PropertySetName = PropertyData.PropertySetNameConstants.Custom Then
+                EnglishName = tmpPropertyData.EnglishName
+                If (EnglishName IsNot Nothing) AndAlso (Not EnglishName = "") Then
+                    Names.Add(EnglishName)
                 End If
-            Next
+            End If
         Next
 
         Return Names
     End Function
 
-    Public Function PropLocalizedToEnglishOrSS(
-        PropertySetActualName As String,
-        IDNumber As Integer,
-        WhichName As String
-        ) As String
-
-        ' PropertySetActualName: SummaryInformation, DocumentSummaryInformation, ...
-        ' IDNumber: The property identifier in Structured Storage (same as Prop.ID in SE)
-        ' WhichName: English, SS, UsedInSE, LocalizedInSE
-        ' Returns Nothing if no matches occurs
-
-        Dim EnglishName As String = Nothing
-        Dim SSName As String = Nothing
-        Dim UsedInSE As String = Nothing
-        Dim LocalizedInSE As String = Nothing
-
-        Dim WhichNames As List(Of String) = "english ss usedinse localizedinse".Split(CChar(" ")).ToList
-
-        WhichName = WhichName.ToLower
-
-        If Not WhichNames.Contains(WhichName) Then
-            Throw New Exception("Valid values for WhichName are 'English', 'SS', 'UsedInSE', 'LocalizedInSE'")
-        End If
-
-        If PropertySetActualName.ToLower = "custom" Then
-            Return Nothing
-        End If
-
-        Select Case PropertySetActualName
-
-            Case "SummaryInformation"
-                Select Case IDNumber
-                    Case 2
-                        EnglishName = "Title"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 3
-                        EnglishName = "Subject"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 4
-                        EnglishName = "Author"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 5
-                        EnglishName = "Keywords"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 6
-                        EnglishName = "Comments"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 7
-                        EnglishName = "Template"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 8
-                        EnglishName = "Last Author"
-                        SSName = "LASTAUTHOR"
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 9
-                        EnglishName = "Revision Number"
-                        SSName = "REVNUMBER"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 10 'Not maintained by SE
-                        EnglishName = "Total Editing Time"
-                        SSName = "EDITTIME"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 11 'Not maintained by SE
-                        EnglishName = "Last Print Date"
-                        SSName = "LASTPRINTED"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 12
-                        EnglishName = "Origination Date"
-                        SSName = "CREATE_DTM"
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 13
-                        EnglishName = "Last Save Date"
-                        SSName = "LASTSAVE_DTM"
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 14 'Not maintained by SE
-                        EnglishName = "Number of pages"
-                        SSName = "PAGECOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 15 'Not maintained by SE
-                        EnglishName = "Number of words"
-                        SSName = "WORDCOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 16 'Not maintained by SE
-                        EnglishName = "Number of characters"
-                        SSName = "CHARCOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 18
-                        EnglishName = "Application Name"
-                        SSName = "APPNAME"
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 19
-                        EnglishName = "Security"
-                        SSName = "DOC_SECURITY"
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                End Select
-
-            Case "DocumentSummaryInformation"
-                Select Case IDNumber
-                    Case 2
-                        EnglishName = "Category"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 3
-                        EnglishName = "Presentation Format"
-                        SSName = "PRESFORMAT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 4
-                        EnglishName = "Byte Count"
-                        SSName = "BYTECOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 5
-                        EnglishName = "Lines"
-                        SSName = "LINECOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 6
-                        EnglishName = "Paragraphs"
-                        SSName = "PARCOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 7
-                        EnglishName = "Slides"
-                        SSName = "SLIDECOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 8
-                        EnglishName = "Notes"
-                        SSName = "NOTECOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 9
-                        EnglishName = "Hidden Objects"
-                        SSName = "HIDDENCOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 10
-                        EnglishName = "Multimedia Clips"
-                        SSName = "MMCLIPCOUNT"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(True)
-                    Case 14
-                        EnglishName = "Manager"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 15
-                        EnglishName = "Company"
-                        SSName = EnglishName.ToUpper
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                End Select
-
-            Case "ExtendedSummaryInformation"
-                Select Case IDNumber
-                    Case 2
-                        EnglishName = "Name of Saving Application"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 3
-                        EnglishName = Nothing
-                        SSName = "File Size"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(False)
-                    Case 4
-                        EnglishName = Nothing
-                        SSName = "Number of Sheets"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(False)
-                    Case 5
-                        EnglishName = Nothing
-                        SSName = "Number of Objects"
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(False)
-                    Case 6
-                        EnglishName = "DocumentID"
-                        SSName = EnglishName
-                        UsedInSE = CStr(False)
-                        LocalizedInSE = CStr(False)
-                    Case 7
-                        EnglishName = "Status"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 8
-                        EnglishName = "Username"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 9
-                        EnglishName = "CreationLocale"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 14
-                        EnglishName = "Hardware"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 19
-                        EnglishName = "StatusChangeDate"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 20
-                        EnglishName = "FriendlyUserName"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 22
-                        EnglishName = "User Profile Name (created by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 23
-                        EnglishName = "User Profile Initials (created by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 24
-                        EnglishName = "User Profile Mailing address (created by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 25
-                        EnglishName = "User Profile Name (modified by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 26
-                        EnglishName = "User Profile Initials (modified by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 27
-                        EnglishName = "User Profile Mailing address (modified by)"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                End Select
-
-            Case "ProjectInformation"
-                Select Case IDNumber
-                    Case 2
-                        EnglishName = "Document Number"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 3
-                        EnglishName = "Revision"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                    Case 4
-                        EnglishName = "Project Name"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(True)
-                End Select
-
-            Case "MechanicalModeling"
-                Select Case IDNumber
-                    Case 3
-                        EnglishName = "Material"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 19
-                        EnglishName = "Sheet Metal Gage"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 20 'Localized in structured storage
-                        EnglishName = "Face Style"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 21 'Localized in structured storage
-                        EnglishName = "Fill Style"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 22 'Localized in structured storage
-                        EnglishName = "Virtual Style"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 23
-                        EnglishName = "Density"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 24
-                        EnglishName = "Coef. of Thermal Exp"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 25
-                        EnglishName = "Thermal Conductivity"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 26
-                        EnglishName = "Specific Heat"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 27
-                        EnglishName = "Modulus of Elasticity"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 28
-                        EnglishName = "Poisson's Ratio"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 29
-                        EnglishName = "Yield Stress"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 30
-                        EnglishName = "Ultimate Stress"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 31
-                        EnglishName = "Elongation"
-                        SSName = EnglishName
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                    Case 32
-                        EnglishName = "Bead Material"
-                        SSName = Nothing
-                        UsedInSE = CStr(True)
-                        LocalizedInSE = CStr(False)
-                End Select
-
-        End Select
-
-        If WhichName = "english" Then
-            Return EnglishName
-        ElseIf WhichName = "ss" Then
-            Return SSName
-        ElseIf WhichName = "usedinse" Then
-            Return UsedInSE
-        ElseIf WhichName = "localizedinse" Then
-            Return LocalizedInSE
-        Else
-            Return Nothing
-        End If
-
-    End Function
-
-    Public Function ScanFilesForProps(Directory As String, Method As String) As List(Of String)
+    Private Function ScanFilesForProps(Directory As String, Method As String) As List(Of String)
         ' Searches a directory and subdirectories for property names
         ' Directory: The top-level directory to search
         ' Method: What program to use to process the files.  'SE' or 'SS'
@@ -922,16 +589,16 @@ End Class
 
 Public Class PropertyData
 
-    ' ###### English mapping from PropLocalizedToEnglish    ######
     ' ###### In case of a duplicate, 'IsDuplicate' = TRUE   ######
     ' ###### and PropID will be for the 'System' property.  ######
 
-    Public Property Name As String
-    Public Property EnglishName As String
-    Public Property PropertySetName As PropertySetNameConstants
-    Public Property PropertySetActualName As String
-    Public Property TypeName As TypeNameConstants
     Public Property PropID As Integer
+    Public Property PropertySetActualName As String
+    Public Property PropertySetName As PropertySetNameConstants
+    Public Property EnglishName As String
+    Public Property Name As String
+    Public Property SSName As String
+    Public Property TypeName As TypeNameConstants
     Public Property PropertySource As PropertySourceConstants
     Public Property FavoritesListIdx As Integer
     Public Property IsDuplicate As Boolean = False
@@ -956,8 +623,9 @@ Public Class PropertyData
         ' Preceeding names with '_' to avoid VB reserved keywords
         _String
         _Integer
+        _Double
         _Boolean
-        _Date
+        _DateTime
         _Unknown
     End Enum
 
@@ -970,6 +638,370 @@ Public Class PropertyData
 
     End Sub
 
+    Public Sub New(_PropertySetActualName As String, _PropID As Integer)
+
+        '###### If the new PropertyData's Name remains Nothing, it's not valid ######
+        Me.Name = Nothing
+
+        Me.PropID = _PropID
+        Me.PropertySetActualName = _PropertySetActualName
+
+        If Me.PropertySetActualName = "Custom" Then
+            Me.PropertySetName = PropertySetNameConstants.Custom
+        Else
+            Me.PropertySetName = PropertySetNameConstants.System
+        End If
+
+        Me.PropertySource = PropertySourceConstants.Auto
+        Me.FavoritesListIdx = -1
+        Me.IsDuplicate = False
+
+        Select Case _PropertySetActualName
+
+            Case "SummaryInformation"
+                Select Case _PropID
+                    Case 2
+                        Me.EnglishName = "Title"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 3
+                        Me.EnglishName = "Subject"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 4
+                        Me.EnglishName = "Author"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 5
+                        Me.EnglishName = "Keywords"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 6
+                        Me.EnglishName = "Comments"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 7
+                        Me.EnglishName = "Template"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 8
+                        Me.EnglishName = "Last Author"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = "LASTAUTHOR"
+                        Me.TypeName = TypeNameConstants._String
+                    Case 9  'Not used by SE
+                        'Me.EnglishName = "Revision Number"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "REVNUMBER"
+                        'Me.TypeName = TypeNameConstants._String
+                    Case 10 'Not used by SE
+                        'Me.EnglishName = "Total Editing Time"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "EDITTIME"
+                        'Me.TypeName = TypeNameConstants._Date
+                    Case 11 'Not used by SE
+                        'Me.EnglishName = "Last Print Date"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "LASTPRINTED"
+                        'Me.TypeName = TypeNameConstants._Date
+                    Case 12
+                        Me.EnglishName = "Origination Date"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = "CREATE_DTM"
+                        Me.TypeName = TypeNameConstants._DateTime
+                    Case 13
+                        Me.EnglishName = "Last Save Date"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = "LASTSAVE_DTM"
+                        Me.TypeName = TypeNameConstants._DateTime
+                    Case 14 'Not maintained by SE
+                        'Me.EnglishName = "Number of pages"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "PAGECOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 15 'Not maintained by SE
+                        'Me.EnglishName = "Number of words"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "WORDCOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 16 'Not maintained by SE
+                        'Me.EnglishName = "Number of characters"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "CHARCOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 18
+                        'Me.EnglishName = "Application Name"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "APPNAME"
+                        'Me.TypeName = TypeNameConstants._String
+                    Case 19
+                        Me.EnglishName = "Security"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = "DOC_SECURITY"
+                        Me.TypeName = TypeNameConstants._Integer
+                End Select
+
+            Case "DocumentSummaryInformation"
+                Select Case _PropID
+                    Case 2
+                        Me.EnglishName = "Category"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 3
+                        'Me.EnglishName = "Presentation Format"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "PRESFORMAT"
+                        'Me.TypeName = TypeNameConstants._String
+                    Case 4
+                        'Me.EnglishName = "Byte Count"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "BYTECOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 5
+                        'Me.EnglishName = "Lines"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "LINECOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 6
+                        'Me.EnglishName = "Paragraphs"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "PARCOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 7
+                        'Me.EnglishName = "Slides"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "SLIDECOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 8
+                        'Me.EnglishName = "Notes"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "NOTECOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 9
+                        'Me.EnglishName = "Hidden Objects"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "HIDDENCOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 10
+                        'Me.EnglishName = "Multimedia Clips"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "MMCLIPCOUNT"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 14
+                        Me.EnglishName = "Manager"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName.ToUpper
+                        Me.TypeName = TypeNameConstants._String
+                    Case 15
+                        Me.EnglishName = "Company"
+                        Me.SSName = EnglishName.ToUpper
+                        Me.Name = Me.EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                End Select
+
+            Case "ExtendedSummaryInformation"
+                Select Case _PropID
+                    Case 2
+                        'Me.EnglishName = "Name of Saving Application"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = EnglishName
+                        'Me.TypeName = TypeNameConstants._String
+                    Case 3
+                        'Me.EnglishName = "File Size"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "File Size"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 4
+                        'Me.EnglishName = "Number of Sheets"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "Number of Sheets"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 5
+                        'Me.EnglishName = "Number of Objects"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = "Number of Objects"
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 6
+                        'Me.EnglishName = "DocumentID"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = EnglishName
+                        'Me.TypeName = TypeNameConstants._String
+                    Case 7
+                        Me.EnglishName = "Status"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Integer
+                    Case 8
+                        Me.EnglishName = "Username"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                    Case 9
+                        'Me.EnglishName = "CreationLocale"
+                        'Me.Name = Me.EnglishName
+                        'Me.SSName = EnglishName
+                        'Me.TypeName = TypeNameConstants._Integer
+                    Case 14
+                        Me.EnglishName = "Hardware"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Boolean
+                    Case 19
+                        Me.EnglishName = "StatusChangeDate"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._DateTime
+                    Case 20
+                        Me.EnglishName = "FriendlyUserName"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 22
+                        Me.EnglishName = "User Profile Name (created by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 23
+                        Me.EnglishName = "User Profile Initials (created by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 24
+                        Me.EnglishName = "User Profile Mailing address (created by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 25
+                        Me.EnglishName = "User Profile Name (modified by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 26
+                        Me.EnglishName = "User Profile Initials (modified by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 27
+                        Me.EnglishName = "User Profile Mailing address (modified by)"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                End Select
+
+            Case "ProjectInformation"
+                Select Case _PropID
+                    Case 2
+                        Me.EnglishName = "Document Number"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                    Case 3
+                        Me.EnglishName = "Revision"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                    Case 4
+                        Me.EnglishName = "Project Name"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                End Select
+
+            Case "MechanicalModeling"
+                Select Case _PropID
+                    Case 3
+                        Me.EnglishName = "Material"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                    Case 19
+                        Me.EnglishName = "Sheet Metal Gage"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._String
+                    Case 20 'Localized in structured storage
+                        Me.EnglishName = "Face Style"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 21 'Localized in structured storage
+                        Me.EnglishName = "Fill Style"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 22 'Localized in structured storage
+                        Me.EnglishName = "Virtual Style"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                    Case 23
+                        Me.EnglishName = "Density"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 24
+                        Me.EnglishName = "Coef. of Thermal Exp"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 25
+                        Me.EnglishName = "Thermal Conductivity"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 26
+                        Me.EnglishName = "Specific Heat"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 27
+                        Me.EnglishName = "Modulus of Elasticity"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 28
+                        Me.EnglishName = "Poisson's Ratio"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 29
+                        Me.EnglishName = "Yield Stress"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 30
+                        Me.EnglishName = "Ultimate Stress"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 31
+                        Me.EnglishName = "Elongation"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = EnglishName
+                        Me.TypeName = TypeNameConstants._Double
+                    Case 32
+                        Me.EnglishName = "Bead Material"
+                        Me.Name = Me.EnglishName
+                        Me.SSName = ""
+                        Me.TypeName = TypeNameConstants._String
+                End Select
+
+            Case "Custom"
+                ' Nothing to do here
+
+            Case Else
+                MsgBox(String.Format("In HCPropertiesData.New PropertyData: PropertySetActualName '{0}' not recognized", Me.PropertySetActualName))
+
+        End Select
+
+    End Sub
 
     Public Function ToJSON() As String
 
@@ -979,6 +1011,7 @@ Public Class PropertyData
 
         tmpDict("Name") = Me.Name
         tmpDict("EnglishName") = Me.EnglishName
+        tmpDict("SSName") = Me.SSName
         tmpDict("PropertySetName") = CStr(CInt(Me.PropertySetName)) ' "0", "1"
         tmpDict("PropertySetActualName") = Me.PropertySetActualName
         tmpDict("TypeName") = CStr(CInt(Me.TypeName))
@@ -1000,6 +1033,7 @@ Public Class PropertyData
 
         Me.Name = tmpDict("Name")
         Me.EnglishName = tmpDict("EnglishName")
+        Me.SSName = tmpDict("SSName")
         Me.PropertySetName = CType(CInt(tmpDict("PropertySetName")), PropertySetNameConstants)
         Me.PropertySetActualName = tmpDict("PropertySetActualName")
         Me.TypeName = CType(CInt(tmpDict("TypeName")), TypeNameConstants)

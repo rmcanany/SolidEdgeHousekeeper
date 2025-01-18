@@ -802,7 +802,7 @@ Public Class HCStructuredStorageDoc
             If PropertySetName.ToLower = "custom" Then
                 If co.HasUserDefinedProperties Then
                     For Each OLEProp As OLEProperty In co.UserDefinedProperties.Properties
-                        CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
+                        CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                         Me.PropNames.Add(CorrectedName)
                         Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
                     Next
@@ -810,7 +810,7 @@ Public Class HCStructuredStorageDoc
 
             Else
                 For Each OLEProp As OLEProperty In co.Properties
-                    CorrectedName = CorrectOLEPropName(PropertySetName, OLEProp)
+                    CorrectedName = CorrectedOLEPropName(PropertySetName, OLEProp)
                     Me.PropNames.Add(CorrectedName)
                     Me.Items.Add(New Prop(co, OLEProp, CorrectedName))
                 Next
@@ -819,7 +819,7 @@ Public Class HCStructuredStorageDoc
 
         End Sub
 
-        Private Function CorrectOLEPropName(PropertySetName As String, OLEProp As OLEProperty) As String
+        Private Function CorrectedOLEPropName(PropertySetName As String, OLEProp As OLEProperty) As String
             Dim CorrectedName As String = ""
 
             Select Case PropertySetName

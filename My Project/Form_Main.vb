@@ -12,21 +12,17 @@ Public Class Form_Main
 
     Private lvwColumnSorter As ListViewColumnSorter
 
-
     Private editbox As New TextBox()
     Private hitinfo As ListViewHitTestInfo
 
     Public Property Version As String = "2024.4"  ' Two fields, both integers: Year.ReleaseNumber.  Can include a bugfix number which is ignored
 
-    Public Property UtilsLogFile As UtilsLogFile
+    'Public Property UtilsLogFile As UtilsLogFile
 
     Public Property StopProcess As Boolean
 
     Public DragDropCache As New List(Of ListViewItem)
     Public DragDropCacheExcluded As New List(Of ListViewItem)
-
-    Private ListItems_TextFiltered As New List(Of ListViewItem)
-    Private ListItems_PropFiltered As New List(Of ListViewItem)
 
     Private _ListViewFilesOutOfDate As Boolean
     Public Property ListViewFilesOutOfDate As Boolean
@@ -45,9 +41,7 @@ Public Class Form_Main
         End Set
     End Property
 
-
     Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
-
 
     Public Property TaskList As List(Of Task)
 
@@ -713,39 +707,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    '' See UC.TemplatePropertyDictAddProp for dictionary key definitions and values.
-    'Private _TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    '    Get
-    '        Return _TemplatePropertyDict
-    '    End Get
-    '    Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-    '        _TemplatePropertyDict = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Dim s = JsonConvert.SerializeObject(Me.TemplatePropertyDict)
-    '            If Not Me.TemplatePropertyDictJSON = s Then
-    '                Me.TemplatePropertyDictJSON = s
-    '            End If
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _TemplatePropertyDictJSON As String
-    'Public Property TemplatePropertyDictJSON As String
-    '    Get
-    '        Return _TemplatePropertyDictJSON
-    '    End Get
-    '    Set(value As String)
-    '        _TemplatePropertyDictJSON = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            If Not _TemplatePropertyDictJSON = JsonConvert.SerializeObject(Me.TemplatePropertyDict) Then
-    '                Me.TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_TemplatePropertyDictJSON)
-    '            End If
-    '        End If
-
-    '    End Set
-    'End Property
-
     Public Property PropertiesData As HCPropertiesData
 
 
@@ -763,7 +724,6 @@ Public Class Form_Main
             End If
         End Set
     End Property
-
 
     Private _ServerQuery As String
     Public Property ServerQuery As String
@@ -1029,7 +989,6 @@ Public Class Form_Main
 
     Public Property SolidEdgeRequired As Integer
 
-
     Private _ListOfColumns As List(Of PropertyColumn)
     Public Property ListOfColumns As List(Of PropertyColumn)
         Get
@@ -1086,60 +1045,6 @@ Public Class Form_Main
             End If
         End Set
     End Property
-
-
-    'Private _PresetsList As List(Of Preset)
-    'Public Property PresetsList As List(Of Preset)
-    '    Get
-    '        Return _PresetsList
-    '    End Get
-    '    Set(value As List(Of Preset))
-    '        _PresetsList = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Dim TextOld = ComboBoxPresetName.Text
-    '            ComboBoxPresetName.Items.Clear()
-    '            ComboBoxPresetName.Items.Add("")
-    '            For Each tmpPreset In PresetsList
-    '                ComboBoxPresetName.Items.Add(tmpPreset.Name)
-    '            Next
-    '            ComboBoxPresetName.Text = TextOld
-
-    '            Dim tmpPresetsListJSON As New List(Of String)
-    '            For Each tmpPreset As Preset In _PresetsList
-    '                tmpPresetsListJSON.Add(tmpPreset.ToJSON)
-    '            Next
-
-    '            Dim UC As New UtilsCommon
-    '            If Not UC.CompareListOfJSON(tmpPresetsListJSON, Me.PresetsListJSON) Then
-    '                Me.PresetsListJSON = tmpPresetsListJSON
-    '            End If
-    '        End If
-    '    End Set
-    'End Property
-
-    'Private _PresetsListJSON As List(Of String)
-    'Public Property PresetsListJSON As List(Of String)
-    '    Get
-    '        Return _PresetsListJSON
-    '    End Get
-    '    Set(value As List(Of String))
-    '        _PresetsListJSON = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Dim tmpPresetsList As New List(Of Preset)
-    '            For Each s As String In _PresetsListJSON
-    '                Dim tmpPreset As New Preset
-    '                tmpPreset.FromJSON(s)
-    '                tmpPresetsList.Add(tmpPreset)
-    '            Next
-
-    '            Dim UC As New UtilsCommon
-    '            If Not UC.ComparePresetList(tmpPresetsList, Me.PresetsList) Then
-    '                Me.PresetsList = tmpPresetsList
-    '            End If
-    '        End If
-    '    End Set
-    'End Property
-
 
     Private _Presets As Presets
     Public Property Presets As Presets
@@ -1227,11 +1132,6 @@ Public Class Form_Main
 
 
     Private Sub Startup()
-
-        'Dim userName As String
-        ''userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name
-        'userName = Environment.UserName
-        'Dim StatusChangeDate = DateTime.Now
 
         Me.Cursor = Cursors.WaitCursor
 
@@ -1372,28 +1272,6 @@ Public Class Form_Main
 
             If Task.RequiresPropertiesData Then
                 Task.PropertiesData = Me.PropertiesData
-                'Select Case Task.Name
-                '    Case "TaskEditProperties"
-                '        Dim T = CType(Task, TaskEditProperties)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case "TaskEditVariables"
-                '        Dim T = CType(Task, TaskEditVariables)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case "TaskSaveDrawingAs"
-                '        Dim T = CType(Task, TaskSaveDrawingAs)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case "TaskSaveModelAs"
-                '        Dim T = CType(Task, TaskSaveModelAs)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case "TaskSetDocumentStatus"
-                '        Dim T = CType(Task, TaskSetDocumentStatus)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case "TaskCheckPartNumberDoesNotMatchFilename"
-                '        Dim T = CType(Task, TaskCheckPartNumberDoesNotMatchFilename)
-                '        T.PropertiesData = Me.PropertiesData
-                '    Case Else
-                '        MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.Startup()", Task.Name))
-                'End Select
             End If
 
             tmpTaskPanel.Controls.Add(Task.TaskControl)
@@ -1536,7 +1414,7 @@ Public Class Form_Main
                     s = String.Format("{0}RequiresMaterial {1}{2}", s, TaskType.ToString, vbCrLf)
                 End If
             End If
-            'Task.ReconcileFormWithProps()
+
         Next
         If Not s = "" Then
             MsgBox(s)
@@ -1589,8 +1467,6 @@ Public Class Form_Main
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.FastSearchScopeFilename = tmpFileDialog.FileName
         End If
-        'ToolTip1.SetToolTip(TextBoxFastSearchScopeFilename, TextBoxFastSearchScopeFilename.Text)
-        'ReconcileFormChanges()
 
     End Sub
 
@@ -1601,7 +1477,6 @@ Public Class Form_Main
 
         If tmpFileDialog.ShowDialog() = DialogResult.OK Then
             Me.LinkManagementFilename = tmpFileDialog.FileName
-
         End If
 
     End Sub
@@ -1618,14 +1493,6 @@ Public Class Form_Main
 
         ' Check if the Properties were imported from templates
         Dim tf As Boolean
-
-        'tf = Me.TemplatePropertyDict Is Nothing
-        ''tf = tf Or Me.TemplatePropertyList Is Nothing
-
-        'If Not tf Then
-        '    tf = Me.TemplatePropertyDict.Count = 0
-        '    'tf = tf Or Me.TemplatePropertyList.Count = 0
-        'End If
 
         tf = Me.PropertiesData Is Nothing
 
@@ -1651,8 +1518,6 @@ Public Class Form_Main
             MsgBox(s, vbOKOnly)
             Exit Sub
         End If
-
-
 
     End Sub
 
@@ -1688,7 +1553,6 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1705,8 +1569,6 @@ Public Class Form_Main
 
         ListViewFilesOutOfDate = True
         BT_Update.BackColor = Color.Orange
-
-        'ApplyFilters()
 
     End Sub
 
@@ -1732,16 +1594,12 @@ Public Class Form_Main
 
     Private Sub CheckBoxRememberTasks_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRememberTasks.CheckedChanged
         Me.RememberTasks = CheckBoxRememberTasks.Checked
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub CheckBoxTLAReportUnrelatedFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxTLAReportUnrelatedFiles.CheckedChanged
         Me.TLAReportUnrelatedFiles = CheckBoxTLAReportUnrelatedFiles.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
-        'ReconcileFormChanges()
     End Sub
 
 
@@ -1768,9 +1626,6 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
-        'ReconcileFormChanges()
     End Sub
 
     Private Sub RadioButtonTLATopDown_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonTLATopDown.CheckedChanged
@@ -1785,22 +1640,14 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
-        'ReconcileFormChanges()
     End Sub
 
 
     ' TEXT BOXES
 
-
-
     Private Sub TextBoxFastSearchScopeFilename_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFastSearchScopeFilename.TextChanged
         Me.FastSearchScopeFilename = TextBoxFastSearchScopeFilename.Text
-
-        'ReconcileFormChanges()
     End Sub
-
 
     Private Sub TextBoxStatus_TextChanged(sender As Object, e As EventArgs) Handles TextBoxStatus.TextChanged
         ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
@@ -1820,7 +1667,6 @@ Public Class Form_Main
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
@@ -1843,7 +1689,6 @@ Public Class Form_Main
             tmpItem.ImageKey = "Folders"
             tmpItem.Tag = "Folders"
             tmpItem.Name = tmpFolderDialog.FileName
-            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
@@ -1880,11 +1725,9 @@ Public Class Form_Main
             End Select
 
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
 
             tmpItem.Name = tmpFileDialog.FileName
-            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
         End If
@@ -1900,12 +1743,10 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level assembly"
             tmpItem.SubItems.Add(tmpFileDialog.FileName)
-            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "asm"
             tmpItem.Tag = "asm"
             tmpItem.Name = tmpFileDialog.FileName
-            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             If CheckBoxTLAAutoIncludeTLF.Checked Then
@@ -1914,12 +1755,10 @@ Public Class Form_Main
                 Dim tmpItem2 As New ListViewItem
                 tmpItem2.Text = "Top level asm folder"
                 tmpItem2.SubItems.Add(Folder)
-                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
                 tmpItem.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem2.ImageKey = "ASM_Folder"
                 tmpItem2.Tag = "ASM_Folder"
                 tmpItem2.Name = Folder
-                'If Not ListViewFiles.Items.ContainsKey(tmpItem2.Name) Then ListViewFiles.Items.Add(tmpItem2)
                 If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             End If
@@ -1939,12 +1778,10 @@ Public Class Form_Main
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Top level asm folder"
             tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
             tmpItem.ImageKey = "ASM_Folder"
             tmpItem.Tag = "ASM_Folder"
             tmpItem.Name = tmpFolderDialog.FileName
-            'If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
@@ -1965,7 +1802,8 @@ Public Class Form_Main
         DragDropCacheExcluded.Clear()
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
+
+        ButtonProcess.Text = "Process"
 
     End Sub
 
@@ -2034,9 +1872,6 @@ Public Class Form_Main
 
             Next
 
-            'ListViewFilesOutOfDate = True
-            'BT_Update.BackColor = Color.Orange
-
         End If
 
     End Sub
@@ -2103,15 +1938,10 @@ Public Class Form_Main
                     content += vbCrLf
 
                 End If
-
             Next
 
             IO.File.WriteAllText(tmpFileDialog.FileName, content)
-
-
-
         End If
-
     End Sub
 
     Private Sub BT_ErrorList_Click(sender As Object, e As EventArgs) Handles BT_ErrorList.Click
@@ -2364,22 +2194,18 @@ Public Class Form_Main
         Me.TLAIncludePartCopies = CheckBoxTLAIncludePartCopies.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
     End Sub
 
     Private Sub CheckBoxDraftAndModelSameName_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxDraftAndModelSameName.CheckedChanged
         Me.DraftAndModelSameName = CheckBoxDraftAndModelSameName.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
     End Sub
 
     Private Sub RadioButtonSortDependency_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortDependency.CheckedChanged
         Me.SortDependency = RadioButtonSortDependency.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
 
         If RadioButtonSortDependency.Checked Then
             CheckBoxSortIncludeNoDependencies.Enabled = True
@@ -2392,31 +2218,24 @@ Public Class Form_Main
         Me.SortNone = RadioButtonSortNone.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
     End Sub
 
     Private Sub RadioButtonSortAlphabetical_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortAlphabetical.CheckedChanged
         Me.SortAlphabetical = RadioButtonSortAlphabetical.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
     End Sub
 
     Private Sub CheckBoxSortIncludeNoDependencies_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxSortIncludeNoDependencies.CheckedChanged
         Me.SortIncludeNoDependencies = CheckBoxSortIncludeNoDependencies.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
-
     End Sub
 
     Private Sub RadioButtonSortRandomSample_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortRandomSample.CheckedChanged
         Me.SortRandomSample = RadioButtonSortRandomSample.Checked
 
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
 
         If RadioButtonSortRandomSample.Checked Then
             TextBoxSortRandomSampleFraction.Enabled = True
@@ -2427,7 +2246,6 @@ Public Class Form_Main
 
     Private Sub TextBoxRandomSampleFraction_LostFocus(sender As Object, e As EventArgs) Handles TextBoxSortRandomSampleFraction.LostFocus
         ListViewFilesOutOfDate = True
-        'BT_Update.BackColor = Color.Orange
 
         Dim Fraction As Double
         Try
@@ -2450,7 +2268,6 @@ Public Class Form_Main
 
         StatusChangeRadioButtons = GetStatusChangeRadioButtons()
 
-        'CheckBoxUseDMForStatusChanges.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableRevert.Enabled = Me.ProcessAsAvailable
         RadioButtonProcessAsAvailableChange.Enabled = Me.ProcessAsAvailable
         If RadioButtonProcessAsAvailableChange.Checked Then
@@ -2665,7 +2482,7 @@ Public Class Form_Main
     End Sub
 
     Private Sub EditTaskListButton_Click(sender As Object, e As EventArgs) Handles EditTaskListButton.Click
-        'MsgBox("Not currently implemented", vbOKOnly)
+
         Dim ETL As New FormEditTaskList()
         ETL.RememberTaskSelections = Me.RememberTasks
         ETL.OldTaskList = Me.TaskList
@@ -2677,17 +2494,6 @@ Public Class Form_Main
 
         If DialogResult = DialogResult.OK Then
             Me.TaskList = ETL.TaskList
-
-            'Dim s As String = ""
-
-            's = "Restart Housekeeper for your changes to take effect."
-            's = String.Format("{0}{1}", s, vbCrLf)
-            's = String.Format("{0}{1}{2}", s, "Once restarted, any new Tasks can be configured as needed.", vbCrLf)
-
-            ''For Each Task As Task In Me.TaskList
-            ''    s = String.Format("{0}{1}{2}", s, Task.Description, vbCrLf)
-            ''Next
-            'MsgBox(s, vbOKOnly)
 
             Dim tmpTaskPanel As Panel = Nothing
 
@@ -2703,30 +2509,10 @@ Public Class Form_Main
             For i = TaskList.Count - 1 To 0 Step -1
                 Dim Task = TaskList(i)
                 If Task.RequiresPropertiesData Then
-                    Select Case Task.Name
-                        Case "TaskEditProperties"
-                            Dim T = CType(Task, TaskEditProperties)
-                            'T.TemplatePropertyDict = Me.TemplatePropertyDict
-                            T.PropertiesData = Me.PropertiesData
-                        Case "TaskEditVariables"
-                            Dim T = CType(Task, TaskEditVariables)
-                            'T.TemplatePropertyDict = Me.TemplatePropertyDict
-                            T.PropertiesData = Me.PropertiesData
-                        Case "TaskSaveDrawingAs"
-                            Dim T = CType(Task, TaskSaveDrawingAs)
-                            'T.TemplatePropertyDict = Me.TemplatePropertyDict
-                            T.PropertiesData = Me.PropertiesData
-                        Case "TaskSaveModelAs"
-                            Dim T = CType(Task, TaskSaveModelAs)
-                            'T.TemplatePropertyDict = Me.TemplatePropertyDict
-                            T.PropertiesData = Me.PropertiesData
-                        Case Else
-                            MsgBox(String.Format("PropertiesData not added to {0} in Form_Main.EditTaskListButton_Click()", Task.Name))
-                    End Select
+                    Task.PropertiesData = Me.PropertiesData
                 End If
                 tmpTaskPanel.Controls.Add(Task.TaskControl)
             Next
-
 
         End If
 
@@ -2890,7 +2676,6 @@ Public Class Form_Main
 
         If Result = DialogResult.OK Then
             Dim UC As New UtilsCommon
-            'Me.TemplatePropertyDict = UC.TemplatePropertyDictUpdateFavorites(Me.TemplatePropertyDict, FPLC.FavoritesList)
 
             Me.PropertiesData.UpdateFavorites(FPLC.FavoritesList)
 
@@ -3450,10 +3235,6 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub CheckBoxUseDMForStatusChanges_CheckedChanged(sender As Object, e As EventArgs)
-        'Me.UseDMForStatusChanges = CheckBoxUseDMForStatusChanges.Checked
-    End Sub
-
     Private Sub ListViewFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListViewFiles.SelectedIndexChanged
 
         If ListViewFiles.SelectedItems.Count > 0 Then
@@ -3467,10 +3248,6 @@ Public Class Form_Main
     Private Sub TextBoxServerConnectionString_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerConnectionString.TextChanged
         ServerConnectionString = TextBoxServerConnectionString.Text
     End Sub
-
-    'Private Sub TextBoxServerQuery_TextChanged(sender As Object, e As EventArgs) Handles TextBoxServerQuery.TextChanged
-    '    ServerQuery = TextBoxServerQuery.Text
-    'End Sub
 
     Private Sub FastColoredServerQuery_TextChanged(sender As Object, e As FastColoredTextBoxNS.TextChangedEventArgs) Handles FastColoredServerQuery.TextChanged
         ServerQuery = FastColoredServerQuery.Text
@@ -3767,7 +3544,6 @@ Public Class Form_Main
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
 
-
             Dim tmpItem As New ListViewItem
             tmpItem.Text = "Files selection"
             tmpItem.ImageKey = "Files"
@@ -3790,8 +3566,6 @@ Public Class Form_Main
             ListViewFilesOutOfDate = True
 
         End If
-
-
 
     End Sub
 
@@ -4376,7 +4150,8 @@ End Class
 
 ' System.Threading.Thread.Sleep(100)
 
-' TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
+' PropTypeName = Prop.Value.GetType().Name
+' The preceeding syntax is probably better.  TypeName = Microsoft.VisualBasic.Information.TypeName(SEDoc)
 
 ' Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
 
@@ -4399,3 +4174,9 @@ End Class
 '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
 
 'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+
+'Dim userName As String
+''userName = System.Security.Principal.WindowsIdentity.GetCurrent().Name
+'userName = Environment.UserName
+'Dim StatusChangeDate = DateTime.Now
+

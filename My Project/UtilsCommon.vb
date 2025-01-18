@@ -680,7 +680,14 @@ Public Class UtilsCommon
             ' Can't add a duplicate property
             Try
                 PropertySet = PropertySets.Item("Custom")
+
+                ' PropertySet.Add arguments are (Name As Object, Value As Object)
+                ' Documentation says the value's Type determines the new property's Type.
+                ' So we are currently creating a String property.
+                ' If PropertiesData holds the Type info for the new property,
+                ' we could make the appropriate decision here.
                 FoundProp = PropertySet.Add(PropertyName, "")
+
                 PropertySet.Save()
                 PropertySets.Save()
             Catch ex As Exception
@@ -692,7 +699,6 @@ Public Class UtilsCommon
         Return FoundProp
 
     End Function
-
 
     Public Function SubstitutePropertyFormula(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,

@@ -564,26 +564,6 @@ Public Class TaskEditProperties
         Return ErrorMessage
     End Function
 
-    'Private Sub AddErrorMessage(
-    '    PropertySetName As String,
-    '    PropertyName As String,
-    '    PropertyNameEnglish As String,
-    '    ErrorString As String,
-    '    ByRef ErrorMessageList As List(Of String))
-
-    '    Dim s As String
-
-    '    If PropertyName = PropertyNameEnglish Then
-    '        s = String.Format(ErrorString, PropertyName)
-    '    Else
-    '        ErrorString = ErrorString.Replace("{0}", "{0}({1})")
-    '        s = String.Format(ErrorString, PropertyName, PropertyNameEnglish)
-    '    End If
-
-    '    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
-    'End Sub
-
     Private Function DoFormulaSubstitution(
         SSDoc As HCStructuredStorageDoc,
         PropertyName As String,

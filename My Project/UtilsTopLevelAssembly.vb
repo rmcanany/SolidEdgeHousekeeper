@@ -127,7 +127,7 @@ Public Class UtilsTopLevelAssembly
 
             'DMApp.Quit()
 
-            'Return FoundFiles
+            Return FoundFiles
         End If
 
 
