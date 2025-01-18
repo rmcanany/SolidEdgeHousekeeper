@@ -45,11 +45,11 @@ Public Class UtilsLogFile
         ErrorsOccurred = False
     End Sub
 
-    Private Sub ClearTODOList()
-        Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
-        Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
+    'Private Sub ClearTODOList()
+    '    Dim StartupPath As String = System.Windows.Forms.Application.StartupPath()
+    '    Dim TODOFile As String = String.Format("{0}\{1}", StartupPath, "todo.txt")
 
-        System.IO.File.Create(TODOFile).Dispose()
-    End Sub
+    '    System.IO.File.Create(TODOFile).Dispose()
+    'End Sub
 
 End Class

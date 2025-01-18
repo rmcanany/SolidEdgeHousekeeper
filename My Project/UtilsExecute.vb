@@ -15,14 +15,14 @@ Public Class UtilsExecute
 
     Public Property TextBoxStatus As TextBox
 
-    Public Enum StatusSecurityMapping
-        ssmAvailable = 0
-        ssmInWork = 0
-        ssmInReview = 0
-        ssmReleased = 4
-        ssmBaselined = 4
-        ssmObsolete = 4
-    End Enum
+    'Public Enum StatusSecurityMapping
+    '    ssmAvailable = 0
+    '    ssmInWork = 0
+    '    ssmInReview = 0
+    '    ssmReleased = 4
+    '    ssmBaselined = 4
+    '    ssmObsolete = 4
+    'End Enum
 
 
     Public Sub New(_Form_Main As Form_Main)

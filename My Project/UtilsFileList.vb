@@ -412,9 +412,6 @@ Public Class UtilsFileList
     End Function
 
 
-
-
-
     Private Function GetAllDirectories(ByVal Path As String) As List(Of String)
 
         Dim tmpList As New List(Of String)

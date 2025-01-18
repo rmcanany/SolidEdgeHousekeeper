@@ -183,43 +183,6 @@ Public Class UtilsPreferences
     End Sub
 
 
-    'Public Function GetTemplatePropertyDictFilename(CheckExisting As Boolean) As String
-    '    Dim Filename = String.Format("{0}\template_property_dict.json", GetPreferencesDirectory)
-
-    '    If CheckExisting Then
-    '        If FileIO.FileSystem.FileExists(Filename) Then
-    '            Return Filename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Else
-    '        Return Filename
-    '    End If
-
-    'End Function
-
-    'Public Sub SaveTemplatePropertyDict(TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String)))
-    '    Dim JSONString As String
-    '    Dim Filename = GetTemplatePropertyDictFilename(CheckExisting:=False)
-
-    '    JSONString = JsonConvert.SerializeObject(TemplatePropertyDict)
-    '    IO.File.WriteAllText(Filename, JSONString)
-
-    'End Sub
-
-    'Public Function GetTemplatePropertyDict() As Dictionary(Of String, Dictionary(Of String, String))
-    '    Dim TemplatePropertyDict As New Dictionary(Of String, Dictionary(Of String, String))
-    '    Dim JSONString As String
-    '    Dim Filename = GetTemplatePropertyDictFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '        TemplatePropertyDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
-    '    End If
-
-    '    Return TemplatePropertyDict
-    'End Function
-
 
     Public Function GetEditPropertiesSavedSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = String.Format("{0}\edit_properties_saved_settings.json", GetPreferencesDirectory)
@@ -261,43 +224,6 @@ Public Class UtilsPreferences
         Return EditPropertiesSavedSettingsDict
     End Function
 
-
-    'Public Function GetPropertyFilterDictFilename(CheckExisting As Boolean) As String
-    '    Dim Filename = String.Format("{0}\property_filter_dict.json", GetPreferencesDirectory)
-
-    '    If CheckExisting Then
-    '        If FileIO.FileSystem.FileExists(Filename) Then
-    '            Return Filename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Else
-    '        Return Filename
-    '    End If
-
-    'End Function
-
-    'Public Sub SavePropertyFilterDict(PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String)))
-    '    Dim JSONString As String
-    '    Dim Filename = GetPropertyFilterDictFilename(CheckExisting:=False)
-
-    '    JSONString = JsonConvert.SerializeObject(PropertyFilterDict)
-    '    IO.File.WriteAllText(Filename, JSONString)
-
-    'End Sub
-
-    'Public Function GetPropertyFilterDict() As Dictionary(Of String, Dictionary(Of String, String))
-    '    Dim PropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
-    '    Dim JSONString As String
-    '    Dim Filename = GetPropertyFilterDictFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '        PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(JSONString)
-    '    End If
-
-    '    Return PropertyFilterDict
-    'End Function
 
 
     Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
@@ -399,43 +325,6 @@ Public Class UtilsPreferences
         Return EditVariablesSavedSettingsDict
     End Function
 
-
-    'Public Function GetTemplatePropertyListFilename(CheckExisting As Boolean) As String
-    '    Dim Filename = String.Format("{0}\template_property_list.txt", GetPreferencesDirectory)
-
-    '    If CheckExisting Then
-    '        If FileIO.FileSystem.FileExists(Filename) Then
-    '            Return Filename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Else
-    '        Return Filename
-    '    End If
-
-    'End Function
-
-    'Public Sub SaveTemplatePropertyList(TemplatePropertyList As List(Of String))
-    '    Dim JSONString As String
-    '    Dim Filename = GetTemplatePropertyListFilename(CheckExisting:=False)
-
-    '    JSONString = JsonConvert.SerializeObject(TemplatePropertyList)
-    '    IO.File.WriteAllText(Filename, JSONString)
-
-    'End Sub
-
-    'Public Function GetTemplatePropertyList() As List(Of String)
-    '    Dim TemplatePropertyList As New List(Of String)
-    '    Dim JSONString As String
-    '    Dim Filename = GetTemplatePropertyListFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '        TemplatePropertyList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
-    '    End If
-
-    '    Return TemplatePropertyList
-    'End Function
 
 
     Public Function GetTaskListFilename(CheckExisting As Boolean) As String
@@ -714,49 +603,6 @@ Public Class UtilsPreferences
 
 
 
-    'Public Function GetPresetsListFilename(CheckExisting As Boolean) As String
-    '    Dim Filename = "presets.json"
-    '    Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
-
-    '    If CheckExisting Then
-    '        If FileIO.FileSystem.FileExists(Filename) Then
-    '            Return Filename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Else
-    '        Return Filename
-    '    End If
-
-    'End Function
-
-    'Public Function GetPresetsListJSON() As List(Of String)
-
-    '    Dim JSONStringList As List(Of String) = Nothing
-    '    Dim JSONString As String = ""
-    '    Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '    Else
-    '        JSONString = "[]"
-    '    End If
-
-    '    JSONStringList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
-
-    '    Return JSONStringList
-    'End Function
-
-    'Public Sub SavePresetsListJSON(JSONStringList As List(Of String))
-
-    '    Dim JSONString As String = JsonConvert.SerializeObject(JSONStringList)
-    '    Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
-
-    '    IO.File.WriteAllText(Outfile, JSONString)
-
-    'End Sub
-
-
     Public Function GetPresetsFilename(CheckExisting As Boolean) As String
         Dim Filename = "presets.json"
         Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
@@ -772,28 +618,6 @@ Public Class UtilsPreferences
         End If
 
     End Function
-
-    'Public Function GetPresetsJSON() As String
-
-    '    Dim JSONString As String = ""
-    '    Dim Filename As String = GetPresetsListFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '    Else
-    '        JSONString = "[]"
-    '    End If
-
-    '    Return JSONString
-    'End Function
-
-    'Public Sub SavePresetsJSON(JSONString As String)
-
-    '    Dim Outfile = GetPresetsListFilename(CheckExisting:=False)
-
-    '    IO.File.WriteAllText(Outfile, JSONString)
-
-    'End Sub
 
 
     Public Function GetPropertiesDataFilename(CheckExisting As Boolean) As String
@@ -849,9 +673,6 @@ Public Class UtilsPreferences
 
         Return LinkManagementOrder
     End Function
-
-
-
 
 
 

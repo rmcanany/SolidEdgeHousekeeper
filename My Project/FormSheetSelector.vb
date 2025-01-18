@@ -57,7 +57,7 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonAnsi_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonAnsi.CheckedChanged
-		Dim UP As New UtilsPrinters
+		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("Ansi")
 
 		CheckedListBox1.Items.Clear()
@@ -71,7 +71,7 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonIso_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonIso.CheckedChanged
-		Dim UP As New UtilsPrinters
+		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("Iso")
 
 		CheckedListBox1.Items.Clear()
@@ -86,7 +86,7 @@ Public Class FormSheetSelector
 	End Sub
 
 	Private Sub RadioButtonAll_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonAll.CheckedChanged
-		Dim UP As New UtilsPrinters
+		'Dim UP As New UtilsPrinters
 		SheetSizeList = Task.GetSheetSizes("All")
 
 		CheckedListBox1.Items.Clear()

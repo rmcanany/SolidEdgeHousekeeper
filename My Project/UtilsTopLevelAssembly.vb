@@ -583,32 +583,32 @@ Public Class UtilsTopLevelAssembly
 
     'End Function
 
-    Private Function GetAllFilenamesTopDownOLD(TopLevelFolder As String) As Dictionary(Of String, String)
-        Dim AllFilenames As IReadOnlyCollection(Of String)
-        Dim Filename As String
-        Dim ActiveFileExtensionsList As New List(Of String)
-        Dim AllFilenamesDict As New Dictionary(Of String, String)
+    'Private Function GetAllFilenamesTopDownOLD(TopLevelFolder As String) As Dictionary(Of String, String)
+    '    Dim AllFilenames As IReadOnlyCollection(Of String)
+    '    Dim Filename As String
+    '    Dim ActiveFileExtensionsList As New List(Of String)
+    '    Dim AllFilenamesDict As New Dictionary(Of String, String)
 
-        FMain.TextBoxStatus.Text = "Getting all filenames."
+    '    FMain.TextBoxStatus.Text = "Getting all filenames."
 
-        ActiveFileExtensionsList.Add("*.asm")
-        ActiveFileExtensionsList.Add("*.par")
-        ActiveFileExtensionsList.Add("*.psm")
-        ActiveFileExtensionsList.Add("*.dft")
+    '    ActiveFileExtensionsList.Add("*.asm")
+    '    ActiveFileExtensionsList.Add("*.par")
+    '    ActiveFileExtensionsList.Add("*.psm")
+    '    ActiveFileExtensionsList.Add("*.dft")
 
-        AllFilenames = FileIO.FileSystem.GetFiles(TopLevelFolder,
-                        FileIO.SearchOption.SearchAllSubDirectories,
-                        ActiveFileExtensionsList.ToArray)
+    '    AllFilenames = FileIO.FileSystem.GetFiles(TopLevelFolder,
+    '                    FileIO.SearchOption.SearchAllSubDirectories,
+    '                    ActiveFileExtensionsList.ToArray)
 
-        For Each Filename In AllFilenames
-            AllFilenamesDict.Add(Filename.ToLower, Filename)
-        Next
+    '    For Each Filename In AllFilenames
+    '        AllFilenamesDict.Add(Filename.ToLower, Filename)
+    '    Next
 
-        FMain.TextBoxStatus.Text = "Done getting all filenames."
+    '    FMain.TextBoxStatus.Text = "Done getting all filenames."
 
-        Return AllFilenamesDict
+    '    Return AllFilenamesDict
 
-    End Function
+    'End Function
 
     Private Sub ReportUnrelatedFilesOLD(
                TopLevelFolders As List(Of String),

@@ -290,7 +290,6 @@
     </Compile>
     <Compile Include="My Project\UtilsPowerShell.vb" />
     <Compile Include="My Project\UtilsPreferences.vb" />
-    <Compile Include="My Project\UtilsPrinters.vb" />
     <Compile Include="My Project\UtilsPropertyFilters.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

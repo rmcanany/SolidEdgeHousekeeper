@@ -5,7 +5,6 @@ Imports System.Runtime.InteropServices
 Public Class UtilsSEApp
 
     Public Property SEApp As SolidEdgeFramework.Application
-
     Public Property TextBoxStatus As TextBox
 
     Public Sub New()
