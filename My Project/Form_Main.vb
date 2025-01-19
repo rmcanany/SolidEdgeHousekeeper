@@ -1093,39 +1093,39 @@ Public Class Form_Main
 
     Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
 
-    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-        Get
-            Return _PropertyFilterDict
-        End Get
-        Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-            _PropertyFilterDict = value
-            If Me.TabControl1 IsNot Nothing Then
-                Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
-                If Not Me.PropertyFilterDictJSON = s Then
-                    Me.PropertyFilterDictJSON = s
-                End If
-            End If
-        End Set
-    End Property
+    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+    'Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+    '    Get
+    '        Return _PropertyFilterDict
+    '    End Get
+    '    Set(value As Dictionary(Of String, Dictionary(Of String, String)))
+    '        _PropertyFilterDict = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
+    '            If Not Me.PropertyFilterDictJSON = s Then
+    '                Me.PropertyFilterDictJSON = s
+    '            End If
+    '        End If
+    '    End Set
+    'End Property
 
-    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
 
-    Private _PropertyFilterDictJSON As String
-    Public Property PropertyFilterDictJSON As String
-        Get
-            Return _PropertyFilterDictJSON
-        End Get
-        Set(value As String)
-            _PropertyFilterDictJSON = value
-            If Me.TabControl1 IsNot Nothing Then
-                If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
-                    Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
-                End If
-            End If
+    'Private _PropertyFilterDictJSON As String
+    'Public Property PropertyFilterDictJSON As String
+    '    Get
+    '        Return _PropertyFilterDictJSON
+    '    End Get
+    '    Set(value As String)
+    '        _PropertyFilterDictJSON = value
+    '        If Me.TabControl1 IsNot Nothing Then
+    '            If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+    '                Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+    '            End If
+    '        End If
 
-        End Set
-    End Property
+    '    End Set
+    'End Property
 
 
     Public Property PropertyFilters As PropertyFilters
@@ -1155,10 +1155,10 @@ Public Class Form_Main
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
-        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        If Me.PropertyFilterDict Is Nothing Then
-            Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
-        End If
+        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+        'If Me.PropertyFilterDict Is Nothing Then
+        '    Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
+        'End If
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1319,9 +1319,9 @@ Public Class Form_Main
 
         ' Other JSON
         Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
-        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
-        Me.PropertyFilterDict = Me.PropertyFilterDict
+        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+        'Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
+        'Me.PropertyFilterDict = Me.PropertyFilterDict
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
         Me.Presets = Me.Presets
 
@@ -1501,14 +1501,14 @@ Public Class Form_Main
         If Not tf Then
             Dim FPF As New FormPropertyFilter
 
-            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            FPF.PropertyFilterDict = Me.PropertyFilterDict
+            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+            'FPF.PropertyFilterDict = Me.PropertyFilterDict
             FPF.PropertyFilters = Me.PropertyFilters
             FPF.ShowDialog()
 
             If FPF.DialogResult = DialogResult.OK Then
-                ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-                Me.PropertyFilterDict = FPF.PropertyFilterDict
+                '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+                'Me.PropertyFilterDict = FPF.PropertyFilterDict
                 Me.PropertyFilters = FPF.PropertyFilters
                 ListViewFilesOutOfDate = True
             End If
@@ -3286,8 +3286,8 @@ Public Class Form_Main
             If GotAMatch Then
                 UP.SaveFormMainSettingsJSON(tmpPreset.FormSettingsJSON)
                 UP.SaveTaskListJSON(tmpPreset.TaskListJSON)
-                'UP.SavePresetsListJSON(Me.PresetsListJSON)
-                Presets.Save()
+                UP.SavePropertyFiltersJSON(tmpPreset.PropertyFiltersJSON)
+                Me.Presets.Save()
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
@@ -3331,6 +3331,7 @@ Public Class Form_Main
             tmpPreset.Name = Name
             tmpPreset.TaskListJSON = UP.GetTaskListJSON()
             tmpPreset.FormSettingsJSON = UP.GetFormMainSettingsJSON
+            tmpPreset.PropertyFiltersJSON = UP.GetPropertyFiltersJSON
 
             If Not GotAMatch Then
                 Me.Presets.Items.Add(tmpPreset)
@@ -3722,6 +3723,7 @@ Public Class Preset
     Public Property Name As String
     Public Property TaskListJSON As String
     Public Property FormSettingsJSON As String
+    Public Property PropertyFiltersJSON As String
 
     Public Sub New()
 
@@ -3735,7 +3737,8 @@ Public Class Preset
 
         tmpPresetDict("Name") = Me.Name
         tmpPresetDict("TaskListJSON") = Me.TaskListJSON
-        tmpPresetDict("FormSettingJSON") = Me.FormSettingsJSON
+        tmpPresetDict("FormSettingsJSON") = Me.FormSettingsJSON
+        tmpPresetDict("PropertyFiltersJSON") = Me.PropertyFiltersJSON
 
         JSONString = JsonConvert.SerializeObject(tmpPresetDict)
 
@@ -3750,7 +3753,8 @@ Public Class Preset
 
         Me.Name = tmpPresetDict("Name")
         Me.TaskListJSON = tmpPresetDict("TaskListJSON")
-        Me.FormSettingsJSON = tmpPresetDict("FormSettingJSON")
+        Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
+        Me.PropertyFiltersJSON = tmpPresetDict("PropertyFiltersJSON")
 
     End Sub
 
@@ -3888,6 +3892,14 @@ Public Class PropertyFilters
         IO.File.WriteAllText(Outfile, JSONString)
     End Sub
 
+    Public Sub RemoveItem(_Name As String)
+        For idx = 0 To Me.Items.Count - 1
+            If Me.Items(idx).Name = _Name Then
+                Me.Items.RemoveAt(idx)
+                Exit For
+            End If
+        Next
+    End Sub
     Public Function GetActivePropertyFilter() As PropertyFilter
         Dim tmpPropertyFilter As PropertyFilter = Nothing
 
@@ -3939,10 +3951,12 @@ Public Class PropertyFilters
 
         Me.Items.Clear()
 
-        For Each ItemJSON In tmpItemsList
-            Dim P As New PropertyFilter(ItemJSON)
-            Me.Items.Add(P)
-        Next
+        If tmpItemsList IsNot Nothing Then
+            For Each ItemJSON In tmpItemsList
+                Dim P As New PropertyFilter(ItemJSON)
+                Me.Items.Add(P)
+            Next
+        End If
     End Sub
 
 End Class

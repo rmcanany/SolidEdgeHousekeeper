@@ -226,47 +226,69 @@ Public Class UtilsPreferences
 
 
 
-    Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
+    'Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
 
-        Dim Filename = String.Format("{0}\property_filter_saved_settings.json", GetPreferencesDirectory)
+    '    Dim Filename = String.Format("{0}\property_filter_saved_settings.json", GetPreferencesDirectory)
 
-        If CheckExisting Then
-            If FileIO.FileSystem.FileExists(Filename) Then
-                Return Filename
-            Else
-                Return ""
-            End If
-        Else
-            Return Filename
-        End If
+    '    If CheckExisting Then
+    '        If FileIO.FileSystem.FileExists(Filename) Then
+    '            Return Filename
+    '        Else
+    '            Return ""
+    '        End If
+    '    Else
+    '        Return Filename
+    '    End If
 
-    End Function
+    'End Function
 
-    Public Sub SavePropertyFilterSavedSettings(
-        PropertyFilterSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
+    'Public Sub SavePropertyFilterSavedSettings(
+    '    PropertyFilterSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
 
-        Dim JSONString As String
-        Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=False)
+    '    Dim JSONString As String
+    '    Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=False)
 
-        JSONString = JsonConvert.SerializeObject(PropertyFilterSavedSettingsDict)
-        IO.File.WriteAllText(Filename, JSONString)
+    '    JSONString = JsonConvert.SerializeObject(PropertyFilterSavedSettingsDict)
+    '    IO.File.WriteAllText(Filename, JSONString)
+
+    'End Sub
+
+    'Public Function GetPropertyFilterSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+    '    Dim PropertyFilterSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
+    '    Dim JSONString As String
+    '    Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=True)
+
+    '    If Not Filename = "" Then
+    '        JSONString = IO.File.ReadAllText(Filename)
+    '        PropertyFilterSavedSettingsDict = JsonConvert.DeserializeObject(
+    '            Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
+    '    End If
+
+    '    Return PropertyFilterSavedSettingsDict
+    'End Function
+
+
+
+
+    Public Sub SavePropertyFiltersJSON(PropertyFiltersJSON As String)
+
+        Dim Outfile = GetPropertyFiltersFilename(CheckExisting:=False)
+
+        IO.File.WriteAllText(Outfile, PropertyFiltersJSON)
 
     End Sub
 
-    Public Function GetPropertyFilterSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-        Dim PropertyFilterSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-        Dim JSONString As String
-        Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=True)
+    Public Function GetPropertyFiltersJSON() As String
+        Dim JSONString As String = ""
+        Dim Filename As String = GetPropertyFiltersFilename(CheckExisting:=True)
 
         If Not Filename = "" Then
             JSONString = IO.File.ReadAllText(Filename)
-            PropertyFilterSavedSettingsDict = JsonConvert.DeserializeObject(
-                Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
         End If
 
-        Return PropertyFilterSavedSettingsDict
-    End Function
+        Return JSONString
 
+    End Function
 
     Public Function GetPropertyFiltersFilename(CheckExisting As Boolean) As String
 
@@ -283,6 +305,8 @@ Public Class UtilsPreferences
         End If
 
     End Function
+
+
 
 
     Public Function GetEditVariablesSavedSettingsFilename(CheckExisting As Boolean) As String

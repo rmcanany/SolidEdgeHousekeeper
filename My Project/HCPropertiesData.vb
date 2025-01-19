@@ -299,8 +299,6 @@ Public Class HCPropertiesData
 
         Dim PropertySetActualName As String
 
-        Dim tf As Boolean
-
         Dim tmpPropertyData As PropertyData
         Dim tmpPreviousPropertyData As PropertyData
 

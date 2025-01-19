@@ -2,8 +2,8 @@
 
 Public Class FormPropertyFilter
 
-    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
+    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+    'Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
 
     Private _PropertyFilters As PropertyFilters
     Public Property PropertyFilters As PropertyFilters
@@ -73,7 +73,7 @@ Public Class FormPropertyFilter
 
         Dim UP As New UtilsPreferences
 
-        Me.SavedSettingsDict = UP.GetPropertyFilterSavedSettings()
+        'Me.SavedSettingsDict = UP.GetPropertyFilterSavedSettings()
 
         Me.UCList = New List(Of UCPropertyFilter)
 
@@ -331,8 +331,8 @@ Public Class FormPropertyFilter
                 PopulateUCList(Me.PropertyFilter)
             End If
         Else
-            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            PopulateUCList(Me.PropertyFilterDict)
+            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+            'PopulateUCList(Me.PropertyFilterDict)
         End If
 
         UpdateForm(UpdateFormula:=False)
@@ -541,10 +541,10 @@ Public Class FormPropertyFilter
 
         'Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
 
-        ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        If Me.PropertyFilterDict Is Nothing Then
-            Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
-        End If
+        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+        'If Me.PropertyFilterDict Is Nothing Then
+        '    Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
+        'End If
 
         If Me.PropertyFilters Is Nothing Then
             Me.PropertyFilters = New PropertyFilters
@@ -576,15 +576,15 @@ Public Class FormPropertyFilter
             End If
 
         Else
-            ComboBoxSavedSettings.Items.Add("")
-            For Each Key As String In Me.SavedSettingsDict.Keys
-                ComboBoxSavedSettings.Items.Add(Key)
-            Next
+            'ComboBoxSavedSettings.Items.Add("")
+            'For Each Key As String In Me.SavedSettingsDict.Keys
+            '    ComboBoxSavedSettings.Items.Add(Key)
+            'Next
 
-            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            If Not PropertyFilterDict.Keys.Count = 0 Then
-                FormatFormula(PropertyFilterDict("0")("Formula"))
-            End If
+            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+            'If Not PropertyFilterDict.Keys.Count = 0 Then
+            '    FormatFormula(PropertyFilterDict("0")("Formula"))
+            'End If
 
         End If
 
@@ -594,8 +594,8 @@ Public Class FormPropertyFilter
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
         If CheckInputs() Then
-            ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
+            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+            'Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
             Me.PropertyFilter = UpdatePropertyFilterFromForm()
 
             For Each PF As PropertyFilter In Me.PropertyFilters.Items
@@ -695,14 +695,14 @@ Public Class FormPropertyFilter
                 End If
 
             Else
-                ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-                Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
-                JSONDict = UpdatePropertyFilterDictFromForm()
+                '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
+                'Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
+                'JSONDict = UpdatePropertyFilterDictFromForm()
 
-                SavedSettingsDict(Name) = JSONDict
+                'SavedSettingsDict(Name) = JSONDict
 
-                Dim UP As New UtilsPreferences
-                UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
+                'Dim UP As New UtilsPreferences
+                'UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
 
             End If
 
@@ -730,27 +730,31 @@ Public Class FormPropertyFilter
                 UpdateForm(UpdateFormula:=False)
             End If
         Else
-            If SavedSettingsDict.Keys.Contains(Name) Then
+            'If SavedSettingsDict.Keys.Contains(Name) Then
 
-                PopulateUCList(SavedSettingsDict(Name))
+            '    PopulateUCList(SavedSettingsDict(Name))
 
-                UpdateForm(UpdateFormula:=False)
+            '    UpdateForm(UpdateFormula:=False)
 
-            End If
+            'End If
         End If
 
     End Sub
 
     Private Sub ButtonRemoveSetting_Click(sender As Object, e As EventArgs) Handles ButtonRemoveSetting.Click
         Dim Name As String = ComboBoxSavedSettings.Text
-        If SavedSettingsDict.Keys.Contains(Name) Then
-            SavedSettingsDict.Remove(Name)
-        End If
+
+        Me.PropertyFilters.RemoveItem(Name)
+
+        'If SavedSettingsDict.Keys.Contains(Name) Then
+        '    SavedSettingsDict.Remove(Name)
+        'End If
+
         ComboBoxSavedSettings.Items.Remove(Name)
         ComboBoxSavedSettings.Text = ""
 
-        Dim UP As New UtilsPreferences
-        UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
+        'Dim UP As New UtilsPreferences
+        'UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
 
     End Sub
 
