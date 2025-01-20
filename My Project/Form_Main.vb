@@ -1046,12 +1046,12 @@ Public Class Form_Main
         End Set
     End Property
 
-    Private _Presets As Presets
-    Public Property Presets As Presets
+    Private _Presets As HCPresets
+    Public Property Presets As HCPresets
         Get
             Return _Presets
         End Get
-        Set(value As Presets)
+        Set(value As HCPresets)
             _Presets = value
             If Me.TabControl1 IsNot Nothing Then
 
@@ -1070,6 +1070,7 @@ Public Class Form_Main
         End Set
     End Property
 
+    Public Property PropertyFilters As PropertyFilters
 
 
     'DESCRIPTION
@@ -1090,45 +1091,6 @@ Public Class Form_Main
     '    -- Place yours in the the appropriate category.
     '    -- For a new category, also update Task.SetColorFromCategory().
 
-
-    Private _PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-
-    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    'Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-    '    Get
-    '        Return _PropertyFilterDict
-    '    End Get
-    '    Set(value As Dictionary(Of String, Dictionary(Of String, String)))
-    '        _PropertyFilterDict = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            Dim s = JsonConvert.SerializeObject(Me.PropertyFilterDict)
-    '            If Not Me.PropertyFilterDictJSON = s Then
-    '                Me.PropertyFilterDictJSON = s
-    '            End If
-    '        End If
-    '    End Set
-    'End Property
-
-    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-
-    'Private _PropertyFilterDictJSON As String
-    'Public Property PropertyFilterDictJSON As String
-    '    Get
-    '        Return _PropertyFilterDictJSON
-    '    End Get
-    '    Set(value As String)
-    '        _PropertyFilterDictJSON = value
-    '        If Me.TabControl1 IsNot Nothing Then
-    '            If Not _PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
-    '                Me.PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
-    '            End If
-    '        End If
-
-    '    End Set
-    'End Property
-
-
-    Public Property PropertyFilters As PropertyFilters
 
 
     Private Sub Startup()
@@ -1200,7 +1162,7 @@ Public Class Form_Main
 
         Me.PropertiesData = New HCPropertiesData  ' Automatically loads saved settings if any.
 
-        Me.Presets = New Presets  ' Automatically loads saved settings if any.
+        Me.Presets = New HCPresets  ' Automatically loads saved settings if any.
 
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
@@ -1422,8 +1384,6 @@ Public Class Form_Main
     End Sub
 
 
-    ' **************** CONTROLS ****************
-
     ' BUTTONS
 
 
@@ -1568,7 +1528,6 @@ Public Class Form_Main
         End If
 
         ListViewFilesOutOfDate = True
-        BT_Update.BackColor = Color.Orange
 
     End Sub
 
@@ -1808,10 +1767,13 @@ Public Class Form_Main
     End Sub
 
     Private Sub BT_Reload_Click(sender As Object, e As EventArgs) Handles BT_Update.Click
+
         If Me.SortRandomSample Then
             Dim Result As MsgBoxResult = MsgBox("INFO: Sort Random Sample enabled.  Select Cancel to quit.", vbOKCancel)
             If Result = MsgBoxResult.Cancel Then Exit Sub
         End If
+
+        ButtonProcess.Text = "Process"
 
         Dim UFL As New UtilsFileList(Me, ListViewFiles, ListViewSources)
         UFL.New_UpdateFileList()
@@ -1848,7 +1810,6 @@ Public Class Form_Main
                 If tmpItem.Group.Name = "Sources" Then
                     tmpItem.Remove()
                     ListViewFilesOutOfDate = True
-                    'BT_Update.BackColor = Color.Orange
 
                 ElseIf tmpItem.Group.Name <> "Excluded" Then
                     ' Move item to "Excluded" group
@@ -3677,464 +3638,6 @@ Public Class ListViewColumnSorter
 End Class
 
 
-Public Class Presets
-    Public Property Items As List(Of Preset)
-
-    Public Sub New()
-
-        Me.Items = New List(Of Preset)
-
-        Dim UP As New UtilsPreferences
-
-        Dim JSONString As String
-        Dim Infile As String = UP.GetPresetsFilename(CheckExisting:=True)
-
-        If Not Infile = "" Then
-            JSONString = IO.File.ReadAllText(Infile)
-
-            Dim tmpList As List(Of String) = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
-
-            For Each PresetJSONString As String In tmpList
-                Dim Item As New Preset
-                Item.FromJSON(PresetJSONString)
-                Me.Items.Add(Item)
-            Next
-        End If
-
-    End Sub
-
-    Public Sub Save()
-
-        Dim UP As New UtilsPreferences
-        Dim Outfile As String = UP.GetPresetsFilename(CheckExisting:=False)
-
-        Dim tmpList As New List(Of String)
-        For Each Item As Preset In Me.Items
-            tmpList.Add(Item.ToJSON)
-        Next
-
-        Dim JSONString As String = JsonConvert.SerializeObject(tmpList)
-        IO.File.WriteAllText(Outfile, JSONString)
-
-    End Sub
-End Class
-
-Public Class Preset
-    Public Property Name As String
-    Public Property TaskListJSON As String
-    Public Property FormSettingsJSON As String
-    Public Property PropertyFiltersJSON As String
-
-    Public Sub New()
-
-    End Sub
-
-    Public Function ToJSON() As String
-
-        Dim JSONString As String = Nothing
-
-        Dim tmpPresetDict As New Dictionary(Of String, String)
-
-        tmpPresetDict("Name") = Me.Name
-        tmpPresetDict("TaskListJSON") = Me.TaskListJSON
-        tmpPresetDict("FormSettingsJSON") = Me.FormSettingsJSON
-        tmpPresetDict("PropertyFiltersJSON") = Me.PropertyFiltersJSON
-
-        JSONString = JsonConvert.SerializeObject(tmpPresetDict)
-
-        Return JSONString
-    End Function
-
-    Public Sub FromJSON(JSONString As String)
-
-        Dim tmpPresetDict As Dictionary(Of String, String)
-
-        tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-        Me.Name = tmpPresetDict("Name")
-        Me.TaskListJSON = tmpPresetDict("TaskListJSON")
-        Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
-        Me.PropertyFiltersJSON = tmpPresetDict("PropertyFiltersJSON")
-
-    End Sub
-
-End Class
-
-'Public Class PropertyData
-
-'    ' ###### English mapping from UC.PropLocalizedToEnglish            ######
-'    ' ###### In case of a duplicate, PropertySet will be 'Duplicate'   ######
-'    ' ###### and ItemNumbers will be for the 'System' property.        ######
-
-'    Public Property Name As String
-'    Public Property EnglishName As String
-'    Public Property PropertySetName As PropertySetNameConstants
-'    Public Property PropertySetActualName As String
-'    Public Property TypeName As TypeNameConstants
-'    Public Property AsmIdx As Integer
-'    Public Property ParIdx As Integer
-'    Public Property PsmIdx As Integer
-'    Public Property DftIdx As Integer
-'    Public Property PropertySource As PropertySourceConstants
-'    Public Property FavoritesListIdx As Integer
-
-'    Public Enum PropertySetNameConstants
-'        System
-'        Custom
-'        Duplicate
-'        Server
-'    End Enum
-
-'    'Public Enum PropertySetActualNameConstants
-'    '    SummaryInformation
-'    '    ExtendedSummaryInformation
-'    '    DocumentSummaryInformation
-'    '    ProjectInformation
-'    '    MechanicalModeling
-'    '    Custom
-'    'End Enum
-
-'    Public Enum TypeNameConstants
-'        ' Preceeding names with '_' to avoid VB reserved keywords
-'        _String
-'        _Integer
-'        _Boolean
-'        _Date
-'        _Unknown
-'    End Enum
-
-'    Public Enum PropertySourceConstants
-'        Auto
-'        Manual
-'    End Enum
-
-'    Public Sub New()
-
-'    End Sub
-
-
-'    Public Function ToJSON() As String
-
-'        Dim JSONString As String
-
-'        Dim tmpDict As New Dictionary(Of String, String)
-
-'        tmpDict("Name") = Me.Name
-'        tmpDict("EnglishName") = Me.EnglishName
-'        tmpDict("PropertySetName") = CStr(CInt(Me.PropertySetName)) ' "0", "1"
-'        tmpDict("PropertySetActualName") = Me.PropertySetActualName
-'        tmpDict("TypeName") = CStr(CInt(Me.TypeName))
-'        tmpDict("AsmPropItemNumber") = CStr(Me.AsmIdx)
-'        tmpDict("ParPropItemNumber") = CStr(Me.ParIdx)
-'        tmpDict("PsmPropItemNumber") = CStr(Me.PsmIdx)
-'        tmpDict("DftPropItemNumber") = CStr(Me.DftIdx)
-'        tmpDict("PropertySource") = CStr(CInt(Me.PropertySource))
-'        tmpDict("FavoritesListIdx") = CStr(Me.FavoritesListIdx)
-
-'        JSONString = JsonConvert.SerializeObject(tmpDict)
-
-'        Return JSONString
-'    End Function
-
-'    Public Sub FromJSON(JSONString As String)
-
-'        Dim tmpDict As Dictionary(Of String, String)
-
-'        tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-'        Me.Name = tmpDict("Name")
-'        Me.EnglishName = tmpDict("EnglishName")
-'        Me.PropertySetName = CType(CInt(tmpDict("PropertySetName")), PropertySetNameConstants)
-'        Me.PropertySetActualName = tmpDict("PropertySetActualName")
-'        Me.TypeName = CType(CInt(tmpDict("TypeName")), TypeNameConstants)
-'        Me.AsmIdx = CInt(tmpDict("AsmPropItemNumber"))
-'        Me.ParIdx = CInt(tmpDict("ParPropItemNumber"))
-'        Me.PsmIdx = CInt(tmpDict("PsmPropItemNumber"))
-'        Me.DftIdx = CInt(tmpDict("DftPropItemNumber"))
-'        Me.PropertySource = CType(CInt(tmpDict("PropertySource")), PropertySourceConstants)
-'        Me.FavoritesListIdx = CInt(tmpDict("FavoritesListIdx"))
-
-'    End Sub
-
-'End Class
-
-
-Public Class PropertyFilters
-    Public Property Items As List(Of PropertyFilter)
-
-    Public Sub New()
-        Dim UP As New UtilsPreferences
-        Dim Infile As String = UP.GetPropertyFiltersFilename(CheckExisting:=True)
-        Dim JSONString As String
-
-        If Not Infile = "" Then
-            JSONString = IO.File.ReadAllText(Infile)
-            FromJSON(JSONString)
-        Else
-            Me.Items = New List(Of PropertyFilter)
-        End If
-
-    End Sub
-
-    Public Sub New(JSONString As String)
-        Me.Items = New List(Of PropertyFilter)
-        FromJSON(JSONString)
-    End Sub
-
-    Public Sub Save()
-        Dim UP As New UtilsPreferences
-        Dim JSONString As String
-        Dim Outfile As String
-
-        Outfile = UP.GetPropertyFiltersFilename(CheckExisting:=False)
-        JSONString = ToJSON()
-
-        IO.File.WriteAllText(Outfile, JSONString)
-    End Sub
-
-    Public Sub RemoveItem(_Name As String)
-        For idx = 0 To Me.Items.Count - 1
-            If Me.Items(idx).Name = _Name Then
-                Me.Items.RemoveAt(idx)
-                Exit For
-            End If
-        Next
-    End Sub
-    Public Function GetActivePropertyFilter() As PropertyFilter
-        Dim tmpPropertyFilter As PropertyFilter = Nothing
-
-        For Each Item As PropertyFilter In Me.Items
-            If Item.IsActiveFilter Then
-                tmpPropertyFilter = Item
-                Exit For
-            End If
-        Next
-
-        Return tmpPropertyFilter
-    End Function
-
-    Public Function GetPropertyFilter(Name As String) As PropertyFilter
-        Dim tmpPropertyFilter As PropertyFilter = Nothing
-
-        For Each Item As PropertyFilter In Me.Items
-            If Item.Name = Name Then
-                tmpPropertyFilter = Item
-                Exit For
-            End If
-        Next
-
-        Return tmpPropertyFilter
-    End Function
-
-    Public Function ToJSON() As String
-        Dim JSONString As String
-
-        Dim tmpItemsList As New List(Of String)
-
-        For Each Item As PropertyFilter In Items
-            tmpItemsList.Add(Item.ToJSON)
-        Next
-
-        JSONString = JsonConvert.SerializeObject(tmpItemsList)
-
-        Return JSONString
-    End Function
-
-    Public Sub FromJSON(JSONString As String)
-        Dim tmpItemsList As List(Of String)
-
-        tmpItemsList = JsonConvert.DeserializeObject(Of List(Of String))(JSONString)
-
-        If Me.Items Is Nothing Then
-            Me.Items = New List(Of PropertyFilter)
-        End If
-
-        Me.Items.Clear()
-
-        If tmpItemsList IsNot Nothing Then
-            For Each ItemJSON In tmpItemsList
-                Dim P As New PropertyFilter(ItemJSON)
-                Me.Items.Add(P)
-            Next
-        End If
-    End Sub
-
-End Class
-
-Public Class PropertyFilter
-    Public Property Name As String
-    Public Property Formula As String  ' "A AND NOT ( B OR C )", etc.
-    Public Property Conditions As List(Of PropertyFilterCondition)
-    Public Property IsActiveFilter As Boolean
-
-    Public Sub New()
-        Me.Conditions = New List(Of PropertyFilterCondition)
-    End Sub
-
-    Public Sub New(JSONString As String)
-        Me.Conditions = New List(Of PropertyFilterCondition)
-        FromJSON(JSONString)
-    End Sub
-
-    Public Function ToJSON() As String
-        Dim JSONString As String
-
-        Dim tmpConditionsList As New List(Of String)
-        Dim tmpConditionsListJSON As String
-        Dim tmpDict As New Dictionary(Of String, String)
-
-        tmpDict("Name") = Me.Name
-        tmpDict("Formula") = Me.Formula
-        tmpDict("IsActiveFilter") = CStr(Me.IsActiveFilter)
-
-        For Each Condition As PropertyFilterCondition In Me.Conditions
-            tmpConditionsList.Add(Condition.ToJSON)
-        Next
-
-        tmpConditionsListJSON = JsonConvert.SerializeObject(tmpConditionsList)
-
-        tmpDict("ConditionsListJSON") = tmpConditionsListJSON
-
-        JSONString = JsonConvert.SerializeObject(tmpDict)
-
-        Return JSONString
-    End Function
-
-    Public Sub FromJSON(JSONString As String)
-        Dim tmpConditionsList As List(Of String)
-        Dim tmpConditionsListJSON As String
-        Dim tmpDict As Dictionary(Of String, String)
-
-        tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-        Me.Name = tmpDict("Name")
-        Me.Formula = tmpDict("Formula")
-        Me.IsActiveFilter = CBool(tmpDict("IsActiveFilter"))
-
-        tmpConditionsListJSON = tmpDict("ConditionsListJSON")
-        tmpConditionsList = JsonConvert.DeserializeObject(Of List(Of String))(tmpConditionsListJSON)
-
-        Me.Conditions.Clear()
-
-        For Each ConditionJSON As String In tmpConditionsList
-            Dim C As New PropertyFilterCondition(ConditionJSON)
-            Me.Conditions.Add(C)
-        Next
-
-    End Sub
-
-    Public Sub SortConditions()
-
-        Dim tmpConditionsDict As New Dictionary(Of String, PropertyFilterCondition)
-        Dim tmpVariableNameList As New List(Of String)
-        Dim Name As String
-
-        For Each C As PropertyFilterCondition In Me.Conditions
-            Name = C.VariableName
-            If Not tmpConditionsDict.Keys.Contains(Name) Then
-                tmpConditionsDict(Name) = C
-            Else
-                MsgBox(String.Format("Duplicate variable name '{0}' found in PropertyFilter Conditions", Name), vbOKOnly)
-                Exit Sub
-            End If
-        Next
-
-        tmpVariableNameList = tmpConditionsDict.Keys.ToList
-
-        tmpVariableNameList.Sort()
-
-        Me.Conditions.Clear()
-
-        For i As Integer = 0 To tmpVariableNameList.Count - 1
-            Name = tmpVariableNameList(i)
-            Dim C As PropertyFilterCondition = tmpConditionsDict(Name)
-            Dim NewName As String = Chr(i + 65)
-            C.VariableName = NewName
-            Me.Conditions.Add(C)
-        Next
-
-    End Sub
-
-End Class
-
-Public Class PropertyFilterCondition
-    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    ' PropertyFilterDict format:
-    '{"0":
-    '    {"Variable":"A",
-    '     "PropertySet":"Custom",
-    '     "PropertyName":"hmk_Part_Number",
-    '     "Comparison":"contains",
-    '     "Value":"aluminum",
-    '     "Formula":" A AND B "},
-    ' "1":
-    '...
-    '}
-
-    Public Property VariableName As String  ' "A", "B", etc.  Used in property filter formulas.
-    Public Property PropertySetName As PropertySetNameConstants
-    Public Property PropertySetActualName As String  ' "SummaryInformation", "Custom", etc.
-    Public Property PropertyName As String  ' "Title", "Titolo", etc.
-    Public Property EnglishName As String  ' "Title", etc.
-    Public Property Comparison As ComparisonConstants
-    Public Property Value As String  ' "aluminum", "%{System.Material|R1}", etc.
-
-    Public Enum PropertySetNameConstants
-        Custom
-        System
-        Duplicate
-        Server
-    End Enum
-
-    Public Enum ComparisonConstants
-        Contains
-        IsExactly
-        WildcardMatch
-        RegexMatch
-        GreaterThan
-        LessThan
-    End Enum
-
-    Public Sub New()
-
-    End Sub
-
-    Public Sub New(JSONString As String)
-        FromJSON(JSONString)
-    End Sub
-
-    Public Function ToJSON() As String
-        Dim JSONString As String
-        Dim tmpComparisonDict As New Dictionary(Of String, String)
-
-        tmpComparisonDict("VariableName") = Me.VariableName
-        tmpComparisonDict("PropertySetName") = CStr(CInt(Me.PropertySetName))
-        tmpComparisonDict("PropertySetActualName") = Me.PropertySetActualName
-        tmpComparisonDict("PropertyName") = Me.PropertyName
-        tmpComparisonDict("EnglishName") = Me.EnglishName
-        tmpComparisonDict("Comparison") = CStr(CInt(Me.Comparison))
-        tmpComparisonDict("Value") = Me.Value
-
-        JSONString = JsonConvert.SerializeObject(tmpComparisonDict)
-
-        Return JSONString
-    End Function
-
-    Public Sub FromJSON(JSONString As String)
-
-        Dim tmpComparisonDict As Dictionary(Of String, String)
-        tmpComparisonDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-        Me.VariableName = tmpComparisonDict("VariableName")
-        Me.PropertySetName = CType(CInt(tmpComparisonDict("PropertySetName")), PropertySetNameConstants)
-        Me.PropertySetActualName = tmpComparisonDict("PropertySetActualName")
-        Me.PropertyName = tmpComparisonDict("PropertyName")
-        Me.EnglishName = tmpComparisonDict("EnglishName")
-        Me.Comparison = CType(CInt(tmpComparisonDict("Comparison")), ComparisonConstants)
-        Me.Value = tmpComparisonDict("Value")
-
-    End Sub
-End Class
 
 ' Commands I can never remember
 

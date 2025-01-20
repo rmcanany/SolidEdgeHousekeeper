@@ -132,6 +132,8 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 - [<ins>**Tools**</ins>](#tools)
 - [<ins>**Update**</ins>](#update)
 - [<ins>**File Type**</ins>](#file-type)
+- [<ins>**File List Options**</ins>](#file-list-options)
+- [<ins>**Shortcut Menu**</ins>](#shortcut-menu)
 
 
 ### Introduction to Selection
@@ -146,13 +148,22 @@ An alternative method is to select files with errors from a previous run.
 
 ### Select by Folder
 
-Choose this option to select files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, click ![Folder](Resources/icons8_Folder_16.png) to select a single folder, click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders.
+Choose this option to select individual files, files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, 
+
+- Click ![Folder](Resources/icons8_versions_16.png) to select individual files
+- Click ![Folder](Resources/icons8_Folder_16.png) to select a single folder
+- Click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders
 
 ### Select by Top-Level Assembly
 
-Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly, click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files. 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
+
+- click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
+- click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
 
 You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
+
+There are a lot of options with this selection type.  They are covered here.  Shown below is the top-level assembly configuration page.
 
 ![Top level assembly options](My%20Project/media/configuration_tab_top_level_assembly_page.png)
 
@@ -182,21 +193,46 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 ### Select by list
 
-Referring to the toolbar diagram, tool group 3, click ![Import List](Resources/icons8_Import_16.png) to import a list, click ![Export List](Resources/icons8_Export_16.png) to export one.  
+OK, that's enough about top-level assemblies.  Getting back to our file selection options, referring to the toolbar diagram, tool group 3, 
+- Click ![Import List](Resources/icons8_Import_16.png) to import a list
+- Click ![Export List](Resources/icons8_Export_16.png) to export one
 
 If you are importing a list from another source, be aware that the file names must contain the full path.  E.g., `D:\Projects\Project123\Partxyz.par`, not just `Partxyz.par`.
 
 ### Tools
 
-#### Select files with errors from the previous run
+Referring to the toolbar diagram, tool group 4, 
+- Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
+- Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
 
-Referring to the toolbar diagram, tool group 4, click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 
-#### Remove all
+### Update
 
-Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
+Referring to the toolbar diagram, tool group 5, 
+- Click ![Update](Resources/Synch_16.png) to populate the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
-#### Shortcut menu
+### File Type
+
+You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 6, 
+- Click ![Assembly](Resources/ST9%20-%20asm.png) to toggle assembly file selection
+- Click ![Part](Resources/ST9%20-%20par.png)  to toggle part file selection
+- Click ![Sheet Metal](Resources/ST9%20-%20psm.png)  to toggle sheet metal file selection
+- Click ![Draft](Resources/ST9%20-%20dft.png)  to toggle draft file selection
+
+### File List Options
+
+You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 7, 
+- Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the right below
+
+![Customize file list columns](My%20Project/media/file_list_columns_customize.png)
+
+Click the Add button to bring up the Property Selector dialog, shown on the left.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.
+
+Getting properties for a large number of files can take some time.  If the program detects that situation when you click the update button, it prompts you if you want them displayed.
+
+You can edit properties directly on the list.  Double-click the property and enter the new value.
+
+### Shortcut menu
 
 If you select one or more files on the list, you can click the right mouse button for more options.  
 
@@ -207,14 +243,6 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
-
-### Update
-
-Referring to the toolbar diagram, tool group 5, the update button ![Update](Resources/Synch_16.png) populates the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
-
-### File Type
-
-Referring to the toolbar diagram, tool group 6, you can limit the search to return only selected types of Solid Edge files. To do so, check/uncheck the appropriate File Type ![Assembly](Resources/ST9%20-%20asm.png) ![Part](Resources/ST9%20-%20par.png) ![Sheet Metal](Resources/ST9%20-%20psm.png) ![Draft](Resources/ST9%20-%20dft.png) 
 
 ## Sorting
 
@@ -242,9 +270,9 @@ You can get around this by checking `Process files as Available regardless of do
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
-If you want simply to change the Status on a batch of files, specify your Before/After choices here, then run the `Open/Save` command.
+If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead.
 
-If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it launches Design Manager. That doesn't hurt anything, but it can be a bit confusing to see that program pop up while Solid Edge is actively processing files.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That doesn't hurt anything, but it results in a slight increase in processing time.
 
 ## Filtering
 
@@ -428,6 +456,22 @@ The tasks are color-coded.  Change the color by selecting the task, right-clicki
 To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as setting your template locations, etc.
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
+
+## Presets
+
+Presets are a way to save any setup you need in the course of using the program. 
+
+![Tabs](My%20Project/media/presets.png)
+
+To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
+
+To have it capture task settings (which you almost always want) be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
+
+Presets come in handy when you have to perform the same series of steps for a given part of your job.  An example might be releasing a project.  You might need to make sure every part has a drawing, model relationships aren't broken, drawings are up to date, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, change options, and so on.  
+
+Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and all that setup is done automatically.  It saves a bit of time, but more importantly it cuts down on setup mistakes resulting in rework and hassle for you.
+
+As a practical matter, I have found that creating a baseline Preset, I call mine `_Default`, is helpful.  It's a known starting point for creating new ones.  
 
 # CONFIGURATION TAB
 

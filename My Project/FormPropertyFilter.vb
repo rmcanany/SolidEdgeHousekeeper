@@ -2,9 +2,6 @@
 
 Public Class FormPropertyFilter
 
-    '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    'Public Property PropertyFilterDict As Dictionary(Of String, Dictionary(Of String, String))
-
     Private _PropertyFilters As PropertyFilters
     Public Property PropertyFilters As PropertyFilters
         Get
@@ -17,25 +14,9 @@ Public Class FormPropertyFilter
         End Set
     End Property
 
-    Public Property PropertyFilter As PropertyFilter
-
-    Public Property NewWay As Boolean = True
-
-    ''{"0":
-    ''    {"Variable":"A",
-    ''     "PropertySet":"Custom",
-    ''     "PropertyName":"hmk_Part_Number",
-    ''     "Comparison":"contains",
-    ''     "Value":"aluminum",
-    ''     "Formula":"A AND B"},
-    '' "1":
-    ''...
-    ''}
-
+    Public Property PropertyFilter As HCPropertyFilter
     Public Property UCList As List(Of UCPropertyFilter)
     Public Property HelpURL As String
-    Public Property SavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
     Public Property TemplatePropertyList As List(Of String)
     Public Property Formula As String
 
@@ -53,8 +34,6 @@ Public Class FormPropertyFilter
     End Property
 
 
-
-
     Public Sub New()
 
         ' This call is required by the designer.
@@ -64,16 +43,9 @@ Public Class FormPropertyFilter
 
         Dim UC As New UtilsCommon
 
-        ' Form_Main does these assignments
-        'Me.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        'Me.PropertyFilterDict = UP.GetPropertyFilterDict
-
-        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
         Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
 
         Dim UP As New UtilsPreferences
-
-        'Me.SavedSettingsDict = UP.GetPropertyFilterSavedSettings()
 
         Me.UCList = New List(Of UCPropertyFilter)
 
@@ -85,12 +57,10 @@ Public Class FormPropertyFilter
         ' Check if the Properties were imported from templates
         Dim tf As Boolean
 
-        'tf = Form_Main.TemplatePropertyDict Is Nothing
         tf = Form_Main.PropertiesData Is Nothing
         tf = tf Or Me.TemplatePropertyList Is Nothing
 
         If Not tf Then
-            'tf = Form_Main.TemplatePropertyDict.Count = 0
             tf = Form_Main.PropertiesData.Items.Count = 0
             tf = tf Or Me.TemplatePropertyList.Count = 0
         End If
@@ -111,11 +81,6 @@ Public Class FormPropertyFilter
         Dim s As String = ""
         Dim indent As String = "    "
         Dim UtilsCommon = New UtilsCommon
-        'Dim tf As Boolean
-
-        'Dim Matches As MatchCollection
-        'Dim MatchString As Match
-        'Dim Pattern As String
 
         For Each UC As UCPropertyFilter In UCList
 
@@ -176,20 +141,18 @@ Public Class FormPropertyFilter
         Return tmpPropertyFilterDict
     End Function
 
-    Private Function UpdatePropertyFilterFromForm() As PropertyFilter
+    Private Function UpdatePropertyFilterFromForm() As HCPropertyFilter
 
-        'Dim tmpPropertyFilterDict As New Dictionary(Of String, Dictionary(Of String, String))
-
-        For Each PF As PropertyFilter In Me.PropertyFilters.Items
+        For Each PF As HCPropertyFilter In Me.PropertyFilters.Items
             PF.IsActiveFilter = False
         Next
 
         Dim Name As String = ComboBoxSavedSettings.Text
 
-        Dim tmpPropertyFilter As PropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
+        Dim tmpPropertyFilter As HCPropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
 
         If tmpPropertyFilter Is Nothing Then
-            tmpPropertyFilter = New PropertyFilter
+            tmpPropertyFilter = New HCPropertyFilter
             tmpPropertyFilter.Name = ComboBoxSavedSettings.Text
         End If
 
@@ -259,8 +222,6 @@ Public Class FormPropertyFilter
             NewUC.Value = tmpPropertyFilterDict(Key)("Value")
             NewUC.Formula = tmpPropertyFilterDict(Key)("Formula")
 
-            'NewUC.ReconcileFormWithProps()
-
             NewUC.Dock = DockStyle.Fill
 
             UCList.Add(NewUC)
@@ -269,7 +230,7 @@ Public Class FormPropertyFilter
 
     End Sub
 
-    Public Sub PopulateUCList(tmpPropertyFilter As PropertyFilter)
+    Public Sub PopulateUCList(tmpPropertyFilter As HCPropertyFilter)
 
         Dim NewUC As UCPropertyFilter
 
@@ -318,21 +279,8 @@ Public Class FormPropertyFilter
 
     Public Sub PopulateForm()
 
-        'Dim JSONDict As New Dictionary(Of String, Dictionary(Of String, String))
-        'Dim ListIsFromSavedSettings As Boolean = False
-
-        'If Not (Me.JSONString = "" Or Me.JSONString = "{}") Then
-        '    ListIsFromSavedSettings = True
-        '    JSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(Me.JSONString)
-        'End If
-
-        If Me.NewWay Then
-            If Me.PropertyFilter IsNot Nothing Then
-                PopulateUCList(Me.PropertyFilter)
-            End If
-        Else
-            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            'PopulateUCList(Me.PropertyFilterDict)
+        If Me.PropertyFilter IsNot Nothing Then
+            PopulateUCList(Me.PropertyFilter)
         End If
 
         UpdateForm(UpdateFormula:=False)
@@ -354,7 +302,6 @@ Public Class FormPropertyFilter
         For Each UC As UCPropertyFilter In UCList
             If Not UC.PropertyName = "" Then
                 UC.Formula = Me.Formula
-                'UC.ReconcileFormWithProps()
             End If
         Next
 
@@ -539,72 +486,48 @@ Public Class FormPropertyFilter
 
     Private Sub FormPropertyFilter_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        'Me.JSONString = JsonConvert.SerializeObject(Me.PropertyFilterDict)
-
-        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        'If Me.PropertyFilterDict Is Nothing Then
-        '    Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
-        'End If
-
         If Me.PropertyFilters Is Nothing Then
             Me.PropertyFilters = New PropertyFilters
         End If
 
         PopulateForm()
 
-        If Me.NewWay Then
-            Dim ActiveFilterName As String = Nothing
+        Dim ActiveFilterName As String = Nothing
 
-            'ComboBoxSavedSettings.Items.Add("")
-            For Each Item As PropertyFilter In Me.PropertyFilters.Items
-                ComboBoxSavedSettings.Items.Add(Item.Name)
-                If Item.IsActiveFilter Then
-                    ActiveFilterName = Item.Name
-                End If
-            Next
-
-            If ActiveFilterName IsNot Nothing Then
-                ComboBoxSavedSettings.Text = ActiveFilterName
-            Else
-                ComboBoxSavedSettings.Text = ""
+        'ComboBoxSavedSettings.Items.Add("")
+        For Each Item As HCPropertyFilter In Me.PropertyFilters.Items
+            ComboBoxSavedSettings.Items.Add(Item.Name)
+            If Item.IsActiveFilter Then
+                ActiveFilterName = Item.Name
             End If
+        Next
 
-            If Not PropertyFilters.Items.Count = 0 Then
-                If PropertyFilter IsNot Nothing Then
-                    FormatFormula(PropertyFilter.Formula)
-                End If
-            End If
-
+        If ActiveFilterName IsNot Nothing Then
+            ComboBoxSavedSettings.Text = ActiveFilterName
         Else
-            'ComboBoxSavedSettings.Items.Add("")
-            'For Each Key As String In Me.SavedSettingsDict.Keys
-            '    ComboBoxSavedSettings.Items.Add(Key)
-            'Next
-
-            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            'If Not PropertyFilterDict.Keys.Count = 0 Then
-            '    FormatFormula(PropertyFilterDict("0")("Formula"))
-            'End If
-
+            ComboBoxSavedSettings.Text = ""
         End If
 
+        If Not PropertyFilters.Items.Count = 0 Then
+            If PropertyFilter IsNot Nothing Then
+                FormatFormula(PropertyFilter.Formula)
+            End If
+        End If
 
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
 
         If CheckInputs() Then
-            '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-            'Me.PropertyFilterDict = UpdatePropertyFilterDictFromForm()
             Me.PropertyFilter = UpdatePropertyFilterFromForm()
 
-            For Each PF As PropertyFilter In Me.PropertyFilters.Items
+            For Each PF As HCPropertyFilter In Me.PropertyFilters.Items
                 PF.IsActiveFilter = False
             Next
 
             Me.PropertyFilter.IsActiveFilter = True
 
-            Dim tmpPropertyFilter As PropertyFilter = Me.PropertyFilters.GetPropertyFilter(Me.PropertyFilter.Name)
+            Dim tmpPropertyFilter As HCPropertyFilter = Me.PropertyFilters.GetPropertyFilter(Me.PropertyFilter.Name)
 
             If tmpPropertyFilter Is Nothing Then
                 Me.PropertyFilter.Name = ComboBoxSavedSettings.Text
@@ -674,36 +597,22 @@ Public Class FormPropertyFilter
         End If
 
         If Proceed Then
-            If Me.NewWay Then
+            For Each PF As HCPropertyFilter In Me.PropertyFilters.Items
+                PF.IsActiveFilter = False
+            Next
 
-                For Each PF As PropertyFilter In Me.PropertyFilters.Items
-                    PF.IsActiveFilter = False
-                Next
+            Dim tmpPropertyFilter As HCPropertyFilter = PropertyFilters.GetPropertyFilter(Name)
 
-                Dim tmpPropertyFilter As PropertyFilter = PropertyFilters.GetPropertyFilter(Name)
+            If tmpPropertyFilter Is Nothing Then
+                tmpPropertyFilter = UpdatePropertyFilterFromForm()
 
-                If tmpPropertyFilter Is Nothing Then
-                    tmpPropertyFilter = UpdatePropertyFilterFromForm()
+                tmpPropertyFilter.Name = Name
+                tmpPropertyFilter.IsActiveFilter = True
 
-                    tmpPropertyFilter.Name = Name
-                    tmpPropertyFilter.IsActiveFilter = True
-
-                    Me.PropertyFilters.Items.Add(tmpPropertyFilter)
-                Else
-                    tmpPropertyFilter = UpdatePropertyFilterFromForm()
-                    tmpPropertyFilter.IsActiveFilter = True
-                End If
-
+                Me.PropertyFilters.Items.Add(tmpPropertyFilter)
             Else
-                '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-                'Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
-                'JSONDict = UpdatePropertyFilterDictFromForm()
-
-                'SavedSettingsDict(Name) = JSONDict
-
-                'Dim UP As New UtilsPreferences
-                'UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
-
+                tmpPropertyFilter = UpdatePropertyFilterFromForm()
+                tmpPropertyFilter.IsActiveFilter = True
             End If
 
             If Not ComboBoxSavedSettings.Items.Contains(Name) Then
@@ -716,27 +625,17 @@ Public Class FormPropertyFilter
     Private Sub ComboBoxSavedSettings_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxSavedSettings.SelectedIndexChanged
         Dim Name As String = ComboBoxSavedSettings.Text
 
-        If Me.NewWay Then
-            Dim tmpPropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
-            If tmpPropertyFilter IsNot Nothing Then
+        Dim tmpPropertyFilter = Me.PropertyFilters.GetPropertyFilter(Name)
+        If tmpPropertyFilter IsNot Nothing Then
 
-                For Each PF As PropertyFilter In Me.PropertyFilters.Items
-                    PF.IsActiveFilter = False
-                Next
+            For Each PF As HCPropertyFilter In Me.PropertyFilters.Items
+                PF.IsActiveFilter = False
+            Next
 
-                tmpPropertyFilter.IsActiveFilter = True
+            tmpPropertyFilter.IsActiveFilter = True
 
-                PopulateUCList(tmpPropertyFilter)
-                UpdateForm(UpdateFormula:=False)
-            End If
-        Else
-            'If SavedSettingsDict.Keys.Contains(Name) Then
-
-            '    PopulateUCList(SavedSettingsDict(Name))
-
-            '    UpdateForm(UpdateFormula:=False)
-
-            'End If
+            PopulateUCList(tmpPropertyFilter)
+            UpdateForm(UpdateFormula:=False)
         End If
 
     End Sub
@@ -746,15 +645,8 @@ Public Class FormPropertyFilter
 
         Me.PropertyFilters.RemoveItem(Name)
 
-        'If SavedSettingsDict.Keys.Contains(Name) Then
-        '    SavedSettingsDict.Remove(Name)
-        'End If
-
         ComboBoxSavedSettings.Items.Remove(Name)
         ComboBoxSavedSettings.Text = ""
-
-        'Dim UP As New UtilsPreferences
-        'UP.SavePropertyFilterSavedSettings(Me.SavedSettingsDict)
 
     End Sub
 
@@ -786,9 +678,6 @@ Public Class FormPropertyFilter
 
     End Sub
 
-    'Private Sub TextBoxFormula_TextChanged(sender As Object, e As EventArgs) Handles TextBoxFormula.TextChanged
-
-    'End Sub
 
     Private Sub ButtonShowAll_Click(sender As Object, e As EventArgs) Handles ButtonShowAllProps.Click
 
@@ -804,9 +693,7 @@ Public Class FormPropertyFilter
                 PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
-                'For Each Key As String In Form_Main.TemplatePropertyDict.Keys
-                '    UCList(i).ComboBoxPropertyName.Items.Add(Key)
-                'Next
+
                 For Each Key As String In Form_Main.PropertiesData.GetAvailableList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next
@@ -821,6 +708,7 @@ Public Class FormPropertyFilter
                 PreviousPropertyName = UCList(i).ComboBoxPropertyName.Text
                 UCList(i).ComboBoxPropertyName.Items.Clear()
                 UCList(i).ComboBoxPropertyName.Items.Add("")
+
                 For Each Key As String In Me.TemplatePropertyList
                     UCList(i).ComboBoxPropertyName.Items.Add(Key)
                 Next

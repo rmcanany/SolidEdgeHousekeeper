@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Public Class UtilsPropertyFilters
 
     Public Property FMain As Form_Main
-    Public Property PropertyFilter As PropertyFilter
+    Public Property PropertyFilter As HCPropertyFilter
     'Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
 
 

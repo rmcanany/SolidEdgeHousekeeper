@@ -10,6 +10,8 @@ Public Class UtilsPreferences
         Me.RememberTaskSelections = True
     End Sub
 
+
+    '###### FOLDERS ######
     Public Function GetStartupDirectory() As String
         Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
         Return StartupDirectory
@@ -29,11 +31,15 @@ Public Class UtilsPreferences
     End Sub
 
 
+
+    '###### FILENAME CHARMAP ######
     Public Sub CreateFilenameCharmap()
         Dim UFC As New UtilsFilenameCharmap()  ' Creates the file filename_charmap.txt if it does not exist.
     End Sub
 
 
+
+    '###### SAVED EXPRESSIONS ######
     Public Function GetSavedExpressionsFilename() As String
         Return String.Format("{0}\saved_expressions.txt", GetPreferencesDirectory)
     End Function
@@ -86,6 +92,8 @@ Public Class UtilsPreferences
     End Sub
 
 
+
+    '###### INTERACTIVE EDIT COMMANDS ######
     Public Function GetInteractiveEditCommandsFilename() As String
         Dim InteractiveEditCommandsFilename = String.Format("{0}\interactive_edit_commands.txt", GetPreferencesDirectory)
         Return InteractiveEditCommandsFilename
@@ -184,6 +192,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### EDIT PROPERTIES ######
     Public Function GetEditPropertiesSavedSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = String.Format("{0}\edit_properties_saved_settings.json", GetPreferencesDirectory)
 
@@ -226,50 +235,7 @@ Public Class UtilsPreferences
 
 
 
-    'Public Function GetPropertyFilterSavedSettingsFilename(CheckExisting As Boolean) As String
-
-    '    Dim Filename = String.Format("{0}\property_filter_saved_settings.json", GetPreferencesDirectory)
-
-    '    If CheckExisting Then
-    '        If FileIO.FileSystem.FileExists(Filename) Then
-    '            Return Filename
-    '        Else
-    '            Return ""
-    '        End If
-    '    Else
-    '        Return Filename
-    '    End If
-
-    'End Function
-
-    'Public Sub SavePropertyFilterSavedSettings(
-    '    PropertyFilterSavedSettingsDict As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))
-
-    '    Dim JSONString As String
-    '    Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=False)
-
-    '    JSONString = JsonConvert.SerializeObject(PropertyFilterSavedSettingsDict)
-    '    IO.File.WriteAllText(Filename, JSONString)
-
-    'End Sub
-
-    'Public Function GetPropertyFilterSavedSettings() As Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-    '    Dim PropertyFilterSavedSettingsDict As New Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String)))
-    '    Dim JSONString As String
-    '    Dim Filename = GetPropertyFilterSavedSettingsFilename(CheckExisting:=True)
-
-    '    If Not Filename = "" Then
-    '        JSONString = IO.File.ReadAllText(Filename)
-    '        PropertyFilterSavedSettingsDict = JsonConvert.DeserializeObject(
-    '            Of Dictionary(Of String, Dictionary(Of String, Dictionary(Of String, String))))(JSONString)
-    '    End If
-
-    '    Return PropertyFilterSavedSettingsDict
-    'End Function
-
-
-
-
+    '###### PROPERTY FILTERS ######
     Public Sub SavePropertyFiltersJSON(PropertyFiltersJSON As String)
 
         Dim Outfile = GetPropertyFiltersFilename(CheckExisting:=False)
@@ -308,7 +274,7 @@ Public Class UtilsPreferences
 
 
 
-
+    '###### EDIT VARIABLES ######
     Public Function GetEditVariablesSavedSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = String.Format("{0}\edit_variables_saved_settings.json", GetPreferencesDirectory)
 
@@ -351,6 +317,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### TASK LIST SETTINGS ######
     Public Function GetTaskListFilename(CheckExisting As Boolean) As String
         Dim Filename = "tasklist.json"
         Dim TaskListFilename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
@@ -446,6 +413,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### FORM MAIN ######
     Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
         Dim Filename = "form_main_settings.json"
         Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
@@ -627,6 +595,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### PRESETS ######
     Public Function GetPresetsFilename(CheckExisting As Boolean) As String
         Dim Filename = "presets.json"
         Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
@@ -644,6 +613,8 @@ Public Class UtilsPreferences
     End Function
 
 
+
+    '###### PROPERTIES DATA ######
     Public Function GetPropertiesDataFilename(CheckExisting As Boolean) As String
         Dim Filename = "properties_data.json"
         Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
@@ -662,6 +633,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### LINK MANAGEMENT ORDER ######
     Public Function GetLinkManagementOrder() As List(Of String)
 
         Dim LinkManagementFilename As String = Form_Main.TextBoxLinkManagementFilename.Text
@@ -700,6 +672,7 @@ Public Class UtilsPreferences
 
 
 
+    '###### TASK FUNCTIONS ######
     Public Function GetNewTaskInstance(
         AvailableTasks As List(Of Task),
         TaskName As String,
@@ -818,6 +791,8 @@ Public Class UtilsPreferences
     End Sub
 
 
+
+    '###### VERSION ######
     Public Sub CheckForNewerVersion(CurrentVersion As String)
         ' Version example '2024.2' or '2024.2.1' but the last number is currently ignored for this check
         ' tag_name example '"tag_name":"v2024.1"'
