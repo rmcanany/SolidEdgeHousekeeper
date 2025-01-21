@@ -1209,6 +1209,7 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, you can "
         HelpString += "also update the properties associated with the material itself. "
         HelpString += "Select the option `For material, update density, face styles, etc.`. "
+        HelpString += "Note this option is not currently compatible with `Run task without Solid Edge`. "
 
         HelpString += vbCrLf + vbCrLf + "**Expressions**"
 
@@ -1246,22 +1247,15 @@ Public Class TaskEditProperties
         HelpString += "`throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, "
         HelpString += "`try()`, `tryParse()`, `typeOf()`, `where()`"
 
-        HelpString += vbCrLf + vbCrLf + "**Edit Outside Solid Edge (Experimental)**"
+        HelpString += vbCrLf + vbCrLf + "**Run Task Without Solid Edge (Experimental)**"
 
-        HelpString += vbCrLf + vbCrLf + "Direct edit using Windows Structured Storage for fast execution. "
-        HelpString += "Like *blazingly* fast -- 100x to 400x faster than Solid Edge. "
-        HelpString += "If you want to try this out, select the option `Edit properties outside Solid Edge`. "
+        HelpString += vbCrLf + vbCrLf + "This option opens the file with Windows Structured Storage, instead of Solid Edge. "
+        HelpString += "It's *blazingly* fast -- 100x to 400x faster than Solid Edge. "
+        HelpString += "If you want to try this out, select the option `Run task without Solid Edge`. "
 
-        HelpString += vbCrLf + vbCrLf + "There are certain items Solid Edge presents as properties, "
-        HelpString += "but do not actually reside in a Structured Storage `Property Stream`. "
-        HelpString += "As such, they are not accessible using this technique. "
-        HelpString += "There are quite a few of these, mostly related to materials, for example density, fill style, etc. "
-        HelpString += "The only two that Housekeeper (but not Structured Storage) currently supports "
-        HelpString += "are `System.Material` and `System.Sheet Metal Gage`. "
-
-        HelpString += vbCrLf + vbCrLf + "Also, Structured Storage does not know about file links. "
-        HelpString += "That means it cannot access models from their drawings. "
-        HelpString += "Property callouts that require such access, for example `%{System.Material|R1}`, generate an error with this option. "
+        HelpString += vbCrLf + vbCrLf + "Note, Solid Edge presents exposed variables as Custom properties.  "
+        HelpString += "You can change those with this command, but Solid Edge will overwrite them the next time the file is opened. "
+        HelpString += "For those, rather than using this command, use `Edit Variables` instead. "
 
         Return HelpString
     End Function

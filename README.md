@@ -230,7 +230,7 @@ Click the Add button to bring up the Property Selector dialog, shown on the left
 
 Getting properties for a large number of files can take some time.  If the program detects that situation when you click the update button, it prompts you if you want them displayed.
 
-You can edit properties directly on the list.  Double-click the property and enter the new value.
+You can edit properties directly on the list.  Double-click the property and enter the new value.  You can also sort the list by any column.  Click the column header to sort.
 
 ### Shortcut menu
 
@@ -415,6 +415,13 @@ To save some time, you can process files in the background, without graphics.  T
 
 # TASK TAB
 
+## Task Tab Contents
+- [<ins>**Task Controls**</ins>](#task-controls)
+- [<ins>**General Controls**</ins>](#general-controls)
+- [<ins>**Customizing**</ins>](#customizing)
+- [<ins>**Presets**</ins>](#presets)
+
+
 The Task Tab is where you choose what operations to perform.
 
 <p align="center">
@@ -459,19 +466,20 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 ## Presets
 
-Presets are a way to save any setup you need in the course of using the program. 
+Presets are a way to save any setup changes you make in the course of using the program. 
 
 ![Tabs](My%20Project/media/presets.png)
 
 To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
 
-To have it capture task settings (which you almost always want) be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
+To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
-Presets come in handy when you have to perform the same series of steps for a given part of your job.  An example might be releasing a project.  You might need to make sure every part has a drawing, model relationships aren't broken, drawings are up to date, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, change options, and so on.  
+Presets come in handy when you have to perform the same series of steps as part of your job.  An example might be releasing a project.  You probably need to make sure every part has a drawing, models and drawings are up to date, output files have been generated, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, tweak options, and so on.  
 
-Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and all that setup is done automatically.  It saves a bit of time, but more importantly it cuts down on setup mistakes resulting in rework and hassle for you.
+Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
-As a practical matter, I have found that creating a baseline Preset, I call mine `_Default`, is helpful.  It's a known starting point for creating new ones.  
+As a practical matter, I have found that creating a baseline Preset, I call mine `_Default`, is helpful.  It's a known starting point for creating new ones.  It's also a quick, reliable way to set back up for everyday use of the program.
+
 
 # CONFIGURATION TAB
 
@@ -512,6 +520,17 @@ There are a lot of properties in a Solid Edge file.  This is where you decide wh
 
 The **Available Properties** are populated by clicking the `Update` button.  You then use the `Customize` dialog to add, remove, and rearrange as needed.  If you need a property not in the template, right-click the **Selected Properties** list and add it manually.
 
+## Server Query Page
+
+This is where you configure your server and queries.
+
+<p align="center">
+  <img src="My%20Project/media/server_query.png">
+</p>
+
+Execute the query with the syntax `%{Server.Query|Rx}`.
+
+Each query in the list is assigned an ID number.  Replace `x` in `Rx` with the ID number of the desired query.
 
 ## General Page
 
@@ -538,7 +557,7 @@ For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) sectio
 - `Property Filter -- Include the Draft file itself in search`
 For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
 - `Check for newer version at startup`
-Uses GitHub's API to get the most recent version and compares it to the running version.  Not everyone wants programs to access outside resources like that, so it is disabled by default.  
+Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
 
 # TASK DETAILS
 
@@ -550,8 +569,9 @@ Sets document status. Select the new status on the Options pane.
 
 ![SetDocumentStatus](My%20Project/media/task_set_document_status.png)
 
-- For performance reasons, the command only runs in Structured Storage mode (i.e. Outside Solid Edge). 
-- To eliminate potential confusion, it cannot run with the `Process as available` option on the **Configuration Tab -- Status Page**. 
+Because certain status settings make the file read-only, the command only runs in Structured Storage mode (i.e. without Solid Edge). 
+
+To eliminate potential confusion, it cannot run with the `Process as available` option on the **Configuration Tab -- Status Page**. 
 
 ### Open save
 Opens a document and saves in the current version.
@@ -678,7 +698,7 @@ If the specified property does not exist in the file, you can optionally add it 
 
 To delete a property, set the Find Search to `X`. As above, this only works for `Custom` properties. 
 
-If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. 
+If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. Note this option is not currently compatible with `Run task without Solid Edge`. 
 
 **Expressions**
 
@@ -694,13 +714,11 @@ Available functions
 
 `concat()`, `contains()`, `convert()`, `count()`, `countBy()`, `dateAdd()`, `dateTime()`, `dateTimeAsEpoch()`, `dateTimeAsEpochMs()`, `dictionary()`,`distinct()`, `endsWith()`, `extend()`, `first()`, `firstOrDefault()`, `format()`, `getProperties()`, `getProperty()`, `humanize()`, `if()`, `in()`, `indexOf()`, `isGuid()`, `isInfinite()`, `isNaN()`, `isNull()`, `isNullOrEmpty()`, `isNullOrWhiteSpace()`, `isSet()`, `itemAtIndex()`, `jObject()`, `join()`, `jPath()`, `last()`, `lastIndexOf()`, `lastOrDefault()`, `length()`, `list()`, `listOf()`, `max()`, `maxValue()`, `min()`, `minValue()`, `nullCoalesce()`, `orderBy()`, `padLeft()`, `parse()`, `parseInt()`, `regexGroup()`, `regexIsMatch()`, `replace()`, `retrieve`, `reverse()`, `sanitize()`, `select()`, `selectDistinct()`, `setProperties()`, `skip()`, `Sort()`, `Split()`, `startsWith()`, `store()`, `substring()`, `sum()`, `switch()`, `take()`, `throw()`, `timeSpan()`, `toDateTime()`, `toLower()`, `toString()`, `toUpper()`, `try()`, `tryParse()`, `typeOf()`, `where()`
 
-**Edit Outside Solid Edge (Experimental)**
+**Run Task Without Solid Edge (Experimental)**
 
-Direct edit using Windows Structured Storage for fast execution. Like *blazingly* fast -- 100x to 400x faster than Solid Edge. If you want to try this out, select the option `Edit properties outside Solid Edge`. 
+This option opens the file with Windows Structured Storage, instead of Solid Edge. It's *blazingly* fast -- 100x to 400x faster than Solid Edge. If you want to try this out, select the option `Run task without Solid Edge`. 
 
-There are certain items Solid Edge presents as properties, but do not actually reside in a Structured Storage `Property Stream`. As such, they are not accessible using this technique. There are quite a few of these, mostly related to materials, for example density, fill style, etc. The only two that Housekeeper (but not Structured Storage) currently supports are `System.Material` and `System.Sheet Metal Gage`. 
-
-Also, Structured Storage does not know about file links. That means it cannot access models from their drawings. Property callouts that require such access, for example `%{System.Material|R1}`, generate an error with this option. 
+Note, Solid Edge presents exposed variables as Custom properties.  You can change those with this command, but Solid Edge will overwrite them the next time the file is opened. For those, rather than using this command, use `Edit Variables` instead. 
 
 ### Edit variables
 Adds, changes, and/or exposes variables. 
@@ -874,7 +892,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 Select the file type using the combobox. Select the directory using the `Browse` button, or check the `Original Directory` checkbox. 
 
-You can optionally create subdirectories using a formula similar to the Property Text Callout. Enable the `Use subdirectory formula` option to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the formula. Here are two examples. 
+You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. Enable the `Change filename` and/or `Use subdirectory formula` options to do so. To add a property, right-click the text box and select `Insert property`. You can also just type it in if that's easier. You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. 
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
@@ -893,9 +911,7 @@ Exports the file to either a non-Solid Edge format, or the same format in a diff
 
 ![SaveDrawingAs](My%20Project/media/task_save_drawing_as.png)
 
-Select the file type using the combobox. Select the directory using the `Browse` button, or enable the `Original Directory` option. 
-
-You can optionally create subdirectories using a formula similar to the Property Text Callout. See the `Save model as` help topic for details. 
+Most options for this command are the same as for `Save Model As`. See the help topic for that command for details. 
 
 Unlike with model files, draft subdirectory formulas can include an Index Reference designator (eg, `|R1`). This is the way to refer to a model contained in the draft file, similar to Property Text in a Callout. For example, `%{System.Material|R1}`. To refer to properties of the draft file itself, do not specify a designator, for example, `%{Custom.Last Revision Date}`. 
 

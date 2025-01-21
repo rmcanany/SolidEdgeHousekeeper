@@ -97,7 +97,7 @@ Public Class UCEditProperties
 
 
     Public Property NotifyPropertyEditor As Boolean
-    Public Property TemplatePropertyList As List(Of String)
+    Public Property FavoritesList As List(Of String)
     Public Property ProcessEvents As Boolean = True
 
 
@@ -111,10 +111,10 @@ Public Class UCEditProperties
         Dim UC As New UtilsCommon
 
         'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
         ComboBoxPropertyName.Items.Add("")
-        For Each s As String In TemplatePropertyList
+        For Each s As String In FavoritesList
             ComboBoxPropertyName.Items.Add(s)
         Next
 
@@ -139,22 +139,15 @@ Public Class UCEditProperties
         Dim UC As New UtilsCommon
 
         Me.PropertyEditor = _PropertyEditor
-        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
-
-        'MsgBox("Temporarily setting hmk_Make_From PropertySet to 'Duplicate'")
-        'Form_Main.TemplatePropertyDict("hmk_Make_From")("PropertySet") = "Duplicate"
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
         If Not Me.PropertyEditor.ShowAllProps Then
             ComboBoxPropertyName.Items.Add("")
-            For Each s As String In TemplatePropertyList
+            For Each s As String In FavoritesList
                 ComboBoxPropertyName.Items.Add(s)
             Next
         Else
             ComboBoxPropertyName.Items.Add("")
-            'For Each s As String In Form_Main.TemplatePropertyDict.Keys
-            '    ComboBoxPropertyName.Items.Add(s)
-            'Next
             For Each s As String In Form_Main.PropertiesData.GetAvailableList
                 ComboBoxPropertyName.Items.Add(s)
             Next
@@ -256,7 +249,7 @@ Public Class UCEditProperties
                 tmpPropList.Add(s)
             Next
         Else
-            For Each s As String In TemplatePropertyList
+            For Each s As String In FavoritesList
                 tmpPropList.Add(s)
             Next
         End If

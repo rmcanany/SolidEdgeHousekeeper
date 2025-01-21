@@ -147,6 +147,7 @@ Public Class FormPropertyInputEditor
 
         For Each Key As String In JSONDict.Keys
             NewUC = New UCEditProperties(Me)
+
             NewUC.NotifyPropertyEditor = False
 
             NewUC.PropertySet = JSONDict(Key)("PropertySet")
@@ -155,12 +156,10 @@ Public Class FormPropertyInputEditor
             NewUC.FindString = JSONDict(Key)("FindString")
             NewUC.ReplaceSearch = JSONDict(Key)("ReplaceSearch")
             NewUC.ReplaceString = JSONDict(Key)("ReplaceString")
-
-            'NewUC.ReconcileFormWithProps()
-
             NewUC.Dock = DockStyle.Fill
 
             UCList.Add(NewUC)
+
             NewUC.NotifyPropertyEditor = True
         Next
 
@@ -365,7 +364,7 @@ Public Class FormPropertyInputEditor
 
             Dim JSONDict As Dictionary(Of String, Dictionary(Of String, String))
 
-            JSONDict = CreateJSONDict()
+            JSONDict = CreateJSONDict()  ' Reads UCList contents
             Me.JSONString = JsonConvert.SerializeObject(JSONDict)
 
             Me.DialogResult = DialogResult.OK

@@ -1471,11 +1471,11 @@ Public Class TaskSaveModelAs
         HelpString += "Select the directory using the `Browse` button, "
         HelpString += "or check the `Original Directory` checkbox. "
 
-        HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
-        HelpString += "Enable the `Use subdirectory formula` option to do so. "
+        HelpString += vbCrLf + vbCrLf + "You can optionally rename the file or create subdirectories using a formula similar to the Property Text Callout. "
+        HelpString += "Enable the `Change filename` and/or `Use subdirectory formula` options to do so. "
         HelpString += "To add a property, right-click the text box and select `Insert property`. "
         HelpString += "You can also just type it in if that's easier. "
-        HelpString += "You can create nested subdirectories if desired. Simply add `\` in the formula. Here are two examples. "
+        HelpString += "You can create nested subdirectories if desired. Simply add `\` in the subdirectory formula. Here are two examples. "
 
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "

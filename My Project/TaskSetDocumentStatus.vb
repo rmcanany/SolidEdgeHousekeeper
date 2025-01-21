@@ -370,9 +370,9 @@ Public Class TaskSetDocumentStatus
 
         HelpString += vbCrLf + vbCrLf + "![SetDocumentStatus](My%20Project/media/task_set_document_status.png)"
 
-        HelpString += vbCrLf + vbCrLf + "- For performance reasons, the command only runs in "
-        HelpString += "Structured Storage mode (i.e. Outside Solid Edge). "
-        HelpString += vbCrLf + "- To eliminate potential confusion, it cannot run with the "
+        HelpString += vbCrLf + vbCrLf + "Because certain status settings make the file read-only, the command only runs in "
+        HelpString += "Structured Storage mode (i.e. without Solid Edge). "
+        HelpString += vbCrLf + vbCrLf + "To eliminate potential confusion, it cannot run with the "
         HelpString += "`Process as available` option on the **Configuration Tab -- Status Page**. "
 
         Return HelpString

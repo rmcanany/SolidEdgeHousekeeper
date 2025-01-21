@@ -13,6 +13,72 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
+## V2025.1 Enhancements/Fixes
+
+### Presets
+Concept by **@Francesco Arfilli**, **@MMTrebuchet**, and others.  Thank you!
+
+Presets are a way to save any setup changes you make in the course of using the program.  
+
+![Tabs](My%20Project/media/presets.png)
+
+Presets come in handy when you have to perform the same series of steps as part of your job.  An example might be releasing a project.  You probably need to make sure every part has a drawing, models and drawings are up to date, output files have been generated, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, tweak options, and so on.  
+
+Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+
+See the [<ins>**Presets Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#presets) for details.
+
+### Property Selection
+
+Properties are now read from your templates.  Localized names, where used, are respected.
+
+<p align="center">
+  <img src="My%20Project/media/customize_property_list.png">
+</p>
+
+The properties are available everywhere they can be used.  You select then from a drop down, or a right click depending on the circumstances.
+
+![Insert Property](My%20Project/media/insert_property.png)
+
+In previous versions, only text type properties were supported.  Now all types are. (Thank you **@Francesco Arfilli**!)
+
+### File Server Query
+Contributed by **@Francesco Arfilli**.  Thank you!
+
+Added the ability to query a server to access properties.
+
+![Insert Property](My%20Project/media/server_query.png)
+
+
+### File List
+Contributed by **@Francesco Arfilli**.  Thank you!
+
+File properties can now be displayed on the file list.  They can be edited and changed in place.  The list can be sorted by column.
+
+![Insert Property](My%20Project/media/file_list_properties.png)
+
+Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name and the dialog will automatically filter the list for you.
+
+![Insert Property](My%20Project/media/file_list_individual_files.png)
+
+### Set Document Status
+Concept by **@Francesco Arfilli**.  Thank you!
+
+Added a new Task to set document status.
+
+![Insert Property](My%20Project/media/task_set_document_status.png)
+
+Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage to make the change, it is between 100x and 400x faster than Solid Edge.
+
+The previous capability `Process as Available` can still be used.  With it, you have the option to revert the file to the previous status after processing.
+
+### Check Links
+
+Added the option to run this command without Solid Edge.  As with `Set Document Status`, it uses Microsoft's Structured Storage with equivalent speed increases.
+
+Added the same option to `Check Part Number Does Not Match Filename`, `Check Missing Drawing`, and `Check Material Not In Material Table`.
+
+
 ## V2024.3 Enhancements/Fixes
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has two new contributors!  Our very own **@ChrisNC** (github @ChrisClems) and **@ZaPpInG** (github @lrmoreno007).  Can't wait for you to see their handywork!

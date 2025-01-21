@@ -1117,11 +1117,6 @@ Public Class Form_Main
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
 
-        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        'If Me.PropertyFilterDict Is Nothing Then
-        '    Me.PropertyFilterDict = New Dictionary(Of String, Dictionary(Of String, String))
-        'End If
-
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
         End If
@@ -1280,18 +1275,14 @@ Public Class Form_Main
 
 
         ' Other JSON
-        Me.TextBoxStatus.Text = "Updating JSON TemplatePropertyDict"
-        '' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-        'Me.TextBoxStatus.Text = "Updating JSON PropertyFilterDict"
-        'Me.PropertyFilterDict = Me.PropertyFilterDict
         Me.TextBoxStatus.Text = "Updating JSON PresetsList"
         Me.Presets = Me.Presets
 
 
         ' Save settings
         Dim UP As New UtilsPreferences
-        Me.TextBoxStatus.Text = "Saving settings"
-        UP.SaveFormMainSettings(Me, SavingPresets)
+        Me.TextBoxStatus.Text = "Saving Form_Main settings"
+        UP.SaveFormMainSettings(Me, SavingPresets:=SavingPresets)  ' If SavingPresets Then Don't save form size or location
         Me.TextBoxStatus.Text = "Saving tasks"
         UP.SaveTaskList(Me.TaskList)
         Me.TextBoxStatus.Text = "Saving presets"

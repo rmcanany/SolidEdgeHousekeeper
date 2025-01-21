@@ -1096,12 +1096,8 @@ Public Class TaskSaveDrawingAs
 
         HelpString += vbCrLf + vbCrLf + "![SaveDrawingAs](My%20Project/media/task_save_drawing_as.png)"
 
-        HelpString += vbCrLf + vbCrLf + "Select the file type using the combobox. "
-        HelpString += "Select the directory using the `Browse` button, "
-        HelpString += "or enable the `Original Directory` option. "
-
-        HelpString += vbCrLf + vbCrLf + "You can optionally create subdirectories using a formula similar to the Property Text Callout. "
-        HelpString += "See the `Save model as` help topic for details. "
+        HelpString += vbCrLf + vbCrLf + "Most options for this command are the same as for `Save Model As`. "
+        HelpString += "See the help topic for that command for details. "
 
         HelpString += vbCrLf + vbCrLf + "Unlike with model files, draft subdirectory formulas can include an Index Reference designator (eg, `|R1`). "
         HelpString += "This is the way to refer to a model contained in the draft file, "
