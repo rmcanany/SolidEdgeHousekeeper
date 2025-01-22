@@ -524,7 +524,7 @@ The **Available Properties** are populated by clicking the `Update` button.  You
 
 ## Server Query Page
 
-This is where you configure your server and queries.
+This is where you configure your server and query.
 
 <p align="center">
   <img src="My%20Project/media/server_query.png">
@@ -532,7 +532,9 @@ This is where you configure your server and queries.
 
 Execute the query with the syntax `%{Server.Query|Rx}`.
 
-Each query in the list is assigned an ID number.  Replace `x` in `Rx` with the ID number of the desired query.
+Only one server and one query are supported at the moment. Replace `x` in `Rx` to retrieve the 'x' field in the query list.
+
+Example: %{Server.Query|R1} will return the first item in the query list.
 
 ## General Page
 
