@@ -531,6 +531,7 @@ This is where you configure your server and query.
 Execute the query with the syntax `%{Server.Query|Rx}`.
 
 Only one server and one query are supported at the moment. Replace `x` in `Rx` to retrieve the 'x' field in the query results.
+
 Example: %{Server.Query|R1} will return the first field in the query results.
 
 ## General Page
