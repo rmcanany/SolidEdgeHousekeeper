@@ -41,8 +41,10 @@ Public Class UCEditProperties
                 If ComboBoxPropertyName.Items.Contains(value) Then
                     ComboBoxPropertyName.Text = value
                 Else
-                    ComboBoxPropertyName.Items.Add(value)
-                    ComboBoxPropertyName.Text = value
+                    If Form_Main.PropertiesData.GetAvailableList.Contains(value) Then
+                        ComboBoxPropertyName.Items.Add(value)
+                        ComboBoxPropertyName.Text = value
+                    End If
                 End If
             End If
         End Set
@@ -107,41 +109,12 @@ Public Class UCEditProperties
 
 
 
-    Public Sub New()
-
-        ' This call is required by the designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-        Dim UC As New UtilsCommon
-
-        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
-
-        ComboBoxPropertyName.Items.Add("")
-        For Each s As String In FavoritesList
-            ComboBoxPropertyName.Items.Add(s)
-        Next
-
-        Me.Selected = False
-        Me.PropertySet = ""
-        Me.PropertyName = ""
-        Me.FindSearch = ""
-        Me.FindString = ""
-        Me.ReplaceSearch = ""
-        Me.ReplaceString = ""
-        Me.NotifyPropertyEditor = True
-
-    End Sub
-
     Public Sub New(_PropertyEditor As FormPropertyInputEditor)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-
-        Dim UC As New UtilsCommon
 
         Me.PropertyEditor = _PropertyEditor
         Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
@@ -175,81 +148,57 @@ Public Class UCEditProperties
     End Sub
 
     Private Sub ComboBoxPropertySet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertySet.SelectedIndexChanged
-        'Me.PropertySet = ComboBoxPropertySet.Text
-        'Notify()
 
-        Dim TryIt As Boolean = True
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
 
-        If Not TryIt Then
             Me.PropertySet = ComboBoxPropertySet.Text
-            Notify()
-        Else
-            If Me.ProcessEvents Then
-                Me.ProcessEvents = False
 
-                Me.PropertySet = ComboBoxPropertySet.Text
-
-
-                Dim PreviousPropertyName = Me.PropertyName
-                Dim IsInList As Boolean = False
-                ComboBoxPropertyName.Items.Clear()
-                For Each PropName As String In FilterPropertyNames()
-                    ComboBoxPropertyName.Items.Add(PropName)
-                    If PropName = PreviousPropertyName Then IsInList = True
-                Next
-                If IsInList Then
-                    ComboBoxPropertyName.Text = PreviousPropertyName
-                Else
-                    ComboBoxPropertyName.Text = ""
-                End If
-
-                Notify()
-
-                Me.ProcessEvents = True
+            Dim PreviousPropertyName = Me.PropertyName
+            Dim IsInList As Boolean = False
+            ComboBoxPropertyName.Items.Clear()
+            For Each PropName As String In FilterPropertyNames()
+                ComboBoxPropertyName.Items.Add(PropName)
+                If PropName = PreviousPropertyName Then IsInList = True
+            Next
+            If IsInList Then
+                ComboBoxPropertyName.Text = PreviousPropertyName
+            Else
+                ComboBoxPropertyName.Text = ""
             End If
 
+            Notify()
+
+            Me.ProcessEvents = True
         End If
 
 
     End Sub
 
     Private Sub ComboBoxPropertyName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.SelectedIndexChanged
-        'UpdatePropertyName()
-        'Notify()
 
-        Dim TryIt As Boolean = True
+        If Me.ProcessEvents Then
+            Me.ProcessEvents = False
 
-        If Not TryIt Then
             Me.PropertyName = ComboBoxPropertyName.Text
             UpdatePropertySet()
             Notify()
 
-        Else
-            If Me.ProcessEvents Then
-                Me.ProcessEvents = False
-
-                Me.PropertyName = ComboBoxPropertyName.Text
-                UpdatePropertySet()
-                Notify()
-
-                Me.ProcessEvents = True
-            End If
-
+            Me.ProcessEvents = True
         End If
 
     End Sub
 
     Private Function FilterPropertyNames() As List(Of String)
+        ' When the user changes the PropertySet ComboBox, this function creates a list of properties
+        ' in the selected PropertySet.  If the selected PropertySet is blank, all properties are returned.
+
         Dim FilteredList = New List(Of String)
         Dim PropSet As String = ""
-        'Dim PropSetConstant As PropertyData.PropertySetNameConstants
 
         Dim tmpPropList As New List(Of String)
 
         If Me.PropertyEditor.ShowAllProps Then
-            'For Each s As String In Form_Main.TemplatePropertyDict.Keys
-            '    tmpPropList.Add(s)
-            'Next
             For Each s As String In Form_Main.PropertiesData.GetAvailableList
                 tmpPropList.Add(s)
             Next
@@ -260,21 +209,6 @@ Public Class UCEditProperties
         End If
 
         For Each PropName As String In tmpPropList
-            'If Form_Main.TemplatePropertyDict.Keys.Contains(PropName) Then
-            '    PropSet = Form_Main.TemplatePropertyDict(PropName)("PropertySet")  ' 'SummaryInformation', ..., 'Custom', 'Duplicate', ''
-
-            '    If Not ((PropSet = "") Or (PropSet = "Custom") Or (PropSet = "Duplicate")) Then
-            '        PropSet = "System"
-            '    End If
-
-            '    If PropSet = "Duplicate" Then
-            '        'PropSet = ""
-            '        PropSet = Me.PropertySet
-            '    End If
-
-            'Else
-            '    PropSet = ""
-            'End If
 
             Dim tmpPropertyData = Form_Main.PropertiesData.GetPropertyData(PropName)
             If tmpPropertyData IsNot Nothing Then
@@ -304,25 +238,6 @@ Public Class UCEditProperties
 
     Private Sub UpdatePropertySet()
         Dim PropSet As String = ""
-        'Dim PropSetConstant As PropertyData.PropertySetNameConstants
-
-        'If Not IsNothing(Form_Main.TemplatePropertyDict) Then
-        '    If Form_Main.TemplatePropertyDict.Keys.Contains(Me.PropertyName) Then
-        '        PropSet = Form_Main.TemplatePropertyDict(Me.PropertyName)("PropertySet")
-
-        '        If Not ((PropSet = "") Or (PropSet = "Custom") Or (PropSet = "Duplicate")) Then
-        '            PropSet = "System"
-        '        End If
-
-        '        If PropSet = "Duplicate" Then
-        '            'PropSet = ""
-        '            PropSet = Me.PropertySet
-        '        End If
-
-        '    Else
-        '        PropSet = ""
-        '    End If
-        'End If
 
         If Form_Main.PropertiesData IsNot Nothing Then
             Dim tmpPropertyData As PropertyData = Form_Main.PropertiesData.GetPropertyData(Me.PropertyName)
@@ -344,13 +259,6 @@ Public Class UCEditProperties
         Me.PropertySet = PropSet
 
     End Sub
-
-
-    'Private Sub ComboBoxPropertyName_Leave(sender As Object, e As EventArgs) Handles ComboBoxPropertyName.Leave
-    '    UpdatePropertyName()
-    '    Notify()
-    'End Sub
-
 
     Private Sub ComboBoxFindType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxFindSearch.SelectedIndexChanged
         Me.FindSearch = ComboBoxFindSearch.Text
@@ -391,8 +299,6 @@ Public Class UCEditProperties
         Dim CaretPosition = TextBox.Text.Length
 
         Dim FPP As New FormPropertyPicker
-        'FPP.TemplatePropertyDict = Form_Main.TemplatePropertyDict
-        'FPP.TemplatePropertyList = Me.TemplatePropertyList
 
         FPP.ShowDialog()
 
@@ -401,4 +307,5 @@ Public Class UCEditProperties
         End If
 
     End Sub
+
 End Class
