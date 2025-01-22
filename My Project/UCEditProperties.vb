@@ -38,7 +38,12 @@ Public Class UCEditProperties
         Set(value As String)
             _PropertyName = value
             If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                ComboBoxPropertyName.Text = value
+                If ComboBoxPropertyName.Items.Contains(value) Then
+                    ComboBoxPropertyName.Text = value
+                Else
+                    ComboBoxPropertyName.Items.Add(value)
+                    ComboBoxPropertyName.Text = value
+                End If
             End If
         End Set
     End Property

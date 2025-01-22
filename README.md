@@ -470,7 +470,9 @@ Presets are a way to save any setup changes you make in the course of using the 
 
 ![Tabs](My%20Project/media/presets.png)
 
-To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
+The setup would include things like selecting tasks and options, configuring property filters, and anything else you need to do to prepare to execute the next step in your process.  
+
+To create a Preset, do the set up, then enter a name and click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
@@ -499,7 +501,7 @@ See the [<ins>**Sorting**</ins>](#sorting) section.
 
 ## Templates Page
 
-Templates and related tools.
+Templates and tools to read properties from them.
 
 <p align="center">
   <img src="My%20Project/media/configuration_tab_templates_page.png">

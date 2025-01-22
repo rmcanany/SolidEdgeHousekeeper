@@ -30,17 +30,19 @@ See the [<ins>**Presets Help Topic**</ins>](https://github.com/rmcanany/SolidEdg
 
 ### Property Selection
 
-Properties are now read from your templates.  Localized names, where used, are respected.
+Properties are now read from your templates.  Localized names, where used, are employed.
 
 <p align="center">
   <img src="My%20Project/media/customize_property_list.png">
 </p>
 
-The properties are available everywhere they can be used.  You select then from a drop down, or a right click depending on the circumstances.
+Wherever in the program a property formula can be used, the properties are presented in a drop down, or accessible via right click, depending on the circumstances.  In the image below, the user performed a right click to add a second property to the subdirectory formula.
 
 ![Insert Property](My%20Project/media/insert_property.png)
 
 In previous versions, only text type properties were supported.  Now all types are. (Thank you **@Francesco Arfilli**!)
+
+See the [<ins>**Templates Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#templates-page) for details.
 
 ### File Server Query
 Contributed by **@Francesco Arfilli**.  Thank you!
@@ -49,6 +51,7 @@ Added the ability to query a server to access properties.
 
 ![Insert Property](My%20Project/media/server_query.png)
 
+See the [<ins>**Server Query Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#server-query-page) for details.
 
 ### File List
 Contributed by **@Francesco Arfilli**.  Thank you!
@@ -57,9 +60,11 @@ File properties can now be displayed on the file list.  They can be edited and c
 
 ![Insert Property](My%20Project/media/file_list_properties.png)
 
-Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name and the dialog will automatically filter the list for you.
+Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the File name text box and it will automatically filter the list for you.
 
 ![Insert Property](My%20Project/media/file_list_individual_files.png)
+
+See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#file-list-options) for details.
 
 ### Set Document Status
 Concept by **@Francesco Arfilli**.  Thank you!
@@ -71,6 +76,8 @@ Added a new Task to set document status.
 Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage to make the change, it is between 100x and 400x faster than Solid Edge.
 
 The previous capability `Process as Available` can still be used.  With it, you have the option to revert the file to the previous status after processing.
+
+See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#set-document-status) for details.
 
 ### Check Links
 
