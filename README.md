@@ -530,9 +530,10 @@ This is where you configure your server and query.
 
 Execute the query with the syntax `%{Server.Query|Rx}`.
 
-The `x` in `|Rx` stands for the ID number of the query in the query list.  Only one server and one query are supported at the moment.  
+Replace `x` in `Rx` to retrieve the 'x' field in the query results.  Only one server and one query are supported at the moment.  
 
-Example: %{Server.Query|R1} will execute the first query in the list.
+Example: %{Server.Query|R2} will return the second field in the record returned by the query. (If more than one record is returned, fields will come from the first one)
+
 
 ## General Page
 
