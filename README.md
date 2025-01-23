@@ -6,13 +6,13 @@
 </div>
 
 **Contributors:**
-@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github)
+**@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github)**
 
 **Beta Testers:**
-@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza
+**@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza**
 
 **Helpful feedback and bug reports:**
-@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO 
+**@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza**
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -466,7 +466,7 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 ## Presets
 
-Presets are a way to save any setup changes you make in the course of using the program. 
+Presets are a way to capture any setup changes you make in the course of using the program. 
 
 ![Tabs](My%20Project/media/presets.png)
 
@@ -474,9 +474,9 @@ To create a Preset, set up the program as desired, enter a name then click Save.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
-Presets come in handy when you have to perform the same series of steps as part of your job.  An example might be releasing a project.  You probably need to make sure every part has a drawing, models and drawings are up to date, output files have been generated, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, tweak options, and so on.  
+Presets help you perform recurring tasks you may encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example enabling a property filter, selecting tasks, tweaking options, and so on. 
 
-Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
 As a practical matter, I have found that creating a baseline Preset, I call mine `_Default`, is helpful.  It's a known starting point for creating new ones.  It's also a quick, reliable way to set back up for everyday use of the program.
 
@@ -735,7 +735,9 @@ The Variable name is required.  There are restrictions on the name.  It cannot s
 
 If a variable on the list is not in the file, it can optionally be added.  Set the behavior on the Options panel. 
 
-The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.  You can use a file property in the formula.  Right-click the formula text box and select Insert Property to do so.  
+The number/formula is not required if only exposing an existing variable, otherwise it is.  If a formula references a variable not in the file, the program will report an error.
+
+You can use a file property in the formula.  Right-click the formula text box and select Insert Property to do so.  Note, the property is a static copy.  If it changes, this command needs to be run again to update the variable.  
 
 If exposing a variable, the Expose name defaults to the variable name. You can optionally change it.  The Expose name does not have restrictions like the variable name. 
 

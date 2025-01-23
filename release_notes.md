@@ -2,7 +2,7 @@
   <p align=center>
   <img src="My%20Project/media/logo.png" width=50%;>
   <p align=center>
-  <span class="description">Robert McAnany 2024</span>
+  <span class="description">Robert McAnany 2025</span>
 </div>
 
 # Release Notes
@@ -16,33 +16,39 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 ## V2025.1 Enhancements/Fixes
 
 ### Presets
-Concept by **@Francesco Arfilli**, **@MMTrebuchet**, and others.  Thank you!
 
-Presets are a way to save any setup changes you make in the course of using the program.  
+Presets are a way to capture any setup changes you make in the course of using the program.  (Thank you **@Francesco Arfilli**, **@mmtrebuchet**, and others!)
 
 ![Tabs](My%20Project/media/presets.png)
 
-Presets come in handy when you have to perform the same series of steps as part of your job.  An example might be releasing a project.  You probably need to make sure every part has a drawing, models and drawings are up to date, output files have been generated, etc., etc.  Each step takes a certain amount of setup.  You might have to change property filters, select different tasks, tweak options, and so on.  
+Presets help you perform recurring tasks you may encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example enabling a property filter, selecting tasks, tweaking options, and so on. 
 
-Using Presets, you can capture that work one time.  At each step in the process, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
 See the [<ins>**Presets Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#presets) for details.
 
-### Property Selection
+### File List
+Contributed by **@Francesco Arfilli**.  Thank you!
 
-Properties are now read from your templates.  Localized names, where used, are employed.
+Added the ability to customize the list.
+- File properties can now be displayed on the list.  
+- Properties can be edited and changed in place.  
+- The list can be sorted by column.  
+- The list can be saved in CSV format.  (Thank you **@CareFrame1**!)
+- File groups are collapsible.
+- File grouping is optional.
 
-<p align="center">
-  <img src="My%20Project/media/customize_property_list.png">
-</p>
+![Insert Property](My%20Project/media/file_list_properties.png)
 
-Wherever in the program a property formula can be used, the properties are presented in a drop down, or accessible via right click, depending on the circumstances.  In the image below, the user performed a right click to add a second property to the subdirectory formula.
+Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the dialog's text box and it will automatically filter the list for you.
 
-![Insert Property](My%20Project/media/insert_property.png)
+![Insert Property](My%20Project/media/file_list_individual_files.png)
 
-In previous versions, only text type properties were supported.  Now all types are. (Thank you **@Francesco Arfilli**!)
+Added feedback to notify the user that some files in the list are selected (which the program interprets as the only files that need to be processed).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
 
-See the [<ins>**Templates Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#templates-page) for details.
+Fixed an issue where encountering a read-only directory was keeping a Folders and Subfolders Search from processing to completion.
+
+See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#file-list-options) for details.
 
 ### File Server Query
 Contributed by **@Francesco Arfilli**.  Thank you!
@@ -53,27 +59,26 @@ Added the ability to query a server to access properties.
 
 See the [<ins>**Server Query Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#server-query-page) for details.
 
-### File List
-Contributed by **@Francesco Arfilli**.  Thank you!
+### Property Selection
 
-File properties can now be displayed on the file list.  They can be edited and changed in place.  The list can be sorted by column.
+Added processing of localized property names where applicable.
 
-![Insert Property](My%20Project/media/file_list_properties.png)
+Expanded the ability to select properties, either from a drop down or shortcut menu, in all areas where properties can be used.  Previously, that was only available with `Property Filter` and `Edit Properties`.
 
-Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the File name text box and it will automatically filter the list for you.
+Added support for all property variable types.  Previously, only text type properties were supported. (Thank you **@Francesco Arfilli**!)
 
-![Insert Property](My%20Project/media/file_list_individual_files.png)
+In `Edit Variables` added the ability to use a property in the `Number/Formula` field.
 
-See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#file-list-options) for details.
+
+See the [<ins>**Templates Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#templates-page) and [<ins>**Edit Variables Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-variables) for details.
 
 ### Set Document Status
-Concept by **@Francesco Arfilli**.  Thank you!
 
-Added a new Task to set document status.
+Added a new Task to set document status.  (Thank you **@Francesco Arfilli**!)
 
 ![Insert Property](My%20Project/media/task_set_document_status.png)
 
-Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage to make the change, it is between 100x and 400x faster than Solid Edge.
+Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage to make the change, it is 100x to 400x faster than Solid Edge.
 
 The previous capability `Process as Available` can still be used.  With it, you have the option to revert the file to the previous status after processing.
 
@@ -83,8 +88,27 @@ See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcan
 
 Added the option to run this command without Solid Edge.  As with `Set Document Status`, it uses Microsoft's Structured Storage with equivalent speed increases.
 
-Added the same option to `Check Part Number Does Not Match Filename`, `Check Missing Drawing`, and `Check Material Not In Material Table`.
+Added the same option to `Part Number Does Not Match Filename`, `Missing Drawing`, and `Material Not In Material Table`.
 
+See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#check-links) for details.
+
+### Save Model As
+
+Added the ability to change the file name itself when saving.  (Thank you **@pkoevesdi**, **@Jojo15702**, **@ih0nza**!)
+
+The name can be drawn from one or more properties in the file.  As with the subdirectory feature, if the property contains any characters that are not valid in file names, they are replaced using the filename_charmap.txt lookup table.
+
+Added the same option to `Save Drawing As`.
+
+See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
+
+### Top Level Assembly
+
+Fixed an issue where Family of Parts Masters (and all their links) were included in Top Down searches.
+
+### Documentation
+
+Added a Table of Contents to the Readme file to improve navigation.  (Thank you **@Francesco Arfilli**!)
 
 ## V2024.3 Enhancements/Fixes
 

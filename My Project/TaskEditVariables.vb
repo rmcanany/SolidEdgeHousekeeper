@@ -223,7 +223,7 @@ Public Class TaskEditVariables
                 Formula = UC.SubstitutePropertyFormula(SEDoc, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
                 If Formula Is Nothing Then
                     ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Could not process formula '{0}'", tmpFormula))
+                    ErrorMessageList.Add(String.Format("Could not process formula '{0}', property not found", tmpFormula))
                     Continue For
                 End If
 
@@ -507,8 +507,12 @@ Public Class TaskEditVariables
 
         HelpString += vbCrLf + vbCrLf + "The number/formula is not required if only exposing an existing variable, "
         HelpString += "otherwise it is.  If a formula references a variable not in the file, the "
-        HelpString += "program will report an error.  You can use a file property in the formula.  "
+        HelpString += "program will report an error."
+
+        HelpString += vbCrLf + vbCrLf + "You can use a file property in the formula.  "
         HelpString += "Right-click the formula text box and select Insert Property to do so.  "
+        HelpString += "Note, the property is a static copy.  "
+        HelpString += "If it changes, this command needs to be run again to update the variable.  "
 
         HelpString += vbCrLf + vbCrLf + "If exposing a variable, the Expose name defaults to the variable name. "
         HelpString += "You can optionally change it.  The Expose name does not have restrictions like the variable name. "
