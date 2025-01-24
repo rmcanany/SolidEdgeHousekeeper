@@ -496,7 +496,7 @@ Public Class TaskEditProperties
             Dim PropertyValue As String = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
             If PropertyValue Is Nothing Then
                 If AddProp Then
-                    Proceed = SSDoc.AddProp(PropertySetName, PropertyNameEnglish, " ")
+                    Proceed = SSDoc.AddProp(PropertySetName, PropertyNameEnglish, Value:=Nothing)
                     If Proceed Then
                         PropertyValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
                         If PropertyValue Is Nothing Then

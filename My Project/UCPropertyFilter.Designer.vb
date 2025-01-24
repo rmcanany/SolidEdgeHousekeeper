@@ -111,7 +111,7 @@ Partial Class UCPropertyFilter
         Me.ComboBoxComparison.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBoxComparison.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxComparison.FormattingEnabled = True
-        Me.ComboBoxComparison.Items.AddRange(New Object() {"", "contains", "is_exactly", "is_not", "wildcard_match", "regex_match", ">", "<"})
+        Me.ComboBoxComparison.Items.AddRange(New Object() {"", "contains", "is_exactly", "wildcard_match", "regex_match", ">", "<"})
         Me.ComboBoxComparison.Location = New System.Drawing.Point(313, 3)
         Me.ComboBoxComparison.Name = "ComboBoxComparison"
         Me.ComboBoxComparison.Size = New System.Drawing.Size(94, 23)

@@ -51,7 +51,14 @@ Public Class UCPropertyFilter
         Set(value As String)
             _PropertyName = value
             If Me.ExTableLayoutPanel1 IsNot Nothing Then
-                ComboBoxPropertyName.Text = value
+                If ComboBoxPropertyName.Items.Contains(value) Then
+                    ComboBoxPropertyName.Text = value
+                Else
+                    If Form_Main.PropertiesData.GetAvailableList.Contains(value) Then
+                        ComboBoxPropertyName.Items.Add(value)
+                        ComboBoxPropertyName.Text = value
+                    End If
+                End If
             End If
         End Set
     End Property
@@ -85,37 +92,37 @@ Public Class UCPropertyFilter
     Public Property Formula As String
 
     Public Property NotifyPropertyFilter As Boolean
-    Public Property TemplatePropertyList As List(Of String)
+    Public Property FavoritesList As List(Of String)
     Public Property ProcessEvents As Boolean = True
 
 
 
-    Public Sub New()
+    'Public Sub New()
 
-        ' This call is required by the designer.
-        InitializeComponent()
+    '    ' This call is required by the designer.
+    '    InitializeComponent()
 
-        ' Add any initialization after the InitializeComponent() call.
-        Dim UC As New UtilsCommon
+    '    ' Add any initialization after the InitializeComponent() call.
+    '    Dim UC As New UtilsCommon
 
-        'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
+    '    'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
+    '    Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
-        ComboBoxPropertyName.Items.Add("")
-        For Each s As String In TemplatePropertyList
-            ComboBoxPropertyName.Items.Add(s)
-        Next
+    '    ComboBoxPropertyName.Items.Add("")
+    '    For Each s As String In FavoritesList
+    '        ComboBoxPropertyName.Items.Add(s)
+    '    Next
 
-        Me.Selected = False
-        Me.Variable = ""
-        Me.PropertySet = ""
-        Me.PropertyName = ""
-        Me.Comparison = ""
-        Me.Value = ""
-        Me.Formula = ""
-        Me.NotifyPropertyFilter = True
+    '    Me.Selected = False
+    '    Me.Variable = ""
+    '    Me.PropertySet = ""
+    '    Me.PropertyName = ""
+    '    Me.Comparison = ""
+    '    Me.Value = ""
+    '    Me.Formula = ""
+    '    Me.NotifyPropertyFilter = True
 
-    End Sub
+    'End Sub
 
     Public Sub New(_PropertyFilter As FormPropertyFilter)
 
@@ -128,14 +135,14 @@ Public Class UCPropertyFilter
 
         Me.PropertyFilter = _PropertyFilter
         'Me.TemplatePropertyList = UC.TemplatePropertyGetFavoritesList(Form_Main.TemplatePropertyDict)
-        Me.TemplatePropertyList = Form_Main.PropertiesData.GetFavoritesList
+        Me.FavoritesList = Form_Main.PropertiesData.GetFavoritesList
 
         'MsgBox("Temporarily setting hmk_Make_From PropertySet to 'Duplicate'")
         'Form_Main.TemplatePropertyDict("hmk_Make_From")("PropertySet") = "Duplicate"
 
         If Not Me.PropertyFilter.ShowAllProps Then
             ComboBoxPropertyName.Items.Add("")
-            For Each s As String In TemplatePropertyList
+            For Each s As String In FavoritesList
                 ComboBoxPropertyName.Items.Add(s)
             Next
         Else
@@ -239,7 +246,7 @@ Public Class UCPropertyFilter
                 tmpPropList.Add(s)
             Next
         Else
-            For Each s As String In TemplatePropertyList
+            For Each s As String In FavoritesList
                 tmpPropList.Add(s)
             Next
         End If

@@ -916,6 +916,7 @@ Public Class HCStructuredStorageDoc
                 UserProperties.PropertyNames(NewPropertyId) = PropertyNameEnglish
 
                 ' ###### TODO: Maybe don't assume string, but check the actual property type and proceed accordingly. ######
+                ' Probably consult PropertiesData to find that information.
                 OLEProp = UserProperties.NewProperty(VTPropertyType.VT_LPSTR, NewPropertyId)
                 OLEProp.Value = Value.ToString
 
