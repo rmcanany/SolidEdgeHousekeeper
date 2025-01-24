@@ -495,14 +495,24 @@ Public Class TaskEditProperties
         Else
             Dim PropertyValue As String = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
             If PropertyValue Is Nothing Then
-                Proceed = False
-                ExitStatus = 1
-                If PropertyName = PropertyNameEnglish Then
-                    s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                If AddProp Then
+                    Proceed = SSDoc.AddProp(PropertySetName, PropertyNameEnglish, " ")
+                    If Proceed Then
+                        PropertyValue = CStr(SSDoc.GetPropValue(PropertySetName, PropertyNameEnglish))
+                        If PropertyValue Is Nothing Then
+                            Proceed = False
+                        End If
+                    End If
                 Else
-                    s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                    Proceed = False
+                    ExitStatus = 1
+                    If PropertyName = PropertyNameEnglish Then
+                        s = String.Format("Property '{0}' not found or not recognized.", PropertyName)
+                    Else
+                        s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
+                    End If
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End If
-                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
             End If
 

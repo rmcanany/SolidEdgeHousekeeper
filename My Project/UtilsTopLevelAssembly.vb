@@ -7,6 +7,7 @@ Public Class UtilsTopLevelAssembly
         Me.FMain = _Form_Main
     End Sub
 
+
     Public Function GetLinksTopDown(
          TopLevelFolders As List(Of String),
          TopLevelAssembly As String,
@@ -17,6 +18,8 @@ Public Class UtilsTopLevelAssembly
         Dim FoundFiles As New List(Of String)
 
         Dim NewWay As Boolean = True
+
+        TopLevelFolders = RemoveNestedFolders(TopLevelFolders)
 
         If NewWay Then
             Dim AllFilenames As New List(Of String)
@@ -960,6 +963,7 @@ Public Class UtilsTopLevelAssembly
         ' ###### Changed all references from DesignManager to RevisionManager RM 20250115 ######
         ' Code with DesignManager references is commented out above.
         ' Affected Functions: GetLinksBottomUp, FollowLinksBottomUp, GetWhereUsedBottomUp.
+        ' Did not change variable names, eg DMApp is now a RevisionManager.Application
 
         Dim AllLinkedFilenames As New List(Of String)
         Dim tmpAllLinkedFilenames As New List(Of String)
@@ -984,6 +988,8 @@ Public Class UtilsTopLevelAssembly
         FMain.Activate()
 
         FMain.TextBoxStatus.Text = String.Format("Opening {0}", System.IO.Path.GetFileName(TopLevelAssembly))
+
+        TopLevelFolders = RemoveNestedFolders(TopLevelFolders)
 
         TLADoc = CType(DMApp.OpenFileInRevisionManager(TopLevelAssembly), RevisionManager.Document)
 
@@ -1233,7 +1239,45 @@ Public Class UtilsTopLevelAssembly
 
     End Function
 
+    Private Function RemoveNestedFolders(
+        TopLevelFolders As List(Of String)
+        ) As List(Of String)
 
+        ' Sorts the list
+        ' [
+        '   c:\data
+        '   c:\data\projects
+        '   c:\data\projects\project1
+        '   d:\other
+        '   d:\other\something
+        ' ]
+        ' Then starting with the entry at the bottom of the list,
+        ' checks if that entry contains the one above.
+        ' If not, add it to the output.
+
+        Dim tmpTopLevelFolders As New List(Of String)
+        Dim OutTopLevelFolders As New List(Of String)
+
+        If TopLevelFolders.Count < 2 Then
+            Return TopLevelFolders
+        End If
+
+        For Each Dirname In TopLevelFolders
+            tmpTopLevelFolders.Add(Dirname.ToLower)
+        Next
+
+        tmpTopLevelFolders.Sort()
+
+        OutTopLevelFolders.Add(tmpTopLevelFolders(0))
+
+        For i = tmpTopLevelFolders.Count - 1 To 1 Step -1
+            If Not tmpTopLevelFolders(i).Contains(tmpTopLevelFolders(i - 1)) Then
+                OutTopLevelFolders.Add(tmpTopLevelFolders(i))
+            End If
+        Next
+
+        Return OutTopLevelFolders
+    End Function
 
 
     Private Sub UpdateStatus(Description As String, Filename As String)

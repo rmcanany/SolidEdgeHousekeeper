@@ -573,9 +573,9 @@ Public Class HCStructuredStorageDoc
 
         If PropSetName.ToLower = "system" Then
             If PropNameEnglish = "File Name".ToLower Then
-                SpecialProperty = Me.FullName
-            ElseIf PropNameEnglish = "File Name (full path)".ToLower Then
                 SpecialProperty = System.IO.Path.GetFileName(Me.FullName)
+            ElseIf PropNameEnglish = "File Name (full path)".ToLower Then
+                SpecialProperty = Me.FullName
             ElseIf PropNameEnglish = "File Name (no extension)".ToLower Then
                 SpecialProperty = System.IO.Path.GetFileNameWithoutExtension(Me.FullName)
             End If
