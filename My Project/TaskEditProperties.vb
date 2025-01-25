@@ -595,11 +595,18 @@ Public Class TaskEditProperties
             If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
         End If
 
+        Dim OriginalReplaceString As String = ""
+        If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
         ReplaceString = SSDoc.SubstitutePropertyFormulas(ReplaceString, ValidFilenameRequired:=False, ReplaceSearchType = "EX")
         If ReplaceString Is Nothing Then
             ExitStatus = 1
-            s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            If Not ReplaceSearchType = "EX" Then
+                s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            Else
+                s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            End If
         End If
 
 
@@ -665,12 +672,19 @@ Public Class TaskEditProperties
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                 End If
 
+                Dim OriginalReplaceString As String = ""
+                If ReplaceSearchType = "EX" Then OriginalReplaceString = ReplaceString
                 ReplaceString = UC.SubstitutePropertyFormula(SEDoc, FullName, ReplaceString, ValidFilenameRequired:=False, Me.PropertiesData, ReplaceSearchType = "EX")
                 If ReplaceString Is Nothing Then
                     Proceed = False
                     ExitStatus = 1
-                    s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    If Not ReplaceSearchType = "EX" Then
+                        s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    Else
+                        s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                    End If
                 End If
             End If
 

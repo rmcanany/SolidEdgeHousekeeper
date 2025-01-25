@@ -815,7 +815,8 @@ Public Class UtilsCommon
                     Dim A = nCalcExpression.Evaluate()
                     Outstring = A.ToString
                 Catch ex As Exception
-                    Outstring = ex.Message.Replace(vbCrLf, "-")
+                    'Outstring = ex.Message.Replace(vbCrLf, "-")
+                    Outstring = Nothing
                 End Try
             End If
         End If

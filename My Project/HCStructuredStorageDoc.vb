@@ -431,7 +431,8 @@ Public Class HCStructuredStorageDoc
 
                 Catch ex As Exception
 
-                    OutString = ex.Message.Replace(vbCrLf, "-")
+                    'OutString = ex.Message.Replace(vbCrLf, "-")
+                    OutString = Nothing
 
                 End Try
 

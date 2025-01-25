@@ -212,6 +212,13 @@ Public Class TaskCheckRelationships
                     Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
                     Dim Occurrence As SolidEdgeAssembly.Occurrence
 
+                    'Dim ComponentType As SolidEdgeAssembly.assemblycomponentTypeconstants.seAssemblyComponentTypeAll
+                    'Dim ComponentCount As Integer
+                    'Dim SuppressedComponents As Object() = Nothing
+                    'tmpSEDoc.GetSuppressedComponents(ComponentType, ComponentCount, SuppressedComponents)
+
+                    'Dim SuppressedOccurrences As List(Of Object) = GetSuppressedComponents(tmpSEDoc)
+
                     For Each Occurrence In Occurrences
                         If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
                             If CheckItem = "Failed relationships" Then
