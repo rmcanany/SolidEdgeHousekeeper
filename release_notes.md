@@ -13,6 +13,7 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
+
 ## V2025.1 Enhancements/Fixes
 
 ### Presets
@@ -21,7 +22,7 @@ Presets are a way to capture any setup changes you make in the course of using t
 
 ![Tabs](My%20Project/media/presets.png)
 
-Presets help you perform recurring tasks you may encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example enabling a property filter, selecting tasks, tweaking options, and so on. 
+Presets help you perform recurring tasks you encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
 
 Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
@@ -40,13 +41,15 @@ Added the ability to customize the list.
 
 ![Insert Property](My%20Project/media/file_list_properties.png)
 
-Added a new input source, Individual Files, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the dialog's text box and it will automatically filter the list for you.
+Added a new input source, `Individual Files`, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the dialog's text box and it will automatically filter the list for you.  You can select multiple files at a time with this option.
 
 ![Insert Property](My%20Project/media/file_list_individual_files.png)
 
+As with the `Individual Files` selection mode above, added multi-select to `Folder`, `Folder with subfolders`, and `Top level assembly folder`.
+
 Added feedback to notify the user that some files in the list are selected (which the program interprets as the only files that need to be processed).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
 
-Fixed an issue where encountering a read-only directory was keeping a Folders and Subfolders Search from processing to completion.
+Fixed an issue where encountering a read-only directory was keeping a `Folders with subfolders` search from processing to completion.
 
 See the [<ins>**File List Options Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#file-list-options) for details.
 
@@ -63,7 +66,7 @@ See the [<ins>**Server Query Help Topic**</ins>](https://github.com/rmcanany/Sol
 
 Added processing of localized property names where applicable.
 
-Expanded the ability to select properties, either from a drop down or shortcut menu, in all areas where properties can be used.  Previously, that was only available with `Property Filter` and `Edit Properties`.
+Expanded the ability to select properties, either from a drop down or shortcut menu, in all locations where properties can be used.  Previously, that was only available with `Property Filter` and `Edit Properties`.
 
 Added support for all property variable types.  Previously, only text type properties were supported. (Thank you **@Francesco Arfilli**!)
 
@@ -96,7 +99,7 @@ See the [<ins>**Check Links Help Topic**</ins>](https://github.com/rmcanany/Soli
 
 Added the ability to change the file name itself when saving.  (Thank you **@pkoevesdi**, **@Jojo15702**, **@ih0nza**!)
 
-The name can be drawn from one or more properties in the file.  As with the subdirectory feature, if the property contains any characters that are not valid in file names, they are replaced using the filename_charmap.txt lookup table.
+The name can be drawn from one or more properties in the file.  As with the subdirectory feature, if the property contains any characters that are not valid in file names, they are replaced using the `filename_charmap.txt` lookup table.
 
 Added the same option to `Save Drawing As`.
 
@@ -104,7 +107,15 @@ See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/So
 
 ### Top Level Assembly
 
-Fixed an issue where Family of Parts Masters (and all their links) were included in Top Down searches.
+Changed from DesignManager to RevisionManager for older versions where the former is not available.
+
+Changed from DesignManager to Structured Storage for top-down searches for all versions.
+
+Fixed an issue where Family of Parts Masters (and all their links) were included in top-down searches.
+
+Fixed an issue where a model file contained in a drawing, but not otherwise related to the top level assembly, was not included in search results.
+
+Fixed an issue, with multiple top-level directories, where nested directories were being processed twice.
 
 ### Documentation
 

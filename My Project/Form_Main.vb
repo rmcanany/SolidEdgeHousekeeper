@@ -1604,45 +1604,151 @@ Public Class Form_Main
         ToolTip1.SetToolTip(TextBoxStatus, TextBoxStatus.Text)
     End Sub
 
-    Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
+    Private Sub BT_AddSingleFiles_Click(sender As Object, e As EventArgs) Handles BT_AddSingleFiles.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
-        tmpFolderDialog.IsFolderPicker = True
+        Dim tmpFolderDialog As New OpenFileDialog
+        tmpFolderDialog.Multiselect = True
+        tmpFolderDialog.Filter =
+                                "Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
+                                "Assembly (*.asm)|*.asm|" +
+                                "Part (*.par)|*.par|" +
+                                "Sheet Metal (*.psm)|*.psm|" +
+                                "Draft (*.dft)|*.dft"
 
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+
             Dim tmpItem As New ListViewItem
-            tmpItem.Text = "Folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+            tmpItem.Text = "Files selection"
+            tmpItem.ImageKey = "Files"
+            tmpItem.Tag = "Files"
+
+            Dim FileLists As String = ""
+            For Each tmpFile As String In tmpFolderDialog.FileNames
+                FileLists = FileLists & tmpFile & ","
+            Next
+            FileLists = FileLists.Remove(FileLists.Length - 1)
+
+            tmpItem.SubItems.Add(FileLists)
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
-            tmpItem.ImageKey = "Folder"
-            tmpItem.Tag = "Folder"
-            tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            tmpItem.Name = FileLists
+
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                ListViewSources.Items.Add(tmpItem)
+                ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
 
             ListViewFilesOutOfDate = True
+        End If
+
+    End Sub
+
+    Private Sub BT_AddFolder_Click(sender As Object, e As EventArgs) Handles BT_AddFolder.Click
+
+        Dim NewWay As Boolean = True
+
+        If NewWay Then
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+            tmpFolderDialog.Multiselect = True
+
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                For Each tmpFolder As String In tmpFolderDialog.FileNames
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = "Folder"
+                    tmpItem.ImageKey = "Folder"
+                    tmpItem.Tag = "Folder"
+
+                    tmpItem.SubItems.Add(tmpFolder)
+                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    tmpItem.Name = tmpFolder
+
+                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                        ListViewSources.Items.Add(tmpItem)
+                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    End If
+                Next
+
+                ListViewFilesOutOfDate = True
+
+            End If
+        Else
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = "Folder"
+                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.ImageKey = "Folder"
+                tmpItem.Tag = "Folder"
+                tmpItem.Name = tmpFolderDialog.FileName
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                    ListViewSources.Items.Add(tmpItem)
+                    ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
+
+                ListViewFilesOutOfDate = True
+
+            End If
 
         End If
+
+
 
     End Sub
 
     Private Sub BT_AddFolderSubfolders_Click(sender As Object, e As EventArgs) Handles BT_AddFolderSubfolders.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
-        tmpFolderDialog.IsFolderPicker = True
+        Dim NewWay As Boolean = True
 
-        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-            Dim tmpItem As New ListViewItem
-            tmpItem.Text = "Folder with subfolders"
-            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-            tmpItem.Group = ListViewSources.Groups.Item("Sources")
-            tmpItem.ImageKey = "Folders"
-            tmpItem.Tag = "Folders"
-            tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        If NewWay Then
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+            tmpFolderDialog.Multiselect = True
 
-            ListViewFilesOutOfDate = True
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                For Each tmpFolder As String In tmpFolderDialog.FileNames
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = "Folder with subfolders"
+                    tmpItem.ImageKey = "Folders"
+                    tmpItem.Tag = "Folders"
+
+                    tmpItem.SubItems.Add(tmpFolder)
+                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    tmpItem.Name = tmpFolder
+
+                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                        ListViewSources.Items.Add(tmpItem)
+                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    End If
+                Next
+
+                ListViewFilesOutOfDate = True
+
+            End If
+
+        Else
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = "Folder with subfolders"
+                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+                'tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.ImageKey = "Folders"
+                tmpItem.Tag = "Folders"
+                tmpItem.Name = tmpFolderDialog.FileName
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+                ListViewFilesOutOfDate = True
+
+            End If
 
         End If
 
@@ -1722,20 +1828,52 @@ Public Class Form_Main
 
     Private Sub BT_ASM_Folder_Click(sender As Object, e As EventArgs) Handles BT_ASM_Folder.Click
 
-        Dim tmpFolderDialog As New CommonOpenFileDialog
-        tmpFolderDialog.IsFolderPicker = True
+        Dim NewWay As Boolean = True
 
-        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-            Dim tmpItem As New ListViewItem
-            tmpItem.Text = "Top level asm folder"
-            tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-            tmpItem.Group = ListViewSources.Groups.Item("Sources")
-            tmpItem.ImageKey = "ASM_Folder"
-            tmpItem.Tag = "ASM_Folder"
-            tmpItem.Name = tmpFolderDialog.FileName
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+        If NewWay Then
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+            tmpFolderDialog.Multiselect = True
 
-            ListViewFilesOutOfDate = True
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                For Each tmpFolder As String In tmpFolderDialog.FileNames
+                    Dim tmpItem As New ListViewItem
+
+                    tmpItem.Text = "Top level asm folder"
+                    tmpItem.ImageKey = "ASM_Folder"
+                    tmpItem.Tag = "ASM_Folder"
+
+                    tmpItem.SubItems.Add(tmpFolder)
+                    tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                    tmpItem.Name = tmpFolder
+
+                    If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                        ListViewSources.Items.Add(tmpItem)
+                        ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    End If
+                Next
+
+                ListViewFilesOutOfDate = True
+
+            End If
+
+        Else
+
+            Dim tmpFolderDialog As New CommonOpenFileDialog
+            tmpFolderDialog.IsFolderPicker = True
+
+            If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = "Top level asm folder"
+                tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.ImageKey = "ASM_Folder"
+                tmpItem.Tag = "ASM_Folder"
+                tmpItem.Name = tmpFolderDialog.FileName
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
+                ListViewFilesOutOfDate = True
+            End If
 
         End If
 
@@ -3483,44 +3621,6 @@ Public Class Form_Main
 
     Private Sub ListViewFiles_DrawSubItem(sender As Object, e As DrawListViewSubItemEventArgs) Handles ListViewFiles.DrawSubItem
         e.DrawDefault = True
-    End Sub
-
-    Private Sub BT_AddSingleFiles_Click(sender As Object, e As EventArgs) Handles BT_AddSingleFiles.Click
-
-        Dim tmpFolderDialog As New OpenFileDialog
-        tmpFolderDialog.Multiselect = True
-        tmpFolderDialog.Filter =
-                                "Solid Edge files (*.par;*.psm;*.asm;*.dft)|*.par;*.psm;*.asm;*.dft|" +
-                                "Assembly (*.asm)|*.asm|" +
-                                "Part (*.par)|*.par|" +
-                                "Sheet Metal (*.psm)|*.psm|" +
-                                "Draft (*.dft)|*.dft"
-
-        If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
-
-            Dim tmpItem As New ListViewItem
-            tmpItem.Text = "Files selection"
-            tmpItem.ImageKey = "Files"
-            tmpItem.Tag = "Files"
-
-            Dim FileLists As String = ""
-            For Each tmpFile As String In tmpFolderDialog.FileNames
-                FileLists = FileLists & tmpFile & ","
-            Next
-            FileLists = FileLists.Remove(FileLists.Length - 1)
-
-            tmpItem.SubItems.Add(FileLists)
-
-            tmpItem.Group = ListViewSources.Groups.Item("Sources")
-
-            tmpItem.Name = FileLists
-
-            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-
-            ListViewFilesOutOfDate = True
-
-        End If
-
     End Sub
 
 End Class

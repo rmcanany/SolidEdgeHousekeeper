@@ -6,13 +6,13 @@
 </div>
 
 **Contributors:**
-**@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github)**
+@[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github)
 
 **Beta Testers:**
-**@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza**
+@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza
 
 **Helpful feedback and bug reports:**
-**@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza**
+@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -154,6 +154,8 @@ Choose this option to select individual files, files within a single folder, or 
 - Click ![Folder](Resources/icons8_Folder_16.png) to select a single folder
 - Click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders
 
+You can select any number of files/folders at a time with these options.
+
 ### Select by Top-Level Assembly
 
 Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
@@ -161,7 +163,7 @@ Choose this option to select files linked to an assembly. Referring to the toolb
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
 
-You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders. Note the program always includes subfolders for *where used* files.
+You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders.  As with the `Select by Folder` option, you can select any number of folders at a time. Note the program always includes subfolders for *where used* files.
 
 There are a lot of options with this selection type.  They are covered here.  Shown below is the top-level assembly configuration page.
 
@@ -222,15 +224,15 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 ### File List Options
 
 You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 7, 
-- Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the right below
+- Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
 
 ![Customize file list columns](My%20Project/media/file_list_columns_customize.png)
 
-Click the Add button to bring up the Property Selector dialog, shown on the left.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.
+Click the Add button to bring up the Property Selector dialog.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.  Note, before you can use properties, they must first be populated from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
 
-Getting properties for a large number of files can take some time.  If the program detects that situation when you click the update button, it prompts you if you want them displayed.
+Getting properties for a large number of files can take some time.  If that's the case, when you click Update, the program asks if you want them displayed anyway.
 
-You can edit properties directly on the list.  Double-click the property and enter the new value.  You can also sort the list by any column.  Click the column header to sort.
+You can edit properties directly on the list.  Double-click the property and enter the new value.  You can also sort the list by column.  Click the column header to sort.  Click it again to reverse the order.
 
 ### Shortcut menu
 
@@ -470,15 +472,17 @@ Presets are a way to capture any setup changes you make in the course of using t
 
 ![Tabs](My%20Project/media/presets.png)
 
+Presets help you perform recurring tasks you encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
+
+Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+
 To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
-Presets help you perform recurring tasks you may encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example enabling a property filter, selecting tasks, tweaking options, and so on. 
+Creating a baseline Preset, while not a requirement, can be helpful.  It's a known starting point for creating new ones.  It's also a quick, reliable way to set back up for everyday use of the program.
 
-Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
-
-As a practical matter, I have found that creating a baseline Preset, I call mine `_Default`, is helpful.  It's a known starting point for creating new ones.  It's also a quick, reliable way to set back up for everyday use of the program.
+For commands with variable information, such as the output directory for Save As, you can leave that field blank when creating the Preset.  That way, if you accidentally click Process before filling it out, the program will stop and prompt you to fix the issue.
 
 
 # CONFIGURATION TAB
