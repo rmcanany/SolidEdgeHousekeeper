@@ -294,11 +294,15 @@ Public Class TaskPrint
 
         Dim OptionList As New List(Of String)
 
-        'Dim IU As New InterfaceUtilities
-
         FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 10, 100, 200)
 
         RowIndex = 0
+
+        Label = FormatOptionsLabel(ControlNames.CopiesLabel.ToString, "Select Printer")
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        ControlsDict(Label.Name) = Label
+
+        RowIndex += 1
 
         ComboBox = FormatOptionsComboBox(ControlNames.PrinterName.ToString, ComboBoxItems, "DropDownList")
         ComboBox.Anchor = CType(AnchorStyles.Left + AnchorStyles.Right, AnchorStyles)
@@ -445,6 +449,8 @@ Public Class TaskPrint
     Public Function GetInstalledPrinterNames() As List(Of String)
         Dim PrinterList As New List(Of String)
         Dim InstalledPrinter As String
+
+        PrinterList.Add("")
         For Each InstalledPrinter In System.Drawing.Printing.PrinterSettings.InstalledPrinters
             PrinterList.Add(InstalledPrinter)
         Next InstalledPrinter

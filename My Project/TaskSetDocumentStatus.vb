@@ -178,7 +178,9 @@ Public Class TaskSetDocumentStatus
         Dim RowIndex As Integer
         Dim CheckBox As CheckBox
         Dim ComboBox As ComboBox
-        Dim ComboBoxItems As List(Of String) = Split("Available Baselined InReview InWork Obsolete Released", " ").ToList
+        'Dim ComboBoxItems As List(Of String) = Split("Available Baselined InReview InWork Obsolete Released", " ").ToList
+        Dim ComboBoxItems As New List(Of String)
+        ComboBoxItems.AddRange({"", "Available", "Baselined", "InReview", "InWork", "Obsolete", "Released"})
         'Dim TextBox As TextBox
         Dim Label As Label
         Dim ControlWidth As Integer = 225
