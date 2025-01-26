@@ -1618,6 +1618,7 @@ Public Class Form_Main
         If tmpFolderDialog.ShowDialog() = DialogResult.OK Then
 
             Dim tmpItem As New ListViewItem
+
             tmpItem.Text = "Files selection"
             tmpItem.ImageKey = "Files"
             tmpItem.Tag = "Files"
@@ -1691,12 +1692,8 @@ Public Class Form_Main
                 End If
 
                 ListViewFilesOutOfDate = True
-
             End If
-
         End If
-
-
 
     End Sub
 
@@ -3383,6 +3380,8 @@ Public Class Form_Main
 
                 Application.DoEvents()
                 Startup()
+
+                Me.ListViewFilesOutOfDate = True
             End If
 
         Else
