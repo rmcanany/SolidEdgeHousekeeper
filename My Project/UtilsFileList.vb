@@ -129,6 +129,14 @@ Public Class UtilsFileList
 
         End If
 
+        '#### CHECK START CONDITIONS ####
+
+        For i = 0 To ListViewSources.Items.Count - 1
+
+            If ListViewSources.Items(i).Group.Name = "Sources" Then
+                GroupTags.Add(CType(ListViewSources.Items(i).Tag, String))
+            End If
+        Next
 
 
         If Not GroupTags.Contains("asm") Then
@@ -148,6 +156,15 @@ Public Class UtilsFileList
 
             If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
                 msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                ListViewFiles.EndUpdate()
+                FMain.Cursor = Cursors.Default
+                FMain.TextBoxStatus.Text = ""
+                MsgBox(msg, vbOKOnly)
+                Exit Sub
+            End If
+
+            If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
+                msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
                 ListViewFiles.EndUpdate()
                 FMain.Cursor = Cursors.Default
                 FMain.TextBoxStatus.Text = ""

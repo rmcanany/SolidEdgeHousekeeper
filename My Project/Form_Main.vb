@@ -1809,11 +1809,14 @@ Public Class Form_Main
                 Dim tmpItem2 As New ListViewItem
                 tmpItem2.Text = "Top level asm folder"
                 tmpItem2.SubItems.Add(Folder)
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem2.Group = ListViewSources.Groups.Item("Sources")
                 tmpItem2.ImageKey = "ASM_Folder"
                 tmpItem2.Tag = "ASM_Folder"
                 tmpItem2.Name = Folder
-                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then ListViewSources.Items.Add(tmpItem2) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                If Not ListViewSources.Items.ContainsKey(tmpItem2.Name) Then
+                    ListViewSources.Items.Add(tmpItem2)
+                    ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                End If
 
             End If
 
