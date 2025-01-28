@@ -25,6 +25,7 @@ Public Class Form_Main
     Public DragDropCache As New List(Of ListViewItem)
     Public DragDropCacheExcluded As New List(Of ListViewItem)
 
+
     Private _ListViewFilesOutOfDate As Boolean
     Public Property ListViewFilesOutOfDate As Boolean
         Get
@@ -1191,7 +1192,7 @@ Public Class Form_Main
 
         ListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
 
-        ListViewFilesOutOfDate = False
+        'ListViewFilesOutOfDate = False
 
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
@@ -1784,6 +1785,7 @@ Public Class Form_Main
             tmpItem.Name = tmpFileDialog.FileName
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
+            ListViewFilesOutOfDate = True
         End If
 
     End Sub
@@ -1963,6 +1965,7 @@ Public Class Form_Main
 
             Next
 
+            ListViewFilesOutOfDate = True
         End If
 
     End Sub
@@ -2094,6 +2097,24 @@ Public Class Form_Main
 
     End Sub
 
+    Private Sub BT_MoveToRecycleBin_Click(sender As Object, e As EventArgs) Handles BT_MoveToRecycleBin.Click
+
+        For i = ListViewFiles.SelectedItems.Count - 1 To 0 Step -1
+
+            Dim tmpItem As ListViewItem = ListViewFiles.SelectedItems.Item(i)
+            Dim Filename As String = tmpItem.Name
+            Try
+                My.Computer.FileSystem.DeleteFile(Filename, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                tmpItem.Remove()
+            Catch ex As Exception
+                Dim s As String = String.Format("Could not move {0} to the recycle bin.", IO.Path.GetFileName(Filename))
+                s = String.Format("{0}  Click OK to keep processing, Cancel to quit.", s)
+                Dim Result As MsgBoxResult = MsgBox(s)
+                If Result = MsgBoxResult.Cancel Then Exit For
+            End Try
+        Next
+
+    End Sub
 
     Private Sub TextBoxListViewUpdateFrequency_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxListViewUpdateFrequency.KeyDown
 
@@ -3384,7 +3405,7 @@ Public Class Form_Main
                 Application.DoEvents()
                 Startup()
 
-                Me.ListViewFilesOutOfDate = True
+                'Me.ListViewFilesOutOfDate = True
             End If
 
         Else

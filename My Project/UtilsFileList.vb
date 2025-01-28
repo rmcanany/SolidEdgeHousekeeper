@@ -43,91 +43,91 @@ Public Class UtilsFileList
 
         ListViewFiles.BeginUpdate()
 
+        ListViewFiles.Items.Clear()
 
-        Dim NewWay As Boolean = False
+        'Dim NewWay As Boolean = False
 
-        If Not NewWay Then
+        'If Not NewWay Then
 
-            '' Remove everything except the "Sources" group.
-            'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-            '    If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-            '        ListViewFiles.Items.Item(i).Remove()
-            '    Else
-            '        GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-            '    End If
-            'Next
+        '    '' Remove everything except the "Sources" group.
+        '    'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
+        '    '    If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
+        '    '        ListViewFiles.Items.Item(i).Remove()
+        '    '    Else
+        '    '        GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+        '    '    End If
+        '    'Next
 
-            ListViewFiles.Items.Clear()
 
-        Else
-            ' ###### Initialize tmpLV ######
+        'Else
+        '    ' ###### Initialize tmpLV ######
 
-            Dim tmpListViewFiles As New ListViewExtended.ListViewCollapsible
+        '    Dim tmpListViewFiles As New ListViewExtended.ListViewCollapsible
 
-            Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
-            ListViewGroup1.Name = "Sources"
-            Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
-            ListViewGroup2.Name = "Excluded"
-            Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
-            ListViewGroup3.Name = ".asm"
-            Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
-            ListViewGroup4.Name = ".par"
-            Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
-            ListViewGroup5.Name = ".psm"
-            Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
-            ListViewGroup6.Name = ".dft"
-            tmpListViewFiles.Groups.Add(ListViewGroup1)
-            tmpListViewFiles.Groups.Add(ListViewGroup2)
-            tmpListViewFiles.Groups.Add(ListViewGroup3)
-            tmpListViewFiles.Groups.Add(ListViewGroup4)
-            tmpListViewFiles.Groups.Add(ListViewGroup5)
-            tmpListViewFiles.Groups.Add(ListViewGroup6)
+        '    Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
+        '    ListViewGroup1.Name = "Sources"
+        '    Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
+        '    ListViewGroup2.Name = "Excluded"
+        '    Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
+        '    ListViewGroup3.Name = ".asm"
+        '    Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
+        '    ListViewGroup4.Name = ".par"
+        '    Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
+        '    ListViewGroup5.Name = ".psm"
+        '    Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
+        '    ListViewGroup6.Name = ".dft"
+        '    tmpListViewFiles.Groups.Add(ListViewGroup1)
+        '    tmpListViewFiles.Groups.Add(ListViewGroup2)
+        '    tmpListViewFiles.Groups.Add(ListViewGroup3)
+        '    tmpListViewFiles.Groups.Add(ListViewGroup4)
+        '    tmpListViewFiles.Groups.Add(ListViewGroup5)
+        '    tmpListViewFiles.Groups.Add(ListViewGroup6)
 
-            tmpListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
+        '    tmpListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
 
-            For i = 0 To ListViewFiles.Items.Count - 1
+        '    For i = 0 To ListViewFiles.Items.Count - 1
 
-                If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
+        '        If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
 
-                    GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+        '            GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
 
-                    Dim tmpItem As New ListViewItem
+        '            Dim tmpItem As New ListViewItem
 
-                    tmpItem.Text = ListViewFiles.Items.Item(i).Text
-                    tmpItem.SubItems.Add(ListViewFiles.Items.Item(i).Name)
-                    tmpItem.Group = tmpListViewFiles.Groups.Item("Sources")
-                    tmpItem.ImageKey = ListViewFiles.Items.Item(i).ImageKey
-                    tmpItem.Tag = ListViewFiles.Items.Item(i).Tag
-                    tmpItem.Name = ListViewFiles.Items.Item(i).Name
+        '            tmpItem.Text = ListViewFiles.Items.Item(i).Text
+        '            tmpItem.SubItems.Add(ListViewFiles.Items.Item(i).Name)
+        '            tmpItem.Group = tmpListViewFiles.Groups.Item("Sources")
+        '            tmpItem.ImageKey = ListViewFiles.Items.Item(i).ImageKey
+        '            tmpItem.Tag = ListViewFiles.Items.Item(i).Tag
+        '            tmpItem.Name = ListViewFiles.Items.Item(i).Name
 
-                    If Not tmpListViewFiles.Items.ContainsKey(tmpItem.Name) Then tmpListViewFiles.Items.Add(tmpItem)
+        '            If Not tmpListViewFiles.Items.ContainsKey(tmpItem.Name) Then tmpListViewFiles.Items.Add(tmpItem)
 
-                End If
-            Next
+        '        End If
+        '    Next
 
-            ListViewFiles.Items.Clear()
+        '    ListViewFiles.Items.Clear()
 
-            For i = 0 To tmpListViewFiles.Items.Count - 1
+        '    For i = 0 To tmpListViewFiles.Items.Count - 1
 
-                If tmpListViewFiles.Items.Item(i).Group.Name = "Sources" Then
+        '        If tmpListViewFiles.Items.Item(i).Group.Name = "Sources" Then
 
-                    'GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
+        '            'GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
 
-                    Dim tmpItem As New ListViewItem
+        '            Dim tmpItem As New ListViewItem
 
-                    tmpItem.Text = tmpListViewFiles.Items.Item(i).Text
-                    tmpItem.SubItems.Add(tmpListViewFiles.Items.Item(i).Name)
-                    tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-                    tmpItem.ImageKey = tmpListViewFiles.Items.Item(i).ImageKey
-                    tmpItem.Tag = tmpListViewFiles.Items.Item(i).Tag
-                    tmpItem.Name = tmpListViewFiles.Items.Item(i).Name
+        '            tmpItem.Text = tmpListViewFiles.Items.Item(i).Text
+        '            tmpItem.SubItems.Add(tmpListViewFiles.Items.Item(i).Name)
+        '            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
+        '            tmpItem.ImageKey = tmpListViewFiles.Items.Item(i).ImageKey
+        '            tmpItem.Tag = tmpListViewFiles.Items.Item(i).Tag
+        '            tmpItem.Name = tmpListViewFiles.Items.Item(i).Name
 
-                    If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
+        '            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
 
-                End If
-            Next
+        '        End If
+        '    Next
 
-        End If
+        'End If
 
         '#### CHECK START CONDITIONS ####
 
@@ -747,22 +747,34 @@ Public Class UtilsFileList
         Dim MissingFilesList As New List(Of String)
         Dim DependencyDict As New Dictionary(Of String, List(Of String))
         Dim Filename As String
-        Dim DMDoc As RevisionManager.Document
+        'Dim DMDoc As RevisionManager.Document
 
-        Dim DMApp As New RevisionManager.Application
-        DMApp.Visible = 1
+        'Dim DMApp As New RevisionManager.Application
+        'DMApp.Visible = 1
+        Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-        FMain.Activate()
+
+        'FMain.Activate()
 
         For Each Filename In Foundfiles
 
             FMain.TextBoxStatus.Text = String.Format("Dependency Sort (this can take some time) {0}", IO.Path.GetFileName(Filename))
+            System.Windows.Forms.Application.DoEvents()
 
-            DMDoc = CType(DMApp.Open(Filename), RevisionManager.Document)
+            'DMDoc = CType(DMApp.Open(Filename), RevisionManager.Document)
+
+            Try
+                SSDoc = New HCStructuredStorageDoc(Filename)
+                SSDoc.ReadLinks(FMain.LinkManagementOrder)
+            Catch ex As Exception
+                If SSDoc IsNot Nothing Then SSDoc.Close()
+            End Try
 
             Dim tmpDependencyDict As New Dictionary(Of String, List(Of String))
 
-            tmpDependencyDict = GetLinks(DMDoc, tmpDependencyDict, MissingFilesList)
+            tmpDependencyDict = GetLinks(SSDoc, tmpDependencyDict, MissingFilesList)
+
+            If SSDoc IsNot Nothing Then SSDoc.Close()
 
             For Each s As String In tmpDependencyDict.Keys
                 FMain.TextBoxStatus.Text = s
@@ -776,7 +788,7 @@ Public Class UtilsFileList
 
         OutList = SortByDependency(DependencyDict)
 
-        DMApp.Quit()
+        'DMApp.Quit()
 
         If MissingFilesList.Count > 0 Then
             Dim Timestamp As String = System.DateTime.Now.ToString("yyyyMMdd_HHmmss")
@@ -804,60 +816,118 @@ Public Class UtilsFileList
 
     End Function
 
+    'Private Function GetLinks(
+    '    DMDoc As RevisionManager.Document,
+    '    LinkDict As Dictionary(Of String, List(Of String)),
+    '    MissingFilesList As List(Of String)
+    '    ) As Dictionary(Of String, List(Of String))
+
+    '    'Dim LinkDict As New Dictionary(Of String, List(Of String))
+    '    Dim LinkDoc As RevisionManager.Document
+    '    Dim LinkDocs As RevisionManager.LinkedDocuments
+    '    Dim DMDocName As String
+    '    Dim LinkDocName As String
+    '    'Dim Filename As String
+    '    Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
+    '    'Dim tf As Boolean
+
+    '    Dim UC As New UtilsCommon
+
+    '    DMDocName = UC.SplitFOAName(DMDoc.FullName)("Filename")
+
+    '    If Not LinkDict.Keys.Contains(DMDocName) Then
+
+    '        LinkDict.Add(DMDocName, New List(Of String))
+
+    '        ' Master FOP reports Child documents as LinkedDocuments.
+    '        ' Not correct in this dependency context.
+    '        'FOPStatus
+    '        '1 Not FOP 
+    '        '2 FOP Master
+    '        '4 FOP not Master
+    '        Dim FOPStatus As Integer
+    '        DMDoc.IsDocumentFOP(FOPStatus)
+
+    '        If Not FOPStatus = 2 Then
+    '            LinkDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
+    '            If Not LinkDocs Is Nothing Then
+    '                If LinkDocs.Count > 0 Then
+    '                    For Each LinkDoc In LinkDocs
+
+    '                        LinkDocName = UC.SplitFOAName(LinkDoc.FullName)("Filename")
+
+    '                        If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
+    '                            If IO.File.Exists(LinkDocName) Then
+    '                                LinkDict(DMDocName).Add(LinkDocName)
+    '                                LinkDict = GetLinks(LinkDoc, LinkDict, MissingFilesList)
+    '                            Else
+    '                                If Not MissingFilesList.Contains(LinkDocName) Then
+    '                                    MissingFilesList.Add(LinkDocName)
+    '                                End If
+    '                            End If
+    '                        End If
+    '                    Next
+    '                End If
+
+    '            End If
+    '        End If
+    '    End If
+
+    '    Return LinkDict
+    'End Function
+
     Private Function GetLinks(
-        DMDoc As RevisionManager.Document,
+        SSDoc As HCStructuredStorageDoc,
         LinkDict As Dictionary(Of String, List(Of String)),
         MissingFilesList As List(Of String)
         ) As Dictionary(Of String, List(Of String))
 
-        'Dim LinkDict As New Dictionary(Of String, List(Of String))
-        Dim LinkDoc As RevisionManager.Document
-        Dim LinkDocs As RevisionManager.LinkedDocuments
-        Dim DMDocName As String
-        Dim LinkDocName As String
+        ''Dim LinkDict As New Dictionary(Of String, List(Of String))
+        'Dim LinkDoc As RevisionManager.Document
+        'Dim LinkDocs As RevisionManager.LinkedDocuments
+        Dim SSDocName As String
+        'Dim LinkDocName As String
         'Dim Filename As String
         Dim ValidExtensions As New List(Of String)({".par", ".psm", ".asm", ".dft"})
         'Dim tf As Boolean
 
+        Dim SSLinkNames As List(Of String)
+        Dim SSLinkName As String
+        Dim SSLinkDoc As HCStructuredStorageDoc = Nothing
+
         Dim UC As New UtilsCommon
 
-        DMDocName = UC.SplitFOAName(DMDoc.FullName)("Filename")
+        SSDocName = SSDoc.FullName
 
-        If Not LinkDict.Keys.Contains(DMDocName) Then
+        If Not LinkDict.Keys.Contains(SSDocName) Then
 
-            LinkDict.Add(DMDocName, New List(Of String))
+            LinkDict.Add(SSDocName, New List(Of String))
 
-            ' Master FOP reports Child documents as LinkedDocuments.
-            ' Not correct in this dependency context.
-            'FOPStatus
-            '1 Not FOP 
-            '2 FOP Master
-            '4 FOP not Master
-            Dim FOPStatus As Integer
-            DMDoc.IsDocumentFOP(FOPStatus)
+            If Not SSDoc.IsFOPMaster Then
+                SSLinkNames = SSDoc.GetLinkNames
+                If SSLinkNames.Count > 0 Then
+                    For Each SSLinkName In SSLinkNames
 
-            If Not FOPStatus = 2 Then
-                LinkDocs = CType(DMDoc.LinkedDocuments, RevisionManager.LinkedDocuments)
-                If Not LinkDocs Is Nothing Then
-                    If LinkDocs.Count > 0 Then
-                        For Each LinkDoc In LinkDocs
-
-                            LinkDocName = UC.SplitFOAName(LinkDoc.FullName)("Filename")
-
-                            If ValidExtensions.Contains(IO.Path.GetExtension(LinkDocName)) Then
-                                If IO.File.Exists(LinkDocName) Then
-                                    LinkDict(DMDocName).Add(LinkDocName)
-                                    LinkDict = GetLinks(LinkDoc, LinkDict, MissingFilesList)
-                                Else
-                                    If Not MissingFilesList.Contains(LinkDocName) Then
-                                        MissingFilesList.Add(LinkDocName)
-                                    End If
+                        If ValidExtensions.Contains(IO.Path.GetExtension(SSLinkName)) Then
+                            If IO.File.Exists(SSLinkName) Then
+                                Try
+                                    SSLinkDoc = New HCStructuredStorageDoc(SSLinkName)
+                                    SSLinkDoc.ReadLinks(FMain.LinkManagementOrder)
+                                    LinkDict(SSDocName).Add(SSLinkName)
+                                    LinkDict = GetLinks(SSLinkDoc, LinkDict, MissingFilesList)
+                                    SSLinkDoc.Close()
+                                Catch ex As Exception
+                                    If SSLinkDoc IsNot Nothing Then SSLinkDoc.Close()
+                                End Try
+                            Else
+                                If Not MissingFilesList.Contains(SSLinkName) Then
+                                    MissingFilesList.Add(SSLinkName)
                                 End If
                             End If
-                        Next
-                    End If
-
+                        End If
+                    Next
                 End If
+
             End If
         End If
 

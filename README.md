@@ -245,6 +245,7 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
+- **Move to Recycle Bin:** Removes the files from their original location and moves them to the Recycle Bin.
 
 ## Sorting
 

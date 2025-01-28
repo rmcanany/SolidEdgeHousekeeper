@@ -25,8 +25,8 @@ Partial Class Form_Main
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form_Main))
+        Dim ListViewGroup1 As System.Windows.Forms.ListViewGroup = New System.Windows.Forms.ListViewGroup("File sources", System.Windows.Forms.HorizontalAlignment.Left)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPageHome = New System.Windows.Forms.TabPage()
         Me.ColumnSelectionPanel = New System.Windows.Forms.Panel()
@@ -244,6 +244,7 @@ Partial Class Form_Main
         Me.BT_ProcessSelected = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_Remove = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
         Me.TabControl1.SuspendLayout()
@@ -337,7 +338,7 @@ Partial Class Form_Main
         '
         'BT_DeleteCLBItem
         '
-        Me.BT_DeleteCLBItem.Image = Global.Housekeeper.My.Resources.Resources.Cancel
+        Me.BT_DeleteCLBItem.Image = CType(resources.GetObject("BT_DeleteCLBItem.Image"), System.Drawing.Image)
         Me.BT_DeleteCLBItem.Location = New System.Drawing.Point(121, 43)
         Me.BT_DeleteCLBItem.Name = "BT_DeleteCLBItem"
         Me.BT_DeleteCLBItem.Size = New System.Drawing.Size(20, 20)
@@ -348,7 +349,7 @@ Partial Class Form_Main
         'ButtonCloseListOfColumns
         '
         Me.ButtonCloseListOfColumns.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonCloseListOfColumns.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonCloseListOfColumns.Image = CType(resources.GetObject("ButtonCloseListOfColumns.Image"), System.Drawing.Image)
         Me.ButtonCloseListOfColumns.Location = New System.Drawing.Point(73, 162)
         Me.ButtonCloseListOfColumns.Name = "ButtonCloseListOfColumns"
         Me.ButtonCloseListOfColumns.Size = New System.Drawing.Size(71, 28)
@@ -360,7 +361,7 @@ Partial Class Form_Main
         'ButtonAddToListOfColumns
         '
         Me.ButtonAddToListOfColumns.Dock = System.Windows.Forms.DockStyle.Left
-        Me.ButtonAddToListOfColumns.Image = Global.Housekeeper.My.Resources.Resources.expand
+        Me.ButtonAddToListOfColumns.Image = CType(resources.GetObject("ButtonAddToListOfColumns.Image"), System.Drawing.Image)
         Me.ButtonAddToListOfColumns.Location = New System.Drawing.Point(0, 162)
         Me.ButtonAddToListOfColumns.Name = "ButtonAddToListOfColumns"
         Me.ButtonAddToListOfColumns.Size = New System.Drawing.Size(73, 28)
@@ -504,7 +505,7 @@ Partial Class Form_Main
         'CheckBoxEnablePropertyFilter
         '
         Me.CheckBoxEnablePropertyFilter.CheckOnClick = True
-        Me.CheckBoxEnablePropertyFilter.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.CheckBoxEnablePropertyFilter.Image = CType(resources.GetObject("CheckBoxEnablePropertyFilter.Image"), System.Drawing.Image)
         Me.CheckBoxEnablePropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxEnablePropertyFilter.Name = "CheckBoxEnablePropertyFilter"
         Me.CheckBoxEnablePropertyFilter.Size = New System.Drawing.Size(99, 22)
@@ -513,7 +514,7 @@ Partial Class Form_Main
         'new_ButtonPropertyFilter
         '
         Me.new_ButtonPropertyFilter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_ButtonPropertyFilter.Image = Global.Housekeeper.My.Resources.Resources.Tools
+        Me.new_ButtonPropertyFilter.Image = CType(resources.GetObject("new_ButtonPropertyFilter.Image"), System.Drawing.Image)
         Me.new_ButtonPropertyFilter.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_ButtonPropertyFilter.Name = "new_ButtonPropertyFilter"
         Me.new_ButtonPropertyFilter.Size = New System.Drawing.Size(23, 22)
@@ -527,7 +528,7 @@ Partial Class Form_Main
         'CheckBoxEnableFileWildcard
         '
         Me.CheckBoxEnableFileWildcard.CheckOnClick = True
-        Me.CheckBoxEnableFileWildcard.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
+        Me.CheckBoxEnableFileWildcard.Image = CType(resources.GetObject("CheckBoxEnableFileWildcard.Image"), System.Drawing.Image)
         Me.CheckBoxEnableFileWildcard.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.CheckBoxEnableFileWildcard.Name = "CheckBoxEnableFileWildcard"
         Me.CheckBoxEnableFileWildcard.Size = New System.Drawing.Size(74, 22)
@@ -542,7 +543,7 @@ Partial Class Form_Main
         'new_ButtonFileSearchDelete
         '
         Me.new_ButtonFileSearchDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_ButtonFileSearchDelete.Image = Global.Housekeeper.My.Resources.Resources.Cancel
+        Me.new_ButtonFileSearchDelete.Image = CType(resources.GetObject("new_ButtonFileSearchDelete.Image"), System.Drawing.Image)
         Me.new_ButtonFileSearchDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_ButtonFileSearchDelete.Name = "new_ButtonFileSearchDelete"
         Me.new_ButtonFileSearchDelete.Size = New System.Drawing.Size(23, 22)
@@ -568,7 +569,7 @@ Partial Class Form_Main
         'BT_AddSingleFiles
         '
         Me.BT_AddSingleFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddSingleFiles.Image = Global.Housekeeper.My.Resources.Resources.Files
+        Me.BT_AddSingleFiles.Image = CType(resources.GetObject("BT_AddSingleFiles.Image"), System.Drawing.Image)
         Me.BT_AddSingleFiles.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddSingleFiles.Name = "BT_AddSingleFiles"
         Me.BT_AddSingleFiles.Size = New System.Drawing.Size(23, 22)
@@ -577,7 +578,7 @@ Partial Class Form_Main
         'BT_AddFolder
         '
         Me.BT_AddFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFolder.Image = Global.Housekeeper.My.Resources.Resources.folder
+        Me.BT_AddFolder.Image = CType(resources.GetObject("BT_AddFolder.Image"), System.Drawing.Image)
         Me.BT_AddFolder.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddFolder.Name = "BT_AddFolder"
         Me.BT_AddFolder.Size = New System.Drawing.Size(23, 22)
@@ -586,7 +587,7 @@ Partial Class Form_Main
         'BT_AddFolderSubfolders
         '
         Me.BT_AddFolderSubfolders.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFolderSubfolders.Image = Global.Housekeeper.My.Resources.Resources.folders
+        Me.BT_AddFolderSubfolders.Image = CType(resources.GetObject("BT_AddFolderSubfolders.Image"), System.Drawing.Image)
         Me.BT_AddFolderSubfolders.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
         Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
@@ -600,7 +601,7 @@ Partial Class Form_Main
         'BT_TopLevelAsm
         '
         Me.BT_TopLevelAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_TopLevelAsm.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
+        Me.BT_TopLevelAsm.Image = CType(resources.GetObject("BT_TopLevelAsm.Image"), System.Drawing.Image)
         Me.BT_TopLevelAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_TopLevelAsm.Name = "BT_TopLevelAsm"
         Me.BT_TopLevelAsm.Size = New System.Drawing.Size(23, 22)
@@ -609,7 +610,7 @@ Partial Class Form_Main
         'BT_ASM_Folder
         '
         Me.BT_ASM_Folder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ASM_Folder.Image = Global.Housekeeper.My.Resources.Resources.ASM_Folder
+        Me.BT_ASM_Folder.Image = CType(resources.GetObject("BT_ASM_Folder.Image"), System.Drawing.Image)
         Me.BT_ASM_Folder.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_ASM_Folder.Name = "BT_ASM_Folder"
         Me.BT_ASM_Folder.Size = New System.Drawing.Size(23, 22)
@@ -623,7 +624,7 @@ Partial Class Form_Main
         'BT_AddFromlist
         '
         Me.BT_AddFromlist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddFromlist.Image = Global.Housekeeper.My.Resources.Resources.Import
+        Me.BT_AddFromlist.Image = CType(resources.GetObject("BT_AddFromlist.Image"), System.Drawing.Image)
         Me.BT_AddFromlist.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddFromlist.Name = "BT_AddFromlist"
         Me.BT_AddFromlist.Size = New System.Drawing.Size(23, 22)
@@ -633,7 +634,7 @@ Partial Class Form_Main
         'BT_ExportList
         '
         Me.BT_ExportList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ExportList.Image = Global.Housekeeper.My.Resources.Resources.Export
+        Me.BT_ExportList.Image = CType(resources.GetObject("BT_ExportList.Image"), System.Drawing.Image)
         Me.BT_ExportList.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_ExportList.Name = "BT_ExportList"
         Me.BT_ExportList.Size = New System.Drawing.Size(23, 22)
@@ -647,7 +648,7 @@ Partial Class Form_Main
         'BT_ErrorList
         '
         Me.BT_ErrorList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ErrorList.Image = Global.Housekeeper.My.Resources.Resources.Errore
+        Me.BT_ErrorList.Image = CType(resources.GetObject("BT_ErrorList.Image"), System.Drawing.Image)
         Me.BT_ErrorList.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_ErrorList.Name = "BT_ErrorList"
         Me.BT_ErrorList.Size = New System.Drawing.Size(23, 22)
@@ -656,7 +657,7 @@ Partial Class Form_Main
         'BT_DeleteAll
         '
         Me.BT_DeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_DeleteAll.Image = Global.Housekeeper.My.Resources.Resources.delete
+        Me.BT_DeleteAll.Image = CType(resources.GetObject("BT_DeleteAll.Image"), System.Drawing.Image)
         Me.BT_DeleteAll.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_DeleteAll.Name = "BT_DeleteAll"
         Me.BT_DeleteAll.Size = New System.Drawing.Size(23, 22)
@@ -669,7 +670,7 @@ Partial Class Form_Main
         '
         'BT_Update
         '
-        Me.BT_Update.Image = Global.Housekeeper.My.Resources.Resources.Update
+        Me.BT_Update.Image = CType(resources.GetObject("BT_Update.Image"), System.Drawing.Image)
         Me.BT_Update.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Update.Name = "BT_Update"
         Me.BT_Update.Size = New System.Drawing.Size(65, 22)
@@ -683,7 +684,7 @@ Partial Class Form_Main
         'BT_Help
         '
         Me.BT_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_Help.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.BT_Help.Image = CType(resources.GetObject("BT_Help.Image"), System.Drawing.Image)
         Me.BT_Help.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_Help.Name = "BT_Help"
         Me.BT_Help.Size = New System.Drawing.Size(23, 22)
@@ -694,7 +695,7 @@ Partial Class Form_Main
         '
         Me.BT_ColumnsSelect.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.BT_ColumnsSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_ColumnsSelect.Image = Global.Housekeeper.My.Resources.Resources.TableProp
+        Me.BT_ColumnsSelect.Image = CType(resources.GetObject("BT_ColumnsSelect.Image"), System.Drawing.Image)
         Me.BT_ColumnsSelect.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_ColumnsSelect.Name = "BT_ColumnsSelect"
         Me.BT_ColumnsSelect.Size = New System.Drawing.Size(23, 22)
@@ -713,7 +714,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterDft.CheckOnClick = True
         Me.new_CheckBoxFilterDft.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterDft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterDft.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
+        Me.new_CheckBoxFilterDft.Image = CType(resources.GetObject("new_CheckBoxFilterDft.Image"), System.Drawing.Image)
         Me.new_CheckBoxFilterDft.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterDft.Name = "new_CheckBoxFilterDft"
         Me.new_CheckBoxFilterDft.Size = New System.Drawing.Size(23, 22)
@@ -726,7 +727,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterPsm.CheckOnClick = True
         Me.new_CheckBoxFilterPsm.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterPsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPsm.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
+        Me.new_CheckBoxFilterPsm.Image = CType(resources.GetObject("new_CheckBoxFilterPsm.Image"), System.Drawing.Image)
         Me.new_CheckBoxFilterPsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterPsm.Name = "new_CheckBoxFilterPsm"
         Me.new_CheckBoxFilterPsm.Size = New System.Drawing.Size(23, 22)
@@ -739,7 +740,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterPar.CheckOnClick = True
         Me.new_CheckBoxFilterPar.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterPar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterPar.Image = Global.Housekeeper.My.Resources.Resources.SE_par
+        Me.new_CheckBoxFilterPar.Image = CType(resources.GetObject("new_CheckBoxFilterPar.Image"), System.Drawing.Image)
         Me.new_CheckBoxFilterPar.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterPar.Name = "new_CheckBoxFilterPar"
         Me.new_CheckBoxFilterPar.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -753,7 +754,7 @@ Partial Class Form_Main
         Me.new_CheckBoxFilterAsm.CheckOnClick = True
         Me.new_CheckBoxFilterAsm.CheckState = System.Windows.Forms.CheckState.Checked
         Me.new_CheckBoxFilterAsm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.new_CheckBoxFilterAsm.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
+        Me.new_CheckBoxFilterAsm.Image = CType(resources.GetObject("new_CheckBoxFilterAsm.Image"), System.Drawing.Image)
         Me.new_CheckBoxFilterAsm.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.new_CheckBoxFilterAsm.Name = "new_CheckBoxFilterAsm"
         Me.new_CheckBoxFilterAsm.Size = New System.Drawing.Size(23, 22)
@@ -852,7 +853,7 @@ Partial Class Form_Main
         Me.TaskHeaderEnableButton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskHeaderEnableButton.FlatAppearance.BorderSize = 0
         Me.TaskHeaderEnableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderEnableButton.Image = Global.Housekeeper.My.Resources.Resources.Checked
+        Me.TaskHeaderEnableButton.Image = CType(resources.GetObject("TaskHeaderEnableButton.Image"), System.Drawing.Image)
         Me.TaskHeaderEnableButton.Location = New System.Drawing.Point(33, 3)
         Me.TaskHeaderEnableButton.Name = "TaskHeaderEnableButton"
         Me.TaskHeaderEnableButton.Size = New System.Drawing.Size(24, 28)
@@ -863,7 +864,7 @@ Partial Class Form_Main
         'TaskHeaderCollapseButton
         '
         Me.TaskHeaderCollapseButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderCollapseButton.Image = Global.Housekeeper.My.Resources.Resources.collapse
+        Me.TaskHeaderCollapseButton.Image = CType(resources.GetObject("TaskHeaderCollapseButton.Image"), System.Drawing.Image)
         Me.TaskHeaderCollapseButton.Location = New System.Drawing.Point(63, 3)
         Me.TaskHeaderCollapseButton.Name = "TaskHeaderCollapseButton"
         Me.TaskHeaderCollapseButton.Size = New System.Drawing.Size(24, 28)
@@ -875,7 +876,7 @@ Partial Class Form_Main
         '
         Me.TaskHeaderToggleAssemblyButton.FlatAppearance.BorderSize = 0
         Me.TaskHeaderToggleAssemblyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleAssemblyButton.Image = Global.Housekeeper.My.Resources.Resources.SE_asm
+        Me.TaskHeaderToggleAssemblyButton.Image = CType(resources.GetObject("TaskHeaderToggleAssemblyButton.Image"), System.Drawing.Image)
         Me.TaskHeaderToggleAssemblyButton.Location = New System.Drawing.Point(93, 3)
         Me.TaskHeaderToggleAssemblyButton.Name = "TaskHeaderToggleAssemblyButton"
         Me.TaskHeaderToggleAssemblyButton.Size = New System.Drawing.Size(24, 27)
@@ -887,7 +888,7 @@ Partial Class Form_Main
         '
         Me.TaskHeaderTogglePartButton.FlatAppearance.BorderSize = 0
         Me.TaskHeaderTogglePartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderTogglePartButton.Image = Global.Housekeeper.My.Resources.Resources.SE_par
+        Me.TaskHeaderTogglePartButton.Image = CType(resources.GetObject("TaskHeaderTogglePartButton.Image"), System.Drawing.Image)
         Me.TaskHeaderTogglePartButton.Location = New System.Drawing.Point(123, 3)
         Me.TaskHeaderTogglePartButton.Name = "TaskHeaderTogglePartButton"
         Me.TaskHeaderTogglePartButton.Size = New System.Drawing.Size(24, 27)
@@ -900,7 +901,7 @@ Partial Class Form_Main
         Me.TaskHeaderToggleSheetmetalButton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskHeaderToggleSheetmetalButton.FlatAppearance.BorderSize = 0
         Me.TaskHeaderToggleSheetmetalButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleSheetmetalButton.Image = Global.Housekeeper.My.Resources.Resources.SE_psm
+        Me.TaskHeaderToggleSheetmetalButton.Image = CType(resources.GetObject("TaskHeaderToggleSheetmetalButton.Image"), System.Drawing.Image)
         Me.TaskHeaderToggleSheetmetalButton.Location = New System.Drawing.Point(153, 3)
         Me.TaskHeaderToggleSheetmetalButton.Name = "TaskHeaderToggleSheetmetalButton"
         Me.TaskHeaderToggleSheetmetalButton.Size = New System.Drawing.Size(24, 28)
@@ -913,7 +914,7 @@ Partial Class Form_Main
         Me.TaskHeaderToggleDraftButton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TaskHeaderToggleDraftButton.FlatAppearance.BorderSize = 0
         Me.TaskHeaderToggleDraftButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.TaskHeaderToggleDraftButton.Image = Global.Housekeeper.My.Resources.Resources.SE_dft
+        Me.TaskHeaderToggleDraftButton.Image = CType(resources.GetObject("TaskHeaderToggleDraftButton.Image"), System.Drawing.Image)
         Me.TaskHeaderToggleDraftButton.Location = New System.Drawing.Point(183, 3)
         Me.TaskHeaderToggleDraftButton.Name = "TaskHeaderToggleDraftButton"
         Me.TaskHeaderToggleDraftButton.Size = New System.Drawing.Size(24, 28)
@@ -924,7 +925,7 @@ Partial Class Form_Main
         'TaskHeaderHelpButton
         '
         Me.TaskHeaderHelpButton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TaskHeaderHelpButton.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.TaskHeaderHelpButton.Image = CType(resources.GetObject("TaskHeaderHelpButton.Image"), System.Drawing.Image)
         Me.TaskHeaderHelpButton.Location = New System.Drawing.Point(518, 3)
         Me.TaskHeaderHelpButton.Name = "TaskHeaderHelpButton"
         Me.TaskHeaderHelpButton.Size = New System.Drawing.Size(24, 28)
@@ -2339,6 +2340,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2618,7 +2620,7 @@ Partial Class Form_Main
         '
         'LabelPreset
         '
-        Me.LabelPreset.Image = Global.Housekeeper.My.Resources.Resources.cfg
+        Me.LabelPreset.Image = CType(resources.GetObject("LabelPreset.Image"), System.Drawing.Image)
         Me.LabelPreset.Name = "LabelPreset"
         Me.LabelPreset.Size = New System.Drawing.Size(60, 23)
         Me.LabelPreset.Text = "Presets"
@@ -2638,7 +2640,7 @@ Partial Class Form_Main
         'ButtonPresetLoad
         '
         Me.ButtonPresetLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetLoad.Image = Global.Housekeeper.My.Resources.Resources.Update
+        Me.ButtonPresetLoad.Image = CType(resources.GetObject("ButtonPresetLoad.Image"), System.Drawing.Image)
         Me.ButtonPresetLoad.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetLoad.Name = "ButtonPresetLoad"
         Me.ButtonPresetLoad.Size = New System.Drawing.Size(23, 23)
@@ -2648,7 +2650,7 @@ Partial Class Form_Main
         'ButtonPresetSave
         '
         Me.ButtonPresetSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetSave.Image = Global.Housekeeper.My.Resources.Resources.Save
+        Me.ButtonPresetSave.Image = CType(resources.GetObject("ButtonPresetSave.Image"), System.Drawing.Image)
         Me.ButtonPresetSave.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetSave.Name = "ButtonPresetSave"
         Me.ButtonPresetSave.Size = New System.Drawing.Size(23, 23)
@@ -2658,7 +2660,7 @@ Partial Class Form_Main
         'ButtonPresetDelete
         '
         Me.ButtonPresetDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonPresetDelete.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonPresetDelete.Image = CType(resources.GetObject("ButtonPresetDelete.Image"), System.Drawing.Image)
         Me.ButtonPresetDelete.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonPresetDelete.Name = "ButtonPresetDelete"
         Me.ButtonPresetDelete.Size = New System.Drawing.Size(23, 23)
@@ -2728,7 +2730,7 @@ Partial Class Form_Main
         'ButtonProcess
         '
         Me.ButtonProcess.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonProcess.Image = Global.Housekeeper.My.Resources.Resources.Play
+        Me.ButtonProcess.Image = CType(resources.GetObject("ButtonProcess.Image"), System.Drawing.Image)
         Me.ButtonProcess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonProcess.Location = New System.Drawing.Point(171, 54)
         Me.ButtonProcess.Margin = New System.Windows.Forms.Padding(2)
@@ -2742,7 +2744,7 @@ Partial Class Form_Main
         '
         Me.ButtonCancel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ButtonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.ButtonCancel.Image = Global.Housekeeper.My.Resources.Resources.Close
+        Me.ButtonCancel.Image = CType(resources.GetObject("ButtonCancel.Image"), System.Drawing.Image)
         Me.ButtonCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonCancel.Location = New System.Drawing.Point(301, 54)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(2)
@@ -2755,7 +2757,7 @@ Partial Class Form_Main
         'ButtonHelp
         '
         Me.ButtonHelp.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonHelp.Image = CType(resources.GetObject("ButtonHelp.Image"), System.Drawing.Image)
         Me.ButtonHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonHelp.Location = New System.Drawing.Point(432, 55)
         Me.ButtonHelp.Name = "ButtonHelp"
@@ -2771,54 +2773,61 @@ Partial Class Form_Main
         '
         'Menu_ListViewFile
         '
-        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove})
+        Me.Menu_ListViewFile.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_Open, Me.BT_OpenFolder, Me.ToolStripSeparator8, Me.BT_FindLinks, Me.BT_ProcessSelected, Me.ToolStripSeparator5, Me.BT_Remove, Me.BT_MoveToRecycleBin})
         Me.Menu_ListViewFile.Name = "Menu_ListViewFile"
-        Me.Menu_ListViewFile.Size = New System.Drawing.Size(165, 126)
+        Me.Menu_ListViewFile.Size = New System.Drawing.Size(183, 148)
         '
         'BT_Open
         '
         Me.BT_Open.Image = CType(resources.GetObject("BT_Open.Image"), System.Drawing.Image)
         Me.BT_Open.Name = "BT_Open"
-        Me.BT_Open.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Open.Size = New System.Drawing.Size(182, 22)
         Me.BT_Open.Text = "Open"
         '
         'BT_OpenFolder
         '
         Me.BT_OpenFolder.Image = CType(resources.GetObject("BT_OpenFolder.Image"), System.Drawing.Image)
         Me.BT_OpenFolder.Name = "BT_OpenFolder"
-        Me.BT_OpenFolder.Size = New System.Drawing.Size(164, 22)
+        Me.BT_OpenFolder.Size = New System.Drawing.Size(182, 22)
         Me.BT_OpenFolder.Text = "Open folder"
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(161, 6)
+        Me.ToolStripSeparator8.Size = New System.Drawing.Size(179, 6)
         '
         'BT_FindLinks
         '
         Me.BT_FindLinks.Image = CType(resources.GetObject("BT_FindLinks.Image"), System.Drawing.Image)
         Me.BT_FindLinks.Name = "BT_FindLinks"
-        Me.BT_FindLinks.Size = New System.Drawing.Size(164, 22)
+        Me.BT_FindLinks.Size = New System.Drawing.Size(182, 22)
         Me.BT_FindLinks.Text = "Find linked files"
         '
         'BT_ProcessSelected
         '
         Me.BT_ProcessSelected.Image = CType(resources.GetObject("BT_ProcessSelected.Image"), System.Drawing.Image)
         Me.BT_ProcessSelected.Name = "BT_ProcessSelected"
-        Me.BT_ProcessSelected.Size = New System.Drawing.Size(164, 22)
+        Me.BT_ProcessSelected.Size = New System.Drawing.Size(182, 22)
         Me.BT_ProcessSelected.Text = "Process selected"
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(161, 6)
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(179, 6)
         '
         'BT_Remove
         '
         Me.BT_Remove.Image = CType(resources.GetObject("BT_Remove.Image"), System.Drawing.Image)
         Me.BT_Remove.Name = "BT_Remove"
-        Me.BT_Remove.Size = New System.Drawing.Size(164, 22)
+        Me.BT_Remove.Size = New System.Drawing.Size(182, 22)
         Me.BT_Remove.Text = "Remove from list"
+        '
+        'BT_MoveToRecycleBin
+        '
+        Me.BT_MoveToRecycleBin.Image = CType(resources.GetObject("BT_MoveToRecycleBin.Image"), System.Drawing.Image)
+        Me.BT_MoveToRecycleBin.Name = "BT_MoveToRecycleBin"
+        Me.BT_MoveToRecycleBin.Size = New System.Drawing.Size(182, 22)
+        Me.BT_MoveToRecycleBin.Text = "Move To Recycle Bin"
         '
         'NotifyIcon1
         '
@@ -3132,4 +3141,5 @@ Partial Class Form_Main
     Friend WithEvents ExTableLayoutPanel11 As ExTableLayoutPanel
     Friend WithEvents TextBoxListViewUpdateFrequency As TextBox
     Friend WithEvents LabelListViewUpdateFrequency As Label
+    Friend WithEvents BT_MoveToRecycleBin As ToolStripMenuItem
 End Class

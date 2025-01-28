@@ -31,7 +31,8 @@ See the [<ins>**Presets Help Topic**</ins>](https://github.com/rmcanany/SolidEdg
 ### File List
 Contributed by **@Francesco Arfilli**.  Thank you!
 
-Added the ability to customize the list.
+#### List Customization
+
 - File properties can now be displayed on the list.  
 - Properties can be edited and changed in place.  
 - The list can be sorted by column.  
@@ -41,13 +42,31 @@ Added the ability to customize the list.
 
 ![Insert Property](My%20Project/media/file_list_properties.png)
 
-Added a new input source, `Individual Files`, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the dialog's text box and it will automatically filter the list for you.  You can select multiple files at a time with this option.
+#### New Input Source
+
+Added a new input source, `Individual Files`, to the file selection options.  This can be a time saver if you are faced with a large directory listing and already know the file's name.  Simply start typing the name in the dialog's text box and it will automatically filter the list for you.  You can also select multiple files at a time with this option.
 
 ![Insert Property](My%20Project/media/file_list_individual_files.png)
 
-As with the `Individual Files` selection mode above, added multi-select to `Folder`, `Folder with subfolders`, and `Top level assembly folder`.
+#### Select Multiple Folders
+As with the `Individual Files` above, added multi-select to `Folder`, `Folder with subfolders`, and `Top level assembly folder`.
 
+#### Selected Files Feedback
 Added feedback to notify the user that some files in the list are selected (which the program interprets as the only files that need to be processed).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
+
+#### New Shortcut Command
+Added `Move to Recycle Bin` to the shortcut menu.  One place this can be handy is with the top-level assembly `Report unrelated files` option.  If there are a lot of unrelated files, cleanup is a hassle.  Here's how I do it now.  
+
+- Save the Unrelated Files report as a *.txt file
+- Empty out the Recycle Bin
+- Clear the file list from the previous run  (important so you don't mix in good files with the unrelated ones)
+- Import the *.txt file and update the list
+- Select all files (or do it in small chunks)
+- Right-click and select `Move to Recycle Bin`
+- Open the top level assembly
+- If it complains about missing files, use the Recycle Bin's `Restore items` command.
+
+#### Read-Only Directories
 
 Fixed an issue where encountering a read-only directory was keeping a `Folders with subfolders` search from processing to completion.
 
