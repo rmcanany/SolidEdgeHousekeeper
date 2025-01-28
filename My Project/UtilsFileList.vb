@@ -15,13 +15,93 @@ Public Class UtilsFileList
         Me.ListViewSources = ListViewSources
     End Sub
 
+    Private Function CheckStartConditions(ByRef BareTopLevelAssembly As Boolean) As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim ErrorList As New List(Of String)
+        Dim GroupTags As New List(Of String)
+        Dim msg As String
+
+        For i = 0 To ListViewSources.Items.Count - 1
+
+            If ListViewSources.Items(i).Group.Name = "Sources" Then
+                GroupTags.Add(CType(ListViewSources.Items(i).Tag, String))
+            End If
+        Next
+
+        If Not GroupTags.Contains("asm") Then
+
+            If GroupTags.Contains("ASM_Folder") Then
+                msg = "A top level assembly folder was found with no top level assembly specified.  "
+                msg += "Please add an assembly, or delete the folder(s)."
+                ErrorList.Add(msg)
+            End If
+        End If
+
+        If GroupTags.Contains("asm") Then
+
+            If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
+                msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                ErrorList.Add(msg)
+            End If
+
+            If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
+                msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
+                ErrorList.Add(msg)
+            End If
+
+            If Not (GroupTags.Contains("ASM_Folder")) Then
+
+                If FMain.WarnBareTLA Then
+                    msg = "A top-level assembly with no top-level folder detected.  "
+                    msg += "No 'Where Used' will be performed."
+                    ErrorList.Add(msg)
+                Else
+                    BareTopLevelAssembly = True
+                End If
+            End If
+
+        End If
+
+        If ErrorList.Count > 0 Then
+
+            Dim WarningDetected As Boolean = False
+
+            Dim ErrorMessage As String = ""
+            For Each s As String In ErrorList
+                If s.Contains("no top-level folder") Then WarningDetected = True
+                ErrorMessage = String.Format("{0}{1}{2}", ErrorMessage, s, vbCrLf)
+            Next
+
+            If (WarningDetected) And (ErrorList.Count = 1) Then
+
+                ErrorMessage = String.Format("{0}{1}Click OK to continue, or Cancel to stop.", ErrorMessage, vbCrLf)
+                ErrorMessage = String.Format("{0}{1}Disable this message on the Configuration Tab -- Top Level Assembly Page.", ErrorMessage, vbCrLf)
+
+                Dim Result As MsgBoxResult = MsgBox(ErrorMessage, vbOKCancel)
+                If Result = MsgBoxResult.Ok Then
+                    BareTopLevelAssembly = True
+                    Proceed = True
+                Else
+                    Proceed = False
+                End If
+            Else
+                MsgBox(ErrorMessage, vbOKOnly)
+                Proceed = False
+            End If
+
+        End If
+
+        Return Proceed
+    End Function
+
     Public Sub New_UpdateFileList()
 
         FMain.Cursor = Cursors.WaitCursor
 
         Dim GroupTags As New List(Of String)
         Dim BareTopLevelAssembly As Boolean = False
-        Dim msg As String
+        'Dim msg As String
 
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
@@ -39,163 +119,19 @@ Public Class UtilsFileList
         If FMain.FilterPsm Then ActiveFileExtensionsList.Add("*.psm")
         If FMain.FilterDft Then ActiveFileExtensionsList.Add("*.dft")
 
-
-
         ListViewFiles.BeginUpdate()
 
         ListViewFiles.Items.Clear()
 
-        'Dim NewWay As Boolean = False
 
-        'If Not NewWay Then
+        If Not CheckStartConditions(BareTopLevelAssembly) Then
+            ListViewFiles.EndUpdate()
+            FMain.Cursor = Cursors.Default
+            FMain.TextBoxStatus.Text = ""
 
-        '    '' Remove everything except the "Sources" group.
-        '    'For i = ListViewFiles.Items.Count - 1 To 0 Step -1
-        '    '    If ListViewFiles.Items.Item(i).Group.Name <> "Sources" Then
-        '    '        ListViewFiles.Items.Item(i).Remove()
-        '    '    Else
-        '    '        GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-        '    '    End If
-        '    'Next
-
-
-        'Else
-        '    ' ###### Initialize tmpLV ######
-
-        '    Dim tmpListViewFiles As New ListViewExtended.ListViewCollapsible
-
-        '    Dim ListViewGroup1 As New ListViewGroup("Files sources", HorizontalAlignment.Left)
-        '    ListViewGroup1.Name = "Sources"
-        '    Dim ListViewGroup2 As New ListViewGroup("Excluded files", HorizontalAlignment.Left)
-        '    ListViewGroup2.Name = "Excluded"
-        '    Dim ListViewGroup3 As New ListViewGroup("Assemblies", HorizontalAlignment.Left)
-        '    ListViewGroup3.Name = ".asm"
-        '    Dim ListViewGroup4 As New ListViewGroup("Parts", HorizontalAlignment.Left)
-        '    ListViewGroup4.Name = ".par"
-        '    Dim ListViewGroup5 As New ListViewGroup("Sheetmetals", HorizontalAlignment.Left)
-        '    ListViewGroup5.Name = ".psm"
-        '    Dim ListViewGroup6 As New ListViewGroup("Drafts", HorizontalAlignment.Left)
-        '    ListViewGroup6.Name = ".dft"
-        '    tmpListViewFiles.Groups.Add(ListViewGroup1)
-        '    tmpListViewFiles.Groups.Add(ListViewGroup2)
-        '    tmpListViewFiles.Groups.Add(ListViewGroup3)
-        '    tmpListViewFiles.Groups.Add(ListViewGroup4)
-        '    tmpListViewFiles.Groups.Add(ListViewGroup5)
-        '    tmpListViewFiles.Groups.Add(ListViewGroup6)
-
-        '    tmpListViewFiles.SetGroupState(ListViewGroupState.Collapsible)
-
-        '    For i = 0 To ListViewFiles.Items.Count - 1
-
-        '        If ListViewFiles.Items.Item(i).Group.Name = "Sources" Then
-
-        '            GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-
-        '            Dim tmpItem As New ListViewItem
-
-        '            tmpItem.Text = ListViewFiles.Items.Item(i).Text
-        '            tmpItem.SubItems.Add(ListViewFiles.Items.Item(i).Name)
-        '            tmpItem.Group = tmpListViewFiles.Groups.Item("Sources")
-        '            tmpItem.ImageKey = ListViewFiles.Items.Item(i).ImageKey
-        '            tmpItem.Tag = ListViewFiles.Items.Item(i).Tag
-        '            tmpItem.Name = ListViewFiles.Items.Item(i).Name
-
-        '            If Not tmpListViewFiles.Items.ContainsKey(tmpItem.Name) Then tmpListViewFiles.Items.Add(tmpItem)
-
-        '        End If
-        '    Next
-
-        '    ListViewFiles.Items.Clear()
-
-        '    For i = 0 To tmpListViewFiles.Items.Count - 1
-
-        '        If tmpListViewFiles.Items.Item(i).Group.Name = "Sources" Then
-
-        '            'GroupTags.Add(CType(ListViewFiles.Items.Item(i).Tag, String))
-
-        '            Dim tmpItem As New ListViewItem
-
-        '            tmpItem.Text = tmpListViewFiles.Items.Item(i).Text
-        '            tmpItem.SubItems.Add(tmpListViewFiles.Items.Item(i).Name)
-        '            tmpItem.Group = ListViewFiles.Groups.Item("Sources")
-        '            tmpItem.ImageKey = tmpListViewFiles.Items.Item(i).ImageKey
-        '            tmpItem.Tag = tmpListViewFiles.Items.Item(i).Tag
-        '            tmpItem.Name = tmpListViewFiles.Items.Item(i).Name
-
-        '            If Not ListViewFiles.Items.ContainsKey(tmpItem.Name) Then ListViewFiles.Items.Add(tmpItem)
-
-        '        End If
-        '    Next
-
-        'End If
-
-        '#### CHECK START CONDITIONS ####
-
-        For i = 0 To ListViewSources.Items.Count - 1
-
-            If ListViewSources.Items(i).Group.Name = "Sources" Then
-                GroupTags.Add(CType(ListViewSources.Items(i).Tag, String))
-            End If
-        Next
-
-
-        If Not GroupTags.Contains("asm") Then
-
-            If GroupTags.Contains("ASM_Folder") Then
-                msg = "A top level assembly folder was found with no top level assembly specified.  "
-                msg += "Please add an assembly, or delete the folder(s)."
-                ListViewFiles.EndUpdate()
-                FMain.Cursor = Cursors.Default
-                FMain.TextBoxStatus.Text = ""
-                MsgBox(msg, vbOKOnly)
-                Exit Sub
-            End If
+            Exit Sub
         End If
 
-        If GroupTags.Contains("asm") Then
-
-            If (FMain.TLABottomUp) And (Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename)) Then
-                msg = "Fast search scope file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                ListViewFiles.EndUpdate()
-                FMain.Cursor = Cursors.Default
-                FMain.TextBoxStatus.Text = ""
-                MsgBox(msg, vbOKOnly)
-                Exit Sub
-            End If
-
-            If (FMain.TLATopDown) And (Not FileIO.FileSystem.FileExists(FMain.LinkManagementFilename)) Then
-                msg = "LinkMgmt.txt file not found.  Set it on the Configuration Tab -- Top Level Assembly Page."
-                ListViewFiles.EndUpdate()
-                FMain.Cursor = Cursors.Default
-                FMain.TextBoxStatus.Text = ""
-                MsgBox(msg, vbOKOnly)
-                Exit Sub
-            End If
-
-            If Not (GroupTags.Contains("ASM_Folder")) Then
-
-                If FMain.WarnBareTLA Then
-                    msg = "A top-level assembly with no top-level folder detected.  "
-                    msg += "No 'Where Used' will be performed." + vbCrLf + vbCrLf
-                    msg += "Click OK to continue, or Cancel to stop." + vbCrLf
-                    msg += "Disable this message on the Configuration Tab -- Top Level Assembly Page."
-                    Dim result As MsgBoxResult = MsgBox(msg, vbOKCancel)
-                    If result = MsgBoxResult.Ok Then
-                        BareTopLevelAssembly = True
-                    Else
-                        ListViewFiles.EndUpdate()
-                        FMain.Cursor = Cursors.Default
-                        FMain.TextBoxStatus.Text = ""
-                        Exit Sub
-                    End If
-                Else
-                    BareTopLevelAssembly = True
-                End If
-            End If
-
-        End If
-
-        ' Only remaining items should be in the "Sources" group.
         Dim tmpFoundFiles As New List(Of String)
 
         For Each item As ListViewItem In ListViewSources.Items
@@ -239,10 +175,8 @@ Public Class UtilsFileList
 
             ' Filter by properties
             If FMain.EnablePropertyFilter Then
-                System.Threading.Thread.Sleep(1000)
-                'Dim UPF As New UtilsPropertyFilters(Me.FMain, FMain.PropertyFilters)
+                System.Threading.Thread.Sleep(100)
                 Dim UPF As New UtilsPropertyFilters(Me.FMain)
-                'FoundFiles = UPF.FilterProperties(FoundFiles, FMain.PropertyFilterDict)
                 FoundFiles = UPF.FilterProperties(FoundFiles)
             End If
 
