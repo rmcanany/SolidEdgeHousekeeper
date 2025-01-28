@@ -52,19 +52,12 @@ Added a new input source, `Individual Files`, to the file selection options.  Th
 As with the `Individual Files` above, added multi-select to `Folder`, `Folder with subfolders`, and `Top level assembly folder`.
 
 #### Selected Files Feedback
-Added feedback to notify the user that some files in the list are selected (which the program interprets as the only files that need to be processed).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
+
+Added feedback to notify the user that some files in the list are selected (which the program interprets as the only ones to process).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
 
 #### New Shortcut Command
-Added `Move to Recycle Bin` to the shortcut menu.  One place this can be handy is with the top-level assembly `Report unrelated files` option.  If there are a lot of unrelated files, cleanup is a hassle.  Here's how I do it now.  
 
-- Save the Unrelated Files report as a *.txt file
-- Empty out the Recycle Bin
-- Clear the file list from the previous run  (important so you don't mix in good files with the unrelated ones)
-- Import the *.txt file and update the list
-- Select all files (or do it in small chunks)
-- Right-click and select `Move to Recycle Bin`
-- Open the top level assembly
-- If it complains about missing files, use the Recycle Bin's `Restore items` command.
+Added `Move to Recycle Bin` to the shortcut menu.  One place this can be handy is with the top-level assembly `Report unrelated files` option.  See the link below for details.
 
 #### Read-Only Directories
 

@@ -247,6 +247,15 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
 - **Move to Recycle Bin:** Removes the files from their original location and moves them to the Recycle Bin.
 
+One place the `Move to Recycle Bin` command can be handy is with the top-level assembly `Report unrelated files` option.  If there are a lot of unrelated files, cleanup is a hassle.  Here's how I do it now.  
+
+- Save the Unrelated Files report as a *.txt file
+- Empty out the Recycle Bin
+- Clear the file list from the previous run  (important so you don't mix in good files with the unrelated ones)
+- Import the *.txt file and update the list
+- Select all files, right-click and select `Move to Recycle Bin` (You can also do a few at a time if preferred.  Repeat this step and the following in succession.)
+- Open the top level assembly.  If it complains about missing files, use the Recycle Bin's `Restore items` command.
+
 ## Sorting
 
 You can sort the file list in a variety of ways.
