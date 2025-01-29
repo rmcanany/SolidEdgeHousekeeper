@@ -22,9 +22,9 @@ Presets are a way to capture any setup changes you make in the course of using t
 
 ![Tabs](My%20Project/media/presets.png)
 
-Presets help you perform recurring tasks you encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
+Presets help you perform recurring tasks you encounter as part of your job.  An example might be releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
 
-Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+Using Presets, you can capture that work one time.  The next time it comes up, choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
 See the [<ins>**Presets Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#presets) for details.
 
@@ -101,7 +101,7 @@ See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcan
 
 ### Check Links
 
-Added the option to run this command without Solid Edge.  As with `Set Document Status`, it uses Microsoft's Structured Storage with equivalent speed increases.
+Added an option to run this command without Solid Edge.  As with `Set Document Status`, it uses Microsoft's Structured Storage with equivalent speed increases.
 
 Added the same option to `Part Number Does Not Match Filename`, `Missing Drawing`, and `Material Not In Material Table`.
 
@@ -119,7 +119,7 @@ See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/So
 
 ### Top Level Assembly
 
-Changed from DesignManager to RevisionManager for older versions where the former is not available.
+Changed from DesignManager to RevisionManager when running older versions of Solid Edge where the former is not available.
 
 Changed from DesignManager to Structured Storage for top-down searches for all versions.
 

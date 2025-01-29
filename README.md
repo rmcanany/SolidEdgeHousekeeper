@@ -482,17 +482,17 @@ Presets are a way to capture any setup changes you make in the course of using t
 
 ![Tabs](My%20Project/media/presets.png)
 
-Presets help you perform recurring tasks you encounter as part of your job.  An example might be when releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
+Presets help you perform recurring tasks you encounter as part of your job.  An example might be releasing a project.  You probably need to make sure files are up to date, parts have drawings, output files have been generated, etc., etc.  Each step takes a certain amount of setup, for example configuring a property filter, selecting tasks, tweaking options, and so on. 
 
-Using Presets, you can capture that work one time.  The next time it comes up, you simply choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
+Using Presets, you can capture that work one time.  The next time it comes up, choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
-To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.
+To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.  To change one, load it, make the changes, then save.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
 Creating a baseline Preset, while not a requirement, can be helpful.  It's a known starting point for creating new ones.  It's also a quick, reliable way to set back up for everyday use of the program.
 
-For commands with variable information, such as the output directory for Save As, you can leave that field blank when creating the Preset.  That way, if you accidentally click Process before filling it out, the program will stop and prompt you to fix the issue.
+For commands with variable information, such as the output directory for `Save As`, you can leave that field blank when creating the Preset.  That way, if you accidentally click Process before setting it, the program will stop and prompt you for the missing information.
 
 
 # CONFIGURATION TAB
