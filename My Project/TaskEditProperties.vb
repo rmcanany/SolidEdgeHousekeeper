@@ -1250,7 +1250,10 @@ Public Class TaskEditProperties
 
         HelpString += vbCrLf + vbCrLf + "You can check your expression using the `Test` button. "
         HelpString += "If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. "
-        HelpString += "You can `Save` or `Save As` your expression with the buttons provided. "
+        HelpString += "When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. "
+        HelpString += "The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. "
+
+        HelpString += vbCrLf + vbCrLf + "You can `Save` or `Save As` your expression with the buttons provided. "
         HelpString += "Retreive them with the `Saved Expressions` drop-down. "
         HelpString += "That drop-down comes with a few examples. You can study those to get the hang of it. "
         HelpString += "To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. "

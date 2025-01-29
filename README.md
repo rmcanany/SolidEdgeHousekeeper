@@ -144,6 +144,8 @@ Another option is to drag and drop files from Windows File Explorer. You can use
 
 An alternative method is to select files with errors from a previous run. 
 
+For new users, there is one potential point of confusion.  Most of the commands discussed below populate the *File Sources* list, not the *File List* itself.  To get the *File List* from the *File Sources*, you need to click the `Update` button.  If an update is needed, it should be colored orange to let you know.
+
 ![Toolbar](My%20Project/media/selection_toolbar_labeled.png)
 
 ### Select by Folder
@@ -154,7 +156,7 @@ Choose this option to select individual files, files within a single folder, or 
 - Click ![Folder](Resources/icons8_Folder_16.png) to select a single folder
 - Click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders
 
-You can select any number of files/folders at a time with these options.
+The dialog that appears with these commands has `multi-select` enabled, meaning you can select any number of files/folders at a time.
 
 ### Select by Top-Level Assembly
 
@@ -163,7 +165,7 @@ Choose this option to select files linked to an assembly. Referring to the toolb
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
 
-You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders.  As with the `Select by Folder` option, you can select any number of folders at a time. Note the program always includes subfolders for *where used* files.
+You would be asking for trouble specifying more than one top-level assembly.  However, you can have any number of folders.  As with the previous commands, `multi-select` is enabled for folders. Note the program always includes subfolders for *where used* files.
 
 There are a lot of options with this selection type.  They are covered here.  Shown below is the top-level assembly configuration page.
 
@@ -171,7 +173,7 @@ There are a lot of options with this selection type.  They are covered here.  Sh
 
 A top level assembly search can optionally report files with no links to the assembly.  Set this and other options on the **Configuration Tab -- Top Level Assembly Page** as shown above.
 
-When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option in on by default. 
+When selecting a top-level assembly, you can automatically include the folder in which it resides. This `auto include` option is on by default. 
 
 If `auto include` is turned off, you do not have to specify any folders. In that case, Housekeeper simply finds files directly linked to the specified assembly and subassemblies. Note this means that no draft files will be found. For that reason, a warning is displayed; disable the `Warn me` option to turn it off.
 
@@ -185,7 +187,9 @@ A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Progr
 
 #### Top Down
 
-Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program launches Design Manager to open every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
+Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program opens every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
+
+A bottom up search requires a valid LinkMgmt filename, (e.g., `C:\Program Files\...\Preferences\LinkMgmt.txt`), which tells the program the order in which to resolve links. 
 
 #### Include parents of part copies option
 
@@ -228,9 +232,9 @@ You can customize the list to show file properties if desired.  Referring to the
 
 ![Customize file list columns](My%20Project/media/file_list_columns_customize.png)
 
-Click the Add button to bring up the Property Selector dialog.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.  Note, before you can use properties, they must first be populated from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
+Click the Add button to bring up the Property Selector dialog.  By default, it shows properties you added to your Favorites.  To show all properties, click the Show All Props button.  Note, before you can use properties, they must first be read from your templates.  See the [<ins>**Templates Page**</ins>](#templates-page) for details.
 
-Getting properties for a large number of files can take some time.  If that's the case, when you click Update, the program asks if you want them displayed anyway.
+Getting properties for a large number of files can take some time.  If that's the case, when you click Update, the program asks whether or not to display them.
 
 You can edit properties directly on the list.  Double-click the property and enter the new value.  You can also sort the list by column.  Click the column header to sort.  Click it again to reverse the order.
 
@@ -284,7 +288,7 @@ After processing, you can choose to change the Status back to the old value, or 
 
 If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead.
 
-If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That doesn't hurt anything, but it results in a slight increase in processing time.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That shouldn't hurt anything, but it's not necessary and it results in a slightly increased run time.
 
 ## Filtering
 
@@ -313,7 +317,7 @@ The property filter allows you to select files by their property values. Prior t
 
 To configure a property filter, click the tool icon ![Configure](Resources/icons8_Tools_16.png) to the right of the Property filter checkbox. 
 
-The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models in the drawing for the specified properties. Set the option on the [<ins>**Configuration Tab -- General Page**</ins>](#general-page). One situation where you might want to disable this option is when searching for file Status. See [<ins>**Document Status Options**</ins>](#document-status-options) below.
+The Property Filter checks Draft files, but they often don't have properties of their own. For those files, Housekeeper can also search any models the drawing contains for the specified properties. Set the option on the [<ins>**Configuration Tab -- General Page**</ins>](#general-page). One situation where you might want to disable this option is when searching for file Status. See [<ins>**Document Status Options**</ins>](#document-status-options) below.
 
 This is a powerful tool with a lot of options. These are detailed below.
 
@@ -325,7 +329,7 @@ Compose a filter by defining one or more **Conditions**, and adding them one-by-
   <img src="My%20Project/media/property_filter.png">
 </p>
 
-Any number of Conditions are allowed for a filter. The filters can be named, saved, modified, and deleted.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
+Any number of Conditions are allowed for a filter. The filters can be saved, modified, and deleted.  The tools to do so are in the **Toolbar -- Saved Setting Group**.
 
 #### Property Set
 
@@ -339,7 +343,7 @@ Template properties will know their `PropertySet`.  Unless you added it manually
 
 #### Comparison
 
-Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `is_not`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
+Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
 
 `Contains` means the **Value** can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
@@ -472,7 +476,7 @@ Each task must have a unique name.  Rename one by double-clicking it in the list
 
 The tasks are color-coded.  Change the color by selecting the task, right-clicking, then selecting `Change color`.  I'm not kidding that the task needs to be selected *before* right-clicking.  Otherwise for some reason the task at the top of the list is modified.  Anyway, you can change hue, saturation and brightness.  A preview of your choices is provided on the dialog.
 
-To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as setting your template locations, etc.
+To save the changes, click `OK`, `Cancel` otherwise.  To start over with the task list, delete the file `task_list.json` in Housekeeper's Preferences directory.  Note, in doing so you will also lose any customizations you did, such as duplicated tasks, colors, etc.
 
 Speaking of `task_list.json`, like any other file in the Preferences directory, you can share your customized version with others.  Just copy it into their Preferences directory.
 
@@ -486,7 +490,7 @@ Presets help you perform recurring tasks you encounter as part of your job.  An 
 
 Using Presets, you can capture that work one time.  The next time it comes up, choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
-To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it from the drop down and click Delete.  To change one, load it, make the changes, then save.
+To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it and click Delete.  To change one, load it, make the changes, then save.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
@@ -725,7 +729,9 @@ An `expression` is similar to a formula in Excel. Expressions enable more comple
 
 You can perform string processing, create logical expressions, do arithmetic, and, well, almost anything.  The available functions are listed below. Like Excel, the expression must return a value.  Nested functions are the norm for complex manipulations. Unlike Excel, multi-line text is allowed, which can make the code more readable. 
 
-You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
+You can check your expression using the `Test` button. If there are undefined variables, for example `%{Custom.Engineer}`, it prompts you for a value. When you are satisfied with your expression, dismiss the dialog by clicking the `X` on the upper right. The expression will be copied to the clipboard.  Click in the desired Replace text box and type CTRL-V. 
+
+You can `Save` or `Save As` your expression with the buttons provided. Retreive them with the `Saved Expressions` drop-down. That drop-down comes with a few examples. You can study those to get the hang of it. To learn more, click the `Help` button.  That opens a web site with lots of useful information, and links to more. 
 
 Available functions
 
