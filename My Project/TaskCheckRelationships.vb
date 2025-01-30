@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.Runtime.InteropServices
 
 Public Class TaskCheckRelationships
     Inherits Task
@@ -211,6 +212,13 @@ Public Class TaskCheckRelationships
 
                     Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
                     Dim Occurrence As SolidEdgeAssembly.Occurrence
+
+
+                    'https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeAssembly~AssemblyFamilyMember~GetSuppressedComponentsOfMember.html
+                    'Dim objSuppressedComponents As System.Array = System.Array.CreateInstance(GetType(SolidEdge.Assembly.Interop.SuppressComponent), 1)
+                    'Dim objSuppressedComponents As System.Array = System.Array.CreateInstance(GetType(SolidEdge.Assembly.Interop.), 1)
+                    'Dim ComponentType As GetType(SolidEdge.Assembly.Interop.SuppressComponent)
+                    'System.Runtime.InteropServices.SolidEdge.Assembly.Interop
 
                     'Dim ComponentType As SolidEdgeAssembly.assemblycomponentTypeconstants.seAssemblyComponentTypeAll
                     'Dim ComponentCount As Integer

@@ -119,15 +119,19 @@ See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/So
 
 ### Top Level Assembly
 
-Changed from DesignManager to RevisionManager when running older versions of Solid Edge where the former is not available.
+Replaced DesignManager with RevisionManager for users running older versions of Solid Edge where the former is not available.
 
-Changed from DesignManager to Structured Storage for top-down searches for all versions.
+Replaced DesignManager with Structured Storage for top-down searches for all versions.
 
 Fixed an issue where Family of Parts Masters (and all their links) were included in top-down searches.
 
 Fixed an issue where a model file contained in a drawing, but not otherwise related to the top level assembly, was not included in search results.
 
 Fixed an issue, with multiple top-level directories, where nested directories were being processed twice.
+
+### Splash Screen
+
+Added a startup splash screen for monitoring program initialization.  Pay attention, there's a fun little animation at the end!
 
 ### Documentation
 

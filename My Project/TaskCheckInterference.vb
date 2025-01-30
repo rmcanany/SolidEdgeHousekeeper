@@ -105,6 +105,7 @@ Public Class TaskCheckInterference
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+        'tmpSEDoc.IsFileFamilyByDocument
 
         Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself
         Dim Status As SolidEdgeAssembly.InterferenceStatusConstants
