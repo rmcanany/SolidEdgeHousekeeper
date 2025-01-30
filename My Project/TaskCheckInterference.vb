@@ -106,6 +106,7 @@ Public Class TaskCheckInterference
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
         'tmpSEDoc.IsFileFamilyByDocument
+        'tmpSEDoc.IsFileAlternatePositionByDocument
 
         Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself
         Dim Status As SolidEdgeAssembly.InterferenceStatusConstants
@@ -117,7 +118,6 @@ Public Class TaskCheckInterference
         Dim IgnoreT As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
         Dim IgnoreD As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
         Dim NumOccurrences As Integer
-        'Dim NumOccurrencesLimit As Integer
 
         Dim SetList As New List(Of Object)
 
@@ -127,8 +127,6 @@ Public Class TaskCheckInterference
         Dim UO As New UtilsOccurrences(tmpSEDoc, False)
 
         NumOccurrences = UO.AllOccurrences.Count + UO.AllSubOccurrences.Count
-
-        'NumOccurrencesLimit = CInt(Configuration("TextBoxCheckInterferenceMaxOccurrences"))
 
         If NumOccurrences > Me.NumOccurrencesLimit Then
             ExitStatus = 1
