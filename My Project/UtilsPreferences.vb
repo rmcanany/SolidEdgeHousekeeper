@@ -11,6 +11,7 @@ Public Class UtilsPreferences
     End Sub
 
 
+
     '###### FOLDERS ######
     Public Function GetStartupDirectory() As String
         Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
@@ -351,7 +352,7 @@ Public Class UtilsPreferences
 
     End Sub
 
-    Public Function GetTaskList() As List(Of Task)
+    Public Function GetTaskList(Splash As FormSplash) As List(Of Task)
 
         Dim TaskList As New List(Of Task)
         Dim Task As Task
@@ -377,6 +378,8 @@ Public Class UtilsPreferences
                 JSONString = JSONDict(TaskDescription)
                 TaskJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
+
+                If Splash IsNot Nothing Then Splash.UpdateStatus(String.Format("Loading {0}", TaskName)) : Application.DoEvents()
 
                 Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
 
@@ -409,6 +412,126 @@ Public Class UtilsPreferences
 
         IO.File.WriteAllText(Outfile, JSONString)
 
+    End Sub
+
+
+
+    '###### TASK FUNCTIONS ######
+    Public Function GetNewTaskInstance(
+        AvailableTasks As List(Of Task),
+        TaskName As String,
+        TaskDescription As String
+        ) As Task
+
+        Dim Task As Task = Nothing
+        Dim tmpTask As Task = Nothing
+
+        For Each Task In AvailableTasks
+            If Task.Name = TaskName Then
+                tmpTask = CType(Activator.CreateInstance(Task.GetType), Task)
+                tmpTask.Description = TaskDescription
+                Exit For
+            End If
+        Next
+
+        Return tmpTask
+    End Function
+
+    Public Function BuildTaskListFromScratch() As List(Of Task)
+        Dim TaskList As New List(Of Task)
+        Dim KnownTasks As New List(Of String)
+
+        ' Update
+        TaskList.Add(New TaskSetDocumentStatus)
+        TaskList.Add(New TaskOpenSave)
+        TaskList.Add(New TaskActivateAndUpdateAll)
+        TaskList.Add(New TaskUpdateMaterialFromMaterialTable)
+        TaskList.Add(New TaskUpdatePartCopies)
+        TaskList.Add(New TaskUpdatePhysicalProperties)
+        TaskList.Add(New TaskUpdateModelSizeInVariableTable)
+        TaskList.Add(New TaskUpdateDesignForCost)
+        TaskList.Add(New TaskUpdateDrawingViews)
+        TaskList.Add(New TaskUpdateFlatPattern)
+        TaskList.Add(New TaskBreakLinks)
+
+        ' Edit
+        TaskList.Add(New TaskEditProperties)
+        TaskList.Add(New TaskEditVariables)
+        TaskList.Add(New TaskEditInteractively)
+        TaskList.Add(New TaskRecognizeHoles)
+
+        ' Restyle
+        TaskList.Add(New TaskUpdateModelStylesFromTemplate)
+        TaskList.Add(New TaskUpdateDrawingStylesFromTemplate)
+        TaskList.Add(New TaskRemoveFaceStyleOverrides)
+        TaskList.Add(New TaskHideConstructions)
+        TaskList.Add(New TaskFitView)
+
+        ' Check
+        TaskList.Add(New TaskCheckInterference)
+        TaskList.Add(New TaskCheckLinks)
+        TaskList.Add(New TaskCheckRelationships)
+        TaskList.Add(New TaskCheckFlatPattern)
+        TaskList.Add(New TaskCheckMaterialNotInMaterialTable)
+        TaskList.Add(New TaskCheckMissingDrawing)
+        TaskList.Add(New TaskCheckPartNumberDoesNotMatchFilename)
+        TaskList.Add(New TaskCheckPartCopies)
+        TaskList.Add(New TaskCheckDrawingPartsList)
+        TaskList.Add(New TaskCheckDrawings)
+
+        ' Output
+        TaskList.Add(New TaskRunExternalProgram)
+        TaskList.Add(New TaskSaveModelAs)
+        TaskList.Add(New TaskSaveDrawingAs)
+        TaskList.Add(New TaskCreateDrawingOfFlatPattern)
+        TaskList.Add(New TaskPrint)
+
+        For Each Task As Task In TaskList
+            'Task.RememberTaskSelections = Form1.RememberTaskSelections
+            'Task.RememberTaskSelections = Me.RememberTaskSelections
+            KnownTasks.Add(Task.Name.ToLower)
+        Next
+
+        CheckForUnknownTasks(KnownTasks)
+
+        Return TaskList
+
+    End Function
+
+    Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))
+        Dim HardcodedPath = "C:\data\CAD\scripts\SolidEdgeHousekeeper\My Project"
+        Dim Filenames As List(Of String)
+        Dim Filename As String
+
+        Dim UnknownTasks As New List(Of String)
+
+        Dim tf As Boolean
+        Dim s As String = String.Format("Unknown Tasks{0}", vbCrLf)
+
+        If FileIO.FileSystem.DirectoryExists(HardcodedPath) Then
+            Filenames = IO.Directory.GetFiles(HardcodedPath).ToList
+
+            For Each Filename In Filenames
+                Filename = System.IO.Path.GetFileNameWithoutExtension(Filename).ToLower
+                tf = Filename.StartsWith("task")
+                tf = tf And Not Filename = "task"
+                tf = tf And Not Filename.StartsWith("task_")
+                tf = tf And Not Filename.EndsWith(".aux")
+                tf = tf And Not KnownTasks.Contains(Filename)
+
+                If tf Then
+                    UnknownTasks.Add(Filename)
+                End If
+            Next
+
+            If UnknownTasks.Count > 0 Then
+                For Each UnknownTask As String In UnknownTasks
+                    s = String.Format("{0}{1}{2}", s, UnknownTask, vbCrLf)
+                Next
+                MsgBox(s)
+            End If
+
+        End If
     End Sub
 
 
@@ -594,7 +717,6 @@ Public Class UtilsPreferences
 
 
 
-
     '###### PRESETS ######
     Public Function GetPresetsFilename(CheckExisting As Boolean) As String
         Dim Filename = "presets.json"
@@ -669,126 +791,6 @@ Public Class UtilsPreferences
 
         Return LinkManagementOrder
     End Function
-
-
-
-    '###### TASK FUNCTIONS ######
-    Public Function GetNewTaskInstance(
-        AvailableTasks As List(Of Task),
-        TaskName As String,
-        TaskDescription As String
-        ) As Task
-
-        Dim Task As Task = Nothing
-        Dim tmpTask As Task = Nothing
-
-        For Each Task In AvailableTasks
-            If Task.Name = TaskName Then
-                tmpTask = CType(Activator.CreateInstance(Task.GetType), Task)
-                tmpTask.Description = TaskDescription
-                Exit For
-            End If
-        Next
-
-        Return tmpTask
-    End Function
-
-    Public Function BuildTaskListFromScratch() As List(Of Task)
-        Dim TaskList As New List(Of Task)
-        Dim KnownTasks As New List(Of String)
-
-        ' Update
-        TaskList.Add(New TaskSetDocumentStatus)
-        TaskList.Add(New TaskOpenSave)
-        TaskList.Add(New TaskActivateAndUpdateAll)
-        TaskList.Add(New TaskUpdateMaterialFromMaterialTable)
-        TaskList.Add(New TaskUpdatePartCopies)
-        TaskList.Add(New TaskUpdatePhysicalProperties)
-        TaskList.Add(New TaskUpdateModelSizeInVariableTable)
-        TaskList.Add(New TaskUpdateDesignForCost)
-        TaskList.Add(New TaskUpdateDrawingViews)
-        TaskList.Add(New TaskUpdateFlatPattern)
-        TaskList.Add(New TaskBreakLinks)
-
-        ' Edit
-        TaskList.Add(New TaskEditProperties)
-        TaskList.Add(New TaskEditVariables)
-        TaskList.Add(New TaskEditInteractively)
-        TaskList.Add(New TaskRecognizeHoles)
-
-        ' Restyle
-        TaskList.Add(New TaskUpdateModelStylesFromTemplate)
-        TaskList.Add(New TaskUpdateDrawingStylesFromTemplate)
-        TaskList.Add(New TaskRemoveFaceStyleOverrides)
-        TaskList.Add(New TaskHideConstructions)
-        TaskList.Add(New TaskFitView)
-
-        ' Check
-        TaskList.Add(New TaskCheckInterference)
-        TaskList.Add(New TaskCheckLinks)
-        TaskList.Add(New TaskCheckRelationships)
-        TaskList.Add(New TaskCheckFlatPattern)
-        TaskList.Add(New TaskCheckMaterialNotInMaterialTable)
-        TaskList.Add(New TaskCheckMissingDrawing)
-        TaskList.Add(New TaskCheckPartNumberDoesNotMatchFilename)
-        TaskList.Add(New TaskCheckPartCopies)
-        TaskList.Add(New TaskCheckDrawingPartsList)
-        TaskList.Add(New TaskCheckDrawings)
-
-        ' Output
-        TaskList.Add(New TaskRunExternalProgram)
-        TaskList.Add(New TaskSaveModelAs)
-        TaskList.Add(New TaskSaveDrawingAs)
-        TaskList.Add(New TaskCreateDrawingOfFlatPattern)
-        TaskList.Add(New TaskPrint)
-
-        For Each Task As Task In TaskList
-            'Task.RememberTaskSelections = Form1.RememberTaskSelections
-            'Task.RememberTaskSelections = Me.RememberTaskSelections
-            KnownTasks.Add(Task.Name.ToLower)
-        Next
-
-        CheckForUnknownTasks(KnownTasks)
-
-        Return TaskList
-
-    End Function
-
-    Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))
-        Dim HardcodedPath = "C:\data\CAD\scripts\SolidEdgeHousekeeper\My Project"
-        Dim Filenames As List(Of String)
-        Dim Filename As String
-
-        Dim UnknownTasks As New List(Of String)
-
-        Dim tf As Boolean
-        Dim s As String = String.Format("Unknown Tasks{0}", vbCrLf)
-
-        If FileIO.FileSystem.DirectoryExists(HardcodedPath) Then
-            Filenames = IO.Directory.GetFiles(HardcodedPath).ToList
-
-            For Each Filename In Filenames
-                Filename = System.IO.Path.GetFileNameWithoutExtension(Filename).ToLower
-                tf = Filename.StartsWith("task")
-                tf = tf And Not Filename = "task"
-                tf = tf And Not Filename.StartsWith("task_")
-                tf = tf And Not Filename.EndsWith(".aux")
-                tf = tf And Not KnownTasks.Contains(Filename)
-
-                If tf Then
-                    UnknownTasks.Add(Filename)
-                End If
-            Next
-
-            If UnknownTasks.Count > 0 Then
-                For Each UnknownTask As String In UnknownTasks
-                    s = String.Format("{0}{1}{2}", s, UnknownTask, vbCrLf)
-                Next
-                MsgBox(s)
-            End If
-
-        End If
-    End Sub
 
 
 

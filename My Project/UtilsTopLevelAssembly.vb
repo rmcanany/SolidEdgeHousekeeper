@@ -945,100 +945,100 @@ Public Class FileLinksContainer
     End Sub
 
 
-    Private Sub testing_windows_search()
-        'Dim provider = Search.CollatorDSO;EXTENDED PROPERTIES="Application=Windows"
-        'Dim provider = Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System.Search.
-        'Dim WINDB = New ADODB.Connection
+    'Private Sub testing_windows_search()
+    '    'Dim provider = Search.CollatorDSO;EXTENDED PROPERTIES="Application=Windows"
+    '    'Dim provider = Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System.Search.
+    '    'Dim WINDB = New ADODB.Connection
 
 
-        '    '~~> API declaration for the windows "Search Results" dialog
-        '    Private Declare Function ShellSearch Lib "shell32.dll" _
-        'Alias "ShellExecuteA" (ByVal hwnd As Integer, ByVal lpOperation As String,
-        'ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String,
-        'ByVal nShowCmd As Integer) As Integer
+    '    '    '~~> API declaration for the windows "Search Results" dialog
+    '    '    Private Declare Function ShellSearch Lib "shell32.dll" _
+    '    'Alias "ShellExecuteA" (ByVal hwnd As Integer, ByVal lpOperation As String,
+    '    'ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String,
+    '    'ByVal nShowCmd As Integer) As Integer
 
-        '    Private Const SW_SHOWNORMAL = 1
+    '    '    Private Const SW_SHOWNORMAL = 1
 
-        '    Const drv As String = "C:\"
+    '    '    Const drv As String = "C:\"
 
-        '    Private Sub Button1_Click(ByVal sender As System.Object,
-        'ByVal e As System.EventArgs) Handles Button1.Click
-        '        ShellSearch(0, "Find", drv, "", "", SW_SHOWNORMAL)
-        '    End Sub
-
-
-        'Dim urlEncodedLocationA As String = strArchiveDirectory_SHARED.Replace(":", "%3A")
-        'Dim urlEncodedLocationB As String = urlEncodedLocationA.Replace("\", "%5C")
-        'Dim urlEncodedLocationC As String = urlEncodedLocationB.Replace(" ", "%20")
-
-        'searchString = ControlChars.Quote & Me.txtBadgeNumber.Text & "     " & Me.DateTimePicker1.Value.Year.ToString & "-" & Me.DateTimePicker1.Value.Month.ToString().PadLeft(2, "0") & "-" & Me.DateTimePicker1.Value.Day.ToString().PadLeft(2, "0") & ControlChars.Quote
-        'Search = "search-ms:query=System.FileName:~<" & searchString.ToString & "&crumb=Location:" & urlEncodedLocationC & ",recursive" & "&" 'Search STARTS (~<) with the badge/date string.
-        'Process.Start(Search)
+    '    '    Private Sub Button1_Click(ByVal sender As System.Object,
+    '    'ByVal e As System.EventArgs) Handles Button1.Click
+    '    '        ShellSearch(0, "Find", drv, "", "", SW_SHOWNORMAL)
+    '    '    End Sub
 
 
-        ''https://www.codeproject.com/Articles/5204134/Windows-Search-ASP-NET
-        'Dim sFolder As String = "C:\Igor\ReportPortal"
-        'Dim sServerName As String = ""
+    '    'Dim urlEncodedLocationA As String = strArchiveDirectory_SHARED.Replace(":", "%3A")
+    '    'Dim urlEncodedLocationB As String = urlEncodedLocationA.Replace("\", "%5C")
+    '    'Dim urlEncodedLocationC As String = urlEncodedLocationB.Replace(" ", "%20")
 
-        'If Left(sFolder, 2) = "\\" Then
-        '    'Search File Sahre
-        '    sServerName = sFolder.Substring(2)
-        '    Dim iPos As Integer = sServerName.IndexOf("\", 3)
-        '    sServerName = """" & sServerName.Substring(0, iPos) & """."
+    '    'searchString = ControlChars.Quote & Me.txtBadgeNumber.Text & "     " & Me.DateTimePicker1.Value.Year.ToString & "-" & Me.DateTimePicker1.Value.Month.ToString().PadLeft(2, "0") & "-" & Me.DateTimePicker1.Value.Day.ToString().PadLeft(2, "0") & ControlChars.Quote
+    '    'Search = "search-ms:query=System.FileName:~<" & searchString.ToString & "&crumb=Location:" & urlEncodedLocationC & ",recursive" & "&" 'Search STARTS (~<) with the badge/date string.
+    '    'Process.Start(Search)
 
-        '    sFolder = Replace(sFolder, "\", "/")
-        '    If Right(sFolder, 1) <> "/" Then
-        '        sFolder += "/"
-        '    End If
-        'End If
 
-        'Dim RequestText = "something"  ' Replacing the original 'Request.Form(txtSql)'
-        '' Also replaced 'Response.Write()' with MsgBox() throughout
+    '    ''https://www.codeproject.com/Articles/5204134/Windows-Search-ASP-NET
+    '    'Dim sFolder As String = "C:\Igor\ReportPortal"
+    '    'Dim sServerName As String = ""
 
-        'If RequestText <> "" Then
+    '    'If Left(sFolder, 2) = "\\" Then
+    '    '    'Search File Sahre
+    '    '    sServerName = sFolder.Substring(2)
+    '    '    Dim iPos As Integer = sServerName.IndexOf("\", 3)
+    '    '    sServerName = """" & sServerName.Substring(0, iPos) & """."
 
-        '    Dim sConnectionString As String = "Provider=Search.CollatorDSO;_
-        '                   Extended Properties=""Application=Windows"""
-        '    Dim cn As New System.Data.OleDb.OleDbConnection(sConnectionString)
+    '    '    sFolder = Replace(sFolder, "\", "/")
+    '    '    If Right(sFolder, 1) <> "/" Then
+    '    '        sFolder += "/"
+    '    '    End If
+    '    'End If
 
-        '    Try
-        '        cn.Open()
-        '    Catch ex As Exception
-        '        MsgBox(ex.Message & "; ConnectionString: " & sConnectionString)
-        '    End Try
+    '    'Dim RequestText = "something"  ' Replacing the original 'Request.Form(txtSql)'
+    '    '' Also replaced 'Response.Write()' with MsgBox() throughout
 
-        '    Try
-        '        Dim ad As System.Data.OleDb.OleDbDataAdapter =
-        '           New System.Data.OleDb.OleDbDataAdapter(RequestText, cn)
-        '        Dim ds As System.Data.DataSet = New System.Data.DataSet
-        '        ad.Fill(ds)
-        '        If ds.Tables.Count > 0 Then
-        '            Dim oTable As System.Data.DataTable = ds.Tables(0)
+    '    'If RequestText <> "" Then
 
-        '            MsgBox("<table class='table table-striped'><thead><tr>")
-        '            For iCol As Integer = 0 To oTable.Columns.Count - 1
-        '                MsgBox("<th>" &
-        '                oTable.Columns(iCol).Caption & "</th>" & vbCrLf)
-        '            Next
-        '            MsgBox("</tr></thead><tbody>" & vbCrLf)
+    '    '    Dim sConnectionString As String = "Provider=Search.CollatorDSO;_
+    '    '                   Extended Properties=""Application=Windows"""
+    '    '    Dim cn As New System.Data.OleDb.OleDbConnection(sConnectionString)
 
-        '            For iRow As Integer = 0 To oTable.Rows.Count - 1
-        '                MsgBox("<tr>")
-        '                For iCol As Integer = 0 To oTable.Columns.Count - 1
-        '                    MsgBox("<td>" & oTable.Rows(iRow)(iCol).ToString & "</td>" & vbCrLf)
-        '                Next
-        '                MsgBox("</tr>")
-        '            Next
+    '    '    Try
+    '    '        cn.Open()
+    '    '    Catch ex As Exception
+    '    '        MsgBox(ex.Message & "; ConnectionString: " & sConnectionString)
+    '    '    End Try
 
-        '            MsgBox("</tbody></table>")
-        '        End If
-        '    Catch ex As Exception
-        '        MsgBox("<div class='alert alert-danger' style='margin-top: 10px;'>" & ex.Message & "</div>")
-        '    End Try
-        '    cn.Close()
+    '    '    Try
+    '    '        Dim ad As System.Data.OleDb.OleDbDataAdapter =
+    '    '           New System.Data.OleDb.OleDbDataAdapter(RequestText, cn)
+    '    '        Dim ds As System.Data.DataSet = New System.Data.DataSet
+    '    '        ad.Fill(ds)
+    '    '        If ds.Tables.Count > 0 Then
+    '    '            Dim oTable As System.Data.DataTable = ds.Tables(0)
 
-        'End If
-    End Sub
+    '    '            MsgBox("<table class='table table-striped'><thead><tr>")
+    '    '            For iCol As Integer = 0 To oTable.Columns.Count - 1
+    '    '                MsgBox("<th>" &
+    '    '                oTable.Columns(iCol).Caption & "</th>" & vbCrLf)
+    '    '            Next
+    '    '            MsgBox("</tr></thead><tbody>" & vbCrLf)
+
+    '    '            For iRow As Integer = 0 To oTable.Rows.Count - 1
+    '    '                MsgBox("<tr>")
+    '    '                For iCol As Integer = 0 To oTable.Columns.Count - 1
+    '    '                    MsgBox("<td>" & oTable.Rows(iRow)(iCol).ToString & "</td>" & vbCrLf)
+    '    '                Next
+    '    '                MsgBox("</tr>")
+    '    '            Next
+
+    '    '            MsgBox("</tbody></table>")
+    '    '        End If
+    '    '    Catch ex As Exception
+    '    '        MsgBox("<div class='alert alert-danger' style='margin-top: 10px;'>" & ex.Message & "</div>")
+    '    '    End Try
+    '    '    cn.Close()
+
+    '    'End If
+    'End Sub
 
     Public Function GetItem(ItemName As String) As FileLinks
         Dim idx As Integer = Me.ItemNames.IndexOf(ItemName.ToLower)

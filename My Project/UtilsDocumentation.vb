@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/98c28e02706048878bde103aeaa1f605460ea4f5"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/tree/cbbc55dc9c80d6ae1f2a04238a12d07085552c1d"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
@@ -17,7 +17,6 @@ Public Class UtilsDocumentation
     Public Sub BuildReadmeFile()
 
         Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
-        'Dim VersionSpecificReadmeFileName = ReadmeFileName.Replace(".md", String.Format("-{0}.md", Me.Version))
 
         ' StartupPath is hard coded so this doesn't do anything on a user's machine
         Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
@@ -134,8 +133,6 @@ Public Class UtilsDocumentation
             ReadmeOut.Add(msg)
             msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
             ReadmeOut.Add(msg)
-            msg = "- Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)"
-            ReadmeOut.Add(msg)
 
             msg = ""
             ReadmeOut.Add("")
@@ -148,7 +145,6 @@ Public Class UtilsDocumentation
 
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
-            'IO.File.WriteAllLines(VersionSpecificReadmeFileName, ReadmeOut)
 
         End If
 

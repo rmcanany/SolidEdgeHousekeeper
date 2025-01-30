@@ -765,12 +765,18 @@ Public Class TaskEditProperties
                                 s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
+                                ' First try int, then double
                                 'Try
                                 '    Dim i As Integer = CInt(PropValue)
-                                '    Prop.Value = i
+                                '    Prop.Value = i  <- This doesn't work, but doesn't throw an exception
+                                '    If Not CInt(Prop.Value) = i Then  <- This breaks something.  Bombs out later getting SEDoc.Fullname.
+                                '        Dim k = 0
+                                '    End If
+                                '    Dim j = 0
                                 'Catch ex2 As Exception
                                 '    Dim d As Double = CDbl(PropValue)
                                 '    Prop.Value = d
+                                '    Dim j = 0
                                 'End Try
 
                             Case "double"

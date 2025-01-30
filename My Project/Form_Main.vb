@@ -18,8 +18,6 @@ Public Class Form_Main
     Private editbox As New TextBox()
     Private hitinfo As ListViewHitTestInfo
 
-    'Public Property UtilsLogFile As UtilsLogFile
-
     Public Property StopProcess As Boolean
 
     Public DragDropCache As New List(Of ListViewItem)
@@ -1095,9 +1093,17 @@ Public Class Form_Main
 
 
 
-    Private Sub Startup()
+    Private Sub Startup(Presets As Boolean)
 
         Me.Cursor = Cursors.WaitCursor
+
+        Dim Splash As FormSplash = Nothing
+        If Not Presets Then
+            Splash = New FormSplash()
+            Splash.Show()
+            Splash.UpdateStatus("Initializing")
+            Application.DoEvents()
+        End If
 
         Dim UP As New UtilsPreferences()
         Dim UD As New UtilsDocumentation
@@ -1105,6 +1111,8 @@ Public Class Form_Main
 
 
         '###### INITIALIZE PREFERENCES IF NEEDED ######
+
+        If Not Presets Then Splash.UpdateStatus("Loading Preferences") : Application.DoEvents()
 
         UP.CreatePreferencesDirectory()
         UP.CreateFilenameCharmap()
@@ -1114,10 +1122,14 @@ Public Class Form_Main
 
         '###### LOAD MAIN FORM SAVED SETTINGS IF ANY ######
 
+        If Not Presets Then Splash.UpdateStatus("Loading Interface Preferences") : Application.DoEvents()
+
         UP.GetFormMainSettings(Me)
 
 
         '###### INITIALIZE DATA STRUCTURES IF NEEDED ######
+
+        If Not Presets Then Splash.UpdateStatus("Loading Data Structures") : Application.DoEvents()
 
         If Me.FileWildcardList Is Nothing Then
             Me.FileWildcardList = New List(Of String)
@@ -1157,12 +1169,16 @@ Public Class Form_Main
 
         Dim TemplateList = {Me.AssemblyTemplate, Me.PartTemplate, Me.SheetmetalTemplate, Me.DraftTemplate}.ToList
 
+        If Not Presets Then Splash.UpdateStatus("Loading Properties Data") : Application.DoEvents()
         Me.PropertiesData = New HCPropertiesData  ' Automatically loads saved settings if any.
 
+        If Not Presets Then Splash.UpdateStatus("Loading Presets") : Application.DoEvents()
         Me.Presets = New HCPresets  ' Automatically loads saved settings if any.
 
+        If Not Presets Then Splash.UpdateStatus("Loading Property Filters") : Application.DoEvents()
         Me.PropertyFilters = New PropertyFilters  ' Automatically loads saved settings if any.
 
+        If Not Presets Then Splash.UpdateStatus("Building Readme") : Application.DoEvents()
         UD.BuildReadmeFile()
 
         CarIcona()
@@ -1170,7 +1186,6 @@ Public Class Form_Main
         If IO.File.Exists(Me.LinkManagementFilename) Then
             Me.LinkManagementOrder = UP.GetLinkManagementOrder()
         End If
-
 
         '###### INITIALIZE FILE LIST IF NEEDED ######
 
@@ -1183,6 +1198,8 @@ Public Class Form_Main
             GroupNames.AddRange({"Sources", "Excluded", ".asm", ".par", ".psm", ".dft"})
 
             For i As Integer = 0 To GroupHeaderNames.Count - 1
+                If Not Presets Then Splash.UpdateStatus(String.Format("Initializing {0}", GroupHeaderNames(i))) : Application.DoEvents()
+
                 Dim LVGroup As New ListViewGroup(GroupHeaderNames(i), HorizontalAlignment.Left)
                 LVGroup.Name = GroupNames(i)
                 ListViewFiles.Groups.Add(LVGroup)
@@ -1197,14 +1214,17 @@ Public Class Form_Main
         ' Form title
         Me.Text = String.Format("Solid Edge Housekeeper {0}", Me.Version)
 
-
         '###### INITIALIZE TASK LIST ######
 
-        Me.TaskList = UP.GetTaskList
+        If Not Presets Then Splash.UpdateStatus("Loading Tasks") : Application.DoEvents()
+
+        Me.TaskList = UP.GetTaskList(Splash)
 
         Dim tmpTaskPanel As Panel = Nothing
 
         For Each c As Control In TabPageTasks.Controls
+            If Not Presets Then Splash.UpdateStatus(String.Format("{0}", c.Name)) : Application.DoEvents()
+
             If c.Name = "TaskPanel" Then
                 tmpTaskPanel = CType(c, Panel)
                 Exit For
@@ -1216,6 +1236,8 @@ Public Class Form_Main
         For i = TaskList.Count - 1 To 0 Step -1
 
             Dim Task = TaskList(i)
+
+            If Not Presets Then Splash.UpdateStatus(String.Format("Configuring {0}", Task.Name)) : Application.DoEvents()
 
             If Not Me.RememberTasks Then
                 Task.IsSelectedTask = False
@@ -1239,6 +1261,7 @@ Public Class Form_Main
         AddHandler editbox.Leave, AddressOf editbox_LostFocus
         AddHandler editbox.KeyUp, AddressOf editbox_KeyUp
 
+        If Not Presets Then Splash.UpdateStatus("Updating ToolStrip") : Application.DoEvents()
 
         '################# Questo risolver il problema del bordo sgrazinato della ToolStrip
         ToolStrip_Filter.Renderer = New MySR()
@@ -1252,6 +1275,13 @@ Public Class Form_Main
             UP.CheckForNewerVersion(Me.Version)
         End If
 
+        If Not Presets Then
+            Splash.UpdateStatus("")
+            Application.DoEvents()
+
+            Splash.Animate()
+            Splash.Hide()
+        End If
         Me.Cursor = Cursors.Default
 
     End Sub
@@ -1485,7 +1515,7 @@ Public Class Form_Main
     ' FORM LOAD
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Startup()
+        Startup(Presets:=False)
     End Sub
 
 
@@ -3403,7 +3433,7 @@ Public Class Form_Main
                 'SaveSettings()  ' Incorrect.  This saves the current settings
 
                 Application.DoEvents()
-                Startup()
+                Startup(Presets:=True)
 
                 'Me.ListViewFilesOutOfDate = True
             End If

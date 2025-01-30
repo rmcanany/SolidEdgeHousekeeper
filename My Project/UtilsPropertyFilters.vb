@@ -6,7 +6,6 @@ Public Class UtilsPropertyFilters
 
     Public Property FMain As Form_Main
     Public Property PropertyFilter As HCPropertyFilter
-    'Public Property PropNotFoundString As String = "HOUSEKEEPER_PROP_NOT_FOUND"
 
 
     Public Sub New(_Form_Main As Form_Main)
@@ -236,8 +235,8 @@ Public Class UtilsPropertyFilters
             tf = DocValue.ToLower.Contains(Value.ToLower)
         ElseIf Comparison = "is_exactly" Then
             tf = DocValue.ToLower = Value.ToLower
-        ElseIf Comparison = "is_not" Then
-            tf = DocValue.ToLower <> Value.ToLower
+            'ElseIf Comparison = "is_not" Then
+            '    tf = DocValue.ToLower <> Value.ToLower
         ElseIf Comparison = "wildcard_match" Then
             tf = DocValue.ToLower Like Value.ToLower
         ElseIf Comparison = "regex_match" Then

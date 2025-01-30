@@ -191,6 +191,12 @@
     <Compile Include="My Project\FormPropertyPicker.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\FormSplash.Designer.vb">
+      <DependentUpon>FormSplash.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormSplash.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\FormTextPrompt.Designer.vb">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>
     </Compile>
@@ -359,6 +365,9 @@
     <EmbeddedResource Include="My Project\FormPropertyPicker.resx">
       <DependentUpon>FormPropertyPicker.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormSplash.resx">
+      <DependentUpon>FormSplash.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormTextPrompt.resx">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>
     </EmbeddedResource>
@@ -476,6 +485,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Housekeeper.ico" />
+    <None Include="Resources\splash_logo_02.png" />
+    <None Include="Resources\splash_logo_01.png" />
     <None Include="Resources\TaskSetDocumentStatus.png" />
     <None Include="Resources\icons8_versions_16.png" />
     <None Include="Resources\icons8_one_page_16.png" />

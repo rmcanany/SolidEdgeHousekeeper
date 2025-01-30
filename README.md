@@ -1003,7 +1003,6 @@ This project uses these awesome open source packages.
 - Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)
 - Expression editor [<ins>**FastColoredTextBox**</ins>](https://github.com/PavelTorgashov/FastColoredTextBox)
 - Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)
-- Time zone converter [<ins>**TimeZoneConverter**</ins>](https://github.com/mattjohnsonpint/TimeZoneConverter)
 
 # CODE ORGANIZATION
 
