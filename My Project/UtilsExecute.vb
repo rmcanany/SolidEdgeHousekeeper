@@ -128,7 +128,13 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Cancel"
 
         If Me.UtilsLogFile.ErrorsOccurred Then
-            Process.Start("Notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
+            Try
+                ' Try to use the default application to open the file.
+                Process.Start(Me.UtilsLogFile.MissingFilesFileName)
+            Catch ex As Exception
+                ' If none, open with notepad.exe
+                Process.Start("notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
+            End Try
         Else
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
