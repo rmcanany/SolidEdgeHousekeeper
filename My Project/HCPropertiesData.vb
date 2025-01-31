@@ -1029,16 +1029,20 @@ Public Class PropertyData
 
         tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
-        Me.Name = tmpDict("Name")
-        Me.EnglishName = tmpDict("EnglishName")
-        Me.SSName = tmpDict("SSName")
-        Me.PropertySetName = CType(CInt(tmpDict("PropertySetName")), PropertySetNameConstants)
-        Me.PropertySetActualName = tmpDict("PropertySetActualName")
-        Me.TypeName = CType(CInt(tmpDict("TypeName")), TypeNameConstants)
-        Me.PropID = CInt(tmpDict("PropID"))
-        Me.PropertySource = CType(CInt(tmpDict("PropertySource")), PropertySourceConstants)
-        Me.FavoritesListIdx = CInt(tmpDict("FavoritesListIdx"))
-        Me.IsDuplicate = CBool(tmpDict("IsDuplicate"))
+        Try
+            Me.Name = tmpDict("Name")
+            Me.EnglishName = tmpDict("EnglishName")
+            Me.SSName = tmpDict("SSName")
+            Me.PropertySetName = CType(CInt(tmpDict("PropertySetName")), PropertySetNameConstants)
+            Me.PropertySetActualName = tmpDict("PropertySetActualName")
+            Me.TypeName = CType(CInt(tmpDict("TypeName")), TypeNameConstants)
+            Me.PropID = CInt(tmpDict("PropID"))
+            Me.PropertySource = CType(CInt(tmpDict("PropertySource")), PropertySourceConstants)
+            Me.FavoritesListIdx = CInt(tmpDict("FavoritesListIdx"))
+            Me.IsDuplicate = CBool(tmpDict("IsDuplicate"))
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
