@@ -71,14 +71,18 @@ Public Class Preset
 
     Public Sub FromJSON(JSONString As String)
 
-        Dim tmpPresetDict As Dictionary(Of String, String)
+        Try
+            Dim tmpPresetDict As Dictionary(Of String, String)
 
-        tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+            tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
-        Me.Name = tmpPresetDict("Name")
-        Me.TaskListJSON = tmpPresetDict("TaskListJSON")
-        Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
-        Me.PropertyFiltersJSON = tmpPresetDict("PropertyFiltersJSON")
+            Me.Name = tmpPresetDict("Name")
+            Me.TaskListJSON = tmpPresetDict("TaskListJSON")
+            Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
+            Me.PropertyFiltersJSON = tmpPresetDict("PropertyFiltersJSON")
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
