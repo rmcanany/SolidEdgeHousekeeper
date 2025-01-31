@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports SolidEdgeCommunity
+'Imports SolidEdgeCommunity
 
 Public Class UtilsExecute
 
@@ -103,7 +103,7 @@ Public Class UtilsExecute
             SEApp = Nothing
         End If
 
-        OleMessageFilter.Unregister()
+        OleMessageFilter.Revoke()
 
         If FMain.StopProcess Then
             If TotalAborts > TotalAbortsMaximum Then
@@ -453,13 +453,13 @@ Public Class UtilsExecute
 
                 If Proceed Then
                     If (FMain.RunInBackground) And (Not Filetype = "Assembly") Then
-                        SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(
-                                    Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
+                        'SEDoc = SolidEdgeCommunity.Extensions.DocumentsExtensions.OpenInBackground(
+                        '            Of SolidEdgeFramework.SolidEdgeDocument)(SEApp.Documents, Path)
 
                         ' Here is the same functionality without using the SolidEdgeCommunity dependency
                         ' https://blogs.sw.siemens.com/solidedge/how-to-open-documents-silently/
-                        ' Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
-                        ' SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
+                        Dim JDOCUMENTPROP_NOWINDOW As UInt16 = 8
+                        SEDoc = DirectCast(SEApp.Documents.Open(Path, JDOCUMENTPROP_NOWINDOW), SolidEdgeFramework.SolidEdgeDocument)
 
                     Else
                         SEDoc = DirectCast(SEApp.Documents.Open(Path), SolidEdgeFramework.SolidEdgeDocument)

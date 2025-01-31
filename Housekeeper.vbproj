@@ -207,6 +207,7 @@
     <Compile Include="My Project\HCStructuredStorageDoc.vb" />
     <Compile Include="My Project\HCPropertyFilter.vb" />
     <Compile Include="My Project\HCPresets.vb" />
+    <Compile Include="My Project\OleMessageFilter.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />

@@ -366,7 +366,15 @@ Public Class UtilsTopLevelAssembly
                     Next
                 End Using
 
-                Process.Start("Notepad.exe", LogfileName)
+                'Process.Start("Notepad.exe", LogfileName)
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(LogfileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", LogfileName)
+                End Try
+
 
             Catch ex As Exception
             End Try
@@ -424,7 +432,15 @@ Public Class UtilsTopLevelAssembly
                     Next
                 End Using
 
-                Process.Start("Notepad.exe", LogfileName)
+                'Process.Start("Notepad.exe", LogfileName)
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(LogfileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", LogfileName)
+                End Try
+
 
             Catch ex As Exception
             End Try

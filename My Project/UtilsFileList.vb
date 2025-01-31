@@ -739,7 +739,16 @@ Public Class UtilsFileList
                     Next
                 End Using
 
-                Process.Start("Notepad.exe", MissingFilesFileName)
+                'Process.Start("Notepad.exe", MissingFilesFileName)
+
+                Try
+                    ' Try to use the default application to open the file.
+                    Process.Start(MissingFilesFileName)
+                Catch ex As Exception
+                    ' If none, open with notepad.exe
+                    Process.Start("notepad.exe", MissingFilesFileName)
+                End Try
+
 
             Catch ex As Exception
             End Try
