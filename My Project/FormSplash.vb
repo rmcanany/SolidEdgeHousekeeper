@@ -21,7 +21,7 @@
 
         PictureBox1.Image = My.Resources.splash_logo_02
         Application.DoEvents()
-        System.Threading.Thread.Sleep(DelayTime)
+        System.Threading.Thread.Sleep(3 * DelayTime)
 
     End Sub
 

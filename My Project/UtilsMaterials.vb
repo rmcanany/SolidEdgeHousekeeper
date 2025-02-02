@@ -391,7 +391,8 @@ Public Class UtilsMaterials
 
                     Features = Model.Features
                     For Each Feature In Features
-                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        'FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
                         If Not FeatureNames.Contains(FeatureName) Then
                             FeatureNames.Add(FeatureName)
 
@@ -502,8 +503,10 @@ Public Class UtilsMaterials
         Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
         Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
 
-        Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-        Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
+        'Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+        'Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
+        Dim FeatureType = HCComObject.GetPropertyValue(
+            Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
 
         Select Case FeatureType
 
@@ -1117,7 +1120,8 @@ Public Class UtilsMaterials
                         'End If
 
                     Case Else
-                        Dim FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        'Dim FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
                         'ExitStatus = 1
                         'ErrorMessageList.Add(String.Format("{0} (FeatureType={1}) not processed.  Please verify results.", FeatureName, FeatureType.ToString))
                 End Select
