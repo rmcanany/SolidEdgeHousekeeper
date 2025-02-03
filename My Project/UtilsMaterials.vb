@@ -161,7 +161,6 @@ Public Class UtilsMaterials
                 For Each MatTableMaterial In CType(MaterialList, System.Array)
                     If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
 
-
                         ' Names match, check if their properties do.
                         s = MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)
                         If s.Count > 0 Then
@@ -176,15 +175,23 @@ Public Class UtilsMaterials
                                 MatTable.GetMaterialPropValueFromDoc(
                                     SEDoc, seFaceStyle, OldDocFaceStyleName)
 
+                                SEApp.DoIdle()
+
                                 Dim OldLibFaceStyleName As Object = Nothing
                                 MatTable.GetMaterialPropValueFromLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
 
+                                SEApp.DoIdle()
+
                                 MatTable.SetMaterialPropValueToLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
 
+                                SEApp.DoIdle()
+
                                 MatTable.ApplyMaterialToDoc(
                                     SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+
+                                SEApp.DoIdle()
 
                                 MatTable.SetMaterialPropValueToLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
@@ -196,7 +203,7 @@ Public Class UtilsMaterials
                         ' Some imported files cause exceptions on face updates.
                         Try
                             ' Face styles are not always updated, especially on imported files.
-                            If Not UpdateFaces(SEApp, SEDoc) Then
+                            If Not UpdateFaces() Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
                             End If
@@ -357,10 +364,7 @@ Public Class UtilsMaterials
 
     End Function
 
-    Private Function UpdateFaces(
-        SEApp As SolidEdgeFramework.Application,
-        SEDoc As SolidEdgeFramework.SolidEdgeDocument
-        ) As Boolean
+    Private Function UpdateFaces() As Boolean
 
         Dim UpdatesComplete As Boolean = True
 
