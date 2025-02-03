@@ -176,6 +176,7 @@
       <DependentUpon>Application.myapp</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="My Project\HCComObject.vb" />
     <Compile Include="My Project\ExTableLayoutPanel.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -207,6 +208,7 @@
     <Compile Include="My Project\HCStructuredStorageDoc.vb" />
     <Compile Include="My Project\HCPropertyFilter.vb" />
     <Compile Include="My Project\HCPresets.vb" />
+    <Compile Include="My Project\IDispatch.vb" />
     <Compile Include="My Project\OleMessageFilter.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />

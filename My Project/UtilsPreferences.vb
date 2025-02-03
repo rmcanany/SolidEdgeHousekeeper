@@ -379,7 +379,7 @@ Public Class UtilsPreferences
                 TaskJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
                 TaskName = TaskJSONDict("TaskName")
 
-                If Splash IsNot Nothing Then Splash.UpdateStatus(String.Format("Loading {0}", TaskName)) : Application.DoEvents()
+                If Splash IsNot Nothing Then Splash.UpdateStatus(String.Format("Loading {0}", TaskName))
 
                 Task = GetNewTaskInstance(AvailableTasks, TaskName, TaskDescription)
 

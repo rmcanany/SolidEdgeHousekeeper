@@ -71,6 +71,18 @@ Public Class TaskEditProperties
         End Set
     End Property
 
+    Private _UpdateFaceStyles As Boolean
+    Public Property UpdateFaceStyles As Boolean
+        Get
+            Return _UpdateFaceStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateFaceStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
     Private _RemoveFaceStyleOverrides As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
         Get
@@ -119,6 +131,7 @@ Public Class TaskEditProperties
         UseConfigurationPageTemplates
         Browse
         MaterialTable
+        UpdateFaceStyles
         RemoveFaceStyleOverrides
         StructuredStorageEdit
         AutoHideOptions
@@ -139,9 +152,10 @@ Public Class TaskEditProperties
         Me.Image = My.Resources.TaskEditPropertiesEx
         Me.Category = "Edit"
         Me.RequiresMaterialTable = True
-        'Me.RequiresTemplatePropertyDict = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
+        'Me.SolidEdgeRequired = False
+        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
 
         GenerateTaskControl()
         TaskOptionsTLP = GenerateTaskOptionsTLP()
@@ -151,14 +165,11 @@ Public Class TaskEditProperties
         Me.MaterialTable = ""
         Me.JSONString = ""
         Me.AutoAddMissingProperty = False
-        Me.AutoUpdateMaterial = False
-        Me.RemoveFaceStyleOverrides = False
         Me.StructuredStorageEdit = False
-        'Me.SolidEdgeRequired = False
-        Me.SolidEdgeRequired = True  ' Default is so checking the box toggles a property update
-
-        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
-        'Me.PropertiesData = New PropertiesData
+        Me.AutoUpdateMaterial = False
+        Me.UseConfigurationPageTemplates = False
+        Me.UpdateFaceStyles = False
+        Me.RemoveFaceStyleOverrides = False
 
     End Sub
 
@@ -855,7 +866,7 @@ Public Class TaskEditProperties
                         Case "par", "psm"
                             Dim UM As New UtilsMaterials
                             SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
-                                        SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
+                                SEApp, SEDoc, Me.MaterialTable, Me.UpdateFaceStyles, Me.RemoveFaceStyleOverrides)
 
                             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
@@ -921,6 +932,7 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -929,6 +941,7 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -944,6 +957,15 @@ Public Class TaskEditProperties
         tmpTLPOptions.Controls.Add(TextBox, 1, RowIndex)
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -1005,15 +1027,15 @@ Public Class TaskEditProperties
                     ErrorMessageList.Add(String.Format("{0}Select a valid material table", Indent))
                 End If
 
-                If Not Me.SolidEdgeRequired Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    Dim s = String.Format("{0}'Material update' incompatible with 'Edit outside SE'.", Indent)
-                    ErrorMessageList.Add(s)
+                'If Not Me.SolidEdgeRequired Then
+                '    If Not ErrorMessageList.Contains(Me.Description) Then
+                '        ErrorMessageList.Add(Me.Description)
+                '    End If
+                '    ExitStatus = 1
+                '    Dim s = String.Format("{0}'Material update' incompatible with 'Edit outside SE'.", Indent)
+                '    ErrorMessageList.Add(s)
 
-                End If
+                'End If
 
             End If
 
@@ -1082,32 +1104,56 @@ Public Class TaskEditProperties
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
-        'Dim Ctrl As Control
-        Dim Button As Button
-        Dim TextBox As TextBox
-        Dim CheckBox2 As CheckBox
+        ''Dim Ctrl As Control
+        'Dim Button As Button
+        'Dim TextBox As TextBox
+        'Dim CheckBox2 As CheckBox
+        Dim tf As Boolean
 
         Select Case Name
             Case ControlNames.AutoAddMissingProperty.ToString '"AutoAddMissingProperty"
                 Me.AutoAddMissingProperty = Checkbox.Checked
 
+            Case ControlNames.StructuredStorageEdit.ToString
+                Me.StructuredStorageEdit = Checkbox.Checked
+                Me.RequiresSave = Not Checkbox.Checked
+                Me.SolidEdgeRequired = Not Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.AutoUpdateMaterial.ToString), CheckBox).Visible = Not Me.StructuredStorageEdit
+
+                tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial)
+
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = tf
+
+                tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial) And (Not Me.UseConfigurationPageTemplates)
+
+                CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = tf
+                CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = tf
+
+                tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial)
+
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
+
             Case ControlNames.AutoUpdateMaterial.ToString '"AutoUpdateMaterial"
                 Me.AutoUpdateMaterial = Checkbox.Checked
+                Checkbox.Visible = Not Me.StructuredStorageEdit
 
-                CheckBox2 = CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox)
-                CheckBox2.Visible = Me.AutoUpdateMaterial
+                tf = Me.AutoUpdateMaterial
 
-                Button = CType(ControlsDict(ControlNames.Browse.ToString), Button)
-                Button.Visible = Me.AutoUpdateMaterial And Not CheckBox2.Checked
+                CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
 
-                TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
-                TextBox.Visible = Me.AutoUpdateMaterial And Not CheckBox2.Checked
+                tf = Me.AutoUpdateMaterial And Not Me.UseConfigurationPageTemplates
 
-                CheckBox2 = CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox)
-                CheckBox2.Visible = Me.AutoUpdateMaterial
+                CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = tf
+                CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = tf
 
             Case ControlNames.UseConfigurationPageTemplates.ToString
                 Me.UseConfigurationPageTemplates = Checkbox.Checked
+                Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
 
                 If Me.UseConfigurationPageTemplates Then
                     Me.MaterialTable = Form_Main.MaterialTable
@@ -1120,13 +1166,15 @@ Public Class TaskEditProperties
 
                 End If
 
+            Case ControlNames.UpdateFaceStyles.ToString
+                Me.UpdateFaceStyles = Checkbox.Checked
+                Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
+
+                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
+
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
-
-            Case ControlNames.StructuredStorageEdit.ToString
-                Me.StructuredStorageEdit = Checkbox.Checked
-                Me.RequiresSave = Not Checkbox.Checked
-                Me.SolidEdgeRequired = Not Checkbox.Checked
+                Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
 
             Case ControlNames.AutoHideOptions.ToString '"HideOptions"
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked

@@ -140,7 +140,7 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Select Case DocType
             Case "asm", "par", "psm"
                 Dim UM As New UtilsMaterials
-                ErrorMessage = UM.MaterialNotInMaterialTable(SEDoc, Me.MaterialTable, SEApp)
+                ErrorMessage = UM.MaterialNotInMaterialTable(SEApp, SEDoc, Me.MaterialTable)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select

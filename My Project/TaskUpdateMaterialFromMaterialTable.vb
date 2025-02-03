@@ -30,6 +30,18 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Set
     End Property
 
+    Private _UpdateFaceStyles As Boolean
+    Public Property UpdateFaceStyles As Boolean
+        Get
+            Return _UpdateFaceStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateFaceStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
     Private _RemoveFaceStyleOverrides As Boolean
     Public Property RemoveFaceStyleOverrides As Boolean
         Get
@@ -75,6 +87,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         UseConfigurationPageTemplates
         Browse
         MaterialTable
+        UpdateFaceStyles
         RemoveFaceStyleOverrides
         'StructuredStorageEdit
         AutoHideOptions
@@ -105,6 +118,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         ' Options
         Me.MaterialTable = ""
+        Me.UpdateFaceStyles = False
         Me.RemoveFaceStyleOverrides = False
     End Sub
 
@@ -158,7 +172,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Select Case DocType
             Case "par", "psm"
                 Dim UM As New UtilsMaterials
-                SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, SEApp)
+                SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
+                    SEApp, SEDoc, Me.MaterialTable, Me.UpdateFaceStyles, Me.RemoveFaceStyleOverrides)
                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
             Case Else
@@ -292,6 +307,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -371,6 +394,11 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
                 End If
 
+            Case ControlNames.UpdateFaceStyles.ToString
+                Me.UpdateFaceStyles = Checkbox.Checked
+
+                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
+
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
@@ -430,7 +458,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
 
     End Sub
-
 
 
     Private Function GetHelpText() As String

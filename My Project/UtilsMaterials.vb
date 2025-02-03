@@ -2,11 +2,21 @@
 
 Public Class UtilsMaterials
 
+    Private Property SEApp As SolidEdgeFramework.Application
+    Private Property SEDoc As SolidEdgeFramework.SolidEdgeDocument
+    Private Property ActiveMaterialLibrary As String
+    Private Property UpdateFaceStyles As Boolean
+    Private Property RemoveFaceStyleOverrides As Boolean
+
     Public Function MaterialNotInMaterialTable(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ActiveMaterialLibrary As String,
-        ByVal SEApp As SolidEdgeFramework.Application
+        ByVal _SEApp As SolidEdgeFramework.Application,
+        ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        _ActiveMaterialLibrary As String
         ) As Dictionary(Of Integer, List(Of String))
+
+        Me.SEApp = _SEApp
+        Me.SEDoc = _SEDoc
+        Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
 
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
@@ -73,14 +83,19 @@ Public Class UtilsMaterials
         Return ErrorMessage
     End Function
 
-
-
     Public Function UpdateMaterialFromMaterialTable(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ActiveMaterialLibrary As String,
-        RemoveFaceStyleOverrides As Boolean,
-        ByVal SEApp As SolidEdgeFramework.Application
+        ByVal _SEApp As SolidEdgeFramework.Application,
+        ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        _ActiveMaterialLibrary As String,
+        _UpdateFaceStyles As Boolean,
+        _RemoveFaceStyleOverrides As Boolean
         ) As Dictionary(Of Integer, List(Of String))
+
+        Me.SEApp = _SEApp
+        Me.SEDoc = _SEDoc
+        Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
+        Me.UpdateFaceStyles = _UpdateFaceStyles
+        Me.RemoveFaceStyleOverrides = _RemoveFaceStyleOverrides
 
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
@@ -132,16 +147,6 @@ Public Class UtilsMaterials
             ' This function populates 'MaterialLibList' and 'NumMaterialLibraries'
             MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
 
-            'This should now be handled already in CheckStartConditions.
-            'Make sure the ActiveMaterialLibrary exists
-            If Not IsActiveMaterialLibraryPresent(MaterialLibList, ActiveMaterialLibrary) Then
-                msg = String.Format("Active material library '{0}' not found.  Exiting...{1}", ActiveMaterialLibrary, Chr(13))
-                msg += "Please update the Material Table on the Configuration tab." + Chr(13)
-                MsgBox(msg)
-                SEApp.Quit()
-                End
-            End If
-
             ' This function populates 'NumMaterials' and 'MaterialList'
             MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
 
@@ -156,20 +161,42 @@ Public Class UtilsMaterials
                 For Each MatTableMaterial In CType(MaterialList, System.Array)
                     If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
 
+
                         ' Names match, check if their properties do.
                         s = MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)
                         If s.Count > 0 Then
                             ' Properties do not match.  Update the document's material to match the library version.
-                            MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                            ' This command sets the face style (and everything else) to that defined in the Material Table.
+                            If Me.UpdateFaceStyles Then
+                                MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                            Else
+                                Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+
+                                Dim OldDocFaceStyleName As Object = Nothing
+                                MatTable.GetMaterialPropValueFromDoc(
+                                    SEDoc, seFaceStyle, OldDocFaceStyleName)
+
+                                Dim OldLibFaceStyleName As Object = Nothing
+                                MatTable.GetMaterialPropValueFromLibrary(
+                                    MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+
+                                MatTable.SetMaterialPropValueToLibrary(
+                                    MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
+
+                                MatTable.ApplyMaterialToDoc(
+                                    SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+
+                                MatTable.SetMaterialPropValueToLibrary(
+                                    MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+
+                                SEApp.DoIdle()
+                            End If
                         End If
 
-                        ' Face styles are not always updated, especially on imported files.
-                        ' Some imported files have trouble with face updates.
+                        ' Some imported files cause exceptions on face updates.
                         Try
-                            'Dim RemoveFaceStyleOverrides As Boolean = CBool(Configuration("CheckBoxRemoveFaceStyleOverrides"))
-                            If Not UpdateFaces(SEApp, SEDoc,
-                                               CurrentMaterialFaceStyle(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary),
-                                               RemoveFaceStyleOverrides) Then
+                            ' Face styles are not always updated, especially on imported files.
+                            If Not UpdateFaces(SEApp, SEDoc) Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
                             End If
@@ -196,6 +223,9 @@ Public Class UtilsMaterials
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
+
+        MatTable = Nothing
+        SEApp.DoIdle()
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
@@ -309,8 +339,6 @@ Public Class UtilsMaterials
                 FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
         End Select
 
-
-
         For Each MatTableProp In MatTableProps
             ' This function populates 'LibPropValue'
             MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
@@ -331,13 +359,12 @@ Public Class UtilsMaterials
 
     Private Function UpdateFaces(
         SEApp As SolidEdgeFramework.Application,
-        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        CurrentMaterialFaceStyle As SolidEdgeFramework.FaceStyle,
-        RemoveFaceStyleOverrides As Boolean) As Boolean
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument
+        ) As Boolean
 
         Dim UpdatesComplete As Boolean = True
 
-        'Dim Models As SolidEdgePart.Models
+        Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
         Dim Body As SolidEdgeGeometry.Body
         Dim Faces As SolidEdgeGeometry.Faces
@@ -347,12 +374,11 @@ Public Class UtilsMaterials
 
         Dim FaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
         Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
-        Dim BodyOverride As SolidEdgeFramework.FaceStyle = Nothing
+        Dim BodyStyle As SolidEdgeFramework.FaceStyle = Nothing
 
         Dim FeatureNames As New List(Of String)
         Dim FeatureName As String
 
-        Dim Models As SolidEdgePart.Models = Nothing
 
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
@@ -366,9 +392,6 @@ Public Class UtilsMaterials
                 Models = tmpSEDoc.Models
         End Select
 
-        'Models = SEDoc.Models
-
-
         If (Models.Count > 0) And (Models.Count < 300) Then
             For Each Model In Models
 
@@ -376,7 +399,7 @@ Public Class UtilsMaterials
                 Try
                     Body = CType(Model.Body, SolidEdgeGeometry.Body)
                     If Body.Style IsNot Nothing Then
-                        BodyOverride = Body.Style
+                        BodyStyle = Body.Style
                     End If
 
                     'Body.Faces
@@ -384,14 +407,12 @@ Public Class UtilsMaterials
 
                     For Each Face In Faces
                         FaceOverrides(Face.ID) = Face.Style
-                        'If Face.Style IsNot Nothing Then
-                        '    FaceOverrides(Face.ID) = Face.Style
-                        'End If
                     Next
 
                     Features = Model.Features
                     For Each Feature In Features
-                        FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        'FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
                         If Not FeatureNames.Contains(FeatureName) Then
                             FeatureNames.Add(FeatureName)
 
@@ -429,13 +450,15 @@ Public Class UtilsMaterials
                             Body = CType(Model.Body, SolidEdgeGeometry.Body)
                             Faces = CType(Body.Faces(SolidEdgeGeometry.FeatureTopologyQueryTypeConstants.igQueryAll), SolidEdgeGeometry.Faces)
 
-                            Dim i As Integer = 0
-                            For Each Face In Faces
-                                If FaceStyleList(i) IsNot Nothing Then
-                                    FaceOverrides(Face.ID) = FaceStyleList(i)
-                                End If
-                                i += 1
-                            Next
+                            If Not Me.RemoveFaceStyleOverrides Then
+                                Dim i As Integer = 0
+                                For Each Face In Faces
+                                    If FaceStyleList(i) IsNot Nothing Then
+                                        FaceOverrides(Face.ID) = FaceStyleList(i)
+                                    End If
+                                    i += 1
+                                Next
+                            End If
 
                         Catch ex As Exception
                             UpdatesComplete = False
@@ -444,25 +467,22 @@ Public Class UtilsMaterials
 
                         SEApp.DoIdle()
 
-                        If BodyOverride IsNot Nothing Then
-                            Body.Style = BodyOverride
-                            BodyOverride = Nothing
+                        If BodyStyle IsNot Nothing Then
+                            Body.Style = BodyStyle
                         End If
 
                         Dim Count As Integer = 0
 
-                        If Not RemoveFaceStyleOverrides Then
-                            For Each Face In Faces
-                                If FaceOverrides.Keys.Contains(Face.ID) Then
-                                    Face.Style = FaceOverrides(Face.ID)
-                                    Count += 1
-                                    If Count Mod 100 = 0 Then
-                                        SEApp.DoIdle()
-                                    End If
+                        For Each Face In Faces
+                            If FaceOverrides.Keys.Contains(Face.ID) Then
+                                Face.Style = FaceOverrides(Face.ID)
+                                Count += 1
+                                If Count Mod 50 = 0 Then
+                                    SEApp.DoIdle()
                                 End If
-                            Next
+                            End If
+                        Next
 
-                        End If
                         FaceOverrides.Clear()
 
                     ElseIf FaceOverrides.Count > MaxFacesToProcess Then
@@ -502,8 +522,10 @@ Public Class UtilsMaterials
         Dim FeatureFaceStyle As SolidEdgeFramework.FaceStyle
         Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
 
-        Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
-        Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
+        'Dim FeatureType = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(
+        'Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
+        Dim FeatureType = HCComObject.GetPropertyValue(
+            Of SolidEdgePart.FeatureTypeConstants)(Feature, "Type", CType(0, SolidEdgePart.FeatureTypeConstants))
 
         Select Case FeatureType
 
@@ -1117,7 +1139,8 @@ Public Class UtilsMaterials
                         'End If
 
                     Case Else
-                        Dim FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        'Dim FeatureName = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetPropertyValue(Of String)(Feature, "Name")
+                        Dim FeatureName = HCComObject.GetPropertyValue(Of String)(Feature, "Name")
                         'ExitStatus = 1
                         'ErrorMessageList.Add(String.Format("{0} (FeatureType={1}) not processed.  Please verify results.", FeatureName, FeatureType.ToString))
                 End Select

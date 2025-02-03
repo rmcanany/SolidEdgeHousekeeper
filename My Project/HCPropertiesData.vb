@@ -10,7 +10,6 @@ Public Class HCPropertiesData
 
         Items = New List(Of PropertyData)
 
-
         '###### Load saved PropertiesData, if any ######
 
         Dim UP As New UtilsPreferences

@@ -575,6 +575,28 @@ Public Class UtilsCommon
 
     '###### PROPERTY FUNCTIONS ######
 
+    Public Function GetPropValue(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String,
+        ModelLinkIdx As Integer,
+        AddProp As Boolean
+        ) As Object
+
+        Dim PropValue As Object = Nothing
+
+        Dim Prop As SolidEdgeFramework.Property
+
+        Prop = GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx, AddProp)
+
+        If Prop IsNot Nothing Then
+            PropValue = Prop.Value
+        End If
+
+        Return PropValue
+
+    End Function
+
     Public Function GetProp(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         PropertySetName As String,
@@ -853,8 +875,10 @@ Public Class UtilsCommon
 
     Public Sub CopyProperties(Source As Object, Destination As Object)
 
-        Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
-        Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
+        'Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
+        'Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
+        Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
+        Dim sourceType As Type = HCComObject.GetCOMObjectType(Source)
 
         Dim destProps() As PropertyInfo = destType.GetProperties()
         Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
@@ -944,6 +968,14 @@ Public Class UtilsCommon
         End If
 
         Return ModelIdx
+    End Function
+
+    Public Function GetPropertyValue(Of T)(ByVal comObject As Object, ByVal name As String) As T
+        'https://github.com/SolidEdgeCommunity/SolidEdge.Community/blob/master/src/SolidEdge.Community/Runtime/InteropServices/ComObject.cs
+        'If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
+        Dim type As Type = comObject.[GetType]()
+        Dim value As Object = type.InvokeMember(name, System.Reflection.BindingFlags.GetProperty, Nothing, comObject, Nothing)
+        Return CType(value, T)
     End Function
 
 End Class
