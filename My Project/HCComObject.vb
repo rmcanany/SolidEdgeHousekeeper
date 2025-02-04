@@ -43,10 +43,12 @@ Public Class HCComObject
         Dim typeInfo As ITypeInfo = Nothing
         Dim pTypeAttr = IntPtr.Zero
         Dim typeAttr = Nothing
+        Dim count As Integer
 
         Try
 
             If dispatch IsNot Nothing Then
+                count = dispatch.GetTypeInfoCount
                 typeInfo = dispatch.GetTypeInfo(0, LOCALE_SYSTEM_DEFAULT)
                 typeInfo.GetTypeAttr(pTypeAttr)
                 typeAttr = CType(Marshal.PtrToStructure(

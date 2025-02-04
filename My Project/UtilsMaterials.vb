@@ -162,11 +162,13 @@ Public Class UtilsMaterials
                     If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
 
                         ' Names match, check if their properties do.
-                        s = MaterialPropertiesMatch(SEDoc, MatTable, MatTableMaterial, ActiveMaterialLibrary)
+                        s = MaterialPropertiesMatch(MatTable, MatTableMaterial, ActiveMaterialLibrary)
                         If s.Count > 0 Then
+
                             ' Properties do not match.  Update the document's material to match the library version.
-                            ' This command sets the face style (and everything else) to that defined in the Material Table.
+
                             If Me.UpdateFaceStyles Then
+                                ' This command sets the face style (and everything else) to that defined in the Material Table.
                                 MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                             Else
                                 Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
@@ -269,7 +271,6 @@ Public Class UtilsMaterials
     End Function
 
     Private Function MaterialPropertiesMatch(
-        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         MatTable As SolidEdgeFramework.MatTable,
         MatTableMaterial As Object,
         ActiveMaterialLibrary As String) As String
@@ -321,48 +322,48 @@ Public Class UtilsMaterials
         Return ErrorMessage
     End Function
 
-    Private Function CurrentMaterialFaceStyle(
-        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        MatTable As SolidEdgeFramework.MatTable,
-        MatTableMaterial As Object,
-        ActiveMaterialLibrary As String) As SolidEdgeFramework.FaceStyle
+    'Private Function CurrentMaterialFaceStyle(
+    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    MatTable As SolidEdgeFramework.MatTable,
+    '    MatTableMaterial As Object,
+    '    ActiveMaterialLibrary As String) As SolidEdgeFramework.FaceStyle
 
-        Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
-        Dim LibPropValue As Object = Nothing
-        Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
-        Dim FaceStyles As SolidEdgeFramework.FaceStyles = Nothing
-        Dim FaceStyle As SolidEdgeFramework.FaceStyle
+    '    Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
+    '    Dim LibPropValue As Object = Nothing
+    '    Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
+    '    Dim FaceStyles As SolidEdgeFramework.FaceStyles = Nothing
+    '    Dim FaceStyle As SolidEdgeFramework.FaceStyle
 
 
-        Dim UC As New UtilsCommon
-        Dim DocType = UC.GetDocType(SEDoc)
+    '    Dim UC As New UtilsCommon
+    '    Dim DocType = UC.GetDocType(SEDoc)
 
-        Select Case DocType
-            Case "par"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
-                FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-            Case "psm"
-                Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-                FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-        End Select
+    '    Select Case DocType
+    '        Case "par"
+    '            Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
+    '            FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+    '        Case "psm"
+    '            Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
+    '            FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
+    '    End Select
 
-        For Each MatTableProp In MatTableProps
-            ' This function populates 'LibPropValue'
-            MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
+    '    For Each MatTableProp In MatTableProps
+    '        ' This function populates 'LibPropValue'
+    '        MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
 
-            If MatTableProp.ToString = "seFaceStyle" Then
-                For Each FaceStyle In FaceStyles
-                    If FaceStyle.StyleName = LibPropValue.ToString Then
-                        Return FaceStyle
-                    End If
-                Next
-            End If
+    '        If MatTableProp.ToString = "seFaceStyle" Then
+    '            For Each FaceStyle In FaceStyles
+    '                If FaceStyle.StyleName = LibPropValue.ToString Then
+    '                    Return FaceStyle
+    '                End If
+    '            Next
+    '        End If
 
-            LibPropValue = Nothing
-        Next
-        Return Nothing
+    '        LibPropValue = Nothing
+    '    Next
+    '    Return Nothing
 
-    End Function
+    'End Function
 
     Private Function UpdateFaces() As Boolean
 
