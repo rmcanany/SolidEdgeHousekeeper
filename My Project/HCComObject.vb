@@ -1,21 +1,34 @@
 ﻿
-'Imports SolidEdgeCommunity.Runtime.InteropServices.ComTypes
+' Copied from https://github.com/SolidEdgeCommunity/SolidEdge.Community/tree/master/src/SolidEdge.Community/Runtime/InteropServices
+
+Option Strict On
+
 Imports System.Runtime.InteropServices
 Imports System.Runtime.InteropServices.ComTypes
+
+' For this to work correctly, the Solid Edge Interop assemblies must have their
+' Embed Interop Types set to False, which in turn sets Copy Local to True.  
+' 
+' Embedded Interops only have definitions for items actually used in the assembly.
+' This function needs definitions for all items, which can only happen with
+' Interops copied locally.
+'
+' Access this option on the Project > Properties > References dialog.  Select the
+' Interop, then on its Properties page, set Embed Interop Types to False.
 
 Public Class HCComObject
     Const LOCALE_SYSTEM_DEFAULT As Integer = 2048
 
-    Public Shared Function GetITypeInfo(ByVal comObject As Object) As ITypeInfo
-        If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
-        Dim dispatch = TryCast(comObject, IDispatch)
+    'Public Shared Function GetITypeInfo(ByVal comObject As Object) As ITypeInfo
+    '    If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
+    '    Dim dispatch = TryCast(comObject, IDispatch)
 
-        If dispatch IsNot Nothing Then
-            Return dispatch.GetTypeInfo(0, LOCALE_SYSTEM_DEFAULT)
-        End If
+    '    If dispatch IsNot Nothing Then
+    '        Return dispatch.GetTypeInfo(0, LOCALE_SYSTEM_DEFAULT)
+    '    End If
 
-        Return Nothing
-    End Function
+    '    Return Nothing
+    'End Function
 
     Public Shared Function GetPropertyValue(Of T)(ByVal comObject As Object, ByVal name As String) As T
         If Marshal.IsComObject(comObject) = False Then Throw New InvalidComObjectException()
@@ -42,13 +55,11 @@ Public Class HCComObject
         Dim dispatch = TryCast(comObject, IDispatch)
         Dim typeInfo As ITypeInfo = Nothing
         Dim pTypeAttr = IntPtr.Zero
-        Dim typeAttr = Nothing
-        Dim count As Integer
+        Dim typeAttr As System.Runtime.InteropServices.ComTypes.TYPEATTR = Nothing
 
         Try
 
             If dispatch IsNot Nothing Then
-                count = dispatch.GetTypeInfoCount
                 typeInfo = dispatch.GetTypeInfo(0, LOCALE_SYSTEM_DEFAULT)
                 typeInfo.GetTypeAttr(pTypeAttr)
                 typeAttr = CType(Marshal.PtrToStructure(

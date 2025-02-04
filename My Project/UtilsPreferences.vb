@@ -365,7 +365,7 @@ Public Class UtilsPreferences
 
         Dim Filename As String = GetTaskListFilename(CheckExisting:=True)
 
-        Dim AvailableTasks = BuildTaskListFromScratch()
+        Dim AvailableTasks = BuildTaskListFromScratch(Splash)
 
         If Filename = "" Then
             TaskList = AvailableTasks
@@ -437,54 +437,89 @@ Public Class UtilsPreferences
         Return tmpTask
     End Function
 
-    Public Function BuildTaskListFromScratch() As List(Of Task)
+    Public Function BuildTaskListFromScratch(Splash As FormSplash) As List(Of Task)
         Dim TaskList As New List(Of Task)
         Dim KnownTasks As New List(Of String)
 
         ' Update
         TaskList.Add(New TaskSetDocumentStatus)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskOpenSave)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskActivateAndUpdateAll)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateMaterialFromMaterialTable)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdatePartCopies)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdatePhysicalProperties)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateModelSizeInVariableTable)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateDesignForCost)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateDrawingViews)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateFlatPattern)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskBreakLinks)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Edit
         TaskList.Add(New TaskEditProperties)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskEditVariables)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskEditInteractively)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskRecognizeHoles)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Restyle
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskUpdateDrawingStylesFromTemplate)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskRemoveFaceStyleOverrides)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskHideConstructions)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskFitView)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Check
         TaskList.Add(New TaskCheckInterference)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckLinks)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckRelationships)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckFlatPattern)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckMaterialNotInMaterialTable)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckMissingDrawing)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckPartNumberDoesNotMatchFilename)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckPartCopies)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckDrawingPartsList)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckDrawings)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Output
         TaskList.Add(New TaskRunExternalProgram)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskSaveModelAs)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskSaveDrawingAs)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCreateDrawingOfFlatPattern)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskPrint)
+        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         For Each Task As Task In TaskList
             'Task.RememberTaskSelections = Form1.RememberTaskSelections

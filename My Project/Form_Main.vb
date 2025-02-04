@@ -1269,7 +1269,7 @@ Public Class Form_Main
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
 
-        If Not Presets Then Splash.UpdateStatus("Checking Version")
+        If Not Presets Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
 

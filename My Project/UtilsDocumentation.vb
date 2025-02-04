@@ -56,7 +56,7 @@ Public Class UtilsDocumentation
             ReadmeOut.Add("")
 
             Dim UP As New UtilsPreferences
-            Dim tmpTaskList = UP.BuildTaskListFromScratch
+            Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
             For Each Task As Task In tmpTaskList
                 ReadmeOut.Add(String.Format("### {0}", Task.Description))

@@ -78,7 +78,7 @@ Public Class FormEditTaskList
         UP.RememberTaskSelections = Me.RememberTaskSelections
 
         Me.AvailableTasks = New List(Of Task)
-        Me.AvailableTasks = UP.BuildTaskListFromScratch()
+        Me.AvailableTasks = UP.BuildTaskListFromScratch(Nothing)
 
 
 
