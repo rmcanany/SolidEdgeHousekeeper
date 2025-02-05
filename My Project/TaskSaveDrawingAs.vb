@@ -613,6 +613,7 @@ Public Class TaskSaveDrawingAs
         NewFileTypeNames.Add("DXF (*.dxf)")
         NewFileTypeNames.Add("DWG (*.dwg)")
         NewFileTypeNames.Add("IGES (*.igs)")
+        NewFileTypeNames.Add("SEV (*.sev)")
         NewFileTypeNames.Add("Copy (*.*)")
 
         PDFPerSheetFileTypeName = "PDF per Sheet (*.pdf)"

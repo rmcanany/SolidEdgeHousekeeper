@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.Reflection
 Imports Newtonsoft.Json
 
 Public Class PropertyFilters
@@ -11,16 +12,21 @@ Public Class PropertyFilters
 
         If Not Infile = "" Then
             JSONString = IO.File.ReadAllText(Infile)
-            FromJSON(JSONString)
+            Try
+                FromJSON(JSONString)
+            Catch ex As Exception
+                Me.Items = New List(Of HCPropertyFilter)
+
+                Dim s As String = String.Format("Unable to load saved Property Filters.{0}", vbCrLf)
+                s = String.Format("{0}{1}{2}Reported error: {3}.", vbCrLf, s, vbCrLf, ex.Message)
+                MsgBox(s)
+
+                Exit Sub
+            End Try
         Else
             Me.Items = New List(Of HCPropertyFilter)
         End If
 
-    End Sub
-
-    Public Sub New(JSONString As String)
-        Me.Items = New List(Of HCPropertyFilter)
-        FromJSON(JSONString)
     End Sub
 
     Public Sub Save()
@@ -42,6 +48,7 @@ Public Class PropertyFilters
             End If
         Next
     End Sub
+
     Public Function GetActivePropertyFilter() As HCPropertyFilter
         Dim tmpPropertyFilter As HCPropertyFilter = Nothing
 
@@ -135,9 +142,15 @@ Public Class HCPropertyFilter
 
         tmpConditionsListJSON = JsonConvert.SerializeObject(tmpConditionsList)
 
-        tmpDict("ConditionsListJSON") = tmpConditionsListJSON
+        tmpDict("Conditions") = tmpConditionsListJSON
 
-        JSONString = JsonConvert.SerializeObject(tmpDict)
+        If Not CheckJSONDict(tmpDict) Then
+            MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            JSONString = ""
+        Else
+            JSONString = JsonConvert.SerializeObject(tmpDict)
+        End If
+
 
         Return JSONString
     End Function
@@ -149,11 +162,19 @@ Public Class HCPropertyFilter
 
         tmpDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
+        If tmpDict.Keys.Contains("ConditionsListJSON") Then
+            tmpDict("Conditions") = tmpDict("ConditionsListJSON")
+        End If
+
+        If Not CheckJSONDict(tmpDict) Then
+            Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+        End If
+
         Me.Name = tmpDict("Name")
         Me.Formula = tmpDict("Formula")
         Me.IsActiveFilter = CBool(tmpDict("IsActiveFilter"))
 
-        tmpConditionsListJSON = tmpDict("ConditionsListJSON")
+        tmpConditionsListJSON = tmpDict("Conditions")
         tmpConditionsList = JsonConvert.DeserializeObject(Of List(Of String))(tmpConditionsListJSON)
 
         Me.Conditions.Clear()
@@ -165,53 +186,37 @@ Public Class HCPropertyFilter
 
     End Sub
 
-    Public Sub SortConditions()
+    Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
+        Dim Proceed As Boolean = True
 
-        Dim tmpConditionsDict As New Dictionary(Of String, PropertyFilterCondition)
-        Dim tmpVariableNameList As New List(Of String)
-        Dim Name As String
+        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
 
-        For Each C As PropertyFilterCondition In Me.Conditions
-            Name = C.VariableName
-            If Not tmpConditionsDict.Keys.Contains(Name) Then
-                tmpConditionsDict(Name) = C
-            Else
-                MsgBox(String.Format("Duplicate variable name '{0}' found in PropertyFilter Conditions", Name), vbOKOnly)
-                Exit Sub
+        ' Check for missing info
+        For Each PropInfo As PropertyInfo In PropInfos
+            If Not JSONDict.Keys.Contains(PropInfo.Name) Then
+                Proceed = False
+                Exit For
             End If
         Next
 
-        tmpVariableNameList = tmpConditionsDict.Keys.ToList
+        ' Surplus info can safely be ignored
+        ' Check for surplus info
+        'If Proceed Then
+        '    For Each PropertyName As String In JSONDict.Keys
+        '        If Not PropertyNamesList.Contains(PropertyName) Then
+        '            Proceed = False
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
 
-        tmpVariableNameList.Sort()
+        Return Proceed
+    End Function
 
-        Me.Conditions.Clear()
-
-        For i As Integer = 0 To tmpVariableNameList.Count - 1
-            Name = tmpVariableNameList(i)
-            Dim C As PropertyFilterCondition = tmpConditionsDict(Name)
-            Dim NewName As String = Chr(i + 65)
-            C.VariableName = NewName
-            Me.Conditions.Add(C)
-        Next
-
-    End Sub
 
 End Class
 
 Public Class PropertyFilterCondition
-    ' ###### PropertyFilterDict is obsolete and should be removed throughout. ######
-    ' PropertyFilterDict format:
-    '{"0":
-    '    {"Variable":"A",
-    '     "PropertySet":"Custom",
-    '     "PropertyName":"hmk_Part_Number",
-    '     "Comparison":"contains",
-    '     "Value":"aluminum",
-    '     "Formula":" A AND B "},
-    ' "1":
-    '...
-    '}
 
     Public Property VariableName As String  ' "A", "B", etc.  Used in property filter formulas.
     Public Property PropertySetName As PropertySetNameConstants
@@ -257,7 +262,12 @@ Public Class PropertyFilterCondition
         tmpComparisonDict("Comparison") = CStr(CInt(Me.Comparison))
         tmpComparisonDict("Value") = Me.Value
 
-        JSONString = JsonConvert.SerializeObject(tmpComparisonDict)
+        If Not CheckJSONDict(tmpComparisonDict) Then
+            MsgBox(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+            JSONString = ""
+        Else
+            JSONString = JsonConvert.SerializeObject(tmpComparisonDict)
+        End If
 
         Return JSONString
     End Function
@@ -266,6 +276,10 @@ Public Class PropertyFilterCondition
 
         Dim tmpComparisonDict As Dictionary(Of String, String)
         tmpComparisonDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+        If Not CheckJSONDict(tmpComparisonDict) Then
+            Throw New Exception(String.Format("{0}: Missing property names in JSON dictionary", Me.ToString))
+        End If
 
         Me.VariableName = tmpComparisonDict("VariableName")
         Me.PropertySetName = CType(CInt(tmpComparisonDict("PropertySetName")), PropertySetNameConstants)
@@ -276,4 +290,32 @@ Public Class PropertyFilterCondition
         Me.Value = tmpComparisonDict("Value")
 
     End Sub
+
+    Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
+
+        ' Check for missing info
+        For Each PropInfo As PropertyInfo In PropInfos
+            If Not JSONDict.Keys.Contains(PropInfo.Name) Then
+                Proceed = False
+                Exit For
+            End If
+        Next
+
+        ' Surplus info can safely be ignored
+        ' Check for surplus info
+        'If Proceed Then
+        '    For Each PropertyName As String In JSONDict.Keys
+        '        If Not PropertyNamesList.Contains(PropertyName) Then
+        '            Proceed = False
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+
+        Return Proceed
+    End Function
+
 End Class

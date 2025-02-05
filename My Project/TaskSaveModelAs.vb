@@ -769,20 +769,6 @@ Public Class TaskSaveModelAs
             ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
         End Try
 
-        ' These checks are performed in CheckStartConditions
-        'If Not Me.NewFileTypeName.ToLower.Contains("copy") Then
-        '    SEDoc.SaveAs(NewFilename)
-        '    SEApp.DoIdle()
-        'Else
-        '    If Not Me.SaveInOriginalDirectory Then
-        '        SEDoc.SaveCopyAs(NewFilename)
-        '        SEApp.DoIdle()
-        '    Else
-        '        ExitStatus = 1
-        '        ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
-        '    End If
-        'End If
-
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
@@ -893,6 +879,7 @@ Public Class TaskSaveModelAs
         NewFileTypeNames.Add("OBJ (*.obj)")
         NewFileTypeNames.Add("STL (*.stl)")
         NewFileTypeNames.Add("JT Document (*.jt)")
+        NewFileTypeNames.Add("SEV (*.sev)")
         NewFileTypeNames.Add("bmp (*.bmp)")
         NewFileTypeNames.Add("jpg (*.jpg)")
         NewFileTypeNames.Add("png (*.png)")

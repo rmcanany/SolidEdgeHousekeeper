@@ -1,4 +1,6 @@
 ﻿Option Strict On
+
+Imports System.Reflection
 Imports Newtonsoft.Json
 
 Public Class HCPresets
@@ -20,7 +22,18 @@ Public Class HCPresets
 
             For Each PresetJSONString As String In tmpList
                 Dim Item As New Preset
-                Item.FromJSON(PresetJSONString)
+
+                Try
+                    Item.FromJSON(PresetJSONString)
+                Catch ex As Exception
+                    Me.Items.Clear()
+
+                    Dim s As String = String.Format("Unable to load saved Presets.{0}", vbCrLf)
+                    s = String.Format("{0}Reported error: '{1}'.", s, ex.Message)
+                    MsgBox(ex.Message)
+
+                    Exit Sub
+                End Try
                 Me.Items.Add(Item)
             Next
         End If
@@ -64,7 +77,12 @@ Public Class Preset
         tmpPresetDict("FormSettingsJSON") = Me.FormSettingsJSON
         tmpPresetDict("PropertyFiltersJSON") = Me.PropertyFiltersJSON
 
-        JSONString = JsonConvert.SerializeObject(tmpPresetDict)
+        If Not CheckJSONDict(tmpPresetDict) Then
+            MsgBox(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
+            JSONString = ""
+        Else
+            JSONString = JsonConvert.SerializeObject(tmpPresetDict)
+        End If
 
         Return JSONString
     End Function
@@ -76,6 +94,10 @@ Public Class Preset
 
             tmpPresetDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
 
+            If Not CheckJSONDict(tmpPresetDict) Then
+                Throw New Exception(String.Format("{0}: Extra or missing property names in JSON dictionary", Me.ToString))
+            End If
+
             Me.Name = tmpPresetDict("Name")
             Me.TaskListJSON = tmpPresetDict("TaskListJSON")
             Me.FormSettingsJSON = tmpPresetDict("FormSettingsJSON")
@@ -85,6 +107,34 @@ Public Class Preset
         End Try
 
     End Sub
+
+    Private Function CheckJSONDict(JSONDict As Dictionary(Of String, String)) As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim PropInfos() As PropertyInfo = Me.GetType.GetProperties()
+
+        ' Check for missing info
+        For Each PropInfo As PropertyInfo In PropInfos
+            If Not JSONDict.Keys.Contains(PropInfo.Name) Then
+                Proceed = False
+                Exit For
+            End If
+        Next
+
+        ' Surplus info can safely be ignored
+        ' Check for surplus info
+        'If Proceed Then
+        '    For Each PropertyName As String In JSONDict.Keys
+        '        If Not PropertyNamesList.Contains(PropertyName) Then
+        '            Proceed = False
+        '            Exit For
+        '        End If
+        '    Next
+        'End If
+
+        Return Proceed
+    End Function
+
 
 End Class
 
