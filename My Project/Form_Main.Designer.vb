@@ -1976,12 +1976,12 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel7.Name = "ExTableLayoutPanel7"
         Me.ExTableLayoutPanel7.RowCount = 8
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel7.Size = New System.Drawing.Size(527, 579)
         Me.ExTableLayoutPanel7.TabIndex = 56
@@ -2007,10 +2007,10 @@ Partial Class Form_Main
         Me.ExTableLayoutPanel8.Controls.Add(Me.TextBoxSortRandomSampleFraction, 0, 0)
         Me.ExTableLayoutPanel8.Controls.Add(Me.LabelSortRandomSampleFraction, 1, 0)
         Me.ExTableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel8.Location = New System.Drawing.Point(3, 183)
+        Me.ExTableLayoutPanel8.Location = New System.Drawing.Point(3, 173)
         Me.ExTableLayoutPanel8.Name = "ExTableLayoutPanel8"
         Me.ExTableLayoutPanel8.RowCount = 1
-        Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
+        Me.ExTableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ExTableLayoutPanel8.Size = New System.Drawing.Size(521, 34)
         Me.ExTableLayoutPanel8.TabIndex = 54
         Me.ExTableLayoutPanel8.Task = Nothing
@@ -2018,31 +2018,31 @@ Partial Class Form_Main
         'TextBoxSortRandomSampleFraction
         '
         Me.TextBoxSortRandomSampleFraction.Anchor = System.Windows.Forms.AnchorStyles.Right
-        Me.TextBoxSortRandomSampleFraction.Enabled = False
         Me.TextBoxSortRandomSampleFraction.Location = New System.Drawing.Point(16, 5)
         Me.TextBoxSortRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TextBoxSortRandomSampleFraction.Name = "TextBoxSortRandomSampleFraction"
         Me.TextBoxSortRandomSampleFraction.Size = New System.Drawing.Size(35, 23)
         Me.TextBoxSortRandomSampleFraction.TabIndex = 55
         Me.TextBoxSortRandomSampleFraction.Text = "0.1"
+        Me.TextBoxSortRandomSampleFraction.Visible = False
         '
         'LabelSortRandomSampleFraction
         '
         Me.LabelSortRandomSampleFraction.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelSortRandomSampleFraction.AutoSize = True
-        Me.LabelSortRandomSampleFraction.Enabled = False
         Me.LabelSortRandomSampleFraction.Location = New System.Drawing.Point(59, 9)
         Me.LabelSortRandomSampleFraction.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelSortRandomSampleFraction.Name = "LabelSortRandomSampleFraction"
         Me.LabelSortRandomSampleFraction.Size = New System.Drawing.Size(90, 15)
         Me.LabelSortRandomSampleFraction.TabIndex = 54
         Me.LabelSortRandomSampleFraction.Text = "Sample fraction"
+        Me.LabelSortRandomSampleFraction.Visible = False
         '
         'RadioButtonSortRandomSample
         '
         Me.RadioButtonSortRandomSample.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortRandomSample.AutoSize = True
-        Me.RadioButtonSortRandomSample.Location = New System.Drawing.Point(3, 155)
+        Me.RadioButtonSortRandomSample.Location = New System.Drawing.Point(3, 145)
         Me.RadioButtonSortRandomSample.Name = "RadioButtonSortRandomSample"
         Me.RadioButtonSortRandomSample.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortRandomSample.Size = New System.Drawing.Size(116, 19)
@@ -2055,20 +2055,20 @@ Partial Class Form_Main
         '
         Me.CheckBoxSortIncludeNoDependencies.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxSortIncludeNoDependencies.AutoSize = True
-        Me.CheckBoxSortIncludeNoDependencies.Enabled = False
-        Me.CheckBoxSortIncludeNoDependencies.Location = New System.Drawing.Point(3, 125)
+        Me.CheckBoxSortIncludeNoDependencies.Location = New System.Drawing.Point(3, 118)
         Me.CheckBoxSortIncludeNoDependencies.Name = "CheckBoxSortIncludeNoDependencies"
         Me.CheckBoxSortIncludeNoDependencies.Padding = New System.Windows.Forms.Padding(15, 0, 0, 0)
         Me.CheckBoxSortIncludeNoDependencies.Size = New System.Drawing.Size(365, 19)
         Me.CheckBoxSortIncludeNoDependencies.TabIndex = 52
         Me.CheckBoxSortIncludeNoDependencies.Text = "Include files with no Part Copy dependencies in search results"
         Me.CheckBoxSortIncludeNoDependencies.UseVisualStyleBackColor = True
+        Me.CheckBoxSortIncludeNoDependencies.Visible = False
         '
         'RadioButtonSortDependency
         '
         Me.RadioButtonSortDependency.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortDependency.AutoSize = True
-        Me.RadioButtonSortDependency.Location = New System.Drawing.Point(3, 95)
+        Me.RadioButtonSortDependency.Location = New System.Drawing.Point(3, 90)
         Me.RadioButtonSortDependency.Name = "RadioButtonSortDependency"
         Me.RadioButtonSortDependency.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortDependency.Size = New System.Drawing.Size(176, 19)
@@ -2081,7 +2081,7 @@ Partial Class Form_Main
         Me.RadioButtonSortAlphabetical.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.RadioButtonSortAlphabetical.AutoSize = True
         Me.RadioButtonSortAlphabetical.Checked = True
-        Me.RadioButtonSortAlphabetical.Location = New System.Drawing.Point(3, 65)
+        Me.RadioButtonSortAlphabetical.Location = New System.Drawing.Point(3, 60)
         Me.RadioButtonSortAlphabetical.Name = "RadioButtonSortAlphabetical"
         Me.RadioButtonSortAlphabetical.Padding = New System.Windows.Forms.Padding(5, 0, 0, 0)
         Me.RadioButtonSortAlphabetical.Size = New System.Drawing.Size(175, 19)
@@ -2094,14 +2094,14 @@ Partial Class Form_Main
         '
         Me.CheckBoxKeepUnsortedDuplicates.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.CheckBoxKeepUnsortedDuplicates.AutoSize = True
-        Me.CheckBoxKeepUnsortedDuplicates.Enabled = False
-        Me.CheckBoxKeepUnsortedDuplicates.Location = New System.Drawing.Point(3, 35)
+        Me.CheckBoxKeepUnsortedDuplicates.Location = New System.Drawing.Point(3, 33)
         Me.CheckBoxKeepUnsortedDuplicates.Name = "CheckBoxKeepUnsortedDuplicates"
         Me.CheckBoxKeepUnsortedDuplicates.Padding = New System.Windows.Forms.Padding(15, 0, 0, 0)
         Me.CheckBoxKeepUnsortedDuplicates.Size = New System.Drawing.Size(124, 19)
         Me.CheckBoxKeepUnsortedDuplicates.TabIndex = 55
         Me.CheckBoxKeepUnsortedDuplicates.Text = "Keep duplicates"
         Me.CheckBoxKeepUnsortedDuplicates.UseVisualStyleBackColor = True
+        Me.CheckBoxKeepUnsortedDuplicates.Visible = False
         '
         'TabPageTemplates
         '
@@ -2359,7 +2359,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)

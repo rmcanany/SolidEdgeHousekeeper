@@ -2362,19 +2362,16 @@ Public Class Form_Main
     Private Sub RadioButtonSortDependency_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortDependency.CheckedChanged
         Me.SortDependency = RadioButtonSortDependency.Checked
 
+        CheckBoxSortIncludeNoDependencies.Visible = Me.SortDependency
+
         ListViewFilesOutOfDate = True
 
-        If RadioButtonSortDependency.Checked Then
-            CheckBoxSortIncludeNoDependencies.Enabled = True
-        Else
-            CheckBoxSortIncludeNoDependencies.Enabled = False
-        End If
     End Sub
 
     Private Sub RadioButtonSortNone_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortNone.CheckedChanged
         Me.SortNone = RadioButtonSortNone.Checked
 
-        CheckBoxKeepUnsortedDuplicates.Enabled = Me.SortNone
+        CheckBoxKeepUnsortedDuplicates.Visible = Me.SortNone
 
         ListViewFilesOutOfDate = True
     End Sub
@@ -2394,8 +2391,8 @@ Public Class Form_Main
     Private Sub RadioButtonSortRandomSample_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonSortRandomSample.CheckedChanged
         Me.SortRandomSample = RadioButtonSortRandomSample.Checked
 
-        TextBoxSortRandomSampleFraction.Enabled = Me.SortRandomSample
-        LabelSortRandomSampleFraction.Enabled = Me.SortRandomSample
+        TextBoxSortRandomSampleFraction.Visible = Me.SortRandomSample
+        LabelSortRandomSampleFraction.Visible = Me.SortRandomSample
 
         ListViewFilesOutOfDate = True
 
