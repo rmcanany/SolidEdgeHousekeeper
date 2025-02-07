@@ -127,7 +127,6 @@ Public Class TaskCheckRelationships
         ByVal SEApp As SolidEdgeFramework.Application
         ) As Dictionary(Of Integer, List(Of String))
 
-
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -174,6 +173,10 @@ Public Class TaskCheckRelationships
                     ' Causes an invalid cast on files with sketches
                     ' of type SolidEdgeAssembly.ComponentLayout
                     ' rather than SolidEdgeAssembly.Layout
+                    ' At least in SE2024, ComponentLayouts and Layouts hold the same information
+                    ' They can have a collection of Layout, which are Assembly Sketches
+                    ' and also can have a collection of ComponentLayout, which are Component Sketches.
+                    ' (Component Sketches are part of the Virtual Component workflow and don't appear in PathFinder)
                     Try
                         SketchesAssembly = tmpSEDoc.ComponentLayouts
                         For Each SketchAssembly In SketchesAssembly
@@ -212,20 +215,6 @@ Public Class TaskCheckRelationships
 
                     Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
                     Dim Occurrence As SolidEdgeAssembly.Occurrence
-
-
-                    'https://docs.sw.siemens.com/documentation/external/PL20220830878154140/en-US/api/content/SolidEdgeAssembly~AssemblyFamilyMember~GetSuppressedComponentsOfMember.html
-                    'Dim objSuppressedComponents As System.Array = System.Array.CreateInstance(GetType(SolidEdge.Assembly.Interop.SuppressComponent), 1)
-                    'Dim objSuppressedComponents As System.Array = System.Array.CreateInstance(GetType(SolidEdge.Assembly.Interop.), 1)
-                    'Dim ComponentType As GetType(SolidEdge.Assembly.Interop.SuppressComponent)
-                    'System.Runtime.InteropServices.SolidEdge.Assembly.Interop
-
-                    'Dim ComponentType As SolidEdgeAssembly.assemblycomponentTypeconstants.seAssemblyComponentTypeAll
-                    'Dim ComponentCount As Integer
-                    'Dim SuppressedComponents As Object() = Nothing
-                    'tmpSEDoc.GetSuppressedComponents(ComponentType, ComponentCount, SuppressedComponents)
-
-                    'Dim SuppressedOccurrences As List(Of Object) = GetSuppressedComponents(tmpSEDoc)
 
                     For Each Occurrence In Occurrences
                         If Not (Occurrence.Adjustable Or Occurrence.IsAdjustablePart) Then
@@ -273,16 +262,6 @@ Public Class TaskCheckRelationships
 
                 CheckSketches(ExitStatus, ErrorMessageList, CheckItem, Sketches)
                 CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, Models, RefPlanesWithUnderconstrainedProfiles)
-                'If CheckItem = "Failed relationships" Then
-                'End If
-                'If CheckItem = "Underconstrained relationships" Then
-                '    CheckSketches(ExitStatus, ErrorMessageList, CheckItem, CheckUnderconstrained, Sketches)
-                '    CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, CheckUnderconstrained, Models, RefPlanesWithUnderconstrainedProfiles)
-                'End If
-                'If CheckItem = "Suppressed relationships" Then
-                '    CheckSketches(ExitStatus, ErrorMessageList, CheckItem, CheckSuppressed, Sketches)
-                '    CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, CheckSuppressed, Models, RefPlanesWithUnderconstrainedProfiles)
-                'End If
 
             End If
         Next
@@ -293,6 +272,30 @@ Public Class TaskCheckRelationships
 
     End Function
 
+    Private Function GetSuppressedComponents(
+        tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
+        ) As List(Of SolidEdgeAssembly.Occurrence)
+
+        Dim SuppressedOccurrences As New List(Of SolidEdgeAssembly.Occurrence)
+
+        Dim ComponentType As SolidEdgeAssembly.AssemblyComponentTypeConstants
+        ComponentType = SolidEdgeAssembly.AssemblyComponentTypeConstants.seAssemblyComponentTypeAll
+        Dim ComponentCount As Integer
+        'Dim SuppressedComponents() As Object = Nothing
+        Dim SuppressedComponents As Array = Nothing
+        tmpSEDoc.GetSuppressedComponents(ComponentType, ComponentCount, SuppressedComponents)
+
+        For Each Component As Object In SuppressedComponents
+            Try
+                Dim tmpComponent As SolidEdgeAssembly.Occurrence = CType(Component, SolidEdgeAssembly.Occurrence)
+                SuppressedOccurrences.Add(tmpComponent)
+            Catch ex As Exception
+
+            End Try
+        Next
+
+        Return SuppressedOccurrences
+    End Function
 
     Private Sub CheckFeatures(
         ByRef ExitStatus As Integer,
@@ -366,7 +369,9 @@ Public Class TaskCheckRelationships
                                         If Profile Is Nothing Then
                                             Continue For
                                         End If
-                                        RefPlane = GetProfilePlane(Profile)
+                                        'RefPlane = GetProfilePlane(Profile)
+                                        RefPlane = CType(Profile.Plane, SolidEdgePart.RefPlane)
+
                                     Catch ex As Exception
                                         Continue For
                                     End Try
@@ -389,10 +394,6 @@ Public Class TaskCheckRelationships
                         End If
                     Next
                 Next
-            ElseIf Models.Count >= 300 Then
-                ExitStatus = 1
-                s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
-                UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
             End If
         End If
 
@@ -445,25 +446,23 @@ Public Class TaskCheckRelationships
         ) As List(Of SolidEdgePart.RefPlane)
 
         Dim RefPlanesWithUnderconstrainedProfiles As New List(Of SolidEdgePart.RefPlane)
-        Dim ProfileSet As SolidEdgePart.ProfileSet
         Dim Profiles As SolidEdgePart.Profiles
-        Dim Profile As SolidEdgePart.Profile
-        'Dim RefPlane As SolidEdgePart.RefPlane
+        Dim RefPlane As SolidEdgePart.RefPlane
 
-        For Each ProfileSet In ProfileSets
+        For Each ProfileSet As SolidEdgePart.ProfileSet In ProfileSets
             If ProfileSet.IsUnderDefined Then
                 Profiles = ProfileSet.Profiles
-                For Each Profile In Profiles
-                    'RefPlane = CType(Profile.Plane, RefPlane)
-                    If Not RefPlanesWithUnderconstrainedProfiles.Contains(GetProfilePlane(Profile)) Then
-                        RefPlanesWithUnderconstrainedProfiles.Add(GetProfilePlane(Profile))
+                For Each Profile As SolidEdgePart.Profile In Profiles
+                    RefPlane = CType(Profile.Plane, SolidEdgePart.RefPlane)
+                    If Not RefPlanesWithUnderconstrainedProfiles.Contains(RefPlane) Then
+                        RefPlanesWithUnderconstrainedProfiles.Add(RefPlane)
                     End If
                 Next
             End If
-
         Next
 
         Return RefPlanesWithUnderconstrainedProfiles
+
     End Function
 
 

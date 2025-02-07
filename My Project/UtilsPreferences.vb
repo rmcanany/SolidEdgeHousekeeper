@@ -615,7 +615,7 @@ Public Class UtilsPreferences
 
         KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
         KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
-        KeepProps.AddRange({"SortNone", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
+        KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
         KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
         KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
         KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU"})

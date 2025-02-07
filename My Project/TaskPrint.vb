@@ -494,7 +494,7 @@ Public Class TaskPrint
             End If
 
             If Filter.ToLower = "iso" Then
-                If Name.ToLower.Contains("iso a") Then
+                If Name.ToLower.Contains("isoa") Then
                     SheetSizeList.Add(Name)
                 End If
             End If

@@ -141,7 +141,13 @@ Public Class UtilsFileList
             End If
         Next
 
-        tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+        If Not FMain.SortNone Then
+            tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+        Else
+            If Not FMain.KeepUnsortedDuplicates Then
+                tmpFoundFiles = tmpFoundFiles.Distinct.ToList
+            End If
+        End If
 
         Dim FoundFiles As IReadOnlyCollection(Of String)
         FoundFiles = tmpFoundFiles
@@ -495,7 +501,7 @@ Public Class UtilsFileList
         For Each item In FoundFiles
             tf = UC.FilenameIsOK(item)
             tf = tf And IO.File.Exists(item)
-            tf = tf And Not tmpFoundFiles.Contains(item)
+            'tf = tf And Not tmpFoundFiles.Contains(item)  ' Duplicate are already removed if needed
 
             ' Exporting from LibreOffice Calc to Excel, the first item can sometimes be Nothing
             ' Causes a problem comparing extensions

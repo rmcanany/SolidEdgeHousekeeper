@@ -110,7 +110,8 @@ Public Class UtilsMaterials
         Dim MaterialList As Object = Nothing
         Dim NumMaterials As Integer
 
-        ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(ActiveMaterialLibrary)
+        'ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(ActiveMaterialLibrary)
+
         Dim CurrentMaterialName As String = ""
         Dim MatTableMaterial As Object
 
@@ -166,40 +167,47 @@ Public Class UtilsMaterials
                         If s.Count > 0 Then
 
                             ' Properties do not match.  Update the document's material to match the library version.
-
-                            If Me.UpdateFaceStyles Then
+                            Dim NewWay As Boolean = False
+                            If Not NewWay Then
                                 ' This command sets the face style (and everything else) to that defined in the Material Table.
                                 MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                             Else
-                                Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+                                If Me.UpdateFaceStyles Then
+                                    ' This command sets the face style (and everything else) to that defined in the Material Table.
+                                    MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                                Else
+                                    Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
 
-                                Dim OldDocFaceStyleName As Object = Nothing
-                                MatTable.GetMaterialPropValueFromDoc(
+                                    Dim OldDocFaceStyleName As Object = Nothing
+                                    MatTable.GetMaterialPropValueFromDoc(
                                     SEDoc, seFaceStyle, OldDocFaceStyleName)
+                                    SEApp.DoIdle()
 
-                                SEApp.DoIdle()
-
-                                Dim OldLibFaceStyleName As Object = Nothing
-                                MatTable.GetMaterialPropValueFromLibrary(
+                                    Dim OldLibFaceStyleName As Object = Nothing
+                                    MatTable.GetMaterialPropValueFromLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+                                    SEApp.DoIdle()
 
-                                SEApp.DoIdle()
-
-                                MatTable.SetMaterialPropValueToLibrary(
+                                    MatTable.SetMaterialPropValueToLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
+                                    SEApp.DoIdle()
 
-                                SEApp.DoIdle()
+                                    Dim MatOOD As Boolean
+                                    Dim GageOOD As Boolean
+                                    MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
 
-                                MatTable.ApplyMaterialToDoc(
+                                    If MatOOD Then
+                                        MatTable.ApplyMaterialToDoc(
                                     SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                                        SEApp.DoIdle()
+                                    End If
 
-                                SEApp.DoIdle()
-
-                                MatTable.SetMaterialPropValueToLibrary(
+                                    MatTable.SetMaterialPropValueToLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-
-                                SEApp.DoIdle()
+                                    SEApp.DoIdle()
+                                End If
                             End If
+
                         End If
 
                         ' Some imported files cause exceptions on face updates.

@@ -318,7 +318,6 @@
     <Compile Include="My Project\TaskCheckMissingDrawing.vb" />
     <Compile Include="My Project\TaskCheckPartCopies.vb" />
     <Compile Include="My Project\TaskCheckPartNumberDoesNotMatchFilename.vb" />
-    <Compile Include="My Project\TaskCheckRelationships.Aux.vb" />
     <Compile Include="My Project\TaskCheckRelationships.vb" />
     <Compile Include="My Project\TaskEditInteractively.vb" />
     <Compile Include="My Project\TaskEditProperties.vb" />

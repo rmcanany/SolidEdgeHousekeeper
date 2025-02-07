@@ -34,6 +34,7 @@ Partial Class FormSheetSelector
         '
         'ButtonOK
         '
+        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonOK.Location = New System.Drawing.Point(24, 427)
         Me.ButtonOK.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonOK.Name = "ButtonOK"
@@ -44,6 +45,7 @@ Partial Class FormSheetSelector
         '
         'ButtonCancel
         '
+        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonCancel.Location = New System.Drawing.Point(146, 427)
         Me.ButtonCancel.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonCancel.Name = "ButtonCancel"
@@ -54,6 +56,9 @@ Partial Class FormSheetSelector
         '
         'CheckedListBox1
         '
+        Me.CheckedListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.Location = New System.Drawing.Point(14, 15)
@@ -64,6 +69,7 @@ Partial Class FormSheetSelector
         '
         'RadioButtonAnsi
         '
+        Me.RadioButtonAnsi.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.RadioButtonAnsi.AutoSize = True
         Me.RadioButtonAnsi.Location = New System.Drawing.Point(12, 320)
         Me.RadioButtonAnsi.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -76,6 +82,7 @@ Partial Class FormSheetSelector
         '
         'RadioButtonIso
         '
+        Me.RadioButtonIso.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.RadioButtonIso.AutoSize = True
         Me.RadioButtonIso.Location = New System.Drawing.Point(12, 347)
         Me.RadioButtonIso.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -88,6 +95,7 @@ Partial Class FormSheetSelector
         '
         'RadioButtonAll
         '
+        Me.RadioButtonAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.RadioButtonAll.AutoSize = True
         Me.RadioButtonAll.Location = New System.Drawing.Point(12, 373)
         Me.RadioButtonAll.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
@@ -100,6 +108,7 @@ Partial Class FormSheetSelector
         '
         'CheckBoxSelectAll
         '
+        Me.CheckBoxSelectAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBoxSelectAll.AutoSize = True
         Me.CheckBoxSelectAll.Location = New System.Drawing.Point(12, 400)
         Me.CheckBoxSelectAll.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)

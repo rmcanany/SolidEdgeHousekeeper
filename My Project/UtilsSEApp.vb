@@ -29,6 +29,16 @@ Public Class UtilsSEApp
                 SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             End If
 
+            'If UseCurrentSession Then
+            '    Try
+            '        SEApp = CType(GetObject(, "SolidEdge.Application"), SolidEdgeFramework.Application)
+            '    Catch ex As Exception
+            '        SEApp = CType(Microsoft.VisualBasic.CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            '    End Try
+            'Else
+            '    SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            'End If
+
 
             ' Turn off popups.
             SEApp.DisplayAlerts = False
