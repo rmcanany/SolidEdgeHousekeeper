@@ -129,116 +129,128 @@ Public Class UtilsMaterials
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
                 Models = tmpSEDoc.Models
 
-                ' This function populates 'CurrentMaterialName'
+                ' Populate 'CurrentMaterialName'
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
 
             Case "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
 
-                ' This function populates 'CurrentMaterialName'
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
 
         End Select
 
+        If Models.Count = 0 Then
+            ' Not an error
+            MatTable = Nothing
+            SEApp.DoIdle()
+
+            ErrorMessage(ExitStatus) = ErrorMessageList
+            Return ErrorMessage
+        End If
+
         Dim MaxModelCount As Integer = 10
 
-        If (Models.Count > 0) And (Models.Count <= MaxModelCount) Then
+        If Models.Count >= MaxModelCount Then
+            MatTable = Nothing
+            SEApp.DoIdle()
 
-            ' This function populates 'MaterialLibList' and 'NumMaterialLibraries'
-            MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
+            ExitStatus = 1
+            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
 
-            ' This function populates 'NumMaterials' and 'MaterialList'
-            MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
+            ErrorMessage(ExitStatus) = ErrorMessageList
+            Return ErrorMessage
+        End If
 
-            If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
-                ExitStatus = 1
-                If CurrentMaterialName = "" Then
-                    ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-                Else
-                    ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-                End If
+        ' Populate 'MaterialLibList' and 'NumMaterialLibraries'
+        MatTable.GetMaterialLibraryList(MaterialLibList, NumMaterialLibraries)
+
+        ' Populate 'NumMaterials' and 'MaterialList'
+        MatTable.GetMaterialListFromLibrary(ActiveMaterialLibrary, NumMaterials, MaterialList)
+
+        If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
+            ExitStatus = 1
+            If CurrentMaterialName = "" Then
+                ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
             Else
-                For Each MatTableMaterial In CType(MaterialList, System.Array)
-                    If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
+                ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+            End If
+        Else
+            For Each MatTableMaterial In CType(MaterialList, System.Array)
+                If MatTableMaterial.ToString.ToLower.Trim = CurrentMaterialName.ToLower.Trim Then
 
-                        ' Names match, check if their properties do.
-                        s = MaterialPropertiesMatch(MatTable, MatTableMaterial, ActiveMaterialLibrary)
-                        If s.Count > 0 Then
+                    ' Names match, check if their properties do.
+                    s = MaterialPropertiesMatch(MatTable, MatTableMaterial, ActiveMaterialLibrary)
+                    If s.Count > 0 Then
 
-                            ' Properties do not match.  Update the document's material to match the library version.
-                            Dim NewWay As Boolean = False
-                            If Not NewWay Then
+                        ' Properties do not match.  Update the document's material to match the library version.
+                        Dim NewWay As Boolean = False
+                        If Not NewWay Then
+                            ' This command sets the face style (and everything else) to that defined in the Material Table.
+                            MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                        Else
+                            If Me.UpdateFaceStyles Then
                                 ' This command sets the face style (and everything else) to that defined in the Material Table.
                                 MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                             Else
-                                If Me.UpdateFaceStyles Then
-                                    ' This command sets the face style (and everything else) to that defined in the Material Table.
-                                    MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                                Else
-                                    Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
+                                Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
 
-                                    Dim OldDocFaceStyleName As Object = Nothing
-                                    MatTable.GetMaterialPropValueFromDoc(
+                                Dim OldDocFaceStyleName As Object = Nothing
+                                MatTable.GetMaterialPropValueFromDoc(
                                     SEDoc, seFaceStyle, OldDocFaceStyleName)
-                                    SEApp.DoIdle()
+                                SEApp.DoIdle()
 
-                                    Dim OldLibFaceStyleName As Object = Nothing
-                                    MatTable.GetMaterialPropValueFromLibrary(
+                                Dim OldLibFaceStyleName As Object = Nothing
+                                MatTable.GetMaterialPropValueFromLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
-                                    SEApp.DoIdle()
+                                SEApp.DoIdle()
 
-                                    MatTable.SetMaterialPropValueToLibrary(
+                                MatTable.SetMaterialPropValueToLibrary(
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
-                                    SEApp.DoIdle()
+                                SEApp.DoIdle()
 
-                                    Dim MatOOD As Boolean
-                                    Dim GageOOD As Boolean
-                                    MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
+                                Dim MatOOD As Boolean
+                                Dim GageOOD As Boolean
+                                MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
 
-                                    If MatOOD Then
-                                        MatTable.ApplyMaterialToDoc(
+                                If MatOOD Then
+                                    MatTable.ApplyMaterialToDoc(
                                     SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                                        SEApp.DoIdle()
-                                    End If
-
-                                    MatTable.SetMaterialPropValueToLibrary(
-                                    MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
                                     SEApp.DoIdle()
                                 End If
-                            End If
 
+                                MatTable.SetMaterialPropValueToLibrary(
+                                    MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
+                                SEApp.DoIdle()
+                            End If
                         End If
 
-                        ' Some imported files cause exceptions on face updates.
-                        Try
-                            ' Face styles are not always updated, especially on imported files.
-                            If Not UpdateFaces() Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-                            End If
-                        Catch ex As Exception
+                    End If
+
+                    ' Some imported files cause exceptions on face updates.
+                    Try
+                        ' Face styles are not always updated, especially on imported files.
+                        If Not UpdateFaces() Then
                             ExitStatus = 1
                             ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-                        End Try
-
-                        If SEDoc.ReadOnly Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-                        Else
-                            SEDoc.Save()
-                            SEApp.DoIdle()
                         End If
+                    Catch ex As Exception
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+                    End Try
 
-                        Exit For
+                    If SEDoc.ReadOnly Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+                    Else
+                        SEDoc.Save()
+                        SEApp.DoIdle()
                     End If
-                Next
 
-            End If
+                    Exit For
+                End If
+            Next
 
-        ElseIf Models.Count >= MaxModelCount Then
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
         End If
 
         MatTable = Nothing
@@ -247,16 +259,6 @@ Public Class UtilsMaterials
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
 
-    End Function
-
-    Private Function IsActiveMaterialLibraryPresent(MaterialLibList As Object, ActiveMaterialLibrary As String) As Boolean
-        For Each MatTableLibrary In CType(MaterialLibList, System.Array)
-            If MatTableLibrary.ToString = ActiveMaterialLibrary Then
-                Return True
-                Exit For
-            End If
-        Next
-        Return False
     End Function
 
     Private Function CurrentMaterialNameInLibrary(CurrentMaterialName As String, MaterialList As Object) As Boolean
@@ -329,49 +331,6 @@ Public Class UtilsMaterials
 
         Return ErrorMessage
     End Function
-
-    'Private Function CurrentMaterialFaceStyle(
-    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    MatTable As SolidEdgeFramework.MatTable,
-    '    MatTableMaterial As Object,
-    '    ActiveMaterialLibrary As String) As SolidEdgeFramework.FaceStyle
-
-    '    Dim MatTableProps As Array = System.Enum.GetValues(GetType(SolidEdgeConstants.MatTablePropIndex))
-    '    Dim LibPropValue As Object = Nothing
-    '    Dim MatTableProp As SolidEdgeFramework.MatTablePropIndex
-    '    Dim FaceStyles As SolidEdgeFramework.FaceStyles = Nothing
-    '    Dim FaceStyle As SolidEdgeFramework.FaceStyle
-
-
-    '    Dim UC As New UtilsCommon
-    '    Dim DocType = UC.GetDocType(SEDoc)
-
-    '    Select Case DocType
-    '        Case "par"
-    '            Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
-    '            FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-    '        Case "psm"
-    '            Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
-    '            FaceStyles = CType(tmpSEDoc.FaceStyles, SolidEdgeFramework.FaceStyles)
-    '    End Select
-
-    '    For Each MatTableProp In MatTableProps
-    '        ' This function populates 'LibPropValue'
-    '        MatTable.GetMaterialPropValueFromLibrary(MatTableMaterial.ToString, ActiveMaterialLibrary, MatTableProp, LibPropValue)
-
-    '        If MatTableProp.ToString = "seFaceStyle" Then
-    '            For Each FaceStyle In FaceStyles
-    '                If FaceStyle.StyleName = LibPropValue.ToString Then
-    '                    Return FaceStyle
-    '                End If
-    '            Next
-    '        End If
-
-    '        LibPropValue = Nothing
-    '    Next
-    '    Return Nothing
-
-    'End Function
 
     Private Function UpdateFaces() As Boolean
 
