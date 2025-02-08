@@ -101,6 +101,13 @@ Public Class UtilsMaterials
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        If SEDoc.ReadOnly Then
+            ExitStatus = 1
+            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+            ErrorMessage(ExitStatus) = ErrorMessageList
+            Return ErrorMessage
+        End If
+
         Dim s As String
 
         Dim MatTable As SolidEdgeFramework.MatTable
@@ -184,7 +191,7 @@ Public Class UtilsMaterials
                     If s.Count > 0 Then
 
                         ' Properties do not match.  Update the document's material to match the library version.
-                        Dim NewWay As Boolean = False
+                        Dim NewWay As Boolean = True
                         If Not NewWay Then
                             ' This command sets the face style (and everything else) to that defined in the Material Table.
                             MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
@@ -209,6 +216,9 @@ Public Class UtilsMaterials
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldDocFaceStyleName)
                                 SEApp.DoIdle()
 
+                                SEDoc.Save()
+                                SEApp.DoIdle()
+
                                 Dim MatOOD As Boolean
                                 Dim GageOOD As Boolean
                                 MatTable.GetOODStatusofMaterialAndGage(SEDoc, MatOOD, GageOOD)
@@ -216,6 +226,9 @@ Public Class UtilsMaterials
                                 If MatOOD Then
                                     MatTable.ApplyMaterialToDoc(
                                     SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                                    SEApp.DoIdle()
+
+                                    SEDoc.Save()
                                     SEApp.DoIdle()
                                 End If
 
@@ -239,13 +252,8 @@ Public Class UtilsMaterials
                         ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
                     End Try
 
-                    If SEDoc.ReadOnly Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-                    Else
-                        SEDoc.Save()
-                        SEApp.DoIdle()
-                    End If
+                    SEDoc.Save()
+                    SEApp.DoIdle()
 
                     Exit For
                 End If

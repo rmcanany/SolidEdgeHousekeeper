@@ -312,7 +312,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
-        CheckBox.Visible = False
+        'CheckBox.Visible = False
 
         RowIndex += 1
 
