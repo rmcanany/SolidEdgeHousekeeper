@@ -110,13 +110,12 @@ Public Class TaskCheckInterference
 
         Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself
         Dim Status As SolidEdgeAssembly.InterferenceStatusConstants
-        Dim Occurrences As SolidEdgeAssembly.Occurrences = Nothing
+        Dim Occurrences As SolidEdgeAssembly.Occurrences = tmpSEDoc.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence = Nothing
         Dim i As Integer
         Dim NumInterferences As Object = Nothing
-        Occurrences = tmpSEDoc.Occurrences
-        Dim IgnoreT As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
-        Dim IgnoreD As SolidEdgeConstants.InterferenceOptionsConstants = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
+        Dim IgnoreT = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreThreadVsNonThreaded
+        Dim IgnoreD = SolidEdgeConstants.InterferenceOptionsConstants.seIntfOptIgnoreSameNominalDia
         Dim NumOccurrences As Integer
 
         Dim SetList As New List(Of Object)
@@ -124,8 +123,8 @@ Public Class TaskCheckInterference
         For i = 1 To Occurrences.Count
             SetList.Add(Occurrences.Item(i))
         Next
-        Dim UO As New UtilsOccurrences(tmpSEDoc, False)
 
+        Dim UO As New UtilsOccurrences(tmpSEDoc, IgnoreIncludeInReportsFlag:=True)
         NumOccurrences = UO.AllOccurrences.Count + UO.AllSubOccurrences.Count
 
         If NumOccurrences > Me.NumOccurrencesLimit Then

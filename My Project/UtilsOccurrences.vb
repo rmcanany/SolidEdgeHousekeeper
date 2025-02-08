@@ -14,8 +14,6 @@ Public Class UtilsOccurrences
                    IgnoreIncludeInReportsFlag As Boolean,
                    Optional IncludeSubOccurrences As Boolean = True)
 
-        'GetOccurrences(SEDoc)
-
         Dim Occurrences As SolidEdgeAssembly.Occurrences
         Dim Occurrence As SolidEdgeAssembly.Occurrence
         Dim SubOccurrences As SolidEdgeAssembly.SubOccurrences
