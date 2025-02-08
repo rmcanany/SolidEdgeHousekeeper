@@ -9,10 +9,10 @@
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github), @KGeetings (github)
 
 **Beta Testers:**
-@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza
+@JayJay04, @Cimarian_RMP, @n0minus38, @xenia.turon, @MonkTheOCD_Engie, @HIL, @[Robin BIoemberg], @[Jan Bos], @Rboyd347, @Jojo15702, @ih0nza, @mefrebo, @KGeetings
 
 **Helpful feedback and bug reports:**
-@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo
+@Satyen, @n0minus38, @wku, @aredderson, @bshand, @TeeVar, @SeanCresswell, @Jean-Louis, @Jan_Bos, @MonkTheOCD_Engie, @[mike miller], @[Francesco Arfilli], @[Martin Bernhard], @[Derek G], @Chris42, @JasonT, @Bob Henry, @JayJay04, @nate.arinta5649, @DaveG, @tempod, @64Pacific, @ben.steele6044, @KennyG, @Alex_H, @Nosybottle, @Seva, @HIL, @[o_o ....码], @roger.ribamatic, @jnewell, @[Robin BIoemberg], @Pedro0996, @Imre Szucs, @Bert303, @gir.isi, @BrianVR74, @CareFrame1, @RBoyd347, @[Artur Sampaio], @pkoevesdi, @Jojo15702, @chjchen, @FERNANDO-DALLAGNOLO, @ih0nza, @mefrebo, @KGeetings
 
 **Notice:**
 *Portions adapted from code by Jason Newell, Tushar Suradkar, Greg Chasteen, and others.  Most of the rest copied verbatim from Jason's repo or Tushar's blog.*
@@ -266,9 +266,9 @@ You can sort the file list in a variety of ways.
 
 ![File list sorting options](My%20Project/media/configuration_tab_sorting_page.png)
 
-The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set it on the **Configuration Tab -- Sorting Page** as shown above.
+The options are `Unsorted`, `Alphabetical`, `Dependency`, or `Random sample`.  Set the sort mode on the **Configuration Tab -- Sorting Page** as shown above.
 
-The `Unsorted` option is primarily intended to preserve the order of imported lists.
+The `Unsorted` option is primarily intended to preserve the order of imported lists.  In some cases, for example printing job packets for distrubution, you may want to keep duplicate entries in the list.  Enable the option `Keep duplicates` to do so.
 
 The `Dependency` option is useful in conjunction with the `Update part copy` command.  It is intended to help eliminate the tedious `model out-of-date` (dark gray corners) on drawings. 
 
@@ -286,9 +286,9 @@ You can get around this by checking `Process files as Available regardless of do
 
 After processing, you can choose to change the Status back to the old value, or pick a new one. In the example, I decided to change everything to Available. You can select the new Status by clicking the appropriate button in the table. For instance, if you wanted to convert all Baselined files to Released, you would click the last button on the second row.
 
-If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead.
+If you want simply to change the Status on a batch of files, rather than using this option, run the `Change Document Status` task instead.  That command runs in Microsoft's Structure Storage mode and is 100x to 400x faster than Solid Edge.
 
-If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That shouldn't hurt anything, but it's not necessary and it results in a slightly increased run time.
+If you don't need to worry about document Status for your current task, it's not a bad idea to disable the `Process files as Available` option. That's because, when enabled, it has to open the file in Structured Storage before and after the run.  That shouldn't hurt anything, but opening and closing files unnecessarily isn't the greatest idea in the world.
 
 ## Filtering
 
@@ -343,7 +343,7 @@ Template properties will know their `PropertySet`.  Unless you added it manually
 
 #### Comparison
 
-Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `is_not`, `>`, and `<` are hopefully self-explanatory.
+Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `>`, and `<` are hopefully self-explanatory.
 
 `Contains` means the **Value** can appear anywhere in the property. For example, if you specify `Aluminum` and a part file has `Aluminum 6061-T6`, you will get a match. Note, at this time, all Values (except see below for dates and numbers) are converted to lower case text before comparison. So `ALUMINUM`, `Aluminum`, and `aluminum` would all match.
 
@@ -490,7 +490,7 @@ Presets help you perform recurring tasks you encounter as part of your job.  An 
 
 Using Presets, you can capture that work one time.  The next time it comes up, choose the appropriate Preset and you're ready to go.  It saves a bit of time, but more importantly it can cut down on costly mistakes and delays.
 
-To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it and click Delete.  To change one, load it, make the changes, then save.
+To create a Preset, set up the program as desired, enter a name then click Save.  To load one, select it from the drop down, then click Load.  To delete one, select it and click Delete.  To make a change to an existing preset, load it, make the changes, then save.
 
 To capture the task settings themselves (which you almost always want), before saving, be sure to enable the `Remember selected tasks between sessions` option on the **Configuration Tab -- General Page**.
 
@@ -617,6 +617,8 @@ In conjuction with `Assembly Activate and update all`, used mainly to eliminate 
 ![UpdatePartCopies](My%20Project/media/task_update_part_copies.png)
 
 You can optionally update the parent files recursively by enabling `Update parent documents` on the Options panel.
+
+In many situations, only a few parts have part copies. Using this command with the Dependency Sort option can filter out those files, greatly speeding up processing. See details on the [<ins>**Configuration Tab -- Sorting Page**</ins>](#sorting).
 
 ### Update physical properties
 Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 

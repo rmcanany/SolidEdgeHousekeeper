@@ -286,6 +286,12 @@ Public Class TaskUpdatePartCopies
         HelpString += vbCrLf + vbCrLf + "You can optionally update the parent files recursively "
         HelpString += "by enabling `Update parent documents` on the Options panel."
 
+        HelpString += vbCrLf + vbCrLf + "In many situations, only a few parts have part copies. "
+        HelpString += "Using this command with the Dependency Sort option can filter out those files, "
+        HelpString += "greatly speeding up processing. "
+        HelpString += "See details on the "
+        HelpString += "[<ins>**Configuration Tab -- Sorting Page**</ins>](#sorting)."
+
         Return HelpString
     End Function
 

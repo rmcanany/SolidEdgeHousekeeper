@@ -53,11 +53,11 @@ As with the `Individual Files` above, added multi-select to `Folder`, `Folder wi
 
 #### Selected Files Feedback
 
-Added feedback to notify the user that some files in the list are selected (which the program interprets as the only ones to process).  The process button text changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
+If any files on the list are *selected*, the program assumes those are the only ones to be processed.  This can be confusing.  To alert the user, the process button text now changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
 
 #### New Shortcut Command
 
-Added `Move to Recycle Bin` to the shortcut menu.  One place this can be handy is with the top-level assembly `Report unrelated files` option.  See the link below for details.
+Added `Move to Recycle Bin` to the shortcut menu.  This is kinda asking for trouble, but can be handy with the top-level assembly `Report unrelated files` option.  Follow the help topic link below for some tips on how it can be used safely.
 
 #### Read-Only Directories
 
@@ -71,6 +71,8 @@ Contributed by **@Francesco Arfilli**.  Thank you!
 Added the ability to query a server to access properties.
 
 ![Insert Property](My%20Project/media/server_query.png)
+
+I'd say more about this, but honestly I'm kinda afraid of servers, and especially SQL.  If this looks useful, you already know way more about it than I do.
 
 See the [<ins>**Server Query Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#server-query-page) for details.
 
@@ -93,9 +95,9 @@ Added a new Task to set document status.  (Thank you **@Francesco Arfilli**!)
 
 ![Insert Property](My%20Project/media/task_set_document_status.png)
 
-Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage to make the change, it is 100x to 400x faster than Solid Edge.
+Since a file can become read-only with certain status changes, the command runs outside of Solid Edge.  Because it uses Microsoft's Structured Storage, it is 100x to 400x faster than Solid Edge.
 
-The previous capability `Process as Available` can still be used.  With it, you have the option to revert the file to the previous status after processing.
+The previous capability `Process as Available` can still be used.  With it, you have the option to revert the file to the previous status after processing.  Note, to avoid confusion only one status-changing operation can be used at a time.
 
 See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#set-document-status) for details.
 
@@ -129,13 +131,17 @@ Fixed an issue where a model file contained in a drawing, but not otherwise rela
 
 Fixed an issue, with multiple top-level directories, where nested directories were being processed twice.
 
-### Splash Screen
+### Other
 
 Added a startup splash screen for monitoring program initialization.  Pay attention, there's a fun little animation at the end!
 
-### Documentation
-
 Added a Table of Contents to the Readme file to improve navigation.  (Thank you **@Francesco Arfilli**!)
+
+Added a `Keep duplicates` option for the Sort Order `None`.
+
+Removed program dependencies on some outdated packages.
+
+Fixed an issue where the Print Task Sheet Selector was not displaying ISO sheet sizes.
 
 ## V2024.3 Enhancements/Fixes
 
