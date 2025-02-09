@@ -139,9 +139,11 @@ Added a Table of Contents to the Readme file to improve navigation.  (Thank you 
 
 Added a `Keep duplicates` option for the Sort Order `None`.
 
-Removed program dependencies on some outdated packages.
+Added a parameter, `Update the file list after this many files`, to the **Configuration Tab -- General Page**.  The default, `1`, is usually a good choice.  It can be increased for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
 
 Fixed an issue where the Print Task Sheet Selector was not displaying ISO sheet sizes.
+
+Removed program dependencies on some outdated packages.
 
 ## V2024.3 Enhancements/Fixes
 

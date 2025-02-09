@@ -394,28 +394,6 @@ Public MustInherit Class Task
 
     End Function
 
-    'Public Sub HandleHideOptionsChange(
-    '    Task As Task,
-    '    TaskOptionsTLP As ExTableLayoutPanel,
-    '    HideOptionsCheckbox As CheckBox)
-
-    '    'Dim Button = CType(Task.ControlsDict(BaseControlNames.Expand.ToString), Button)
-    '    'Dim ButtonImage As Bitmap
-
-    '    'If HideOptionsCheckbox.Checked Then
-    '    '    ButtonImage = My.Resources.expand
-    '    'Else
-    '    '    ButtonImage = My.Resources.collapse
-    '    'End If
-
-    '    Task.AutoHideOptions = HideOptionsCheckbox.Checked
-
-    '    'Me.TaskOptionsTLP.Visible = Not HideOptionsCheckbox.Checked
-
-    '    'Button.Image = ButtonImage
-
-    'End Sub
-
     Public Sub HandleMutuallyExclusiveCheckBoxes(
         TLPOptions As ExTableLayoutPanel,
         NewlyCheckedCheckBox As CheckBox,
@@ -434,17 +412,6 @@ Public MustInherit Class Task
 
 
     End Sub
-
-    'Public Overridable Sub ReconcileFormWithProps()
-
-    'End Sub
-
-    'Public Overridable Sub NotifyAutoHideOptions()
-
-    'End Sub
-
-
-    'FORM STATE
 
     Public Function GetFormState() As String
         Dim JSONString As String

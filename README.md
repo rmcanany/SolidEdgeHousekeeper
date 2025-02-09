@@ -569,6 +569,8 @@ Normally Housekeeper will not start if Solid Edge is open.  This is to protect y
 This is a way for me to wag my finger one last time, reminding you to back up files before using the program.  It is enabled by default.  It's very annoying and you'll want to turn it off.  Just don't forget, I told you to make backups!
 - `Do not show processed files in Most Recently Used List`
 This keeps from clogging up Solid Edge's file list with those processed in batch mode.
+- `Update list after this many files`
+This controls the file list update frequency.  Setting it to `1` means update the list after each file is processed.  This is normally what you want.  However, you may want to increase it for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
 - `File list font size`
 This allows you to change the font size of the file list.
 - `Remember selected tasks between sessions`
