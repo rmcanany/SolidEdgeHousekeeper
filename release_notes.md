@@ -11,7 +11,7 @@ Solid Edge Housekeeper is a utility for finding annoying little errors in your p
 
 Please note, the program has been tested on thousands of our files, but none of yours.  Do not run it on production work without testing on backups first.
 
-Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
+Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
 
 ## V2025.1 Enhancements/Fixes
@@ -33,10 +33,10 @@ Contributed by **@Francesco Arfilli**.  Thank you!
 
 #### List Customization
 
-- File properties can now be displayed on the list.  
+- File properties can now be displayed on the list.  (Thank you **@CareFrame1**!)
 - Properties can be edited and changed in place.  
 - The list can be sorted by column.  
-- The list can be saved in CSV format.  (Thank you **@CareFrame1**!)
+- The list can be saved in CSV format.  (Thank you again **@CareFrame1**!)
 - File groups are collapsible.
 - File grouping is optional.
 
@@ -51,9 +51,11 @@ Added a new input source, `Individual Files`, to the file selection options.  Th
 #### Select Multiple Folders
 As with the `Individual Files` above, added multi-select to `Folder`, `Folder with subfolders`, and `Top level assembly folder`.
 
-#### Selected Files Feedback
+#### User Feedback
 
-If any files on the list are *selected*, the program assumes those are the only ones to be processed.  This can be confusing.  To alert the user, the process button text now changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
+If any files on the list are *selected*, the program assumes those are the only ones to be processed.  This can be confusing/annoying.  To alert the user, the process button text now changes from **Process** to **Process Selected**.  (Thank you **@64Pacific**!)
+
+Added dates and sizes to each listed file's tooltip popup.
 
 #### New Shortcut Command
 
@@ -82,9 +84,9 @@ Added processing of localized property names where applicable.
 
 Expanded the ability to select properties, either from a drop down or shortcut menu, in all locations where properties can be used.  Previously, that was only available with `Property Filter` and `Edit Properties`.
 
-Added support for all property variable types.  Previously, only text type properties were supported. (Thank you **@Francesco Arfilli**!)
+Added support for all property variable types.  Previously, only text type properties were processed. (Thank you **@Francesco Arfilli**!)
 
-In `Edit Variables` added the ability to use a property in the `Number/Formula` field.
+In the `Edit Variables` command, added the ability to use a property in the `Number/Formula` field.
 
 
 See the [<ins>**Templates Page Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#templates-page) and [<ins>**Edit Variables Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#edit-variables) for details.
