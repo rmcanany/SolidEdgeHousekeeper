@@ -619,7 +619,7 @@ Public Class UtilsPreferences
         KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
         KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
         KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU"})
-        KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "RememberTasks", "RunInBackground"})
+        KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
         KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
         KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
         KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})

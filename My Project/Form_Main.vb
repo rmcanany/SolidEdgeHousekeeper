@@ -822,6 +822,19 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _GroupFiles As Boolean
+    Public Property GroupFiles As Boolean
+        Get
+            Return _GroupFiles
+        End Get
+        Set(value As Boolean)
+            _GroupFiles = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxGroupFiles.Checked = value
+            End If
+        End Set
+    End Property
+
     Private _RememberTasks As Boolean
     Public Property RememberTasks As Boolean
         Get
@@ -3620,8 +3633,10 @@ Public Class Form_Main
     End Class
 
     Private Sub CheckBoxGroupFiles_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxGroupFiles.CheckedChanged
+        Me.GroupFiles = CheckBoxGroupFiles.Checked
+        ListViewFiles.ShowGroups = Me.GroupFiles
 
-        ListViewFiles.ShowGroups = CheckBoxGroupFiles.Checked
+        ListViewFilesOutOfDate = True
 
     End Sub
 

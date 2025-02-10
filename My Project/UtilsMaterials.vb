@@ -192,13 +192,15 @@ Public Class UtilsMaterials
 
                         ' Properties do not match.  Update the document's material to match the library version.
                         Dim NewWay As Boolean = True
-                        If Not NewWay Then
-                            ' This command sets the face style (and everything else) to that defined in the Material Table.
-                            MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
-                        Else
+                        If NewWay Then
                             If Me.UpdateFaceStyles Then
-                                ' This command sets the face style (and everything else) to that defined in the Material Table.
-                                MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                                ' Face styles are not always updated, especially on imported files.
+                                Try
+                                    MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                                Catch ex As Exception
+                                    ExitStatus = 1
+                                    ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+                                End Try
                             Else
                                 Dim seFaceStyle = SolidEdgeFramework.MatTablePropIndex.seFaceStyle
 
@@ -236,21 +238,18 @@ Public Class UtilsMaterials
                                     MatTableMaterial.ToString, ActiveMaterialLibrary, seFaceStyle, OldLibFaceStyleName)
                                 SEApp.DoIdle()
                             End If
+
+                        Else  ' Not NewWay
+                            ' Face styles are not always updated, especially on imported files.
+                            Try
+                                MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
+                            Catch ex As Exception
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+                            End Try
                         End If
 
                     End If
-
-                    ' Some imported files cause exceptions on face updates.
-                    Try
-                        ' Face styles are not always updated, especially on imported files.
-                        If Not UpdateFaces() Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-                        End If
-                    Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-                    End Try
 
                     SEDoc.Save()
                     SEApp.DoIdle()
