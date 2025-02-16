@@ -743,15 +743,27 @@ Public Class TaskUpdateMaterialFromMaterialTable
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks to see if the part's material name and properties match any material "
-        HelpString += "in a file you specify on the Options panel. "
+        HelpString += "in your material table. "
 
         HelpString += vbCrLf + vbCrLf + "![UpdateMaterialFromMaterialTable](My%20Project/media/task_update_material_from_material_table.png)"
 
         HelpString += vbCrLf + vbCrLf + "If the names match, "
         HelpString += "but their properties (e.g., density, face style, etc.) do not, the material is updated. "
         HelpString += "If no match is found, or no material is assigned, it is reported in the log file."
-        HelpString += vbCrLf + vbCrLf + "You can optionally remove any face style overrides. "
-        HelpString += "Set the option on the Options panel. "
+
+        HelpString += vbCrLf + vbCrLf + "There are several options for this command. "
+        HelpString += vbCrLf + vbCrLf + "- `Remove face style overrides`:  Change all face styles to match that of the material. "
+        HelpString += vbCrLf + "- `Update face styles`:  Disabling this option leaves faces unchanged. "
+        HelpString += vbCrLf + "- `Finish property determines face style`:  Uses the finish rather than the material face style. "
+        HelpString += "Note a face style with the same name as the finish must be present in the file. "
+        HelpString += vbCrLf + "- `Finish property`: The property that contains finish information. "
+        HelpString += "Note the syntax required in the image above. "
+        HelpString += "Right click the text box to select it from a list. "
+        HelpString += vbCrLf + "- `Finishes that don't change material appearance`: Enter these in the list provided. "
+        HelpString += "Note no action is taken with these finishes, so their face styles do *not* need to be present in the file. "
+        HelpString += vbCrLf + "- `Override the Body face style`: Uses Part Painter to change the faces. "
+        HelpString += vbCrLf + "- `Override the Material face style`: Uses the Material Table to change the faces. "
+        HelpString += "Note this option is currently disabled. "
 
         Return HelpString
     End Function

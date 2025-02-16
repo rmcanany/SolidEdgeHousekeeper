@@ -71,30 +71,31 @@ Public Class TaskEditProperties
         End Set
     End Property
 
-    Private _UpdateFaceStyles As Boolean
-    Public Property UpdateFaceStyles As Boolean
-        Get
-            Return _UpdateFaceStyles
-        End Get
-        Set(value As Boolean)
-            _UpdateFaceStyles = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
-    Private _RemoveFaceStyleOverrides As Boolean
-    Public Property RemoveFaceStyleOverrides As Boolean
-        Get
-            Return _RemoveFaceStyleOverrides
-        End Get
-        Set(value As Boolean)
-            _RemoveFaceStyleOverrides = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
+    'Private _UpdateFaceStyles As Boolean
+    'Public Property UpdateFaceStyles As Boolean
+    '    Get
+    '        Return _UpdateFaceStyles
+    '    End Get
+    '    Set(value As Boolean)
+    '        _UpdateFaceStyles = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
+    '        End If
+    '    End Set
+    'End Property
+
+    'Private _RemoveFaceStyleOverrides As Boolean
+    'Public Property RemoveFaceStyleOverrides As Boolean
+    '    Get
+    '        Return _RemoveFaceStyleOverrides
+    '    End Get
+    '    Set(value As Boolean)
+    '        _RemoveFaceStyleOverrides = value
+    '        If Me.TaskOptionsTLP IsNot Nothing Then
+    '            CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
+    '        End If
+    '    End Set
+    'End Property
 
     Private _StructuredStorageEdit As Boolean
     Public Property StructuredStorageEdit As Boolean
@@ -131,8 +132,8 @@ Public Class TaskEditProperties
         UseConfigurationPageTemplates
         Browse
         MaterialTable
-        UpdateFaceStyles
-        RemoveFaceStyleOverrides
+        'UpdateFaceStyles
+        'RemoveFaceStyleOverrides
         StructuredStorageEdit
         AutoHideOptions
     End Enum
@@ -168,8 +169,8 @@ Public Class TaskEditProperties
         Me.StructuredStorageEdit = False
         Me.AutoUpdateMaterial = False
         Me.UseConfigurationPageTemplates = False
-        Me.UpdateFaceStyles = False
-        Me.RemoveFaceStyleOverrides = False
+        'Me.UpdateFaceStyles = False
+        'Me.RemoveFaceStyleOverrides = False
 
     End Sub
 
@@ -958,23 +959,23 @@ Public Class TaskEditProperties
         ControlsDict(TextBox.Name) = TextBox
         TextBox.Visible = False
 
-        RowIndex += 1
+        'RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
-        CheckBox.Visible = False
+        'CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
+        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        'ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
 
-        RowIndex += 1
+        'RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
-        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
-        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
-        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
-        ControlsDict(CheckBox.Name) = CheckBox
-        CheckBox.Visible = False
+        'CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        'AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        'tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        'tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        'ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
 
         RowIndex += 1
 
@@ -1131,10 +1132,10 @@ Public Class TaskEditProperties
                 CType(ControlsDict(ControlNames.Browse.ToString), Button).Visible = tf
                 CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox).Visible = tf
 
-                tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial)
+                'tf = (Not Me.StructuredStorageEdit) And (Me.AutoUpdateMaterial)
 
-                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
-                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
+                'CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
+                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
 
             Case ControlNames.AutoUpdateMaterial.ToString '"AutoUpdateMaterial"
                 Me.AutoUpdateMaterial = Checkbox.Checked
@@ -1143,8 +1144,8 @@ Public Class TaskEditProperties
                 tf = Me.AutoUpdateMaterial
 
                 CType(ControlsDict(ControlNames.UseConfigurationPageTemplates.ToString), CheckBox).Visible = tf
-                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
-                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
+                'CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = tf
+                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = tf
 
                 tf = Me.AutoUpdateMaterial And Not Me.UseConfigurationPageTemplates
 
@@ -1166,15 +1167,15 @@ Public Class TaskEditProperties
 
                 End If
 
-            Case ControlNames.UpdateFaceStyles.ToString
-                Me.UpdateFaceStyles = Checkbox.Checked
-                Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
+            'Case ControlNames.UpdateFaceStyles.ToString
+            '    Me.UpdateFaceStyles = Checkbox.Checked
+            '    Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
 
-                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
+            '    'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
 
-            Case ControlNames.RemoveFaceStyleOverrides.ToString
-                Me.RemoveFaceStyleOverrides = Checkbox.Checked
-                Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
+            'Case ControlNames.RemoveFaceStyleOverrides.ToString
+            '    Me.RemoveFaceStyleOverrides = Checkbox.Checked
+            '    Checkbox.Visible = Not Me.StructuredStorageEdit And Me.AutoUpdateMaterial
 
             Case ControlNames.AutoHideOptions.ToString '"HideOptions"
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -1287,6 +1288,8 @@ Public Class TaskEditProperties
         HelpString += vbCrLf + vbCrLf + "If you are changing `System.Material` specifically, you can "
         HelpString += "also update the properties associated with the material itself. "
         HelpString += "Select the option `For material, update density, face styles, etc.`. "
+        HelpString += "For more options to control the material updates, "
+        HelpString += "take a look at the command `Update material from material table`."
         HelpString += "Note this option is not currently compatible with `Run task without Solid Edge`. "
 
         HelpString += vbCrLf + vbCrLf + "**Expressions**"

@@ -602,13 +602,21 @@ Loads all assembly occurrences' geometry into memory and does an update. Used ma
 Can run out of memory for very large assemblies.
 
 ### Update material from material table
-Checks to see if the part's material name and properties match any material in a file you specify on the Options panel. 
+Checks to see if the part's material name and properties match any material in your material table. 
 
 ![UpdateMaterialFromMaterialTable](My%20Project/media/task_update_material_from_material_table.png)
 
 If the names match, but their properties (e.g., density, face style, etc.) do not, the material is updated. If no match is found, or no material is assigned, it is reported in the log file.
 
-You can optionally remove any face style overrides. Set the option on the Options panel. 
+There are several options for this command. 
+
+- `Remove face style overrides`:  Change all face styles to match that of the material. 
+- `Update face styles`:  Disabling this option leaves faces unchanged. 
+- `Finish property determines face style`:  Uses the finish rather than the material face style. Note a face style with the same name as the finish must be present in the file. 
+- `Finish property`: The property that contains finish information. Note the syntax required in the image above. Right click the text box to select it from a list. 
+- `Finishes that don't change material appearance`: Enter these in the list provided. Note no action is taken with these finishes, so their face styles do *not* need to be present in the file. 
+- `Override the Body face style`: Uses Part Painter to change the faces. 
+- `Override the Material face style`: Uses the Material Table to change the faces. Note this option is currently disabled. 
 
 ### Update part copies
 In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. 
@@ -720,7 +728,7 @@ If the specified property does not exist in the file, you can optionally add it 
 
 To delete a property, set the Find Search to `X`. As above, this only works for `Custom` properties. 
 
-If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. Note this option is not currently compatible with `Run task without Solid Edge`. 
+If you are changing `System.Material` specifically, you can also update the properties associated with the material itself. Select the option `For material, update density, face styles, etc.`. For more options to control the material updates, take a look at the command `Update material from material table`.Note this option is not currently compatible with `Run task without Solid Edge`. 
 
 **Expressions**
 

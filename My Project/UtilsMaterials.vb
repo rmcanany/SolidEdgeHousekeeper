@@ -327,9 +327,12 @@ Public Class UtilsMaterials
         End If
 
         If Me.UpdateFaceStyles Then
-            If Not UpdateFaces() Then
+            Dim SupplementalErrorMessageList = UpdateFaces()
+            If SupplementalErrorMessageList.Count > 0 Then
                 ExitStatus = 1
-                ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+                For Each s As String In SupplementalErrorMessageList
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                Next
             End If
         End If
 
@@ -407,9 +410,10 @@ Public Class UtilsMaterials
         Return Mismatches
     End Function
 
-    Private Function UpdateFaces() As Boolean
+    Private Function UpdateFaces() As List(Of String)
 
-        Dim UpdatesComplete As Boolean = True
+        Dim ErrorMessageList As New List(Of String)
+        'Dim UpdatesComplete As Boolean = True
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -520,8 +524,9 @@ Public Class UtilsMaterials
                             End If
 
                         Catch ex As Exception
-                            UpdatesComplete = False
-                            Return UpdatesComplete
+                            Dim s As String = "Could not process model faces"
+                            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                            Return ErrorMessageList
                         End Try
 
                         SEApp.DoIdle()
@@ -532,7 +537,8 @@ Public Class UtilsMaterials
                                 If FinishFaceStyle IsNot Nothing Then
                                     Body.Style = FinishFaceStyle
                                 Else
-                                    UpdatesComplete = False
+                                    Dim s As String = String.Format("Finish face style '{0}' not found", FinishFaceStyle.StyleName)
+                                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                                 End If
                             End If
                         End If
@@ -559,19 +565,23 @@ Public Class UtilsMaterials
                         FaceOverrides.Clear()  ' Get ready for the next Model
 
                     ElseIf FaceOverrides.Count > MaxFacesToProcess Then
-                        UpdatesComplete = False
+                        Dim s As String = String.Format("Number of faces '{0}' exceeds maximum '{1}'", FaceOverrides.Count, MaxFacesToProcess)
+                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                     End If
 
                 Catch ex As Exception
-                    UpdatesComplete = False
+                    Dim s As String = "Could not process model"
+                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
                 End Try
             Next
 
         ElseIf Models.Count >= 300 Then
-            UpdatesComplete = False
+            Dim s As String = String.Format("Number of models '{0}' exceeds maximum '{1}'", Models.Count, 300)
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
         End If
 
-        Return UpdatesComplete
+        Return ErrorMessageList
 
     End Function
 

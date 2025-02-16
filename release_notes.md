@@ -103,6 +103,14 @@ The previous capability `Process as Available` can still be used.  With it, you 
 
 See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#set-document-status) for details.
 
+### Update Material from Material Table
+
+Added an option to update face styles using a part's finish property, rather than the material itself. (Thank you **@KGeetings**!)
+
+A face style with the same name as the finish must be present in the file. Finishes that do not change the appearance of the part, such as `NONE` or `CLEAR ANODIZE` can be excluded from processing.  The names are entered on the list provided.
+
+See the [<ins>**Update Material from Material Table Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-material-from-material-table) for details.
+
 ### Check Links
 
 Added an option to run this command without Solid Edge.  As with `Set Document Status`, it uses Microsoft's Structured Storage with equivalent speed increases.
