@@ -30,31 +30,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Set
     End Property
 
-    Private _UpdateFaceStyles As Boolean
-    Public Property UpdateFaceStyles As Boolean
-        Get
-            Return _UpdateFaceStyles
-        End Get
-        Set(value As Boolean)
-            _UpdateFaceStyles = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
-    Private _RemoveFaceStyleOverrides As Boolean
-    Public Property RemoveFaceStyleOverrides As Boolean
-        Get
-            Return _RemoveFaceStyleOverrides
-        End Get
-        Set(value As Boolean)
-            _RemoveFaceStyleOverrides = value
-            If Me.TaskOptionsTLP IsNot Nothing Then
-                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
-            End If
-        End Set
-    End Property
-
     'Private _StructuredStorageEdit As Boolean
     'Public Property StructuredStorageEdit As Boolean
     '    Get
@@ -68,6 +43,110 @@ Public Class TaskUpdateMaterialFromMaterialTable
     '        End If
     '    End Set
     'End Property
+
+    Private _RemoveFaceStyleOverrides As Boolean
+    Public Property RemoveFaceStyleOverrides As Boolean
+        Get
+            Return _RemoveFaceStyleOverrides
+        End Get
+        Set(value As Boolean)
+            _RemoveFaceStyleOverrides = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UpdateFaceStyles As Boolean
+    Public Property UpdateFaceStyles As Boolean
+        Get
+            Return _UpdateFaceStyles
+        End Get
+        Set(value As Boolean)
+            _UpdateFaceStyles = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _UseFinishFaceStyle As Boolean
+    Public Property UseFinishFaceStyle As Boolean
+        Get
+            Return _UseFinishFaceStyle
+        End Get
+        Set(value As Boolean)
+            _UseFinishFaceStyle = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _FinishPropertyFormula As String
+    Public Property FinishPropertyFormula As String
+        Get
+            Return _FinishPropertyFormula
+        End Get
+        Set(value As String)
+            _FinishPropertyFormula = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.FinishPropertyFormula.ToString), TextBox).Text = value
+            End If
+        End Set
+    End Property
+
+    Private _ExcludedFinishesList As List(Of String)
+    Public Property ExcludedFinishesList As List(Of String)
+        Get
+            Return _ExcludedFinishesList
+        End Get
+        Set(value As List(Of String))
+            _ExcludedFinishesList = value
+            _ExcludedFinishesList.Sort()
+
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                Dim tmpTextBox As TextBox = CType(ControlsDict(ControlNames.ExcludedFinishes.ToString), TextBox)
+                Dim s1 As String = ""
+                For Each s2 As String In _ExcludedFinishesList
+                    If Not s2.Trim = "" Then
+                        s1 = String.Format("{0}{1}{2}", s1, s2, vbCrLf)
+                    End If
+                Next
+                If Not s1 = "" Then s1 = s1.Substring(0, s1.Length - 1) ' Remove trailing vbcrlf
+
+                If Not tmpTextBox.Text = s1 Then tmpTextBox.Text = s1
+
+            End If
+        End Set
+    End Property
+
+
+    Private _OverrideBodyFaceStyle As Boolean
+    Public Property OverrideBodyFaceStyle As Boolean
+        Get
+            Return _OverrideBodyFaceStyle
+        End Get
+        Set(value As Boolean)
+            _OverrideBodyFaceStyle = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _OverrideMaterialFaceStyle As Boolean
+    Public Property OverrideMaterialFaceStyle As Boolean
+        Get
+            Return _OverrideMaterialFaceStyle
+        End Get
+        Set(value As Boolean)
+            _OverrideMaterialFaceStyle = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
 
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
@@ -87,9 +166,17 @@ Public Class TaskUpdateMaterialFromMaterialTable
         UseConfigurationPageTemplates
         Browse
         MaterialTable
-        UpdateFaceStyles
-        RemoveFaceStyleOverrides
         'StructuredStorageEdit
+        RemoveFaceStyleOverrides
+        UpdateFaceStyles
+        UseFinishFaceStyle
+        FinishPropertyFormulaLabel
+        FinishPropertyFormula
+        ExcludedFinishesLabel
+        ExcludedFinishes
+        'DeleteExcludedFinish
+        OverrideBodyFaceStyle
+        OverrideMaterialFaceStyle
         AutoHideOptions
     End Enum
 
@@ -120,6 +207,11 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Me.MaterialTable = ""
         Me.UpdateFaceStyles = False
         Me.RemoveFaceStyleOverrides = False
+        Me.UseFinishFaceStyle = False
+        Me.FinishPropertyFormula = ""
+        Me.ExcludedFinishesList = New List(Of String)
+        Me.OverrideBodyFaceStyle = False
+        Me.OverrideMaterialFaceStyle = False
     End Sub
 
 
@@ -149,7 +241,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        'ErrorMessage = ProcessInternal(FileName)
+        ErrorMessage = ProcessInternal(FileName)
 
         Return ErrorMessage
 
@@ -166,14 +258,28 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Dim PropertySetName As String
+        Dim PropertyName As String
+        Dim FinishName As String = Nothing
+
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "par", "psm"
+                If Me.UseFinishFaceStyle Then
+                    PropertySetName = UC.PropSetFromFormula(Me.FinishPropertyFormula)
+                    PropertyName = UC.PropNameFromFormula(Me.FinishPropertyFormula)
+                    FinishName = CStr(UC.GetPropValue(
+                        SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
+                End If
                 Dim UM As New UtilsMaterials
+
                 SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
-                    SEApp, SEDoc, Me.MaterialTable, Me.UpdateFaceStyles, Me.RemoveFaceStyleOverrides)
+                    SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
+                    Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
+                    Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle)
+
                 AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
             Case Else
@@ -271,8 +377,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim CheckBox As CheckBox
         Dim Button As Button
         Dim TextBox As TextBox
-
-        'Dim IU As New InterfaceUtilities
+        'Dim Combobox As ComboBox
+        Dim Label As Label
 
         FormatTLPOptions(tmpTLPOptions, "TLPOptions", 4)
 
@@ -307,6 +413,15 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        'CheckBox.Visible = False
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.UpdateFaceStyles.ToString, "Update face styles")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -316,11 +431,71 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         RowIndex += 1
 
-        CheckBox = FormatOptionsCheckBox(ControlNames.RemoveFaceStyleOverrides.ToString, "Remove face style overrides")
+        CheckBox = FormatOptionsCheckBox(ControlNames.UseFinishFaceStyle.ToString, "Finish property determines face style")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(CheckBox, 2)
         ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        Label = FormatOptionsLabel(ControlNames.FinishPropertyFormulaLabel.ToString, "Finish property")
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(Label, 2)
+        ControlsDict(Label.Name) = Label
+        Label.Visible = False
+
+        RowIndex += 1
+
+        TextBox = FormatOptionsTextBox(ControlNames.FinishPropertyFormula.ToString, "")
+        TextBox.ContextMenuStrip = Me.TaskControl.ContextMenuStrip1
+        TextBox.BackColor = Color.FromArgb(255, 240, 240, 240)
+        AddHandler TextBox.TextChanged, AddressOf TextBoxOptions_Text_Changed
+        AddHandler TextBox.GotFocus, AddressOf TextBox_GotFocus
+        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(TextBox, 2)
+        ControlsDict(TextBox.Name) = TextBox
+        TextBox.Visible = False
+
+        RowIndex += 1
+
+        Label = FormatOptionsLabel(ControlNames.ExcludedFinishesLabel.ToString, "Finishes that do not change material appearance")
+        tmpTLPOptions.Controls.Add(Label, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(Label, 2)
+        ControlsDict(Label.Name) = Label
+        Label.Visible = False
+
+        RowIndex += 1
+
+        TextBox = FormatOptionsTextBox(ControlNames.ExcludedFinishes.ToString, "")
+        AddHandler TextBox.LostFocus, AddressOf TextBoxOptions_Text_Changed
+        TextBox.Multiline = True
+        TextBox.ScrollBars = ScrollBars.Vertical
+        TextBox.Width = 200
+        TextBox.Height = 60
+        tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(TextBox, 2)
+        ControlsDict(TextBox.Name) = TextBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.OverrideBodyFaceStyle.ToString, "Override the Body face style")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.OverrideMaterialFaceStyle.ToString, "Override the Material face style")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+        CheckBox.Visible = False
+        CheckBox.Enabled = False
 
         RowIndex += 1
 
@@ -378,6 +553,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
+        Dim tf As Boolean
 
         Select Case Name
 
@@ -395,20 +571,77 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
                 End If
 
-            Case ControlNames.UpdateFaceStyles.ToString
-                Me.UpdateFaceStyles = Checkbox.Checked
+            'Case ControlNames.StructuredStorageEdit.ToString
+            '    Me.StructuredStorageEdit = Checkbox.Checked
+            '    Me.SolidEdgeRequired = Not Checkbox.Checked
 
-                'CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Me.UpdateFaceStyles
+            '    CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Visible = Not Me.StructuredStorageEdit
+            '    CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Not Me.StructuredStorageEdit
+
+            '    tf = Not Me.StructuredStorageEdit
+            '    tf = tf And CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked
+
+            '    CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Visible = tf
+
+            '    tf = Not Me.StructuredStorageEdit
+            '    tf = tf And CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked
+            '    tf = tf And CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Checked
+
+            '    CType(ControlsDict(ControlNames.FinishPropertyFormulaLabel.ToString), Label).Visible = tf
+            '    CType(ControlsDict(ControlNames.FinishPropertyFormula.ToString), TextBox).Visible = tf
+            '    CType(ControlsDict(ControlNames.ExcludedFinishesLabel.ToString), Label).Visible = tf
+            '    CType(ControlsDict(ControlNames.ExcludedFinishes.ToString), ComboBox).Visible = tf
+            '    CType(ControlsDict(ControlNames.DeleteExcludedFinish.ToString), Button).Visible = tf
+            '    CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Visible = tf
+            '    CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Visible = tf
 
             Case ControlNames.RemoveFaceStyleOverrides.ToString
                 Me.RemoveFaceStyleOverrides = Checkbox.Checked
 
-            'Case ControlNames.StructuredStorageEdit.ToString
-            '    Me.StructuredStorageEdit = Checkbox.Checked
-            '    'Me.RequiresSave = Not Checkbox.Checked
-            '    Me.SolidEdgeRequired = Not Checkbox.Checked
+            Case ControlNames.UpdateFaceStyles.ToString
+                Me.UpdateFaceStyles = Checkbox.Checked
 
-            '    CType(ControlsDict(ControlNames.RemoveFaceStyleOverrides.ToString), CheckBox).Visible = Not Me.StructuredStorageEdit
+                tf = Me.UpdateFaceStyles
+                'tf = tf And Not Me.StructuredStorageEdit
+
+                CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Visible = tf
+
+                tf = Me.UpdateFaceStyles
+                'tf = tf And Not Me.StructuredStorageEdit
+                tf = tf And CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Checked
+
+                CType(ControlsDict(ControlNames.FinishPropertyFormulaLabel.ToString), Label).Visible = tf
+                CType(ControlsDict(ControlNames.FinishPropertyFormula.ToString), TextBox).Visible = tf
+                CType(ControlsDict(ControlNames.ExcludedFinishesLabel.ToString), Label).Visible = tf
+                CType(ControlsDict(ControlNames.ExcludedFinishes.ToString), TextBox).Visible = tf
+                'CType(ControlsDict(ControlNames.DeleteExcludedFinish.ToString), Button).Visible = tf
+                CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Visible = tf
+
+            Case ControlNames.UseFinishFaceStyle.ToString
+                Me.UseFinishFaceStyle = Checkbox.Checked
+
+                tf = Me.UseFinishFaceStyle
+                tf = tf And CType(ControlsDict(ControlNames.UpdateFaceStyles.ToString), CheckBox).Checked
+                tf = tf And CType(ControlsDict(ControlNames.UseFinishFaceStyle.ToString), CheckBox).Checked
+
+                CType(ControlsDict(ControlNames.FinishPropertyFormulaLabel.ToString), Label).Visible = tf
+                CType(ControlsDict(ControlNames.FinishPropertyFormula.ToString), TextBox).Visible = tf
+                CType(ControlsDict(ControlNames.ExcludedFinishesLabel.ToString), Label).Visible = tf
+                CType(ControlsDict(ControlNames.ExcludedFinishes.ToString), TextBox).Visible = tf
+                'CType(ControlsDict(ControlNames.DeleteExcludedFinish.ToString), Button).Visible = tf
+                CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Visible = tf
+                CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Visible = tf
+
+            Case ControlNames.OverrideBodyFaceStyle.ToString
+                Me.OverrideBodyFaceStyle = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideBodyFaceStyle
+
+            Case ControlNames.OverrideMaterialFaceStyle.ToString
+                Me.OverrideMaterialFaceStyle = Checkbox.Checked
+
+                CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideMaterialFaceStyle
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
@@ -426,6 +659,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim Button = CType(sender, Button)
         Dim Name = Button.Name
         Dim TextBox As TextBox
+        'Dim ComboBox As ComboBox
 
         Select Case Name
             Case ControlNames.Browse.ToString
@@ -438,6 +672,10 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     TextBox = CType(ControlsDict(ControlNames.MaterialTable.ToString), TextBox)
                     TextBox.Text = Me.MaterialTable
                 End If
+
+                'Case ControlNames.DeleteExcludedFinish.ToString
+                '    ComboBox = CType(ControlsDict(ControlNames.ExcludedFinishes.ToString), ComboBox)
+                '    ComboBox.Items.Remove(ComboBox.SelectedItem)
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
@@ -453,6 +691,20 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Select Case Name
             Case ControlNames.MaterialTable.ToString '"ExternalProgram"
                 Me.MaterialTable = TextBox.Text
+
+            Case ControlNames.FinishPropertyFormula.ToString
+                Me.FinishPropertyFormula = TextBox.Text
+
+            Case ControlNames.ExcludedFinishes.ToString
+                Dim tmpList As New List(Of String)
+                For Each s As String In TextBox.Text.Split(CChar(vbLf)).ToList
+                    s = s.Replace(vbCr, "").Replace(vbCrLf, "")
+                    If Not s.Trim = "" Then
+                        tmpList.Add(s)
+                    End If
+                Next
+                Me.ExcludedFinishesList = tmpList
+
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
         End Select
@@ -460,6 +712,33 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
     End Sub
 
+    Public Sub ComboBoxOptions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
+        Dim ComboBox = CType(sender, ComboBox)
+        Dim Name = ComboBox.Name
+        Dim CheckBox As CheckBox = Nothing
+        Dim TextBox As TextBox = Nothing
+        Dim Label As Label = Nothing
+
+        Select Case Name
+            Case ControlNames.ExcludedFinishes.ToString
+
+                If Not ComboBox.Items.Contains(ComboBox.Text) Then
+                    ComboBox.Items.Add(ComboBox.Text)
+                End If
+
+                Me.ExcludedFinishesList.Clear()
+
+                For Each Item As String In ComboBox.Items
+                    ExcludedFinishesList.Add(Item)
+                Next
+
+
+            Case Else
+                MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
+
+        End Select
+
+    End Sub
 
     Private Function GetHelpText() As String
         Dim HelpString As String

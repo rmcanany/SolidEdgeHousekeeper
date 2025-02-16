@@ -1,6 +1,6 @@
 ﻿Option Strict On
 
-Imports System.IO
+'Imports System.IO
 Imports ListViewExtended
 
 Public Class UtilsFileList
@@ -457,7 +457,7 @@ Public Class UtilsFileList
 
             If tf Then
 
-                Dim tmpFinfo As FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
+                Dim tmpFinfo As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(FoundFile)
 
                 Dim tmpLVItem As New ListViewItem
                 tmpLVItem.Text = IO.Path.GetFileName(FoundFile)

@@ -452,7 +452,7 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim DVXL, DVYL, DVXH, DVYH As Double
         DrawingView.Range(DVXL, DVYL, DVXH, DVYH)
 
-        ' Drawing view margin -- padding between the drawing border and the graphics contents
+        ' Drawing view margin -- padding between the drawing border and the graphics contents is 1/4"
         Dim M As Double = 0.25 * 25.4 / 1000  ' Need to check ISO.
 
 

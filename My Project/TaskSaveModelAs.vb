@@ -216,9 +216,6 @@ Public Class TaskSaveModelAs
 
     Public Property ImageFileTypeNames As New List(Of String)
 
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-
-    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName

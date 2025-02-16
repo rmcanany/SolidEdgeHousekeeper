@@ -431,6 +431,7 @@ Public MustInherit Class Task
         IgnoreProps.AddRange({"RequiresSheetmetalTemplate", "RequiresDraftTemplate", "RequiresMaterialTable", "Category"})
         IgnoreProps.AddRange({"SolidEdgeRequired", "Application", "Document", "IsOptionsHidden"})
         IgnoreProps.AddRange({"PropertiesData"})
+        IgnoreProps.AddRange({"LinkManagementOrder", "ImageFileTypeNames", "SelectedSheetsList"})
 
         Dim s As String = ""
 
@@ -453,11 +454,16 @@ Public MustInherit Class Task
                     tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
                 Case "Boolean".ToLower
                     tmpJSONDict(PropInfoName) = CStr(PropInfo.GetValue(Me, Nothing))
+                Case "List`1".ToLower
+                    '_PropertyFilterDictJSON = JsonConvert.SerializeObject(Me.PropertyFilterDict) Then
+                    'PropertyFilterDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, Dictionary(Of String, String)))(_PropertyFilterDictJSON)
+                    Dim Something = PropInfo.GetValue(Me, Nothing)
+                    tmpJSONDict(PropInfoName) = JsonConvert.SerializeObject(Something)
+                    Dim i = 0
 
                 Case "Image".ToLower  ' Nothing to do here and below
                 Case "UCTaskControl".ToLower
                 Case "ExTableLayoutPanel".ToLower
-                Case "List`1".ToLower
                 Case "Dictionary`2".ToLower
                 Case "Application".ToLower
                 Case "SolidEdgeDocument".ToLower
@@ -515,6 +521,11 @@ Public MustInherit Class Task
                         PropInfo.SetValue(Me, CInt(tmpJSONDict(PropInfoName)))
                     Case "Boolean"
                         PropInfo.SetValue(Me, CBool(tmpJSONDict(PropInfoName)))
+                    Case "List`1"
+                        Dim Something = tmpJSONDict(PropInfoName)
+                        Dim tmpList = JsonConvert.DeserializeObject(Of List(Of String))(Something)
+                        PropInfo.SetValue(Me, tmpList)
+                        Dim i = 0
                 End Select
 
             End If

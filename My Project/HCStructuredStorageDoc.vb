@@ -1,4 +1,7 @@
-﻿Option Strict On
+﻿' https://support.sw.siemens.com/en-US/knowledge-base/PL8758767
+' https://community.sw.siemens.com/s/question/0D5Vb000006uL9iKAE/how-to-repair-corrupt-daft-drawing-file
+
+Option Strict On
 
 Imports System.IO
 Imports System.Text
@@ -665,13 +668,13 @@ Public Class HCStructuredStorageDoc
         Return Me.MatTable.MaterialUpToDate(SSDoc)
     End Function
 
-    'Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
-    '    If Me.MatTable Is Nothing Then
-    '        Throw New Exception("Material table is not initialized")
-    '    End If
+    Public Function UpdateMaterial(SSDoc As HCStructuredStorageDoc) As Boolean
+        If Me.MatTable Is Nothing Then
+            Throw New Exception("Material table is not initialized")
+        End If
 
-    '    Return Me.MatTable.UpdateMaterial(SSDoc)
-    'End Function
+        Return Me.MatTable.UpdateMaterial(SSDoc)
+    End Function
 
 
     Private Class PropertySets
@@ -1028,9 +1031,9 @@ Public Class HCStructuredStorageDoc
             Dim tmpPropertyIdentifier As UInteger
             Dim UDP As OLEPropertiesContainer
 
-            If Not Me.co.HasUserDefinedProperties Then
-                Success = False
-            End If
+            'If Not Me.co.HasUserDefinedProperties Then
+            '    Success = False
+            'End If
 
             If Success Then
                 If CStr(PropertyValue) = CInt(PropertyValue).ToString Then
@@ -1080,10 +1083,14 @@ Public Class HCStructuredStorageDoc
             ' VTPropertyType enum: https://github.com/ironfede/openmcdf/blob/master/OpenMcdf.Ole/VTPropertyType.cs
 
             Dim Success As Boolean = True
+            Dim tf As Boolean
 
             ' EditProperties currently always passes in the new value as a string
 
-            If (Me.VTType = VTPropertyType.VT_I4) Or (Me.VTType = VTPropertyType.VT_R8) Then
+            tf = Me.VTType = VTPropertyType.VT_I4
+            tf = tf Or Me.VTType = VTPropertyType.VT_R8
+            tf = tf And Me.co.HasUserDefinedProperties
+            If tf Then
                 Success = MaybeChangePropType(PropertyValue)
             End If
 
@@ -1765,10 +1772,13 @@ Public Class HCStructuredStorageDoc
 
             If Proceed Then
                 Try
-                    tf = SSDoc.SetPropValue("System", "Material", Matl, AddProperty:=False)
-                    tf = tf And SSDoc.SetPropValue("System", "Face Style", MatTableMatl.FaceStyle, AddProperty:=False)
-                    tf = tf And SSDoc.SetPropValue("System", "Fill Style", MatTableMatl.FillStyle, AddProperty:=False)
-                    tf = tf And SSDoc.SetPropValue("System", "Virtual Style", MatTableMatl.VirtualStyle, AddProperty:=False)
+                    tf = True
+
+                    'tf = tf And SSDoc.SetPropValue("System", "Material", Matl, AddProperty:=False)
+                    'tf = tf And SSDoc.SetPropValue("System", "Face Style", MatTableMatl.FaceStyle, AddProperty:=False)
+                    'tf = tf And SSDoc.SetPropValue("System", "Fill Style", MatTableMatl.FillStyle, AddProperty:=False)
+                    'tf = tf And SSDoc.SetPropValue("System", "Virtual Style", MatTableMatl.VirtualStyle, AddProperty:=False)
+
                     tf = tf And SSDoc.SetPropValue("System", "Coef. of Thermal Exp", MatTableMatl.CoefOfThermalExp, AddProperty:=False)
                     tf = tf And SSDoc.SetPropValue("System", "Thermal Conductivity", MatTableMatl.ThermalConductivity, AddProperty:=False)
                     tf = tf And SSDoc.SetPropValue("System", "Specific Heat", MatTableMatl.SpecificHeat, AddProperty:=False)

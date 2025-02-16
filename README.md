@@ -249,16 +249,13 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Find linked files:** Populates the list with files linked to a top-level assembly.  Similar to **Update** but no other File Sources are processed.
 - **Process selected:** Runs selected Tasks on the selected files. This does the same thing as clicking the **Process** button.
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
-- **Move to Recycle Bin:** Removes the files from their original location and moves them to the Recycle Bin.
-
-One place the `Move to Recycle Bin` command can be handy is with the top-level assembly `Report unrelated files` option.  If there are a lot of unrelated files, cleanup is a hassle.  Here's how I do it now.  
-
-- Save the Unrelated Files report as a *.txt file
-- Empty out the Recycle Bin
-- Clear the file list from the previous run  (important so you don't mix in good files with the unrelated ones)
-- Import the *.txt file and update the list
-- Select all files, right-click and select `Move to Recycle Bin` (You can also do a few at a time if preferred.  Repeat this step and the following in succession.)
-- Open the top level assembly.  If it complains about missing files, use the Recycle Bin's `Restore items` command.
+- **Move to Recycle Bin:** This is kinda asking for trouble, but can be handy with top-level assembly `Report unrelated files`.  If there are a lot of them, cleanup is a hassle.  Here's how I do it now.  
+ 
+  - Save the Unrelated Files report as a *.txt file
+  - Empty out the Recycle Bin
+  - Clear the file list from the previous run.  *This is important so you don't mix in good files with the bad.*
+  - Import the *.txt file and update the list
+  - Select files you no longer need and use this command.  Then open the top level assembly; if it complains about missing files, run `Restore items` from the Recycle Bin.  (I do a few files at a time, then repeat.)
 
 ## Sorting
 

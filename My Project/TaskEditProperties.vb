@@ -866,7 +866,7 @@ Public Class TaskEditProperties
                         Case "par", "psm"
                             Dim UM As New UtilsMaterials
                             SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
-                                SEApp, SEDoc, Me.MaterialTable, Me.UpdateFaceStyles, Me.RemoveFaceStyleOverrides)
+                                SEApp, SEDoc, Me.MaterialTable, False, True, False, "", Nothing, False, False)
 
                             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 

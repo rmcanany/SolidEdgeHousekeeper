@@ -597,6 +597,41 @@ Public Class UtilsCommon
 
     End Function
 
+    Public Function SetPropValue(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropertySetName As String,
+        PropertyName As String,
+        ModelLinkIdx As Integer,
+        AddProp As Boolean,
+        PropValue As Object
+        ) As Boolean
+
+        Dim Success As Boolean = True
+
+        Dim PropertySets As SolidEdgeFramework.PropertySets
+        Dim Prop As SolidEdgeFramework.Property
+
+        PropertySets = CType(SEDoc.Properties, SolidEdgeFramework.PropertySets)
+
+        Dim UC As New UtilsCommon
+
+        Prop = GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx, AddProp)
+
+        If Prop IsNot Nothing AndAlso Not Prop.Value.ToString = PropValue.ToString Then
+            Try
+                Prop.Value = PropValue
+            Catch ex As Exception
+                Success = False
+            End Try
+        Else
+            Success = False
+        End If
+
+        If Success Then PropertySets.Save()
+
+        Return Success
+    End Function
+
     Public Function GetProp(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         PropertySetName As String,
