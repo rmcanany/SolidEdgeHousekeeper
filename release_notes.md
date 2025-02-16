@@ -107,7 +107,7 @@ See the [<ins>**Set Document Status Help Topic**</ins>](https://github.com/rmcan
 
 Added an option to update face styles using a part's finish property, rather than the material itself. (Thank you **@KGeetings**!)
 
-A face style with the same name as the finish must be present in the file. Finishes that do not change the appearance of the part, such as `NONE` or `CLEAR ANODIZE` can be excluded from processing.  The names are entered on the list provided.
+A face style with the same name as the finish must be present in the file. Finishes that do not change the appearance of the part, such as `NONE` or `CLEAR ANODIZE` can be excluded from processing.  Enter the names on the list provided.
 
 See the [<ins>**Update Material from Material Table Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#update-material-from-material-table) for details.
 
@@ -125,17 +125,19 @@ Added the ability to change the file name itself when saving.  (Thank you **@pko
 
 The name can be drawn from one or more properties in the file.  As with the subdirectory feature, if the property contains any characters that are not valid in file names, they are replaced using the `filename_charmap.txt` lookup table.
 
-Added the same option to `Save Drawing As`.
+Added the ability to save Solid Edge Viewer files, `*.sev`.  (Thank you **@mefrebo**!)
+
+Made the same changes to `Save Drawing As`.
 
 See the [<ins>**Save Model As Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/#save-model-as) for details.
 
 ### Top Level Assembly
 
-Replaced DesignManager with RevisionManager for users running older versions of Solid Edge where the former is not available.
+Replaced DesignManager with RevisionManager for users running older versions of Solid Edge where the former is not available. (Thank you **@Francesco Arfilli**!)
 
 Replaced DesignManager with Structured Storage for top-down searches for all versions.
 
-Fixed an issue where Family of Parts Masters (and all their links) were included in top-down searches.
+Fixed an issue where Family of Parts Masters (and all their links) were included in top-down searches.  (Thank you again **@Francesco Arfilli**!)
 
 Fixed an issue where a model file contained in a drawing, but not otherwise related to the top level assembly, was not included in search results.
 
@@ -145,13 +147,11 @@ Fixed an issue, with multiple top-level directories, where nested directories we
 
 Added a startup splash screen for monitoring program initialization.  Pay attention, there's a fun little animation at the end!
 
-Added a Table of Contents to the Readme file to improve navigation.  (Thank you **@Francesco Arfilli**!)
-
-Added a `Keep duplicates` option for the Sort Order `None`.
+Added a `Keep duplicates` option for the Sort Order `None`.  (Thank you **@mefrebo**!)
 
 Added a parameter, `Update the file list after this many files`, to the **Configuration Tab -- General Page**.  The default, `1`, is usually a good choice.  It can be increased for Structured Storage mode, where updating the list is sometimes the most time-consuming part.
 
-Fixed an issue where the Print Task Sheet Selector was not displaying ISO sheet sizes.
+Fixed an issue where the `Print Task` `Sheet Selector` was not filtering ISO sheet sizes correctly.
 
 Removed program dependencies on some outdated packages.
 

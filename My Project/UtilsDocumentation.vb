@@ -18,7 +18,8 @@ Public Class UtilsDocumentation
 
         Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
 
-        ' StartupPath is hard coded so this doesn't do anything on a user's machine
+        ' The readme file is not needed on the user's machine.  
+        ' StartupPath is hard coded so this hopefully doesn't do anything on their machine.
         Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
 
         Dim TaskListHeader As String = "<!-- Start -->"
@@ -29,9 +30,6 @@ Public Class UtilsDocumentation
         Dim ReadmeIn As String() = Nothing
         Dim ReadmeOut As New List(Of String)
 
-
-        ' The readme file is not needed on the user's machine.  
-        ' The startup path is hard coded, hopefully most users won't have this exact location on their machines.  
         If FileIO.FileSystem.DirectoryExists(StartupPath) Then
             Try
                 ReadmeIn = IO.File.ReadAllLines(ReadmeFileName)
@@ -121,8 +119,8 @@ Public Class UtilsDocumentation
 
             msg = "This project uses these awesome open source packages."
             ReadmeOut.Add(msg)
-            msg = "- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)"
-            ReadmeOut.Add(msg)
+            'msg = "- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)"
+            'ReadmeOut.Add(msg)
             msg = "- JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)"
             ReadmeOut.Add(msg)
             msg = "- Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)"
@@ -139,7 +137,7 @@ Public Class UtilsDocumentation
             msg = "# CODE ORGANIZATION"
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
-            msg = "Processing starts in Form_Main.vb.  A short description of the code's organization can be found there."
+            msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
