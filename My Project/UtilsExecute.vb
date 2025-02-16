@@ -15,16 +15,6 @@ Public Class UtilsExecute
 
     Public Property TextBoxStatus As TextBox
 
-    'Public Enum StatusSecurityMapping
-    '    ssmAvailable = 0
-    '    ssmInWork = 0
-    '    ssmInReview = 0
-    '    ssmReleased = 4
-    '    ssmBaselined = 4
-    '    ssmObsolete = 4
-    'End Enum
-
-
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
     End Sub
@@ -355,15 +345,21 @@ Public Class UtilsExecute
             End
         End If
 
-        Dim LVItemReverseLUT As New Dictionary(Of String, ListViewItem)
+        Dim idx As Integer = 0
+
+        Dim LVItemReverseLUT As New List(Of ListViewItem)
         For Each tmpItem As ListViewItem In FMain.ListViewFiles.Items
-            LVItemReverseLUT(tmpItem.Name) = tmpItem
+            If FilesToProcess.Contains(tmpItem.Name) Then
+                LVItemReverseLUT.Add(tmpItem)
+                idx += 1
+            End If
         Next
 
+        idx = 0
         For Each FileToProcess In FilesToProcess
 
             If (FilesToProcessCompleted > 0) And (FilesToProcessCompleted Mod CInt(FMain.ListViewUpdateFrequency) = 0) Then
-                LVItemReverseLUT(FileToProcess).EnsureVisible()
+                LVItemReverseLUT(idx).EnsureVisible()
 
             End If
 
@@ -373,12 +369,6 @@ Public Class UtilsExecute
                 Exit Sub
             End If
 
-            FilesToProcessCompleted += 1
-
-            msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            msg += System.IO.Path.GetFileName(FileToProcess)
-            FMain.TextBoxStatus.Text = msg
-
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
 
             If ErrorMessagesCombined.Count > 0 Then
@@ -387,10 +377,19 @@ Public Class UtilsExecute
                 Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
 
                 Me.UtilsLogFile.LogfileAppend(s, ErrorMessagesCombined)
-                FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
+                'FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
+                LVItemReverseLUT(idx).ImageKey = "Error"
             Else
-                FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
+                'FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
+                LVItemReverseLUT(idx).ImageKey = "Checked"
             End If
+
+            FilesToProcessCompleted += 1  ' This is for all files in the run
+            idx += 1  ' This is for files in this loop
+
+            msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
+            msg += System.IO.Path.GetFileName(FileToProcess)
+            FMain.TextBoxStatus.Text = msg
 
         Next
 

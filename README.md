@@ -1006,7 +1006,6 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 # OPEN SOURCE PACKAGES
 
 This project uses these awesome open source packages.
-- Solid Edge Community [<ins>**SolidEdgeCommunity**</ins>](https://github.com/SolidEdgeCommunity)
 - JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
 - Excel reader [<ins>**ExcelDataReader**</ins>](https://github.com/ExcelDataReader/ExcelDataReader)
 - Expression engine [<ins>**PanoramicData.NCalcExtensions**</ins>](https://github.com/panoramicdata/PanoramicData.NCalcExtensions)
@@ -1015,5 +1014,5 @@ This project uses these awesome open source packages.
 
 # CODE ORGANIZATION
 
-Processing starts in Form_Main.vb.  A short description of the code's organization can be found there.
+Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there.
 
