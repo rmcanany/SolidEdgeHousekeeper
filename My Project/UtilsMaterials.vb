@@ -493,7 +493,6 @@ Public Class UtilsMaterials
                     If (FaceOverrides.Count > 0) And (FaceOverrides.Count <= MaxFacesToProcess) Then
                         ' Crashes on some imported files
                         Try
-
                             ' ###### CLEAR OVERRIDES ######
 
                             ' The method Body.ClearOverrides() apparently makes a new body, rendeering the previous Body invalid.
@@ -533,8 +532,6 @@ Public Class UtilsMaterials
 
                         tf = Me.UseFinishFaceStyle
                         tf = tf And Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
-                        'tf = tf AndAlso Me.FinishName IsNot Nothing
-                        'tf = tf AndAlso Not Me.FinishName.Trim = ""
                         If tf Then
                             For Each tmpFaceStyle As SolidEdgeFramework.FaceStyle In DocFaceStyles
                                 If tmpFaceStyle.StyleName.ToLower = FinishName.ToLower Then

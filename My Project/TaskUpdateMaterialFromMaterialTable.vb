@@ -272,12 +272,14 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     PropertyName = UC.PropNameFromFormula(Me.FinishPropertyFormula)
                     FinishName = CStr(UC.GetPropValue(
                         SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
+
+                    If FinishName Is Nothing Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
+                    End If
                 End If
 
-                If FinishName Is Nothing Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
-                Else
+                If ExitStatus = 0 Then
                     Dim UM As New UtilsMaterials
 
                     SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
