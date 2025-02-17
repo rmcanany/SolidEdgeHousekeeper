@@ -273,14 +273,20 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     FinishName = CStr(UC.GetPropValue(
                         SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
                 End If
-                Dim UM As New UtilsMaterials
 
-                SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
+                If FinishName Is Nothing Then
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
+                Else
+                    Dim UM As New UtilsMaterials
+
+                    SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
                     SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
                     Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
                     Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle)
 
-                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                End If
 
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))

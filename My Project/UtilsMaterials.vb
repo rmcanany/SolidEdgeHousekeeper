@@ -427,10 +427,10 @@ Public Class UtilsMaterials
         Dim FeatureFaceOverrides As New Dictionary(Of Integer, SolidEdgeFramework.FaceStyle)
         Dim BodyStyle As SolidEdgeFramework.FaceStyle = Nothing
         Dim DocFaceStyles As SolidEdgeFramework.FaceStyles = Nothing
-        Dim FinishFaceStyle As SolidEdgeFramework.FaceStyle
+        Dim FinishFaceStyle As SolidEdgeFramework.FaceStyle = Nothing
         Dim FeatureNames As New List(Of String)
         Dim FeatureName As String
-
+        Dim tf As Boolean
 
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
@@ -531,15 +531,23 @@ Public Class UtilsMaterials
 
                         SEApp.DoIdle()
 
-                        If Me.UseFinishFaceStyle Then
-                            If Not Me.ExcludedFinishesList.Contains(Me.FinishName) Then
-                                FinishFaceStyle = CType(DocFaceStyles.Item(FinishName), SolidEdgeFramework.FaceStyle)
-                                If FinishFaceStyle IsNot Nothing Then
-                                    Body.Style = FinishFaceStyle
-                                Else
-                                    Dim s As String = String.Format("Finish face style '{0}' not found", FinishFaceStyle.StyleName)
-                                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                        tf = Me.UseFinishFaceStyle
+                        tf = tf And Not Me.ExcludedFinishesList.Contains(Me.FinishName, StringComparer.OrdinalIgnoreCase)
+                        'tf = tf AndAlso Me.FinishName IsNot Nothing
+                        'tf = tf AndAlso Not Me.FinishName.Trim = ""
+                        If tf Then
+                            For Each tmpFaceStyle As SolidEdgeFramework.FaceStyle In DocFaceStyles
+                                If tmpFaceStyle.StyleName.ToLower = FinishName.ToLower Then
+                                    FinishFaceStyle = tmpFaceStyle
+                                    Exit For
                                 End If
+                            Next
+
+                            If FinishFaceStyle IsNot Nothing Then
+                                Body.Style = FinishFaceStyle
+                            Else
+                                Dim s As String = String.Format("Finish face style '{0}' not found", FinishName)
+                                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
                             End If
                         End If
 
