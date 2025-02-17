@@ -546,9 +546,30 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 ErrorMessageList.Add(String.Format("{0}Select a valid material table", Indent))
             End If
 
+            If Me.UpdateFaceStyles And Me.UseFinishFaceStyle Then
+                Dim UC As New UtilsCommon
+
+                If Not UC.CheckValidPropertyFormulas(Me.FinishPropertyFormula) Then
+                    If Not ErrorMessageList.Contains(Me.Description) Then
+                        ErrorMessageList.Add(Me.Description)
+                    End If
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("{0}Could not parse property formula '{1}'", Indent, Me.FinishPropertyFormula))
+                End If
+
+                If Not ((Me.OverrideBodyFaceStyle) Or (Me.OverrideMaterialFaceStyle)) Then
+                    If Not ErrorMessageList.Contains(Me.Description) Then
+                        ErrorMessageList.Add(Me.Description)
+                    End If
+                    ExitStatus = 1
+                    ErrorMessageList.Add(String.Format("{0}Select an override method", Indent))
+                End If
+            End If
+
         End If
 
         If ExitStatus > 0 Then  ' Start conditions not met.
+
             ErrorMessage(ExitStatus) = ErrorMessageList
             Return ErrorMessage
         Else
@@ -642,14 +663,18 @@ Public Class TaskUpdateMaterialFromMaterialTable
                 CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Visible = tf
 
             Case ControlNames.OverrideBodyFaceStyle.ToString
-                Me.OverrideBodyFaceStyle = Checkbox.Checked
+                'Me.OverrideBodyFaceStyle = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideBodyFaceStyle
+                'CType(ControlsDict(ControlNames.OverrideMaterialFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideBodyFaceStyle
+
+                Me.OverrideBodyFaceStyle = True
 
             Case ControlNames.OverrideMaterialFaceStyle.ToString
-                Me.OverrideMaterialFaceStyle = Checkbox.Checked
+                'Me.OverrideMaterialFaceStyle = Checkbox.Checked
 
-                CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideMaterialFaceStyle
+                'CType(ControlsDict(ControlNames.OverrideBodyFaceStyle.ToString), CheckBox).Checked = Not Me.OverrideMaterialFaceStyle
+
+                Me.OverrideMaterialFaceStyle = False
 
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
