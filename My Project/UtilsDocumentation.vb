@@ -56,6 +56,19 @@ Public Class UtilsDocumentation
             Dim UP As New UtilsPreferences
             Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
+            ReadmeOut.Add("## Task Details Table of Contents")
+            ReadmeOut.Add("")
+
+            For Each Task As Task In tmpTaskList
+                Dim Tag As String = Task.Description.ToLower.Replace(" ", "-")
+                ReadmeOut.Add(String.Format("- [<ins>**{0}**</ins>](#{1})", Task.Description, Tag))
+                'ReadmeOut.Add(Task.HelpText)
+                'ReadmeOut.Add("")
+            Next
+
+            '            # TABLE OF CONTENTS
+            '- [<ins>**Description**</ins>](#description)
+
             For Each Task As Task In tmpTaskList
                 ReadmeOut.Add(String.Format("### {0}", Task.Description))
                 ReadmeOut.Add(Task.HelpText)

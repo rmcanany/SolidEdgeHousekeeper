@@ -282,9 +282,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     Dim UM As New UtilsMaterials
 
                     SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
-                    SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
-                    Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
-                    Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle)
+                        SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
+                        Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
+                        Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle)
 
                     AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If

@@ -57,15 +57,12 @@ Public Class TaskCheckDrawings
     End Property
 
 
-
-
     Enum ControlNames
         DrawingViewsOutOfDate
         DetachedDimensionsOrAnnotations
         DrawingViewOnBackgroundSheet
         AutoHideOptions
     End Enum
-
 
 
     Public Sub New()

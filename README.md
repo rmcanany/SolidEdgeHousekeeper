@@ -584,6 +584,42 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
+## Task Details Table of Contents
+
+- [<ins>**Set document status**</ins>](#set-document-status)
+- [<ins>**Open save**</ins>](#open-save)
+- [<ins>**Activate and update all**</ins>](#activate-and-update-all)
+- [<ins>**Update material from material table**</ins>](#update-material-from-material-table)
+- [<ins>**Update part copies**</ins>](#update-part-copies)
+- [<ins>**Update physical properties**</ins>](#update-physical-properties)
+- [<ins>**Update model size in variable table**</ins>](#update-model-size-in-variable-table)
+- [<ins>**Update design for cost**</ins>](#update-design-for-cost)
+- [<ins>**Update drawing views**</ins>](#update-drawing-views)
+- [<ins>**Update flat pattern**</ins>](#update-flat-pattern)
+- [<ins>**Break links**</ins>](#break-links)
+- [<ins>**Edit properties**</ins>](#edit-properties)
+- [<ins>**Edit variables**</ins>](#edit-variables)
+- [<ins>**Edit interactively**</ins>](#edit-interactively)
+- [<ins>**Update model styles from template**</ins>](#update-model-styles-from-template)
+- [<ins>**Update drawing styles from template**</ins>](#update-drawing-styles-from-template)
+- [<ins>**Remove face style overrides**</ins>](#remove-face-style-overrides)
+- [<ins>**Hide constructions**</ins>](#hide-constructions)
+- [<ins>**Fit view**</ins>](#fit-view)
+- [<ins>**Check interference**</ins>](#check-interference)
+- [<ins>**Check links**</ins>](#check-links)
+- [<ins>**Check relationships**</ins>](#check-relationships)
+- [<ins>**Check flat pattern**</ins>](#check-flat-pattern)
+- [<ins>**Check material not in material table**</ins>](#check-material-not-in-material-table)
+- [<ins>**Check missing drawing**</ins>](#check-missing-drawing)
+- [<ins>**Check part number does not match filename**</ins>](#check-part-number-does-not-match-filename)
+- [<ins>**Check part copies**</ins>](#check-part-copies)
+- [<ins>**Check drawing parts list**</ins>](#check-drawing-parts-list)
+- [<ins>**Check drawings**</ins>](#check-drawings)
+- [<ins>**Run external program**</ins>](#run-external-program)
+- [<ins>**Save model as**</ins>](#save-model-as)
+- [<ins>**Save drawing as**</ins>](#save-drawing-as)
+- [<ins>**Create drawing of flat pattern**</ins>](#create-drawing-of-flat-pattern)
+- [<ins>**Print**</ins>](#print)
 ### Set document status
 Sets document status. Select the new status on the Options pane. 
 

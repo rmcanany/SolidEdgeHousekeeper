@@ -142,17 +142,6 @@ Public Class TaskUpdateDrawingViews
                     Catch ex As Exception
                     End Try
                 End If
-                'Try
-                '    If DrawingView.ModelLink IsNot Nothing Then
-                '        ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
-                '        If ModelLink.ModelOutOfDate Then
-                '            ExitStatus = 1
-                '            s = "Drawing views out of date"
-                '            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                '        End If
-                '    End If
-                'Catch ex As Exception
-                'End Try
             Next DrawingView
         Next Sheet
 

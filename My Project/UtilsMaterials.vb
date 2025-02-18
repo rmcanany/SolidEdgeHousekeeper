@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports SolidEdgeConstants
 
 Public Class UtilsMaterials
 
