@@ -910,13 +910,13 @@ Public Class UtilsCommon
 
     Public Sub CopyProperties(Source As Object, Destination As Object)
 
-        'Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
         'Dim sourceType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Source)
-        Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
+        'Dim destType As Type = SolidEdgeCommunity.Runtime.InteropServices.ComObject.GetType(Destination)
         Dim sourceType As Type = HCComObject.GetCOMObjectType(Source)
+        Dim destType As Type = HCComObject.GetCOMObjectType(Destination)
 
-        Dim destProps() As PropertyInfo = destType.GetProperties()
         Dim sourceProps() As PropertyInfo = sourceType.GetProperties()
+        Dim destProps() As PropertyInfo = destType.GetProperties()
 
         For Each sourceProp As PropertyInfo In sourceProps
             For Each destProp As PropertyInfo In destProps

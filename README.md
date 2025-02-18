@@ -811,13 +811,6 @@ Also, do not `Close` or `Save As` the file being processed. Housekeeper maintain
 
 One last thing.  Macros interact with Solid Edge through something called the Windows Component Object Model.  That framework appears to have some sort of built-in inactivity detection.  If you let this command sit idle for a period of time, COM reports an error. It doesn't really hurt anything, but Housekeeper stops and restarts SE any time a COM error occurs. I get around it by selecting only a small number of files to work on at a time. 
 
-### Recognize holes
-Finds cylindrical cutouts in an imported model and converts them into hole features. For the command to work correctly, the model must be in a freshly-imported state, with no subsequent modifications performed in Solid Edge. 
-
-As the first step of the conversion process, the Optimize command is run on the imported geometry. While not strictly necessary, it is considered good practice for any imported file. 
-
-The conversion is only possible in Synchronous mode. Ordered files are switched to Sync before the conversion, then switched back. Note, the imported body and the new hole features remain in Sync after the transition. 
-
 ### Update model styles from template
 Updates the styles you select from a template you specify. 
 

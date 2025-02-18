@@ -121,7 +121,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Set
     End Property
 
-
     Private _OverrideBodyFaceStyle As Boolean
     Public Property OverrideBodyFaceStyle As Boolean
         Get
@@ -205,8 +204,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
 
         ' Options
         Me.MaterialTable = ""
-        Me.UpdateFaceStyles = False
         Me.RemoveFaceStyleOverrides = False
+        Me.UpdateFaceStyles = False
         Me.UseFinishFaceStyle = False
         Me.FinishPropertyFormula = ""
         Me.ExcludedFinishesList = New List(Of String)

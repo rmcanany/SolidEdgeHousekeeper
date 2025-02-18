@@ -472,8 +472,8 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskEditInteractively)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
-        TaskList.Add(New TaskRecognizeHoles)
-        If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
+        'TaskList.Add(New TaskRecognizeHoles)
+        'If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
 
         ' Restyle
         TaskList.Add(New TaskUpdateModelStylesFromTemplate)
