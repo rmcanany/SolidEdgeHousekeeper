@@ -51,6 +51,8 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
   <img src="My%20Project/media/plot_downloads.png">
 </p>
 
+*Please note, for ease of navigation, the remaining topics are in outline form.  Click a heading to view its contents.*
+
 </details>
 
 <details open><summary><h2 style="display:inline-block">INSTALLATION</h2></summary>

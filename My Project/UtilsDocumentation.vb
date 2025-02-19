@@ -5,7 +5,7 @@ Public Class UtilsDocumentation
     Public Function GenerateVersionURL(Tag As String) As String
         ' To get the BaseURL, on GitHub click the Commits button on the file list header.
         ' Click the top commit on the list.  On that page, click Browse Files.
-        ' The URL that opens is the BaseURL.
+        ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
         Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/73679cbe4eafc609c79750a503dd42f14a1f57ba/HelpTopics.md"
 

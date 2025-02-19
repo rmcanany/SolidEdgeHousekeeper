@@ -47,6 +47,7 @@ Public Class TaskUpdateDrawingViews
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -54,6 +55,7 @@ Public Class TaskUpdateDrawingViews
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -125,25 +127,26 @@ Public Class TaskUpdateDrawingViews
         Next
 
         ' Check drawing views.
-        'For Each Sheet In SectionSheets.OfType(Of SolidEdgeDraft.Sheet)()
-        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
-            DrawingViews = Sheet.DrawingViews
-            For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
-                If Not DrawingView.IsUpToDate Then
-                    ' Can fail if the model file is missing.
-                    Try
-                        DrawingView.Update()
-                        If DrawingView.IsUpToDate Then
-                            PerformedUpdate = True
-                        Else
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Unable to update drawing view")
-                        End If
-                    Catch ex As Exception
-                    End Try
-                End If
-            Next DrawingView
-        Next Sheet
+        For Each SheetType As String In {"Working", "Background"}
+            For Each Sheet In UC.GetSheets(tmpSEDoc, SheetType)
+                DrawingViews = Sheet.DrawingViews
+                For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
+                    If Not DrawingView.IsUpToDate Then
+                        ' Can fail if the model file is missing.
+                        Try
+                            DrawingView.Update()
+                            If DrawingView.IsUpToDate Then
+                                PerformedUpdate = True
+                            Else
+                                ExitStatus = 1
+                                ErrorMessageList.Add("Unable to update drawing view")
+                            End If
+                        Catch ex As Exception
+                        End Try
+                    End If
+                Next DrawingView
+            Next Sheet
+        Next
 
         If PerformedUpdate Then
             If SEDoc.ReadOnly Then
