@@ -17,6 +17,7 @@ Public Class UtilsDocumentation
     Public Sub BuildReadmeFile()
 
         Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim HelpTopicsFileName As String = ReadmeFileName.Replace("README", "HelpTopics")
 
         ' The readme file is not needed on the user's machine.  
         ' StartupPath is hard coded so this hopefully doesn't do anything on their machine.
@@ -56,27 +57,29 @@ Public Class UtilsDocumentation
             Dim UP As New UtilsPreferences
             Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
-            ReadmeOut.Add("## Task Details Table of Contents")
+            '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
+            msg = String.Format("<details><summary><h2 style={0}display:inline-block{0}>TASK DETAILS</h2></summary>", Chr(34))
+            ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
             For Each Task As Task In tmpTaskList
-                Dim Tag As String = Task.Description.ToLower.Replace(" ", "-")
-                ReadmeOut.Add(String.Format("- [<ins>**{0}**</ins>](#{1})", Task.Description, Tag))
-                'ReadmeOut.Add(Task.HelpText)
-                'ReadmeOut.Add("")
-            Next
+                msg = String.Format("<details><summary><h3 style={0}display:inline-block{0}>{1}</h3></summary>", Chr(34), Task.Description)
+                ReadmeOut.Add(msg)
+                ReadmeOut.Add("")
 
-            '            # TABLE OF CONTENTS
-            '- [<ins>**Description**</ins>](#description)
-
-            For Each Task As Task In tmpTaskList
-                ReadmeOut.Add(String.Format("### {0}", Task.Description))
                 ReadmeOut.Add(Task.HelpText)
+                ReadmeOut.Add("")
+
+                ReadmeOut.Add("</details>")
                 ReadmeOut.Add("")
             Next
 
+            ReadmeOut.Add("</details>")
             ReadmeOut.Add("")
-            msg = "# KNOWN ISSUES"
+
+            ReadmeOut.Add("")
+            'msg = "# KNOWN ISSUES"
+            msg = String.Format("<details><summary><h2 style={0}display:inline-block{0}>KNOWN ISSUES</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -124,9 +127,12 @@ Public Class UtilsDocumentation
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
+            ReadmeOut.Add("</details>")
+            ReadmeOut.Add("")
 
             ReadmeOut.Add("")
-            msg = "# OPEN SOURCE PACKAGES"
+            'msg = "# OPEN SOURCE PACKAGES"
+            msg = String.Format("<details><summary><h2 style={0}display:inline-block{0}>OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -145,17 +151,33 @@ Public Class UtilsDocumentation
             msg = "- Structured storage editor [<ins>**OpenMCDF**</ins>](https://github.com/ironfede/openmcdf)"
             ReadmeOut.Add(msg)
 
+            ReadmeOut.Add("</details>")
+            ReadmeOut.Add("")
+
             msg = ""
             ReadmeOut.Add("")
-            msg = "# CODE ORGANIZATION"
+            'msg = "# CODE ORGANIZATION"
+            msg = String.Format("<details><summary><h2 style={0}display:inline-block{0}>CODE ORGANIZATION</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
             msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
+            ReadmeOut.Add("</details>")
+            ReadmeOut.Add("")
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
+
+            Dim HelpTopicsOut As New List(Of String)
+            For Each Line As String In ReadmeOut
+                If Line.Contains("<details") And Not Line.Contains("<details open") Then
+                    Line = Line.Replace("<details>", "<details open>")
+                End If
+                HelpTopicsOut.Add(Line)
+            Next
+
+            IO.File.WriteAllLines(HelpTopicsFileName, HelpTopicsOut)
 
         End If
 

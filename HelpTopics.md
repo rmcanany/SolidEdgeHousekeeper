@@ -53,7 +53,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 
 </details>
 
-<details><summary><h2 style="display:inline-block">INSTALLATION</h2></summary>
+<details open><summary><h2 style="display:inline-block">INSTALLATION</h2></summary>
 
 
 There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
@@ -73,7 +73,7 @@ If you are upgrading from a previous release, you should be able to copy the set
 
 </details>
 
-<details><summary><h2 style="display:inline-block">GETTING HELP</h2></summary>
+<details open><summary><h2 style="display:inline-block">GETTING HELP</h2></summary>
 
 
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
@@ -92,7 +92,7 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 
 </details>
 
-<details><summary><h2 style="display:inline-block">OPERATION</h2></summary>
+<details open><summary><h2 style="display:inline-block">OPERATION</h2></summary>
 
 
 ![Tabs](My%20Project/media/tabs.png)
@@ -108,10 +108,10 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 </details>
 
 
-<details><summary><h2 style="display:inline-block">FILE SELECTION</h2></summary>
+<details open><summary><h2 style="display:inline-block">FILE SELECTION</h2></summary>
 
 
-<details><summary><h3 style="display:inline-block">Selection</h3></summary>
+<details open><summary><h3 style="display:inline-block">Selection</h3></summary>
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -123,7 +123,7 @@ For new users, there is one potential point of confusion.  Most of the commands 
 
 ![Toolbar](My%20Project/media/selection_toolbar_labeled.png)
 
-<details><summary><h4 style="display:inline-block">Select by Folder</h4></summary>
+<details open><summary><h4 style="display:inline-block">Select by Folder</h4></summary>
 
 Choose this option to select individual files, files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, 
 
@@ -135,7 +135,7 @@ The dialog that appears with these commands has `multi-select` enabled, meaning 
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Select by Top Level Assembly</h4></summary>
+<details open><summary><h4 style="display:inline-block">Select by Top Level Assembly</h4></summary>
 
 Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
 
@@ -156,7 +156,7 @@ If `auto include` is turned off, you do not have to specify any folders. In that
 
 If you *do* specify one or more folders, there are two options for performing *where used*, **Top Down** or **Bottom Up** (see next). Guidelines are given below, however it's not a bad idea to try both methods to see which works best for you.
 
-<details><summary><h5 style="display:inline-block">Bottom Up</h5></summary>
+<details open><summary><h5 style="display:inline-block">Bottom Up</h5></summary>
 
 Bottom up is meant for general purpose (hopefully indexed) directories (e.g., `\\BIG_SERVER\all_parts\`), where the number of files in the folder(s) far exceed the number of files in the assembly. The program gets links by recursion, then finds draft files with *where used*. If your draft files have the same name as the model they depict, click that option and the program will find drawings directly, bypassing the often time-consuming *where used* operation. 
 
@@ -164,7 +164,7 @@ A bottom up search requires a valid Fast Search Scope filename, (e.g., `C:\Progr
 
 </details>
 
-<details><summary><h5 style="display:inline-block">Top Down</h5></summary>
+<details open><summary><h5 style="display:inline-block">Top Down</h5></summary>
 
 Top down is meant for self-contained project directories (e.g., `C:\Projects\Project123\`), where most of the files in the folder(s) are related to the assembly. The program opens every file within and below the top-level assembly folder(s). As it does, it creates a graph of the links. The graph is subsequently traversed to find related files. I don't know how it works; my son did that part. 
 
@@ -172,7 +172,7 @@ A bottom up search requires a valid LinkMgmt filename, (e.g., `C:\Program Files\
 
 </details>
 
-<details><summary><h5 style="display:inline-block">Include Parents of Part Copies</h5></summary>
+<details open><summary><h5 style="display:inline-block">Include Parents of Part Copies</h5></summary>
 
 This option may be confusing.  Referring to the diagram, note that `C.par` is a parent of `B.par`.  `B.par` is in `top.asm`, while `C.par` is not. Enabling the option means that `C.par` would be included in the search results.
 
@@ -182,7 +182,7 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Select by List</h4></summary>
+<details open><summary><h4 style="display:inline-block">Select by List</h4></summary>
 
 OK, that's enough about top-level assemblies.  Getting back to our file selection options, referring to the toolbar diagram, tool group 3, 
 - Click ![Import List](Resources/icons8_Import_16.png) to import a list
@@ -192,7 +192,7 @@ If you are importing a list from another source, be aware that the file names mu
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Tools</h4></summary>
+<details open><summary><h4 style="display:inline-block">Tools</h4></summary>
 
 Referring to the toolbar diagram, tool group 4, 
 - Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
@@ -200,14 +200,14 @@ Referring to the toolbar diagram, tool group 4,
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Update</h4></summary>
+<details open><summary><h4 style="display:inline-block">Update</h4></summary>
 
 Referring to the toolbar diagram, tool group 5, 
 - Click ![Update](Resources/Synch_16.png) to populate the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
 </details>
 
-<details><summary><h4 style="display:inline-block">File Type</h4></summary>
+<details open><summary><h4 style="display:inline-block">File Type</h4></summary>
 
 You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 6, 
 - Click ![Assembly](Resources/ST9%20-%20asm.png) to toggle assembly file selection
@@ -217,7 +217,7 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 </details>
 
-<details><summary><h4 style="display:inline-block">File List Options</h4></summary>
+<details open><summary><h4 style="display:inline-block">File List Options</h4></summary>
 
 You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 7, 
 - Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
@@ -232,7 +232,7 @@ You can edit properties directly on the list.  Double-click the property and ent
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Shortcut Menu</h4></summary>
+<details open><summary><h4 style="display:inline-block">Shortcut Menu</h4></summary>
 
 If you select one or more files on the list, you can click the right mouse button for more options.  
 
@@ -255,7 +255,7 @@ If you select one or more files on the list, you can click the right mouse butto
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Sorting</h3></summary>
+<details open><summary><h3 style="display:inline-block">Sorting</h3></summary>
 
 You can sort the file list in a variety of ways.
 
@@ -273,7 +273,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Document Status Options</h3></summary>
+<details open><summary><h3 style="display:inline-block">Document Status Options</h3></summary>
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
@@ -292,13 +292,13 @@ If you don't need to worry about document Status for your current task, it's not
 </details>
 
 
-<details><summary><h2 style="display:inline-block">FILTERING</h2></summary>
+<details open><summary><h2 style="display:inline-block">FILTERING</h2></summary>
 
 Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
-<details><summary><h3 style="display:inline-block">Property Filter</h3></summary>
+<details open><summary><h3 style="display:inline-block">Property Filter</h3></summary>
 
 The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page) section of this Readme.
 
@@ -312,7 +312,7 @@ This is a powerful tool with a lot of options. These are detailed below.
   <img src="My%20Project/media/property_filter.png">
 </p>
 
-<details><summary><h4 style="display:inline-block">Composing a Filter</h4></summary>
+<details open><summary><h4 style="display:inline-block">Composing a Filter</h4></summary>
 
 Compose a filter by defining one or more **Conditions**, and adding them one-by-one to the list. A **Condition** consists of a **Property**, a **Comparison**, and a **Value**. For example, `Material contains stainless`, where `Material` is the **Property**, `contains` is the **Comparison**, and `stainless` is the **Value**.
 
@@ -320,7 +320,7 @@ Any number of Conditions are allowed for a filter. The filters can be saved, mod
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Property Set</h4></summary>
+<details open><summary><h4 style="display:inline-block">Property Set</h4></summary>
 
 In addition to entering the `Property name`, you must also specify the `Property set`, either `System` or `Custom`.
 
@@ -332,7 +332,7 @@ Template properties will know their `PropertySet`.  Unless you added it manually
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Comparison</h4></summary>
+<details open><summary><h4 style="display:inline-block">Comparison</h4></summary>
 
 Select the Comparison from its dropdown box. The choices are `contains`, `is_exactly`, `wildcard_match`, `regex_match`, `>`, or `<`. The options `is_exactly`, `>`, and `<` are hopefully self-explanatory.
 
@@ -346,7 +346,7 @@ Internally the [<ins>**VB Like Operator**</ins>](https://docs.microsoft.com/en-u
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Filter Formula</h4></summary>
+<details open><summary><h4 style="display:inline-block">Filter Formula</h4></summary>
 
 **Default Formula**
 
@@ -369,7 +369,7 @@ If there is an issue, like `PowerShell` isn't installed, you won't get an error 
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Dates and Numbers</h4></summary>
+<details open><summary><h4 style="display:inline-block">Dates and Numbers</h4></summary>
 
 Dates and numbers are converted to their native format when possible. This is done to obtain commonsense results for `<` and `>`. Note the conversion is attempted even if the property type is `TEXT`, rather than `NUMBER`, `DATE`, or `YES/NO`.
 
@@ -379,7 +379,7 @@ Numbers are converted to floating point decimals. In Solid Edge many numbers, in
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Document Status</h4></summary>
+<details open><summary><h4 style="display:inline-block">Document Status</h4></summary>
 
 You can select files based on Status, but not like this:
 	
@@ -404,7 +404,7 @@ As mentioned above, this is a situation where the option `Include Draft file mod
 
 </details>
 
-<details><summary><h4 style="display:inline-block">Saved Settings</h4></summary>
+<details open><summary><h4 style="display:inline-block">Saved Settings</h4></summary>
 
 The filters are saved in `property_filter_saved_settings.json` in the `Preferences` directory under the root directory of `Housekeeper.exe`. If desired, you can create a master copy of the file and share it with others. 
 
@@ -412,7 +412,7 @@ The filters are saved in `property_filter_saved_settings.json` in the `Preferenc
 
 </details>
 
-<details><summary><h3 style="display:inline-block">File Name Filter</h3></summary>
+<details open><summary><h3 style="display:inline-block">File Name Filter</h3></summary>
 
 The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png).
  
@@ -422,7 +422,7 @@ As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft
 
 </details>
 
-<details><summary><h2 style="display:inline-block">PROCESSING</h2></summary>
+<details open><summary><h2 style="display:inline-block">PROCESSING</h2></summary>
 
 
 ![Tabs](My%20Project/media/status_bar_running.png)
@@ -439,7 +439,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 </details>
 
-<details><summary><h2 style="display:inline-block">TASK TAB</h2></summary>
+<details open><summary><h2 style="display:inline-block">TASK TAB</h2></summary>
 
 The Task Tab is where you choose what operations to perform.
 
@@ -447,7 +447,7 @@ The Task Tab is where you choose what operations to perform.
   <img src="My%20Project/media/sheetmetal_done.png">
 </p>
 
-<details><summary><h3 style="display:inline-block">Task Controls</h3></summary>
+<details open><summary><h3 style="display:inline-block">Task Controls</h3></summary>
 
 To enable a task, click its left-most checkbox.  If it has options, they will appear when the task is selected.  You can hide the options by clicking ![Collapse](Resources/collapse.png) (Collapse).  If you don't want the options to automatically appear, enable `Only show options manually` at the bottom of the Options pane.
 
@@ -457,7 +457,7 @@ To open the task's help page, click ![Help](Resources/icons8_help_16.png) on the
 
 </details>
 
-<details><summary><h3 style="display:inline-block">General Controls</h3></summary>
+<details open><summary><h3 style="display:inline-block">General Controls</h3></summary>
 
 The row at the top of the task list has buttons that operate on all tasks.  Click the left-most checkbox to disable all.  Click ![Collapse](Resources/collapse.png) (Collapse All) to hide options for all selected tasks.  
 
@@ -467,7 +467,7 @@ On the far right ![Help](Resources/icons8_help_16.png) brings up general help fo
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Customizing</h3></summary>
+<details open><summary><h3 style="display:inline-block">Customizing</h3></summary>
 
 You can customize the list.  To do so, click `Edit Task List` at the bottom of the form.  The following dialog will appear.
 
@@ -489,7 +489,7 @@ Speaking of `task_list.json`, like any other file in the Preferences directory, 
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Presets</h3></summary>
+<details open><summary><h3 style="display:inline-block">Presets</h3></summary>
 
 Presets are a way to capture any setup changes you make in the course of using the program. 
 
@@ -511,30 +511,30 @@ For commands with variable information, such as the output directory for `Save A
 
 </details>
 
-<details><summary><h2 style="display:inline-block">CONFIGURATION TAB</h2></summary>
+<details open><summary><h2 style="display:inline-block">CONFIGURATION TAB</h2></summary>
 
 
 Global options for the program are set on this tab.
 
-<details><summary><h3 style="display:inline-block">Top Level Assembly Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">Top Level Assembly Page</h3></summary>
 
 See the [<ins>**Top Level Assembly**</ins>](#select-by-top-level-assembly) section.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Status Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">Status Page</h3></summary>
 
 See the [<ins>**Document Status**</ins>](#document-status-options) section.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Sorting Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">Sorting Page</h3></summary>
 
 See the [<ins>**Sorting**</ins>](#sorting) section.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Templates Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">Templates Page</h3></summary>
 
 Templates and related tools.
 
@@ -559,7 +559,7 @@ The **Available Properties** are populated by clicking the `Update` button.  You
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Server Query Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">Server Query Page</h3></summary>
 
 This is where you configure your server and query.
 
@@ -576,7 +576,7 @@ Example: `%{Server.Query|R2}` will return the second field in the record returne
 
 </details>
 
-<details><summary><h3 style="display:inline-block">General Page</h3></summary>
+<details open><summary><h3 style="display:inline-block">General Page</h3></summary>
 
 Everything else.
 
@@ -613,9 +613,9 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
-<details><summary><h2 style="display:inline-block">TASK DETAILS</h2></summary>
+<details open><summary><h2 style="display:inline-block">TASK DETAILS</h2></summary>
 
-<details><summary><h3 style="display:inline-block">Set document status</h3></summary>
+<details open><summary><h3 style="display:inline-block">Set document status</h3></summary>
 
 Sets document status. Select the new status on the Options pane. 
 
@@ -627,13 +627,13 @@ To eliminate potential confusion, it cannot run with the `Process as available` 
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Open save</h3></summary>
+<details open><summary><h3 style="display:inline-block">Open save</h3></summary>
 
 Opens a document and saves in the current version.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Activate and update all</h3></summary>
+<details open><summary><h3 style="display:inline-block">Activate and update all</h3></summary>
 
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -641,7 +641,7 @@ Can run out of memory for very large assemblies.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update material from material table</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update material from material table</h3></summary>
 
 Checks to see if the part's material name and properties match any material in your material table. 
 
@@ -661,7 +661,7 @@ There are several options for this command.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update part copies</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update part copies</h3></summary>
 
 In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -673,7 +673,7 @@ In many situations, only a few parts have part copies. Using this command with t
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update physical properties</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update physical properties</h3></summary>
 
 Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 
 
@@ -685,7 +685,7 @@ Occasionally, the physical properties are updated correctly, but the results are
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update model size in variable table</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update model size in variable table</h3></summary>
 
 Copies the model size to the variable table. 
 
@@ -703,7 +703,7 @@ The command reports sheet metal size in the formed state. For a flat pattern, in
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update design for cost</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update design for cost</h3></summary>
 
 Updates DesignForCost and saves the document.
 
@@ -711,13 +711,13 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update drawing views</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update drawing views</h3></summary>
 
 Checks drawing views one by one, and updates them if needed.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update flat pattern</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update flat pattern</h3></summary>
 
 Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 
 
@@ -725,7 +725,7 @@ Before updating the flat pattern, this command first regenerates the flat *model
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Break links</h3></summary>
+<details open><summary><h3 style="display:inline-block">Break links</h3></summary>
 
 Breaks external links to a file.  This is irreversible, so you know, think about it. 
 
@@ -749,7 +749,7 @@ Luckily, Solid Edge can take care of that. That's in the program, but only for C
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Edit properties</h3></summary>
+<details open><summary><h3 style="display:inline-block">Edit properties</h3></summary>
 
 Searches for text in a specified property and replaces it if found. 
 
@@ -819,7 +819,7 @@ Note, Solid Edge presents exposed variables as Custom properties.  You can chang
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Edit variables</h3></summary>
+<details open><summary><h3 style="display:inline-block">Edit variables</h3></summary>
 
 Adds, changes, and/or exposes variables. 
 
@@ -845,7 +845,7 @@ You can save a setup for future use. In the toolbar `Saved Settings` group, ente
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Edit interactively</h3></summary>
+<details open><summary><h3 style="display:inline-block">Edit interactively</h3></summary>
 
 Brings up files one at a time for manual processing. 
 
@@ -884,7 +884,7 @@ One last thing.  Macros interact with Solid Edge through something called the Wi
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update model styles from template</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update model styles from template</h3></summary>
 
 Updates the styles you select from a template you specify. 
 
@@ -902,7 +902,7 @@ The active view style of the file is changed to match the one active in the temp
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Update drawing styles from template</h3></summary>
+<details open><summary><h3 style="display:inline-block">Update drawing styles from template</h3></summary>
 
 Updates styles and/or background sheets from a template you specify. 
 
@@ -912,19 +912,19 @@ These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyle
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Remove face style overrides</h3></summary>
+<details open><summary><h3 style="display:inline-block">Remove face style overrides</h3></summary>
 
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Hide constructions</h3></summary>
+<details open><summary><h3 style="display:inline-block">Hide constructions</h3></summary>
 
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Fit view</h3></summary>
+<details open><summary><h3 style="display:inline-block">Fit view</h3></summary>
 
 Maximizes the window, sets the view orientation for model files, and does a fit. 
 
@@ -934,7 +934,7 @@ Select the desired orientation on the Options panel. The setting is required, bu
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check interference</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check interference</h3></summary>
 
 Runs an interference check.  All parts are checked against all others. 
 
@@ -944,7 +944,7 @@ This can take a long time on large assemblies, so there is a limit to the number
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check links</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check links</h3></summary>
 
 Checks linked files.  
 
@@ -954,7 +954,7 @@ Checks linked files.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check relationships</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check relationships</h3></summary>
 
 Checks if the file has any failed, underconstrained, or suppressed relationships.
 
@@ -962,13 +962,13 @@ Checks if the file has any failed, underconstrained, or suppressed relationships
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check flat pattern</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check flat pattern</h3></summary>
 
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check material not in material table</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check material not in material table</h3></summary>
 
 Checks if the material in the file exists in the material table. 
 
@@ -978,13 +978,13 @@ The material table is chosen on the Options panel. This command only checks the 
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check missing drawing</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check missing drawing</h3></summary>
 
 Assumes drawing has the same name as the model, and is in the same directory
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check part number does not match filename</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check part number does not match filename</h3></summary>
 
 Checks if the file name contains the part number. 
 
@@ -996,19 +996,19 @@ The command only checks that the part number appears somewhere in the file name.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check part copies</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check part copies</h3></summary>
 
 If the file has any Part Copies, checks if they are up to date.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check drawing parts list</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check drawing parts list</h3></summary>
 
 Checks is there are any parts list in the drawing and if they are all up to date.
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Check drawings</h3></summary>
+<details open><summary><h3 style="display:inline-block">Check drawings</h3></summary>
 
 Checks draft files for various problems. 
 
@@ -1021,7 +1021,7 @@ The options are:
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Run external program</h3></summary>
+<details open><summary><h3 style="display:inline-block">Run external program</h3></summary>
 
 Runs an `*.exe` or `*.vbs` or `*.ps1` file. 
 
@@ -1033,7 +1033,7 @@ If you are writing your own program, be aware several interoperability rules app
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Save model as</h3></summary>
+<details open><summary><h3 style="display:inline-block">Save model as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1057,7 +1057,7 @@ For image file formats there are additional options. You can hide constructions 
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Save drawing as</h3></summary>
+<details open><summary><h3 style="display:inline-block">Save drawing as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1073,7 +1073,7 @@ When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The f
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Create drawing of flat pattern</h3></summary>
+<details open><summary><h3 style="display:inline-block">Create drawing of flat pattern</h3></summary>
 
 Creates a drawing of a flat pattern using the template you specify. If the file does not contain a flat pattern, the command reports an error. It does not check if the flat pattern is up to date. For that, run the `Check flat pattern` and/or `Update flat pattern` commands before running this one. 
 
@@ -1085,7 +1085,7 @@ You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the sam
 
 </details>
 
-<details><summary><h3 style="display:inline-block">Print</h3></summary>
+<details open><summary><h3 style="display:inline-block">Print</h3></summary>
 
 Prints drawings. 
 
@@ -1106,7 +1106,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="display:inline-block">KNOWN ISSUES</h2></summary>
+<details open><summary><h2 style="display:inline-block">KNOWN ISSUES</h2></summary>
 
 **The program is not perfect**
 - *Cause*: The programmer is not perfect.
@@ -1133,7 +1133,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="display:inline-block">OPEN SOURCE PACKAGES</h2></summary>
+<details open><summary><h2 style="display:inline-block">OPEN SOURCE PACKAGES</h2></summary>
 
 This project uses these awesome open source packages.
 - JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
@@ -1144,7 +1144,7 @@ This project uses these awesome open source packages.
 </details>
 
 
-<details><summary><h2 style="display:inline-block">CODE ORGANIZATION</h2></summary>
+<details open><summary><h2 style="display:inline-block">CODE ORGANIZATION</h2></summary>
 
 Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there.
 
