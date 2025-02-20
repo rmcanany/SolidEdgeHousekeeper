@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/82cc837b76ed59a7a80afa71f1720c3910e331d7/HelpTopics.md"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/863f05508c3c2a7b6f6a20758a4408f13727db05/HelpTopics.md"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
@@ -59,7 +59,7 @@ Public Class UtilsDocumentation
 
             '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
             msg = String.Format(
-                "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0}>TASK DETAILS</h2></summary>",
+                "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0} style={0}padding-right:10px{0}>TASK DETAILS</h2></summary>",
                 Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
@@ -67,7 +67,7 @@ Public Class UtilsDocumentation
             For Each Task As Task In tmpTaskList
                 Dim ImageName As String = Task.Name
                 msg = String.Format(
-                    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/{2}.png{0}>{1}</h3></summary>",
+                    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/{2}.png{0} style={0}padding-right:10px{0}>{1}</h3></summary>",
                     Chr(34), Task.Description, ImageName)
                 ReadmeOut.Add(msg)
                 ReadmeOut.Add("")
@@ -84,7 +84,7 @@ Public Class UtilsDocumentation
 
             ReadmeOut.Add("")
             'msg = "# KNOWN ISSUES"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/icons8_help_16.png{0}> KNOWN ISSUES</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/icons8_help_16.png{0} style={0}padding-right:10px{0}>KNOWN ISSUES</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -137,7 +137,7 @@ Public Class UtilsDocumentation
 
             ReadmeOut.Add("")
             'msg = "# OPEN SOURCE PACKAGES"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/TaskRunExternalProgram.png{0}> OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/TaskRunExternalProgram.png{0} style={0}padding-right:10px{0}>OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -164,7 +164,7 @@ Public Class UtilsDocumentation
             msg = ""
             ReadmeOut.Add("")
             'msg = "# CODE ORGANIZATION"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/Info-16.png{0}> CODE ORGANIZATION</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/Info-16.png{0} style={0}padding-right:10px{0}>CODE ORGANIZATION</h2></summary>", Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
             msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."
