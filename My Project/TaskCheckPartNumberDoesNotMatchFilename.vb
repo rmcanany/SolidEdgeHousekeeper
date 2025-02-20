@@ -882,7 +882,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         HelpString += vbCrLf + vbCrLf + "Enter the property formula that holds part number on the Options panel. "
         'HelpString += "A `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, see the "
-        HelpString += "[<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. "
+        HelpString += "[<ins>**Property Filter**</ins>](#property-filter) section in this README file. "
 
         HelpString += vbCrLf + vbCrLf + "The command only checks that the part number appears somewhere in the file name. "
         HelpString += "If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, "

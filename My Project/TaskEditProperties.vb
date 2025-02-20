@@ -1237,7 +1237,7 @@ Public Class TaskEditProperties
         HelpString += "One exception is if you have a custom property with the same name as a system property. "
         HelpString += "In that case, you have to select the appropriate one yourself. "
         HelpString += "For more information about `Property sets`, see the "
-        HelpString += "[<ins>**Property Filter**</ins>](#1-property-filter) "
+        HelpString += "[<ins>**Property Filter**</ins>](#property-filter) "
         HelpString += "section in this README file. "
 
         HelpString += vbCrLf + vbCrLf + "There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. "

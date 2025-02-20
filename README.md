@@ -85,7 +85,7 @@ If you are upgrading from a previous release, you should be able to copy the set
 
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
-If you need more general information, try the [<ins>**Table of Contents**</ins>](#table-of-contents).  It has links to all topics in the Readme.  Topics which are particularly detailed have their own contents section.
+If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the Readme.
 
 Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
@@ -104,13 +104,13 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 
 ![Tabs](My%20Project/media/tabs.png)
 
-Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION AND FILTERING**</ins>](#file-selection-and-filtering) below for details. 
+Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION**</ins>](#file-selection) below for details. 
 
 If any errors are found, a log file will be written to your temp folder. It will identify each error and the file in which it occurred. When processing is complete, the log file is opened in Notepad for review. If you want to open an old log file, look for file names starting with 'Housekeeper' in the `%temp%` folder.
 
 ![Status Bar](My%20Project/media/status_bar_ready.png)
 
-To start execution, click the `Process` button.  The status bar tracks progress. You can also stop execution if desired. See [<ins>**STARTING, STOPPING, AND MONITORING EXECUTION**</ins>](#starting-stopping-and-monitoring-execution) for details.
+To start execution, click the `Process` button.  The status bar tracks progress. You can also stop execution if desired. See the [<ins>**PROCESSING**</ins>](#processing) section for details.
 
 </details>
 
@@ -606,9 +606,9 @@ This allows you to change the font size of the file list.
 - `Remember selected tasks between sessions`
 When you close out of Housekeeper, it records the state of all settings, such as template locations, etc.  Normally that's what you want, but not necessarily for task selection.  This lets you decide how to handle that.
 - `Property Filter -- Include Draft file model in search`
-For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
 - `Property Filter -- Include the Draft file itself in search`
-For details, see the [<ins>**Property Filter**</ins>](#1-property-filter) section
+For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
 - `Check for newer version at startup`
 Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
 
@@ -772,7 +772,7 @@ This is a powerful tool with a lot of options.  These are detailed below.
 
 Before using this command, you must pre-populate property choices from your templates. To do so, on the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page), select your templates and click the `Update` button. There are a lot of properties.  After the update is complete, the `Customize` dialog appears. Choose which to make available there. If you need a property that is not in your templates, right-click the Favorites pane and click `Add property manually`. To access properties not in your Favorites, enable the `Show All Props` option on the toolbar. 
 
-A `Property set`, either `System` or `Custom`, is required. The program will normally set the correct choice automatically. One exception is if you have a custom property with the same name as a system property. In that case, you have to select the appropriate one yourself. For more information about `Property sets`, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
+A `Property set`, either `System` or `Custom`, is required. The program will normally set the correct choice automatically. One exception is if you have a custom property with the same name as a system property. In that case, you have to select the appropriate one yourself. For more information about `Property sets`, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
 
 There are five search modes, `PT`, `WC`, `RX`, `EX`, and `X`. 
 
@@ -997,7 +997,7 @@ Checks if the file name contains the part number.
 
 ![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)
 
-Enter the property formula that holds part number on the Options panel. For more information, see the [<ins>**Property Filter**</ins>](#1-property-filter) section in this README file. 
+Enter the property formula that holds part number on the Options panel. For more information, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
 
 The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
 
@@ -1052,7 +1052,7 @@ You can optionally rename the file or create subdirectories using a formula simi
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
-As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the [<ins>**Property Filter**</ins>](#1-property-filter) section in this Readme file. 
+As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the [<ins>**Property Filter**</ins>](#property-filter) section in this Readme file. 
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 
 

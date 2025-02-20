@@ -2719,7 +2719,7 @@ Public Class Form_Main
 
     Private Sub BT_Help_Click(sender As Object, e As EventArgs) Handles BT_Help.Click
 
-        Dim Tag As String = "file-selection-and-filtering"
+        Dim Tag As String = "file-selection"
 
         Dim UD As New UtilsDocumentation
 
