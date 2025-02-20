@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/73679cbe4eafc609c79750a503dd42f14a1f57ba/HelpTopics.md"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/2f23d53df3e77ef113e9581c29ea8cdeb07e8b6f/HelpTopics.md"
 
         Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
@@ -59,7 +59,7 @@ Public Class UtilsDocumentation
 
             '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
             msg = String.Format(
-                "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0}> TASK DETAILS</h2></summary>",
+                "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0}>TASK DETAILS</h2></summary>",
                 Chr(34))
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
@@ -67,7 +67,7 @@ Public Class UtilsDocumentation
             For Each Task As Task In tmpTaskList
                 Dim ImageName As String = Task.Name
                 msg = String.Format(
-                    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/{2}.png{0}> {1}</h3></summary>",
+                    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/{2}.png{0}>{1}</h3></summary>",
                     Chr(34), Task.Description, ImageName)
                 ReadmeOut.Add(msg)
                 ReadmeOut.Add("")

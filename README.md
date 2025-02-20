@@ -620,9 +620,9 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/SE_asm.png"> TASK DETAILS</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/SE_asm.png">TASK DETAILS</h2></summary>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSetDocumentStatus.png"> Set document status</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSetDocumentStatus.png">Set document status</h3></summary>
 
 Sets document status. Select the new status on the Options pane. 
 
@@ -634,13 +634,13 @@ To eliminate potential confusion, it cannot run with the `Process as available` 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskOpenSave.png"> Open save</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskOpenSave.png">Open save</h3></summary>
 
 Opens a document and saves in the current version.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskActivateAndUpdateAll.png"> Activate and update all</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskActivateAndUpdateAll.png">Activate and update all</h3></summary>
 
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -648,7 +648,7 @@ Can run out of memory for very large assemblies.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateMaterialFromMaterialTable.png"> Update material from material table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateMaterialFromMaterialTable.png">Update material from material table</h3></summary>
 
 Checks to see if the part's material name and properties match any material in your material table. 
 
@@ -668,7 +668,7 @@ There are several options for this command.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePartCopies.png"> Update part copies</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePartCopies.png">Update part copies</h3></summary>
 
 In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -680,7 +680,7 @@ In many situations, only a few parts have part copies. Using this command with t
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePhysicalProperties.png"> Update physical properties</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePhysicalProperties.png">Update physical properties</h3></summary>
 
 Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 
 
@@ -692,7 +692,7 @@ Occasionally, the physical properties are updated correctly, but the results are
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelSizeInVariableTable.png"> Update model size in variable table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelSizeInVariableTable.png">Update model size in variable table</h3></summary>
 
 Copies the model size to the variable table. 
 
@@ -710,7 +710,7 @@ The command reports sheet metal size in the formed state. For a flat pattern, in
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDesignForCost.png"> Update design for cost</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDesignForCost.png">Update design for cost</h3></summary>
 
 Updates DesignForCost and saves the document.
 
@@ -718,13 +718,13 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingViews.png"> Update drawing views</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingViews.png">Update drawing views</h3></summary>
 
 Checks drawing views one by one, and updates them if needed.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateFlatPattern.png"> Update flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateFlatPattern.png">Update flat pattern</h3></summary>
 
 Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 
 
@@ -732,7 +732,7 @@ Before updating the flat pattern, this command first regenerates the flat *model
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskBreakLinks.png"> Break links</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskBreakLinks.png">Break links</h3></summary>
 
 Breaks external links to a file.  This is irreversible, so you know, think about it. 
 
@@ -756,7 +756,7 @@ Luckily, Solid Edge can take care of that. That's in the program, but only for C
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditProperties.png"> Edit properties</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditProperties.png">Edit properties</h3></summary>
 
 Searches for text in a specified property and replaces it if found. 
 
@@ -826,7 +826,7 @@ Note, Solid Edge presents exposed variables as Custom properties.  You can chang
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditVariables.png"> Edit variables</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditVariables.png">Edit variables</h3></summary>
 
 Adds, changes, and/or exposes variables. 
 
@@ -852,7 +852,7 @@ You can save a setup for future use. In the toolbar `Saved Settings` group, ente
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditInteractively.png"> Edit interactively</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditInteractively.png">Edit interactively</h3></summary>
 
 Brings up files one at a time for manual processing. 
 
@@ -891,7 +891,7 @@ One last thing.  Macros interact with Solid Edge through something called the Wi
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelStylesFromTemplate.png"> Update model styles from template</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelStylesFromTemplate.png">Update model styles from template</h3></summary>
 
 Updates the styles you select from a template you specify. 
 
@@ -909,7 +909,7 @@ The active view style of the file is changed to match the one active in the temp
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingStylesFromTemplate.png"> Update drawing styles from template</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingStylesFromTemplate.png">Update drawing styles from template</h3></summary>
 
 Updates styles and/or background sheets from a template you specify. 
 
@@ -919,19 +919,19 @@ These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyle
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRemoveFaceStyleOverrides.png"> Remove face style overrides</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRemoveFaceStyleOverrides.png">Remove face style overrides</h3></summary>
 
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskHideConstructions.png"> Hide constructions</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskHideConstructions.png">Hide constructions</h3></summary>
 
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskFitView.png"> Fit view</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskFitView.png">Fit view</h3></summary>
 
 Maximizes the window, sets the view orientation for model files, and does a fit. 
 
@@ -941,7 +941,7 @@ Select the desired orientation on the Options panel. The setting is required, bu
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckInterference.png"> Check interference</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckInterference.png">Check interference</h3></summary>
 
 Runs an interference check.  All parts are checked against all others. 
 
@@ -951,7 +951,7 @@ This can take a long time on large assemblies, so there is a limit to the number
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckLinks.png"> Check links</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckLinks.png">Check links</h3></summary>
 
 Checks linked files.  
 
@@ -961,7 +961,7 @@ Checks linked files.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckRelationships.png"> Check relationships</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckRelationships.png">Check relationships</h3></summary>
 
 Checks if the file has any failed, underconstrained, or suppressed relationships.
 
@@ -969,13 +969,13 @@ Checks if the file has any failed, underconstrained, or suppressed relationships
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFlatPattern.png"> Check flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFlatPattern.png">Check flat pattern</h3></summary>
 
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMaterialNotInMaterialTable.png"> Check material not in material table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMaterialNotInMaterialTable.png">Check material not in material table</h3></summary>
 
 Checks if the material in the file exists in the material table. 
 
@@ -985,13 +985,13 @@ The material table is chosen on the Options panel. This command only checks the 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMissingDrawing.png"> Check missing drawing</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMissingDrawing.png">Check missing drawing</h3></summary>
 
 Assumes drawing has the same name as the model, and is in the same directory
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartNumberDoesNotMatchFilename.png"> Check part number does not match filename</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartNumberDoesNotMatchFilename.png">Check part number does not match filename</h3></summary>
 
 Checks if the file name contains the part number. 
 
@@ -1003,19 +1003,19 @@ The command only checks that the part number appears somewhere in the file name.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartCopies.png"> Check part copies</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartCopies.png">Check part copies</h3></summary>
 
 If the file has any Part Copies, checks if they are up to date.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawingPartsList.png"> Check drawing parts list</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawingPartsList.png">Check drawing parts list</h3></summary>
 
 Checks is there are any parts list in the drawing and if they are all up to date.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawings.png"> Check drawings</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawings.png">Check drawings</h3></summary>
 
 Checks draft files for various problems. 
 
@@ -1028,7 +1028,7 @@ The options are:
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRunExternalProgram.png"> Run external program</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRunExternalProgram.png">Run external program</h3></summary>
 
 Runs an `*.exe` or `*.vbs` or `*.ps1` file. 
 
@@ -1040,7 +1040,7 @@ If you are writing your own program, be aware several interoperability rules app
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveModelAs.png"> Save model as</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveModelAs.png">Save model as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1064,7 +1064,7 @@ For image file formats there are additional options. You can hide constructions 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveDrawingAs.png"> Save drawing as</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveDrawingAs.png">Save drawing as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1080,7 +1080,7 @@ When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The f
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCreateDrawingOfFlatPattern.png"> Create drawing of flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCreateDrawingOfFlatPattern.png">Create drawing of flat pattern</h3></summary>
 
 Creates a drawing of a flat pattern using the template you specify. If the file does not contain a flat pattern, the command reports an error. It does not check if the flat pattern is up to date. For that, run the `Check flat pattern` and/or `Update flat pattern` commands before running this one. 
 
@@ -1092,7 +1092,7 @@ You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the sam
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskPrint.png"> Print</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskPrint.png">Print</h3></summary>
 
 Prints drawings. 
 
