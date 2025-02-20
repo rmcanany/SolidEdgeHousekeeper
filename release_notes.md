@@ -153,7 +153,7 @@ Added a parameter, `Update the file list after this many files`, to the **Config
 
 Fixed an issue where the `Print Task` `Sheet Selector` was not filtering ISO sheet sizes correctly.
 
-Added collapsible sections to the Readme to improve navigation.
+Added collapsible sections to the Readme to improve navigation. (Thank you **@Francesco Arfilli**!)
 
 Removed program dependencies on some outdated packages.
 
