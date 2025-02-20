@@ -77,15 +77,13 @@ Click the file `SolidEdgeHousekeeper-vYYYY.N.zip` (sometimes hidden under the As
 The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
 
 If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in Housekeeper's Preferences folder. There is one exception.  Starting with v2024.2, property filters are stored in a `*.json` format.  The old `*.txt` format is no longer used.
-
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_help_16.png" style="padding-right:10px">GETTING HELP</h2></summary>
-
-
+<details>
+<summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_help_16.png" style="padding-right:10px">GETTING HELP</h2></summary>
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
-If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the Readme.
+If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the file.  Look for this icon ![Table of Contents](Resources/github_toc.png) on the far right of the file's header banner.  It opens an outline view of the document, which can be a great help in finding what you're looking for.
 
 Ask questions, report bugs, or suggest improvements on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).
 
@@ -96,12 +94,10 @@ If you want to make Housekeeper better, join us as a beta tester! Beta testing i
 To sign up, message me, RobertMcAnany, on the forum. (The `Messages` button is hidden under your profile picture, at the very top right of the page). Unsubscribe the same way. To combat bots and spam, I will probably ignore requests from `User16612341234...`. (Change you nickname in `My Profile`, also under your profile picture). 
 
 If you know .NET, or want to learn, there's more to do!  If you're new to GitHub collaboration, head over to [<ins>**ToyProject**</ins>](https://github.com/rmcanany/ToyProject). There are instructions and links to get you up to speed.  Otherwise, feel free to fork the repo and start in with those PRs!
-
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-key-16.png" style="padding-right:10px">OPERATION</h2></summary>
-
-
+<details>
+<summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-key-16.png" style="padding-right:10px">OPERATION</h2></summary>
 ![Tabs](My%20Project/media/tabs.png)
 
 Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION**</ins>](#file-selection) below for details. 
