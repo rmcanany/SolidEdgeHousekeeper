@@ -27,7 +27,13 @@ Public Class UtilsPreferences
     Public Sub CreatePreferencesDirectory()
         Dim PreferencesDirectory = GetPreferencesDirectory()
         If Not FileIO.FileSystem.DirectoryExists(PreferencesDirectory) Then
-            FileIO.FileSystem.CreateDirectory(PreferencesDirectory)
+            Try
+                FileIO.FileSystem.CreateDirectory(PreferencesDirectory)
+            Catch ex As Exception
+                Dim s As String = String.Format("Unable to create Preferences directory '{0}'.  ", PreferencesDirectory)
+                s = String.Format("{0}You may not have the correct permissions.", s)
+                MsgBox(s, vbOKOnly)
+            End Try
         End If
     End Sub
 
