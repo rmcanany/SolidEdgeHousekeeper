@@ -3846,6 +3846,11 @@ End Class
 
 ' Dim DrawingFilename = System.IO.Path.ChangeExtension(SEDoc.FullName, ".dft")
 
+' Dim DI As New DirectoryInfo(Dirname)
+' For Each File As FileInfo In DI.GetFiles
+'     File.Delete()
+' Next
+
 ' System.Threading.Thread.Sleep(100)
 
 ' PropTypeName = Prop.Value.GetType().Name

@@ -585,12 +585,16 @@ Public Class UtilsCommon
 
         Dim PropValue As Object = Nothing
 
-        Dim Prop As SolidEdgeFramework.Property
+        PropValue = ProcessSpecialProperty(SEDoc, PropertySetName, PropertyName, ModelLinkIdx)
 
-        Prop = GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx, AddProp)
+        If PropValue Is Nothing Then
+            Dim Prop As SolidEdgeFramework.Property
 
-        If Prop IsNot Nothing Then
-            PropValue = Prop.Value
+            Prop = GetProp(SEDoc, PropertySetName, PropertyName, ModelLinkIdx, AddProp)
+
+            If Prop IsNot Nothing Then
+                PropValue = Prop.Value
+            End If
         End If
 
         Return PropValue
@@ -755,6 +759,58 @@ Public Class UtilsCommon
 
         Return FoundProp
 
+    End Function
+
+    Private Function ProcessSpecialProperty(
+        SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        PropSetName As String,
+        PropName As String,
+        ModelLinkIdx As Integer
+        ) As String
+
+        ' Returns Nothing if not a special property
+        ' Special properties:
+        '     "System.File Name (full path)"     ' C:\project\part.par -> C:\project\part.par
+        '     "System.File Name"                 ' C:\project\part.par -> part.par
+        '     "System.File Name (no extension)"  ' C:\project\part.par -> part
+
+        PropName = PropName.ToLower
+
+        Dim Proceed As Boolean = True
+        Dim Fullname As String = Nothing
+        Dim SpecialProperty As String = Nothing
+
+        If ModelLinkIdx = 0 Then  ' Model file
+            Fullname = SplitFOAName(SEDoc.FullName)("Filename")
+
+        Else  ' Must be a draft file
+            Dim ModelLink As SolidEdgeDraft.ModelLink
+
+            Try
+                Dim tmpSEDoc As SolidEdgeDraft.DraftDocument
+                tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
+
+                ModelLink = tmpSEDoc.ModelLinks.Item(ModelLinkIdx)
+                Fullname = SplitFOAName(ModelLink.FileName)("Filename")
+
+            Catch ex As Exception
+                Proceed = False
+            End Try
+        End If
+
+        If Proceed Then
+            If PropSetName.ToLower = "system" Then
+                If PropName = "File Name".ToLower Then
+                    SpecialProperty = System.IO.Path.GetFileName(Fullname)
+                ElseIf PropName = "File Name (full path)".ToLower Then
+                    SpecialProperty = Fullname
+                ElseIf PropName = "File Name (no extension)".ToLower Then
+                    SpecialProperty = System.IO.Path.GetFileNameWithoutExtension(Fullname)
+                End If
+            End If
+        End If
+
+        Return SpecialProperty
     End Function
 
     Public Function SubstitutePropertyFormula(

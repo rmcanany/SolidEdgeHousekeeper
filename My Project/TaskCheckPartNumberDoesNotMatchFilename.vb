@@ -182,8 +182,9 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Prop As SolidEdgeFramework.Property = Nothing
+        Dim PropValue As Object
 
-        Dim PartNumber As String = ""
+        Dim PartNumber As String = Nothing
         Dim PartNumberFound As Boolean
         Dim Filename As String
 
@@ -204,15 +205,21 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
             Select Case DocType
                 Case = "asm", "par", "psm"
 
-                    Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
-                    If Prop Is Nothing Then
+                    'Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                    'If Prop Is Nothing Then
+                    '    ExitStatus = 1
+                    '    ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                    '                     Me.PropertyName, Me.PropertySet))
+                    'End If
+                    PropValue = UC.GetPropValue(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                    If PropValue Is Nothing Then
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
                                          Me.PropertyName, Me.PropertySet))
                     End If
 
                     If ExitStatus = 0 Then
-                        PartNumber = CStr(Prop.Value).Trim
+                        PartNumber = CStr(PropValue).Trim
                         If PartNumber = "" Then
                             ExitStatus = 1
                             ErrorMessageList.Add("Part number not assigned")
@@ -229,7 +236,13 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                 Case = "dft"
 
                     If Me.DraftsCheckDraftItself Then
-                        Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                        'Prop = UC.GetProp(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                        'If Prop Is Nothing Then
+                        '    ExitStatus = 1
+                        '    ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
+                        '                 Me.PropertyName, Me.PropertySet))
+                        'End If
+                        PropValue = UC.GetPropValue(SEDoc, Me.PropertySet, Me.PropertyName, 0, False)
                         If Prop Is Nothing Then
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Property name: '{0}' not found in property set: '{1}'",
@@ -237,7 +250,7 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                         End If
 
                         If ExitStatus = 0 Then
-                            PartNumber = CStr(Prop.Value).Trim
+                            PartNumber = CStr(PropValue).Trim
                             If PartNumber = "" Then
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Part number not assigned")
@@ -277,9 +290,20 @@ Public Class TaskCheckPartNumberDoesNotMatchFilename
                                 ModelLinkFilenames.Add(System.IO.Path.GetFileName(ModelLinkFilename))
                                 ModelLinkDoc = CType(ModelLink.ModelDocument, SolidEdgeFramework.SolidEdgeDocument)
 
-                                Prop = UC.GetProp(ModelLinkDoc, Me.PropertySet, Me.PropertyName, 0, False)
-                                If Prop IsNot Nothing Then
-                                    PartNumber = CStr(Prop.Value).Trim
+                                'Prop = UC.GetProp(ModelLinkDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                                'If Prop IsNot Nothing Then
+                                '    PartNumber = CStr(Prop.Value).Trim
+                                '    If Not PartNumber = "" Then
+                                '        If Filename.ToLower.Contains(PartNumber.ToLower) Then
+                                '            PartNumberFound = True
+                                '            Exit For
+                                '        End If
+                                '    End If
+
+                                'End If
+                                PropValue = UC.GetPropValue(ModelLinkDoc, Me.PropertySet, Me.PropertyName, 0, False)
+                                If PropValue IsNot Nothing Then
+                                    PartNumber = CStr(PropValue).Trim
                                     If Not PartNumber = "" Then
                                         If Filename.ToLower.Contains(PartNumber.ToLower) Then
                                             PartNumberFound = True
