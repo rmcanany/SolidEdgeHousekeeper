@@ -804,7 +804,12 @@ Public Class Form_Main
         Set(value As String)
             _ListViewUpdateFrequency = value
             If Me.TabControl1 IsNot Nothing Then
-                TextBoxListViewUpdateFrequency.Text = value
+                Try
+                    Dim i = CInt(value)
+                    TextBoxListViewUpdateFrequency.Text = value
+                Catch ex As Exception
+                    TextBoxListViewUpdateFrequency.Text = "1"
+                End Try
             End If
         End Set
     End Property

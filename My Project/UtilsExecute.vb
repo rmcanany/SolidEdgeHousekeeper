@@ -255,10 +255,10 @@ Public Class UtilsExecute
         Try
             Dim i = CInt(FMain.ListViewUpdateFrequency)
             If i <= 0 Then
-                msg += String.Format("    Enter a valid number for the file list update frequency on the Configuration Tab -- General Page{0}", vbCrLf)
+                msg += String.Format("    Enter a valid number for 'When processing, update the file list after this many files' on the Configuration Tab -- General Page{0}", vbCrLf)
             End If
         Catch ex As Exception
-            msg += String.Format("    Enter a valid number for the file list update frequency on the Configuration Tab -- General Page{0}", vbCrLf)
+            msg += String.Format("    Enter a valid number for 'When processing, update the file list after this many files' on the Configuration Tab -- General Page{0}", vbCrLf)
         End Try
 
         ExitStatus = ErrorMessage.Keys(0)

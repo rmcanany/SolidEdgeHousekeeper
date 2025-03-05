@@ -189,7 +189,12 @@ Public Class HCPropertiesData
 
             Dim OpenReadOnly As Boolean = True
 
-            PropertySets.Open(TemplateName, OpenReadOnly)
+            Try
+                PropertySets.Open(TemplateName, OpenReadOnly)
+            Catch ex As Exception
+                MsgBox(String.Format("Could not open template '{0}'", TemplateName), vbOKOnly)
+                Return Nothing
+            End Try
 
 
             ' ###### PROCESS PROPERTY SETS ######
@@ -343,6 +348,9 @@ Public Class HCPropertiesData
 
         tmpItems = UpdateFromTemplates(TemplateList, tmpItems, KnownSystemProps)
 
+        If tmpItems Is Nothing Then
+            Exit Sub
+        End If
 
         '' ###### ADD SPECIAL PROPERTIES ######
 
