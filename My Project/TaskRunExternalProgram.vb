@@ -129,22 +129,39 @@ Public Class TaskRunExternalProgram
 
         Dim UP As New UtilsPreferences
         Dim SettingsFilename = UP.GetFormMainSettingsFilename(CheckExisting:=True)
+        Dim NewSettingsFilename As String = ""
         If Not SettingsFilename = "" Then
-            Dim NewSettingsFilename = System.IO.Path.GetFileName(SettingsFilename)
+            NewSettingsFilename = System.IO.Path.GetFileName(SettingsFilename)
             NewSettingsFilename = String.Format("{0}\{1}", ExternalProgramDirectory, NewSettingsFilename)
+            If IO.File.Exists(NewSettingsFilename) Then IO.File.Delete(NewSettingsFilename)
             System.IO.File.Copy(SettingsFilename, NewSettingsFilename)
         End If
 
         Extension = IO.Path.GetExtension(Me.ExternalProgram)
 
+        Dim PSError As String = ""
+
         If Extension = ".ps1" Then
             P.StartInfo.FileName = "powershell.exe"
             P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", Me.ExternalProgram, Chr(34))
-            'P.StartInfo.RedirectStandardOutput = True
-            'P.StartInfo.UseShellExecute = False
+            P.StartInfo.RedirectStandardError = True
+            P.StartInfo.UseShellExecute = False
             P.Start()
+            PSError = P.StandardError.ReadToEnd
+        ElseIf Extension = ".snp" Then
+            P.StartInfo.FileName = "powershell.exe"
+            P.StartInfo.Arguments = String.Format("-command {1}{0}{1}", BuildSnippetFile(Me.ExternalProgram), Chr(34))
+            P.StartInfo.RedirectStandardError = True
+            P.StartInfo.UseShellExecute = False
+            P.Start()
+            PSError = P.StandardError.ReadToEnd
         Else
             P = Diagnostics.Process.Start(Me.ExternalProgram)
+        End If
+
+        If Not PSError = "" Then
+            ExitStatus = 1
+            ErrorMessageList.Add(PSError)
         End If
 
         P.WaitForExit()
@@ -185,6 +202,103 @@ Public Class TaskRunExternalProgram
         Return ErrorMessage
 
 
+    End Function
+
+    Private Function BuildSnippetFile(SnippetFilename As String) As String
+        Dim Toplist As New List(Of String)
+        Dim Midlist As New List(Of String)
+        Dim Botlist As New List(Of String)
+        Dim Outlist As New List(Of String)
+        Dim s As String
+        Dim Indent As String = "                "
+
+        Dim PowerShellFilename As String = IO.Path.ChangeExtension(SnippetFilename, ".ps1")
+
+        Toplist.Add("$StartupPath = Split-Path $script:MyInvocation.MyCommand.Path")
+        Toplist.Add("")
+        Toplist.Add(String.Format("$Source = @{0}", Chr(34)))
+        Toplist.Add("Imports System")
+        Toplist.Add("Imports System.Collections.Generic")
+        Toplist.Add("Public Class Snippet")
+        Toplist.Add("")
+        Toplist.Add("    Public Shared Function RunSnippet(StartupPath As String) As Integer")
+        Toplist.Add("        Dim ExitStatus As Integer = 0")
+        Toplist.Add("        Dim ErrorMessageList As New List(Of String)")
+        Toplist.Add("")
+        Toplist.Add("        Dim SEApp As Object = Nothing")
+        Toplist.Add("        Dim SEDoc As Object = Nothing")
+        Toplist.Add("")
+        Toplist.Add("        Try")
+        Toplist.Add(String.Format("            SEApp = Runtime.InteropServices.Marshal.GetActiveObject({0}SolidEdge.Application{0})", Chr(34)))
+        Toplist.Add("            SEDoc = SEApp.ActiveDocument")
+        s = "            Console.WriteLine(String.Format(*Processing {0}*, SEDoc.Name))"
+        s = s.Replace(CChar("*"), Chr(34))
+        Toplist.Add(s)
+        Toplist.Add("        Catch ex As Exception")
+        Toplist.Add("            ExitStatus = 1")
+        Toplist.Add(String.Format("            ErrorMessageList.Add({0}Unable to connect to Solid Edge, or no file is open{0})", Chr(34)))
+        Toplist.Add("        End Try")
+        Toplist.Add("")
+        Toplist.Add("        If ExitStatus = 0 Then")
+        Toplist.Add("")
+        Toplist.Add("            Dim DocType = IO.Path.GetExtension(SEDoc.Fullname)")
+        Toplist.Add("")
+        Toplist.Add("            Try")
+
+        Dim tmpMidlist = IO.File.ReadAllLines(SnippetFilename).ToList
+        For Each s In tmpMidlist
+            Midlist.Add(String.Format("{0}{1}", Indent, s))
+        Next
+
+        Botlist.Add("            Catch ex As Exception")
+        Botlist.Add("                ExitStatus = 1")
+        s = "                ErrorMessageList.Add(String.Format(*{0}*, ex.Message))"
+        s = s.Replace(CChar("*"), Chr(34))
+        Botlist.Add(s)
+        Botlist.Add("            End Try")
+        Botlist.Add("        End If")
+        Botlist.Add("")
+        Botlist.Add("        If Not ExitStatus = 0 Then")
+        Botlist.Add("            SaveErrorMessages(StartupPath, ErrorMessageList)")
+        Botlist.Add("        End If")
+        Botlist.Add("")
+        Botlist.Add("        Return ExitStatus")
+        Botlist.Add("    End Function")
+        Botlist.Add("")
+        Botlist.Add("    Private Shared Sub SaveErrorMessages(StartupPath As String, ErrorMessageList As List(Of String))")
+        Botlist.Add("        Dim ErrorFilename As String")
+        Botlist.Add("")
+        s = "        ErrorFilename = String.Format(*{0}\error_messages.txt*, StartupPath)"
+        s = s.Replace(CChar("*"), Chr(34))
+        Botlist.Add(s)
+        Botlist.Add("")
+        Botlist.Add("        IO.File.WriteAllLines(ErrorFilename, ErrorMessageList)")
+        Botlist.Add("")
+        Botlist.Add("    End Sub")
+        Botlist.Add("")
+        Botlist.Add("End Class")
+        Botlist.Add(String.Format("{0}@", Chr(34)))
+        Botlist.Add("")
+        Botlist.Add("Add-Type -TypeDefinition $Source -Language VisualBasic")
+        Botlist.Add("")
+        Botlist.Add("$ExitStatus = [Snippet]::RunSnippet($StartupPath)")
+        Botlist.Add("")
+        Botlist.Add("Function ExitWithCode($exitcode) {")
+        Botlist.Add("  $host.SetShouldExit($exitcode)")
+        Botlist.Add("  Exit $exitcode")
+        Botlist.Add("}")
+        Botlist.Add("")
+        Botlist.Add("ExitWithCode($ExitStatus)")
+
+        For Each L As List(Of String) In {Toplist, Midlist, Botlist}
+            For Each s In L
+                Outlist.Add(s)
+            Next
+        Next
+
+        IO.File.WriteAllLines(PowerShellFilename, Outlist)
+
+        Return PowerShellFilename
     End Function
 
 
@@ -233,21 +347,6 @@ Public Class TaskRunExternalProgram
         Return tmpTLPOptions
     End Function
 
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.ExternalProgram.ToString), TextBox)
-        Me.ExternalProgram = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.SaveAfterProcessing.ToString), CheckBox)
-        Me.SaveAfterProcessing = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
-
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))
         ) As Dictionary(Of Integer, List(Of String))
@@ -266,7 +365,7 @@ Public Class TaskRunExternalProgram
                     ErrorMessageList.Add(Me.Description)
                 End If
                 ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorMessageList.Add(String.Format("{0}Select at least one type Of file To process", Indent))
             End If
 
             If Not FileIO.FileSystem.FileExists(Me.ExternalProgram) Then
@@ -318,7 +417,7 @@ Public Class TaskRunExternalProgram
             Case ControlNames.Browse.ToString
                 Dim tmpFileDialog As New OpenFileDialog
                 tmpFileDialog.Title = "Select a program file"
-                tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1"
+                tmpFileDialog.Filter = "Programs|*.exe;*.vbs;*.ps1;*.snp"
 
                 If tmpFileDialog.ShowDialog() = DialogResult.OK Then
                     Me.ExternalProgram = tmpFileDialog.FileName
@@ -354,13 +453,48 @@ Public Class TaskRunExternalProgram
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Runs an `*.exe` or `*.vbs` or `*.ps1` file. "
+        HelpString = "Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` file. "
 
         HelpString += vbCrLf + vbCrLf + "![RunExternalProgram](My%20Project/media/task_run_external_program.png)"
 
         HelpString += vbCrLf + vbCrLf + "Select the program with the `Browse` button on the Options panel. "
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
         HelpString += "See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
+
+        HelpString += vbCrLf + vbCrLf + "Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. "
+        HelpString += "The program inserts it between two sections that take care of the task's set-up and wrap-up, respectively. "
+        HelpString += "The code snippet is the (often very short) part that does the actual task at hand. "
+
+        HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
+        HelpString += "where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. "
+
+        HelpString += vbCrLf + vbCrLf + "One example is enabling the Physical Properties `Update on Save` flag. "
+        HelpString += "The code snippet would look something like this."
+
+        HelpString += vbCrLf + vbCrLf + "```"
+        HelpString += vbCrLf + String.Format("If DocType = {0}.asm{0} Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True", Chr(34))
+        HelpString += vbCrLf + String.Format("If DocType = {0}.par{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
+        HelpString += vbCrLf + String.Format("If DocType = {0}.psm{0} Then SEDoc.UpdateOnFileSave = True", Chr(34))
+        HelpString += vbCrLf + "If ExitStatus = 0 Then"
+        HelpString += vbCrLf + "    SEDoc.Save()"
+        HelpString += vbCrLf + "    SEApp.DoIdle()"
+        HelpString += vbCrLf + "Else"
+        HelpString += vbCrLf + String.Format("    ErrorMessageList.Add({0}An error occurred{0})", Chr(34))
+        HelpString += vbCrLf + "End If"
+        HelpString += vbCrLf + "```"
+
+        HelpString += vbCrLf + vbCrLf + "The program defines these variables"
+        HelpString += vbCrLf + "- `SEApp` The Solid Edge application."
+        HelpString += vbCrLf + "- `SEDoc` The active document in the application."
+        HelpString += vbCrLf + "- `ExitStatus` An integer.  0 = Success, 1 = Error."
+        HelpString += vbCrLf + "- `ErrorMessageList` A list of error messages that Housekeeper reports."
+        HelpString += vbCrLf + "- `DocType` The file extension of SEDoc."
+
+        HelpString += vbCrLf + vbCrLf + "The `*.snp` is just a text file in VB.Net format.  "
+        HelpString += "It can be created in Notepad. "
+        HelpString += "The program inserts the snippet into a predefined PowerShell script.  "
+        HelpString += "The PowerShell script will have the same name as the snippet file, with a `.ps1` extension.  "
+
 
         Return HelpString
     End Function

@@ -1026,13 +1026,40 @@ The options are:
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRunExternalProgram.png" style="padding-right:10px">Run external program</h3></summary>
 
-Runs an `*.exe` or `*.vbs` or `*.ps1` file. 
+Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` file. 
 
 ![RunExternalProgram](My%20Project/media/task_run_external_program.png)
 
 Select the program with the `Browse` button on the Options panel. 
 
 If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
+
+Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. The program inserts it between two sections that take care of the task's set-up and wrap-up, respectively. The code snippet is the (often very short) part that does the actual task at hand. 
+
+The intent is to address one-off automation chores, where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. 
+
+One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
+
+```
+If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
+If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
+If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
+If ExitStatus = 0 Then
+    SEDoc.Save()
+    SEApp.DoIdle()
+Else
+    ErrorMessageList.Add("An error occurred")
+End If
+```
+
+The program defines these variables
+- `SEApp` The Solid Edge application.
+- `SEDoc` The active document in the application.
+- `ExitStatus` An integer.  0 = Success, 1 = Error.
+- `ErrorMessageList` A list of error messages that Housekeeper reports.
+- `DocType` The file extension of SEDoc.
+
+The `*.snp` is just a text file in VB.Net format.  It can be created in Notepad. The program inserts the snippet into a predefined PowerShell script.  The PowerShell script will have the same name as the snippet file, with a `.ps1` extension.  
 
 </details>
 
