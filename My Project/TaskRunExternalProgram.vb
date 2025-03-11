@@ -488,7 +488,7 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + "- `SEDoc` The active document in the application."
         HelpString += vbCrLf + "- `ExitStatus` An integer.  0 = Success, 1 = Error."
         HelpString += vbCrLf + "- `ErrorMessageList` A list of error messages that Housekeeper reports."
-        HelpString += vbCrLf + "- `DocType` The file extension of SEDoc."
+        HelpString += vbCrLf + "- `DocType` The file extension of `SEDoc`."
 
         HelpString += vbCrLf + vbCrLf + "The `*.snp` is just a text file in VB.Net format.  "
         HelpString += "It can be created in Notepad. "

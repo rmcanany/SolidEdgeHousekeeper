@@ -81,6 +81,7 @@ If you are upgrading from a previous release, you should be able to copy the set
 
 <details open>
 <summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_help_16.png" style="padding-right:10px">GETTING HELP</h2></summary>
+
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
 If you need more general information, try the [<ins>**Readme**</ins>](#readme).  GitHub provides a Table of Contents with links to all topics in the file.  Look for this icon ![Table of Contents](Resources/github_toc.png) on the far right of the file's header banner.  It opens an outline view of the document, which can be a great help in finding what you're looking for.
@@ -98,6 +99,7 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 
 <details open>
 <summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-key-16.png" style="padding-right:10px">OPERATION</h2></summary>
+
 ![Tabs](My%20Project/media/tabs.png)
 
 Select which files to process on the **Home Tab**.  Select what to do on the **Task Tab**.  There are many options for selecting files.  See [<ins>**FILE SELECTION**</ins>](#file-selection) below for details. 
@@ -112,7 +114,6 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_Folders_16.png" style="padding-right:10px">FILE SELECTION</h2></summary>
-
 
 <details open><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/icons8_Folder_16.png" style="padding-right:10px">Selection</h3></summary>
 
@@ -248,10 +249,10 @@ If you select one or more files on the list, you can click the right mouse butto
 - **Remove from list:** Moves the files to the *Excluded files* section of the list.
 - **Move to Recycle Bin:** This is kinda asking for trouble, but can be handy with top-level assembly `Report unrelated files`.  If there are a lot of them, cleanup is a hassle.  Here's how I do it now.  
  
-  - Save the Unrelated Files report as a *.txt file
+  - Save the Unrelated Files report as a `*.txt` file
   - Empty out the Recycle Bin
   - Clear the file list from the previous run.  *This is important so you don't mix in good files with the bad.*
-  - Import the *.txt file and update the list
+  - Import the `*.txt` file and update the list
   - Select files you no longer need and use this command.  Then open the top level assembly; if it complains about missing files, run `Restore items` from the Recycle Bin.  (I do a few files at a time, then repeat.)
 
 </details>
@@ -1057,7 +1058,7 @@ The program defines these variables
 - `SEDoc` The active document in the application.
 - `ExitStatus` An integer.  0 = Success, 1 = Error.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
-- `DocType` The file extension of SEDoc.
+- `DocType` The file extension of `SEDoc`.
 
 The `*.snp` is just a text file in VB.Net format.  It can be created in Notepad. The program inserts the snippet into a predefined PowerShell script.  The PowerShell script will have the same name as the snippet file, with a `.ps1` extension.  
 

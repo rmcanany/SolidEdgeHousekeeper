@@ -167,8 +167,6 @@ Public Class TaskCheckRelationships
 
                     Dim SketchesAssembly As SolidEdgeAssembly.ComponentLayouts
                     Dim SketchAssembly As SolidEdgeAssembly.Layout
-                    'Dim Profiles As SolidEdgePart.Profiles
-                    'Dim Profile As SolidEdgePart.Profile
 
                     ' Causes an invalid cast on files with sketches
                     ' of type SolidEdgeAssembly.ComponentLayout
@@ -234,11 +232,25 @@ Public Class TaskCheckRelationships
                                 End If
                             End If
 
-                            If CheckItem = "Suppressed relationships" Then
-                                ' Haven't found a way.  The Occurrences collection does not show suppressed parts.
-                            End If
                         End If
                     Next
+
+                    If CheckItem = "Suppressed relationships" Then
+                        'https://community.sw.siemens.com/s/question/0D5Vb00000TenJTKAZ/unsuppress-occurrences-from-api
+                        Dim Count As Integer
+                        Dim ComponentType = SolidEdgeAssembly.AssemblyComponentTypeConstants.seAssemblyComponentTypeAll
+                        Dim Components As System.Array = System.Array.CreateInstance(GetType(SolidEdgeAssembly.SuppressComponent), 0)
+
+                        tmpSEDoc.GetSuppressedComponents(ComponentType, Count, Components)
+
+                        If Components IsNot Nothing AndAlso Count > 0 Then
+                            For Each tmpSC As SolidEdgeAssembly.SuppressComponent In Components
+                                ExitStatus = 1
+                                UpdateErrorMessageList(ErrorMessageList, tmpSC.Name, True, CheckItem)
+                            Next
+                        End If
+
+                    End If
 
                 Case = "par"
                     Dim tmpSEDoc As SolidEdgePart.PartDocument = CType(SEDoc, SolidEdgePart.PartDocument)
