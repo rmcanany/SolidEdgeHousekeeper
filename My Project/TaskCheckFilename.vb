@@ -134,7 +134,7 @@ Public Class TaskCheckFilename
         Me.AppliesToDraft = True
         Me.HasOptions = True
         Me.HelpURL = GenerateHelpURL(Description)
-        Me.Image = My.Resources.TaskCheckPartNumberDoesNotMatchFilename
+        Me.Image = My.Resources.TaskCheckFilename
         Me.Category = "Check"
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
