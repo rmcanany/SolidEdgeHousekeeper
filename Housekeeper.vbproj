@@ -204,6 +204,7 @@
     <Compile Include="My Project\HCPresets.vb" />
     <Compile Include="My Project\IDispatch.vb" />
     <Compile Include="My Project\OleMessageFilter.vb" />
+    <Compile Include="My Project\TaskCheckFilename.vb" />
     <Compile Include="My Project\TaskSetDocumentStatus.vb" />
     <Compile Include="My Project\UtilsDocumentation.vb" />
     <Compile Include="My Project\UtilsExecute.vb" />
@@ -317,7 +318,6 @@
     <Compile Include="My Project\TaskCheckMaterialNotInMaterialTable.vb" />
     <Compile Include="My Project\TaskCheckMissingDrawing.vb" />
     <Compile Include="My Project\TaskCheckPartCopies.vb" />
-    <Compile Include="My Project\TaskCheckPartNumberDoesNotMatchFilename.vb" />
     <Compile Include="My Project\TaskCheckRelationships.vb" />
     <Compile Include="My Project\TaskEditInteractively.vb" />
     <Compile Include="My Project\TaskEditProperties.vb" />

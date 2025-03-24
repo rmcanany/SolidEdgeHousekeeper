@@ -159,6 +159,8 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _LinkManagementFilename = value
+            Dim UP As New UtilsPreferences
+            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
             If Me.TabControl1 IsNot Nothing Then
                 TextBoxLinkManagementFilename.Text = value
             End If
@@ -1300,6 +1302,7 @@ Public Class Form_Main
         ToolStripPresets.Renderer = New MySR()
         '################# rif: https://stackoverflow.com/questions/1918247/how-to-disable-the-line-under-tool-strip-in-winform-c
 
+        If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
         If Not Presets Then Splash.UpdateStatus("Wrapping up")
 
@@ -3871,6 +3874,18 @@ End Class
 
 ' Iterate through an Enum
 ' For Each PaperSizeConstant In System.Enum.GetValues(GetType(SolidEdgeDraft.PaperSizeConstants))
+
+' Check COM types
+' Select Case HCComObject.GetCOMObjectType(objVar)
+'    Case GetType(SolidEdgeFramework.variable)
+'        Dim tmpVar = CType(objVar, SolidEdgeFramework.variable)
+'        UnitTypeConstant = CType(tmpVar.UnitsType, SolidEdgeFramework.UnitTypeConstants)
+'    Case GetType(SolidEdgeFrameworkSupport.Dimension)
+'        Dim tmpDim = CType(objVar, SolidEdgeFrameworkSupport.Dimension)
+'        UnitTypeConstant = CType(tmpDim.UnitsType, SolidEdgeFramework.UnitTypeConstants)
+'    Case Else
+'        MsgBox(String.Format("Unrecognized variable type '{0}'", objVar.GetType.ToString))
+' End Select
 
 'Me.Cursor = Cursors.WaitCursor
 'Me.Cursor = Cursors.Default

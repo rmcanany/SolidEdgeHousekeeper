@@ -7,6 +7,31 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
+        'Dim WC As New System.Net.WebClient
+        'Dim NewList As List(Of String)
+        'Dim s As String
+        'Dim DoubleQuote As Char = Chr(34)
+
+        ''"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
+
+        'WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+
+        ''s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
+        's = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/commits/master")
+
+        'NewList = s.Split(CChar(",")).ToList
+
+        'For Each s In NewList
+        '    If s.Contains("sha") Then
+        '        Exit For
+        '    End If
+        'Next
+
+        's = s.ToLower
+        's = s.Replace(DoubleQuote, "")  ' '{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29""' -> '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29'
+        's = s.Split(CChar(":"))(1)      ' '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29' -> 'dfbcf706c5cc8417d751351d2b56e46983ffbe29'
+
+
         Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/5379e246570c9624bd9128057ffc8775b49bc5f5/HelpTopics.md"
 
         If Not BaseURL.Contains("HelpTopics.md") Then
@@ -19,13 +44,16 @@ Public Class UtilsDocumentation
     End Function
 
     Public Sub BuildReadmeFile()
+        Dim UP As New UtilsPreferences
+        'Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
+        Dim ReadmeFileName As String = String.Format("{0}\README.md", UP.GetHardCodedPath)
 
-        Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
         Dim HelpTopicsFileName As String = ReadmeFileName.Replace("README", "HelpTopics")
 
         ' The readme file is not needed on the user's machine.  
         ' StartupPath is hard coded so this hopefully doesn't do anything on their machine.
-        Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+        'Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
+        Dim StartupPath As String = String.Format("{0}\bin\Release", UP.GetHardCodedPath)
 
         Dim TaskListHeader As String = "<!-- Start -->"
         Dim Proceed As Boolean = True
@@ -58,7 +86,7 @@ Public Class UtilsDocumentation
             ReadmeOut.Add(TaskListHeader)
             ReadmeOut.Add("")
 
-            Dim UP As New UtilsPreferences
+            'Dim UP As New UtilsPreferences
             Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
             '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>

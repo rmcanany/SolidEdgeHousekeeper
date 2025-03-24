@@ -988,15 +988,21 @@ Assumes drawing has the same name as the model, and is in the same directory
 
 </details>
 
-<details open><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartNumberDoesNotMatchFilename.png" style="padding-right:10px">Check part number does not match filename</h3></summary>
+<details open><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFilename.png" style="padding-right:10px">Check filename</h3></summary>
 
-Checks if the file name contains the part number. 
+Checks the file name for the presence of a property (or combination of properties). 
 
-![CheckPartNumberDoesNotMatchFilename](My%20Project/media/task_check_part_number_does_not_match_filename.png)
+![CheckFilename](My%20Project/media/task_check_filename.png)
 
-Enter the property formula that holds part number on the Options panel. For more information, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
+Enter the property formula on the Options panel. For example `%{System.Document Number}`, `%{Custom.PartNumber}-%{Custom.RevisionLetter}`, etc.  In the example above, it is set to check if a *.dft has the same name as the model it depicts.  For more information on properties, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
 
-The command only checks that the part number appears somewhere in the file name. If the part number is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you will get a match. 
+There are two comparison methods. 
+- `Comparison contains` checks if the property appears anywhere in the file name.  If the property value is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you would get a match. 
+- `Comparison is exactly` looks for an exact match.  With the previous example, the program would report an error. 
+
+For *.dft files, there are two ways to search.  You can use either one, or both. 
+- `Check model files` is the option most users will want.  It searches any models linked to the file for a property match.  
+- `Check draft itself` searches properties in the draft file.  Since draft files rarely have properties of their own, this is usually not necessary. Also, because missing properties are reported as an error, it can be confusing as well. 
 
 </details>
 

@@ -506,7 +506,7 @@ Public Class UtilsPreferences
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckMissingDrawing)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
-        TaskList.Add(New TaskCheckPartNumberDoesNotMatchFilename)
+        TaskList.Add(New TaskCheckFilename)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
         TaskList.Add(New TaskCheckPartCopies)
         If Splash IsNot Nothing Then Splash.UpdateStatus(TaskList(TaskList.Count - 1).Name)
@@ -540,7 +540,8 @@ Public Class UtilsPreferences
     End Function
 
     Private Sub CheckForUnknownTasks(KnownTasks As List(Of String))
-        Dim HardcodedPath = "C:\data\CAD\scripts\SolidEdgeHousekeeper\My Project"
+        'Dim HardcodedPath = "C:\data\CAD\scripts\SolidEdgeHousekeeper\My Project"
+        Dim HardcodedPath = String.Format("{0}\My Project", GetHardCodedPath)
         Dim Filenames As List(Of String)
         Dim Filename As String
 
@@ -799,7 +800,8 @@ Public Class UtilsPreferences
     '###### LINK MANAGEMENT ORDER ######
     Public Function GetLinkManagementOrder() As List(Of String)
 
-        Dim LinkManagementFilename As String = Form_Main.TextBoxLinkManagementFilename.Text
+        'Dim LinkManagementFilename As String = Form_Main.TextBoxLinkManagementFilename.Text
+        Dim LinkManagementFilename As String = Form_Main.LinkManagementFilename
 
         Dim Contents As String() = Nothing
         Dim CommentString As String = "\\ "
@@ -920,5 +922,12 @@ Public Class UtilsPreferences
         End If
 
     End Sub
+
+
+
+    '###### HARD CODED PATH ######
+    Public Function GetHardCodedPath() As String
+        Return "C:\data\CAD\scripts\SolidEdgeHousekeeper"
+    End Function
 
 End Class
