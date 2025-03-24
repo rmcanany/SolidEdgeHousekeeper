@@ -994,7 +994,7 @@ Checks the file name for the presence of a property (or combination of propertie
 
 ![CheckFilename](My%20Project/media/task_check_filename.png)
 
-Enter the property formula on the Options panel. For example `%{System.Document Number}`, `%{Custom.PartNumber}-%{Custom.RevisionLetter}`, etc.  In the example above, it is set to check if a *.dft has the same name as the model it depicts.  For more information on properties, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
+Enter the property formula on the Options panel. For example `%{System.Document Number}`, `%{Custom.PartNumber}-%{Custom.RevisionLetter}`, etc.  (The example above is set to check if a `*.dft` has the same name as the model it depicts.)  For more information on properties, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
 
 There are two comparison methods. 
 - `Comparison contains` checks if the property appears anywhere in the file name.  If the property value is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you would get a match. 

@@ -3,11 +3,6 @@
 Public Class TaskCheckFilename
 
     Inherits Task
-    'Public Property PropertySet As String
-
-    'Public Property PropertyName As String
-
-    'Public Property PropertyNameEnglish As String
 
     Private _PropertyFormula As String
     Public Property PropertyFormula As String
@@ -116,11 +111,7 @@ Public Class TaskCheckFilename
         End Set
     End Property
 
-    'Public Property PropertiesData As PropertiesData
-
     Enum ControlNames
-        'PropertySet
-        'PropertySetLabel
         PropertyFormula
         PropertyFormulaLabel
         ComparisonContains
@@ -341,19 +332,19 @@ Public Class TaskCheckFilename
                         ExitStatus = 1
                         If Me.ComparisonContains Then
                             If ModelLinkFilenames.Count = 1 Then
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property formula in this file", Filename))
+                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in this model file", Filename))
                             Else
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property formula in these files", Filename))
+                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in these model files", Filename))
                             End If
                         ElseIf Me.ComparisonIsExactly Then
                             If ModelLinkFilenames.Count = 1 Then
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property formula in this file", Filename))
+                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in this model file", Filename))
                             Else
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property formula in these files", Filename))
+                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in these model files", Filename))
                             End If
                         End If
                         For i As Integer = 0 To ModelLinkFilenames.Count - 1
-                            ErrorMessageList.Add(String.Format("    Linked file: {0} formula: {1}", ModelLinkFilenames(i), Formulas(i)))
+                            ErrorMessageList.Add(String.Format("    Model file: '{0}', property value: '{1}'", ModelLinkFilenames(i), Formulas(i)))
                         Next
                     End If
 
@@ -530,19 +521,19 @@ Public Class TaskCheckFilename
                                 ExitStatus = 1
                                 If Me.ComparisonContains Then
                                     If ChildNames.Count = 1 Then
-                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property formula in this file", Filename))
+                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in this model file", Filename))
                                     Else
-                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property formula in these files", Filename))
+                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in these model files", Filename))
                                     End If
                                 ElseIf Me.ComparisonIsExactly Then
                                     If ChildNames.Count = 1 Then
-                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property formula in this file", Filename))
+                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in this model file", Filename))
                                     Else
-                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property formula in these files", Filename))
+                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in these model files", Filename))
                                     End If
                                 End If
                                 For i As Integer = 0 To ChildNames.Count - 1
-                                    ErrorMessageList.Add(String.Format("    Linked file: {0}, formula: {1}", IO.Path.GetFileName(ChildNames(i)), Formulas(i)))
+                                    ErrorMessageList.Add(String.Format("    Model file: '{0}', property value: '{1}'", IO.Path.GetFileName(ChildNames(i)), Formulas(i)))
                                 Next
                             End If
                         End If
@@ -800,7 +791,7 @@ Public Class TaskCheckFilename
 
         HelpString += vbCrLf + vbCrLf + "Enter the property formula on the Options panel. "
         HelpString += "For example `%{System.Document Number}`, `%{Custom.PartNumber}-%{Custom.RevisionLetter}`, etc.  "
-        HelpString += "In the example above, it is set to check if a *.dft has the same name as the model it depicts.  "
+        HelpString += "(The example above is set to check if a `*.dft` has the same name as the model it depicts.)  "
         HelpString += "For more information on properties, see the "
         HelpString += "[<ins>**Property Filter**</ins>](#property-filter) section in this README file. "
 

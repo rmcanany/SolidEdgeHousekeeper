@@ -32,7 +32,7 @@ Public Class UtilsDocumentation
         's = s.Split(CChar(":"))(1)      ' '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29' -> 'dfbcf706c5cc8417d751351d2b56e46983ffbe29'
 
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/5379e246570c9624bd9128057ffc8775b49bc5f5/HelpTopics.md"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/6e009e563f8dd113326090b7538a5f253e2527f1/HelpTopics.md"
 
         If Not BaseURL.Contains("HelpTopics.md") Then
             MsgBox("BaseURL does not point to `HelpTopics.md`")
