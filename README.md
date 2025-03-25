@@ -990,19 +990,25 @@ Assumes drawing has the same name as the model, and is in the same directory
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFilename.png" style="padding-right:10px">Check filename</h3></summary>
 
-Checks the file name for the presence of a property (or combination of properties). 
+Checks the file name for the presence of a property (or combination of properties and other text). 
 
 ![CheckFilename](My%20Project/media/task_check_filename.png)
 
-Enter the property formula on the Options panel. For example `%{System.Document Number}`, `%{Custom.PartNumber}-%{Custom.RevisionLetter}`, etc.  (The example above is set to check if a `*.dft` has the same name as the model it depicts.)  For more information on properties, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
+Enter the property formula on the Options panel.  For example,
+- `%{System.Document Number}`
+- `%{Custom.PartNumber}-%{Custom.RevisionLetter}`
+
+In the image above, the program is set to check if a `*.dft` has the same name as the model it depicts.  
+
+For more information on properties, in particular how to make them available with a right-click, see the [<ins>**Property Filter**</ins>](#property-filter) section in this README file. 
 
 There are two comparison methods. 
 - `Comparison contains` checks if the property appears anywhere in the file name.  If the property value is, say, `7481-12104` and the file name is `7481-12104 Motor Mount.par`, you would get a match. 
 - `Comparison is exactly` looks for an exact match.  With the previous example, the program would report an error. 
 
-For *.dft files, there are two ways to search.  You can use either one, or both. 
+For `*.dft` files, there are two ways to search.  You can use either one, or both. 
 - `Check model files` is the option most users will want.  It searches any models linked to the file for a property match.  
-- `Check draft itself` searches properties in the draft file.  Since draft files rarely have properties of their own, this is usually not necessary. Also, because missing properties are reported as an error, it can be confusing as well. 
+- `Check draft itself` searches properties in the draft file.  Since draft files rarely have properties of their own, this is usually not necessary. Also, because missing properties are reported as an error, it can be distracting/confusing as well. 
 
 </details>
 
