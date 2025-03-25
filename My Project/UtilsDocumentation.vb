@@ -7,7 +7,7 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/4639cb3b3d395874b66046b960e9250aeadff122/HelpTopics.md"
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/ae00ef48cf33ac2b8e93420f11e8c8553051c3a0/HelpTopics.md"
 
         If Not BaseURL.Contains("HelpTopics.md") Then
             MsgBox("BaseURL does not point to `HelpTopics.md`")
