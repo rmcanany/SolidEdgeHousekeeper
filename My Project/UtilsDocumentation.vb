@@ -7,6 +7,19 @@ Public Class UtilsDocumentation
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
+        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/4639cb3b3d395874b66046b960e9250aeadff122/HelpTopics.md"
+
+        If Not BaseURL.Contains("HelpTopics.md") Then
+            MsgBox("BaseURL does not point to `HelpTopics.md`")
+        End If
+
+        Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
+
+        Return VersionURL
+
+
+        ' ###### WAY TO GET LATEST COMMIT STRING ######
+
         'Dim WC As New System.Net.WebClient
         'Dim NewList As List(Of String)
         'Dim s As String
@@ -32,15 +45,6 @@ Public Class UtilsDocumentation
         's = s.Split(CChar(":"))(1)      ' '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29' -> 'dfbcf706c5cc8417d751351d2b56e46983ffbe29'
 
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/4639cb3b3d395874b66046b960e9250aeadff122/HelpTopics.md"
-
-        If Not BaseURL.Contains("HelpTopics.md") Then
-            MsgBox("BaseURL does not point to `HelpTopics.md`")
-        End If
-
-        Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
-
-        Return VersionURL
     End Function
 
     Public Sub BuildReadmeFile()
