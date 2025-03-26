@@ -14,6 +14,9 @@ Public Class UtilsPreferences
 
     '###### FOLDERS ######
     Public Function GetStartupDirectory() As String
+
+        ' Returns the location of Housekeeper.exe
+
         Dim StartupDirectory As String = System.Windows.Forms.Application.StartupPath()
         Return StartupDirectory
     End Function
@@ -37,6 +40,12 @@ Public Class UtilsPreferences
         End If
     End Sub
 
+
+
+    '###### HELP FILE BASE URL ######
+    Public Function GetHelpfileBaseURLFilename() As String
+        Return String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
+    End Function
 
 
     '###### FILENAME CHARMAP ######

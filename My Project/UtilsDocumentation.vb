@@ -3,60 +3,87 @@
 Public Class UtilsDocumentation
 
     Public Function GenerateVersionURL(Tag As String) As String
+        ' Old way
         ' To get the BaseURL, on GitHub click the Commits button on the file list header.
         ' Click the top commit on the list.  On that page, click Browse Files.
         ' Click HelpTopics.md.  The URL that opens is the BaseURL.
 
-        Dim BaseURL As String = "https://github.com/rmcanany/SolidEdgeHousekeeper/blob/ae00ef48cf33ac2b8e93420f11e8c8553051c3a0/HelpTopics.md"
+        ' New way
+        ' To update the base URL, run Housekeeper in Release mode, then <CTRL><ALT>-click the main Help button.
 
-        If Not BaseURL.Contains("HelpTopics.md") Then
-            MsgBox("BaseURL does not point to `HelpTopics.md`")
+        Dim UP As New UtilsPreferences
+        Dim Filename As String = UP.GetHelpfileBaseURLFilename
+        Dim VersionURL As String = ""
+
+        If Not FileIO.FileSystem.FileExists(Filename) Then
+            UpdateBaseURL()
         End If
 
-        Dim VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
+        Dim Inlist As New List(Of String)
+        Inlist = IO.File.ReadAllLines(Filename).ToList
+
+        Dim BaseURL As String = Inlist(0)
+        VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))
 
         Return VersionURL
 
-
-        ' ###### WAY TO GET LATEST COMMIT STRING ######
-
-        'Dim WC As New System.Net.WebClient
-        'Dim NewList As List(Of String)
-        'Dim s As String
-        'Dim DoubleQuote As Char = Chr(34)
-
-        ''"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
-
-        'WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
-
-        ''s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/releases/latest")
-        's = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/commits/master")
-
-        'NewList = s.Split(CChar(",")).ToList
-
-        'For Each s In NewList
-        '    If s.Contains("sha") Then
-        '        Exit For
-        '    End If
-        'Next
-
-        's = s.ToLower
-        's = s.Replace(DoubleQuote, "")  ' '{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29""' -> '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29'
-        's = s.Split(CChar(":"))(1)      ' '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29' -> 'dfbcf706c5cc8417d751351d2b56e46983ffbe29'
-
-
     End Function
+
+    Public Sub UpdateBaseURL()
+
+        ' Updates <StartupDirectory>\HelpTextBaseURL.txt with the latest commit hash
+
+        ' ###### GET LATEST COMMIT STRING ######
+
+        Dim WC As New System.Net.WebClient
+        Dim NewList As List(Of String)
+        Dim s As String
+        Dim DoubleQuote As Char = Chr(34)
+        Dim UP As New UtilsPreferences
+        Dim CommitString As String
+        Dim BaseURL As String
+        Dim HelpfileBaseURLFilename As String
+        Dim Outlist As New List(Of String)
+
+        ' Format example (in testing, this was line 1 from the api results)
+        '"{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29"""
+
+        WC.Headers.Add("User-Agent: Other")  ' Get a 403 error without this.
+
+        s = WC.DownloadString("https://api.github.com/repos/rmcanany/solidedgehousekeeper/commits/master")
+
+        NewList = s.Split(CChar(",")).ToList
+
+        For Each s In NewList
+            If s.Contains("sha") Then
+                Exit For
+            End If
+        Next
+
+        s = s.ToLower
+        s = s.Replace(DoubleQuote, "")  ' '{""sha"":""dfbcf706c5cc8417d751351d2b56e46983ffbe29""' -> '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29'
+        s = s.Split(CChar(":"))(1)      ' '{sha:dfbcf706c5cc8417d751351d2b56e46983ffbe29' -> 'dfbcf706c5cc8417d751351d2b56e46983ffbe29'
+
+        CommitString = s
+
+        ' ###### SAVE TO FILE ######
+
+        BaseURL = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/{0}/HelpTopics.md", CommitString)
+        Outlist.Add(BaseURL)
+        HelpfileBaseURLFilename = UP.GetHelpfileBaseURLFilename
+
+        IO.File.WriteAllLines(HelpfileBaseURLFilename, Outlist)
+
+    End Sub
 
     Public Sub BuildReadmeFile()
         Dim UP As New UtilsPreferences
-        'Dim ReadmeFileName As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\README.md"
         Dim ReadmeFileName As String = String.Format("{0}\README.md", UP.GetHardCodedPath)
 
         Dim HelpTopicsFileName As String = ReadmeFileName.Replace("README", "HelpTopics")
 
         ' The readme file is not needed on the user's machine.  
         ' StartupPath is hard coded so this hopefully doesn't do anything on their machine.
-        'Dim StartupPath As String = "C:\data\CAD\scripts\SolidEdgeHousekeeper\bin\Release"
         Dim StartupPath As String = String.Format("{0}\bin\Release", UP.GetHardCodedPath)
 
         Dim TaskListHeader As String = "<!-- Start -->"
@@ -90,13 +117,14 @@ Public Class UtilsDocumentation
             ReadmeOut.Add(TaskListHeader)
             ReadmeOut.Add("")
 
-            'Dim UP As New UtilsPreferences
             Dim tmpTaskList = UP.BuildTaskListFromScratch(Nothing)
 
+            ' html for collapsible sections
             '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
             msg = String.Format(
                 "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0} style={0}padding-right:10px{0}>TASK DETAILS</h2></summary>",
                 Chr(34))
+
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -111,11 +139,11 @@ Public Class UtilsDocumentation
                 ReadmeOut.Add(Task.HelpText)
                 ReadmeOut.Add("")
 
-                ReadmeOut.Add("</details>")
+                ReadmeOut.Add("</details>") ' Close collapsible section
                 ReadmeOut.Add("")
             Next
 
-            ReadmeOut.Add("</details>")
+            ReadmeOut.Add("</details>") ' Close collapsible section
             ReadmeOut.Add("")
 
             ReadmeOut.Add("")
@@ -212,6 +240,8 @@ Public Class UtilsDocumentation
 
             IO.File.WriteAllLines(ReadmeFileName, ReadmeOut)
 
+            ' This is a copy of the README with all sections expanded.
+            ' It is needed for the version-specific help URLs.
             Dim HelpTopicsOut As New List(Of String)
             For Each Line As String In ReadmeOut
                 If Line.Contains("<details") And Not Line.Contains("<details open") Then
@@ -223,7 +253,6 @@ Public Class UtilsDocumentation
             IO.File.WriteAllLines(HelpTopicsFileName, HelpTopicsOut)
 
         End If
-
 
     End Sub
 

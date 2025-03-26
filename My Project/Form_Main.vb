@@ -2871,13 +2871,16 @@ Public Class Form_Main
     End Sub
 
     Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
-        Dim Tag As String = "readme"
 
         Dim UD As New UtilsDocumentation
 
-        Dim HelpURL = UD.GenerateVersionURL(Tag)
-
-        System.Diagnostics.Process.Start(HelpURL)
+        If ModifierKeys = Keys.Alt + Keys.Control Then
+            UD.UpdateBaseURL()
+        Else
+            Dim Tag As String = "readme"
+            Dim HelpURL = UD.GenerateVersionURL(Tag)
+            System.Diagnostics.Process.Start(HelpURL)
+        End If
 
     End Sub
 
