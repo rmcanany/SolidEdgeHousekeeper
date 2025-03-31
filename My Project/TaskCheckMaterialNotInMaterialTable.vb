@@ -134,13 +134,15 @@ Public Class TaskCheckMaterialNotInMaterialTable
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
 
         Select Case DocType
             Case "asm", "par", "psm"
                 Dim UM As New UtilsMaterials
-                ErrorMessage = UM.MaterialNotInMaterialTable(SEApp, SEDoc, Me.MaterialTable)
+                ErrorMessage = UM.MaterialNotInMaterialTable(SEApp, SEDoc, Me.MaterialTable, TaskLogger)
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
@@ -154,6 +156,8 @@ Public Class TaskCheckMaterialNotInMaterialTable
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
         Dim Proceed As Boolean = True
         Dim Matl As String = ""
@@ -170,6 +174,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add(ex.Message)
+
+            TaskLogger.AddMessage(ex.Message)
+
         End Try
 
         If Proceed Then
@@ -188,6 +195,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 Proceed = False
                 ExitStatus = 1
                 ErrorMessageList.Add("Material 'None' not in material table")
+
+                TaskLogger.AddMessage("Material 'None' not in material table")
+
             End If
         End If
 
@@ -196,6 +206,9 @@ Public Class TaskCheckMaterialNotInMaterialTable
                 Proceed = False
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Material '{0}' not in material table", Matl))
+
+                TaskLogger.AddMessage(String.Format("Material '{0}' not in material table", Matl))
+
             End If
         End If
 

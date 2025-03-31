@@ -148,6 +148,10 @@ Public MustInherit Class Task
     Public Property RequiresLinkManagementOrder As Boolean = False
     Public Property LinkManagementOrder As List(Of String) = Nothing
 
+    Public Property ErrorLogger As HCErrorLogger
+    Public Property FileLogger As Logger
+    Public Property TaskLogger As Logger
+
 
 
     Public Enum BaseControlNames
@@ -432,6 +436,7 @@ Public MustInherit Class Task
         IgnoreProps.AddRange({"SolidEdgeRequired", "Application", "Document", "IsOptionsHidden"})
         IgnoreProps.AddRange({"PropertiesData"})
         IgnoreProps.AddRange({"LinkManagementOrder", "ImageFileTypeNames", "SelectedSheetsList"})
+        IgnoreProps.AddRange({"ErrorLogger", "FileLogger", "TaskLogger"})
 
         Dim s As String = ""
 
@@ -476,7 +481,7 @@ Public MustInherit Class Task
         Next
 
         If Not s = "" Then
-            MsgBox(String.Format("In GetFormState(), {2} PropTypestrings not recognized{0}{1}", vbCrLf, s, Me.Name))
+            MsgBox(String.Format("In Task.GetFormState(), {2} PropTypestrings not recognized{0}{1}", vbCrLf, s, Me.Name))
         End If
 
         tmpJSONDict("TaskName") = Me.Name

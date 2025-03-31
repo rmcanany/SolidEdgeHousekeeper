@@ -131,6 +131,8 @@ Public Class TaskCheckDrawings
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim s As String
         Dim tf As Boolean
 
@@ -156,7 +158,9 @@ Public Class TaskCheckDrawings
                         ExitStatus = 1
                         s = "Parts list out of date"
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                        'UpdateErrorMessageList(ErrorMessageList, SketchAssembly.Name, True, CheckItem)
+
+                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
                     End If
                 Next
             Catch ex As Exception
@@ -171,6 +175,9 @@ Public Class TaskCheckDrawings
                         ExitStatus = 1
                         s = "Drawing views out of date"
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
                     End If
                     ' Some drawing views do not have a ModelLink
                     Try
@@ -180,6 +187,9 @@ Public Class TaskCheckDrawings
                                 ExitStatus = 1
                                 s = "Drawing views out of date"
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
                             End If
                         End If
                     Catch ex As Exception
@@ -210,6 +220,9 @@ Public Class TaskCheckDrawings
                                 ExitStatus = 1
                                 s = String.Format("Detached annotation: Sheet {0}: {1}", Sheet.Name, Balloon.BalloonDisplayedText)
                                 ErrorMessageList.Add(s)
+
+                                TaskLogger.AddMessage(s)
+
                             End If
                         End If
                     Catch ex As Exception
@@ -222,6 +235,9 @@ Public Class TaskCheckDrawings
             If DocDimensionDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access dimensions")
+
+                TaskLogger.AddMessage("Unable to access dimensions")
+
             Else
                 For Each DimensionName In DocDimensionDict.Keys
                     Dimension = DocDimensionDict(DimensionName)
@@ -235,6 +251,9 @@ Public Class TaskCheckDrawings
                         ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
                         s = String.Format("Detached dimension: Sheet {0}: {1}", ParentSheet.Name, Dimension.DisplayName)
                         ErrorMessageList.Add(s)
+
+                        TaskLogger.AddMessage(s)
+
                     End If
 
                 Next
@@ -250,6 +269,9 @@ Public Class TaskCheckDrawings
                     ExitStatus = 1
                     s = String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
                 End If
             Next
 
@@ -307,23 +329,6 @@ Public Class TaskCheckDrawings
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox)
-        Me.DrawingViewsOutOfDate = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox)
-        Me.DetachedDimensionsOrAnnotations = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox)
-        Me.DrawingViewOnBackgroundSheet = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

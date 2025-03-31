@@ -1,4 +1,5 @@
 ﻿Option Strict On
+Imports System.Management.Automation
 
 Public Class TaskActivateAndUpdateAll
     Inherits Task
@@ -62,6 +63,8 @@ Public Class TaskActivateAndUpdateAll
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim UC As New UtilsCommon
 
 
@@ -73,10 +76,11 @@ Public Class TaskActivateAndUpdateAll
             tmpSEDoc.UpdateAll()
         End If
 
-
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
             SEDoc.Save()
             SEApp.DoIdle()
@@ -87,22 +91,6 @@ Public Class TaskActivateAndUpdateAll
         Return ErrorMessage
     End Function
 
-    'Public Overrides Function GetTaskControl(TLPParent As ExTableLayoutPanel) As UCTaskControl
-
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Me.TaskControl = New UCTaskControl(Me)
-
-    '    For Each Control As Control In Me.TaskControl.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Return Me.TaskControl
-
-    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

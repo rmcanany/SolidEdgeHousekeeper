@@ -190,8 +190,6 @@ Public Class TaskSaveDrawingAs
 
     Public Property PDFPerSheetFileTypeName As String
 
-    'Public Property TemplatePropertyDict As Dictionary(Of String, Dictionary(Of String, String))
-    'Public Property PropertiesData As PropertiesData
 
     Enum ControlNames
         NewFileTypeName
@@ -297,6 +295,8 @@ Public Class TaskSaveDrawingAs
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
@@ -334,6 +334,10 @@ Public Class TaskSaveDrawingAs
                 If NewFilename = "" Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
+                    ' Handled in GenerateNewFilename
+                    'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
                 End If
 
                 If ExitStatus = 0 Then
@@ -361,7 +365,8 @@ Public Class TaskSaveDrawingAs
     Private Function GenerateNewFilename(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         NewExtension As String,
-        Optional Suffix As String = "") As String
+        Optional Suffix As String = ""
+        ) As String
 
         ' Example conversions
         ' NewExtension: ".stp"
@@ -409,6 +414,9 @@ Public Class TaskSaveDrawingAs
             NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
             If NewSubDirectoryName Is Nothing Then
                 Success = False
+
+                Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+
             End If
             If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
@@ -425,6 +433,9 @@ Public Class TaskSaveDrawingAs
             NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
             If NewFilenameWOExt Is Nothing Then
                 Success = False
+
+                Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+
             End If
         End If
 
@@ -497,6 +508,9 @@ Public Class TaskSaveDrawingAs
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Unable to add watermark to sheet '{0}'", Sheet.Name))
+
+                Me.TaskLogger.AddMessage(String.Format("Unable to add watermark to sheet '{0}'", Sheet.Name))
+
             End Try
         Next
 
@@ -581,6 +595,9 @@ Public Class TaskSaveDrawingAs
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
+
+                    Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
+
                 End Try
 
                 ' These checks are performed in CheckStartConditions
@@ -596,6 +613,9 @@ Public Class TaskSaveDrawingAs
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Error saving file {0}", NewFilename))
+
+            Me.TaskLogger.AddMessage(String.Format("Error saving file {0}", NewFilename))
+
         End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList

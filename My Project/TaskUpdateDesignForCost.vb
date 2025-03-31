@@ -25,12 +25,6 @@ Public Class TaskUpdateDesignForCost
 
     End Sub
 
-    'Public Sub New(Task As TaskUpdateDesignForCost)
-
-    '    'Options
-
-    'End Sub
-
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -53,6 +47,7 @@ Public Class TaskUpdateDesignForCost
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -60,6 +55,7 @@ Public Class TaskUpdateDesignForCost
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -69,6 +65,8 @@ Public Class TaskUpdateDesignForCost
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
@@ -81,6 +79,9 @@ Public Class TaskUpdateDesignForCost
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()
@@ -92,23 +93,6 @@ Public Class TaskUpdateDesignForCost
 
     End Function
 
-
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Return Me.TLPTask
-    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

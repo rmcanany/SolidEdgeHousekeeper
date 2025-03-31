@@ -46,6 +46,7 @@ Public Class TaskCheckFlatPattern
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -53,6 +54,7 @@ Public Class TaskCheckFlatPattern
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -63,12 +65,14 @@ Public Class TaskCheckFlatPattern
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
 
         Dim FlatpatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Dim FlatpatternModel As SolidEdgePart.FlatPatternModel
-        
+
         Select Case DocType
             Case = "par"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.PartDocument)
@@ -81,18 +85,44 @@ Public Class TaskCheckFlatPattern
             Case Else
                 MsgBox(String.Format("{0} DocType '{0}' not recognized", Me.Name, DocType))
         End Select
-        
-        If Not FlatpatternModels Is Nothing
+
+        '' Active flat environment to regenerate flat model then save part if no errors
+        'If ExitStatus = 0 And FlatpatternModels.Count > 0 Then
+        '    SEDoc.Activate()
+        '    SEApp.DoIdle()
+        '    SEApp.StartCommand(CType(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalToolsSelectTool, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    SEApp.DoIdle()
+        '    SEApp.StartCommand(CType(SolidEdgeConstants.SheetMetalCommandConstants.SheetMetalModelFlatPattern, SolidEdgeFramework.SolidEdgeCommandConstants))
+        '    SEApp.DoIdle()
+        '    'SEDoc.Save()
+        '    SEApp.DoIdle()
+        'End If
+
+
+        If Not FlatpatternModels Is Nothing Then
             If FlatpatternModels.Count > 0 Then
                 For Each FlatpatternModel In FlatpatternModels
                     If Not FlatpatternModel.IsUpToDate Then
                         ExitStatus = 1
                         ErrorMessageList.Add("Flat pattern is out of date")
+
+                        TaskLogger.AddMessage("Flat pattern is out of date")
+
+                    End If
+                    If Not FlatpatternModel.FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureOK Then
+                        ExitStatus = 1
+                        ErrorMessageList.Add("Flat pattern is out of date")
+
+                        TaskLogger.AddMessage("Flat pattern is out of date")
+
                     End If
                 Next
             Else
                 ExitStatus = 1
                 ErrorMessageList.Add("No flat patterns found")
+
+                TaskLogger.AddMessage("No flat patterns found")
+
             End If
         End If
         ErrorMessage(ExitStatus) = ErrorMessageList

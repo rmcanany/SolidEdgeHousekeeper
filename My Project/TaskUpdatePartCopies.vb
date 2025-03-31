@@ -101,6 +101,8 @@ Public Class TaskUpdatePartCopies
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalExitStatus As Integer = 0
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
@@ -140,6 +142,8 @@ Public Class TaskUpdatePartCopies
                                 If Not TF Then
                                     ExitStatus = 1
                                     ErrorMessageList.Add(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
+
+                                    TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
                                 Else
                                     If Me.UpdateParents Then
                                         ' Try a recursion
@@ -160,6 +164,9 @@ Public Class TaskUpdatePartCopies
                                     If SEDoc.ReadOnly Then
                                         ExitStatus = 1
                                         ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                                        TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
                                     Else
                                         SEDoc.Save()
                                         SEApp.DoIdle()
@@ -173,6 +180,9 @@ Public Class TaskUpdatePartCopies
             ElseIf Models.Count >= 300 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
+                TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
             End If
 
         End If
@@ -180,6 +190,9 @@ Public Class TaskUpdatePartCopies
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()

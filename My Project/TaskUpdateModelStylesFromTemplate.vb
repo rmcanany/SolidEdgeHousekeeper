@@ -288,6 +288,8 @@ Public Class TaskUpdateModelStylesFromTemplate
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim UC As New UtilsCommon
@@ -485,6 +487,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()
@@ -582,6 +587,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
+
+                        TaskLogger.AddMessage(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
+
                     End Try
 
                     'Update skybox
@@ -597,6 +605,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                             Catch ex As Exception
                                 ExitStatus = 1
                                 ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+
+                                TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+
                             End Try
                         Next
 
@@ -615,6 +626,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
+
+                    TaskLogger.AddMessage(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
+
                 End Try
 
                 'Update skybox
@@ -630,6 +644,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+
+                            TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
+
                         End Try
                     Next
 
@@ -651,6 +668,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to remove ViewStyle '{0}'", s))
+
+                        TaskLogger.AddMessage(String.Format("Unable to remove ViewStyle '{0}'", s))
+
                     End Try
                 End If
             Next
@@ -694,6 +714,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+
+                        TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+
                     End Try
 
                     Exit For
@@ -708,6 +731,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
+
+                    TaskLogger.AddMessage(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
+
                 End Try
             End If
 
@@ -726,6 +752,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to remove TextStyle '{0}'", s))
+
+                        TaskLogger.AddMessage(String.Format("Unable to remove TextStyle '{0}'", s))
+
                     End Try
                 End If
             Next
@@ -769,6 +798,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
+                        TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
                     End Try
 
                     Exit For
@@ -784,6 +816,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
+                    TaskLogger.AddMessage(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
                 End Try
             End If
 
@@ -802,6 +837,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to remove TextCharStyle '{0}'", s))
+
+                        TaskLogger.AddMessage(String.Format("Unable to remove TextCharStyle '{0}'", s))
+
                     End Try
                 End If
             Next
@@ -845,6 +883,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+
+                        TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+
                     End Try
 
                     Exit For
@@ -859,6 +900,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
+
+                    TaskLogger.AddMessage(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
+
                 End Try
             End If
 
@@ -877,6 +921,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to remove LinearStyle '{0}'", s))
+
+                        TaskLogger.AddMessage(String.Format("Unable to remove LinearStyle '{0}'", s))
+
                     End Try
                 End If
             Next
@@ -920,6 +967,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
+                        TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
                     End Try
 
                     Exit For
@@ -934,6 +984,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
+                    TaskLogger.AddMessage(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
                 End Try
             End If
 
@@ -952,6 +1005,9 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to remove DimensionStyle '{0}'", s))
+
+                        TaskLogger.AddMessage(String.Format("Unable to remove DimensionStyle '{0}'", s))
+
                     End Try
                 End If
             Next
@@ -983,6 +1039,9 @@ Public Class TaskUpdateModelStylesFromTemplate
         If DocBaseStyles.Keys.Count < TemplateBaseStyles.Keys.Count Then
             ExitStatus = 1
             ErrorMessageList.Add("Unable to update all Color Manager base styles")
+
+            TaskLogger.AddMessage("Unable to update all Color Manager base styles")
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList

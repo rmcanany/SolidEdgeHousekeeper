@@ -134,6 +134,8 @@ Public Class TaskFitView
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
 
@@ -193,6 +195,9 @@ Public Class TaskFitView
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()
@@ -246,23 +251,6 @@ Public Class TaskFitView
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-
-        CheckBox = CType(ControlsDict(ControlNames.Isometric.ToString), CheckBox)
-        Me.Isometric = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.Dimetric.ToString), CheckBox)
-        Me.Dimetric = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.Trimetric.ToString), CheckBox)
-        Me.Trimetric = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

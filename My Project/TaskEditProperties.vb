@@ -174,6 +174,7 @@ Public Class TaskEditProperties
 
     End Sub
 
+
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -221,6 +222,8 @@ Public Class TaskEditProperties
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim PropertySets As SolidEdgeFramework.PropertySets = Nothing
@@ -267,6 +270,9 @@ Public Class TaskEditProperties
         Else
             ExitStatus = 1
             ErrorMessageList.Add("No properties provided")
+
+            TaskLogger.AddMessage("No properties provided")
+
         End If
 
         If ExitStatus = 0 Then
@@ -282,11 +288,15 @@ Public Class TaskEditProperties
                 If Not Members.GlobalEditMode Then
                     ExitStatus = 1
                     ErrorMessageList.Add("Cannot process FOA with 'Apply edits to all members' disabled")
+
+                    TaskLogger.AddMessage("Cannot process FOA with 'Apply edits to all members' disabled")
+
                 Else
                     For Each Member As SolidEdgeAssembly.AssemblyFamilyMember In Members
                         Members.ActivateMember(Member.MemberName)
                         SEApp.DoIdle()
-                        SupplementalErrorMessage = DoFindReplace(SEApp, CType(tmpAsmDoc, SolidEdgeFramework.SolidEdgeDocument), PropertiesToEditDict)
+                        SupplementalErrorMessage = DoFindReplace(
+                            SEApp, CType(tmpAsmDoc, SolidEdgeFramework.SolidEdgeDocument), PropertiesToEditDict)
                         AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                     Next
                 End If
@@ -301,10 +311,18 @@ Public Class TaskEditProperties
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
+        Else
+            Dim s = "Errors encountered.  No changes made."
+            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
         End If
 
@@ -325,6 +343,8 @@ Public Class TaskEditProperties
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim SupplementalExitStatus As Integer
@@ -360,6 +380,9 @@ Public Class TaskEditProperties
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add("No properties provided")
+
+            TaskLogger.AddMessage("No properties provided")
+
         End If
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
@@ -371,6 +394,9 @@ Public Class TaskEditProperties
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add(ex.Message)
+
+            TaskLogger.AddMessage(ex.Message)
+
         End Try
 
         If Proceed Then
@@ -395,6 +421,9 @@ Public Class TaskEditProperties
                     Proceed = False
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Property '{0}' not recognized", PropertyName))
+
+                    TaskLogger.AddMessage(String.Format("Property '{0}' not recognized", PropertyName))
+
                 End If
 
                 AutoAdd = (Me.AutoAddMissingProperty) And (PropertySetName.ToLower = "custom")
@@ -407,7 +436,8 @@ Public Class TaskEditProperties
                     AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
                     SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                    If SupplementalExitStatus > 0 Then Proceed = False
+                    'If SupplementalExitStatus > 0 Then Proceed = False
+                    If SupplementalExitStatus > 0 Or TaskLogger.HasErrors Then Proceed = False
 
                 End If
 
@@ -428,6 +458,9 @@ Public Class TaskEditProperties
                             s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
                         End If
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
                     End If
 
                 End If
@@ -441,14 +474,16 @@ Public Class TaskEditProperties
                     AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
                     SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-                    If SupplementalExitStatus > 0 Then Proceed = False
+                    'If SupplementalExitStatus > 0 Then Proceed = False
+                    If SupplementalExitStatus > 0 Or TaskLogger.HasErrors Then Proceed = False
 
                 End If
             Next
 
         End If
 
-        If ExitStatus = 0 Then
+        'If ExitStatus = 0 Then
+        If ExitStatus = 0 Or Not TaskLogger.HasErrors Then
             If SSDoc IsNot Nothing Then
                 SSDoc.Save()
                 SSDoc.Close()
@@ -456,6 +491,9 @@ Public Class TaskEditProperties
         Else
             s = "Errors encountered.  No changes made."
             If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -502,6 +540,9 @@ Public Class TaskEditProperties
                     s = String.Format("Unable to delete property '{0}({1})'.  This command only works on custom properties.", PropertyName, PropertyNameEnglish)
                 End If
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
             End If
 
         Else
@@ -524,6 +565,9 @@ Public Class TaskEditProperties
                         s = String.Format("Property '{0}({1})' not found or not recognized.", PropertyName, PropertyNameEnglish)
                     End If
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                 End If
 
             End If
@@ -555,6 +599,9 @@ Public Class TaskEditProperties
                         s = String.Format("Unable to replace property value '{0}({1})'.", PropertyName, PropertyNameEnglish)
                     End If
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                 End If
 
             End If
@@ -605,6 +652,9 @@ Public Class TaskEditProperties
             ExitStatus = 1
             s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
             If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+            If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
         End If
 
         Dim OriginalReplaceString As String = ""
@@ -615,9 +665,15 @@ Public Class TaskEditProperties
             If Not ReplaceSearchType = "EX" Then
                 s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
             Else
                 s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
             End If
         End If
 
@@ -682,6 +738,9 @@ Public Class TaskEditProperties
                     ExitStatus = 1
                     s = String.Format("Unable to process formula in Find text '{0}' for property '{1}'", FindString, PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                 End If
 
                 Dim OriginalReplaceString As String = ""
@@ -693,9 +752,15 @@ Public Class TaskEditProperties
                     If Not ReplaceSearchType = "EX" Then
                         s = String.Format("Unable to process formula in Replace text '{0}' for property '{1}'", ReplaceString, PropertyName)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     Else
                         s = String.Format("Unable to evaluate expression in Replace text '{0}' for property '{1}'", OriginalReplaceString, PropertyName)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     End If
                 End If
             End If
@@ -710,6 +775,9 @@ Public Class TaskEditProperties
                         ExitStatus = 1
                         s = String.Format("Property '{0}.{1}' not found.", PropertySetName, PropertyName)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     End If
 
                 Catch ex As Exception
@@ -717,6 +785,9 @@ Public Class TaskEditProperties
                     ExitStatus = 1
                     s = String.Format("Property '{0}.{1}' not found or not recognized.", PropertySetName, PropertyName)
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                 End Try
 
             End If
@@ -737,6 +808,9 @@ Public Class TaskEditProperties
                         ExitStatus = 1
                         s = String.Format("Unable to delete property '{0}'.  This command only works on custom properties.", PropertyName)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     End Try
 
                 Else
@@ -777,6 +851,9 @@ Public Class TaskEditProperties
                                 s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
+                                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
+
                                 ' First try int, then double
                                 'Try
                                 '    Dim i As Integer = CInt(PropValue)
@@ -799,6 +876,9 @@ Public Class TaskEditProperties
                                 s = String.Format("Property '{0}': Currently unable to process variable type '{1}'", PropertyName, SETypeName)
                                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
 
+                                If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
+
                                 'Dim d As Double = CDbl(PropValue)
                                 'Prop.Value = d
 
@@ -816,6 +896,9 @@ Public Class TaskEditProperties
                         ExitStatus = 1
                         s = String.Format("Unable to set '{0}' (variable type '{1}') to '{2}'.", PropertyName, SETypeName, PropValue)
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     End Try
 
                 End If
@@ -838,6 +921,9 @@ Public Class TaskEditProperties
                         ExitStatus = 1
                         s = "Cannot save document marked 'Read Only'"
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                     Else
                         SEDoc.Save()
                         SEApp.DoIdle()
@@ -848,6 +934,9 @@ Public Class TaskEditProperties
                     ExitStatus = 1
                     s = "Problem accessing or saving Property."
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not Me.TaskLogger.ContainsMessage(s) Then Me.TaskLogger.AddMessage(s)
+
                 End Try
             End If
 
@@ -867,7 +956,7 @@ Public Class TaskEditProperties
                         Case "par", "psm"
                             Dim UM As New UtilsMaterials
                             SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
-                                SEApp, SEDoc, Me.MaterialTable, False, True, False, "", Nothing, False, False)
+                                SEApp, SEDoc, Me.MaterialTable, False, True, False, "", Nothing, False, False, Me.TaskLogger)
 
                             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 

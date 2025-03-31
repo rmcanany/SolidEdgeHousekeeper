@@ -139,6 +139,8 @@ Public Class TaskCheckLinks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim LinkFilenames As New List(Of String)
 
         Dim Models As SolidEdgePart.Models = Nothing
@@ -167,6 +169,8 @@ Public Class TaskCheckLinks
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
 
+        Dim tmpMissingLinks As New List(Of String)  ' Used to avoid reporting missing links as also misplaced
+
         For ListIndex = 0 To CheckItems.Count - 1
 
             If Not CheckOptions(ListIndex) Then
@@ -174,6 +178,8 @@ Public Class TaskCheckLinks
             End If
 
             CheckItem = CheckItems(ListIndex)
+
+            Dim SubLogger As Logger = TaskLogger.AddLogger(CheckItem)
 
             ' The Select Case section simply builds a list of files to check.
             Select Case DocType
@@ -249,6 +255,9 @@ Public Class TaskCheckLinks
                     s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
                     ExitStatus = 1
                     UpdateErrorMessageList(ErrorMessageList, s, True, Me.Description)
+
+                    SubLogger.AddMessage(s)
+
                 End If
 
             End If
@@ -266,6 +275,11 @@ Public Class TaskCheckLinks
                         s = String.Format("{0} in {1}", Filename, Path)
 
                         UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
+
+                        SubLogger.AddMessage(s)
+
+                        tmpMissingLinks.Add(s)
+
                     End If
                 End If
 
@@ -295,6 +309,11 @@ Public Class TaskCheckLinks
                         If Not tf Then
                             UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
                         End If
+
+                        If Not tmpMissingLinks.Contains(s) Then
+                            SubLogger.AddMessage(s)
+                        End If
+
                     End If
 
                 End If
@@ -312,6 +331,8 @@ Public Class TaskCheckLinks
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim Proceed As Boolean = True
         Dim LinkNames As List(Of String)
         Dim BadLinkNames As List(Of String)
@@ -322,7 +343,7 @@ Public Class TaskCheckLinks
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
-        Dim ShowException As Boolean = True
+        Dim ShowException As Boolean = False
         If ShowException Then
             SSDoc = New HCStructuredStorageDoc(FullName)
         Else
@@ -332,6 +353,9 @@ Public Class TaskCheckLinks
                 Proceed = False
                 ExitStatus = 1
                 ErrorMessageList.Add(ex.Message)
+
+                TaskLogger.AddMessage(ex.Message)
+
             End Try
         End If
 
@@ -346,6 +370,9 @@ Public Class TaskCheckLinks
                 Proceed = False
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to read file links")
+
+                TaskLogger.AddMessage("Unable to read file links")
+
             End If
 
             If Proceed Then
@@ -368,6 +395,9 @@ Public Class TaskCheckLinks
                 Next
 
                 If Me.CheckMissingLinks Then
+
+                    Dim SubLogger As Logger = TaskLogger.AddLogger("Missing links")
+
                     If BadLinkNames.Count > 0 Then
                         ExitStatus = 1
                         ErrorMessageList.Add("Missing Links")
@@ -376,11 +406,18 @@ Public Class TaskCheckLinks
                             Filename = IO.Path.GetFileName(BadLinkName)
                             Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
                             ErrorMessageList.Add(s)
+
+                            s = String.Format("{0} in {1}", Filename, Directory)
+                            SubLogger.AddMessage(s)
+
                         Next
                     End If
                 End If
 
                 If Me.CheckMisplacedLinks Then
+
+                    Dim SubLogger As Logger = TaskLogger.AddLogger("Misplaced links")
+
                     If MisplacedLinkNames.Count > 0 Then
                         ExitStatus = 1
                         ErrorMessageList.Add("Misplaced Links")
@@ -389,6 +426,10 @@ Public Class TaskCheckLinks
                             Filename = IO.Path.GetFileName(MisplacedLinkName)
                             Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
                             ErrorMessageList.Add(s)
+
+                            s = String.Format("{0} in {1}", Filename, Directory)
+                            SubLogger.AddMessage(s)
+
                         Next
                     End If
                 End If
@@ -396,9 +437,7 @@ Public Class TaskCheckLinks
             End If
         End If
 
-        If SSDoc IsNot Nothing Then
-            SSDoc.Close()
-        End If
+        If SSDoc IsNot Nothing Then SSDoc.Close()
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

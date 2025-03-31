@@ -305,6 +305,8 @@ Public Class TaskCreateDrawingOfFlatPattern
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
@@ -327,11 +329,17 @@ Public Class TaskCreateDrawingOfFlatPattern
         If FlatPatternModels.Count = 0 Then
             ExitStatus = 1
             ErrorMessageList.Add("No flat patterns detected")
+
+            TaskLogger.AddMessage("No flat patterns detected")
+
         End If
         
         If FlatPatternModels.Count > 0 AndAlso FlatPatternModels.Item(1).FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed Then
             ExitStatus = 1
             ErrorMessageList.Add("Flat pattern feature is in a failed state")
+
+            TaskLogger.AddMessage("Flat pattern feature is in a failed state")
+
         End If
 
         If ExitStatus = 0 Then
@@ -355,7 +363,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             Dim FV = SolidEdgeDraft.SheetMetalDrawingViewTypeConstants.seSheetMetalFlatView
             Dim DrawingView As SolidEdgeDraft.DrawingView = DrawingViews.AddSheetMetalView(ModelLink, TV, 1.0, 0.0, 0.0, FV)
 
-            SupplementalErrorMessage = FormatDrawingView(Sheet, DrawingView)
+            SupplementalErrorMessage = FormatDrawingView(Sheet, DrawingView, TaskLogger)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
 
             Dim DrawingFilename As String = ""
@@ -427,7 +435,8 @@ Public Class TaskCreateDrawingOfFlatPattern
 
     Private Function FormatDrawingView(
         ByRef Sheet As SolidEdgeDraft.Sheet,
-        ByRef DrawingView As SolidEdgeDraft.DrawingView
+        ByRef DrawingView As SolidEdgeDraft.DrawingView,
+        ErrorLogger As Logger
         ) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)

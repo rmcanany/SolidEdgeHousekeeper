@@ -112,26 +112,13 @@ Public Class TaskSetDocumentStatus
 
     End Function
 
-    Private Overloads Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
-
     Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
         'Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
         'Dim NewSecurity As StatusSecurityMapping
@@ -147,6 +134,9 @@ Public Class TaskSetDocumentStatus
             Proceed = False
             ExitStatus = 1
             ErrorMessageList.Add("Unable to open file")
+
+            TaskLogger.AddMessage("Unable to open file")
+
         End Try
 
         If Proceed Then
@@ -156,6 +146,9 @@ Public Class TaskSetDocumentStatus
             If Not Proceed Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Unable to change status to '{0}'", Me.NewStatus))
+
+                TaskLogger.AddMessage(String.Format("Unable to change status to '{0}'", Me.NewStatus))
+
             End If
 
         End If

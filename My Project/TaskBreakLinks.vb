@@ -163,37 +163,25 @@ Public Class TaskBreakLinks
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
-        If Me.BreakDesignCopies Then
+        If Me.BreakDesignCopies Or Me.BreakInterpartCopies Then
             SupplementalErrorMessage = DoBreakDesignCopies(SEDoc, Configuration, SEApp)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
         End If
 
-        If Me.BreakConstructionCopies Then
+        If Me.BreakConstructionCopies Or Me.BreakInterpartCopies Then
             SupplementalErrorMessage = DoBreakConstructionCopies(SEDoc, Configuration, SEApp)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
         End If
 
-        If Me.BreakExcel Then
+        If Me.BreakExcel Or Me.BreakInterpartCopies Then
             SupplementalErrorMessage = DoBreakExcel(SEDoc, Configuration, SEApp)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
         End If
 
         ' https://community.sw.siemens.com/s/question/0D5Vb000007bHr1KAE/how-do-i-break-these-links
         If Me.BreakInterpartCopies Then
-            ' Design copies
-            SupplementalErrorMessage = DoBreakDesignCopies(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-            ' Construction copies
-            SupplementalErrorMessage = DoBreakConstructionCopies(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-            ' Excel
-            SupplementalErrorMessage = DoBreakExcel(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-            ' Whatever else it wants
             SupplementalErrorMessage = DoBreakInterpartCopies(SEDoc, Configuration, SEApp)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
         End If
@@ -206,6 +194,8 @@ Public Class TaskBreakLinks
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
             If ExitStatus = 0 Then
                 SEDoc.Save()
@@ -219,6 +209,7 @@ Public Class TaskBreakLinks
 
     End Function
 
+
     Private Function DoBreakInterpartCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -228,8 +219,6 @@ Public Class TaskBreakLinks
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim FileChanged As Boolean = True
 
         Dim UC As New UtilsCommon
 
@@ -252,7 +241,6 @@ Public Class TaskBreakLinks
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
-
 
     Private Function DoBreakDraftModels(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -287,6 +275,8 @@ Public Class TaskBreakLinks
                     FileChanged = False
                     ExitStatus = 1
                     ErrorMessageList.Add("Unable to process all sheets.  No changes made.")
+
+                    Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
                 End Try
 
         End Select
@@ -331,7 +321,6 @@ Public Class TaskBreakLinks
         Next
 
     End Sub
-
 
     Private Function DoBreakExcel(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -431,6 +420,8 @@ Public Class TaskBreakLinks
             ElseIf Models.Count >= 300 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
+                Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
             End If
         End If
 
@@ -492,12 +483,15 @@ Public Class TaskBreakLinks
             ElseIf CopyConstructions.Count >= 300 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", CopyConstructions.Count.ToString))
+
+                Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", CopyConstructions.Count.ToString))
             End If
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
+
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel

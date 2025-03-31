@@ -213,6 +213,8 @@ Public Class TaskUpdateModelSizeInVariableTable
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim Range As New List(Of Double)
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
         Dim Variables As SolidEdgeFramework.Variables
@@ -230,6 +232,9 @@ Public Class TaskUpdateModelSizeInVariableTable
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add("Unable to obtain stock size")
+
+            TaskLogger.AddMessage("Unable to obtain stock size")
+
         End Try
 
         If ExitStatus = 0 Then
@@ -255,6 +260,9 @@ Public Class TaskUpdateModelSizeInVariableTable
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+
+                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+
                         End Try
                     Else
                         ' Update it
@@ -265,6 +273,9 @@ Public Class TaskUpdateModelSizeInVariableTable
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+
+                            TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+
                         End Try
                     End If
                     i += 1
@@ -291,6 +302,9 @@ Public Class TaskUpdateModelSizeInVariableTable
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+
+                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+
                         End Try
                     Else
                         ' Update it
@@ -301,6 +315,9 @@ Public Class TaskUpdateModelSizeInVariableTable
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+
+                            TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
+
                         End Try
                     End If
                     i += 1
@@ -311,6 +328,9 @@ Public Class TaskUpdateModelSizeInVariableTable
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()

@@ -148,15 +148,13 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        'Dim TemplateFilename As String = Configuration("TextBoxTemplateDraft")
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
         Dim MissingStyles As String = ""
-
-        'Dim SupplementalExitStatus As Integer = 0
-        'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim UC As New UtilsCommon
 
@@ -185,6 +183,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                 Else
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Template has no background named '{0}'", Sheet.Name))
+
+                    TaskLogger.AddMessage(String.Format("Template has no background named '{0}'", Sheet.Name))
+
                 End If
             Next
 
@@ -225,6 +226,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -234,6 +238,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Dimension styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -261,6 +268,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying DrawingViewStyle '{0}'", TemplateDrawingViewStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -270,6 +280,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Drawing View styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -297,6 +310,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -306,6 +322,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Linear styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Linear styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -339,6 +358,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying TableStyle '{0}'", TemplateTableStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -348,6 +370,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Table styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Table styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -375,6 +400,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -384,6 +412,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Text Char styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Text Char styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -411,6 +442,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+
+                            TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
+
                         End Try
                     End If
                 Next
@@ -420,6 +454,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             If Len(MissingStyles) > 0 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Text styles in Draft but not in Template: {0}", MissingStyles))
+
+                TaskLogger.AddMessage(String.Format("Text styles in Draft but not in Template: {0}", MissingStyles))
+
             End If
             DocStyleNames.Clear()
             TemplateStyleNames.Clear()
@@ -433,6 +470,9 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()

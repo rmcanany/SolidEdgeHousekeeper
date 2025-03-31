@@ -3,6 +3,9 @@
 Public Class UtilsDocumentation
 
     Public Function GenerateVersionURL(Tag As String) As String
+
+        ' Builds a URL to the version-specific help page on GitHub.
+
         ' Old way
         ' To get the BaseURL, on GitHub click the Commits button on the file list header.
         ' Click the top commit on the list.  On that page, click Browse Files.
@@ -19,8 +22,7 @@ Public Class UtilsDocumentation
             UpdateBaseURL()
         End If
 
-        Dim Inlist As New List(Of String)
-        Inlist = IO.File.ReadAllLines(Filename).ToList
+        Dim Inlist As List(Of String) = IO.File.ReadAllLines(Filename).ToList
 
         Dim BaseURL As String = Inlist(0)
         VersionURL = String.Format("{0}#{1}", BaseURL, Tag.Replace("#", ""))

@@ -14,6 +14,54 @@ Please note, the program has been tested on thousands of our files, but none of 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
 
+## V2025.2 Enhancements/Fixes
+
+### Check Filename
+
+Added the option to use multiple properties instead of just one.  (Thank you **@tempod!**)  Added a comparison option, `is_exactly`.  Clarified the description of the option `Draft files -- Check the draft file itself`, which was causing confusion.  Changed the name from `Check part number does not match filename` to `Check filename`.  
+
+See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-filename) for details.
+
+
+### Check Relationships
+
+Added the ability to detect suppressed occurrences in assemblies.  (Thank you **@GregL!** and **@javigoca!**)
+
+See the [<ins>**Check Relationships Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-relationships) for details.
+
+### Run External Program
+
+Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. 
+
+The intent is to address one-off automation chores, where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. 
+
+One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
+
+```
+If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
+If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
+If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
+If ExitStatus = 0 Then
+    SEDoc.Save()
+    SEApp.DoIdle()
+Else
+    ErrorMessageList.Add("An error occurred")
+End If
+```
+
+See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
+
+### Structured Storage
+
+Fixed an issue where weldment materials were not processed correctly.
+
+Fixed an issue where certain missing links were not captured.
+
+### Miscellaneous
+
+Fixed an issue where the `List update frequency` was not properly initialized on startup.  (Thank you **@64Pacific!**)
+
+
 ## V2025.1 Enhancements/Fixes
 
 ### Presets

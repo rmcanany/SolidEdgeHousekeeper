@@ -117,6 +117,8 @@ Public Class TaskUpdatePhysicalProperties
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim s As String
         Dim Proceed As Boolean
 
@@ -189,6 +191,9 @@ Public Class TaskUpdatePhysicalProperties
                                 s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
                                 s = String.Format("{0}  Please verify results.", s)
                                 ErrorMessageList.Add(s)
+
+                                TaskLogger.AddMessage(s)
+
                             End If
                         End If
 
@@ -210,6 +215,9 @@ Public Class TaskUpdatePhysicalProperties
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add("Unable to update physical properties.")
+
+                    TaskLogger.AddMessage("Unable to update physical properties.")
+
                 End Try
 
             Case "par"
@@ -255,6 +263,9 @@ Public Class TaskUpdatePhysicalProperties
                     Proceed = False
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Density set to {0}", Density))
+
+                    TaskLogger.AddMessage(String.Format("Density set to {0}", Density))
+
                 End If
 
             End If
@@ -270,6 +281,9 @@ Public Class TaskUpdatePhysicalProperties
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add("Issue reported when hiding symbols.  Please verify results.")
+
+                            TaskLogger.AddMessage("Issue reported when hiding symbols.  Please verify results.")
+
                         End Try
                     End If
                     If Me.ShowSymbols Then
@@ -280,6 +294,9 @@ Public Class TaskUpdatePhysicalProperties
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add("Issue reported showing symbols.  Please verify results.")
+
+                            TaskLogger.AddMessage("Issue reported showing symbols.  Please verify results.")
+
                         End Try
                     End If
 
@@ -292,12 +309,18 @@ Public Class TaskUpdatePhysicalProperties
             If Not UC.IsVariablePresent(SEDoc, "Mass") Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
+
+                TaskLogger.AddMessage("Unable to add 'Mass' to the variable table")
+
             End If
         End If
 
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()

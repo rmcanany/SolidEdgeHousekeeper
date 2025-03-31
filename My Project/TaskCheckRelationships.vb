@@ -131,6 +131,8 @@ Public Class TaskCheckRelationships
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim Sketches As SolidEdgePart.Sketchs = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
         Dim ProfileSets As SolidEdgePart.ProfileSets = Nothing
@@ -160,6 +162,8 @@ Public Class TaskCheckRelationships
 
             CheckItem = CheckItems(ListIndex)
 
+            Dim SubtaskLogger As Logger = TaskLogger.AddLogger(CheckItem)
+
             Select Case DocType
 
                 Case = "asm"
@@ -185,6 +189,9 @@ Public Class TaskCheckRelationships
                                 If tf Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, SketchAssembly.Name, True, CheckItem)
+
+                                    SubtaskLogger.AddMessage(SketchAssembly.Name)
+
                                 End If
                             End If
 
@@ -199,6 +206,9 @@ Public Class TaskCheckRelationships
                                 If tf Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, SketchAssembly.Name, True, CheckItem)
+
+                                    SubtaskLogger.AddMessage(SketchAssembly.Name)
+
                                 End If
                             End If
 
@@ -208,6 +218,9 @@ Public Class TaskCheckRelationships
                         ExitStatus = 1
                         s = "Unable to process sketches"
                         If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                        TaskLogger.AddMessage(s)
+
                     End Try
 
 
@@ -222,6 +235,9 @@ Public Class TaskCheckRelationships
                                 If tf Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, Occurrence.Name, True, CheckItem)
+
+                                    SubtaskLogger.AddMessage(Occurrence.Name)
+
                                 End If
                             End If
 
@@ -229,6 +245,9 @@ Public Class TaskCheckRelationships
                                 If Occurrence.Status = SolidEdgeAssembly.OccurrenceStatusConstants.seOccurrenceStatusUnderDefined Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, Occurrence.Name, True, CheckItem)
+
+                                    SubtaskLogger.AddMessage(Occurrence.Name)
+
                                 End If
                             End If
 
@@ -247,6 +266,9 @@ Public Class TaskCheckRelationships
                             For Each tmpSC As SolidEdgeAssembly.SuppressComponent In Components
                                 ExitStatus = 1
                                 UpdateErrorMessageList(ErrorMessageList, tmpSC.Name, True, CheckItem)
+
+                                SubtaskLogger.AddMessage(tmpSC.Name)
+
                             Next
                         End If
 
@@ -272,15 +294,14 @@ Public Class TaskCheckRelationships
 
                 RefPlanesWithUnderconstrainedProfiles = GetRefPlanesWithUnderconstrainedProfiles(ProfileSets)
 
-                CheckSketches(ExitStatus, ErrorMessageList, CheckItem, Sketches)
-                CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, Models, RefPlanesWithUnderconstrainedProfiles)
+                CheckSketches(ExitStatus, ErrorMessageList, CheckItem, Sketches, SubtaskLogger)
+                CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, Models, RefPlanesWithUnderconstrainedProfiles, SubtaskLogger)
 
             End If
         Next
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
-
 
     End Function
 
@@ -314,7 +335,8 @@ Public Class TaskCheckRelationships
         ByRef ErrorMessageList As List(Of String),
         CheckItem As String,
         Models As SolidEdgePart.Models,
-        RefPlanesWithUnderconstrainedProfiles As List(Of SolidEdgePart.RefPlane))
+        RefPlanesWithUnderconstrainedProfiles As List(Of SolidEdgePart.RefPlane),
+        SubtaskLogger As Logger)
 
         Dim s As String
         Dim tf As Boolean
@@ -336,6 +358,7 @@ Public Class TaskCheckRelationships
                 ExitStatus = 1
                 s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
                 UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
+                SubtaskLogger.AddMessage(s)
             End If
 
             If (Models.Count > 0) And (Models.Count <= 300) Then
@@ -366,6 +389,7 @@ Public Class TaskCheckRelationships
                                 If tf Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
+                                    SubtaskLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -391,6 +415,7 @@ Public Class TaskCheckRelationships
                                 If RefPlanesWithUnderconstrainedProfiles.Contains(RefPlane) Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
+                                    SubtaskLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -400,6 +425,7 @@ Public Class TaskCheckRelationships
                                 If tf Then
                                     ExitStatus = 1
                                     UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
+                                    SubtaskLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -415,7 +441,8 @@ Public Class TaskCheckRelationships
         ByRef ExitStatus As Integer,
         ByRef ErrorMessageList As List(Of String),
         CheckItem As String,
-        Sketches As SolidEdgePart.Sketchs)
+        Sketches As SolidEdgePart.Sketchs,
+        SubtaskLogger As Logger)
 
         Dim tf As Boolean
         Dim Sketch As SolidEdgePart.Sketch
@@ -430,12 +457,14 @@ Public Class TaskCheckRelationships
                     If tf Then
                         ExitStatus = 1
                         UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
+                        SubtaskLogger.AddMessage(Sketch.Name)
                     End If
                 End If
                 If CheckItem = "Underconstrained relationships" Then
                     If Sketch.IsUnderDefined Then
                         ExitStatus = 1
                         UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
+                        SubtaskLogger.AddMessage(Sketch.Name)
                     End If
                 End If
                 If CheckItem = "Suppressed relationships" Then
@@ -444,6 +473,7 @@ Public Class TaskCheckRelationships
                     If tf Then
                         ExitStatus = 1
                         UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
+                        SubtaskLogger.AddMessage(Sketch.Name)
                     End If
                 End If
 

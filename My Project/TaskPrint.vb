@@ -121,7 +121,6 @@ Public Class TaskPrint
         End Set
     End Property
 
-
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -227,6 +226,8 @@ Public Class TaskPrint
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim DraftPrinter As SolidEdgeDraft.DraftPrintUtility = Nothing
 
         Dim Sheets As New List(Of SolidEdgeDraft.Sheet)
@@ -262,6 +263,9 @@ Public Class TaskPrint
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
+
+                TaskLogger.AddMessage(String.Format("Print drawing sheet {0} did not succeed", Sheet.Name))
+
             End Try
         Next
 

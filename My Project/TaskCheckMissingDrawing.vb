@@ -105,6 +105,8 @@ Public Class TaskCheckMissingDrawing
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
@@ -117,6 +119,9 @@ Public Class TaskCheckMissingDrawing
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Drawing {0} not found", DrawingFilename))
+
+            TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
+
         End If
 
 
@@ -130,6 +135,8 @@ Public Class TaskCheckMissingDrawing
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim ModelFilename As String
         Dim DrawingFilename As String
 
@@ -142,6 +149,9 @@ Public Class TaskCheckMissingDrawing
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Drawing {0} not found", DrawingFilename))
+
+            TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
+
         End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList

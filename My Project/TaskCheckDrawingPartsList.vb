@@ -66,6 +66,8 @@ Public Class TaskCheckDrawingPartsList
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
         Dim PartsLists As SolidEdgeDraft.PartsLists = tmpSEDoc.PartsLists
@@ -74,11 +76,17 @@ Public Class TaskCheckDrawingPartsList
         If PartsLists.Count = 0 Then
             ExitStatus = 1
             ErrorMessageList.Add("Parts list missing")
+
+            TaskLogger.AddMessage("Parts list missing")
+
         Else
             For Each PartsList In PartsLists
                 If Not PartsList.IsUpToDate Then
                     ExitStatus = 1
                     ErrorMessageList.Add("Parts list out of date")
+
+                    TaskLogger.AddMessage("Parts list out of date")
+
                     Exit For
                 End If
             Next

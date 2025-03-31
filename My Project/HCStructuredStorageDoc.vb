@@ -853,6 +853,59 @@ Public Class HCStructuredStorageDoc
                         Case Else
                             CorrectedName = OLEProp.PropertyName
                     End Select
+                Case "MechanicalModeling"
+                    Select Case OLEProp.PropertyIdentifier
+                        Case 3
+                            CorrectedName = "Material"
+                        Case 8
+                            CorrectedName = "TubeBendRadius"
+                        Case 9
+                            CorrectedName = "TubeOuterDiameter"
+                        Case 10
+                            CorrectedName = "TubeMinimumFlatLength"
+                        Case 11
+                            CorrectedName = "TubeWallThickness"
+                        Case 12
+                            CorrectedName = "TubeFlatLength"
+                        Case 13
+                            CorrectedName = "TubeAreaInsideDiameter"
+                        Case 14
+                            CorrectedName = "TubeVolumeInsideDiameter"
+                        Case 15
+                            CorrectedName = "TubeEndTreatmentTypeEnd1"
+                        Case 16
+                            CorrectedName = "TubeEndTreatmentTypeEnd2"
+                        Case 19
+                            CorrectedName = "Sheet Metal Gage"
+                        Case 20
+                            CorrectedName = "Face Style"
+                        Case 21
+                            CorrectedName = "Fill Style"
+                        Case 22
+                            CorrectedName = "Virtual Style"
+                        Case 23
+                            CorrectedName = "Density"
+                        Case 24
+                            CorrectedName = "Coef. of Thermal Exp"
+                        Case 25
+                            CorrectedName = "Thermal Conductivity"
+                        Case 26
+                            CorrectedName = "Specific Heat"
+                        Case 27
+                            CorrectedName = "Modulus of Elasticity"
+                        Case 28
+                            CorrectedName = "Poisson's Ratio"
+                        Case 29
+                            CorrectedName = "Yield Stress"
+                        Case 30
+                            CorrectedName = "Ultimate Stress"
+                        Case 31
+                            CorrectedName = "Elongation"
+                        Case 32
+                            CorrectedName = "Bead Material"
+                        Case Else
+                            CorrectedName = OLEProp.PropertyName
+                    End Select
                 Case Else
                     CorrectedName = OLEProp.PropertyName
             End Select
@@ -1185,12 +1238,14 @@ Public Class HCStructuredStorageDoc
             Dim AllStorages As New List(Of CFStorage)
             Dim JSiteStorages As New List(Of CFStorage)
 
+            Dim DocType As String = IO.Path.GetExtension(Me.ContainingFileFullName).ToLower
+
             ' For assemblies, get all filenames in the Attachments stream.
             ' It is needed because some JSite* OLE streams have filenames not in the assembly.
             ' Ideally we could parse the Attachments stream directly, but its format is messy.
 
             Dim AttachmentNamesList As New List(Of String)
-            If IO.Path.GetExtension(Me.ContainingFileFullName).ToLower = ".asm" Then
+            If DocType = ".asm" Then
                 Dim AllStreams As New List(Of CFStream)
                 Dim Attachments As CFStream = Nothing
                 RootStorage.VisitEntries(Sub(item) If item.IsStream Then AllStreams.Add(CType(item, CFStream)), recursive:=False)
@@ -1229,7 +1284,7 @@ Public Class HCStructuredStorageDoc
                 If (JSiteStreamNames.Contains(OLEName)) And (JSiteStreamNames.Contains("JProperties")) Then
                     If CheckJProperties(JSiteStorage.GetStream("JProperties")) Then
 
-                        Dim FullName As String = GetFullNameFromOLEStream(JSiteStorage.GetStream(OLEName), AttachmentNamesList)
+                        Dim FullName As String = GetFullNameFromOLEStream(JSiteStorage.GetStream(OLEName), AttachmentNamesList, DocType)
 
                         If FullName IsNot Nothing Then
                             If Not FullNames.Contains(FullName, StringComparer.OrdinalIgnoreCase) Then
@@ -1247,7 +1302,8 @@ Public Class HCStructuredStorageDoc
 
         Private Function GetFullNameFromOLEStream(
             OLEStream As CFStream,
-            AttachmentNamesList As List(Of String)
+            AttachmentNamesList As List(Of String),
+            DocType As String
             ) As String
 
             ' The OLE stream stores three filename formats, or none if the drawing view doesn't have a model link.
@@ -1315,17 +1371,32 @@ Public Class HCStructuredStorageDoc
                     For Each Target As String In Me.LinkManagementOrder
                         Select Case Target.ToUpper
                             Case "ABSOLUTE"
-                                If AttachmentNamesList.Contains(ABSOLUTE) Then
+                                If DocType = ".asm" Then
+                                    If AttachmentNamesList.Contains(ABSOLUTE) Then
+                                        BadName = ABSOLUTE
+                                        Exit For
+                                    End If
+                                Else
                                     BadName = ABSOLUTE
                                     Exit For
                                 End If
                             Case "RELATIVE"
-                                If AttachmentNamesList.Contains(RELATIVE) Then
+                                If DocType = ".asm" Then
+                                    If AttachmentNamesList.Contains(CONTAINER) Then
+                                        BadName = RELATIVE
+                                        Exit For
+                                    End If
+                                Else
                                     BadName = RELATIVE
                                     Exit For
                                 End If
                             Case "CONTAINER"
-                                If AttachmentNamesList.Contains(CONTAINER) Then
+                                If DocType = ".asm" Then
+                                    If AttachmentNamesList.Contains(CONTAINER) Then
+                                        BadName = CONTAINER
+                                        Exit For
+                                    End If
+                                Else
                                     BadName = CONTAINER
                                     Exit For
                                 End If

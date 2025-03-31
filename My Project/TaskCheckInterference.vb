@@ -104,6 +104,8 @@ Public Class TaskCheckInterference
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
         'tmpSEDoc.IsFileFamilyByDocument
         'tmpSEDoc.IsFileAlternatePositionByDocument
@@ -129,10 +131,11 @@ Public Class TaskCheckInterference
 
         If NumOccurrences > Me.NumOccurrencesLimit Then
             ExitStatus = 1
-            ErrorMessageList.Add(String.Format(
-                "Not performing interference check.  Number of occurrences {0} exceeds limit {1}.",
-                NumOccurrences,
-                Me.NumOccurrencesLimit))
+            Dim s = String.Format("Number of occurrences {0} exceeds limit {1}.", NumOccurrences, Me.NumOccurrencesLimit)
+            ErrorMessageList.Add(s)
+
+            TaskLogger.AddMessage(s)
+
         End If
 
         If (ExitStatus = 0) And (NumOccurrences > 1) Then
@@ -149,6 +152,9 @@ Public Class TaskCheckInterference
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add("Error running interference check")
+
+                TaskLogger.AddMessage("Error running interference check")
+
             End Try
         End If
 
@@ -156,6 +162,9 @@ Public Class TaskCheckInterference
             If Not Status = SolidEdgeAssembly.InterferenceStatusConstants.seInterferenceStatusNoInterference Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Interference detected")
+
+                TaskLogger.AddMessage("Interference detected")
+
             End If
         End If
 

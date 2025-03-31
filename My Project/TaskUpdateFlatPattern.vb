@@ -66,6 +66,8 @@ Public Class TaskUpdateFlatPattern
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
 
@@ -87,11 +89,17 @@ Public Class TaskUpdateFlatPattern
         If Not SEApp.Visible Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot regenerate flat model in background mode")
+
+            TaskLogger.AddMessage("Cannot regenerate flat model in background mode")
+
         End If
 
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         End If
 
         ' Active flat environment to regenerate flat model then save part if no errors
@@ -114,11 +122,17 @@ Public Class TaskUpdateFlatPattern
                     If Not FPM.IsUpToDate Then
                         ExitStatus = 1
                         ErrorMessageList.Add("Unable to update flat pattern")
+
+                        TaskLogger.AddMessage("Unable to update flat pattern")
+
                     End If
                 Next
             Else
                 ExitStatus = 1
                 ErrorMessageList.Add("No flat patterns found")
+
+                TaskLogger.AddMessage("No flat patterns found")
+
             End If
         End If
 

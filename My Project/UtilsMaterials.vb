@@ -16,7 +16,8 @@ Public Class UtilsMaterials
     Public Function MaterialNotInMaterialTable(
         ByVal _SEApp As SolidEdgeFramework.Application,
         ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        _ActiveMaterialLibrary As String
+        _ActiveMaterialLibrary As String,
+        ErrorLogger As Logger
         ) As Dictionary(Of Integer, List(Of String))
 
         Me.SEApp = _SEApp
@@ -26,6 +27,8 @@ Public Class UtilsMaterials
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        'Dim SubLogger As Logger = ErrorLogger.AddLogger("Material utilities")
 
         Dim MatTable As SolidEdgeFramework.MatTable
 
@@ -45,6 +48,8 @@ Public Class UtilsMaterials
 
         Dim Models As SolidEdgePart.Models = Nothing
 
+        Dim IsWeldment As Boolean = False
+
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
 
@@ -56,10 +61,12 @@ Public Class UtilsMaterials
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
                 Models = tmpSEDoc.Models
             Case "asm"
-                'Hopefully, nothing to do here.
+                Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
+                IsWeldment = tmpSEDoc.WeldmentAssembly
+                'If IsWeldment = Nothing Then IsWeldment = False
         End Select
 
-        If (DocType = "asm") OrElse (Models.Count > 0) Then
+        If ((DocType = "asm") And (IsWeldment)) Or (Models IsNot Nothing AndAlso Models.Count > 0) Then
 
             MatTable = SEApp.GetMaterialTable()
             MatTable.GetCurrentMaterialName(SEDoc, CurrentMaterialName)
@@ -78,8 +85,14 @@ Public Class UtilsMaterials
                 ExitStatus = 1
                 If CurrentMaterialName = "" Then
                     ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+
+                    ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+
                 Else
                     ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+
+                    ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+
                 End If
             End If
         End If
@@ -98,7 +111,8 @@ Public Class UtilsMaterials
         _FinishName As String,
         _ExcludedFinishesList As List(Of String),
         _OverrideBodyFaceStyle As Boolean,
-        _OverrideMaterialFaceStyle As Boolean
+        _OverrideMaterialFaceStyle As Boolean,
+        ErrorLogger As Logger
         ) As Dictionary(Of Integer, List(Of String))
 
         Me.SEApp = _SEApp
@@ -167,7 +181,7 @@ Public Class UtilsMaterials
         ' ###### CHECK START CONDITIONS ######
 
         ErrorMessageList = CheckUpdateMaterialStartConditions(
-            SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList)
+            SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList, ErrorLogger)
 
         If ErrorMessageList.Count > 0 Then
             ExitStatus = 1
@@ -205,6 +219,9 @@ Public Class UtilsMaterials
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+
+                        ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
+
                     End Try
                 Else
                     For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
@@ -250,6 +267,8 @@ Public Class UtilsMaterials
                                             Else
                                                 ExitStatus = 1
                                                 ErrorMessageList.Add(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
+
+                                                ErrorLogger.AddMessage(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
                                             End If
                                         End If
                                     Next
@@ -320,6 +339,9 @@ Public Class UtilsMaterials
                 Catch ex As Exception
                     ExitStatus = 1
                     ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
+
+                    ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
+
                 End Try
             End If
 
@@ -331,6 +353,9 @@ Public Class UtilsMaterials
                 ExitStatus = 1
                 For Each s As String In SupplementalErrorMessageList
                     If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+
                 Next
             End If
         End If
@@ -1244,26 +1269,39 @@ Public Class UtilsMaterials
         Models As SolidEdgePart.Models,
         MaxModelCount As Integer,
         CurrentMaterialName As String,
-        MaterialList As Object
+        MaterialList As Object,
+        ErrorLogger As Logger
         ) As List(Of String)
 
         Dim ErrorMessageList As New List(Of String)
 
         If SEDoc.ReadOnly Then
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            ErrorLogger.AddMessage("Cannot save document marked 'Read Only'")
+
             Return ErrorMessageList
         End If
 
         If Models.Count > MaxModelCount Then
             ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
+            ErrorLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
             Return ErrorMessageList
         End If
 
         If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
             If CurrentMaterialName = "" Then
                 ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+
+                ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
+
             Else
                 ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+
+                ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
+
             End If
             Return ErrorMessageList
         End If

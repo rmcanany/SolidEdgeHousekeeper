@@ -212,6 +212,117 @@ Public Class TaskEditInteractively
 
     End Sub
 
+
+
+    Public Overrides Function Process(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        ErrorMessage = InvokeSTAThread(
+                               Of SolidEdgeFramework.SolidEdgeDocument,
+                               Dictionary(Of String, String),
+                               SolidEdgeFramework.Application,
+                               Dictionary(Of Integer, List(Of String)))(
+                                   AddressOf ProcessInternal,
+                                   SEDoc,
+                                   Configuration,
+                                   SEApp)
+
+        Return ErrorMessage
+
+    End Function
+
+    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Return ErrorMessage
+
+    End Function
+
+    Private Function ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal Configuration As Dictionary(Of String, String),
+        ByVal SEApp As SolidEdgeFramework.Application
+        ) As Dictionary(Of Integer, List(Of String))
+
+        Dim ErrorMessageList As New List(Of String)
+        Dim ExitStatus As Integer = 0
+        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        SEApp.DisplayAlerts = True
+
+        Dim UC As New UtilsCommon
+
+        Dim FEI As New FormEditInteractively
+
+        FEI.FormX = Me.FormX
+        FEI.FormY = Me.FormY
+        FEI.NewFormX = Me.NewFormX
+        FEI.NewFormY = Me.NewFormY
+        FEI.Left = Me.NewFormX
+        FEI.Top = Me.NewFormY
+
+        FEI.UseCountdownTimer = Me.UseCountdownTimer
+        FEI.PauseTime = Me.PauseTime
+        FEI.RunCommands = Me.RunCommands
+        FEI.CommandIDAssembly = Me.CommandIDAssembly
+        FEI.CommandIDPart = Me.CommandIDPart
+        FEI.CommandIDSheetmetal = Me.CommandIDSheetmetal
+        FEI.CommandIDDraft = Me.CommandIDDraft
+        FEI.Filetype = UC.GetDocType(SEDoc)
+        FEI.SEApp = SEApp
+        FEI.SaveAfterTimeout = Me.SaveAfterTimeout
+
+        Dim Result As DialogResult = FEI.ShowDialog()
+
+        Me.NewFormX = FEI.Left
+        Me.NewFormY = FEI.Top
+        'Can't do this because the task runs on a different thread.
+        'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
+        'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
+
+
+        If Result = DialogResult.Yes Then
+            If SEDoc.ReadOnly Then
+                ExitStatus = 1
+                ErrorMessageList.Add("Cannot save read-only file.")
+
+                TaskLogger.AddMessage("Cannot save read-only file.")
+
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+
+        ElseIf Result = DialogResult.No Then
+            ' Nothing to do here
+
+        ElseIf Result = DialogResult.Abort Then
+
+            ExitStatus = 99
+            ErrorMessageList.Add("Operation was cancelled.")
+
+            Me.ErrorLogger.RequestAbort()
+            TaskLogger.AddMessage("Operation was cancelled.")
+
+        End If
+
+        SEApp.DisplayAlerts = False
+
+        ErrorMessage(ExitStatus) = ErrorMessageList
+        Return ErrorMessage
+
+
+    End Function
+
+
     Private Function GenerateCommandDict() As Dictionary(Of String, Dictionary(Of String, Integer))
 
         Dim CommandDict As New Dictionary(Of String, Dictionary(Of String, Integer))
@@ -254,105 +365,6 @@ Public Class TaskEditInteractively
         Next
 
         Return CommandDict
-
-    End Function
-
-    Public Overrides Function Process(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        SEApp.DisplayAlerts = True
-
-        Dim UC As New UtilsCommon
-
-        Dim FEI As New FormEditInteractively
-
-        FEI.FormX = Me.FormX
-        FEI.FormY = Me.FormY
-        FEI.NewFormX = Me.NewFormX
-        FEI.NewFormY = Me.NewFormY
-        FEI.Left = Me.NewFormX
-        FEI.Top = Me.NewFormY
-
-        FEI.UseCountdownTimer = Me.UseCountdownTimer
-        FEI.PauseTime = Me.PauseTime
-        FEI.RunCommands = Me.RunCommands
-        FEI.CommandIDAssembly = Me.CommandIDAssembly
-        FEI.CommandIDPart = Me.CommandIDPart
-        FEI.CommandIDSheetmetal = Me.CommandIDSheetmetal
-        FEI.CommandIDDraft = Me.CommandIDDraft
-        FEI.Filetype = UC.GetDocType(SEDoc)
-        FEI.SEApp = SEApp
-        FEI.SaveAfterTimeout = Me.SaveAfterTimeout
-
-        Dim Result As DialogResult = FEI.ShowDialog()
-
-        Me.NewFormX = FEI.Left
-        Me.NewFormY = FEI.Top
-        'Can't do this because the task runs on a different thread.
-        'CType(ControlsDict(ControlNames.FormX.ToString), TextBox).Text = CStr(Me.FormX)
-        'CType(ControlsDict(ControlNames.FormY.ToString), TextBox).Text = CStr(Me.FormY)
-
-
-        If Result = DialogResult.Yes Then
-            If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save read-only file.")
-            Else
-                SEDoc.Save()
-                SEApp.DoIdle()
-            End If
-
-        ElseIf Result = DialogResult.No Then
-            ' Nothing to do here
-
-        ElseIf Result = DialogResult.Abort Then
-
-            ExitStatus = 99
-            ErrorMessageList.Add("Operation was cancelled.")
-        End If
-
-        SEApp.DisplayAlerts = False
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
 
     End Function
 

@@ -66,6 +66,8 @@ Public Class TaskUpdateDrawingViews
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
         Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
@@ -99,6 +101,9 @@ Public Class TaskUpdateDrawingViews
                     Else
                         ExitStatus = 1
                         ErrorMessageList.Add("Unable to update parts list")
+
+                        TaskLogger.AddMessage("Unable to update parts list")
+
                     End If
                 End If
             Next
@@ -119,10 +124,16 @@ Public Class TaskUpdateDrawingViews
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Model file '{0}' not found", Filename))
 
+                TaskLogger.AddMessage(String.Format("Model file '{0}' not found", Filename))
+
+
             ElseIf ModelLink.ModelOutOfDate Then
                 ExitStatus = 1
                 s = String.Format("Model link out of date '{0}'", Filename)
                 If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
             End If
         Next
 
@@ -140,6 +151,9 @@ Public Class TaskUpdateDrawingViews
                             Else
                                 ExitStatus = 1
                                 ErrorMessageList.Add("Unable to update drawing view")
+
+                                TaskLogger.AddMessage("Unable to update drawing view")
+
                             End If
                         Catch ex As Exception
                         End Try
@@ -152,6 +166,9 @@ Public Class TaskUpdateDrawingViews
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()

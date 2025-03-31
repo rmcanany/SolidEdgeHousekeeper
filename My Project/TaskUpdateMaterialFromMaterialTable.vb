@@ -257,6 +257,8 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim PropertySetName As String
         Dim PropertyName As String
         Dim FinishName As String = Nothing
@@ -275,6 +277,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     If FinishName Is Nothing Then
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
+
+                        TaskLogger.AddMessage(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
+
                     End If
                 End If
 
@@ -284,7 +289,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
                     SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
                         SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
                         Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
-                        Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle)
+                        Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle, TaskLogger)
 
                     AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If
@@ -296,6 +301,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
         If SEDoc.ReadOnly Then
             ExitStatus = 1
             ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
         Else
             SEDoc.Save()
             SEApp.DoIdle()

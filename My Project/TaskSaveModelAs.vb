@@ -323,6 +323,8 @@ Public Class TaskSaveModelAs
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
@@ -372,6 +374,9 @@ Public Class TaskSaveModelAs
                     If NewFilename = "" Then
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
+                        ' Hangled in GenerateNewFilename
+                        'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
                     End If
 
                     If ExitStatus = 0 Then
@@ -390,6 +395,9 @@ Public Class TaskSaveModelAs
                         Catch ex As Exception
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+
+                            TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+
                         End Try
 
                     End If
@@ -404,6 +412,10 @@ Public Class TaskSaveModelAs
                         If NewFilename = "" Then
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
+                            ' Handled in GenerateNewFilename
+                            'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
                         End If
 
                         If ExitStatus = 0 Then
@@ -422,6 +434,9 @@ Public Class TaskSaveModelAs
                             Catch ex As Exception
                                 ExitStatus = 1
                                 ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+
+                                TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
+
                             End Try
 
                         End If
@@ -438,6 +453,9 @@ Public Class TaskSaveModelAs
                 If NewFilename = "" Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
+                    ' TaskLogger populated in GenerateNewFilename
+
                 End If
 
                 If ExitStatus = 0 Then
@@ -456,6 +474,8 @@ Public Class TaskSaveModelAs
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+
+                        TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
                     End Try
 
                 End If
@@ -474,6 +494,9 @@ Public Class TaskSaveModelAs
                 If NewFilename = "" Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
+
+                    ' TaskLogger populated in GenerateNewFilename
+
                 End If
 
                 If ExitStatus = 0 Then
@@ -491,6 +514,9 @@ Public Class TaskSaveModelAs
                                 If Not FileIO.FileSystem.FileExists(DraftFilename) Then
                                     ExitStatus = 1
                                     ErrorMessageList.Add(String.Format("Draft document not found '{0}'", DraftFilename))
+
+                                    TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
+
                                 Else
                                     SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
                                     SEApp.DoIdle()
@@ -514,6 +540,8 @@ Public Class TaskSaveModelAs
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
+
+                        TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
                     End Try
 
                     Try
@@ -587,20 +615,15 @@ Public Class TaskSaveModelAs
             NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
             If NewSubDirectoryName Is Nothing Then
                 Success = False
+
+                Me.TaskLogger.AddMessage(String.Format("Could not parse subdirectory formula '{0}'", Me.Formula))
+
             End If
             If Success Then
                 If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
                     NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
                 End If
             End If
-            'Try
-            '    NewSubDirectoryName = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.Formula, ValidFilenameRequired:=True, Me.PropertiesData)
-            '    If Not NewSubDirectoryName(Len(NewSubDirectoryName) - 1) = "\" Then
-            '        NewSubDirectoryName = String.Format("{0}\", NewSubDirectoryName)
-            '    End If
-            'Catch ex As Exception
-            '    Success = False
-            'End Try
         End If
 
 
@@ -611,12 +634,10 @@ Public Class TaskSaveModelAs
             NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
             If NewFilenameWOExt Is Nothing Then
                 Success = False
+
+                Me.TaskLogger.AddMessage(String.Format("Could not parse filename formula '{0}'", Me.FilenameFormula))
+
             End If
-            'Try
-            '    NewFilenameWOExt = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.FilenameFormula, ValidFilenameRequired:=True, Me.PropertiesData)
-            'Catch ex As Exception
-            '    Success = False
-            'End Try
         End If
 
 
@@ -658,51 +679,6 @@ Public Class TaskSaveModelAs
                 If Not Me.NewFileTypeName.ToLower.Contains("pdf per sheet") Then
                     SEDoc.SaveAs(NewFilename)
                     SEApp.DoIdle()
-
-                Else  ' Save as one pdf file per sheet
-
-                    'Dim PreviousSetting As Object = Nothing
-                    'Dim SheetList As New List(Of SolidEdgeDraft.Sheet)
-                    'Dim Sheet As SolidEdgeDraft.Sheet
-                    'Dim SheetName As String
-                    'Dim tmpNewFilename As String
-
-                    '' seApplicationGlobalDraftSaveAsPDFSheetOptions (same mapping as SolidEdgeConstants.DraftSaveAsPDFSheetOptionsConstants)
-                    '' 0: Active sheet only
-                    '' 1: All sheets
-                    '' 2: Sheets: (sheet number and/or ranges)
-
-                    'SEApp.GetGlobalParameter(SaveAsPDFOptions, PreviousSetting)
-                    'SEApp.SetGlobalParameter(SaveAsPDFOptions, 0)
-
-                    'Dim TC As New Task_Common
-                    'SheetList = TC.GetSheets(SEDoc, "Working")
-
-                    'tmpNewFilename = NewFilename
-
-                    'Dim FCD As New FilenameCharmapDoctor
-
-                    'For Each Sheet In SheetList
-                    '    Sheet.Activate()
-
-                    '    SheetName = String.Format("-{0}", Sheet.Name)
-                    '    SheetName = FCD.SubstituteIllegalCharacters(SheetName)
-                    '    If Me.PDFPerSheetSuppressSheetname Then
-                    '        If SheetList.Count = 1 Then
-                    '            SheetName = ""
-                    '        End If
-
-                    '    End If
-
-                    '    NewFilename = tmpNewFilename.Substring(0, tmpNewFilename.Count - 4)
-                    '    NewFilename = String.Format("{0}{1}.pdf", NewFilename, SheetName)
-                    '    SEDoc.SaveAs(NewFilename)
-                    '    SEApp.DoIdle()
-
-                    'Next
-
-                    'SEApp.SetGlobalParameter(SaveAsPDFOptions, PreviousSetting)
-
                 End If
             Else
                 If Me.SaveInOriginalDirectory Then
@@ -711,6 +687,9 @@ Public Class TaskSaveModelAs
                 Else
                     ExitStatus = 1
                     ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
+
+                    Me.TaskLogger.AddMessage("Can not SaveCopyAs to the original directory")
+
                 End If
             End If
 
@@ -732,7 +711,7 @@ Public Class TaskSaveModelAs
         Dim ErrorMessageList As New List(Of String)
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim Models As SolidEdgePart.Models
 
@@ -743,8 +722,12 @@ Public Class TaskSaveModelAs
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
+
+            Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
+
         End Try
 
+        ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage
     End Function
 
@@ -764,6 +747,9 @@ Public Class TaskSaveModelAs
         Catch ex As Exception
             ExitStatus = 1
             ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
+
+            Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
+
         End Try
 
         ErrorMessage(ExitStatus) = ErrorMessageList
@@ -801,8 +787,18 @@ Public Class TaskSaveModelAs
             TaskFitView.Isometric = Me.Isometric
             TaskFitView.Dimetric = Me.Dimetric
             TaskFitView.Trimetric = Me.Trimetric
+
             SupplementalErrorMessage = TaskFitView.Process(SEDoc, Configuration, SEApp)
             AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+
+            ' ####### TODO Pass TaskLogger to other Tasks ######
+            Dim SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
+            If SupplementalExitStatus > 0 Then
+                For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+                    Me.TaskLogger.AddMessage(s)
+                Next
+            End If
+
         End If
 
         Window = CType(SEApp.ActiveWindow, SolidEdgeFramework.Window)
@@ -840,6 +836,9 @@ Public Class TaskSaveModelAs
             Catch ex As Exception
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("Error changing to view style '{0}'", ViewStyleName))
+
+                Me.TaskLogger.AddMessage(String.Format("Error changing to view style '{0}'", ViewStyleName))
+
             End Try
         End If
 
@@ -850,6 +849,9 @@ Public Class TaskSaveModelAs
             If Not ExitMessage = "" Then
                 ExitStatus = 1
                 ErrorMessageList.Add(ExitMessage)
+
+                Me.TaskLogger.AddMessage(ExitMessage)
+
             End If
         End If
 
@@ -858,6 +860,9 @@ Public Class TaskSaveModelAs
             If Not ExitMessage = "" Then
                 ExitStatus = 1
                 ErrorMessageList.Add(ExitMessage)
+
+                ' ErrorLogger populated in DoCropImage
+
             End If
         End If
 
@@ -933,17 +938,6 @@ Public Class TaskSaveModelAs
         ImageW = 0.557 * ModelX + 0.830667 * ModelY
         ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
 
-        'If Configuration("RadioButtonPictorialViewIsometric").ToLower = "true" Then
-        '    ImageW = 0.707 * ModelX + 0.707 * ModelY
-        '    ImageH = 0.40833 * ModelX + 0.40833 * ModelY + 0.81689 * ModelZ
-        'ElseIf Configuration("RadioButtonPictorialViewDimetric").ToLower = "true" Then
-        '    ImageW = 0.9356667 * ModelX + 0.353333 * ModelY
-        '    ImageH = 0.117222 * ModelX + 0.311222 * ModelY + 0.942444 * ModelZ
-        'Else
-        '    ImageW = 0.557 * ModelX + 0.830667 * ModelY
-        '    ImageH = 0.325444 * ModelX + 0.217778 * ModelY + 0.920444 * ModelZ
-        'End If
-
         ImageAspectRatio = ImageH / ImageW
 
         If WindowAspectRatio > ImageAspectRatio Then
@@ -975,10 +969,16 @@ Public Class TaskSaveModelAs
                 FileSystem.Rename(TempFilename, NewFilename)
             Catch ex As Exception
                 ExitMessage = String.Format("Unable to save cropped image '{0}'", NewFilename)
+
+                Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", NewFilename))
+
             End Try
 
         Catch ex As Exception
             ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
+
+            Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", TempFilename))
+
         End Try
 
         Return ExitMessage

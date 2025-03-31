@@ -120,6 +120,8 @@ Public Class TaskRunExternalProgram
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(Me.ExternalProgram)
         Dim P As New Diagnostics.Process
         Dim ExitCode As Integer
@@ -162,6 +164,9 @@ Public Class TaskRunExternalProgram
         If Not PSError = "" Then
             ExitStatus = 1
             ErrorMessageList.Add(PSError)
+
+            TaskLogger.AddMessage(PSError)
+
         End If
 
         P.WaitForExit()
@@ -176,14 +181,23 @@ Public Class TaskRunExternalProgram
                 If ErrorMessages.Length > 0 Then
                     For Each ErrorMessageFromProgram As String In ErrorMessages
                         ErrorMessageList.Add(ErrorMessageFromProgram)
+
+                        TaskLogger.AddMessage(ErrorMessageFromProgram)
+
                     Next
                 Else
                     ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+
+                    TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
+
                 End If
 
                 IO.File.Delete(ErrorMessageFilename)
             Else
                 ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
+
+                TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
+
             End If
         End If
 
@@ -191,6 +205,8 @@ Public Class TaskRunExternalProgram
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
@@ -203,6 +219,7 @@ Public Class TaskRunExternalProgram
 
 
     End Function
+
 
     Private Function BuildSnippetFile(SnippetFilename As String) As String
         Dim Toplist As New List(Of String)

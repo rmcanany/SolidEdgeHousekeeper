@@ -128,6 +128,8 @@ Public Class TaskEditVariables
         'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
         'Dim SupplementalExitStatus As Integer = 0
 
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
         Dim tmpVariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim VariablesToEditDict As New Dictionary(Of Integer, Dictionary(Of String, String))
         Dim ColumnIndexString As String
@@ -189,6 +191,9 @@ Public Class TaskEditVariables
         Else
             ExitStatus = 1
             ErrorMessageList.Add("No variables provided")
+
+            TaskLogger.AddMessage("No variables provided")
+
         End If
 
         If ExitStatus = 0 Then
@@ -198,12 +203,18 @@ Public Class TaskEditVariables
             If DocDimensionDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access dimensions")
+
+                TaskLogger.AddMessage("Unable to access dimensions")
+
             End If
 
             DocVariableDict = UC.GetDocVariables(SEDoc)
             If DocVariableDict Is Nothing Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Unable to access variables")
+
+                TaskLogger.AddMessage("Unable to access variables")
+
             End If
 
         End If
@@ -224,6 +235,9 @@ Public Class TaskEditVariables
                 If Formula Is Nothing Then
                     ExitStatus = 1
                     ErrorMessageList.Add(String.Format("Could not process formula '{0}', property not found", tmpFormula))
+
+                    TaskLogger.AddMessage(String.Format("Could not process formula '{0}', property not found", tmpFormula))
+
                     Continue For
                 End If
 
@@ -239,6 +253,9 @@ Public Class TaskEditVariables
                         If Formula = "" Then  ' Can't add a variable without a formula
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
+
+                            TaskLogger.AddMessage(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
+
                             Continue For
                         End If
 
@@ -255,7 +272,15 @@ Public Class TaskEditVariables
                             ExitStatus = 1
                             ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
 
+                            TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
+
                         End Try
+
+                    Else
+                        ExitStatus = 1
+                        ErrorMessageList.Add(String.Format("Variable '{0}' not found", VariableName))
+
+                        TaskLogger.AddMessage(String.Format("Variable '{0}' not found", VariableName))
 
                     End If
 
@@ -289,6 +314,9 @@ Public Class TaskEditVariables
                     Catch ex As Exception
                         ExitStatus = 1
                         ErrorMessageList.Add(String.Format("Unable to change variable '{0}'", VariableName))
+
+                        TaskLogger.AddMessage(String.Format("Unable to change variable '{0}'", VariableName))
+
                     End Try
 
                 End If
@@ -300,19 +328,22 @@ Public Class TaskEditVariables
             If SEDoc.ReadOnly Then
                 ExitStatus = 1
                 ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
         End If
 
-        If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
-            SEApp.DoIdle()
-        End If
+        'If SEDoc.ReadOnly Then
+        '    ExitStatus = 1
+        '    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
+        'Else
+        '    SEDoc.Save()
+        '    SEApp.DoIdle()
+        'End If
 
         ErrorMessage(ExitStatus) = ErrorMessageList
         Return ErrorMessage

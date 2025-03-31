@@ -25,11 +25,6 @@ Public Class TaskCheckPartCopies
 
     End Sub
 
-    'Public Sub New(Task As TaskCheckPartCopies)
-
-    '    'Options
-
-    'End Sub
 
     Public Overrides Function Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -52,6 +47,7 @@ Public Class TaskCheckPartCopies
         Return ErrorMessage
 
     End Function
+
     Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
 
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
@@ -59,6 +55,7 @@ Public Class TaskCheckPartCopies
         Return ErrorMessage
 
     End Function
+
     Private Function ProcessInternal(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal Configuration As Dictionary(Of String, String),
@@ -68,6 +65,8 @@ Public Class TaskCheckPartCopies
         Dim ErrorMessageList As New List(Of String)
         Dim ExitStatus As Integer = 0
         Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -100,10 +99,16 @@ Public Class TaskCheckPartCopies
                                 If Not FileIO.FileSystem.FileExists(CopiedPart.FileName) Then
                                     ExitStatus = 1
                                     ErrorMessageList.Add(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
+
+                                    TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
+
                                 Else
                                     If Not CopiedPart.IsUpToDate Then
                                         ExitStatus = 1
                                         ErrorMessageList.Add(String.Format("Part copy out of date: '{0}'", CopiedPart.Name))
+
+                                        TaskLogger.AddMessage(String.Format("Part copy out of date: '{0}'", CopiedPart.Name))
+
                                     End If
                                 End If
                             End If
@@ -113,6 +118,9 @@ Public Class TaskCheckPartCopies
             ElseIf Models.Count >= 300 Then
                 ExitStatus = 1
                 ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
+                TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
+
             End If
 
         End If
@@ -122,22 +130,6 @@ Public Class TaskCheckPartCopies
 
     End Function
 
-    'Public Overrides Function GetTLPTask(TLPParent As ExTableLayoutPanel) As ExTableLayoutPanel
-    '    ControlsDict = New Dictionary(Of String, Control)
-
-    '    Dim IU As New InterfaceUtilities
-
-    '    Me.TLPTask = IU.BuildTLPTask(Me, TLPParent)
-
-    '    For Each Control As Control In Me.TLPTask.Controls
-    '        If ControlsDict.Keys.Contains(Control.Name) Then
-    '            MsgBox(String.Format("ControlsDict already has Key '{0}'", Control.Name))
-    '        End If
-    '        ControlsDict(Control.Name) = Control
-    '    Next
-
-    '    Return Me.TLPTask
-    'End Function
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

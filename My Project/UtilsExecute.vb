@@ -12,8 +12,9 @@ Public Class UtilsExecute
     Public Property TotalAbortsMaximum As Integer = 4
     Public Property SEApp As SolidEdgeFramework.Application
     Public Property StartTime As DateTime
-
     Public Property TextBoxStatus As TextBox
+
+    Public Property ErrorLogger As HCErrorLogger
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
@@ -27,6 +28,8 @@ Public Class UtilsExecute
         Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
+
+        Me.ErrorLogger = New HCErrorLogger
 
         FMain.SaveSettings(SavingPresets:=False)  ' Updates JSON Properties and saves settings
 
@@ -79,6 +82,8 @@ Public Class UtilsExecute
             If Task.IsSelectedTask And Task.IsSelectedSheetmetal Then SheetmetalCount += 1
             If Task.IsSelectedTask And Task.IsSelectedAssembly Then AssemblyCount += 1
             If Task.IsSelectedTask And Task.IsSelectedDraft Then DraftCount += 1
+
+            Task.ErrorLogger = Me.ErrorLogger
         Next
 
         ' Process the files
@@ -116,6 +121,19 @@ Public Class UtilsExecute
 
         FMain.StopProcess = False
         FMain.ButtonCancel.Text = "Cancel"
+
+        If Me.ErrorLogger.HasErrors Then
+            Me.ErrorLogger.Save()
+            Try
+                ' Try to use the default application to open the file.
+                Process.Start(Me.ErrorLogger.LogfileName)
+            Catch ex As Exception
+                ' If none, open with notepad.exe
+                Process.Start("notepad.exe", Me.ErrorLogger.LogfileName)
+            End Try
+        Else
+            FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
+        End If
 
         If Me.UtilsLogFile.ErrorsOccurred Then
             Try
@@ -371,7 +389,7 @@ Public Class UtilsExecute
 
             ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
 
-            If ErrorMessagesCombined.Count > 0 Then
+            If ErrorMessagesCombined.Count > 0 Or Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)
                 Dim tmpFilename As String = System.IO.Path.GetFileName(FileToProcess)
                 Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
@@ -404,6 +422,8 @@ Public Class UtilsExecute
         Dim ExitStatus As Integer
         Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
+        Dim FileLogger As Logger = Me.ErrorLogger.AddFile(Path)
+
         Dim SEDoc As SolidEdgeFramework.SolidEdgeDocument = Nothing
 
         Dim ActiveWindow As SolidEdgeFramework.Window
@@ -433,6 +453,7 @@ Public Class UtilsExecute
             Dim s As String = SetStartingStatus(OldStatus, Path) 'SetStartingStatus populates OldStatus
             If Not s = "" Then
                 ErrorMessagesCombined(s) = New List(Of String) From {""}
+                FileLogger.AddMessage(s)
             End If
 
         End If
@@ -448,6 +469,7 @@ Public Class UtilsExecute
                 Proceed = CheckVersion(SEApp, Path)
                 If Not Proceed Then
                     ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                    FileLogger.AddMessage("Error opening file")
                 End If
 
                 If Proceed Then
@@ -485,6 +507,9 @@ Public Class UtilsExecute
             If Proceed Then
                 For Each Task As Task In FMain.TaskList
                     If Task.IsSelectedTask Then
+
+                        Task.FileLogger = FileLogger
+
                         tf = (Filetype = "Assembly") And (Task.IsSelectedAssembly)
                         tf = tf Or ((Filetype = "Part") And (Task.IsSelectedPart))
                         tf = tf Or ((Filetype = "Sheetmetal") And (Task.IsSelectedSheetmetal))
@@ -502,12 +527,12 @@ Public Class UtilsExecute
 
                             If ExitStatus <> 0 Then
                                 ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
-
-                                If ExitStatus = 99 Then
-                                    FMain.StopProcess = True
-                                End If
-
                             End If
+
+                            If ExitStatus = 99 Or Me.ErrorLogger.Abort Then
+                                FMain.StopProcess = True
+                            End If
+
                         End If
                     End If
                 Next
@@ -530,6 +555,7 @@ Public Class UtilsExecute
                     Dim s As String = SetEndingStatus(OldStatus, Path)
                     If Not s = "" Then
                         ErrorMessagesCombined(s) = New List(Of String) From {""}
+                        FileLogger.AddMessage(s)
                     End If
                 End If
 
@@ -563,8 +589,13 @@ Public Class UtilsExecute
 
             If ex.ToString.Contains("SolidEdgeFramework.Documents.Open") Then
                 ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                FileLogger.AddMessage("Error opening file")
             Else
                 ErrorMessagesCombined("Error processing file") = AbortList
+                FileLogger.AddMessage(String.Format("Error processing file"))
+                For Each s In AbortList
+                    FileLogger.AddMessage(s)
+                Next
             End If
         End Try
 
