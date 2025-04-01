@@ -470,12 +470,12 @@ Public Class UtilsCommon
 
     End Function
 
-    Public Function SaveAsPNG(
+    Public Sub SaveAsPNG(
         View As SolidEdgeFramework.View,
-        NewFilename As String
-        ) As String
+        NewFilename As String,
+        ErrorLogger As Logger
+        )
 
-        Dim ExitMessage As String = ""
         Dim TempFilename As String = NewFilename.Replace(".png", "-Housekeeper.tif")
 
         Try
@@ -491,16 +491,14 @@ Public Class UtilsCommon
                 IO.File.Delete(TempFilename)
 
             Catch ex As Exception
-                ExitMessage = String.Format("Unable to save '{0}'.  ", NewFilename)
+                ErrorLogger.AddMessage(String.Format("Unable to save '{0}'.  ", NewFilename))
             End Try
 
         Catch ex As Exception
-            ExitMessage = String.Format("Unable to save '{0}'.  ", TempFilename)
+            ErrorLogger.AddMessage(String.Format("Unable to save '{0}'.  ", TempFilename))
         End Try
 
-        Return ExitMessage
-
-    End Function
+    End Sub
 
     Public Function SplitFOAName(SEDocFullName As String) As Dictionary(Of String, String)
         Dim SplitDict As New Dictionary(Of String, String)

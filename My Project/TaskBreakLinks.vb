@@ -121,104 +121,66 @@ Public Class TaskBreakLinks
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
         If Me.BreakDesignCopies Or Me.BreakInterpartCopies Then
-            SupplementalErrorMessage = DoBreakDesignCopies(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoBreakDesignCopies(SEDoc, SEApp)
         End If
 
         If Me.BreakConstructionCopies Or Me.BreakInterpartCopies Then
-            SupplementalErrorMessage = DoBreakConstructionCopies(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoBreakConstructionCopies(SEDoc, SEApp)
         End If
 
         If Me.BreakExcel Or Me.BreakInterpartCopies Then
-            SupplementalErrorMessage = DoBreakExcel(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoBreakExcel(SEDoc, SEApp)
         End If
 
         ' https://community.sw.siemens.com/s/question/0D5Vb000007bHr1KAE/how-do-i-break-these-links
         If Me.BreakInterpartCopies Then
-            SupplementalErrorMessage = DoBreakInterpartCopies(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoBreakInterpartCopies(SEDoc, SEApp)
         End If
 
         If Me.BreakDraftModels Then
-            SupplementalErrorMessage = DoBreakDraftModels(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoBreakDraftModels(SEDoc, SEApp)
         End If
 
         If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
         Else
-            If ExitStatus = 0 Then
+            If Not TaskLogger.HasErrors Then
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
         End If
 
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
-    Private Function DoBreakInterpartCopies(
+    Private Sub DoBreakInterpartCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim UC As New UtilsCommon
 
@@ -238,21 +200,12 @@ Public Class TaskBreakLinks
 
         End Select
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoBreakDraftModels(
+    Private Sub DoBreakDraftModels(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim FileChanged As Boolean = True
+        )
 
         Dim UC As New UtilsCommon
 
@@ -272,20 +225,14 @@ Public Class TaskBreakLinks
                     ProcessDrawingViews(Sheets)
 
                 Catch ex As Exception
-                    FileChanged = False
-                    ExitStatus = 1
-                    ErrorMessageList.Add("Unable to process all sheets.  No changes made.")
-
                     Me.TaskLogger.AddMessage("Unable to process all sheets.  No changes made.")
                 End Try
 
         End Select
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Shared Sub ProcessCallouts(Sheets As List(Of SolidEdgeDraft.Sheet))
+    Private Sub ProcessCallouts(Sheets As List(Of SolidEdgeDraft.Sheet))
         Dim Sheet As SolidEdgeDraft.Sheet
         Dim Balloons As SolidEdgeFrameworkSupport.Balloons
         Dim Balloon As SolidEdgeFrameworkSupport.Balloon
@@ -302,7 +249,7 @@ Public Class TaskBreakLinks
 
     End Sub
 
-    Private Shared Sub ProcessDrawingViews(Sheets As List(Of SolidEdgeDraft.Sheet))
+    Private Sub ProcessDrawingViews(Sheets As List(Of SolidEdgeDraft.Sheet))
         Dim Sheet As SolidEdgeDraft.Sheet
         Dim DrawingViews As SolidEdgeDraft.DrawingViews
         Dim DrawingView As SolidEdgeDraft.DrawingView
@@ -314,23 +261,16 @@ Public Class TaskBreakLinks
                 Try
                     DrawingView.Drop()
                 Catch ex2 As Exception
-                    'exitstatus = 1
-                    'Errormessagelist.add("something")
                 End Try
             Next
         Next
 
     End Sub
 
-    Private Function DoBreakExcel(
+    Private Sub DoBreakExcel(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim FileChanged As Boolean = False
 
@@ -358,19 +298,12 @@ Public Class TaskBreakLinks
             End If
         Next
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoBreakDesignCopies(
+    Private Sub DoBreakDesignCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -418,35 +351,19 @@ Public Class TaskBreakLinks
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
                 Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
             End If
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoBreakConstructionCopies(
+    Private Sub DoBreakConstructionCopies(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
         ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
+        )
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        'Dim Models As SolidEdgePart.Models = Nothing
-        'Dim Model As SolidEdgePart.Model
-        'Dim CopiedParts As SolidEdgePart.CopiedParts
-        'Dim CopiedPart As SolidEdgePart.CopiedPart
         Dim CopyConstructions As SolidEdgePart.CopyConstructions = Nothing
         Dim CopyConstruction As SolidEdgePart.CopyConstruction
-        Dim FileChanged As Boolean = False
-
 
         Dim UC As New UtilsCommon
         Dim DocType As String = UC.GetDocType(SEDoc)
@@ -471,26 +388,20 @@ Public Class TaskBreakLinks
                     ' Must be ignored or NotImplemented exception will be thrown
                     If CopyConstruction.ModelingModeType = 2 Then
                         If Not CopyConstruction.IsBroken Then
-                            FileChanged = True
                             CopyConstruction.BreakLinks()
                             SEApp.DoIdle()
-                            ' SE will report an out of date link on next open if we don' update
+                            ' SE will report an out of date link on next open if we don't update
                             CopyConstruction.Update()
                             SEApp.DoIdle()
                         End If
                     End If
                 Next
             ElseIf CopyConstructions.Count >= 300 Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", CopyConstructions.Count.ToString))
-
                 Me.TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", CopyConstructions.Count.ToString))
             End If
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

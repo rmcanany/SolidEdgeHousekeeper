@@ -77,47 +77,28 @@ Public Class TaskUpdatePhysicalProperties
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim s As String
         Dim Proceed As Boolean
@@ -187,11 +168,8 @@ Public Class TaskUpdatePhysicalProperties
 
                         If Not ParFileNamesWithoutDensity Is Nothing Then
                             If ParFileNamesWithoutDensity.Count > 0 Then
-                                ExitStatus = 1
                                 s = String.Format("Found {0} models with no density assigned.", ParFileNamesWithoutDensity.Count)
                                 s = String.Format("{0}  Please verify results.", s)
-                                ErrorMessageList.Add(s)
-
                                 TaskLogger.AddMessage(s)
 
                             End If
@@ -213,11 +191,7 @@ Public Class TaskUpdatePhysicalProperties
 
                     End If
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add("Unable to update physical properties.")
-
                     TaskLogger.AddMessage("Unable to update physical properties.")
-
                 End Try
 
             Case "par"
@@ -261,11 +235,7 @@ Public Class TaskUpdatePhysicalProperties
             If Proceed Then
                 If Density <= 0 Then
                     Proceed = False
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Density set to {0}", Density))
-
                     TaskLogger.AddMessage(String.Format("Density set to {0}", Density))
-
                 End If
 
             End If
@@ -279,11 +249,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayPrincipalAxes = False
                             Model.DisplayCenterOfVolume = False
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Issue reported when hiding symbols.  Please verify results.")
-
                             TaskLogger.AddMessage("Issue reported when hiding symbols.  Please verify results.")
-
                         End Try
                     End If
                     If Me.ShowSymbols Then
@@ -292,11 +258,7 @@ Public Class TaskUpdatePhysicalProperties
                             Model.DisplayPrincipalAxes = True
                             Model.DisplayCenterOfVolume = True
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add("Issue reported showing symbols.  Please verify results.")
-
                             TaskLogger.AddMessage("Issue reported showing symbols.  Please verify results.")
-
                         End Try
                     End If
 
@@ -307,28 +269,18 @@ Public Class TaskUpdatePhysicalProperties
 
         If Proceed Then
             If Not UC.IsVariablePresent(SEDoc, "Mass") Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to add 'Mass' to the variable table")
-
                 TaskLogger.AddMessage("Unable to add 'Mass' to the variable table")
-
             End If
         End If
 
         If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

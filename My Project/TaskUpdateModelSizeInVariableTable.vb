@@ -173,47 +173,28 @@ Public Class TaskUpdateModelSizeInVariableTable
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                Of SolidEdgeFramework.SolidEdgeDocument,
-                Dictionary(Of String, String),
-                SolidEdgeFramework.Application,
-                Dictionary(Of Integer, List(Of String)))(
-                AddressOf ProcessInternal,
-                SEDoc,
-                Configuration,
-                SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Range As New List(Of Double)
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
@@ -230,14 +211,10 @@ Public Class TaskUpdateModelSizeInVariableTable
         Try
             Range = UC.GetDocRange(SEDoc)
         Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add("Unable to obtain stock size")
-
             TaskLogger.AddMessage("Unable to obtain stock size")
-
         End Try
 
-        If ExitStatus = 0 Then
+        If Not TaskLogger.HasErrors Then
             'DocVariableDict = TC.GetDocVariables(SEDoc)
 
             Variables = CType(SEDoc.Variables, SolidEdgeFramework.Variables)
@@ -258,11 +235,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                         End Try
                     Else
                         ' Update it
@@ -271,11 +244,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable.Formula = Formula
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
-
                         End Try
                     End If
                     i += 1
@@ -300,11 +269,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable = CType(Variables.Add(VariableName, Formula), SolidEdgeFramework.variable)
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                         End Try
                     Else
                         ' Update it
@@ -313,11 +278,7 @@ Public Class TaskUpdateModelSizeInVariableTable
                             Variable.Formula = Formula
                             Variable.Expose = CInt(True)
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to change and/or expose variable '{0}'", VariableName))
-
                         End Try
                     End If
                     i += 1
@@ -326,11 +287,7 @@ Public Class TaskUpdateModelSizeInVariableTable
 
 
             If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
                 TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
@@ -338,9 +295,7 @@ Public Class TaskUpdateModelSizeInVariableTable
 
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
     Private Function CheckDuplicates() As Boolean
         Dim HasDuplicates As Boolean = False

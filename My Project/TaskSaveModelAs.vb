@@ -283,49 +283,28 @@ Public Class TaskSaveModelAs
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
 
@@ -369,35 +348,19 @@ Public Class TaskSaveModelAs
 
                 If (Not tmpSEDoc.IsFileFamilyByDocument) Or (IsSaveCopyAs) Then  ' SaveCopyAs doesn't need a new file for every member
 
-                    NewFilename = GenerateNewFilename(SEDoc, NewExtension)
+                    NewFilename = GenerateNewFilename(SEDoc, NewExtension)  ' Updates TaskLogger
 
-                    If NewFilename = "" Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                        ' Hangled in GenerateNewFilename
-                        'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-                    End If
-
-                    If ExitStatus = 0 Then
+                    If Not TaskLogger.HasErrors Then
                         FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                         Try
                             If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                                SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                                SaveAsModel(SEDoc, NewFilename, SEApp)
                             Else  ' Saving as image
-                                SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                                SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                             End If
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-
                             TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-
                         End Try
 
                     End If
@@ -409,34 +372,17 @@ Public Class TaskSaveModelAs
 
                         NewFilename = GenerateNewFilename(SEDoc, NewExtension, Member.MemberName)
 
-                        If NewFilename = "" Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                            ' Handled in GenerateNewFilename
-                            'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                        End If
-
-                        If ExitStatus = 0 Then
+                        If Not TaskLogger.HasErrors Then
                             FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                             Try
                                 If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                                    SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                                    SaveAsModel(SEDoc, NewFilename, SEApp)
                                 Else  ' Saving as image
-                                    SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                                    SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                                 End If
                             Catch ex As Exception
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-
                                 TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
-
                             End Try
 
                         End If
@@ -450,31 +396,16 @@ Public Class TaskSaveModelAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                If NewFilename = "" Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                    ' TaskLogger populated in GenerateNewFilename
-
-                End If
-
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                     Try
                         If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
-                            SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                            SaveAsModel(SEDoc, NewFilename, SEApp)
                         Else  ' Saving as image
-                            SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                            SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                         End If
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-
                         TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
                     End Try
 
@@ -491,56 +422,35 @@ Public Class TaskSaveModelAs
 
                 NewFilename = GenerateNewFilename(SEDoc, NewExtension)
 
-                If NewFilename = "" Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                    ' TaskLogger populated in GenerateNewFilename
-
-                End If
-
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                     Try
                         If Not ImageExtensions.Contains(NewExtension) Then  ' Saving as a model, not an image.
 
                             If NewExtension = ".dxf" Then
-                                SupplementalErrorMessage = SaveAsFlatDXF(tmpSEDoc, NewFilename, SEApp)
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                                SaveAsFlatDXF(tmpSEDoc, NewFilename, SEApp)
 
                             ElseIf NewExtension = ".pdf" Then
                                 DraftFilename = System.IO.Path.ChangeExtension(tmpSEDoc.FullName, ".dft")
                                 If Not FileIO.FileSystem.FileExists(DraftFilename) Then
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Draft document not found '{0}'", DraftFilename))
-
                                     TaskLogger.AddMessage(String.Format("Draft document not found '{0}'", DraftFilename))
-
                                 Else
                                     SEDraftDoc = CType(SEApp.Documents.Open(DraftFilename), SolidEdgeDraft.DraftDocument)
                                     SEApp.DoIdle()
 
-                                    SupplementalErrorMessage = SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
-                                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                                    SaveAsDrawing(SEDraftDoc, NewFilename, SEApp)
                                 End If
 
                             Else
-                                SupplementalErrorMessage = SaveAsModel(SEDoc, NewFilename, SEApp)
-                                AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                                SaveAsModel(SEDoc, NewFilename, SEApp)
                             End If
 
 
                         Else  ' Saving as image
-                            SupplementalErrorMessage = SaveAsImage(SEDoc, NewFilename, SEApp, Configuration, NewExtension)
-                            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                            SaveAsImage(SEDoc, NewFilename, SEApp, NewExtension)
                         End If
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error saving {0}", NewFilename))
-
                         TaskLogger.AddMessage(String.Format("Error saving {0}", NewFilename))
                     End Try
 
@@ -559,9 +469,7 @@ Public Class TaskSaveModelAs
 
         End Select
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateNewFilename(
@@ -661,15 +569,11 @@ Public Class TaskSaveModelAs
 
     End Function
 
-    Private Function SaveAsDrawing(
+    Private Sub SaveAsDrawing(
         SEDoc As SolidEdgeDraft.DraftDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim SaveAsPDFOptions As SolidEdgeFramework.ApplicationGlobalConstants
         SaveAsPDFOptions = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalDraftSaveAsPDFSheetOptions
@@ -685,33 +589,21 @@ Public Class TaskSaveModelAs
                     SEDoc.SaveCopyAs(NewFilename)
                     SEApp.DoIdle()
                 Else
-                    ExitStatus = 1
-                    ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
-
                     Me.TaskLogger.AddMessage("Can not SaveCopyAs to the original directory")
-
                 End If
             End If
 
         Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving file {0}", NewFilename))
+            Me.TaskLogger.AddMessage(String.Format("Error saving file {0}", NewFilename))
         End Try
 
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function SaveAsFlatDXF(
+    Private Sub SaveAsFlatDXF(
         SEDoc As SolidEdgePart.SheetMetalDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim Models As SolidEdgePart.Models
 
@@ -720,56 +612,34 @@ Public Class TaskSaveModelAs
             Models.SaveAsFlatDXFEx(NewFilename, Nothing, Nothing, Nothing, True)
             SEApp.DoIdle()
         Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
-
             Me.TaskLogger.AddMessage(String.Format("Error saving '{0}'.  Please verify a flat pattern is present.", NewFilename))
-
         End Try
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function SaveAsModel(
+    Private Sub SaveAsModel(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Try
             SEDoc.SaveAs(NewFilename)
             SEApp.DoIdle()
         Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
-
             Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
-
         End Try
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function SaveAsImage(
+    Private Sub SaveAsImage(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application,
-        Configuration As Dictionary(Of String, String),
         NewExtension As String
-        ) As Dictionary(Of Integer, List(Of String))
+        )
 
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim ExitMessage As String
+        'Dim ExitMessage As String
 
         Dim Window As SolidEdgeFramework.Window
         Dim View As SolidEdgeFramework.View
@@ -778,24 +648,30 @@ Public Class TaskSaveModelAs
 
         If Me.HideConstructions Then
             Dim TaskHideConstructions As New TaskHideConstructions
-            SupplementalErrorMessage = TaskHideConstructions.Process(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            TaskHideConstructions.FileLogger = Me.FileLogger
+
+            TaskHideConstructions.Process(SEDoc, SEApp)
+            If TaskHideConstructions.TaskLogger.HasErrors Then
+                Dim tmpMessages As List(Of String) = TaskHideConstructions.TaskLogger.GetMessages
+                For Each s As String In tmpMessages
+                    TaskLogger.AddMessage(s)
+                Next
+            End If
         End If
 
         If Me.FitView Then
             Dim TaskFitView As New TaskFitView
+            TaskFitView.FileLogger = Me.FileLogger
+
             TaskFitView.Isometric = Me.Isometric
             TaskFitView.Dimetric = Me.Dimetric
             TaskFitView.Trimetric = Me.Trimetric
 
-            SupplementalErrorMessage = TaskFitView.Process(SEDoc, Configuration, SEApp)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
-            ' ####### TODO Pass TaskLogger to other Tasks ######
-            Dim SupplementalExitStatus = SupplementalErrorMessage.Keys(0)
-            If SupplementalExitStatus > 0 Then
-                For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                    Me.TaskLogger.AddMessage(s)
+            TaskFitView.Process(SEDoc, SEApp)
+            If TaskFitView.TaskLogger.HasErrors Then
+                Dim tmpMessages As List(Of String) = TaskFitView.TaskLogger.GetMessages
+                For Each s As String In tmpMessages
+                    TaskLogger.AddMessage(s)
                 Next
             End If
 
@@ -834,9 +710,6 @@ Public Class TaskSaveModelAs
                 SEApp.DoIdle()
 
             Catch ex As Exception
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Error changing to view style '{0}'", ViewStyleName))
-
                 Me.TaskLogger.AddMessage(String.Format("Error changing to view style '{0}'", ViewStyleName))
 
             End Try
@@ -845,30 +718,14 @@ Public Class TaskSaveModelAs
         If Not NewExtension = ".png" Then
             View.SaveAsImage(NewFilename)
         Else
-            ExitMessage = UC.SaveAsPNG(View, NewFilename)
-            If Not ExitMessage = "" Then
-                ExitStatus = 1
-                ErrorMessageList.Add(ExitMessage)
-
-                Me.TaskLogger.AddMessage(ExitMessage)
-
-            End If
+            UC.SaveAsPNG(View, NewFilename, TaskLogger)
         End If
 
         If Me.CropImage Then
-            ExitMessage = DoCropImage(SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
-            If Not ExitMessage = "" Then
-                ExitStatus = 1
-                ErrorMessageList.Add(ExitMessage)
-
-                ' ErrorLogger populated in DoCropImage
-
-            End If
+            DoCropImage(SEDoc, NewFilename, NewExtension, Window.Height, Window.Width)
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
     Private Function GetNewFileTypeNames() As List(Of String)
         Dim NewFileTypeNames As New List(Of String)
@@ -901,13 +758,13 @@ Public Class TaskSaveModelAs
         Return NewFileTypeNames
     End Function
 
-    Public Function DoCropImage(
+    Public Sub DoCropImage(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         NewFilename As String,
         NewExtension As String,
         WindowH As Integer,
         WindowW As Integer
-        ) As String
+        )
 
         Dim ModelX As Double
         Dim ModelY As Double
@@ -921,8 +778,6 @@ Public Class TaskSaveModelAs
         Dim CropH As Integer
 
         Dim TempFilename As String
-
-        Dim ExitMessage As String = ""
 
         Dim WindowAspectRatio As Double = WindowH / WindowW
 
@@ -968,22 +823,14 @@ Public Class TaskSaveModelAs
                 System.IO.File.Delete(NewFilename)
                 FileSystem.Rename(TempFilename, NewFilename)
             Catch ex As Exception
-                ExitMessage = String.Format("Unable to save cropped image '{0}'", NewFilename)
-
                 Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", NewFilename))
-
             End Try
 
         Catch ex As Exception
-            ExitMessage = String.Format("Unable to save cropped image '{0}'", TempFilename)
-
             Me.TaskLogger.AddMessage(String.Format("Unable to save cropped image '{0}'", TempFilename))
-
         End Try
 
-        Return ExitMessage
-
-    End Function
+    End Sub
 
 
 

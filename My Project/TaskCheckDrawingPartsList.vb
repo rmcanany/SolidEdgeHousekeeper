@@ -26,47 +26,28 @@ Public Class TaskCheckDrawingPartsList
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
@@ -74,17 +55,11 @@ Public Class TaskCheckDrawingPartsList
         Dim PartsList As SolidEdgeDraft.PartsList
 
         If PartsLists.Count = 0 Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Parts list missing")
-
             TaskLogger.AddMessage("Parts list missing")
 
         Else
             For Each PartsList In PartsLists
                 If Not PartsList.IsUpToDate Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add("Parts list out of date")
-
                     TaskLogger.AddMessage("Parts list out of date")
 
                     Exit For
@@ -93,12 +68,7 @@ Public Class TaskCheckDrawingPartsList
 
         End If
 
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-
-    End Function
+    End Sub
 
 
     Public Overrides Function CheckStartConditions(

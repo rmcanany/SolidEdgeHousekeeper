@@ -166,13 +166,18 @@ Public MustInherit Class Task
         EditTaskList
     End Enum
 
-    Public MustOverride Function Process(
+    'Public MustOverride Function Process(
+    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+    '    Configuration As Dictionary(Of String, String),
+    '    SEApp As SolidEdgeFramework.Application
+    '    ) As Dictionary(Of Integer, List(Of String))
+    Public MustOverride Sub Process(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        Configuration As Dictionary(Of String, String),
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
+        )
 
-    Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
+    'Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
+    Public MustOverride Sub Process(FileName As String)
 
 
     Public MustOverride Function CheckStartConditions(
@@ -180,8 +185,8 @@ Public MustInherit Class Task
         ) As Dictionary(Of Integer, List(Of String))
 
 
-    Public Sub New()
 
+    Public Sub New()
     End Sub
 
     Public Sub GenerateTaskControl()

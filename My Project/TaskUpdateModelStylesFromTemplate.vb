@@ -248,49 +248,28 @@ Public Class TaskUpdateModelStylesFromTemplate
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim UC As New UtilsCommon
 
@@ -366,8 +345,7 @@ Public Class TaskUpdateModelStylesFromTemplate
 
                 ' BaseStyles
                 If Me.UpdateBaseStyles Then
-                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(AsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
-                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    DoUpdateBaseStyles(SEDoc, CType(AsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
                 End If
 
             Case "par"
@@ -407,8 +385,7 @@ Public Class TaskUpdateModelStylesFromTemplate
 
                 ' BaseStyles
                 If Me.UpdateBaseStyles Then
-                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(ParTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
-                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    DoUpdateBaseStyles(SEDoc, CType(ParTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
                 End If
 
             Case "psm"
@@ -448,57 +425,44 @@ Public Class TaskUpdateModelStylesFromTemplate
 
                 ' BaseStyles
                 If Me.UpdateBaseStyles Then
-                    SupplementalErrorMessage = DoUpdateBaseStyles(SEDoc, CType(PsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
-                    Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                    DoUpdateBaseStyles(SEDoc, CType(PsmTemplateDoc, SolidEdgeFramework.SolidEdgeDocument))
                 End If
 
         End Select
 
         If Me.UpdateDimensionStyles Then
-            SupplementalErrorMessage = DoUpdateDimensionStyles(DocDimensionStyles, TemplateDimensionStyles)
-            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoUpdateDimensionStyles(DocDimensionStyles, TemplateDimensionStyles)
         End If
 
         If Me.UpdateLinearStyles Then
-            SupplementalErrorMessage = DoUpdateLinearStyles(DocLinearStyles, TemplateLinearStyles)
-            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoUpdateLinearStyles(DocLinearStyles, TemplateLinearStyles)
         End If
 
         If Me.UpdateTextCharStyles Then
-            SupplementalErrorMessage = DoUpdateTextCharStyles(DocTextCharStyles, TemplateTextCharStyles)
-            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoUpdateTextCharStyles(DocTextCharStyles, TemplateTextCharStyles)
         End If
 
         If Not (DocTextStyles Is Nothing Or TemplateTextStyles Is Nothing) Then
             If Me.UpdateTextStyles Then
-                SupplementalErrorMessage = DoUpdateTextStyles(DocTextStyles, TemplateTextStyles)
-                Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                DoUpdateTextStyles(DocTextStyles, TemplateTextStyles)
             End If
         End If
 
         If Me.UpdateViewStyles Then
-            SupplementalErrorMessage = DoUpdateViewStyles(DocViewStyles, TemplateViewStyles)
-            Me.AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            DoUpdateViewStyles(DocViewStyles, TemplateViewStyles)
 
             SetActiveViewStyle(SEApp, DocWindows, TemplateWindows, AsmTemplateDoc, ParTemplateDoc, PsmTemplateDoc)
         End If
 
 
         If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
         Else
             SEDoc.Save()
             SEApp.DoIdle()
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Sub SetActiveViewStyle(SEApp As SolidEdgeFramework.Application,
@@ -553,14 +517,10 @@ Public Class TaskUpdateModelStylesFromTemplate
 
     End Sub
 
-    Private Function DoUpdateViewStyles(
+    Private Sub DoUpdateViewStyles(
         ByRef DocViewStyles As SolidEdgeFramework.ViewStyles,
         ByRef TemplateViewStyles As SolidEdgeFramework.ViewStyles
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -585,11 +545,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                         UC.CopyProperties(TemplateViewStyle, DocViewStyle)
 
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
-
                         TaskLogger.AddMessage(String.Format("Error updating ViewStyle '{0}'", TemplateViewStyle.StyleName))
-
                     End Try
 
                     'Update skybox
@@ -603,11 +559,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                                 s = TemplateViewStyle.GetSkyboxSideFilename(i)
                                 DocViewStyle.SetSkyboxSideFilename(i, s)
                             Catch ex As Exception
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
-
                                 TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
-
                             End Try
                         Next
 
@@ -624,11 +576,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateViewStyle, NewViewStyle)
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
-
                     TaskLogger.AddMessage(String.Format("Error configuring ViewStyle '{0}'", TemplateViewStyle.StyleName))
-
                 End Try
 
                 'Update skybox
@@ -642,11 +590,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                             s = TemplateViewStyle.GetSkyboxSideFilename(i)
                             NewViewStyle.SetSkyboxSideFilename(i, s)
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
-
                             TaskLogger.AddMessage(String.Format("ViewStyle '{0}' SkyBox image '{1}' not found", TemplateViewStyle.StyleName, s))
-
                         End Try
                     Next
 
@@ -666,28 +610,18 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocViewStyle.Delete()
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to remove ViewStyle '{0}'", s))
-
                         TaskLogger.AddMessage(String.Format("Unable to remove ViewStyle '{0}'", s))
-
                     End Try
                 End If
             Next
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoUpdateTextStyles(
+    Private Sub DoUpdateTextStyles(
         ByRef DocTextStyles As SolidEdgeFramework.TextStyles,
         ByRef TemplateTextStyles As SolidEdgeFramework.TextStyles
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -712,11 +646,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextStyle, DocTextStyle)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
-
                         TaskLogger.AddMessage(String.Format("Error applying TextStyle '{0}'", TemplateTextStyle.Name))
-
                     End Try
 
                     Exit For
@@ -729,11 +659,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateTextStyle, NewTextStyle)
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
-
                     TaskLogger.AddMessage(String.Format("Error configuring TextStyle '{0}'", TemplateTextStyle.Name))
-
                 End Try
             End If
 
@@ -750,28 +676,18 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocTextStyles.Remove(DocTextStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to remove TextStyle '{0}'", s))
-
                         TaskLogger.AddMessage(String.Format("Unable to remove TextStyle '{0}'", s))
-
                     End Try
                 End If
             Next
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoUpdateTextCharStyles(
+    Private Sub DoUpdateTextCharStyles(
         ByRef DocTextCharStyles As SolidEdgeFramework.TextCharStyles,
         ByRef TemplateTextCharStyles As SolidEdgeFramework.TextCharStyles
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -796,11 +712,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateTextCharStyle, DocTextCharStyle)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-
                         TaskLogger.AddMessage(String.Format("Error applying TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-
                     End Try
 
                     Exit For
@@ -814,11 +726,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateTextCharStyle, NewTextCharStyle)
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-
                     TaskLogger.AddMessage(String.Format("Error configuring TextCharStyle '{0}'", TemplateTextCharStyle.Name))
-
                 End Try
             End If
 
@@ -835,28 +743,18 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocTextCharStyles.Remove(DocTextCharStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to remove TextCharStyle '{0}'", s))
-
                         TaskLogger.AddMessage(String.Format("Unable to remove TextCharStyle '{0}'", s))
-
                     End Try
                 End If
             Next
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoUpdateLinearStyles(
+    Private Sub DoUpdateLinearStyles(
         ByRef DocLinearStyles As SolidEdgeFramework.LinearStyles,
         ByRef TemplateLinearStyles As SolidEdgeFramework.LinearStyles
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -881,11 +779,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateLinearStyle, DocLinearStyle)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
-
                         TaskLogger.AddMessage(String.Format("Error applying LinearStyle '{0}'", TemplateLinearStyle.Name))
-
                     End Try
 
                     Exit For
@@ -898,11 +792,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateLinearStyle, NewLinearStyle)
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
-
                     TaskLogger.AddMessage(String.Format("Error configuring LinearStyle '{0}'", TemplateLinearStyle.Name))
-
                 End Try
             End If
 
@@ -919,28 +809,18 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocLinearStyles.Remove(DocLinearStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to remove LinearStyle '{0}'", s))
-
                         TaskLogger.AddMessage(String.Format("Unable to remove LinearStyle '{0}'", s))
-
                     End Try
                 End If
             Next
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function DoUpdateDimensionStyles(
+    Private Sub DoUpdateDimensionStyles(
         ByRef DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles,
         ByRef TemplateDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -965,9 +845,6 @@ Public Class TaskUpdateModelStylesFromTemplate
                     Try
                         UC.CopyProperties(TemplateDimensionStyle, DocDimensionStyle)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-
                         TaskLogger.AddMessage(String.Format("Error applying DimensionStyle '{0}'", TemplateDimensionStyle.Name))
 
                     End Try
@@ -982,11 +859,7 @@ Public Class TaskUpdateModelStylesFromTemplate
                 Try
                     UC.CopyProperties(TemplateDimensionStyle, NewDimensionStyle)
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-
                     TaskLogger.AddMessage(String.Format("Error configuring DimensionStyle '{0}'", TemplateDimensionStyle.Name))
-
                 End Try
             End If
 
@@ -1003,29 +876,19 @@ Public Class TaskUpdateModelStylesFromTemplate
                         DocDimensionStyles.Remove(DocDimensionStyle.Name)
                         DocStyleNames.Remove(s)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to remove DimensionStyle '{0}'", s))
-
                         TaskLogger.AddMessage(String.Format("Unable to remove DimensionStyle '{0}'", s))
-
                     End Try
                 End If
             Next
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
-    Private Function DoUpdateBaseStyles(
+    Private Sub DoUpdateBaseStyles(
         ByRef SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByRef SETemplateDoc As SolidEdgeFramework.SolidEdgeDocument
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         Dim TemplateBaseStyles As New Dictionary(Of String, SolidEdgeFramework.FaceStyle)
         Dim DocBaseStyles As New Dictionary(Of String, SolidEdgeFramework.FaceStyle)
@@ -1037,16 +900,10 @@ Public Class TaskUpdateModelStylesFromTemplate
         DocBaseStyles = GetBaseStyles(SEDoc)
 
         If DocBaseStyles.Keys.Count < TemplateBaseStyles.Keys.Count Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Unable to update all Color Manager base styles")
-
             TaskLogger.AddMessage("Unable to update all Color Manager base styles")
-
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
     Private Function GetBaseStyles(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument
@@ -1614,20 +1471,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         End Select
 
     End Sub
-
-
-    'Public Overrides Sub ReconcileFormWithProps()
-    '    ControlsDict(ControlNames.AssemblyTemplate.ToString).Text = Me.AssemblyTemplate
-    '    ControlsDict(ControlNames.PartTemplate.ToString).Text = Me.PartTemplate
-    '    ControlsDict(ControlNames.SheetmetalTemplate.ToString).Text = Me.SheetmetalTemplate
-    'End Sub
-
-    'Public Overrides Sub NotifyAutoHideOptions()
-    '    'MyBase.NotifyAutoHideOptions()
-    '    If Not TaskControl.AutoHideOptions = Me.AutoHideOptions Then
-    '        Me.AutoHideOptions = TaskControl.AutoHideOptions
-    '    End If
-    'End Sub
 
 
     Private Function GetHelpText() As String

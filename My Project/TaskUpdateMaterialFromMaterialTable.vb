@@ -214,50 +214,29 @@ Public Class TaskUpdateMaterialFromMaterialTable
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = ProcessInternal(FileName)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Overloads Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+        ProcessInternal(FileName)
+    End Sub
+
+    Private Overloads Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim PropertySetName As String
         Dim PropertyName As String
@@ -275,23 +254,17 @@ Public Class TaskUpdateMaterialFromMaterialTable
                         SEDoc, PropertySetName, PropertyName, ModelLinkIdx:=0, AddProp:=False))
 
                     If FinishName Is Nothing Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
-
                         TaskLogger.AddMessage(String.Format("Property '{0}' not found", Me.FinishPropertyFormula))
-
                     End If
                 End If
 
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     Dim UM As New UtilsMaterials
 
-                    SupplementalErrorMessage = UM.UpdateMaterialFromMaterialTable(
+                    UM.UpdateMaterialFromMaterialTable(
                         SEApp, SEDoc, Me.MaterialTable, Me.RemoveFaceStyleOverrides, Me.UpdateFaceStyles,
                         Me.UseFinishFaceStyle, FinishName, Me.ExcludedFinishesList,
                         Me.OverrideBodyFaceStyle, Me.OverrideMaterialFaceStyle, TaskLogger)
-
-                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
                 End If
 
             Case Else
@@ -299,9 +272,6 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Select
 
         If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
 
         Else
@@ -309,16 +279,9 @@ Public Class TaskUpdateMaterialFromMaterialTable
             SEApp.DoIdle()
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
+    End Sub
 
-    End Function
-
-    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
         'Dim Proceed As Boolean = True
         'Dim Matl As String = ""
@@ -379,10 +342,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         'If SSDoc IsNot Nothing Then SSDoc.Close()
         'If SSMatTable IsNot Nothing Then SSMatTable.Close()
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -779,6 +739,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         End Select
 
     End Sub
+
 
     Private Function GetHelpText() As String
         Dim HelpString As String

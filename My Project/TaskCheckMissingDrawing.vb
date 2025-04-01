@@ -63,49 +63,29 @@ Public Class TaskCheckMissingDrawing
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = ProcessInternal(FileName)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Overloads Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+        ProcessInternal(FileName)
+    End Sub
+
+    Private Overloads Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim ModelFilename As String
         Dim DrawingFilename As String
@@ -117,25 +97,12 @@ Public Class TaskCheckMissingDrawing
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Drawing {0} not found", DrawingFilename))
-
             TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
-
         End If
 
+    End Sub
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
-
-    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
         Dim ModelFilename As String
         Dim DrawingFilename As String
@@ -147,17 +114,10 @@ Public Class TaskCheckMissingDrawing
         DrawingFilename = System.IO.Path.ChangeExtension(ModelFilename, ".dft")
 
         If Not FileIO.FileSystem.FileExists(DrawingFilename) Then
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Drawing {0} not found", DrawingFilename))
-
             TaskLogger.AddMessage(String.Format("Drawing {0} not found", DrawingFilename))
-
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

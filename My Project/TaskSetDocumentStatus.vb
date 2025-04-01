@@ -80,50 +80,21 @@ Public Class TaskSetDocumentStatus
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        'ErrorMessage = InvokeSTAThread(
-        '                       Of SolidEdgeFramework.SolidEdgeDocument,
-        '                       Dictionary(Of String, String),
-        '                       SolidEdgeFramework.Application,
-        '                       Dictionary(Of Integer, List(Of String)))(
-        '                           AddressOf ProcessInternal,
-        '                           SEDoc,
-        '                           Configuration,
-        '                           SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = ProcessInternal(FileName)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
 
-        'Dim NewStatusConstant As SolidEdgeConstants.DocumentStatus
-        'Dim NewSecurity As StatusSecurityMapping
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+        ProcessInternal(FileName)
+    End Sub
+
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
+
         Dim Proceed As Boolean = True
-        'Dim UC As New UtilsCommon
 
         Dim SSDoc As HCStructuredStorageDoc = Nothing
 
@@ -132,9 +103,6 @@ Public Class TaskSetDocumentStatus
             SSDoc.ReadProperties(Me.PropertiesData)
         Catch ex As Exception
             Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add("Unable to open file")
-
             TaskLogger.AddMessage("Unable to open file")
 
         End Try
@@ -144,9 +112,6 @@ Public Class TaskSetDocumentStatus
             Proceed = SSDoc.SetStatus(Me.NewStatus)
 
             If Not Proceed Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Unable to change status to '{0}'", Me.NewStatus))
-
                 TaskLogger.AddMessage(String.Format("Unable to change status to '{0}'", Me.NewStatus))
 
             End If
@@ -159,10 +124,7 @@ Public Class TaskSetDocumentStatus
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

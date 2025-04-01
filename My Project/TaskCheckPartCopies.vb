@@ -26,47 +26,28 @@ Public Class TaskCheckPartCopies
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -97,18 +78,10 @@ Public Class TaskCheckPartCopies
                         For Each CopiedPart In CopiedParts
                             If Not CopiedPart.FileName = "" Then  ' Empty filename implies no link to outside file
                                 If Not FileIO.FileSystem.FileExists(CopiedPart.FileName) Then
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
-
                                     TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
-
                                 Else
                                     If Not CopiedPart.IsUpToDate Then
-                                        ExitStatus = 1
-                                        ErrorMessageList.Add(String.Format("Part copy out of date: '{0}'", CopiedPart.Name))
-
                                         TaskLogger.AddMessage(String.Format("Part copy out of date: '{0}'", CopiedPart.Name))
-
                                     End If
                                 End If
                             End If
@@ -116,19 +89,12 @@ Public Class TaskCheckPartCopies
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
                 TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
             End If
 
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Public Overrides Function CheckStartConditions(

@@ -26,47 +26,28 @@ Public Class TaskUpdateDrawingViews
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Sheet As SolidEdgeDraft.Sheet = Nothing
         Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
@@ -99,11 +80,7 @@ Public Class TaskUpdateDrawingViews
                     If PartsList.IsUpToDate Then
                         PerformedUpdate = True
                     Else
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Unable to update parts list")
-
                         TaskLogger.AddMessage("Unable to update parts list")
-
                     End If
                 End If
             Next
@@ -121,19 +98,11 @@ Public Class TaskUpdateDrawingViews
             End If
 
             If Not FileIO.FileSystem.FileExists(Filename) Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Model file '{0}' not found", Filename))
-
                 TaskLogger.AddMessage(String.Format("Model file '{0}' not found", Filename))
 
-
             ElseIf ModelLink.ModelOutOfDate Then
-                ExitStatus = 1
                 s = String.Format("Model link out of date '{0}'", Filename)
-                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
                 If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
-
             End If
         Next
 
@@ -149,11 +118,7 @@ Public Class TaskUpdateDrawingViews
                             If DrawingView.IsUpToDate Then
                                 PerformedUpdate = True
                             Else
-                                ExitStatus = 1
-                                ErrorMessageList.Add("Unable to update drawing view")
-
                                 TaskLogger.AddMessage("Unable to update drawing view")
-
                             End If
                         Catch ex As Exception
                         End Try
@@ -164,21 +129,14 @@ Public Class TaskUpdateDrawingViews
 
         If PerformedUpdate Then
             If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
                 TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Public Overrides Function CheckStartConditions(

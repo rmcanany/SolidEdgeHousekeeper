@@ -64,51 +64,30 @@ Public Class TaskCheckInterference
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
+
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeAssembly.AssemblyDocument)
-        'tmpSEDoc.IsFileFamilyByDocument
-        'tmpSEDoc.IsFileAlternatePositionByDocument
 
         Dim ComparisonMethod = SolidEdgeConstants.InterferenceComparisonConstants.seInterferenceComparisonSet1vsItself
         Dim Status As SolidEdgeAssembly.InterferenceStatusConstants
@@ -130,15 +109,11 @@ Public Class TaskCheckInterference
         NumOccurrences = UO.AllOccurrences.Count + UO.AllSubOccurrences.Count
 
         If NumOccurrences > Me.NumOccurrencesLimit Then
-            ExitStatus = 1
             Dim s = String.Format("Number of occurrences {0} exceeds limit {1}.", NumOccurrences, Me.NumOccurrencesLimit)
-            ErrorMessageList.Add(s)
-
             TaskLogger.AddMessage(s)
-
         End If
 
-        If (ExitStatus = 0) And (NumOccurrences > 1) Then
+        If (Not TaskLogger.HasErrors) And (NumOccurrences > 1) Then
             Try
                 tmpSEDoc.CheckInterference2(
                 NumElementsSet1:=SetList.Count,
@@ -150,28 +125,17 @@ Public Class TaskCheckInterference
                 IgnoreSameNominalDiaConstant:=IgnoreD,
                 IgnoreNonThreadVsThreadConstant:=IgnoreT)
             Catch ex As Exception
-                ExitStatus = 1
-                ErrorMessageList.Add("Error running interference check")
-
                 TaskLogger.AddMessage("Error running interference check")
-
             End Try
         End If
 
-        If (ExitStatus = 0) And (NumOccurrences > 1) Then
+        If (Not TaskLogger.HasErrors) And (NumOccurrences > 1) Then
             If Not Status = SolidEdgeAssembly.InterferenceStatusConstants.seInterferenceStatusNoInterference Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Interference detected")
-
                 TaskLogger.AddMessage("Interference detected")
-
             End If
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
 

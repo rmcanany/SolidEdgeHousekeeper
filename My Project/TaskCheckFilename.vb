@@ -156,49 +156,30 @@ Public Class TaskCheckFilename
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = ProcessInternal(FileName)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Overloads Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        ProcessInternal(FileName)
+    End Sub
+
+    Private Overloads Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Formula As String
         Dim FormulaFound As Boolean
@@ -218,41 +199,26 @@ Public Class TaskCheckFilename
                 Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, ValidFilenameRequired:=False, Me.PropertiesData)
 
                 If Formula Is Nothing Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                     TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
 
                 Else
                     Formula = Formula.Trim
                 End If
 
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     If Formula = "" Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                         TaskLogger.AddMessage(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                     End If
                 End If
 
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     If Me.ComparisonContains Then
                         If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("File name '{0}' does not contain property formula '{1}'", Filename, Formula))
-
                             TaskLogger.AddMessage(String.Format("File name '{0}' does not contain property formula '{1}'", Filename, Formula))
-
                         End If
                     ElseIf Me.ComparisonIsExactly Then
                         If Not Filename.ToLower = Formula.ToLower Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("File name '{0}' not the same as property formula '{1}'", Filename, Formula))
-
                             TaskLogger.AddMessage(String.Format("File name '{0}' not the same as property formula '{1}'", Filename, Formula))
-
                         End If
                     End If
                 End If
@@ -263,39 +229,24 @@ Public Class TaskCheckFilename
                     Formula = UC.SubstitutePropertyFormula(SEDoc, SEDoc.FullName, Me.PropertyFormula, ValidFilenameRequired:=False, Me.PropertiesData)
 
                     If Formula Is Nothing Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                         TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
 
                     End If
 
-                    If ExitStatus = 0 Then
+                    If Not TaskLogger.HasErrors Then
                         If Formula = "" Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                             TaskLogger.AddMessage(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                         End If
                     End If
 
-                    If ExitStatus = 0 Then
+                    If Not TaskLogger.HasErrors Then
                         If Me.ComparisonContains Then
                             If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                             End If
                         ElseIf Me.ComparisonIsExactly Then
                             If Not Filename.ToLower = Formula.ToLower Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the formula value '{1}'", Filename, Formula))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' not the same as the formula value '{1}'", Filename, Formula))
-
                             End If
                         End If
                     End If
@@ -353,37 +304,21 @@ Public Class TaskCheckFilename
                     Next
 
                     If (Not FormulaFound) And (ModelLinkFilenames.Count > 0) Then
-                        ExitStatus = 1
                         If Me.ComparisonContains Then
                             If ModelLinkFilenames.Count = 1 Then
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in the following model file", Filename))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' does not contain property in the following model file", Filename))
-
                             Else
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in the following model files", Filename))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' does not contain property in the following model files", Filename))
-
                             End If
                         ElseIf Me.ComparisonIsExactly Then
                             If ModelLinkFilenames.Count = 1 Then
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in the following model file", Filename))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' not the same as the property in the following model file", Filename))
-
                             Else
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in the following model files", Filename))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' not the same as the property in the following model files", Filename))
-
                             End If
                         End If
                         For i As Integer = 0 To ModelLinkFilenames.Count - 1
-                            ErrorMessageList.Add(String.Format("    Model file: '{0}', property value: '{1}'", ModelLinkFilenames(i), Formulas(i)))
-
                             TaskLogger.AddMessage(String.Format("    Model file: '{0}', property value: '{1}'", ModelLinkFilenames(i), Formulas(i)))
-
                         Next
                     End If
 
@@ -393,17 +328,9 @@ Public Class TaskCheckFilename
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
         Dim Proceed As Boolean = True
         Dim Formula As String = ""
@@ -429,9 +356,6 @@ Public Class TaskCheckFilename
 
         Catch ex As Exception
             Proceed = False
-            ExitStatus = 1
-            ErrorMessageList.Add(ex.Message)
-
             TaskLogger.AddMessage(ex.Message)
 
         End Try
@@ -444,41 +368,25 @@ Public Class TaskCheckFilename
                     Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
 
                     If Formula Is Nothing Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                         TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                     Else
                         Formula = Formula.Trim
                     End If
 
-                    If ExitStatus = 0 Then
+                    If Not TaskLogger.HasErrors Then
                         If Formula = "" Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                             TaskLogger.AddMessage(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                         End If
                     End If
 
-                    If ExitStatus = 0 Then
+                    If Not TaskLogger.HasErrors Then
                         If Me.ComparisonContains Then
                             If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                             End If
                         ElseIf Me.ComparisonIsExactly Then
                             If Not Filename.ToLower = Formula.ToLower Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("File name '{0}' not the same as formula value '{1}'", Filename, Formula))
-
                                 TaskLogger.AddMessage(String.Format("File name '{0}' not the same as formula value '{1}'", Filename, Formula))
-
                             End If
                         End If
                     End If
@@ -491,41 +399,25 @@ Public Class TaskCheckFilename
                         Formula = SSParentDoc.SubstitutePropertyFormulas(Me.PropertyFormula, ValidFilenameRequired:=False)
 
                         If Formula Is Nothing Then
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                             TaskLogger.AddMessage(String.Format("Could not process formula '{0}'", Me.PropertyFormula))
-
                         Else
                             Formula = Formula.Trim
                         End If
 
-                        If ExitStatus = 0 Then
+                        If Not TaskLogger.HasErrors Then
                             If Formula = "" Then
-                                ExitStatus = 1
-                                ErrorMessageList.Add(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                                 TaskLogger.AddMessage(String.Format("Formula '{0}' not assigned", Me.PropertyFormula))
-
                             End If
                         End If
 
-                        If ExitStatus = 0 Then
+                        If Not TaskLogger.HasErrors Then
                             If Me.ComparisonContains Then
                                 If Not Filename.ToLower.Contains(Formula.ToLower) Then
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                                     TaskLogger.AddMessage(String.Format("File name '{0}' does not contain formula value '{1}'", Filename, Formula))
-
                                 End If
                             ElseIf Me.ComparisonIsExactly Then
                                 If Not Filename.ToLower = Formula.ToLower Then
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("File name '{0}' not the same as formula value '{1}'", Filename, Formula))
-
                                     TaskLogger.AddMessage(String.Format("File name '{0}' not the same as formula value '{1}'", Filename, Formula))
-
                                 End If
                             End If
                         End If
@@ -576,11 +468,7 @@ Public Class TaskCheckFilename
                                 Catch ex As Exception
                                     Formulas.Add("")
                                     If ex.Message.Contains("FOA") Then
-                                        ExitStatus = 1
-                                        ErrorMessageList.Add(String.Format("FOA file '{0}' not processed", IO.Path.GetFileName(ChildName)))
-
                                         TaskLogger.AddMessage(String.Format("FOA file '{0}' not processed", IO.Path.GetFileName(ChildName)))
-
                                     End If
                                 End Try
 
@@ -589,37 +477,21 @@ Public Class TaskCheckFilename
                             Next
 
                             If (Not FormulaFound) And (ChildNames.Count > 0) Then
-                                ExitStatus = 1
                                 If Me.ComparisonContains Then
                                     If ChildNames.Count = 1 Then
-                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in the following model file", Filename))
-
                                         TaskLogger.AddMessage(String.Format("File name '{0}' does not contain property in the following model file", Filename))
-
                                     Else
-                                        ErrorMessageList.Add(String.Format("File name '{0}' does not contain property in the following model files", Filename))
-
                                         TaskLogger.AddMessage(String.Format("File name '{0}' does not contain property in the following model files", Filename))
-
                                     End If
                                 ElseIf Me.ComparisonIsExactly Then
                                     If ChildNames.Count = 1 Then
-                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in the following model file", Filename))
-
                                         TaskLogger.AddMessage(String.Format("File name '{0}' not the same as the property in the following model file", Filename))
-
                                     Else
-                                        ErrorMessageList.Add(String.Format("File name '{0}' not the same as the property in the following model files", Filename))
-
                                         TaskLogger.AddMessage(String.Format("File name '{0}' not the same as the property in the following model files", Filename))
-
                                     End If
                                 End If
                                 For i As Integer = 0 To ChildNames.Count - 1
-                                    ErrorMessageList.Add(String.Format("    Model file: '{0}', property value: '{1}'", IO.Path.GetFileName(ChildNames(i)), Formulas(i)))
-
                                     TaskLogger.AddMessage(String.Format("    Model file: '{0}', property value: '{1}'", IO.Path.GetFileName(ChildNames(i)), Formulas(i)))
-
                                 Next
                             End If
                         End If
@@ -634,10 +506,7 @@ Public Class TaskCheckFilename
 
         If SSParentDoc IsNot Nothing Then SSParentDoc.Close()
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
 

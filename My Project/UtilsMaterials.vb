@@ -13,22 +13,16 @@ Public Class UtilsMaterials
     Private Property OverrideBodyFaceStyle As Boolean
     Private Property OverrideMaterialFaceStyle As Boolean
 
-    Public Function MaterialNotInMaterialTable(
+    Public Sub MaterialNotInMaterialTable(
         ByVal _SEApp As SolidEdgeFramework.Application,
         ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         _ActiveMaterialLibrary As String,
         ErrorLogger As Logger
-        ) As Dictionary(Of Integer, List(Of String))
+        )
 
         Me.SEApp = _SEApp
         Me.SEDoc = _SEDoc
         Me.ActiveMaterialLibrary = _ActiveMaterialLibrary
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        'Dim SubLogger As Logger = ErrorLogger.AddLogger("Material utilities")
 
         Dim MatTable As SolidEdgeFramework.MatTable
 
@@ -82,26 +76,17 @@ Public Class UtilsMaterials
             Next
 
             If Not CurrentMaterialNameInLibrary Then
-                ExitStatus = 1
                 If CurrentMaterialName = "" Then
-                    ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-
                     ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-
                 Else
-                    ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-
                     ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-
                 End If
             End If
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Public Function UpdateMaterialFromMaterialTable(
+    Public Sub UpdateMaterialFromMaterialTable(
         ByVal _SEApp As SolidEdgeFramework.Application,
         ByVal _SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         _ActiveMaterialLibrary As String,
@@ -113,7 +98,7 @@ Public Class UtilsMaterials
         _OverrideBodyFaceStyle As Boolean,
         _OverrideMaterialFaceStyle As Boolean,
         ErrorLogger As Logger
-        ) As Dictionary(Of Integer, List(Of String))
+        )
 
         Me.SEApp = _SEApp
         Me.SEDoc = _SEDoc
@@ -128,14 +113,8 @@ Public Class UtilsMaterials
 
         'ActiveMaterialLibrary = System.IO.Path.GetFileNameWithoutExtension(ActiveMaterialLibrary)
 
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
         Dim Mismatches As List(Of SolidEdgeFramework.MatTablePropIndex)
         Dim MatTable As SolidEdgeFramework.MatTable
-        'Dim MaterialLibList As Object
-        'Dim NumMaterialLibraries As Integer
         Dim MaterialList As Object = Nothing
         Dim NumMaterials As Integer
         Dim CurrentMaterialName As String = ""
@@ -163,8 +142,7 @@ Public Class UtilsMaterials
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
                 If Models.Count = 0 Then
                     ' Not an error
-                    ErrorMessage(ExitStatus) = ErrorMessageList
-                    Return ErrorMessage
+                    Exit Sub
                 End If
             Case "psm"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgePart.SheetMetalDocument)
@@ -172,22 +150,16 @@ Public Class UtilsMaterials
                 MatTable.GetCurrentMaterialName(tmpSEDoc, CurrentMaterialName)
                 If Models.Count = 0 Then
                     ' Not an error
-                    ErrorMessage(ExitStatus) = ErrorMessageList
-                    Return ErrorMessage
+                    Exit Sub
                 End If
         End Select
 
 
         ' ###### CHECK START CONDITIONS ######
 
-        ErrorMessageList = CheckUpdateMaterialStartConditions(
-            SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList, ErrorLogger)
+        CheckUpdateMaterialStartConditions(SEDoc, Models, MaxModelCount, CurrentMaterialName, MaterialList, ErrorLogger)
 
-        If ErrorMessageList.Count > 0 Then
-            ExitStatus = 1
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        End If
+        If ErrorLogger.HasErrors Then Exit Sub
 
 
         ' ###### GET THE MATERIAL OBJECT FROM THE MATERIAL TABLE ######
@@ -217,11 +189,7 @@ Public Class UtilsMaterials
                     Try
                         MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-
                         ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
-
                     End Try
                 Else
                     For Each MismatchProp As SolidEdgeFramework.MatTablePropIndex In Mismatches
@@ -265,9 +233,6 @@ Public Class UtilsMaterials
                                                 LibPropDouble = Factor * LibPropDouble
                                                 DocVariableDict("PhysicalProperties_Density").Formula = LibPropDouble.ToString
                                             Else
-                                                ExitStatus = 1
-                                                ErrorMessageList.Add(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
-
                                                 ErrorLogger.AddMessage(String.Format("Could not update density with '{0}' units", UnitOfMeasure.Units))
                                             End If
                                         End If
@@ -337,27 +302,14 @@ Public Class UtilsMaterials
                     MatTable.ApplyMaterialToDoc(SEDoc, MatTableMaterial.ToString, ActiveMaterialLibrary)
                     'UpdateFaces()
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add("Some face styles may not have been updated.  Please verify results.")
-
                     ErrorLogger.AddMessage("Some face styles may not have been updated.  Please verify results.")
-
                 End Try
             End If
 
         End If
 
         If Me.UpdateFaceStyles Then
-            Dim SupplementalErrorMessageList = UpdateFaces()
-            If SupplementalErrorMessageList.Count > 0 Then
-                ExitStatus = 1
-                For Each s As String In SupplementalErrorMessageList
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
-                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
-
-                Next
-            End If
+            UpdateFaces(ErrorLogger)
         End If
 
         SEDoc.Save()
@@ -366,10 +318,7 @@ Public Class UtilsMaterials
         MatTable = Nothing
         SEApp.DoIdle()
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
     Private Function CurrentMaterialNameInLibrary(CurrentMaterialName As String, MaterialList As Object) As Boolean
         For Each MatTableMaterial In CType(MaterialList, System.Array)
@@ -434,10 +383,7 @@ Public Class UtilsMaterials
         Return Mismatches
     End Function
 
-    Private Function UpdateFaces() As List(Of String)
-
-        Dim ErrorMessageList As New List(Of String)
-        'Dim UpdatesComplete As Boolean = True
+    Private Sub UpdateFaces(ErrorLogger As Logger)
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -548,8 +494,8 @@ Public Class UtilsMaterials
 
                         Catch ex As Exception
                             Dim s As String = "Could not process model faces"
-                            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-                            Return ErrorMessageList
+                            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
+                            Exit Sub
                         End Try
 
                         SEApp.DoIdle()
@@ -568,7 +514,7 @@ Public Class UtilsMaterials
                                 Body.Style = FinishFaceStyle
                             Else
                                 Dim s As String = String.Format("Finish face style '{0}' not found", FinishName)
-                                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                                If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                             End If
                         End If
 
@@ -595,24 +541,21 @@ Public Class UtilsMaterials
 
                     ElseIf FaceOverrides.Count > MaxFacesToProcess Then
                         Dim s As String = String.Format("Number of faces '{0}' exceeds maximum '{1}'", FaceOverrides.Count, MaxFacesToProcess)
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+                        If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                     End If
 
                 Catch ex As Exception
                     Dim s As String = "Could not process model"
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                 End Try
             Next
 
         ElseIf Models.Count >= 300 Then
             Dim s As String = String.Format("Number of models '{0}' exceeds maximum '{1}'", Models.Count, 300)
-            If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
+            If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
         End If
 
-        Return ErrorMessageList
-
-    End Function
+    End Sub
 
     Private Function PopulateFeatureFaceOverrides(
         FeatureFaces As SolidEdgeGeometry.Faces,
@@ -1264,49 +1207,33 @@ Public Class UtilsMaterials
 
     End Function
 
-    Private Function CheckUpdateMaterialStartConditions(
+    Private Sub CheckUpdateMaterialStartConditions(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         Models As SolidEdgePart.Models,
         MaxModelCount As Integer,
         CurrentMaterialName As String,
         MaterialList As Object,
         ErrorLogger As Logger
-        ) As List(Of String)
-
-        Dim ErrorMessageList As New List(Of String)
+        )
 
         If SEDoc.ReadOnly Then
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             ErrorLogger.AddMessage("Cannot save document marked 'Read Only'")
-
-            Return ErrorMessageList
+            Exit Sub
         End If
 
         If Models.Count > MaxModelCount Then
-            ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
             ErrorLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
-            Return ErrorMessageList
+            Exit Sub
         End If
 
         If Not CurrentMaterialNameInLibrary(CurrentMaterialName, MaterialList) Then
             If CurrentMaterialName = "" Then
-                ErrorMessageList.Add(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-
                 ErrorLogger.AddMessage(String.Format("Material 'None' not in {0}", ActiveMaterialLibrary))
-
             Else
-                ErrorMessageList.Add(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-
                 ErrorLogger.AddMessage(String.Format("Material '{0}' not in {1}", CurrentMaterialName, ActiveMaterialLibrary))
-
             End If
-            Return ErrorMessageList
         End If
 
-        Return ErrorMessageList
-    End Function
+    End Sub
 
 End Class

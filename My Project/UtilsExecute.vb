@@ -135,17 +135,17 @@ Public Class UtilsExecute
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
 
-        If Me.UtilsLogFile.ErrorsOccurred Then
-            Try
-                ' Try to use the default application to open the file.
-                Process.Start(Me.UtilsLogFile.MissingFilesFileName)
-            Catch ex As Exception
-                ' If none, open with notepad.exe
-                Process.Start("notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
-            End Try
-        Else
-            FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
-        End If
+        'If Me.UtilsLogFile.ErrorsOccurred Then
+        '    Try
+        '        ' Try to use the default application to open the file.
+        '        Process.Start(Me.UtilsLogFile.MissingFilesFileName)
+        '    Catch ex As Exception
+        '        ' If none, open with notepad.exe
+        '        Process.Start("notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
+        '    End Try
+        'Else
+        '    FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
+        'End If
 
         FMain.Cursor = Cursors.Default
 
@@ -344,7 +344,7 @@ Public Class UtilsExecute
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
         Dim msg As String
-        Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
+        'Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
 
         Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
@@ -387,14 +387,16 @@ Public Class UtilsExecute
                 Exit Sub
             End If
 
-            ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
+            'ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
+            ProcessFile(FileToProcess, Filetype)
 
-            If ErrorMessagesCombined.Count > 0 Or Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
+            'If ErrorMessagesCombined.Count > 0 Or Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
+            If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)
                 Dim tmpFilename As String = System.IO.Path.GetFileName(FileToProcess)
                 Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
 
-                Me.UtilsLogFile.LogfileAppend(s, ErrorMessagesCombined)
+                'Me.UtilsLogFile.LogfileAppend(s, ErrorMessagesCombined)
                 'FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
                 LVItemReverseLUT(idx).ImageKey = "Error"
             Else
@@ -413,14 +415,14 @@ Public Class UtilsExecute
 
     End Sub
 
-    Public Function ProcessFile(
+    Public Sub ProcessFile(
         ByVal Path As String,
         ByVal Filetype As String
-        ) As Dictionary(Of String, List(Of String))
+        ) 'As Dictionary(Of String, List(Of String))
 
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer
-        Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
+        'Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        'Dim ExitStatus As Integer
+        'Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
 
         Dim FileLogger As Logger = Me.ErrorLogger.AddFile(Path)
 
@@ -452,7 +454,7 @@ Public Class UtilsExecute
 
             Dim s As String = SetStartingStatus(OldStatus, Path) 'SetStartingStatus populates OldStatus
             If Not s = "" Then
-                ErrorMessagesCombined(s) = New List(Of String) From {""}
+                'ErrorMessagesCombined(s) = New List(Of String) From {""}
                 FileLogger.AddMessage(s)
             End If
 
@@ -468,7 +470,7 @@ Public Class UtilsExecute
 
                 Proceed = CheckVersion(SEApp, Path)
                 If Not Proceed Then
-                    ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                    'ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
                     FileLogger.AddMessage("Error opening file")
                 End If
 
@@ -518,18 +520,23 @@ Public Class UtilsExecute
                         If tf Then
 
                             If FMain.SolidEdgeRequired > 0 Then
-                                ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
+                                'ErrorMessage = Task.Process(SEDoc, FMain.Configuration, SEApp)
+                                Task.Process(SEDoc, SEApp)
                             Else
-                                ErrorMessage = Task.Process(Path)
+                                'ErrorMessage = Task.Process(Path)
+                                Task.Process(Path)
                             End If
 
-                            ExitStatus = ErrorMessage.Keys(0)
+                            'ExitStatus = ErrorMessage.Keys(0)
 
-                            If ExitStatus <> 0 Then
-                                ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
-                            End If
+                            'If ExitStatus <> 0 Then
+                            '    ErrorMessagesCombined(Task.Description) = ErrorMessage(ErrorMessage.Keys(0))
+                            'End If
 
-                            If ExitStatus = 99 Or Me.ErrorLogger.Abort Then
+                            'If ExitStatus = 99 Or Me.ErrorLogger.Abort Then
+                            '    FMain.StopProcess = True
+                            'End If
+                            If Me.ErrorLogger.Abort Then
                                 FMain.StopProcess = True
                             End If
 
@@ -554,7 +561,7 @@ Public Class UtilsExecute
                 If FMain.ProcessAsAvailable Then
                     Dim s As String = SetEndingStatus(OldStatus, Path)
                     If Not s = "" Then
-                        ErrorMessagesCombined(s) = New List(Of String) From {""}
+                        'ErrorMessagesCombined(s) = New List(Of String) From {""}
                         FileLogger.AddMessage(s)
                     End If
                 End If
@@ -588,10 +595,10 @@ Public Class UtilsExecute
             End If
 
             If ex.ToString.Contains("SolidEdgeFramework.Documents.Open") Then
-                ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
+                'ErrorMessagesCombined("Error opening file") = New List(Of String) From {""}
                 FileLogger.AddMessage("Error opening file")
             Else
-                ErrorMessagesCombined("Error processing file") = AbortList
+                'ErrorMessagesCombined("Error processing file") = AbortList
                 FileLogger.AddMessage(String.Format("Error processing file"))
                 For Each s In AbortList
                     FileLogger.AddMessage(s)
@@ -601,8 +608,8 @@ Public Class UtilsExecute
 
         UpdateTimeRemaining()
 
-        Return ErrorMessagesCombined
-    End Function
+        'Return ErrorMessagesCombined
+    End Sub
 
     Private Function CheckVersion(SEApp As SolidEdgeFramework.Application, Filename As String) As Boolean
         ' Checks if the file to be processed is of the same or earlier version than the version installed on the machine.

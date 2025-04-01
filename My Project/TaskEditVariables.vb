@@ -86,57 +86,34 @@ Public Class TaskEditVariables
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        'Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
-        'Dim SupplementalExitStatus As Integer = 0
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim tmpVariablesToEditDict As New Dictionary(Of String, Dictionary(Of String, String))
         Dim VariablesToEditDict As New Dictionary(Of Integer, Dictionary(Of String, String))
         Dim ColumnIndexString As String
         Dim ColumnIndex As Integer
         Dim RowIndex As Integer
-
-        'Dim VariableName As String
 
         Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
         Dim DocVariableDict As New Dictionary(Of String, SolidEdgeFramework.variable)
@@ -145,7 +122,6 @@ Public Class TaskEditVariables
         Dim VariableListObject As SolidEdgeFramework.VariableList = Nothing
         Dim Variable As SolidEdgeFramework.variable = Nothing
         Dim Dimension As SolidEdgeFrameworkSupport.Dimension = Nothing
-        'Dim VariableTypeName As String
 
         Dim VariablesToEdit As String = ""
         Dim VariablesToExposeDict As New Dictionary(Of String, String)
@@ -154,9 +130,7 @@ Public Class TaskEditVariables
 
         Dim UC As New UtilsCommon
 
-        'Dim Proceed As Boolean = True
         Dim tf As Boolean
-        'Dim s As String
 
         DocType = UC.GetDocType(SEDoc)
 
@@ -189,37 +163,25 @@ Public Class TaskEditVariables
             Next
 
         Else
-            ExitStatus = 1
-            ErrorMessageList.Add("No variables provided")
-
             TaskLogger.AddMessage("No variables provided")
-
         End If
 
-        If ExitStatus = 0 Then
+        If Not TaskLogger.HasErrors Then
             Variables = DirectCast(SEDoc.Variables, SolidEdgeFramework.Variables)
 
             DocDimensionDict = UC.GetDocDimensions(SEDoc)
             If DocDimensionDict Is Nothing Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to access dimensions")
-
                 TaskLogger.AddMessage("Unable to access dimensions")
-
             End If
 
             DocVariableDict = UC.GetDocVariables(SEDoc)
             If DocVariableDict Is Nothing Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to access variables")
-
                 TaskLogger.AddMessage("Unable to access variables")
-
             End If
 
         End If
 
-        If ExitStatus = 0 Then
+        If Not TaskLogger.HasErrors Then
 
             ' Process variables.
 
@@ -233,11 +195,7 @@ Public Class TaskEditVariables
 
                 Formula = UC.SubstitutePropertyFormula(SEDoc, FullName, Formula, ValidFilenameRequired:=False, Me.PropertiesData)
                 If Formula Is Nothing Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Could not process formula '{0}', property not found", tmpFormula))
-
                     TaskLogger.AddMessage(String.Format("Could not process formula '{0}', property not found", tmpFormula))
-
                     Continue For
                 End If
 
@@ -251,11 +209,7 @@ Public Class TaskEditVariables
                 If Not tf Then  ' Add it.
                     If Me.AutoAddMissingVariable Then
                         If Formula = "" Then  ' Can't add a variable without a formula
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to add variable named '{0}'.  No value or formula supplied.", VariableName))
-
                             Continue For
                         End If
 
@@ -269,19 +223,11 @@ Public Class TaskEditVariables
                                 End If
                             End If
                         Catch ex As Exception
-                            ExitStatus = 1
-                            ErrorMessageList.Add(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                             TaskLogger.AddMessage(String.Format("Unable to add and/or expose variable '{0}'", VariableName))
-
                         End Try
 
                     Else
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Variable '{0}' not found", VariableName))
-
                         TaskLogger.AddMessage(String.Format("Variable '{0}' not found", VariableName))
-
                     End If
 
                 Else  ' Edit and/or Expose.
@@ -312,11 +258,7 @@ Public Class TaskEditVariables
 
                         End If
                     Catch ex As Exception
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("Unable to change variable '{0}'", VariableName))
-
                         TaskLogger.AddMessage(String.Format("Unable to change variable '{0}'", VariableName))
-
                     End Try
 
                 End If
@@ -324,30 +266,16 @@ Public Class TaskEditVariables
 
         End If
 
-        If ExitStatus = 0 Then
+        If Not TaskLogger.HasErrors Then
             If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
                 TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
             Else
                 SEDoc.Save()
                 SEApp.DoIdle()
             End If
         End If
 
-        'If SEDoc.ReadOnly Then
-        '    ExitStatus = 1
-        '    ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-        'Else
-        '    SEDoc.Save()
-        '    SEApp.DoIdle()
-        'End If
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -395,21 +323,6 @@ Public Class TaskEditVariables
 
         Return tmpTLPOptions
     End Function
-
-    Private Sub InitializeOptionProperties()
-        Dim CheckBox As CheckBox
-        Dim TextBox As TextBox
-
-        TextBox = CType(ControlsDict(ControlNames.JSONString.ToString), TextBox)
-        Me.JSONString = TextBox.Text
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoAddMissingVariable.ToString), CheckBox)
-        Me.AutoAddMissingVariable = CheckBox.Checked
-
-        CheckBox = CType(ControlsDict(ControlNames.AutoHideOptions.ToString), CheckBox)
-        Me.AutoHideOptions = CheckBox.Checked
-
-    End Sub
 
     Public Overrides Function CheckStartConditions(
         PriorErrorMessage As Dictionary(Of Integer, List(Of String))

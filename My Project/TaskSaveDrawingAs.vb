@@ -255,49 +255,28 @@ Public Class TaskSaveDrawingAs
         Me.PropertiesData = New HCPropertiesData
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
 
@@ -329,37 +308,23 @@ Public Class TaskSaveDrawingAs
             Case = "dft"
                 Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-                NewFilename = GenerateNewFilename(SEDoc, NewExtension)
+                NewFilename = GenerateNewFilename(SEDoc, NewExtension)  ' Updates TaskLogger
 
-                If NewFilename = "" Then
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                    ' Handled in GenerateNewFilename
-                    'TaskLogger.AddMessage(String.Format("Error creating subdirectory '{0}'", Me.Formula))
-
-                End If
-
-                If ExitStatus = 0 Then
+                If Not TaskLogger.HasErrors Then
                     FileIO.FileSystem.CreateDirectory(System.IO.Path.GetDirectoryName(NewFilename))
 
                     If Me.AddWatermark Then
-                        SupplementalErrorMessage = AddWatermarkToSheets(tmpSEDoc, NewFilename, SEApp)
-                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                        AddWatermarkToSheets(tmpSEDoc, NewFilename, SEApp)
                     End If
 
-                    SupplementalErrorMessage = SaveAsDrawing(tmpSEDoc, NewFilename, SEApp)
-                    AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
-
+                    SaveAsDrawing(tmpSEDoc, NewFilename, SEApp)
                 End If
 
             Case Else
                 MsgBox(String.Format("{0} DocType '{1}' not recognized", Me.Name, DocType))
         End Select
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateNewFilename(
@@ -460,17 +425,11 @@ Public Class TaskSaveDrawingAs
 
     End Function
 
-    Private Function AddWatermarkToSheets(
+    Private Sub AddWatermarkToSheets(
         SEDoc As SolidEdgeDraft.DraftDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim Sections As SolidEdgeDraft.Sections
         Dim Section As SolidEdgeDraft.Section
@@ -506,9 +465,6 @@ Public Class TaskSaveDrawingAs
 
                 SEApp.DoIdle()
             Catch ex As Exception
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("Unable to add watermark to sheet '{0}'", Sheet.Name))
-
                 Me.TaskLogger.AddMessage(String.Format("Unable to add watermark to sheet '{0}'", Sheet.Name))
 
             End Try
@@ -521,18 +477,13 @@ Public Class TaskSaveDrawingAs
         SheetWindow.DisplayBackgroundSheetTabs = False
         SEApp.DoIdle()
 
-        Return ErrorMessage
-    End Function
+    End Sub
 
-    Private Function SaveAsDrawing(
+    Private Sub SaveAsDrawing(
         SEDoc As SolidEdgeDraft.DraftDocument,
         NewFilename As String,
         SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList As New List(Of String)
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        )
 
         Dim SaveAsPDFOptions As SolidEdgeFramework.ApplicationGlobalConstants
         SaveAsPDFOptions = SolidEdgeFramework.ApplicationGlobalConstants.seApplicationGlobalDraftSaveAsPDFSheetOptions
@@ -593,34 +544,17 @@ Public Class TaskSaveDrawingAs
                     SEDoc.SaveAs(NewFilename)
                     SEApp.DoIdle()
                 Catch ex As Exception
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("Could not save '{0}'", NewFilename))
-
                     Me.TaskLogger.AddMessage(String.Format("Could not save '{0}'", NewFilename))
-
                 End Try
 
-                ' These checks are performed in CheckStartConditions
-                'If Not Me.SaveInOriginalDirectory Then
-                '    SEDoc.SaveCopyAs(NewFilename)
-                '    SEApp.DoIdle()
-                'Else
-                '    ExitStatus = 1
-                '    ErrorMessageList.Add("Can not SaveCopyAs to the original directory")
-                'End If
             End If
 
         Catch ex As Exception
-            ExitStatus = 1
-            ErrorMessageList.Add(String.Format("Error saving file {0}", NewFilename))
-
             Me.TaskLogger.AddMessage(String.Format("Error saving file {0}", NewFilename))
 
         End Try
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GetNewFileTypeNames() As List(Of String)

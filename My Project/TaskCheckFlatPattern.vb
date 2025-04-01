@@ -25,47 +25,28 @@ Public Class TaskCheckFlatPattern
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim UC As New UtilsCommon
         Dim DocType = UC.GetDocType(SEDoc)
@@ -103,32 +84,18 @@ Public Class TaskCheckFlatPattern
             If FlatpatternModels.Count > 0 Then
                 For Each FlatpatternModel In FlatpatternModels
                     If Not FlatpatternModel.IsUpToDate Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Flat pattern is out of date")
-
                         TaskLogger.AddMessage("Flat pattern is out of date")
-
                     End If
                     If Not FlatpatternModel.FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureOK Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Flat pattern is out of date")
-
                         TaskLogger.AddMessage("Flat pattern is out of date")
-
                     End If
                 Next
             Else
-                ExitStatus = 1
-                ErrorMessageList.Add("No flat patterns found")
-
                 TaskLogger.AddMessage("No flat patterns found")
-
             End If
         End If
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
 
-    End Function
+    End Sub
 
 
     Public Overrides Function CheckStartConditions(

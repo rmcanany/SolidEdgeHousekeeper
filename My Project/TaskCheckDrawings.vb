@@ -91,47 +91,28 @@ Public Class TaskCheckDrawings
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim s As String
         Dim tf As Boolean
@@ -155,10 +136,7 @@ Public Class TaskCheckDrawings
             Try
                 For Each PartsList In tmpSEDoc.PartsLists
                     If Not PartsList.IsUpToDate Then
-                        ExitStatus = 1
                         s = "Parts list out of date"
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
                     End If
@@ -172,10 +150,7 @@ Public Class TaskCheckDrawings
                 DrawingViews = Sheet.DrawingViews
                 For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
                     If Not DrawingView.IsUpToDate Then
-                        ExitStatus = 1
                         s = "Drawing views out of date"
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
                         If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
                     End If
@@ -184,10 +159,7 @@ Public Class TaskCheckDrawings
                         If DrawingView.ModelLink IsNot Nothing Then
                             ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
                             If ModelLink.ModelOutOfDate Then
-                                ExitStatus = 1
                                 s = "Drawing views out of date"
-                                If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
                                 If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
                             End If
@@ -217,12 +189,8 @@ Public Class TaskCheckDrawings
                     Try
                         If Balloon.Leader Then
                             If Not Balloon.IsTerminatorAttachedToEntity Then
-                                ExitStatus = 1
                                 s = String.Format("Detached annotation: Sheet {0}: {1}", Sheet.Name, Balloon.BalloonDisplayedText)
-                                ErrorMessageList.Add(s)
-
                                 TaskLogger.AddMessage(s)
-
                             End If
                         End If
                     Catch ex As Exception
@@ -233,9 +201,6 @@ Public Class TaskCheckDrawings
             ' Check dimensions.
             DocDimensionDict = UC.GetDocDimensions(SEDoc)
             If DocDimensionDict Is Nothing Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to access dimensions")
-
                 TaskLogger.AddMessage("Unable to access dimensions")
 
             Else
@@ -247,41 +212,27 @@ Public Class TaskCheckDrawings
                     tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
 
                     If tf Then
-                        ExitStatus = 1
                         ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
                         s = String.Format("Detached dimension: Sheet {0}: {1}", ParentSheet.Name, Dimension.DisplayName)
-                        ErrorMessageList.Add(s)
-
                         TaskLogger.AddMessage(s)
-
                     End If
 
                 Next
             End If
-
-
         End If
 
         If DrawingViewOnBackgroundSheet Then
             Dim BackgroundSheet As SolidEdgeDraft.Sheet
             For Each BackgroundSheet In UC.GetSheets(tmpSEDoc, "Background")
                 If BackgroundSheet.DrawingViews.Count > 0 Then
-                    ExitStatus = 1
                     s = String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name)
-                    If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
                     If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
                 End If
             Next
-
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

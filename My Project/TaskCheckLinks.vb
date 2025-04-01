@@ -97,49 +97,29 @@ Public Class TaskCheckLinks
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = ProcessInternal(FileName)
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Overloads Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+        ProcessInternal(FileName)
+    End Sub
+
+    Private Overloads Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim LinkFilenames As New List(Of String)
 
@@ -253,11 +233,7 @@ Public Class TaskCheckLinks
                     Next
                 ElseIf Models.Count >= 300 Then
                     s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
-                    ExitStatus = 1
-                    UpdateErrorMessageList(ErrorMessageList, s, True, Me.Description)
-
                     SubLogger.AddMessage(s)
-
                 End If
 
             End If
@@ -269,12 +245,9 @@ Public Class TaskCheckLinks
 
                 If CheckItem = "Missing links" Then
                     If Not FileIO.FileSystem.FileExists(s) Then
-                        ExitStatus = 1
                         Path = System.IO.Path.GetDirectoryName(s)
                         Filename = System.IO.Path.GetFileName(s)
                         s = String.Format("{0} in {1}", Filename, Path)
-
-                        UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
 
                         SubLogger.AddMessage(s)
 
@@ -293,22 +266,11 @@ Public Class TaskCheckLinks
                     Next
 
                     If Not tf Then
-                        ExitStatus = 1
                         Path = System.IO.Path.GetDirectoryName(s)
                         Filename = System.IO.Path.GetFileName(s)
                         s = String.Format("{0} in {1}", Filename, Path)
 
                         ' Don't add the file to the misplaced list if it is already listed as missing
-                        tf = False
-                        For Each tmps As String In ErrorMessageList
-                            If tmps.Contains(s) Then
-                                tf = True
-                                Exit For
-                            End If
-                        Next
-                        If Not tf Then
-                            UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
-                        End If
 
                         If Not tmpMissingLinks.Contains(s) Then
                             SubLogger.AddMessage(s)
@@ -320,18 +282,9 @@ Public Class TaskCheckLinks
             Next
         Next
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
+    End Sub
 
-    End Function
-
-    Private Overloads Function ProcessInternal(ByVal FullName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    Private Overloads Sub ProcessInternal(ByVal FullName As String)
 
         Dim Proceed As Boolean = True
         Dim LinkNames As List(Of String)
@@ -351,11 +304,7 @@ Public Class TaskCheckLinks
                 SSDoc = New HCStructuredStorageDoc(FullName)
             Catch ex As Exception
                 Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add(ex.Message)
-
                 TaskLogger.AddMessage(ex.Message)
-
             End Try
         End If
 
@@ -368,11 +317,7 @@ Public Class TaskCheckLinks
 
             If (LinkNames Is Nothing) Or (BadLinkNames Is Nothing) Then
                 Proceed = False
-                ExitStatus = 1
-                ErrorMessageList.Add("Unable to read file links")
-
                 TaskLogger.AddMessage("Unable to read file links")
-
             End If
 
             If Proceed Then
@@ -399,17 +344,10 @@ Public Class TaskCheckLinks
                     Dim SubLogger As Logger = TaskLogger.AddLogger("Missing links")
 
                     If BadLinkNames.Count > 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Missing Links")
                         For Each BadLinkName As String In BadLinkNames
                             Directory = IO.Path.GetDirectoryName(BadLinkName)
                             Filename = IO.Path.GetFileName(BadLinkName)
-                            Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
-                            ErrorMessageList.Add(s)
-
-                            s = String.Format("{0} in {1}", Filename, Directory)
-                            SubLogger.AddMessage(s)
-
+                            SubLogger.AddMessage(String.Format("{0} in {1}", Filename, Directory))
                         Next
                     End If
                 End If
@@ -419,17 +357,10 @@ Public Class TaskCheckLinks
                     Dim SubLogger As Logger = TaskLogger.AddLogger("Misplaced links")
 
                     If MisplacedLinkNames.Count > 0 Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add("Misplaced Links")
                         For Each MisplacedLinkName As String In MisplacedLinkNames
                             Directory = IO.Path.GetDirectoryName(MisplacedLinkName)
                             Filename = IO.Path.GetFileName(MisplacedLinkName)
-                            Dim s = String.Format("{0}{1} in {2}", Indent, Filename, Directory)
-                            ErrorMessageList.Add(s)
-
-                            s = String.Format("{0} in {1}", Filename, Directory)
-                            SubLogger.AddMessage(s)
-
+                            SubLogger.AddMessage(String.Format("{0} in {1}", Filename, Directory))
                         Next
                     End If
                 End If
@@ -439,10 +370,7 @@ Public Class TaskCheckLinks
 
         If SSDoc IsNot Nothing Then SSDoc.Close()
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel

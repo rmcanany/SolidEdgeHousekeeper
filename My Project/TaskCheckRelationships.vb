@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports System.Runtime.InteropServices
 
 Public Class TaskCheckRelationships
     Inherits Task
@@ -91,47 +90,28 @@ Public Class TaskCheckRelationships
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Sketches As SolidEdgePart.Sketchs = Nothing
         Dim Models As SolidEdgePart.Models = Nothing
@@ -162,7 +142,7 @@ Public Class TaskCheckRelationships
 
             CheckItem = CheckItems(ListIndex)
 
-            Dim SubtaskLogger As Logger = TaskLogger.AddLogger(CheckItem)
+            Dim SubLogger As Logger = TaskLogger.AddLogger(CheckItem)
 
             Select Case DocType
 
@@ -187,11 +167,7 @@ Public Class TaskCheckRelationships
                                 tf = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed)
                                 tf = tf Or (Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned)
                                 If tf Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, SketchAssembly.Name, True, CheckItem)
-
-                                    SubtaskLogger.AddMessage(SketchAssembly.Name)
-
+                                    SubLogger.AddMessage(SketchAssembly.Name)
                                 End If
                             End If
 
@@ -204,23 +180,15 @@ Public Class TaskCheckRelationships
                                 tf = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed)
                                 tf = tf Or (Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack)
                                 If tf Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, SketchAssembly.Name, True, CheckItem)
-
-                                    SubtaskLogger.AddMessage(SketchAssembly.Name)
-
+                                    SubLogger.AddMessage(SketchAssembly.Name)
                                 End If
                             End If
 
                         Next
 
                     Catch ex As Exception
-                        ExitStatus = 1
                         s = "Unable to process sketches"
-                        If Not ErrorMessageList.Contains(s) Then ErrorMessageList.Add(s)
-
-                        TaskLogger.AddMessage(s)
-
+                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
                     End Try
 
 
@@ -233,21 +201,13 @@ Public Class TaskCheckRelationships
                                 tf = Occurrence.Status = SolidEdgeAssembly.OccurrenceStatusConstants.seOccurrenceStatusOverDefined
                                 tf = tf Or (Occurrence.Status = SolidEdgeAssembly.OccurrenceStatusConstants.seOccurrenceStatusNotConsistent)
                                 If tf Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, Occurrence.Name, True, CheckItem)
-
-                                    SubtaskLogger.AddMessage(Occurrence.Name)
-
+                                    SubLogger.AddMessage(Occurrence.Name)
                                 End If
                             End If
 
                             If CheckItem = "Underconstrained relationships" Then
                                 If Occurrence.Status = SolidEdgeAssembly.OccurrenceStatusConstants.seOccurrenceStatusUnderDefined Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, Occurrence.Name, True, CheckItem)
-
-                                    SubtaskLogger.AddMessage(Occurrence.Name)
-
+                                    SubLogger.AddMessage(Occurrence.Name)
                                 End If
                             End If
 
@@ -264,11 +224,7 @@ Public Class TaskCheckRelationships
 
                         If Components IsNot Nothing AndAlso Count > 0 Then
                             For Each tmpSC As SolidEdgeAssembly.SuppressComponent In Components
-                                ExitStatus = 1
-                                UpdateErrorMessageList(ErrorMessageList, tmpSC.Name, True, CheckItem)
-
-                                SubtaskLogger.AddMessage(tmpSC.Name)
-
+                                SubLogger.AddMessage(tmpSC.Name)
                             Next
                         End If
 
@@ -294,16 +250,13 @@ Public Class TaskCheckRelationships
 
                 RefPlanesWithUnderconstrainedProfiles = GetRefPlanesWithUnderconstrainedProfiles(ProfileSets)
 
-                CheckSketches(ExitStatus, ErrorMessageList, CheckItem, Sketches, SubtaskLogger)
-                CheckFeatures(ExitStatus, ErrorMessageList, CheckItem, Models, RefPlanesWithUnderconstrainedProfiles, SubtaskLogger)
+                CheckSketches(CheckItem, Sketches, SubLogger)
+                CheckFeatures(CheckItem, Models, RefPlanesWithUnderconstrainedProfiles, SubLogger)
 
             End If
         Next
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
     Private Function GetSuppressedComponents(
         tmpSEDoc As SolidEdgeAssembly.AssemblyDocument
@@ -331,16 +284,13 @@ Public Class TaskCheckRelationships
     End Function
 
     Private Sub CheckFeatures(
-        ByRef ExitStatus As Integer,
-        ByRef ErrorMessageList As List(Of String),
         CheckItem As String,
         Models As SolidEdgePart.Models,
         RefPlanesWithUnderconstrainedProfiles As List(Of SolidEdgePart.RefPlane),
-        SubtaskLogger As Logger)
+        SubLogger As Logger)
 
         Dim s As String
         Dim tf As Boolean
-
 
         Dim Model As SolidEdgePart.Model
         Dim Features As SolidEdgePart.Features
@@ -355,10 +305,7 @@ Public Class TaskCheckRelationships
         If (Models IsNot Nothing) Then
 
             If Models.Count > 300 Then
-                ExitStatus = 1
-                s = String.Format("{0} models exceeds maximum to process", Models.Count.ToString)
-                UpdateErrorMessageList(ErrorMessageList, s, True, CheckItem)
-                SubtaskLogger.AddMessage(s)
+                SubLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
             End If
 
             If (Models.Count > 0) And (Models.Count <= 300) Then
@@ -387,9 +334,7 @@ Public Class TaskCheckRelationships
                                 tf = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed)
                                 tf = tf Or (Status = SolidEdgePart.FeatureStatusConstants.igFeatureWarned)
                                 If tf Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
-                                    SubtaskLogger.AddMessage(_FeatureName)
+                                    SubLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -413,9 +358,7 @@ Public Class TaskCheckRelationships
                                     End Try
                                 End If
                                 If RefPlanesWithUnderconstrainedProfiles.Contains(RefPlane) Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
-                                    SubtaskLogger.AddMessage(_FeatureName)
+                                    SubLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -423,9 +366,7 @@ Public Class TaskCheckRelationships
                                 tf = (Status = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed)
                                 tf = tf Or (Status = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack)
                                 If tf Then
-                                    ExitStatus = 1
-                                    UpdateErrorMessageList(ErrorMessageList, _FeatureName, True, CheckItem)
-                                    SubtaskLogger.AddMessage(_FeatureName)
+                                    SubLogger.AddMessage(_FeatureName)
                                 End If
                             End If
 
@@ -438,11 +379,9 @@ Public Class TaskCheckRelationships
     End Sub
 
     Private Sub CheckSketches(
-        ByRef ExitStatus As Integer,
-        ByRef ErrorMessageList As List(Of String),
         CheckItem As String,
         Sketches As SolidEdgePart.Sketchs,
-        SubtaskLogger As Logger)
+        SubLogger As Logger)
 
         Dim tf As Boolean
         Dim Sketch As SolidEdgePart.Sketch
@@ -455,25 +394,19 @@ Public Class TaskCheckRelationships
                     tf = (StatusEx = SolidEdgePart.FeatureStatusConstants.igFeatureFailed)
                     tf = tf Or (StatusEx = SolidEdgePart.FeatureStatusConstants.igFeatureWarned)
                     If tf Then
-                        ExitStatus = 1
-                        UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
-                        SubtaskLogger.AddMessage(Sketch.Name)
+                        SubLogger.AddMessage(Sketch.Name)
                     End If
                 End If
                 If CheckItem = "Underconstrained relationships" Then
                     If Sketch.IsUnderDefined Then
-                        ExitStatus = 1
-                        UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
-                        SubtaskLogger.AddMessage(Sketch.Name)
+                        SubLogger.AddMessage(Sketch.Name)
                     End If
                 End If
                 If CheckItem = "Suppressed relationships" Then
                     tf = (StatusEx = SolidEdgePart.FeatureStatusConstants.igFeatureSuppressed)
                     tf = tf Or (StatusEx = SolidEdgePart.FeatureStatusConstants.igFeatureRolledBack)
                     If tf Then
-                        ExitStatus = 1
-                        UpdateErrorMessageList(ErrorMessageList, Sketch.Name, True, CheckItem)
-                        SubtaskLogger.AddMessage(Sketch.Name)
+                        SubLogger.AddMessage(Sketch.Name)
                     End If
                 End If
 

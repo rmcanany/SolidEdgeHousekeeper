@@ -265,47 +265,28 @@ Public Class TaskCreateDrawingOfFlatPattern
 
     End Sub
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
@@ -327,22 +308,14 @@ Public Class TaskCreateDrawingOfFlatPattern
         End Select
 
         If FlatPatternModels.Count = 0 Then
-            ExitStatus = 1
-            ErrorMessageList.Add("No flat patterns detected")
-
             TaskLogger.AddMessage("No flat patterns detected")
-
         End If
-        
+
         If FlatPatternModels.Count > 0 AndAlso FlatPatternModels.Item(1).FlatPatterns.Item(1).Status = SolidEdgePart.FeatureStatusConstants.igFeatureFailed Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Flat pattern feature is in a failed state")
-
             TaskLogger.AddMessage("Flat pattern feature is in a failed state")
-
         End If
 
-        If ExitStatus = 0 Then
+        If Not TaskLogger.HasErrors Then
             FlatPatternModel = FlatPatternModels.Item(1)
             FlatPattern = FlatPatternModel.FlatPatterns.Item(1)
 
@@ -363,8 +336,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             Dim FV = SolidEdgeDraft.SheetMetalDrawingViewTypeConstants.seSheetMetalFlatView
             Dim DrawingView As SolidEdgeDraft.DrawingView = DrawingViews.AddSheetMetalView(ModelLink, TV, 1.0, 0.0, 0.0, FV)
 
-            SupplementalErrorMessage = FormatDrawingView(Sheet, DrawingView, TaskLogger)
-            AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+            FormatDrawingView(Sheet, DrawingView)
 
             Dim DrawingFilename As String = ""
             Dim BaseName = System.IO.Path.GetFileNameWithoutExtension(SEDoc.FullName) ' C:\project\part.par -> part
@@ -426,24 +398,12 @@ Public Class TaskCreateDrawingOfFlatPattern
 
         End If
 
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
-    Private Function FormatDrawingView(
+    Private Sub FormatDrawingView(
         ByRef Sheet As SolidEdgeDraft.Sheet,
-        ByRef DrawingView As SolidEdgeDraft.DrawingView,
-        ErrorLogger As Logger
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-
+        ByRef DrawingView As SolidEdgeDraft.DrawingView)
 
         ' MEASURED  (Nomenclature defined in ~\SolidEdgeHousekeeper\reference\create_drawing_of_flat_pattern.dft)
 
@@ -523,10 +483,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             DrawingView.SetRotationAngle(90.0 * Math.PI / 180.0)
         End If
 
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -964,17 +921,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         End Select
 
     End Sub
-
-    Public Sub SetDraftTemplate(DraftTemplate As String)
-        ' Should update the property as well as the textbox
-        CType(ControlsDict(ControlNames.DraftTemplate.ToString), TextBox).Text = DraftTemplate
-
-    End Sub
-
-
-    'Public Overrides Sub ReconcileFormWithProps()
-    '    ControlsDict(ControlNames.DraftTemplate.ToString).Text = Me.DraftTemplate
-    'End Sub
 
 
     Private Function GetHelpText() As String

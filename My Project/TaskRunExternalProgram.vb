@@ -79,48 +79,28 @@ Public Class TaskRunExternalProgram
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim ExternalProgramDirectory As String = System.IO.Path.GetDirectoryName(Me.ExternalProgram)
         Dim P As New Diagnostics.Process
@@ -162,11 +142,7 @@ Public Class TaskRunExternalProgram
         End If
 
         If Not PSError = "" Then
-            ExitStatus = 1
-            ErrorMessageList.Add(PSError)
-
             TaskLogger.AddMessage(PSError)
-
         End If
 
         P.WaitForExit()
@@ -175,37 +151,25 @@ Public Class TaskRunExternalProgram
         ErrorMessageFilename = String.Format("{0}\error_messages.txt", ExternalProgramDirectory)
 
         If ExitCode <> 0 Then
-            ExitStatus = 1
             If FileIO.FileSystem.FileExists(ErrorMessageFilename) Then
                 ErrorMessages = IO.File.ReadAllLines(ErrorMessageFilename)
                 If ErrorMessages.Length > 0 Then
                     For Each ErrorMessageFromProgram As String In ErrorMessages
-                        ErrorMessageList.Add(ErrorMessageFromProgram)
-
                         TaskLogger.AddMessage(ErrorMessageFromProgram)
 
                     Next
                 Else
-                    ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-
                     TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
-
                 End If
 
                 IO.File.Delete(ErrorMessageFilename)
             Else
-                ErrorMessageList.Add(String.Format("Program terminated with exit code {0}", ExitCode))
-
                 TaskLogger.AddMessage(String.Format("Program terminated with exit code {0}", ExitCode))
-
             End If
         End If
 
         If Me.SaveAfterProcessing Then
             If SEDoc.ReadOnly Then
-                ExitStatus = 1
-                ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
                 TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
             Else
                 SEDoc.Save()
@@ -213,12 +177,7 @@ Public Class TaskRunExternalProgram
             End If
         End If
 
-
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-
-    End Function
+    End Sub
 
 
     Private Function BuildSnippetFile(SnippetFilename As String) As String

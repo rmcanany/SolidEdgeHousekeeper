@@ -61,50 +61,28 @@ Public Class TaskUpdatePartCopies
     End Sub
 
 
-    Public Overrides Function Process(
+    Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        ErrorMessage = InvokeSTAThread(
-                               Of SolidEdgeFramework.SolidEdgeDocument,
-                               Dictionary(Of String, String),
-                               SolidEdgeFramework.Application,
-                               Dictionary(Of Integer, List(Of String)))(
-                                   AddressOf ProcessInternal,
-                                   SEDoc,
-                                   Configuration,
-                                   SEApp)
-
-        Return ErrorMessage
-
-    End Function
-
-    Public Overrides Function Process(ByVal FileName As String) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-
-        Return ErrorMessage
-
-    End Function
-
-    Private Function ProcessInternal(
-        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-        ByVal Configuration As Dictionary(Of String, String),
-        ByVal SEApp As SolidEdgeFramework.Application
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim ErrorMessageList As New List(Of String)
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        ByVal SEApp As SolidEdgeFramework.Application)
 
         Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
 
-        Dim SupplementalExitStatus As Integer = 0
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
+        InvokeSTAThread(
+            Of SolidEdgeFramework.SolidEdgeDocument,
+            SolidEdgeFramework.Application)(
+                AddressOf ProcessInternal,
+                SEDoc,
+                SEApp)
+    End Sub
+
+    Public Overrides Sub Process(ByVal FileName As String)
+        Me.TaskLogger = Me.FileLogger.AddLogger(Me.Description)
+    End Sub
+
+    Private Sub ProcessInternal(
+        ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
+        ByVal SEApp As SolidEdgeFramework.Application
+        )
 
         Dim Models As SolidEdgePart.Models = Nothing
         Dim Model As SolidEdgePart.Model
@@ -140,17 +118,13 @@ Public Class TaskUpdatePartCopies
                                 TF = FileIO.FileSystem.FileExists(CopiedPart.FileName)
                                 TF = TF Or (CopiedPart.FileName = "")  ' Implies no link to outside file
                                 If Not TF Then
-                                    ExitStatus = 1
-                                    ErrorMessageList.Add(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
-
                                     TaskLogger.AddMessage(String.Format("Part copy file not found: '{0}'", CopiedPart.FileName))
                                 Else
                                     If Me.UpdateParents Then
                                         ' Try a recursion
 
                                         Dim ParentDoc = CType(SEApp.Documents.Open(CopiedPart.FileName), SolidEdgeFramework.SolidEdgeDocument)
-                                        SupplementalErrorMessage = ProcessInternal(ParentDoc, Configuration, SEApp)
-                                        AddSupplementalErrorMessage(ExitStatus, ErrorMessageList, SupplementalErrorMessage)
+                                        ProcessInternal(ParentDoc, SEApp)
 
                                         ParentDoc.Close()
                                         SEApp.DoIdle()
@@ -162,11 +136,7 @@ Public Class TaskUpdatePartCopies
                                     End If
 
                                     If SEDoc.ReadOnly Then
-                                        ExitStatus = 1
-                                        ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
                                         TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-
                                     Else
                                         SEDoc.Save()
                                         SEApp.DoIdle()
@@ -178,9 +148,6 @@ Public Class TaskUpdatePartCopies
                     End If
                 Next
             ElseIf Models.Count >= 300 Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
-
                 TaskLogger.AddMessage(String.Format("{0} models exceeds maximum to process", Models.Count.ToString))
 
             End If
@@ -188,9 +155,6 @@ Public Class TaskUpdatePartCopies
         End If
 
         If SEDoc.ReadOnly Then
-            ExitStatus = 1
-            ErrorMessageList.Add("Cannot save document marked 'Read Only'")
-
             TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
 
         Else
@@ -198,10 +162,7 @@ Public Class TaskUpdatePartCopies
             SEApp.DoIdle()
         End If
 
-        ErrorMessage(ExitStatus) = ErrorMessageList
-        Return ErrorMessage
-
-    End Function
+    End Sub
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
