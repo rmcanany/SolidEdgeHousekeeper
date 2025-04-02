@@ -44,14 +44,12 @@ Public Class TaskRunExternalProgram
     End Property
 
 
-
     Enum ControlNames
         Browse
         ExternalProgram
         SaveAfterProcessing
         AutoHideOptions
     End Enum
-
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -323,45 +321,20 @@ Public Class TaskRunExternalProgram
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type Of file To process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Not FileIO.FileSystem.FileExists(Me.ExternalProgram) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid external program", Indent))
+                ErrorLogger.AddMessage("Select a valid external program")
             End If
 
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)

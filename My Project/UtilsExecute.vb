@@ -25,7 +25,7 @@ Public Class UtilsExecute
 
         FMain.Cursor = Cursors.WaitCursor
 
-        Dim ErrorMessage As String
+        'Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
@@ -33,17 +33,9 @@ Public Class UtilsExecute
 
         FMain.SaveSettings(SavingPresets:=False)  ' Updates JSON Properties and saves settings
 
-        ErrorMessage = CheckStartConditions()
-
-        If ErrorMessage <> "" Then
+        If Not CheckStartConditions() Then
             FMain.Cursor = Cursors.Default
-            Dim result As MsgBoxResult = MsgBox(ErrorMessage, vbOKOnly, "Check start conditions")
-            If result = MsgBoxResult.Cancel Then
-                Exit Sub
-            End If
-            If ErrorMessage.Contains("Please correct the following before continuing") Then
-                Exit Sub
-            End If
+            Exit Sub
         End If
 
         Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
@@ -152,7 +144,13 @@ Public Class UtilsExecute
     End Sub
 
 
-    Public Function CheckStartConditions() As String
+    Public Function CheckStartConditions() As Boolean
+        Dim Proceed As Boolean = True
+
+        Dim ErrorLogger As New HCErrorLogger
+        Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
+        Dim StartLogger As Logger = HeaderLogger.AddLogger("")
+
         Dim msg As String = ""
         Dim msg2 As String = ""
         Dim indent As String = "    "
@@ -164,20 +162,24 @@ Public Class UtilsExecute
         If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
                 msg += "    Close Solid Edge" + Chr(13)
+                StartLogger.AddMessage("Close Solid Edge")
             End If
         End If
 
         If USEA.DMIsRunning() Then
             msg += "    Close Revision Manager" + Chr(13)
+            StartLogger.AddMessage("Close Revision Manager")
         End If
 
         If FMain.ListViewFilesOutOfDate Then
             msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
+            StartLogger.AddMessage("Update the file list (Orange button on the Home Tab toolstrip)")
         End If
 
         If FMain.TLABottomUp Then
             If Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename) Then
                 msg += "    Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)" + Chr(13)
+                StartLogger.AddMessage("Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)")
             End If
         End If
 
@@ -195,6 +197,8 @@ Public Class UtilsExecute
                 If Not FileIO.FileSystem.FileExists(Filename.Name) Then
                     msg += "    File not found, or Path exceeds maximum length" + Chr(13)
                     msg += "    " + CType(Filename.Name, String) + Chr(13)
+                    StartLogger.AddMessage("File not found, or Path exceeds maximum length")
+                    StartLogger.AddMessage(CType(Filename.Name, String))
                     FMain.ListViewFilesOutOfDate = True
                     Exit For
                 End If
@@ -209,18 +213,20 @@ Public Class UtilsExecute
             'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
         ElseIf FMain.ListViewFiles.Items.Count = 0 Then
             msg += "    Select an input directory with files to process" + Chr(13)
+            StartLogger.AddMessage("Select an input directory with files to process")
         End If
 
         If FMain.EnableFileWildcard Then
             If FMain.FileWildcard = "" Then
                 msg += "    Enter a file wildcard search string" + Chr(13)
+                StartLogger.AddMessage("Enter a file wildcard search string")
             End If
         End If
 
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        ErrorMessage(0) = New List(Of String)
-        Dim ExitStatus As Integer = 0
-        'Dim NoTaskSelected As Boolean = True
+        'Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
+        'ErrorMessage(0) = New List(Of String)
+        'Dim ExitStatus As Integer = 0
+        ''Dim NoTaskSelected As Boolean = True
 
         FMain.SolidEdgeRequired = 0
         Dim SelectedTasksCount As Integer = 0
@@ -235,18 +241,20 @@ Public Class UtilsExecute
                     Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
 
-                If Task.RequiresSave And FMain.WarnSave Then
-                    SaveMsg = String.Format("{0}{1}{2}{3}", SaveMsg, indent, Task.Description, vbCrLf)
-                End If
+                'If Task.RequiresSave And FMain.WarnSave Then
+                '    SaveMsg = String.Format("{0}{1}{2}{3}", SaveMsg, indent, Task.Description, vbCrLf)
+                'End If
 
                 ' True returns -1 upon conversion
                 FMain.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
 
                 If Not Task.CompatibleWithOtherTasks Then
-                    IncompatibleTaskNamesList.Add(Task.Name)
+                    IncompatibleTaskNamesList.Add(Task.Description)
                 End If
 
-                ErrorMessage = Task.CheckStartConditions(ErrorMessage)
+                Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)
+                Task.CheckStartConditions(SubLogger)
+
             End If
         Next
 
@@ -254,7 +262,7 @@ Public Class UtilsExecute
             If SelectedTasksCount <> FMain.SolidEdgeRequired Then
                 'msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
                 msg += String.Format("    Cannot run some Tasks with SE and others without{0}", vbCrLf)
-                ExitStatus += 1
+                StartLogger.AddMessage("Cannot run some Tasks with SE and others without")
             End If
         End If
 
@@ -262,46 +270,63 @@ Public Class UtilsExecute
             Dim s2 As String = ""
             For Each s As String In IncompatibleTaskNamesList
                 s2 = String.Format("{0} '{1}', ", s2, s)
+                StartLogger.AddMessage(String.Format("{0} cannot be run with other tasks enabled", s))
             Next
             msg += String.Format("    Listed Task(s): {0} cannot be run with other tasks enabled{1}", s2, vbCrLf)
         End If
 
         If SelectedTasksCount = 0 Then
             msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
+            StartLogger.AddMessage("Select at least one task to perform")
         End If
 
         Try
             Dim i = CInt(FMain.ListViewUpdateFrequency)
             If i <= 0 Then
-                msg += String.Format("    Enter a valid number for 'When processing, update the file list after this many files' on the Configuration Tab -- General Page{0}", vbCrLf)
+                FMain.ListViewUpdateFrequency = "1"
             End If
         Catch ex As Exception
-            msg += String.Format("    Enter a valid number for 'When processing, update the file list after this many files' on the Configuration Tab -- General Page{0}", vbCrLf)
+            FMain.ListViewUpdateFrequency = "1"
         End Try
 
-        ExitStatus = ErrorMessage.Keys(0)
-        If ExitStatus > 0 Then
-            For Each s As String In ErrorMessage(ExitStatus)
-                msg += String.Format("    {0}{1}", s, vbCrLf)
-            Next
-        End If
+        'ExitStatus = ErrorMessage.Keys(0)
+        'If ExitStatus > 0 Then
+        '    For Each s As String In ErrorMessage(ExitStatus)
+        '        msg += String.Format("    {0}{1}", s, vbCrLf)
+        '    Next
+        'End If
 
-        If Len(msg) <> 0 Then
-            msg = "Please correct the following before continuing" + Chr(13) + msg
-        End If
+        'If Len(msg) <> 0 Then
+        '    msg = "Please correct the following before continuing" + Chr(13) + msg
+        'End If
 
-        If (Len(SaveMsg) <> 0) And FMain.WarnSave Then
-            Dim s As String = "The following options require the original file to be saved." + Chr(13)
-            s += "Please verify you have a backup before continuing."
-            SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
-            SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
-        Else
-            SaveMsg = ""
-        End If
+        'If (Len(SaveMsg) <> 0) And FMain.WarnSave Then
+        '    Dim s As String = "The following options require the original file to be saved." + Chr(13)
+        '    s += "Please verify you have a backup before continuing."
+        '    SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
+        '    SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
+        'Else
+        '    SaveMsg = ""
+        'End If
 
         FMain.TextBoxStatus.Text = ""
 
-        Return SaveMsg + msg
+        Dim Outlist As List(Of String) = ErrorLogger.FormatReport()
+
+        If Outlist.Count > 0 Then
+            Proceed = False
+
+            'Dim Outstring As String = String.Format("Please correct the following before continuing{0}", vbCrLf)
+            Dim Outstring As String = ""
+            For Each s As String In Outlist
+                Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
+            Next
+
+            MsgBox(Outstring, vbOKOnly)
+
+        End If
+
+        Return Proceed
     End Function
 
     Public Sub UpdateTimeRemaining()

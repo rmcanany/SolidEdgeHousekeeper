@@ -138,7 +138,6 @@ Public Class TaskEditProperties
         AutoHideOptions
     End Enum
 
-
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
@@ -900,74 +899,30 @@ Public Class TaskEditProperties
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If (Me.JSONString = "") Or (Me.JSONString = "{}") Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one property to edit", Indent))
+                ErrorLogger.AddMessage("Select at least one property to edit")
             End If
 
             If Me.AutoUpdateMaterial Then
                 If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Select a valid material table", Indent))
+                    ErrorLogger.AddMessage("Select a valid material table")
                 End If
-
-                'If Not Me.SolidEdgeRequired Then
-                '    If Not ErrorMessageList.Contains(Me.Description) Then
-                '        ErrorMessageList.Add(Me.Description)
-                '    End If
-                '    ExitStatus = 1
-                '    Dim s = String.Format("{0}'Material update' incompatible with 'Edit outside SE'.", Indent)
-                '    ErrorMessageList.Add(s)
-
-                'End If
 
             End If
 
             If (Not Me.SolidEdgeRequired) And (Me.PropertiesData.Items.Count = 0) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                Dim s = String.Format("{0}Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page", Indent)
-                ErrorMessageList.Add(s)
+                ErrorLogger.AddMessage("Template properties required for 'Edit outside SE'.  Update them on the Configuration Tab -- Templates Page")
             End If
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)

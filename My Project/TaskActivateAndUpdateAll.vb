@@ -1,5 +1,4 @@
 ﻿Option Strict On
-Imports System.Management.Automation
 
 Public Class TaskActivateAndUpdateAll
     Inherits Task
@@ -22,6 +21,7 @@ Public Class TaskActivateAndUpdateAll
         GenerateTaskControl()
 
     End Sub
+
 
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -73,37 +73,15 @@ Public Class TaskActivateAndUpdateAll
     End Sub
 
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Private Function GenerateHelpText() As String

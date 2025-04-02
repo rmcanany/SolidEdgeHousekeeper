@@ -452,6 +452,7 @@ Public Class TaskUpdateMaterialFromMaterialTable
         tmpTLPOptions.Controls.Add(TextBox, 0, RowIndex)
         tmpTLPOptions.SetColumnSpan(TextBox, 2)
         ControlsDict(TextBox.Name) = TextBox
+        TextBox.Visible = False
 
         RowIndex += 1
 
@@ -484,66 +485,31 @@ Public Class TaskUpdateMaterialFromMaterialTable
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Not FileIO.FileSystem.FileExists(Me.MaterialTable) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid material table", Indent))
+                ErrorLogger.AddMessage("Select a valid material table")
             End If
 
             If Me.UpdateFaceStyles And Me.UseFinishFaceStyle Then
                 Dim UC As New UtilsCommon
 
                 If Not UC.CheckValidPropertyFormulas(Me.FinishPropertyFormula) Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Could not parse property formula '{1}'", Indent, Me.FinishPropertyFormula))
+                    ErrorLogger.AddMessage(String.Format("Could not parse property formula '{0}'", Me.FinishPropertyFormula))
                 End If
 
                 If Not ((Me.OverrideBodyFaceStyle) Or (Me.OverrideMaterialFaceStyle)) Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Select an override method", Indent))
+                    ErrorLogger.AddMessage("Select an override method")
                 End If
             End If
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)

@@ -151,6 +151,7 @@ Public Class TaskEditInteractively
     Public Property NewFormY As Integer
     Private Property CommandDict As Dictionary(Of String, Dictionary(Of String, Integer))
 
+
     Enum ControlNames
         FormX
         FormXLabel
@@ -173,7 +174,6 @@ Public Class TaskEditInteractively
         StartCommandDraftLabel
         AutoHideOptions
     End Enum
-
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -211,7 +211,6 @@ Public Class TaskEditInteractively
 
 
     End Sub
-
 
 
     Public Overrides Sub Process(
@@ -510,37 +509,18 @@ Public Class TaskEditInteractively
         Return tmpTLPOptions
     End Function
 
-
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
 
             Dim i As Integer
-            Dim s As String
 
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If (Me.UseCountdownTimer And Me.PauseTime <= 0) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Countdown time must be > 0", Indent))
+                ErrorLogger.AddMessage("Countdown time must be > 0")
             End If
 
             If Me.RunCommands Then
@@ -550,12 +530,7 @@ Public Class TaskEditInteractively
                     i = CInt(Me.CommandIDSheetmetal)
                     i = CInt(Me.CommandIDDraft)
                 Catch ex As Exception
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    s = String.Format("{0}All command IDs must be an integer", Indent)
-                    ErrorMessageList.Add(s)
+                    ErrorLogger.AddMessage("All command IDs must be an integer")
                 End Try
 
             End If
@@ -569,26 +544,12 @@ Public Class TaskEditInteractively
                 NewFormX = FormX
                 NewFormY = FormY
             Catch ex As Exception
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                s = String.Format("{0}Both dialog locations must be integers >= 0", Indent)
-                s = String.Format("{0}, preferably < the screen size (in pixels)", s)
-                ErrorMessageList.Add(s)
-
+                ErrorLogger.AddMessage("Both dialog locations must be integers >= 0, preferably < the screen size (in pixels)")
             End Try
 
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub ComboBoxOptions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)

@@ -31,7 +31,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         End Set
     End Property
 
-
     Private _ScaleFactor As Double
     Public Property ScaleFactor As Double
         Get
@@ -204,7 +203,6 @@ Public Class TaskCreateDrawingOfFlatPattern
     Public Property OffsetUnits As String
 
 
-
     Enum ControlNames
         UseConfigurationPageTemplates
         Browse
@@ -265,6 +263,7 @@ Public Class TaskCreateDrawingOfFlatPattern
 
     End Sub
 
+
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal SEApp As SolidEdgeFramework.Application)
@@ -287,8 +286,6 @@ Public Class TaskCreateDrawingOfFlatPattern
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByVal SEApp As SolidEdgeFramework.Application
         )
-
-        Dim SupplementalErrorMessage As New Dictionary(Of Integer, List(Of String))
 
         Dim FlatPatternModels As SolidEdgePart.FlatPatternModels = Nothing
         Dim FlatPatternModel As SolidEdgePart.FlatPatternModel
@@ -664,90 +661,45 @@ Public Class TaskCreateDrawingOfFlatPattern
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Not (Me.SaveDraft Or Me.SavePDF) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to create", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to create")
             End If
 
             If Me.OffsetUnits = "" Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a offset unit", Indent))
+                ErrorLogger.AddMessage("Select a offset unit")
             End If
 
             Try
                 Me.ScaleFactor = CDbl(ControlsDict(ControlNames.ScaleFactor.ToString).Text)
                 If Not ((Me.ScaleFactor > 0) And (Me.ScaleFactor <= 1)) Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Enter a scale factor between 0 and 1", Indent))
+                    ErrorLogger.AddMessage("Enter a scale factor between 0 and 1")
                 End If
             Catch ex As Exception
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Enter a valid scale factor", Indent))
+                ErrorLogger.AddMessage("Enter a valid scale factor")
             End Try
 
             Try
                 Me.XOffset = CDbl(ControlsDict(ControlNames.XOffset.ToString).Text)
             Catch ex As Exception
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Enter a valid XOffset", Indent))
+                ErrorLogger.AddMessage("Enter a valid XOffset")
             End Try
 
             Try
                 Me.YOffset = CDbl(ControlsDict(ControlNames.YOffset.ToString).Text)
             Catch ex As Exception
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Enter a valid YOffset", Indent))
+                ErrorLogger.AddMessage("Enter a valid YOffset")
             End Try
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
+    End Sub
 
-    End Function
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)

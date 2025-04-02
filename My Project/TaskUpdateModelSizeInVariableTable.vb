@@ -107,7 +107,6 @@ Public Class TaskUpdateModelSizeInVariableTable
         End Set
     End Property
 
-
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -139,7 +138,6 @@ Public Class TaskUpdateModelSizeInVariableTable
         MidVariableLabel
         MaxVariableLabel
     End Enum
-
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -296,6 +294,7 @@ Public Class TaskUpdateModelSizeInVariableTable
         End If
 
     End Sub
+
 
     Private Function CheckDuplicates() As Boolean
         Dim HasDuplicates As Boolean = False
@@ -459,71 +458,34 @@ Public Class TaskUpdateModelSizeInVariableTable
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Not (Me.ReportXYZ Or Me.ReportMinMidMax) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select ReportXYZ, ReportMinMidMax, or both", Indent))
+                ErrorLogger.AddMessage("")
             End If
 
-            Dim MissingOrDuplicateErrorMessage = String.Format("{0}Enter unique names for each variable", Indent)
+            Dim s = "Enter unique names for each variable"
 
             If Me.ReportXYZ Then
                 If CheckDuplicates() Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    If Not ErrorMessageList.Contains(MissingOrDuplicateErrorMessage) Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(MissingOrDuplicateErrorMessage)
-                    End If
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                 End If
             End If
 
             If Me.ReportMinMidMax Then
                 If CheckDuplicates() Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    If Not ErrorMessageList.Contains(MissingOrDuplicateErrorMessage) Then
-                        ExitStatus = 1
-                        ErrorMessageList.Add(MissingOrDuplicateErrorMessage)
-                    End If
+                    If Not ErrorLogger.ContainsMessage(s) Then ErrorLogger.AddMessage(s)
                 End If
             End If
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
+    End Sub
 
-    End Function
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)

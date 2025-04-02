@@ -172,7 +172,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         End Set
     End Property
 
-
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -186,10 +185,6 @@ Public Class TaskUpdateModelStylesFromTemplate
         End Set
     End Property
 
-
-
-    ' DimensionStyles, FaceStyles,
-    ' LinearStyles, TextCharStyles, TextStyles, ViewStyles
 
     Enum ControlNames
         UseConfigurationPageTemplates
@@ -247,6 +242,7 @@ Public Class TaskUpdateModelStylesFromTemplate
         Me.RemoveNonTemplateStyles = False
 
     End Sub
+
 
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -884,7 +880,6 @@ Public Class TaskUpdateModelStylesFromTemplate
 
     End Sub
 
-
     Private Sub DoUpdateBaseStyles(
         ByRef SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         ByRef SETemplateDoc As SolidEdgeFramework.SolidEdgeDocument
@@ -1241,61 +1236,28 @@ Public Class TaskUpdateModelStylesFromTemplate
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If (Me.IsSelectedAssembly) And (Not FileIO.FileSystem.FileExists(Me.AssemblyTemplate)) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid assembly template", Indent))
+                ErrorLogger.AddMessage("Select a valid assembly template")
             End If
 
             If (Me.IsSelectedPart) And (Not FileIO.FileSystem.FileExists(Me.PartTemplate)) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid part template", Indent))
+                ErrorLogger.AddMessage("Select a valid part template")
             End If
 
             If (Me.IsSelectedSheetmetal) And (Not FileIO.FileSystem.FileExists(Me.SheetmetalTemplate)) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid sheetmetal template", Indent))
+                ErrorLogger.AddMessage("Select a valid sheetmetal template")
             End If
 
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)

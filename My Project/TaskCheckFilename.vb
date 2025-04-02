@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Public Class TaskCheckFilename
-
     Inherits Task
 
     Private _PropertyFormula As String
@@ -97,7 +96,6 @@ Public Class TaskCheckFilename
         End Set
     End Property
 
-
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -111,6 +109,7 @@ Public Class TaskCheckFilename
         End Set
     End Property
 
+
     Enum ControlNames
         PropertyFormula
         PropertyFormulaLabel
@@ -121,7 +120,6 @@ Public Class TaskCheckFilename
         StructuredStorageEdit
         AutoHideOptions
     End Enum
-
 
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
@@ -155,6 +153,7 @@ Public Class TaskCheckFilename
         Me.StructuredStorageEdit = False
 
     End Sub
+
 
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -509,7 +508,6 @@ Public Class TaskCheckFilename
     End Sub
 
 
-
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
         Dim tmpTLPOptions = New ExTableLayoutPanel
 
@@ -591,98 +589,40 @@ Public Class TaskCheckFilename
         Return tmpTLPOptions
     End Function
 
-
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Me.PropertyFormula = "" Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Enter a property formula", Indent))
+                ErrorLogger.AddMessage("Enter a property formula")
             End If
 
             If (Not Me.ComparisonContains) And (Not Me.ComparisonIsExactly) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a comparison option", Indent))
+                ErrorLogger.AddMessage("Select a comparison option")
             End If
 
             If (Not Me.DraftsCheckModels) And (Not Me.DraftsCheckDraftItself) And (Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one Draft process option", Indent))
+                ErrorLogger.AddMessage("Select at least one Draft process option")
             End If
-
 
             Me.LinkManagementOrder = Form_Main.LinkManagementOrder
 
             If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder Is Nothing) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page", Indent))
+                ErrorLogger.AddMessage("Populate LinkMgmt.txt file name on the Configuration Tab -- Templates page")
             End If
 
             If (Me.StructuredStorageEdit) And (Me.DraftsCheckModels) And (Me.LinkManagementOrder IsNot Nothing) Then
                 If Me.LinkManagementOrder.Count = 0 Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}LinkMgmt.txt file does not contain any search order information", Indent))
-
+                    ErrorLogger.AddMessage("LinkMgmt.txt file does not contain any search order information")
                 End If
             End If
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
+    End Sub
 
-    End Function
-
-
-    'Public Sub ComboBoxOptions_SelectedIndexChanged(sender As System.Object, e As System.EventArgs)
-    '    Dim ComboBox = CType(sender, ComboBox)
-    '    Dim Name = ComboBox.Name
-
-    '    Select Case Name
-    '        Case ControlNames.PropertySet.ToString
-    '            Me.PropertySet = ComboBox.Text
-    '        Case Else
-    '            MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))
-    '    End Select
-
-    'End Sub
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)

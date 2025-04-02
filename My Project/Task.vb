@@ -86,7 +86,6 @@ Public MustInherit Class Task
         End Set
     End Property
 
-
     Private _IsSelectedDraft As Boolean
     Public Property IsSelectedDraft As Boolean
         Get
@@ -100,58 +99,32 @@ Public MustInherit Class Task
         End Set
     End Property
 
-    'Public Property AutoHideOptions As Boolean
     Public Property IsOptionsHidden As Boolean
-
-    'Public Property RememberTaskSelections As Boolean
-
-    'Public Property Visible As Boolean
-
     Public Property RequiresSourceDirectories As Boolean
     Public Property SourceDirectories As List(Of String)
-
-    Public TLPHeader As ExTableLayoutPanel
+    Public Property TLPHeader As ExTableLayoutPanel
     Public Property ControlsDict As Dictionary(Of String, Control)
-
-    'Shared Property BaseControlsDict As New Dictionary(Of String, Control)
-
     Public Property ColorHue As String
     Public Property ColorSaturation As Double
     Public Property ColorBrightness As Double
     Public Property ColorR As Integer
     Public Property ColorG As Integer
     Public Property ColorB As Integer
-
     Public Property RequiresAssemblyTemplate As Boolean = False
     Public Property RequiresPartTemplate As Boolean = False
     Public Property RequiresSheetmetalTemplate As Boolean = False
     Public Property RequiresDraftTemplate As Boolean = False
     Public Property RequiresMaterialTable As Boolean = False
-
-    'These belong only in the tasks that need them.
-    'Easier to synchronize props with UI there, for one thing.
-    'Public Property AssemblyTemplate As String = ""
-    'Public Property PartTemplate As String = ""
-    'Public Property SheetmetalTemplate As String = ""
-    'Public Property DraftTemplate As String = ""
-    'Public Property MaterialTable As String = ""
-    'Public Property UseConfigurationPageTemplates As Boolean = False
-
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
-
-    'Public Property RequiresTemplatePropertyDict As Boolean = False
     Public Property RequiresPropertiesData As Boolean = False
     Public Property PropertiesData As HCPropertiesData
     Public Property CompatibleWithOtherTasks As Boolean = True
-
     Public Property RequiresLinkManagementOrder As Boolean = False
     Public Property LinkManagementOrder As List(Of String) = Nothing
-
     Public Property ErrorLogger As HCErrorLogger
     Public Property FileLogger As Logger
     Public Property TaskLogger As Logger
-
 
 
     Public Enum BaseControlNames
@@ -166,24 +139,15 @@ Public MustInherit Class Task
         EditTaskList
     End Enum
 
-    'Public MustOverride Function Process(
-    '    SEDoc As SolidEdgeFramework.SolidEdgeDocument,
-    '    Configuration As Dictionary(Of String, String),
-    '    SEApp As SolidEdgeFramework.Application
-    '    ) As Dictionary(Of Integer, List(Of String))
+
     Public MustOverride Sub Process(
         SEDoc As SolidEdgeFramework.SolidEdgeDocument,
         SEApp As SolidEdgeFramework.Application
         )
 
-    'Public MustOverride Function Process(FileName As String) As Dictionary(Of Integer, List(Of String))
     Public MustOverride Sub Process(FileName As String)
 
-
-    Public MustOverride Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
+    Public MustOverride Sub CheckStartConditions(ErrorLogger As Logger)
 
 
     Public Sub New()
@@ -293,43 +257,43 @@ Public MustInherit Class Task
 
     End Sub
 
-    Public Sub AddSupplementalErrorMessage(
-        ByRef ExitStatus As Integer,
-        ErrorMessageList As List(Of String),
-        SupplementalErrorMessage As Dictionary(Of Integer, List(Of String))
-        )
+    'Public Sub AddSupplementalErrorMessage(
+    '    ByRef ExitStatus As Integer,
+    '    ErrorMessageList As List(Of String),
+    '    SupplementalErrorMessage As Dictionary(Of Integer, List(Of String))
+    '    )
 
-        Dim SupplementalExitStatus As Integer = SupplementalErrorMessage.Keys(0)
+    '    Dim SupplementalExitStatus As Integer = SupplementalErrorMessage.Keys(0)
 
-        If Not SupplementalExitStatus = 0 Then
-            If SupplementalExitStatus > ExitStatus Then
-                ExitStatus = SupplementalExitStatus
-            End If
-            For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
-                ErrorMessageList.Add(s)
-            Next
-        End If
-    End Sub
+    '    If Not SupplementalExitStatus = 0 Then
+    '        If SupplementalExitStatus > ExitStatus Then
+    '            ExitStatus = SupplementalExitStatus
+    '        End If
+    '        For Each s As String In SupplementalErrorMessage(SupplementalExitStatus)
+    '            ErrorMessageList.Add(s)
+    '        Next
+    '    End If
+    'End Sub
 
-    Public Sub UpdateErrorMessageList(
-        ErrorMessageList As List(Of String),
-        ErrorMessage As String,
-        TreatAsSubtask As Boolean,
-        LabelText As String)
+    'Public Sub UpdateErrorMessageList(
+    '    ErrorMessageList As List(Of String),
+    '    ErrorMessage As String,
+    '    TreatAsSubtask As Boolean,
+    '    LabelText As String)
 
-        Dim Indent As String = "    "
+    '    Dim Indent As String = "    "
 
-        If TreatAsSubtask Then
-            If Not ErrorMessageList.Contains(LabelText) Then
-                ErrorMessageList.Add(LabelText)
-            End If
-            ErrorMessageList.Add(String.Format("{0}{1}", Indent, ErrorMessage))
-        Else
-            ErrorMessageList.Add(ErrorMessage)
-        End If
+    '    If TreatAsSubtask Then
+    '        If Not ErrorMessageList.Contains(LabelText) Then
+    '            ErrorMessageList.Add(LabelText)
+    '        End If
+    '        ErrorMessageList.Add(String.Format("{0}{1}", Indent, ErrorMessage))
+    '    Else
+    '        ErrorMessageList.Add(ErrorMessage)
+    '    End If
 
 
-    End Sub
+    'End Sub
 
     Public Function GenerateLabelText() As String
         ' Scratch.TaskOpenSave -> Open save
@@ -547,9 +511,7 @@ Public MustInherit Class Task
     End Sub
 
 
-
     'CONTROLS FORMATTING
-
     Public Sub FormatTLPOptions(
         TLP As TableLayoutPanel,
         Name As String,
@@ -701,10 +663,7 @@ Public MustInherit Class Task
     End Function
 
 
-
     'EVENT HANDLERS
-
-
     Public Sub TextBox_GotFocus(sender As System.Object, e As System.EventArgs)
         Dim TextBox = CType(sender, TextBox)
         TextBox.BeginInvoke(New Action(AddressOf TextBox.SelectAll))

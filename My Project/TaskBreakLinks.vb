@@ -16,7 +16,6 @@ Public Class TaskBreakLinks
         End Set
     End Property
 
-
     Private _BreakConstructionCopies As Boolean
     Public Property BreakConstructionCopies As Boolean
         Get
@@ -83,7 +82,6 @@ Public Class TaskBreakLinks
     End Property
 
 
-
     Enum ControlNames
         BreakDesignCopies
         BreakConstructionCopies
@@ -120,6 +118,7 @@ Public Class TaskBreakLinks
         Me.BreakDraftModels = False
 
     End Sub
+
 
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -466,28 +465,14 @@ Public Class TaskBreakLinks
         Return tmpTLPOptions
     End Function
 
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
-            Dim tf As Boolean = False
+            Dim tf As Boolean
             tf = Me.BreakConstructionCopies
             tf = tf Or Me.BreakDesignCopies
             tf = tf Or Me.BreakExcel
@@ -495,20 +480,13 @@ Public Class TaskBreakLinks
             tf = tf Or Me.BreakDraftModels
 
             If Not tf Then
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of link to break", Indent))
+                ErrorLogger.AddMessage("Select at least one type of link to break")
             End If
 
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
+    End Sub
 
-    End Function
 
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
@@ -542,6 +520,7 @@ Public Class TaskBreakLinks
         End Select
 
     End Sub
+
 
     Private Function GetHelpText() As String
         Dim HelpString As String

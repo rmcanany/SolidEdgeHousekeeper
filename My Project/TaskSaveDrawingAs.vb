@@ -214,7 +214,6 @@ Public Class TaskSaveDrawingAs
         AutoHideOptions
     End Enum
 
-
     Public Sub New()
         Me.Name = Me.ToString.Replace("Housekeeper.", "")
         Me.Description = GenerateLabelText()
@@ -254,6 +253,7 @@ Public Class TaskSaveDrawingAs
 
         Me.PropertiesData = New HCPropertiesData
     End Sub
+
 
     Public Overrides Sub Process(
         ByVal SEDoc As SolidEdgeFramework.SolidEdgeDocument,
@@ -556,7 +556,6 @@ Public Class TaskSaveDrawingAs
 
     End Sub
 
-
     Private Function GetNewFileTypeNames() As List(Of String)
         Dim NewFileTypeNames As New List(Of String)
         '        FileTypesString = "PDF (*.pdf):PDF per Sheet (*.pdf):DXF (*.dxf):DWG (*.dwg):IGES (*.igs)"
@@ -574,7 +573,6 @@ Public Class TaskSaveDrawingAs
 
         Return NewFileTypeNames
     End Function
-
 
 
     Private Function GenerateTaskOptionsTLP() As ExTableLayoutPanel
@@ -762,120 +760,70 @@ Public Class TaskSaveDrawingAs
         Return tmpTLPOptions
     End Function
 
-
-    Public Overrides Function CheckStartConditions(
-        PriorErrorMessage As Dictionary(Of Integer, List(Of String))
-        ) As Dictionary(Of Integer, List(Of String))
-
-        Dim PriorExitStatus As Integer = PriorErrorMessage.Keys(0)
-
-        Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        Dim ExitStatus As Integer = 0
-        Dim ErrorMessageList = PriorErrorMessage(PriorExitStatus)
-        Dim Indent = "    "
-
-        Dim UC As New UtilsCommon
+    Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
         If Me.IsSelectedTask Then
-            ' Check start conditions.
+
+            Dim UC As New UtilsCommon
+
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select at least one type of file to process", Indent))
+                ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
             If Me.NewFileTypeName = "" Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Output file type not detected", Indent))
+                ErrorLogger.AddMessage("Output file type not detected")
             End If
 
             If (Me.NewFileTypeName.ToLower.Contains("copy")) And (Me.SaveInOriginalDirectory) And (Not Me.UseSubdirectoryFormula) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Cannot save copy to the original directory", Indent))
+                ErrorLogger.AddMessage("Cannot save copy to the original directory")
             End If
 
             If (Me.NewDir = "") And (Not Me.SaveInOriginalDirectory) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Select a valid output directory", Indent))
+                ErrorLogger.AddMessage("Select a valid output directory")
             End If
 
             If (Me.Formula = "") And (Me.UseSubdirectoryFormula) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Enter a subdirectory formula", Indent))
+                ErrorLogger.AddMessage("Enter a subdirectory formula")
             End If
 
             If Not UC.CheckValidPropertyFormulas(Me.Formula) And (Me.UseSubdirectoryFormula) Then
-                If Not ErrorMessageList.Contains(Me.Description) Then
-                    ErrorMessageList.Add(Me.Description)
-                End If
-                ExitStatus = 1
-                ErrorMessageList.Add(String.Format("{0}Subdirectory formula missing 'System.' or 'Custom.'", Indent))
+                ErrorLogger.AddMessage("Subdirectory formula missing 'System.' or 'Custom.'")
+            End If
+
+            If (Me.FilenameFormula = "") And (Me.ChangeFilename) Then
+                ErrorLogger.AddMessage("Enter a filename formula")
+            End If
+
+            If Not UC.CheckValidPropertyFormulas(Me.FilenameFormula) And (Me.ChangeFilename) Then
+                ErrorLogger.AddMessage("Filename formula missing 'System.' or 'Custom.'")
             End If
 
             If Me.AddWatermark Then
 
                 If Not FileIO.FileSystem.FileExists(Me.WatermarkFilename) Then
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Select a valid watermark file", Indent))
+                    ErrorLogger.AddMessage("Select a valid watermark file")
                 End If
 
                 Try
                     Me.WatermarkScale = CDbl(ControlsDict(ControlNames.WatermarkScale.ToString).Text)
                     If Not Me.WatermarkScale > 0 Then
-                        If Not ErrorMessageList.Contains(Me.Description) Then
-                            ErrorMessageList.Add(Me.Description)
-                        End If
-                        ExitStatus = 1
-                        ErrorMessageList.Add(String.Format("{0}Enter a number > 0 for watermark scale", Indent))
+                        ErrorLogger.AddMessage("Enter a number > 0 for watermark scale")
                     End If
                 Catch ex As Exception
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Enter a valid number for watermark scale", Indent))
+                    ErrorLogger.AddMessage("Enter a valid number for watermark scale")
                 End Try
 
                 Try
                     Me.WatermarkPositionX = CDbl(ControlsDict(ControlNames.WatermarkPositionX.ToString).Text)
                     Me.WatermarkPositionY = CDbl(ControlsDict(ControlNames.WatermarkPositionY.ToString).Text)
                 Catch ex As Exception
-                    If Not ErrorMessageList.Contains(Me.Description) Then
-                        ErrorMessageList.Add(Me.Description)
-                    End If
-                    ExitStatus = 1
-                    ErrorMessageList.Add(String.Format("{0}Enter valid numbers for watermark X and Y positions", Indent))
+                    ErrorLogger.AddMessage("Enter valid numbers for watermark X and Y positions")
                 End Try
 
             End If
-
         End If
 
-        If ExitStatus > 0 Then  ' Start conditions not met.
-            ErrorMessage(ExitStatus) = ErrorMessageList
-            Return ErrorMessage
-        Else
-            Return PriorErrorMessage
-        End If
-
-    End Function
+    End Sub
 
 
     Public Sub ButtonOptions_Click(sender As System.Object, e As System.EventArgs)
