@@ -707,9 +707,9 @@ Public Class TaskCheckFilename
         HelpString += "Since draft files rarely have properties of their own, this is usually not necessary. "
         HelpString += "Also, because missing properties are reported as an error, "
         HelpString += "it can be distracting/confusing as well. "
-        HelpString += "One more thing.  "
-        HelpString += "In the example above, the program is set up to check if the model and draft files have the same name.  "
-        HelpString += "With this option enabled, it would also check if the draft file has the same name as itself. "
+        HelpString += vbCrLf + "- `Check draft itself`.  I'm not done with this.  "
+        HelpString += "In the example above, the program will check if the model and draft files have the same name.  "
+        HelpString += "With this option enabled, it would check if the draft file has the same name as itself.  "
         HelpString += "That will always be true, and never be what you intended. "
 
         Return HelpString
