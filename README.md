@@ -1076,7 +1076,7 @@ The program defines these variables, which you can use in your code.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
 - `DocType` The file extension of `SEDoc`.
 
-One present annoyance of using PowerShell is that I haven't found how to tell it about Solid Edge type libraries.  That means it doesn't understand things like 
+One present annoyance of using PowerShell is that I haven't found how to tell it about Solid Edge type libraries.  That means it doesn't understand things like: 
 
 `Dim TemplateDoc As SolidEdgePart.PartDocument` 
 
@@ -1089,9 +1089,9 @@ Dim igQueryPlane = 6
 Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)
 ```
 
-Another annoyance is with troubleshooting. The Console Window from `Run External Program` disappears too fast to see syntax errors. 
+Another annoyance is troubleshooting. The Console Window from `Run External Program` disappears too fast to see syntax errors. 
 
-To get around that, I let Housekeeper create the PowerShell program.  I then run that separately in a PowerShell terminal. where the error messages are persistent. There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. 
+To get around that, I `Run External Program` once to create the PowerShell program.  I then run that code separately in a PowerShell terminal, where the error messages are persistent. Once it's working, I copy the relevant part back into the `*.snp` file. There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. 
 
 </details>
 
