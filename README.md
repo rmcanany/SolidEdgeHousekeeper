@@ -1009,7 +1009,7 @@ There are two comparison methods.
 For `*.dft` files, there are two ways to search.  You can use either one, or both. 
 - `Check model files` is the option most users will want.  It searches any models linked to the file for a property match.  
 - `Check draft itself` searches properties in the draft file.  Since draft files rarely have properties of their own, this is usually not necessary. Also, because missing properties are reported as an error, it can be distracting/confusing as well. 
-- `Check draft itself`.  I'm not done with this.  In the example above, the program will check if the model and draft files have the same name.  With this option enabled, it would check if the draft file has the same name as itself.  That will always be true, and never be what you intended. 
+- `Check draft itself`  I'm not done with this.  In the example above, the program will check if the model and draft files have the same name.  With this option enabled, it would check if the draft file has the same name as itself.  That will always be true, and never be what you want. 
 
 </details>
 
