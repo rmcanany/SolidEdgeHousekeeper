@@ -280,7 +280,6 @@
     </Compile>
     <Compile Include="My Project\HCIsolatedTask.vb" />
     <Compile Include="My Project\HCIsolatedTaskProxy.vb" />
-    <Compile Include="My Project\UtilsLogFile.vb" />
     <Compile Include="My Project\UtilsMaterials.vb" />
     <Compile Include="My Project\UtilsOccurrences.vb" />
     <Compile Include="My Project\UCEditVariables.Designer.vb">

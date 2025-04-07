@@ -1,31 +1,26 @@
 ﻿Option Strict On
 
-'Imports SolidEdgeCommunity
-
 Public Class UtilsExecute
 
     Public Property FMain As Form_Main
     Public Property FilesToProcessTotal As Integer
     Public Property FilesToProcessCompleted As Integer
-    Public Property UtilsLogFile As UtilsLogFile
+    'Public Property UtilsLogFile As UtilsLogFile
     Public Property TotalAborts As Double
     Public Property TotalAbortsMaximum As Integer = 4
     Public Property SEApp As SolidEdgeFramework.Application
     Public Property StartTime As DateTime
     Public Property TextBoxStatus As TextBox
-
     Public Property ErrorLogger As HCErrorLogger
 
     Public Sub New(_Form_Main As Form_Main)
         Me.FMain = _Form_Main
     End Sub
 
-
     Public Sub ProcessAll()
 
         FMain.Cursor = Cursors.WaitCursor
 
-        'Dim ErrorMessage As String
         Dim ElapsedTime As Double
         Dim ElapsedTimeText As String
 
@@ -47,10 +42,6 @@ Public Class UtilsExecute
         FMain.ButtonCancel.Text = "Stop"
 
         OleMessageFilter.Register()
-
-        Me.UtilsLogFile = New UtilsLogFile
-
-        Me.UtilsLogFile.LogfileSetName()
 
         TotalAborts = 0
 
@@ -85,7 +76,6 @@ Public Class UtilsExecute
         If DraftCount > 0 Then ProcessFiles("Draft")
 
         If FMain.SolidEdgeRequired > 0 Then
-            'Dim USEA = New UtilsSEApp
             USEA.SEStop(FMain.UseCurrentSession)
             SEApp = Nothing
         End If
@@ -127,22 +117,9 @@ Public Class UtilsExecute
             FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
         End If
 
-        'If Me.UtilsLogFile.ErrorsOccurred Then
-        '    Try
-        '        ' Try to use the default application to open the file.
-        '        Process.Start(Me.UtilsLogFile.MissingFilesFileName)
-        '    Catch ex As Exception
-        '        ' If none, open with notepad.exe
-        '        Process.Start("notepad.exe", Me.UtilsLogFile.MissingFilesFileName)
-        '    End Try
-        'Else
-        '    FMain.TextBoxStatus.Text = FMain.TextBoxStatus.Text + "  All checks passed."
-        'End If
-
         FMain.Cursor = Cursors.Default
 
     End Sub
-
 
     Public Function CheckStartConditions() As Boolean
         Dim Proceed As Boolean = True
@@ -151,34 +128,25 @@ Public Class UtilsExecute
         Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
-        Dim msg As String = ""
-        Dim msg2 As String = ""
-        Dim indent As String = "    "
-        Dim SaveMsg As String = ""
-
         Dim USEA = New UtilsSEApp
         USEA.TextBoxStatus = Me.TextBoxStatus
 
         If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
-                msg += "    Close Solid Edge" + Chr(13)
                 StartLogger.AddMessage("Close Solid Edge")
             End If
         End If
 
         If USEA.DMIsRunning() Then
-            msg += "    Close Revision Manager" + Chr(13)
             StartLogger.AddMessage("Close Revision Manager")
         End If
 
         If FMain.ListViewFilesOutOfDate Then
-            msg += "    Update the file list (Orange button toward the top of the Home Tab)" + Chr(13)
             StartLogger.AddMessage("Update the file list (Orange button on the Home Tab toolstrip)")
         End If
 
         If FMain.TLABottomUp Then
             If Not FileIO.FileSystem.FileExists(FMain.FastSearchScopeFilename) Then
-                msg += "    Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)" + Chr(13)
                 StartLogger.AddMessage("Enter a valid Fast Search Scope file (on the Configuration Tab - Top Level Assembly Page)")
             End If
         End If
@@ -195,38 +163,25 @@ Public Class UtilsExecute
                 Filename.ImageKey = "Unchecked"
 
                 If Not FileIO.FileSystem.FileExists(Filename.Name) Then
-                    msg += "    File not found, or Path exceeds maximum length" + Chr(13)
-                    msg += "    " + CType(Filename.Name, String) + Chr(13)
                     StartLogger.AddMessage("File not found, or Path exceeds maximum length")
                     StartLogger.AddMessage(CType(Filename.Name, String))
                     FMain.ListViewFilesOutOfDate = True
                     Exit For
                 End If
-
             End If
-
         Next
 
         FMain.ListViewFiles.EndUpdate()
 
-        If FMain.ListViewFilesOutOfDate Then
-            'msg += "    Update the file list, or otherwise correct the issue" + Chr(13)
-        ElseIf FMain.ListViewFiles.Items.Count = 0 Then
-            msg += "    Select an input directory with files to process" + Chr(13)
+        If FMain.ListViewFiles.Items.Count = 0 Then
             StartLogger.AddMessage("Select an input directory with files to process")
         End If
 
         If FMain.EnableFileWildcard Then
             If FMain.FileWildcard = "" Then
-                msg += "    Enter a file wildcard search string" + Chr(13)
                 StartLogger.AddMessage("Enter a file wildcard search string")
             End If
         End If
-
-        'Dim ErrorMessage As New Dictionary(Of Integer, List(Of String))
-        'ErrorMessage(0) = New List(Of String)
-        'Dim ExitStatus As Integer = 0
-        ''Dim NoTaskSelected As Boolean = True
 
         FMain.SolidEdgeRequired = 0
         Dim SelectedTasksCount As Integer = 0
@@ -240,10 +195,6 @@ Public Class UtilsExecute
                     Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
                     Task.SourceDirectories = UFL.GetSourceDirectories()
                 End If
-
-                'If Task.RequiresSave And FMain.WarnSave Then
-                '    SaveMsg = String.Format("{0}{1}{2}{3}", SaveMsg, indent, Task.Description, vbCrLf)
-                'End If
 
                 ' True returns -1 upon conversion
                 FMain.SolidEdgeRequired -= CType(Task.SolidEdgeRequired, Integer)
@@ -260,23 +211,17 @@ Public Class UtilsExecute
 
         If FMain.SolidEdgeRequired <> 0 Then
             If SelectedTasksCount <> FMain.SolidEdgeRequired Then
-                'msg += String.Format("    Conflicts in Tasks Solid Edge required property{0}", vbCrLf)
-                msg += String.Format("    Cannot run some Tasks with SE and others without{0}", vbCrLf)
                 StartLogger.AddMessage("Cannot run some Tasks with SE and others without")
             End If
         End If
 
         If (IncompatibleTaskNamesList.Count > 0) And (Not SelectedTasksCount = 1) Then
-            Dim s2 As String = ""
             For Each s As String In IncompatibleTaskNamesList
-                s2 = String.Format("{0} '{1}', ", s2, s)
                 StartLogger.AddMessage(String.Format("{0} cannot be run with other tasks enabled", s))
             Next
-            msg += String.Format("    Listed Task(s): {0} cannot be run with other tasks enabled{1}", s2, vbCrLf)
         End If
 
         If SelectedTasksCount = 0 Then
-            msg += String.Format("    Select at least one task to perform{0}", vbCrLf)
             StartLogger.AddMessage("Select at least one task to perform")
         End If
 
@@ -289,26 +234,6 @@ Public Class UtilsExecute
             FMain.ListViewUpdateFrequency = "1"
         End Try
 
-        'ExitStatus = ErrorMessage.Keys(0)
-        'If ExitStatus > 0 Then
-        '    For Each s As String In ErrorMessage(ExitStatus)
-        '        msg += String.Format("    {0}{1}", s, vbCrLf)
-        '    Next
-        'End If
-
-        'If Len(msg) <> 0 Then
-        '    msg = "Please correct the following before continuing" + Chr(13) + msg
-        'End If
-
-        'If (Len(SaveMsg) <> 0) And FMain.WarnSave Then
-        '    Dim s As String = "The following options require the original file to be saved." + Chr(13)
-        '    s += "Please verify you have a backup before continuing."
-        '    SaveMsg += Chr(13) + "Disable this warning on the Configuration Tab -- General Page."
-        '    SaveMsg = s + Chr(13) + SaveMsg + Chr(13) + Chr(13)
-        'Else
-        '    SaveMsg = ""
-        'End If
-
         FMain.TextBoxStatus.Text = ""
 
         Dim Outlist As List(Of String) = ErrorLogger.FormatReport()
@@ -316,7 +241,6 @@ Public Class UtilsExecute
         If Outlist.Count > 0 Then
             Proceed = False
 
-            'Dim Outstring As String = String.Format("Please correct the following before continuing{0}", vbCrLf)
             Dim Outstring As String = ""
             For Each s As String In Outlist
                 Outstring = String.Format("{0}{1}{2}", Outstring, s, vbCrLf)
@@ -369,8 +293,6 @@ Public Class UtilsExecute
         Dim FilesToProcess As List(Of String)
         Dim FileToProcess As String
         Dim msg As String
-        'Dim ErrorMessagesCombined As New Dictionary(Of String, List(Of String))
-
 
         Dim UFL As New UtilsFileList(FMain, FMain.ListViewFiles, FMain.ListViewSources)
 
@@ -412,20 +334,15 @@ Public Class UtilsExecute
                 Exit Sub
             End If
 
-            'ErrorMessagesCombined = ProcessFile(FileToProcess, Filetype)
             ProcessFile(FileToProcess, Filetype)
 
-            'If ErrorMessagesCombined.Count > 0 Or Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
             If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
                 Dim tmpPath As String = System.IO.Path.GetDirectoryName(FileToProcess)
                 Dim tmpFilename As String = System.IO.Path.GetFileName(FileToProcess)
                 Dim s As String = String.Format("{0} in {1}", tmpFilename, tmpPath)
 
-                'Me.UtilsLogFile.LogfileAppend(s, ErrorMessagesCombined)
-                'FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Error"
                 LVItemReverseLUT(idx).ImageKey = "Error"
             Else
-                'FMain.ListViewFiles.Items.Item(FileToProcess).ImageKey = "Checked"
                 LVItemReverseLUT(idx).ImageKey = "Checked"
             End If
 

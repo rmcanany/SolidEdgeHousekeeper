@@ -41,8 +41,6 @@ Public Class Form_Main
         End Set
     End Property
 
-    Public Property Configuration As Dictionary(Of String, String) = New Dictionary(Of String, String)
-
     Public Property TaskList As List(Of Task)
 
 

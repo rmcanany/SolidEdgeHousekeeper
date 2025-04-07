@@ -18,7 +18,9 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ### Check Filename
 
-Added the option to use multiple properties instead of just one.  (Thank you **@tempod!**)  Added a comparison option, `is_exactly`.  Clarified the description of the option `Draft files -- Check the draft file itself`, which was causing confusion.  Changed the name from `Check part number does not match filename` to `Check filename`.  
+Changed the name of the command `Check part number does not match filename` to `Check filename`.
+
+Added the option to use multiple properties instead of just one.  (Thank you **@tempod!**)  Added a comparison option, `is_exactly`.  Clarified the description of the option `Draft files -- Check the draft file itself`, which was causing confusion.  
 
 See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-filename) for details.
 
@@ -33,24 +35,23 @@ See the [<ins>**Check Relationships Help Topic**</ins>](https://github.com/rmcan
 
 Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. 
 
-The intent is to address one-off automation chores, where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. 
-
-One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
-
-```
-If DocType = ".asm" Then SEDoc.PhysicalProperties.UpdateOnFileSaveStatus = True
-If DocType = ".par" Then SEDoc.UpdateOnFileSave = True
-If DocType = ".psm" Then SEDoc.UpdateOnFileSave = True
-If ExitStatus = 0 Then
-    SEDoc.Save()
-    SEApp.DoIdle()
-Else
-    ErrorMessageList.Add("An error occurred")
-End If
-```
+The intent is to address one-off automation chores, where the time to do the job manually cannot justify the time needed to write, test and maintain a full-blown program to do it automatically. 
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 
+### Thin Part to Sheetmetal
+
+Added a new Housekeeper External Program to convert imported parts to sheetmetal.  
+
+See [<ins>**Thin Part to Sheetmetal**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/ThinPartToSheetmetal) for details.
+
+### Batch Importer
+
+Added a new bare-bones importer.  This is a separate program and not part of Housekeeper.  
+
+The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That file is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
+
+See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter) for details.
 ### Structured Storage
 
 Fixed an issue where weldment materials were not processed correctly.

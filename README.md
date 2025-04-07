@@ -1047,9 +1047,13 @@ Select the program with the `Browse` button on the Options panel.
 
 If you are writing your own program, be aware several interoperability rules apply. See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. 
 
-Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. The program inserts it between two sections that take care of the task's set-up and wrap-up, respectively. The code snippet is the (often very short) part that does the actual task at hand. 
+**Code Snippets**
 
-The intent is to address one-off automation chores, where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. 
+Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
+
+It is just a text file in VB.Net format and can be created in Notepad.  The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It will have the same name as the snippet file, with a `.ps1` extension.  
+
+The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a full-blown program to do it automatically. 
 
 One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
 
@@ -1065,14 +1069,29 @@ Else
 End If
 ```
 
-The program defines these variables
+The program defines these variables, which you can use in your code. 
 - `SEApp` The Solid Edge application.
 - `SEDoc` The active document in the application.
 - `ExitStatus` An integer.  0 = Success, 1 = Error.
 - `ErrorMessageList` A list of error messages that Housekeeper reports.
 - `DocType` The file extension of `SEDoc`.
 
-The `*.snp` is just a text file in VB.Net format.  It can be created in Notepad. The program inserts the snippet into a predefined PowerShell script.  The PowerShell script will have the same name as the snippet file, with a `.ps1` extension.  
+One present annoyance of using PowerShell is that I haven't found how to tell it about Solid Edge type libraries.  That means it doesn't understand things like 
+
+`Dim TemplateDoc As SolidEdgePart.PartDocument` 
+
+You have to use `Dim TemplateDoc As Object` instead. 
+
+It's not all bad news. For one thing, you can chain assignments like in the VB6 days. 
+
+```
+Dim igQueryPlane = 6
+Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)
+```
+
+Another annoyance is with troubleshooting. The Console Window from `Run External Program` disappears too fast to see syntax errors. 
+
+To get around that, I let Housekeeper create the PowerShell program.  I then run that separately in a PowerShell terminal. where the error messages are persistent. There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. 
 
 </details>
 

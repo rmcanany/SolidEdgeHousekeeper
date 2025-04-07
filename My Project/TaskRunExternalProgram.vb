@@ -410,12 +410,21 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "If you are writing your own program, be aware several interoperability rules apply. "
         HelpString += "See [<ins>**HousekeeperExternalPrograms**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms) for details and examples. "
 
+        HelpString += vbCrLf + vbCrLf + "**Code Snippets**"
+
         HelpString += vbCrLf + vbCrLf + "Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. "
-        HelpString += "The program inserts it between two sections that take care of the task's set-up and wrap-up, respectively. "
         HelpString += "The code snippet is the (often very short) part that does the actual task at hand. "
+        HelpString += "You can see a few examples "
+        HelpString += "[<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets)."
+
+        HelpString += vbCrLf + vbCrLf + "It is just a text file using VB.Net syntax.  It can be created in Notepad.  "
+        HelpString += "The program inserts the snippet into a predefined PowerShell script.  "
+        HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
+        HelpString += "It will have the same name as the snippet file, with a `.ps1` extension.  "
 
         HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
-        HelpString += "where the time to do the job manually is less than the time needed to write, test and maintain a program to do it automatically. "
+        HelpString += "where the time to do the job manually can't justify the time needed to "
+        HelpString += "write, test and maintain a full-blown program to do it automatically. "
 
         HelpString += vbCrLf + vbCrLf + "One example is enabling the Physical Properties `Update on Save` flag. "
         HelpString += "The code snippet would look something like this."
@@ -432,18 +441,32 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + "End If"
         HelpString += vbCrLf + "```"
 
-        HelpString += vbCrLf + vbCrLf + "The program defines these variables"
+        HelpString += vbCrLf + vbCrLf + "The program defines these variables, which you can use in your code. "
         HelpString += vbCrLf + "- `SEApp` The Solid Edge application."
         HelpString += vbCrLf + "- `SEDoc` The active document in the application."
         HelpString += vbCrLf + "- `ExitStatus` An integer.  0 = Success, 1 = Error."
         HelpString += vbCrLf + "- `ErrorMessageList` A list of error messages that Housekeeper reports."
         HelpString += vbCrLf + "- `DocType` The file extension of `SEDoc`."
 
-        HelpString += vbCrLf + vbCrLf + "The `*.snp` is just a text file in VB.Net format.  "
-        HelpString += "It can be created in Notepad. "
-        HelpString += "The program inserts the snippet into a predefined PowerShell script.  "
-        HelpString += "The PowerShell script will have the same name as the snippet file, with a `.ps1` extension.  "
+        HelpString += vbCrLf + vbCrLf + "One present annoyance of using PowerShell is that I haven't found how "
+        HelpString += "to tell it about Solid Edge type libraries.  "
+        HelpString += "That means it doesn't understand things like "
+        HelpString += vbCrLf + vbCrLf + "`Dim TemplateDoc As SolidEdgePart.PartDocument` "
+        HelpString += vbCrLf + vbCrLf + "You have to use `Dim TemplateDoc As Object` instead. "
+        HelpString += vbCrLf + vbCrLf + "It's not all bad news. "
+        HelpString += "For one thing, you can chain assignments like in the VB6 days. "
 
+        HelpString += vbCrLf + vbCrLf + "```"
+        HelpString += vbCrLf + "Dim igQueryPlane = 6"
+        HelpString += vbCrLf + "Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)"
+        HelpString += vbCrLf + "```"
+
+        HelpString += vbCrLf + vbCrLf + "Another annoyance is with troubleshooting. "
+        HelpString += "The Console Window from `Run External Program` disappears too fast to see syntax errors. "
+
+        HelpString += vbCrLf + vbCrLf + "To get around that, I let Housekeeper create the PowerShell program.  "
+        HelpString += "I then run that separately in a PowerShell terminal. where the error messages are persistent. "
+        HelpString += "There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. "
 
         Return HelpString
     End Function
