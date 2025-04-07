@@ -76,6 +76,10 @@ Public Class UtilsDocumentation
 
         IO.File.WriteAllLines(HelpfileBaseURLFilename, Outlist)
 
+        If HelpfileBaseURLFilename.Contains(UP.GetHardCodedPath) Then
+            MsgBox(String.Format("Updated BaseURL '{0}'", BaseURL))
+        End If
+
     End Sub
 
     Public Sub BuildReadmeFile()
