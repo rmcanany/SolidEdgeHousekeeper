@@ -18,9 +18,9 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ### Check Filename
 
-Changed the name of the command `Check part number does not match filename` to `Check filename`.
+Renamed the command `Check part number does not match filename` to `Check filename`.
 
-Added the option to use multiple properties instead of just one.  (Thank you **@tempod!**)  Added a comparison option, `is_exactly`.  Clarified the description of the option `Draft files -- Check the draft file itself`, which was causing confusion.  
+Added the option to use a property formula.  Previously only a single property was allowed.  (Thank you **@tempod!**)  Added a choice in comparison operators: `contains` or `is_exactly`.  Clarified the description of the sometimes confusing option `Draft files -- Check the draft file itself`.  Updated the documentation to show examples for common use cases.
 
 See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-filename) for details.
 
@@ -35,7 +35,7 @@ See the [<ins>**Check Relationships Help Topic**</ins>](https://github.com/rmcan
 
 Added the ability to run a user-supplied `code snippet`.  The program inserts the snippet between two sections of pre-built code that take care of the task's set-up and wrap-up, respectively.  The code snippet is the (often very short) part that does the actual task at hand. 
 
-The intent is to address one-off automation chores, where the time to do the job manually cannot justify the time needed to write, test and maintain a full-blown program to do it automatically. 
+The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a separate program to do it automatically. 
 
 See the [<ins>**Run External Program Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#run-external-program) for details.
 

@@ -1091,7 +1091,7 @@ Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)
 
 Another annoyance is troubleshooting. The Console Window from `Run External Program` disappears too fast to see syntax errors. 
 
-To get around that, I `Run External Program` once to create the PowerShell program.  I then run that code separately in a PowerShell terminal, where the error messages are persistent. Once it's working, I copy the relevant part back into the `*.snp` file. 
+To get around that, you can `Run External Program` once to create the PowerShell program.  Then run that code separately in a PowerShell terminal, where the error messages are persistent. Once it's working, copy the relevant part back into the `*.snp` file. 
 
 </details>
 

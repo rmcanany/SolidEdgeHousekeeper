@@ -464,9 +464,9 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "Another annoyance is troubleshooting. "
         HelpString += "The Console Window from `Run External Program` disappears too fast to see syntax errors. "
 
-        HelpString += vbCrLf + vbCrLf + "To get around that, I `Run External Program` once to create the PowerShell program.  "
-        HelpString += "I then run that code separately in a PowerShell terminal, where the error messages are persistent. "
-        HelpString += "Once it's working, I copy the relevant part back into the `*.snp` file. "
+        HelpString += vbCrLf + vbCrLf + "To get around that, you can `Run External Program` once to create the PowerShell program.  "
+        HelpString += "Then run that code separately in a PowerShell terminal, where the error messages are persistent. "
+        HelpString += "Once it's working, copy the relevant part back into the `*.snp` file. "
 
         Return HelpString
     End Function
