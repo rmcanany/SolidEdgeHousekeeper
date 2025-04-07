@@ -1051,9 +1051,9 @@ If you are writing your own program, be aware several interoperability rules app
 
 Unlike the other file types, a `*.snp` is a special file containing only a snippet of code. The code snippet is the (often very short) part that does the actual task at hand. You can see a few examples [<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets).
 
-It is just a text file using VB.Net syntax.  It can be created in Notepad.  The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It will have the same name as the snippet file, with a `.ps1` extension.  
+The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad.  The program inserts the snippet into a predefined PowerShell script.  The script has two sections that take care of the task's set-up and wrap-up, respectively. It has the same name and directory as the snippet file, except with a `.ps1` extension.  
 
-The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test and maintain a full-blown program to do it automatically. 
+The intent is to address one-off automation chores, where the time to do the job manually can't justify the time needed to write, test, and maintain a separate program to do it automatically. 
 
 One example is enabling the Physical Properties `Update on Save` flag. The code snippet would look something like this.
 
@@ -1091,7 +1091,7 @@ Dim Faces = SEDoc.Models.Item(1).Body.Faces(FaceType:=igQueryPlane)
 
 Another annoyance is troubleshooting. The Console Window from `Run External Program` disappears too fast to see syntax errors. 
 
-To get around that, I `Run External Program` once to create the PowerShell program.  I then run that code separately in a PowerShell terminal, where the error messages are persistent. Once it's working, I copy the relevant part back into the `*.snp` file. There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. 
+To get around that, I `Run External Program` once to create the PowerShell program.  I then run that code separately in a PowerShell terminal, where the error messages are persistent. Once it's working, I copy the relevant part back into the `*.snp` file. 
 
 </details>
 

@@ -417,14 +417,14 @@ Public Class TaskRunExternalProgram
         HelpString += "You can see a few examples "
         HelpString += "[<ins>**here**</ins>](https://github.com/rmcanany/HousekeeperExternalPrograms/tree/main/Snippets)."
 
-        HelpString += vbCrLf + vbCrLf + "It is just a text file using VB.Net syntax.  It can be created in Notepad.  "
+        HelpString += vbCrLf + vbCrLf + "The code snippet is just a text file written in VB.Net syntax.  It can be created in Notepad.  "
         HelpString += "The program inserts the snippet into a predefined PowerShell script.  "
         HelpString += "The script has two sections that take care of the task's set-up and wrap-up, respectively. "
-        HelpString += "It will have the same name as the snippet file, with a `.ps1` extension.  "
+        HelpString += "It has the same name and directory as the snippet file, except with a `.ps1` extension.  "
 
         HelpString += vbCrLf + vbCrLf + "The intent is to address one-off automation chores, "
         HelpString += "where the time to do the job manually can't justify the time needed to "
-        HelpString += "write, test and maintain a full-blown program to do it automatically. "
+        HelpString += "write, test, and maintain a separate program to do it automatically. "
 
         HelpString += vbCrLf + vbCrLf + "One example is enabling the Physical Properties `Update on Save` flag. "
         HelpString += "The code snippet would look something like this."
@@ -467,7 +467,6 @@ Public Class TaskRunExternalProgram
         HelpString += vbCrLf + vbCrLf + "To get around that, I `Run External Program` once to create the PowerShell program.  "
         HelpString += "I then run that code separately in a PowerShell terminal, where the error messages are persistent. "
         HelpString += "Once it's working, I copy the relevant part back into the `*.snp` file. "
-        HelpString += "There may be a way to capture the output with `stderr` or something.  I haven't gotten that far. "
 
         Return HelpString
     End Function
