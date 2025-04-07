@@ -20,7 +20,10 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 Renamed the command `Check part number does not match filename` to `Check filename`.
 
-Added the option to use a property formula.  Previously only a single property was allowed.  (Thank you **@tempod!**)  Added a choice in comparison operators: `contains` or `is_exactly`.  Clarified the description of the sometimes confusing option `Draft files -- Check the draft file itself`.  Updated the documentation to show examples for common use cases.
+- Added the option to use a property formula.  Previously only a single property was allowed.  (Thank you **@tempod!**).
+- Added a choice in comparison operators: `contains` or `is_exactly`.
+- Clarified the description of the sometimes confusing option `Draft files -- Check the draft file itself`.
+- Updated the documentation to show examples for common use cases.
 
 See the [<ins>**Check Filename Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-filename) for details.
 
