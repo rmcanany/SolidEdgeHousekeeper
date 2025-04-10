@@ -171,6 +171,12 @@
       <DependentUpon>Application.myapp</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="My Project\FormTeamCenterAdd.Designer.vb">
+      <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormTeamCenterAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\HCComObject.vb" />
     <Compile Include="My Project\ExTableLayoutPanel.vb">
       <SubType>Component</SubType>
@@ -362,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormSplash.resx">
       <DependentUpon>FormSplash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormTeamCenterAdd.resx">
+      <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormTextPrompt.resx">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>

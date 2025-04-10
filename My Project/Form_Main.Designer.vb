@@ -54,6 +54,7 @@ Partial Class Form_Main
         Me.BT_AddSingleFiles = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
+        Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
         Me.BT_ASM_Folder = New System.Windows.Forms.ToolStripButton()
@@ -559,7 +560,7 @@ Partial Class Form_Main
         '
         Me.ToolStrip_List.BackColor = System.Drawing.Color.White
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.BT_AddTeamCenter, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
         Me.ToolStrip_List.Location = New System.Drawing.Point(2, 2)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -593,6 +594,15 @@ Partial Class Form_Main
         Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
         Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
         Me.BT_AddFolderSubfolders.Text = "Add folder and subfolders"
+        '
+        'BT_AddTeamCenter
+        '
+        Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.BT_AddTeamCenter.Image = CType(resources.GetObject("BT_AddTeamCenter.Image"), System.Drawing.Image)
+        Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
+        Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
+        Me.BT_AddTeamCenter.Text = "Add TeamCenter"
         '
         'ToolStripSeparator4
         '
@@ -2359,7 +2369,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -3162,4 +3171,5 @@ Partial Class Form_Main
     Friend WithEvents LabelListViewUpdateFrequency As Label
     Friend WithEvents BT_MoveToRecycleBin As ToolStripMenuItem
     Friend WithEvents CheckBoxKeepUnsortedDuplicates As CheckBox
+    Friend WithEvents BT_AddTeamCenter As ToolStripButton
 End Class

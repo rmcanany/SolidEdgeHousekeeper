@@ -1104,6 +1104,7 @@ Public Class Form_Main
 
     Public Property PropertyFilters As PropertyFilters
 
+    Public Property cachePathTC As String
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -3720,6 +3721,11 @@ Public Class Form_Main
 
     Private Sub CheckBoxKeepDuplicates_CheckedChanged(sender As Object, e As EventArgs)
 
+    End Sub
+
+    Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
+        Dim tmp As New FormTeamCenterAdd(Me)
+        tmp.ShowDialog()
     End Sub
 End Class
 
