@@ -16,6 +16,23 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 ## V2025.2 Enhancements/Fixes
 
+### TeamCenter Integration
+
+Sponsored by **@john.matthews3452 (Hatch)** Thank you!
+Contributed by **@aalian.khan8036**  Thank you!
+
+Added the ability to select files from TeamCenter.  
+
+![Selection Toolbar](My%20Project/media/selection_toolbar.png)
+
+Clicking ![Table of Contents](Resources/teamcenter.png) opens the form.
+
+![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
+
+You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
+
+The files are downloaded to your cache, then copied into Housekeeper's file list.  
+
 ### Check Filename
 
 Renamed the command `Check part number does not match filename` to `Check filename`.

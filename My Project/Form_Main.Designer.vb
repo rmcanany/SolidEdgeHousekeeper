@@ -249,6 +249,7 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -560,7 +561,7 @@ Partial Class Form_Main
         '
         Me.ToolStrip_List.BackColor = System.Drawing.Color.White
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.BT_AddTeamCenter, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BT_AddSingleFiles, Me.BT_AddFolder, Me.BT_AddFolderSubfolders, Me.ToolStripSeparator12, Me.BT_AddTeamCenter, Me.ToolStripSeparator4, Me.BT_TopLevelAsm, Me.BT_ASM_Folder, Me.ToolStripSeparator1, Me.BT_AddFromlist, Me.BT_ExportList, Me.ToolStripSeparator2, Me.BT_ErrorList, Me.BT_DeleteAll, Me.ToolStripSeparator3, Me.BT_Update, Me.ToolStripSeparator9, Me.BT_Help, Me.BT_ColumnsSelect, Me.ToolStripSeparator10, Me.new_CheckBoxFilterDft, Me.new_CheckBoxFilterPsm, Me.new_CheckBoxFilterPar, Me.new_CheckBoxFilterAsm, Me.ToolStripLabel1})
         Me.ToolStrip_List.Location = New System.Drawing.Point(2, 2)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
@@ -598,7 +599,7 @@ Partial Class Form_Main
         'BT_AddTeamCenter
         '
         Me.BT_AddTeamCenter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BT_AddTeamCenter.Image = CType(resources.GetObject("BT_AddTeamCenter.Image"), System.Drawing.Image)
+        Me.BT_AddTeamCenter.Image = Global.Housekeeper.My.Resources.Resources.teamcenter
         Me.BT_AddTeamCenter.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BT_AddTeamCenter.Name = "BT_AddTeamCenter"
         Me.BT_AddTeamCenter.Size = New System.Drawing.Size(23, 22)
@@ -775,7 +776,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -2862,6 +2863,11 @@ Partial Class Form_Main
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
+        '
         'Form_Main
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -3172,4 +3178,5 @@ Partial Class Form_Main
     Friend WithEvents BT_MoveToRecycleBin As ToolStripMenuItem
     Friend WithEvents CheckBoxKeepUnsortedDuplicates As CheckBox
     Friend WithEvents BT_AddTeamCenter As ToolStripButton
+    Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
 End Class

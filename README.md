@@ -7,6 +7,8 @@
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-gold-star-16.png" style="padding-right:10px">CREDITS</h2></summary>
 
+**Sponsors**
+@john.matthews3452 (Hatch)
 
 **Contributors**
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github), @KGeetings (github)
@@ -131,17 +133,31 @@ For new users, there is one potential point of confusion.  Most of the commands 
 
 Choose this option to select individual files, files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, 
 
-- Click ![Folder](Resources/icons8_versions_16.png) to select individual files
+- Click ![File](Resources/icons8_versions_16.png) to select individual files
 - Click ![Folder](Resources/icons8_Folder_16.png) to select a single folder
-- Click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders
+- Click ![Folders](Resources/icons8_folder_tree_16.png) to select a folder and sub folders
 
 The dialog that appears with these commands has `multi-select` enabled, meaning you can select any number of files/folders at a time.
 
 </details>
 
+<details><summary><h4 style="margin:0px; display:inline-block">Select from TeamCenter</h4></summary>
+
+Choose this option to select files from TeamCenter. Referring to the toolbar diagram, tool group 2, 
+
+- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter.  The following dialog is displayed.
+
+![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
+
+You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
+
+The files are downloaded to your cache, then copied into Housekeeper's file list.  
+
+</details>
+
 <details><summary><h4 style="margin:0px; display:inline-block">Select by Top Level Assembly</h4></summary>
 
-Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 2, 
+Choose this option to select files linked to an assembly. Referring to the toolbar diagram, tool group 3, 
 
 - click ![Assembly](Resources/ST9%20-%20asm.png) to choose the assembly
 - click ![Assembly Folders](Resources/icons8_Folders_16.png) to choose the search path for *where used* files
@@ -188,7 +204,7 @@ This option may be confusing.  Referring to the diagram, note that `C.par` is a 
 
 <details><summary><h4 style="margin:0px; display:inline-block">Select by List</h4></summary>
 
-OK, that's enough about top-level assemblies.  Getting back to our file selection options, referring to the toolbar diagram, tool group 3, 
+OK, that's enough about top-level assemblies.  Getting back to our file selection options, referring to the toolbar diagram, tool group 4, 
 - Click ![Import List](Resources/icons8_Import_16.png) to import a list
 - Click ![Export List](Resources/icons8_Export_16.png) to export one
 
@@ -198,7 +214,7 @@ If you are importing a list from another source, be aware that the file names mu
 
 <details><summary><h4 style="margin:0px; display:inline-block">Tools</h4></summary>
 
-Referring to the toolbar diagram, tool group 4, 
+Referring to the toolbar diagram, tool group 5, 
 - Click ![Errors](Resources/icons8_Error_16.png) to select only files that encountered an error. All other files will be removed from the list.  To reproduce the TODO list functionality from previous versions, you can export the resultant list if desired.
 - Click ![Remove All](Resources/icons8_trash_16.png) to remove all folders and files from the list.
 
@@ -206,14 +222,14 @@ Referring to the toolbar diagram, tool group 4,
 
 <details><summary><h4 style="margin:0px; display:inline-block">Update</h4></summary>
 
-Referring to the toolbar diagram, tool group 5, 
+Referring to the toolbar diagram, tool group 6, 
 - Click ![Update](Resources/Synch_16.png) to populate the file list from the File Sources and Filters. If any Sources are added or removed, or a change is made to a Filter (see [<ins>**Filtering**</ins>](#filtering) below), an update is required.  In those cases the button will turn orange to let you know.  
 
 </details>
 
 <details><summary><h4 style="margin:0px; display:inline-block">File Type</h4></summary>
 
-You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 6, 
+You can limit the search to return only selected types of Solid Edge files. Referring to the toolbar diagram, tool group 7, 
 - Click ![Assembly](Resources/ST9%20-%20asm.png) to toggle assembly file selection
 - Click ![Part](Resources/ST9%20-%20par.png)  to toggle part file selection
 - Click ![Sheet Metal](Resources/ST9%20-%20psm.png)  to toggle sheet metal file selection
@@ -223,7 +239,7 @@ You can limit the search to return only selected types of Solid Edge files. Refe
 
 <details><summary><h4 style="margin:0px; display:inline-block">File List Options</h4></summary>
 
-You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 7, 
+You can customize the list to show file properties if desired.  Referring to the toolbar diagram, tool group 8, 
 - Click ![Columns](Resources/icons8_table_properties_16.png) to open the column selection pane, shown on the left below
 
 ![Customize file list columns](My%20Project/media/file_list_columns_customize.png)

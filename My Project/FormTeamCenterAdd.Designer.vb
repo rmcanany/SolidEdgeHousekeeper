@@ -45,12 +45,12 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxDft = New System.Windows.Forms.ToolStripButton()
         Me.ButtonDownloadAll = New System.Windows.Forms.Button()
         Me.DataGridViewItems = New System.Windows.Forms.DataGridView()
-        Me.ItemIDs = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rev = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.ButtonSearchAndAdd = New System.Windows.Forms.Button()
+        Me.ItemIDs = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rev = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ToolStrip_List.SuspendLayout()
         CType(Me.DataGridViewItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -266,18 +266,6 @@ Partial Class FormTeamCenterAdd
         Me.DataGridViewItems.Size = New System.Drawing.Size(191, 377)
         Me.DataGridViewItems.TabIndex = 36
         '
-        'ItemIDs
-        '
-        Me.ItemIDs.HeaderText = "Item ID"
-        Me.ItemIDs.Name = "ItemIDs"
-        Me.ItemIDs.Width = 65
-        '
-        'rev
-        '
-        Me.rev.HeaderText = "Revision"
-        Me.rev.Name = "rev"
-        Me.rev.Width = 55
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
@@ -317,6 +305,18 @@ Partial Class FormTeamCenterAdd
         Me.ButtonSearchAndAdd.TabIndex = 40
         Me.ButtonSearchAndAdd.Text = "Search and add all to cache"
         Me.ButtonSearchAndAdd.UseVisualStyleBackColor = True
+        '
+        'ItemIDs
+        '
+        Me.ItemIDs.HeaderText = "Item ID"
+        Me.ItemIDs.Name = "ItemIDs"
+        Me.ItemIDs.Width = 75
+        '
+        'rev
+        '
+        Me.rev.HeaderText = "Revision"
+        Me.rev.Name = "rev"
+        Me.rev.Width = 75
         '
         'FormTeamCenterAdd
         '
@@ -374,8 +374,8 @@ Partial Class FormTeamCenterAdd
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
-    Friend WithEvents ItemIDs As DataGridViewTextBoxColumn
-    Friend WithEvents rev As DataGridViewTextBoxColumn
     Friend WithEvents ButtonSearchAndAdd As Button
     Friend WithEvents fileType As ColumnHeader
+    Friend WithEvents ItemIDs As DataGridViewTextBoxColumn
+    Friend WithEvents rev As DataGridViewTextBoxColumn
 End Class

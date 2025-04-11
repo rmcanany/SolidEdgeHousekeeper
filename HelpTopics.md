@@ -7,6 +7,8 @@
 
 <details open><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-gold-star-16.png" style="padding-right:10px">CREDITS</h2></summary>
 
+**Sponsors**
+@john.matthews3452 (Hatch)
 
 **Contributors**
 @[Francesco Arfilli] (github @farfilli), @daysanduski, @mmtrebuchet (github), @[o_o ....码], @ChrisNC (github @ChrisClems), @ZaPpInG (github @lrmoreno007), @aalian.khan8036 (@AalianKhan  github), @KGeetings (github)
@@ -131,11 +133,12 @@ For new users, there is one potential point of confusion.  Most of the commands 
 
 Choose this option to select individual files, files within a single folder, or a folder and its subfolders. Referring to the toolbar diagram, tool group 1, 
 
-- Click ![Folder](Resources/icons8_versions_16.png) to select individual files
+- Click ![File](Resources/icons8_versions_16.png) to select individual files
 - Click ![Folder](Resources/icons8_Folder_16.png) to select a single folder
-- Click ![Folders](Resources/icons8_folder_tree_16.png) for a folder and sub folders
+- Click ![Folders](Resources/icons8_folder_tree_16.png) to select a folder and sub folders
+- Click ![TeamCenter](Resources/teamcenter.png) to select files from TeamCenter
 
-The dialog that appears with these commands has `multi-select` enabled, meaning you can select any number of files/folders at a time.
+The dialog that appears with these commands (except TeamCenter) has `multi-select` enabled, meaning you can select any number of files/folders at a time.
 
 </details>
 
