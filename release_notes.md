@@ -19,6 +19,7 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 ### TeamCenter Integration
 
 Sponsored by **@john.matthews3452 (Hatch)** Thank you!
+
 Contributed by **@aalian.khan8036**  Thank you!
 
 Added the ability to select files from TeamCenter.  
