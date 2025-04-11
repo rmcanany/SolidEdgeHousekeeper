@@ -54,6 +54,7 @@ Partial Class Form_Main
         Me.BT_AddSingleFiles = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolder = New System.Windows.Forms.ToolStripButton()
         Me.BT_AddFolderSubfolders = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_AddTeamCenter = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.BT_TopLevelAsm = New System.Windows.Forms.ToolStripButton()
@@ -249,7 +250,6 @@ Partial Class Form_Main
         Me.BT_MoveToRecycleBin = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
-        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.TabControl1.SuspendLayout()
         Me.TabPageHome.SuspendLayout()
         Me.ColumnSelectionPanel.SuspendLayout()
@@ -595,6 +595,11 @@ Partial Class Form_Main
         Me.BT_AddFolderSubfolders.Name = "BT_AddFolderSubfolders"
         Me.BT_AddFolderSubfolders.Size = New System.Drawing.Size(23, 22)
         Me.BT_AddFolderSubfolders.Text = "Add folder and subfolders"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
         '
         'BT_AddTeamCenter
         '
@@ -2370,6 +2375,7 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2862,11 +2868,6 @@ Partial Class Form_Main
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'ToolStripSeparator12
-        '
-        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(6, 25)
         '
         'Form_Main
         '

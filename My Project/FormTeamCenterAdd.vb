@@ -350,31 +350,52 @@ Public Class FormTeamCenterAdd
             Return
         End If
 
-        For Each item As ListViewItem In ListViewDownloadedFiles.Items
-            Dim fileName As String = item.Text
-            Dim filePath As String = System.IO.Path.Combine(_mainForm.cachePathTC, fileName)
+        Dim NewWay As Boolean = True
+        If NewWay Then
+            Dim tmpItem As New ListViewItem
 
-            ' Check if the file already exists in the ListView
-            Dim exists As Boolean = False
-            For Each existingItem As ListViewItem In _mainForm.ListViewFiles.Items
-                If existingItem.Name = filePath Then
-                    exists = True
-                    Exit For
+            tmpItem.Text = "Folder"
+            tmpItem.ImageKey = "Folder"
+            tmpItem.Tag = "Folder"
+
+            tmpItem.SubItems.Add(_mainForm.cachePathTC)
+            tmpItem.Group = _mainForm.ListViewSources.Groups.Item("Sources")
+            tmpItem.Name = _mainForm.cachePathTC
+
+            If Not _mainForm.ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                _mainForm.ListViewSources.Items.Add(tmpItem)
+                _mainForm.ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
+
+            _mainForm.ListViewFilesOutOfDate = True
+
+        Else
+            For Each item As ListViewItem In ListViewDownloadedFiles.Items
+                Dim fileName As String = item.Text
+                Dim filePath As String = System.IO.Path.Combine(_mainForm.cachePathTC, fileName)
+
+                ' Check if the file already exists in the ListView
+                Dim exists As Boolean = False
+                For Each existingItem As ListViewItem In _mainForm.ListViewFiles.Items
+                    If existingItem.Name = filePath Then
+                        exists = True
+                        Exit For
+                    End If
+                Next
+
+                ' Add the file to the ListView in the main form if it doesn't already exist
+                If Not exists Then
+                    Dim tmpItem As New ListViewItem
+                    tmpItem.Text = fileName
+                    tmpItem.SubItems.Add(filePath)
+                    tmpItem.ImageKey = "Unchecked"
+                    tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
+                    tmpItem.Name = filePath
+                    tmpItem.Group = _mainForm.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
+                    _mainForm.ListViewFiles.Items.Add(tmpItem)
                 End If
             Next
-
-            ' Add the file to the ListView in the main form if it doesn't already exist
-            If Not exists Then
-                Dim tmpItem As New ListViewItem
-                tmpItem.Text = fileName
-                tmpItem.SubItems.Add(filePath)
-                tmpItem.ImageKey = "Unchecked"
-                tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
-                tmpItem.Name = filePath
-                tmpItem.Group = _mainForm.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
-                _mainForm.ListViewFiles.Items.Add(tmpItem)
-            End If
-        Next
+        End If
 
         Me.Close()
     End Sub
