@@ -73,17 +73,18 @@ Added a new bare-bones importer.  This is a separate program and not part of Hou
 The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That file is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
 
 See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter) for details.
+
 ### Structured Storage
 
 Fixed an issue where weldment materials were not processed correctly.
 
 Fixed an issue where certain missing links were not captured.
 
-### Miscellaneous
+### Other
 
 Fixed an issue where the `List update frequency` was not properly initialized on startup.  (Thank you **@64Pacific!**)
 
-Fixed an issue in Top Level Assembly Search where some folders could be searched twice.
+Fixed an issue in Top Level Assembly Search where in certain cases folders could be searched more than once.
 
 ## V2025.1 Enhancements/Fixes
 
