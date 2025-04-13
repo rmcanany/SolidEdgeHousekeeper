@@ -83,6 +83,7 @@ Fixed an issue where certain missing links were not captured.
 
 Fixed an issue where the `List update frequency` was not properly initialized on startup.  (Thank you **@64Pacific!**)
 
+Fixed an issue in Top Level Assembly Search where some folders could be searched twice.
 
 ## V2025.1 Enhancements/Fixes
 

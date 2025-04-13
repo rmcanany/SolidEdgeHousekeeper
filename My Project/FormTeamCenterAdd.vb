@@ -123,13 +123,19 @@ Public Class FormTeamCenterAdd
             Dim files As New List(Of Tuple(Of String, String, String))
             Dim numOfFiles As Integer = 0
 
+            Dim ErrorList As New List(Of String)
+
             For Each row As DataGridViewRow In DataGridViewItems.Rows
                 If Not row.IsNewRow Then
                     Dim itemID As String = If(row.Cells("ItemIDs").Value IsNot Nothing, row.Cells("ItemIDs").Value.ToString().Trim(), String.Empty)
                     Dim revision As String = If(row.Cells("rev").Value IsNot Nothing, row.Cells("rev").Value.ToString().Trim(), String.Empty)
 
                     ' Validate item ID
+
+                    ' ###### Does this apply to all TeamCenter sites? ######
+
                     If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
+                        ErrorList.Add($"Invalid Item ID: {itemID}. It should be 8 digits.")
                         MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         Continue For
                     End If
@@ -146,6 +152,8 @@ Public Class FormTeamCenterAdd
                         itemAttributes(0, 0) = "item_id"
                         itemAttributes(0, 1) = itemID
 
+                        ' ###### Does this apply to all TeamCenter sites? ######
+
                         ' Retrieve all revisions for the item
                         TCE.GetAllRevisions(itemAttributes, "MFK9Item1", revisions)
 
@@ -155,6 +163,9 @@ Public Class FormTeamCenterAdd
                             Dim filteredRevisions As New List(Of String)
                             For i As Integer = 0 To revisions.GetLength(0) - 1
                                 Dim rev As String = revisions(i, 0).ToString()
+
+                                ' ###### Does this apply to all TeamCenter sites? ######
+
                                 If System.Text.RegularExpressions.Regex.IsMatch(rev, "^[A-Z]$") Then
                                     filteredRevisions.Add(rev)
                                 End If
@@ -167,11 +178,13 @@ Public Class FormTeamCenterAdd
                             Else
                                 ' Throw an exception if no valid revisions are found
                                 MessageBox.Show($"No valid revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
                                 Continue For
                             End If
                         Else
                             ' Throw an exception if no revisions are found
                             MessageBox.Show($"No revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                            ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
                             Continue For
                         End If
                     End If
@@ -183,6 +196,8 @@ Public Class FormTeamCenterAdd
 
                     MFKAttributes2(0, 0) = "item_id"
                     MFKAttributes2(0, 1) = itemID
+
+                    ' ###### Is this function call valid for all TeamCenter sites? ######
 
                     TCE.GetAllRevisions(MFKAttributes2, "MFK9Item1", RevIdAndUIDs2)
 
@@ -198,6 +213,7 @@ Public Class FormTeamCenterAdd
 
                     If Not revisionExists Then
                         MessageBox.Show($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        ErrorList.Add($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.")
                         Continue For
                     End If
 
@@ -215,6 +231,25 @@ Public Class FormTeamCenterAdd
                     End If
                 End If
             Next
+
+            ' Report any errors from the previous loop
+            If Not ErrorList.Count = 0 Then
+                Dim s As String = ""
+                Dim MaxErrorsToShow As Integer = 20
+                For i As Integer = 0 To ErrorList.Count - 1
+                    s = String.Format("{0}{1}{2}", s, ErrorList(i), vbCrLf)
+                    If i = MaxErrorsToShow Then Exit For
+                Next
+                If ErrorList.Count > MaxErrorsToShow Then
+                    Dim Diff As Integer = ErrorList.Count - MaxErrorsToShow
+                    s = String.Format("These errors (and {0} more) occurred{1}{2}", Diff, vbCrLf, s)
+                Else
+                    s = String.Format("These errors occurred{0}{1}", vbCrLf, s)
+                End If
+                'MessageBox.Show(s, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Dim Result = MsgBox(s, vbOKOnly, "Validation Error")
+                If Result = MsgBoxResult.Cancel Then Return
+            End If
 
             ListViewTeamCenterItems.Items.Clear()
 
@@ -306,7 +341,7 @@ Public Class FormTeamCenterAdd
                 Next
 
                 If alreadyDownloaded Then
-                    MessageBox.Show("File Already In Cache", fileName + " is already in the cache folder", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    'MessageBox.Show("File Already In Cache", fileName + " is already in the cache folder", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                     Continue For
                 End If
 

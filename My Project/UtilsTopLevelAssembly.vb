@@ -856,12 +856,14 @@ Public Class UtilsTopLevelAssembly
         '   c:\data
         '   c:\data\projects
         '   c:\data\projects\project1
+        '   c:\data\standard_parts
         '   d:\other
         '   d:\other\something
         ' ]
-        ' Then starting with the entry at the bottom of the list,
-        ' checks if that entry contains the one above.
-        ' If not, add it to the output.
+        ' Adds the first entry to the output list.
+        ' Checks if each subsequent entry contains any entry in the output list.
+        ' eg, "c:\data\projects".Contains("c:\data")
+        ' If not, it is added.
 
         Dim tmpTopLevelFolders As New List(Of String)
         Dim OutTopLevelFolders As New List(Of String)
@@ -878,8 +880,21 @@ Public Class UtilsTopLevelAssembly
 
         OutTopLevelFolders.Add(tmpTopLevelFolders(0))
 
-        For i = tmpTopLevelFolders.Count - 1 To 1 Step -1
-            If Not tmpTopLevelFolders(i).Contains(tmpTopLevelFolders(i - 1)) Then
+        'For i = tmpTopLevelFolders.Count - 1 To 1 Step -1
+        '    If Not tmpTopLevelFolders(i).Contains(tmpTopLevelFolders(i - 1)) Then
+        '        OutTopLevelFolders.Add(tmpTopLevelFolders(i))
+        '    End If
+        'Next
+
+        For i = 1 To tmpTopLevelFolders.Count - 1
+            Dim IsChildFolder As Boolean = False
+            For Each OutTLF As String In OutTopLevelFolders
+                If tmpTopLevelFolders(i).Contains(OutTLF) Then  ' eg, "c:\data\projects".Contains("c:\data")
+                    IsChildFolder = True
+                    Exit For
+                End If
+            Next
+            If Not IsChildFolder Then
                 OutTopLevelFolders.Add(tmpTopLevelFolders(i))
             End If
         Next
