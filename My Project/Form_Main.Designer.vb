@@ -781,7 +781,7 @@ Partial Class Form_Main
         '
         Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
         Me.ToolStripLabel1.Name = "ToolStripLabel1"
-        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 15)
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripLabel1.Text = "File Type:"
         '
         'TabPageTasks
@@ -1007,6 +1007,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel4
         '
+        Me.ExTableLayoutPanel4.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel4.ColumnCount = 1
         Me.ExTableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel4.Controls.Add(Me.LabelTLAListOptions, 0, 0)
@@ -1239,6 +1240,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel6
         '
+        Me.ExTableLayoutPanel6.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel6.ColumnCount = 1
         Me.ExTableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel6.Controls.Add(Me.CheckBoxProcessAsAvailable, 0, 0)
@@ -1311,7 +1313,7 @@ Partial Class Form_Main
         'LabelStatusAfter
         '
         Me.LabelStatusAfter.AutoSize = True
-        Me.LabelStatusAfter.Location = New System.Drawing.Point(142, 7)
+        Me.LabelStatusAfter.Location = New System.Drawing.Point(161, 7)
         Me.LabelStatusAfter.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusAfter.Name = "LabelStatusAfter"
         Me.LabelStatusAfter.Size = New System.Drawing.Size(84, 15)
@@ -1351,7 +1353,7 @@ Partial Class Form_Main
         'LabelStatusOutReleased
         '
         Me.LabelStatusOutReleased.AutoSize = True
-        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(264, 27)
+        Me.LabelStatusOutReleased.Location = New System.Drawing.Point(268, 27)
         Me.LabelStatusOutReleased.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutReleased.Name = "LabelStatusOutReleased"
         Me.LabelStatusOutReleased.Size = New System.Drawing.Size(14, 15)
@@ -1371,7 +1373,7 @@ Partial Class Form_Main
         'LabelStatusOutObsolete
         '
         Me.LabelStatusOutObsolete.AutoSize = True
-        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(235, 27)
+        Me.LabelStatusOutObsolete.Location = New System.Drawing.Point(239, 27)
         Me.LabelStatusOutObsolete.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutObsolete.Name = "LabelStatusOutObsolete"
         Me.LabelStatusOutObsolete.Size = New System.Drawing.Size(16, 15)
@@ -1391,7 +1393,7 @@ Partial Class Form_Main
         'LabelStatusOutIW
         '
         Me.LabelStatusOutIW.AutoSize = True
-        Me.LabelStatusOutIW.Location = New System.Drawing.Point(205, 27)
+        Me.LabelStatusOutIW.Location = New System.Drawing.Point(209, 27)
         Me.LabelStatusOutIW.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutIW.Name = "LabelStatusOutIW"
         Me.LabelStatusOutIW.Size = New System.Drawing.Size(21, 15)
@@ -1411,7 +1413,7 @@ Partial Class Form_Main
         'LabelStatusOutInReview
         '
         Me.LabelStatusOutInReview.AutoSize = True
-        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(174, 27)
+        Me.LabelStatusOutInReview.Location = New System.Drawing.Point(178, 27)
         Me.LabelStatusOutInReview.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutInReview.Name = "LabelStatusOutInReview"
         Me.LabelStatusOutInReview.Size = New System.Drawing.Size(17, 15)
@@ -1426,77 +1428,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoIR)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoB)
         Me.GroupBoxStatusInA.Controls.Add(Me.RadioButtonStatusAtoA)
-        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(118, 48)
+        Me.GroupBoxStatusInA.Location = New System.Drawing.Point(118, 43)
         Me.GroupBoxStatusInA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInA.Name = "GroupBoxStatusInA"
         Me.GroupBoxStatusInA.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInA.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInA.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInA.TabIndex = 82
         Me.GroupBoxStatusInA.TabStop = False
         '
         'RadioButtonStatusAtoR
         '
+        Me.RadioButtonStatusAtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoR.AutoSize = True
+        Me.RadioButtonStatusAtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusAtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusAtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoR.Name = "RadioButtonStatusAtoR"
-        Me.RadioButtonStatusAtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoR.TabIndex = 5
         Me.RadioButtonStatusAtoR.TabStop = True
         Me.RadioButtonStatusAtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusAtoO
         '
+        Me.RadioButtonStatusAtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoO.AutoSize = True
+        Me.RadioButtonStatusAtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusAtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusAtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoO.Name = "RadioButtonStatusAtoO"
-        Me.RadioButtonStatusAtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoO.TabIndex = 4
         Me.RadioButtonStatusAtoO.TabStop = True
         Me.RadioButtonStatusAtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusAtoIW
         '
+        Me.RadioButtonStatusAtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoIW.AutoSize = True
+        Me.RadioButtonStatusAtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusAtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusAtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoIW.Name = "RadioButtonStatusAtoIW"
-        Me.RadioButtonStatusAtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoIW.TabIndex = 3
         Me.RadioButtonStatusAtoIW.TabStop = True
         Me.RadioButtonStatusAtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusAtoIR
         '
+        Me.RadioButtonStatusAtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoIR.AutoSize = True
+        Me.RadioButtonStatusAtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusAtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusAtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoIR.Name = "RadioButtonStatusAtoIR"
-        Me.RadioButtonStatusAtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoIR.TabIndex = 2
         Me.RadioButtonStatusAtoIR.TabStop = True
         Me.RadioButtonStatusAtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusAtoB
         '
+        Me.RadioButtonStatusAtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoB.AutoSize = True
+        Me.RadioButtonStatusAtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusAtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusAtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoB.Name = "RadioButtonStatusAtoB"
-        Me.RadioButtonStatusAtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoB.TabIndex = 1
         Me.RadioButtonStatusAtoB.TabStop = True
         Me.RadioButtonStatusAtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusAtoA
         '
+        Me.RadioButtonStatusAtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusAtoA.AutoSize = True
         Me.RadioButtonStatusAtoA.Checked = True
+        Me.RadioButtonStatusAtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusAtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusAtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusAtoA.Name = "RadioButtonStatusAtoA"
-        Me.RadioButtonStatusAtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusAtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusAtoA.TabIndex = 0
         Me.RadioButtonStatusAtoA.TabStop = True
         Me.RadioButtonStatusAtoA.UseVisualStyleBackColor = True
@@ -1504,7 +1518,7 @@ Partial Class Form_Main
         'LabelStatusOutBaselined
         '
         Me.LabelStatusOutBaselined.AutoSize = True
-        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(147, 27)
+        Me.LabelStatusOutBaselined.Location = New System.Drawing.Point(151, 27)
         Me.LabelStatusOutBaselined.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutBaselined.Name = "LabelStatusOutBaselined"
         Me.LabelStatusOutBaselined.Size = New System.Drawing.Size(14, 15)
@@ -1519,77 +1533,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoIR)
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoB)
         Me.GroupBoxStatusInB.Controls.Add(Me.RadioButtonStatusBtoA)
-        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(118, 83)
+        Me.GroupBoxStatusInB.Location = New System.Drawing.Point(118, 78)
         Me.GroupBoxStatusInB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInB.Name = "GroupBoxStatusInB"
         Me.GroupBoxStatusInB.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInB.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInB.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInB.TabIndex = 83
         Me.GroupBoxStatusInB.TabStop = False
         '
         'RadioButtonStatusBtoR
         '
+        Me.RadioButtonStatusBtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoR.AutoSize = True
+        Me.RadioButtonStatusBtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusBtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusBtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoR.Name = "RadioButtonStatusBtoR"
-        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoR.TabIndex = 5
         Me.RadioButtonStatusBtoR.TabStop = True
         Me.RadioButtonStatusBtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusBtoO
         '
+        Me.RadioButtonStatusBtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoO.AutoSize = True
+        Me.RadioButtonStatusBtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusBtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusBtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoO.Name = "RadioButtonStatusBtoO"
-        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoO.TabIndex = 4
         Me.RadioButtonStatusBtoO.TabStop = True
         Me.RadioButtonStatusBtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusBtoIW
         '
+        Me.RadioButtonStatusBtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoIW.AutoSize = True
+        Me.RadioButtonStatusBtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusBtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusBtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoIW.Name = "RadioButtonStatusBtoIW"
-        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoIW.TabIndex = 3
         Me.RadioButtonStatusBtoIW.TabStop = True
         Me.RadioButtonStatusBtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusBtoIR
         '
+        Me.RadioButtonStatusBtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoIR.AutoSize = True
+        Me.RadioButtonStatusBtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusBtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusBtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoIR.Name = "RadioButtonStatusBtoIR"
-        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoIR.TabIndex = 2
         Me.RadioButtonStatusBtoIR.TabStop = True
         Me.RadioButtonStatusBtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusBtoB
         '
+        Me.RadioButtonStatusBtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoB.AutoSize = True
+        Me.RadioButtonStatusBtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusBtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusBtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoB.Name = "RadioButtonStatusBtoB"
-        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoB.TabIndex = 1
         Me.RadioButtonStatusBtoB.TabStop = True
         Me.RadioButtonStatusBtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusBtoA
         '
+        Me.RadioButtonStatusBtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusBtoA.AutoSize = True
         Me.RadioButtonStatusBtoA.Checked = True
+        Me.RadioButtonStatusBtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusBtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusBtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusBtoA.Name = "RadioButtonStatusBtoA"
-        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusBtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusBtoA.TabIndex = 0
         Me.RadioButtonStatusBtoA.TabStop = True
         Me.RadioButtonStatusBtoA.UseVisualStyleBackColor = True
@@ -1597,7 +1623,7 @@ Partial Class Form_Main
         'LabelStatusOutAvailable
         '
         Me.LabelStatusOutAvailable.AutoSize = True
-        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(118, 27)
+        Me.LabelStatusOutAvailable.Location = New System.Drawing.Point(122, 27)
         Me.LabelStatusOutAvailable.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.LabelStatusOutAvailable.Name = "LabelStatusOutAvailable"
         Me.LabelStatusOutAvailable.Size = New System.Drawing.Size(15, 15)
@@ -1612,77 +1638,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoIR)
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoB)
         Me.GroupBoxStatusInIR.Controls.Add(Me.RadioButtonStatusIRtoA)
-        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(118, 117)
+        Me.GroupBoxStatusInIR.Location = New System.Drawing.Point(118, 112)
         Me.GroupBoxStatusInIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInIR.Name = "GroupBoxStatusInIR"
         Me.GroupBoxStatusInIR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIR.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInIR.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInIR.TabIndex = 84
         Me.GroupBoxStatusInIR.TabStop = False
         '
         'RadioButtonStatusIRtoR
         '
+        Me.RadioButtonStatusIRtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoR.AutoSize = True
+        Me.RadioButtonStatusIRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIRtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusIRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoR.Name = "RadioButtonStatusIRtoR"
-        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoR.TabIndex = 5
         Me.RadioButtonStatusIRtoR.TabStop = True
         Me.RadioButtonStatusIRtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIRtoO
         '
+        Me.RadioButtonStatusIRtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoO.AutoSize = True
+        Me.RadioButtonStatusIRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIRtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusIRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoO.Name = "RadioButtonStatusIRtoO"
-        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoO.TabIndex = 4
         Me.RadioButtonStatusIRtoO.TabStop = True
         Me.RadioButtonStatusIRtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIRtoIW
         '
+        Me.RadioButtonStatusIRtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoIW.AutoSize = True
+        Me.RadioButtonStatusIRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIRtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusIRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoIW.Name = "RadioButtonStatusIRtoIW"
-        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoIW.TabIndex = 3
         Me.RadioButtonStatusIRtoIW.TabStop = True
         Me.RadioButtonStatusIRtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIRtoIR
         '
+        Me.RadioButtonStatusIRtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoIR.AutoSize = True
+        Me.RadioButtonStatusIRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIRtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusIRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoIR.Name = "RadioButtonStatusIRtoIR"
-        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoIR.TabIndex = 2
         Me.RadioButtonStatusIRtoIR.TabStop = True
         Me.RadioButtonStatusIRtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIRtoB
         '
+        Me.RadioButtonStatusIRtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoB.AutoSize = True
+        Me.RadioButtonStatusIRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIRtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusIRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoB.Name = "RadioButtonStatusIRtoB"
-        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoB.TabIndex = 1
         Me.RadioButtonStatusIRtoB.TabStop = True
         Me.RadioButtonStatusIRtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIRtoA
         '
+        Me.RadioButtonStatusIRtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIRtoA.AutoSize = True
         Me.RadioButtonStatusIRtoA.Checked = True
+        Me.RadioButtonStatusIRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusIRtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusIRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIRtoA.Name = "RadioButtonStatusIRtoA"
-        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIRtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIRtoA.TabIndex = 0
         Me.RadioButtonStatusIRtoA.TabStop = True
         Me.RadioButtonStatusIRtoA.UseVisualStyleBackColor = True
@@ -1695,77 +1733,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoIR)
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoB)
         Me.GroupBoxStatusInR.Controls.Add(Me.RadioButtonStatusRtoA)
-        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(118, 222)
+        Me.GroupBoxStatusInR.Location = New System.Drawing.Point(118, 219)
         Me.GroupBoxStatusInR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInR.Name = "GroupBoxStatusInR"
         Me.GroupBoxStatusInR.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInR.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInR.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInR.TabIndex = 87
         Me.GroupBoxStatusInR.TabStop = False
         '
         'RadioButtonStatusRtoR
         '
+        Me.RadioButtonStatusRtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoR.AutoSize = True
+        Me.RadioButtonStatusRtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusRtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusRtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoR.Name = "RadioButtonStatusRtoR"
-        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoR.TabIndex = 5
         Me.RadioButtonStatusRtoR.TabStop = True
         Me.RadioButtonStatusRtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusRtoO
         '
+        Me.RadioButtonStatusRtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoO.AutoSize = True
+        Me.RadioButtonStatusRtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusRtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusRtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoO.Name = "RadioButtonStatusRtoO"
-        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoO.TabIndex = 4
         Me.RadioButtonStatusRtoO.TabStop = True
         Me.RadioButtonStatusRtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusRtoIW
         '
+        Me.RadioButtonStatusRtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoIW.AutoSize = True
+        Me.RadioButtonStatusRtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusRtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusRtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoIW.Name = "RadioButtonStatusRtoIW"
-        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoIW.TabIndex = 3
         Me.RadioButtonStatusRtoIW.TabStop = True
         Me.RadioButtonStatusRtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusRtoIR
         '
+        Me.RadioButtonStatusRtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoIR.AutoSize = True
+        Me.RadioButtonStatusRtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusRtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusRtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoIR.Name = "RadioButtonStatusRtoIR"
-        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoIR.TabIndex = 2
         Me.RadioButtonStatusRtoIR.TabStop = True
         Me.RadioButtonStatusRtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusRtoB
         '
+        Me.RadioButtonStatusRtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoB.AutoSize = True
+        Me.RadioButtonStatusRtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusRtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusRtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoB.Name = "RadioButtonStatusRtoB"
-        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoB.TabIndex = 1
         Me.RadioButtonStatusRtoB.TabStop = True
         Me.RadioButtonStatusRtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusRtoA
         '
+        Me.RadioButtonStatusRtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusRtoA.AutoSize = True
         Me.RadioButtonStatusRtoA.Checked = True
+        Me.RadioButtonStatusRtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusRtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusRtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusRtoA.Name = "RadioButtonStatusRtoA"
-        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusRtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusRtoA.TabIndex = 0
         Me.RadioButtonStatusRtoA.TabStop = True
         Me.RadioButtonStatusRtoA.UseVisualStyleBackColor = True
@@ -1778,77 +1828,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoIR)
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoB)
         Me.GroupBoxStatusInIW.Controls.Add(Me.RadioButtonStatusIWtoA)
-        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(118, 152)
+        Me.GroupBoxStatusInIW.Location = New System.Drawing.Point(118, 147)
         Me.GroupBoxStatusInIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInIW.Name = "GroupBoxStatusInIW"
         Me.GroupBoxStatusInIW.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInIW.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInIW.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInIW.TabIndex = 85
         Me.GroupBoxStatusInIW.TabStop = False
         '
         'RadioButtonStatusIWtoR
         '
+        Me.RadioButtonStatusIWtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoR.AutoSize = True
+        Me.RadioButtonStatusIWtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIWtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusIWtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoR.Name = "RadioButtonStatusIWtoR"
-        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoR.TabIndex = 5
         Me.RadioButtonStatusIWtoR.TabStop = True
         Me.RadioButtonStatusIWtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIWtoO
         '
+        Me.RadioButtonStatusIWtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoO.AutoSize = True
+        Me.RadioButtonStatusIWtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIWtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusIWtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoO.Name = "RadioButtonStatusIWtoO"
-        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoO.TabIndex = 4
         Me.RadioButtonStatusIWtoO.TabStop = True
         Me.RadioButtonStatusIWtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIWtoIW
         '
+        Me.RadioButtonStatusIWtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoIW.AutoSize = True
+        Me.RadioButtonStatusIWtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIWtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusIWtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoIW.Name = "RadioButtonStatusIWtoIW"
-        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoIW.TabIndex = 3
         Me.RadioButtonStatusIWtoIW.TabStop = True
         Me.RadioButtonStatusIWtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIWtoIR
         '
+        Me.RadioButtonStatusIWtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoIR.AutoSize = True
+        Me.RadioButtonStatusIWtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIWtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusIWtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoIR.Name = "RadioButtonStatusIWtoIR"
-        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoIR.TabIndex = 2
         Me.RadioButtonStatusIWtoIR.TabStop = True
         Me.RadioButtonStatusIWtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIWtoB
         '
+        Me.RadioButtonStatusIWtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoB.AutoSize = True
+        Me.RadioButtonStatusIWtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusIWtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusIWtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoB.Name = "RadioButtonStatusIWtoB"
-        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoB.TabIndex = 1
         Me.RadioButtonStatusIWtoB.TabStop = True
         Me.RadioButtonStatusIWtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusIWtoA
         '
+        Me.RadioButtonStatusIWtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusIWtoA.AutoSize = True
         Me.RadioButtonStatusIWtoA.Checked = True
+        Me.RadioButtonStatusIWtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusIWtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusIWtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusIWtoA.Name = "RadioButtonStatusIWtoA"
-        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusIWtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusIWtoA.TabIndex = 0
         Me.RadioButtonStatusIWtoA.TabStop = True
         Me.RadioButtonStatusIWtoA.UseVisualStyleBackColor = True
@@ -1861,77 +1923,89 @@ Partial Class Form_Main
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoIR)
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoB)
         Me.GroupBoxStatusInO.Controls.Add(Me.RadioButtonStatusOtoA)
-        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(118, 188)
+        Me.GroupBoxStatusInO.Location = New System.Drawing.Point(118, 183)
         Me.GroupBoxStatusInO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.GroupBoxStatusInO.Name = "GroupBoxStatusInO"
         Me.GroupBoxStatusInO.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.GroupBoxStatusInO.Size = New System.Drawing.Size(175, 35)
+        Me.GroupBoxStatusInO.Size = New System.Drawing.Size(175, 40)
         Me.GroupBoxStatusInO.TabIndex = 86
         Me.GroupBoxStatusInO.TabStop = False
         '
         'RadioButtonStatusOtoR
         '
+        Me.RadioButtonStatusOtoR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoR.AutoSize = True
+        Me.RadioButtonStatusOtoR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusOtoR.Location = New System.Drawing.Point(146, 15)
         Me.RadioButtonStatusOtoR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoR.Name = "RadioButtonStatusOtoR"
-        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoR.TabIndex = 5
         Me.RadioButtonStatusOtoR.TabStop = True
         Me.RadioButtonStatusOtoR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusOtoO
         '
+        Me.RadioButtonStatusOtoO.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoO.AutoSize = True
+        Me.RadioButtonStatusOtoO.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusOtoO.Location = New System.Drawing.Point(117, 15)
         Me.RadioButtonStatusOtoO.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoO.Name = "RadioButtonStatusOtoO"
-        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoO.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoO.TabIndex = 4
         Me.RadioButtonStatusOtoO.TabStop = True
         Me.RadioButtonStatusOtoO.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusOtoIW
         '
+        Me.RadioButtonStatusOtoIW.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoIW.AutoSize = True
+        Me.RadioButtonStatusOtoIW.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusOtoIW.Location = New System.Drawing.Point(88, 15)
         Me.RadioButtonStatusOtoIW.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoIW.Name = "RadioButtonStatusOtoIW"
-        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIW.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoIW.TabIndex = 3
         Me.RadioButtonStatusOtoIW.TabStop = True
         Me.RadioButtonStatusOtoIW.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusOtoIR
         '
+        Me.RadioButtonStatusOtoIR.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoIR.AutoSize = True
+        Me.RadioButtonStatusOtoIR.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusOtoIR.Location = New System.Drawing.Point(58, 15)
         Me.RadioButtonStatusOtoIR.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoIR.Name = "RadioButtonStatusOtoIR"
-        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoIR.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoIR.TabIndex = 2
         Me.RadioButtonStatusOtoIR.TabStop = True
         Me.RadioButtonStatusOtoIR.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusOtoB
         '
+        Me.RadioButtonStatusOtoB.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoB.AutoSize = True
+        Me.RadioButtonStatusOtoB.Image = Global.Housekeeper.My.Resources.Resources.Unchecked
         Me.RadioButtonStatusOtoB.Location = New System.Drawing.Point(29, 15)
         Me.RadioButtonStatusOtoB.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoB.Name = "RadioButtonStatusOtoB"
-        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoB.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoB.TabIndex = 1
         Me.RadioButtonStatusOtoB.TabStop = True
         Me.RadioButtonStatusOtoB.UseVisualStyleBackColor = True
         '
         'RadioButtonStatusOtoA
         '
+        Me.RadioButtonStatusOtoA.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioButtonStatusOtoA.AutoSize = True
         Me.RadioButtonStatusOtoA.Checked = True
+        Me.RadioButtonStatusOtoA.Image = Global.Housekeeper.My.Resources.Resources.Checked
         Me.RadioButtonStatusOtoA.Location = New System.Drawing.Point(0, 15)
         Me.RadioButtonStatusOtoA.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.RadioButtonStatusOtoA.Name = "RadioButtonStatusOtoA"
-        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(14, 13)
+        Me.RadioButtonStatusOtoA.Size = New System.Drawing.Size(22, 22)
         Me.RadioButtonStatusOtoA.TabIndex = 0
         Me.RadioButtonStatusOtoA.TabStop = True
         Me.RadioButtonStatusOtoA.UseVisualStyleBackColor = True
@@ -1978,6 +2052,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel7
         '
+        Me.ExTableLayoutPanel7.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel7.ColumnCount = 1
         Me.ExTableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel7.Controls.Add(Me.RadioButtonSortNone, 0, 0)
@@ -2121,6 +2196,7 @@ Partial Class Form_Main
         '
         'TabPageTemplates
         '
+        Me.TabPageTemplates.BackColor = System.Drawing.Color.White
         Me.TabPageTemplates.Controls.Add(Me.ExTableLayoutPanel1)
         Me.TabPageTemplates.ImageKey = "se"
         Me.TabPageTemplates.Location = New System.Drawing.Point(4, 24)
@@ -2129,7 +2205,6 @@ Partial Class Form_Main
         Me.TabPageTemplates.Size = New System.Drawing.Size(535, 585)
         Me.TabPageTemplates.TabIndex = 7
         Me.TabPageTemplates.Text = "Templates"
-        Me.TabPageTemplates.UseVisualStyleBackColor = True
         '
         'ExTableLayoutPanel1
         '
@@ -2313,6 +2388,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel9
         '
+        Me.ExTableLayoutPanel9.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel9.ColumnCount = 1
         Me.ExTableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel9.Controls.Add(Me.TextBoxServerConnectionString, 0, 1)
@@ -2375,7 +2451,6 @@ Partial Class Form_Main
         Me.FastColoredServerQuery.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredServerQuery.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredServerQuery.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FastColoredServerQuery.Font = New System.Drawing.Font("Courier New", 9.75!)
         Me.FastColoredServerQuery.IsReplaceMode = False
         Me.FastColoredServerQuery.Language = FastColoredTextBoxNS.Language.SQL
         Me.FastColoredServerQuery.LeftBracket = Global.Microsoft.VisualBasic.ChrW(40)
@@ -2415,6 +2490,7 @@ Partial Class Form_Main
         '
         'ExTableLayoutPanel2
         '
+        Me.ExTableLayoutPanel2.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel2.Controls.Add(Me.CheckBoxUseCurrentSession, 0, 0)

@@ -12,6 +12,188 @@ Public Class UtilsPreferences
 
 
 
+    '###### FORM MAIN ######
+    Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
+        Dim Filename = "form_main_settings.json"
+        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
+
+        If CheckExisting Then
+            If FileIO.FileSystem.FileExists(Filename) Then
+                Return Filename
+            Else
+                Return ""
+            End If
+        Else
+            Return Filename
+        End If
+
+    End Function
+
+    Public Sub SaveFormMainSettings(FMain As Form_Main, SavingPresets As Boolean)
+
+        Dim tmpJSONDict As New Dictionary(Of String, String)
+        Dim JSONString As String
+
+        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
+
+        Dim FormType As Type = FMain.GetType()
+        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
+        Dim Value As String
+        Dim PropType As String
+
+        ' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
+        Dim ReportIgnoredProperties As Boolean = False
+        Dim MaxIgnoredShowPerPage = 20
+        Dim IgnoredCount As Integer = 0
+        Dim s As String = ""
+
+        Dim KeepProps As New List(Of String)
+        KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
+        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
+
+        'KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
+        KeepProps.AddRange({"LinkManagementFilename"})
+
+        KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
+        KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
+        KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
+        KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
+        KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
+        KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU"})
+        KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
+        KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
+        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
+        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
+        KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
+        KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
+        KeepProps.AddRange({"TCCachePath", "TCItemIDRx", "TCRevisionRx"})
+
+        If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
+
+        For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
+
+            PropType = PropInfo.PropertyType.Name.ToLower
+
+            If Not KeepProps.Contains(PropInfo.Name) Then
+
+                If ReportIgnoredProperties Then
+                    s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
+                    If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
+                        s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
+                        MsgBox(s, vbOKOnly)
+                        s = ""
+                        IgnoredCount = -1
+                    End If
+                    IgnoredCount += 1
+
+                End If
+
+                Continue For
+            End If
+
+            Value = Nothing
+
+            Select Case PropType
+                Case "string", "double", "int32", "boolean"
+                    Value = CStr(PropInfo.GetValue(FMain, Nothing))
+                Case "list`1"
+                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
+                Case Else
+                    MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
+            End Select
+
+
+            If Value Is Nothing Then
+                Select Case PropType
+                    Case "string"
+                        Value = ""
+                    Case "double", "int32"
+                        Value = "0"
+                    Case "boolean"
+                        Value = "False"
+                    Case "list`1"
+                        Value = JsonConvert.SerializeObject(New List(Of String))
+                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
+                    Case Else
+                        MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
+                End Select
+            End If
+
+            tmpJSONDict(PropInfo.Name) = Value
+
+        Next
+
+        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+
+    End Sub
+
+    Public Sub GetFormMainSettings(FMain As Form_Main)
+
+        Dim tmpJSONDict As New Dictionary(Of String, String)
+        Dim JSONString As String
+
+        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
+
+        Dim FormType As Type = FMain.GetType()
+        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
+        'Dim Value As String
+
+        If Not Infile = "" Then
+            JSONString = IO.File.ReadAllText(Infile)
+
+            tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
+
+            For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
+
+                If tmpJSONDict.Keys.Contains(PropInfo.Name) Then
+                    Dim PropTypestring = PropInfo.PropertyType.Name
+
+                    Select Case PropInfo.PropertyType.Name.ToLower
+                        Case "string"
+                            PropInfo.SetValue(FMain, CStr(tmpJSONDict(PropInfo.Name)))
+                        Case "double"
+                            PropInfo.SetValue(FMain, CDbl(tmpJSONDict(PropInfo.Name)))
+                        Case "int32"
+                            PropInfo.SetValue(FMain, CInt(tmpJSONDict(PropInfo.Name)))
+                        Case "boolean"
+                            PropInfo.SetValue(FMain, CBool(tmpJSONDict(PropInfo.Name)))
+                        Case "list`1"
+                            Dim L = JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
+                            PropInfo.SetValue(FMain, L)
+                    End Select
+
+                End If
+            Next
+        End If
+
+    End Sub
+
+    Public Function GetFormMainSettingsJSON() As String
+
+        Dim JSONString As String = ""
+
+        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
+
+        If Not Infile = "" Then
+            JSONString = IO.File.ReadAllText(Infile)
+        End If
+
+        Return JSONString
+    End Function
+
+    Public Sub SaveFormMainSettingsJSON(JSONString As String)
+
+        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
+
+        IO.File.WriteAllText(Outfile, JSONString)
+
+    End Sub
+
+
+
     '###### FOLDERS ######
     Public Function GetStartupDirectory() As String
 
@@ -583,187 +765,6 @@ Public Class UtilsPreferences
             End If
 
         End If
-    End Sub
-
-
-
-    '###### FORM MAIN ######
-    Public Function GetFormMainSettingsFilename(CheckExisting As Boolean) As String
-        Dim Filename = "form_main_settings.json"
-        Filename = String.Format("{0}\{1}", GetPreferencesDirectory, Filename)
-
-        If CheckExisting Then
-            If FileIO.FileSystem.FileExists(Filename) Then
-                Return Filename
-            Else
-                Return ""
-            End If
-        Else
-            Return Filename
-        End If
-
-    End Function
-
-    Public Sub SaveFormMainSettings(FMain As Form_Main, SavingPresets As Boolean)
-
-        Dim tmpJSONDict As New Dictionary(Of String, String)
-        Dim JSONString As String
-
-        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
-
-        Dim FormType As Type = FMain.GetType()
-        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
-        Dim Value As String
-        Dim PropType As String
-
-        ' ###### For reporting Properties not processed.  For occasional checks.  Can cause an exception closing the form.
-        Dim ReportIgnoredProperties As Boolean = False
-        Dim MaxIgnoredShowPerPage = 20
-        Dim IgnoredCount As Integer = 0
-        Dim s As String = ""
-
-        Dim KeepProps As New List(Of String)
-        KeepProps.AddRange({"TLAAutoIncludeTLF", "WarnBareTLA", "TLAIncludePartCopies", "TLAReportUnrelatedFiles", "TLATopDown", "TLABottomUp"})
-        KeepProps.AddRange({"DraftAndModelSameName", "FastSearchScopeFilename", "TLAIgnoreIncludeInReports"})
-
-        'KeepProps.AddRange({"LinkManagementFilename", "LinkManagementOrder"})
-        KeepProps.AddRange({"LinkManagementFilename"})
-
-        KeepProps.AddRange({"ProcessAsAvailable", "ProcessAsAvailableRevert", "ProcessAsAvailableChange"})
-        KeepProps.AddRange({"StatusAtoX", "StatusBtoX", "StatusIRtoX", "StatusIWtoX", "StatusOtoX", "StatusRtoX"})
-        KeepProps.AddRange({"SortNone", "KeepUnsortedDuplicates", "SortAlphabetical", "SortDependency", "SortIncludeNoDependencies"})
-        KeepProps.AddRange({"SortRandomSample", "SortRandomSampleFraction"})
-        KeepProps.AddRange({"AssemblyTemplate", "PartTemplate", "SheetmetalTemplate", "DraftTemplate", "MaterialTable", "UseTemplateProperties"})
-        KeepProps.AddRange({"UseCurrentSession", "WarnSave", "NoUpdateMRU"})
-        KeepProps.AddRange({"ListViewUpdateFrequency", "FileListFontSize", "GroupFiles", "RememberTasks", "RunInBackground"})
-        KeepProps.AddRange({"PropertyFilterIncludeDraftModel", "PropertyFilterIncludeDraftItself", "CheckForNewerVersion"})
-        KeepProps.AddRange({"WarnNoImportedProperties", "EnablePropertyFilter", "EnableFileWildcard", "FileWildcard", "FileWildcardList", "SolidEdgeRequired"})
-        KeepProps.AddRange({"PropertyFilterDictJSON", "TemplatePropertyDictJSON", "TemplatePropertyList", "ListOfColumnsJSON"})
-        KeepProps.AddRange({"ServerConnectionString", "ServerQuery"})
-        KeepProps.AddRange({"FilterAsm", "FilterPar", "FilterPsm", "FilterDft"})
-
-        If Not SavingPresets Then KeepProps.AddRange({"Left", "Top", "Width", "Height"})
-
-        For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
-
-            PropType = PropInfo.PropertyType.Name.ToLower
-
-            If Not KeepProps.Contains(PropInfo.Name) Then
-
-                If ReportIgnoredProperties Then
-                    s = String.Format("{0}{1} {2}{3}", s, PropInfo.Name, PropType, vbCrLf)
-                    If IgnoredCount > 0 And IgnoredCount Mod MaxIgnoredShowPerPage = 0 Then
-                        s = String.Format("IGNORED PROPERTIES{0}{1}", vbCrLf, s)
-                        MsgBox(s, vbOKOnly)
-                        s = ""
-                        IgnoredCount = -1
-                    End If
-                    IgnoredCount += 1
-
-                End If
-
-                Continue For
-            End If
-
-            Value = Nothing
-
-            Select Case PropType
-                Case "string", "double", "int32", "boolean"
-                    Value = CStr(PropInfo.GetValue(FMain, Nothing))
-                Case "list`1"
-                    Value = JsonConvert.SerializeObject(PropInfo.GetValue(FMain, Nothing))
-                Case Else
-                    MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' not recognized", PropType))
-            End Select
-
-
-            If Value Is Nothing Then
-                Select Case PropType
-                    Case "string"
-                        Value = ""
-                    Case "double", "int32"
-                        Value = "0"
-                    Case "boolean"
-                        Value = "False"
-                    Case "list`1"
-                        Value = JsonConvert.SerializeObject(New List(Of String))
-                        MsgBox(String.Format("PropInfo.PropertyType.Name '{0}' detected", PropInfo.PropertyType.Name))
-                    Case Else
-                        MsgBox(String.Format("In UtilsPreferences.SaveFormMainSettings: PropInfo.PropertyType.Name '{0}' not recognized", PropInfo.PropertyType.Name))
-                End Select
-            End If
-
-            tmpJSONDict(PropInfo.Name) = Value
-
-        Next
-
-        JSONString = JsonConvert.SerializeObject(tmpJSONDict)
-
-        IO.File.WriteAllText(Outfile, JSONString)
-
-
-    End Sub
-
-    Public Sub GetFormMainSettings(FMain As Form_Main)
-
-        Dim tmpJSONDict As New Dictionary(Of String, String)
-        Dim JSONString As String
-
-        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
-
-        Dim FormType As Type = FMain.GetType()
-        Dim PropInfos = New List(Of System.Reflection.PropertyInfo)(FormType.GetProperties())
-        'Dim Value As String
-
-        If Not Infile = "" Then
-            JSONString = IO.File.ReadAllText(Infile)
-
-            tmpJSONDict = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(JSONString)
-
-            For Each PropInfo As System.Reflection.PropertyInfo In PropInfos
-
-                If tmpJSONDict.Keys.Contains(PropInfo.Name) Then
-                    Dim PropTypestring = PropInfo.PropertyType.Name
-
-                    Select Case PropInfo.PropertyType.Name.ToLower
-                        Case "string"
-                            PropInfo.SetValue(FMain, CStr(tmpJSONDict(PropInfo.Name)))
-                        Case "double"
-                            PropInfo.SetValue(FMain, CDbl(tmpJSONDict(PropInfo.Name)))
-                        Case "int32"
-                            PropInfo.SetValue(FMain, CInt(tmpJSONDict(PropInfo.Name)))
-                        Case "boolean"
-                            PropInfo.SetValue(FMain, CBool(tmpJSONDict(PropInfo.Name)))
-                        Case "list`1"
-                            Dim L = JsonConvert.DeserializeObject(Of List(Of String))(tmpJSONDict(PropInfo.Name))
-                            PropInfo.SetValue(FMain, L)
-                    End Select
-
-                End If
-            Next
-        End If
-
-    End Sub
-
-    Public Function GetFormMainSettingsJSON() As String
-
-        Dim JSONString As String = ""
-
-        Dim Infile = GetFormMainSettingsFilename(CheckExisting:=True)
-
-        If Not Infile = "" Then
-            JSONString = IO.File.ReadAllText(Infile)
-        End If
-
-        Return JSONString
-    End Function
-
-    Public Sub SaveFormMainSettingsJSON(JSONString As String)
-
-        Dim Outfile = GetFormMainSettingsFilename(CheckExisting:=False)
-
-        IO.File.WriteAllText(Outfile, JSONString)
-
     End Sub
 
 

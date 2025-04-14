@@ -52,16 +52,21 @@ Public Class UtilsTopLevelAssembly
 
             '###### Check for unprocessed files ######
             If FileLinksContainer.UnprocessedFilenames.Count > 0 Then
-                Dim s As String = String.Format("The following files, and any links they contain, could not be processed.  This can happen if{0}", vbCrLf)
-                s = String.Format("{0}-- The file name (including path) has > 260 characters.{1}", s, vbCrLf)
-                s = String.Format("{0}-- The file is already open in another process.{1}", s, vbCrLf)
-                s = String.Format("{0}-- The file is not a Solid Edge file, or is somehow corrupt.{1}", s, vbCrLf)
-                s = String.Format("{0}-- An unknown error occurred.{1}{1}", s, vbCrLf)
-                s = String.Format("{0}Processing will continue.  Please verify results.{1}{1}", s, vbCrLf)
-                For Each Filename As String In FileLinksContainer.UnprocessedFilenames
-                    s = String.Format("{0}{1}{2}{2}", s, Filename, vbCrLf)
-                Next
-                MsgBox(s, vbOKOnly)
+                Dim Title As String = String.Format("The following files, and any links they contain, could not be processed.  This can happen if{0}", vbCrLf)
+                Title = String.Format("{0}-- The file name (including path) has > 260 characters.{1}", Title, vbCrLf)
+                Title = String.Format("{0}-- The file is already open in another process.{1}", Title, vbCrLf)
+                Title = String.Format("{0}-- The file is not a Solid Edge file, or is somehow corrupt.{1}", Title, vbCrLf)
+                Title = String.Format("{0}-- An unknown error occurred.{1}{1}", Title, vbCrLf)
+                'Title = String.Format("{0}Processing will continue.  Please verify results.{1}{1}", Title, vbCrLf)
+                Title = String.Format("{0}Processing will continue.  Please verify results.", Title)
+
+                Dim UC As New UtilsCommon
+                Dim s As String = UC.FormatMsgBoxText(FileLinksContainer.UnprocessedFilenames, Title)
+                If Not s = "" Then MsgBox(s, vbOKOnly)
+                'For Each Filename As String In FileLinksContainer.UnprocessedFilenames
+                '    Title = String.Format("{0}{1}{2}{2}", Title, Filename, vbCrLf)
+                'Next
+                'MsgBox(Title, vbOKOnly)
             End If
 
             '###### Report unrelated files if required ######

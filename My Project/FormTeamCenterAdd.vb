@@ -43,7 +43,7 @@ Public Class FormTeamCenterAdd
         ' Check if the item is already in ListViewDownloadedFiles
         For Each item As ListViewItem In ListViewDownloadedFiles.Items
             If item.Text = fileName Then
-                LabelDownloadStatus.Text = "Item already in cache!"
+                LabelStatus.Text = "Item already in cache!"
                 MessageBox.Show(fileName + " is already in the cache folder", "File Already In Cache", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
@@ -54,7 +54,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelDownloadStatus.Text = "Adding to cache..."
+            LabelStatus.Text = "Adding to cache..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -69,13 +69,13 @@ Public Class FormTeamCenterAdd
             TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
 
             ' Get cache path and add the filename and file path to listview
-            Dim filePath As String = System.IO.Path.Combine(_mainForm.cachePathTC, fileName)
+            Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
 
             ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
 
-            LabelDownloadStatus.Text = "Added to cache!"
+            LabelStatus.Text = "Added to cache!"
         Catch ex As Exception
-            LabelDownloadStatus.Text = "Item already in cache!"
+            LabelStatus.Text = "Item already in cache!"
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             Cursor.Current = Cursors.Default
@@ -92,10 +92,10 @@ Public Class FormTeamCenterAdd
             ' Connect to Solid Edge, if not open then Open Solid Edge
 
             Try
-                LabelSearchStatus.Text = "Connecting to Solid Edge..."
+                LabelStatus.Text = "Connecting to Solid Edge..."
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             Catch ex As COMException When ex.ErrorCode = &H800401E3
-                LabelSearchStatus.Text = "Opening Solid Edge..."
+                LabelStatus.Text = "Opening Solid Edge..."
                 objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
                 objApp.Visible = False
             End Try
@@ -109,15 +109,15 @@ Public Class FormTeamCenterAdd
                 Throw New ApplicationException($"TeamCenter not set as PDM mode. Please open Solid Edge and enable TeamCenter by going to File > Manage > TeamCenter.")
             End If
 
-            LabelSearchStatus.Text = "Connecting to TeamCenter..." + Environment.NewLine + "(You may need to sign in)"
+            LabelStatus.Text = "Connecting to TeamCenter..." + Environment.NewLine + "(You may need to sign in)"
             objDocuments = objApp.Documents
 
             'Save Cache Path to settings.settings
             Dim cachePath As String = Nothing
             TCE.GetPDMCachePath(cachePath)
-            _mainForm.cachePathTC = cachePath
+            _mainForm.TCCachePath = cachePath
 
-            LabelSearchStatus.Text = "Searching..."
+            LabelStatus.Text = "Searching..."
 
             'Get the list of item IDs and Revisions from DataGridView
             Dim files As New List(Of Tuple(Of String, String, String))
@@ -136,14 +136,14 @@ Public Class FormTeamCenterAdd
 
                     If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
                         ErrorList.Add($"Invalid Item ID: {itemID}. It should be 8 digits.")
-                        MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        'MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         Continue For
                     End If
 
                     ' If revision is empty, find the latest revision
                     If String.IsNullOrEmpty(revision) Then
                         ' Update status label to indicate the search for the latest revision
-                        LabelSearchStatus.Text = "Getting latest revision for " & itemID
+                        LabelStatus.Text = "Getting latest revision for " & itemID
 
                         ' Define attributes for the item
                         Dim itemAttributes(0, 1) As Object
@@ -177,20 +177,20 @@ Public Class FormTeamCenterAdd
                                 revision = filteredRevisions.Last()
                             Else
                                 ' Throw an exception if no valid revisions are found
-                                MessageBox.Show($"No valid revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                'MessageBox.Show($"No valid revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                                 ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
                                 Continue For
                             End If
                         Else
                             ' Throw an exception if no revisions are found
-                            MessageBox.Show($"No revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                            'MessageBox.Show($"No revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                             ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
                             Continue For
                         End If
                     End If
 
                     ' Validate if revision exists
-                    LabelSearchStatus.Text = "Validating revision for " + itemID
+                    LabelStatus.Text = "Validating revision for " + itemID
                     Dim MFKAttributes2(0, 1) As Object
                     Dim RevIdAndUIDs2 As Object = Nothing
 
@@ -212,12 +212,12 @@ Public Class FormTeamCenterAdd
                     End If
 
                     If Not revisionExists Then
-                        MessageBox.Show($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        'MessageBox.Show($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         ErrorList.Add($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.")
                         Continue For
                     End If
 
-                    LabelSearchStatus.Text = "Searching..."
+                    LabelStatus.Text = "Searching..."
                     Dim tempFiles As Object = Nothing
                     Dim tempNumOfFiles As Integer = 0
                     TCE.GetListOfFilesFromTeamcenterServer(itemID, revision, tempFiles, tempNumOfFiles)
@@ -234,21 +234,13 @@ Public Class FormTeamCenterAdd
 
             ' Report any errors from the previous loop
             If Not ErrorList.Count = 0 Then
-                Dim s As String = ""
-                Dim MaxErrorsToShow As Integer = 20
-                For i As Integer = 0 To ErrorList.Count - 1
-                    s = String.Format("{0}{1}{2}", s, ErrorList(i), vbCrLf)
-                    If i = MaxErrorsToShow Then Exit For
-                Next
-                If ErrorList.Count > MaxErrorsToShow Then
-                    Dim Diff As Integer = ErrorList.Count - MaxErrorsToShow
-                    s = String.Format("These errors (and {0} more) occurred{1}{2}", Diff, vbCrLf, s)
-                Else
-                    s = String.Format("These errors occurred{0}{1}", vbCrLf, s)
-                End If
-                'MessageBox.Show(s, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Dim Result = MsgBox(s, vbOKOnly, "Validation Error")
+                Dim UC As New UtilsCommon
+
+                Dim s As String = UC.FormatMsgBoxText(ErrorList, "These errors occurred")
+                Dim Result = MsgBox(s, vbOKCancel, "Validation Error")
                 If Result = MsgBoxResult.Cancel Then Return
+
+                ''MessageBox.Show(s, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
 
             ListViewTeamCenterItems.Items.Clear()
@@ -293,17 +285,17 @@ Public Class FormTeamCenterAdd
             Next
 
             If numOfFiles = 0 Then
-                LabelSearchStatus.Text = "No files found."
+                LabelStatus.Text = "No files found."
             Else
-                LabelSearchStatus.Text = numOfFiles.ToString + " files found, filtered down to " + ListViewTeamCenterItems.Items.Count.ToString
+                LabelStatus.Text = numOfFiles.ToString + " files found, filtered down to " + ListViewTeamCenterItems.Items.Count.ToString
             End If
 
         Catch ex As ApplicationException
             MessageBox.Show(ex.Message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            LabelSearchStatus.Text = "Search failed!"
+            LabelStatus.Text = "Search failed!"
         Catch ex As Exception
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            LabelSearchStatus.Text = "Search failed!"
+            LabelStatus.Text = "Search failed!"
         Finally
             Cursor.Current = Cursors.Default
         End Try
@@ -315,7 +307,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelDownloadStatus.Text = "Adding to cache..."
+            LabelStatus.Text = "Adding to cache..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -347,11 +339,11 @@ Public Class FormTeamCenterAdd
 
                 Dim temp(,) As Object = New Object(1, 1) {}
                 TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
-                Dim filePath As String = System.IO.Path.Combine(_mainForm.cachePathTC, fileName)
+                Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
                 ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
             Next
 
-            LabelDownloadStatus.Text = "Added to cache!"
+            LabelStatus.Text = "Added to cache!"
         Catch ex As Exception
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
@@ -393,9 +385,9 @@ Public Class FormTeamCenterAdd
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
 
-            tmpItem.SubItems.Add(_mainForm.cachePathTC)
+            tmpItem.SubItems.Add(_mainForm.TCCachePath)
             tmpItem.Group = _mainForm.ListViewSources.Groups.Item("Sources")
-            tmpItem.Name = _mainForm.cachePathTC
+            tmpItem.Name = _mainForm.TCCachePath
 
             If Not _mainForm.ListViewSources.Items.ContainsKey(tmpItem.Name) Then
                 _mainForm.ListViewSources.Items.Add(tmpItem)
@@ -407,7 +399,7 @@ Public Class FormTeamCenterAdd
         Else
             For Each item As ListViewItem In ListViewDownloadedFiles.Items
                 Dim fileName As String = item.Text
-                Dim filePath As String = System.IO.Path.Combine(_mainForm.cachePathTC, fileName)
+                Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
 
                 ' Check if the file already exists in the ListView
                 Dim exists As Boolean = False
@@ -489,5 +481,19 @@ Public Class FormTeamCenterAdd
         Catch ex As Exception
             MessageBox.Show($"Error pasting data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub Cancel_Click(sender As Object, e As EventArgs) Handles Cancel.Click
+        CloseSolidEdge()
+        Me.Close()
+    End Sub
+
+    Private Sub Help_Click(sender As Object, e As EventArgs) Handles Help.Click
+        Dim UD As New UtilsDocumentation
+
+        Dim Tag As String = "select-from-teamcenter"
+        Dim HelpURL = UD.GenerateVersionURL(Tag)
+        System.Diagnostics.Process.Start(HelpURL)
+
     End Sub
 End Class

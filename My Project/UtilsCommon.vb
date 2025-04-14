@@ -192,6 +192,38 @@ Public Class UtilsCommon
     End Function
 
 
+    Public Function FormatMsgBoxText(
+        ErrorList As List(Of String),
+        Title As String,
+        Optional MaxErrorsToShow As Integer = 20
+        ) As String
+
+        Dim ErrorMessage As String = ""
+
+        If Not ErrorList.Count = 0 Then
+            Dim s As String = ""
+            Dim Indent As String = "    "
+            If MaxErrorsToShow <= 0 Then MaxErrorsToShow = 1
+
+            For i As Integer = 0 To ErrorList.Count - 1
+                s = String.Format("{0}{1}{2}{3}", s, Indent, ErrorList(i), vbCrLf)
+                If i = MaxErrorsToShow - 1 Then Exit For
+            Next
+
+            If ErrorList.Count > MaxErrorsToShow Then
+                ErrorMessage = String.Format("{0}{1}", Title, vbCrLf)
+                ErrorMessage = String.Format("{0}{1}(Showing {2} of {3}){4}", ErrorMessage, Indent, MaxErrorsToShow, ErrorList.Count, vbCrLf)
+            Else
+                ErrorMessage = String.Format("{0}{1}", Title, vbCrLf)
+            End If
+
+            ErrorMessage = String.Format("{0}{1}", ErrorMessage, s)
+        End If
+
+        Return ErrorMessage
+    End Function
+
+
     '###### DIMENSIONS AND VARIABLES ######
 
     Public Function GetDocDimensions(SEDoc As SolidEdgeFramework.SolidEdgeDocument

@@ -1104,7 +1104,9 @@ Public Class Form_Main
 
     Public Property PropertyFilters As PropertyFilters
 
-    Public Property cachePathTC As String
+    Public Property TCCachePath As String
+    Public Property TCItemIDRx As String
+    Public Property TCRevisionRx As String
 
     'DESCRIPTION
     'Solid Edge Housekeeper
@@ -1123,7 +1125,6 @@ Public Class Form_Main
     '    -- The tasks are presented in the UI in the same order as the list.
     '    -- Place yours in the the appropriate category.
     '    -- For a new category, also update Task.SetColorFromCategory().
-
 
 
     Private Sub Startup(Presets As Boolean)
@@ -2899,186 +2900,294 @@ Public Class Form_Main
     Private Sub RadioButtonStatusAtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoA.CheckedChanged
         If RadioButtonStatusAtoA.Checked Then
             Me.StatusAtoX = "Available"
+            RadioButtonStatusAtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusAtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoB.CheckedChanged
         If RadioButtonStatusAtoB.Checked Then
             Me.StatusAtoX = "Baselined"
+            RadioButtonStatusAtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusAtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIR.CheckedChanged
         If RadioButtonStatusAtoIR.Checked Then
             Me.StatusAtoX = "InReview"
+            RadioButtonStatusAtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusAtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoIW.CheckedChanged
         If RadioButtonStatusAtoIW.Checked Then
             Me.StatusAtoX = "InWork"
+            RadioButtonStatusAtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusAtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoO.CheckedChanged
         If RadioButtonStatusAtoO.Checked Then
             Me.StatusAtoX = "Obsolete"
+            RadioButtonStatusAtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusAtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusAtoR.CheckedChanged
         If RadioButtonStatusAtoR.Checked Then
             Me.StatusAtoX = "Released"
+            RadioButtonStatusAtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusAtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
     Private Sub RadioButtonStatusBtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoA.CheckedChanged
         If RadioButtonStatusBtoA.Checked Then
             Me.StatusBtoX = "Available"
+            RadioButtonStatusBtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusBtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoB.CheckedChanged
         If RadioButtonStatusBtoB.Checked Then
             Me.StatusBtoX = "Baselined"
+            RadioButtonStatusBtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusBtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIR.CheckedChanged
         If RadioButtonStatusBtoIR.Checked Then
             Me.StatusBtoX = "InReview"
+            RadioButtonStatusBtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusBtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoIW.CheckedChanged
         If RadioButtonStatusBtoIW.Checked Then
             Me.StatusBtoX = "InWork"
+            RadioButtonStatusBtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusBtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoO.CheckedChanged
         If RadioButtonStatusBtoO.Checked Then
             Me.StatusBtoX = "Obsolete"
+            RadioButtonStatusBtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusBtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusBtoR.CheckedChanged
         If RadioButtonStatusBtoR.Checked Then
             Me.StatusBtoX = "Released"
+            RadioButtonStatusBtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusBtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
     Private Sub RadioButtonStatusIRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoA.CheckedChanged
         If RadioButtonStatusIRtoA.Checked Then
             Me.StatusIRtoX = "Available"
+            RadioButtonStatusIRtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoB.CheckedChanged
         If RadioButtonStatusIRtoB.Checked Then
             Me.StatusIRtoX = "Baselined"
+            RadioButtonStatusIRtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIR.CheckedChanged
         If RadioButtonStatusIRtoIR.Checked Then
             Me.StatusIRtoX = "InReview"
+            RadioButtonStatusIRtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoIW.CheckedChanged
         If RadioButtonStatusIRtoIW.Checked Then
             Me.StatusIRtoX = "InWork"
+            RadioButtonStatusIRtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoO.CheckedChanged
         If RadioButtonStatusIRtoO.Checked Then
             Me.StatusIRtoX = "Obsolete"
+            RadioButtonStatusIRtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIRtoR.CheckedChanged
         If RadioButtonStatusIRtoR.Checked Then
             Me.StatusIRtoX = "Released"
+            RadioButtonStatusIRtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIRtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
     Private Sub RadioButtonStatusIWtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoA.CheckedChanged
         If RadioButtonStatusIWtoA.Checked Then
             Me.StatusIWtoX = "Available"
+            RadioButtonStatusIWtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoB.CheckedChanged
         If RadioButtonStatusIWtoB.Checked Then
             Me.StatusIWtoX = "Baselined"
+            RadioButtonStatusIWtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIR.CheckedChanged
         If RadioButtonStatusIWtoIR.Checked Then
             Me.StatusIWtoX = "InReview"
+            RadioButtonStatusIWtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoIW.CheckedChanged
         If RadioButtonStatusIWtoIW.Checked Then
             Me.StatusIWtoX = "InWork"
+            RadioButtonStatusIWtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoO.CheckedChanged
         If RadioButtonStatusIWtoO.Checked Then
             Me.StatusIWtoX = "Obsolete"
+            RadioButtonStatusIWtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusIWtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusIWtoR.CheckedChanged
         If RadioButtonStatusIWtoR.Checked Then
             Me.StatusIWtoX = "Released"
+            RadioButtonStatusIWtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusIWtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
     Private Sub RadioButtonStatusOtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoA.CheckedChanged
         If RadioButtonStatusOtoA.Checked Then
             Me.StatusOtoX = "Available"
+            RadioButtonStatusOtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusOtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoB.CheckedChanged
         If RadioButtonStatusOtoB.Checked Then
             Me.StatusOtoX = "Baselined"
+            RadioButtonStatusOtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusOtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIR.CheckedChanged
         If RadioButtonStatusOtoIR.Checked Then
             Me.StatusOtoX = "InReview"
+            RadioButtonStatusOtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusOtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoIW.CheckedChanged
         If RadioButtonStatusOtoIW.Checked Then
             Me.StatusOtoX = "InWork"
+            RadioButtonStatusOtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusOtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoO.CheckedChanged
         If RadioButtonStatusOtoO.Checked Then
             Me.StatusOtoX = "Obsolete"
+            RadioButtonStatusOtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusOtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusOtoR.CheckedChanged
         If RadioButtonStatusOtoR.Checked Then
             Me.StatusOtoX = "Released"
+            RadioButtonStatusOtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusOtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
     Private Sub RadioButtonStatusRtoA_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoA.CheckedChanged
         If RadioButtonStatusRtoA.Checked Then
             Me.StatusRtoX = "Available"
+            RadioButtonStatusRtoA.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoA.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusRtoB_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoB.CheckedChanged
         If RadioButtonStatusRtoB.Checked Then
             Me.StatusRtoX = "Baselined"
+            RadioButtonStatusRtoB.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoB.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusRtoIR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIR.CheckedChanged
         If RadioButtonStatusRtoIR.Checked Then
             Me.StatusRtoX = "InReview"
+            RadioButtonStatusRtoIR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoIR.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusRtoIW_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoIW.CheckedChanged
         If RadioButtonStatusRtoIW.Checked Then
             Me.StatusRtoX = "InWork"
+            RadioButtonStatusRtoIW.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoIW.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusRtoO_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoO.CheckedChanged
         If RadioButtonStatusRtoO.Checked Then
             Me.StatusRtoX = "Obsolete"
+            RadioButtonStatusRtoO.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoO.Image = My.Resources.Unchecked
         End If
     End Sub
     Private Sub RadioButtonStatusRtoR_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonStatusRtoR.CheckedChanged
         If RadioButtonStatusRtoR.Checked Then
             Me.StatusRtoX = "Released"
+            RadioButtonStatusRtoR.Image = My.Resources.Checked
+        Else
+            RadioButtonStatusRtoR.Image = My.Resources.Unchecked
         End If
     End Sub
 
