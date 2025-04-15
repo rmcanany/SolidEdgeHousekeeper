@@ -1,15 +1,11 @@
-Imports System.Media
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
-Imports Housekeeper.My
-Imports System.Text.RegularExpressions
 
 Public Class FormTeamCenterAdd
-    Private _mainForm As Form_Main
+    Private FMain As Form_Main
 
-    Public Sub New(mainForm As Form_Main)
+    Public Sub New(_FMain As Form_Main)
         InitializeComponent()
-        _mainForm = mainForm
+        FMain = _FMain
     End Sub
 
     Private Sub FormTeamCenterAdd_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -54,7 +50,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelStatus.Text = "Adding to cache..."
+            LabelStatus.Text = "Connecting to Solid Edge..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -64,12 +60,14 @@ Public Class FormTeamCenterAdd
             End Try
             TCE = objApp.SolidEdgeTCE
 
+            LabelStatus.Text = "Adding to cache..."
+
             ' Download the selected item
             Dim temp(,) As Object = New Object(1, 1) {}
             TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
 
             ' Get cache path and add the filename and file path to listview
-            Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
+            Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
 
             ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
 
@@ -109,13 +107,14 @@ Public Class FormTeamCenterAdd
                 Throw New ApplicationException($"TeamCenter not set as PDM mode. Please open Solid Edge and enable TeamCenter by going to File > Manage > TeamCenter.")
             End If
 
-            LabelStatus.Text = "Connecting to TeamCenter..." + Environment.NewLine + "(You may need to sign in)"
+            'LabelStatus.Text = "Connecting to TeamCenter..." + Environment.NewLine + "(You may need to sign in)"
+            LabelStatus.Text = "Connecting to TeamCenter.  (You may need to sign in)"
             objDocuments = objApp.Documents
 
             'Save Cache Path to settings.settings
             Dim cachePath As String = Nothing
             TCE.GetPDMCachePath(cachePath)
-            _mainForm.TCCachePath = cachePath
+            FMain.TCCachePath = cachePath
 
             LabelStatus.Text = "Searching..."
 
@@ -129,6 +128,12 @@ Public Class FormTeamCenterAdd
                 If Not row.IsNewRow Then
                     Dim itemID As String = If(row.Cells("ItemIDs").Value IsNot Nothing, row.Cells("ItemIDs").Value.ToString().Trim(), String.Empty)
                     Dim revision As String = If(row.Cells("rev").Value IsNot Nothing, row.Cells("rev").Value.ToString().Trim(), String.Empty)
+
+                    If Not revision = "" Then
+                        LabelStatus.Text = String.Format("Item ID {0}, Revision {1}", itemID, revision)
+                    Else
+                        LabelStatus.Text = String.Format("Item ID {0}, Revision (not specified)", itemID)
+                    End If
 
                     ' Validate item ID
 
@@ -252,6 +257,8 @@ Public Class FormTeamCenterAdd
                 Dim revision As String = fileTuple.Item3
                 Dim extension As String = System.IO.Path.GetExtension(fileName).ToLower()
 
+                LabelStatus.Text = String.Format("Adding {0}", fileName)
+
                 ' Determine the file type
                 Dim fileType As String = String.Empty
                 Select Case extension
@@ -307,7 +314,7 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelStatus.Text = "Adding to cache..."
+            LabelStatus.Text = "Connecting to Solid Edge..."
 
             Try
                 objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
@@ -317,11 +324,15 @@ Public Class FormTeamCenterAdd
             End Try
             TCE = objApp.SolidEdgeTCE
 
+            LabelStatus.Text = "Adding to cache..."
+
             ' Download each file in listview
             For Each item As ListViewItem In ListViewTeamCenterItems.Items
                 Dim fileName As String = item.Text
                 Dim fileItemID As String = item.SubItems(1).Text
                 Dim fileItemRevID As String = item.SubItems(2).Text
+
+                LabelStatus.Text = String.Format("Adding {0} to cache...", fileName)
 
                 ' Check if the item is already in ListViewDownloadedFiles
                 Dim alreadyDownloaded As Boolean = False
@@ -339,12 +350,13 @@ Public Class FormTeamCenterAdd
 
                 Dim temp(,) As Object = New Object(1, 1) {}
                 TCE.DownladDocumentsFromServerWithOptions(fileItemID, fileItemRevID, fileName, "", "", False, True, 1, temp)
-                Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
+                Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
                 ListViewDownloadedFiles.Items.Add(New ListViewItem(New String() {fileName, filePath}))
             Next
 
             LabelStatus.Text = "Added to cache!"
         Catch ex As Exception
+            LabelStatus.Text = ""
             MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             Cursor.Current = Cursors.Default
@@ -385,25 +397,25 @@ Public Class FormTeamCenterAdd
             tmpItem.ImageKey = "Folder"
             tmpItem.Tag = "Folder"
 
-            tmpItem.SubItems.Add(_mainForm.TCCachePath)
-            tmpItem.Group = _mainForm.ListViewSources.Groups.Item("Sources")
-            tmpItem.Name = _mainForm.TCCachePath
+            tmpItem.SubItems.Add(FMain.TCCachePath)
+            tmpItem.Group = FMain.ListViewSources.Groups.Item("Sources")
+            tmpItem.Name = FMain.TCCachePath
 
-            If Not _mainForm.ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                _mainForm.ListViewSources.Items.Add(tmpItem)
-                _mainForm.ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            If Not FMain.ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                FMain.ListViewSources.Items.Add(tmpItem)
+                FMain.ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
             End If
 
-            _mainForm.ListViewFilesOutOfDate = True
+            FMain.ListViewFilesOutOfDate = True
 
         Else
             For Each item As ListViewItem In ListViewDownloadedFiles.Items
                 Dim fileName As String = item.Text
-                Dim filePath As String = System.IO.Path.Combine(_mainForm.TCCachePath, fileName)
+                Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
 
                 ' Check if the file already exists in the ListView
                 Dim exists As Boolean = False
-                For Each existingItem As ListViewItem In _mainForm.ListViewFiles.Items
+                For Each existingItem As ListViewItem In FMain.ListViewFiles.Items
                     If existingItem.Name = filePath Then
                         exists = True
                         Exit For
@@ -418,8 +430,8 @@ Public Class FormTeamCenterAdd
                     tmpItem.ImageKey = "Unchecked"
                     tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
                     tmpItem.Name = filePath
-                    tmpItem.Group = _mainForm.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
-                    _mainForm.ListViewFiles.Items.Add(tmpItem)
+                    tmpItem.Group = FMain.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
+                    FMain.ListViewFiles.Items.Add(tmpItem)
                 End If
             Next
         End If
@@ -488,7 +500,7 @@ Public Class FormTeamCenterAdd
         Me.Close()
     End Sub
 
-    Private Sub Help_Click(sender As Object, e As EventArgs) Handles Help.Click
+    Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
         Dim UD As New UtilsDocumentation
 
         Dim Tag As String = "select-from-teamcenter"
@@ -496,4 +508,17 @@ Public Class FormTeamCenterAdd
         System.Diagnostics.Process.Start(HelpURL)
 
     End Sub
+
+    Private Sub ButtonSettings_Click(sender As Object, e As EventArgs) Handles ButtonSettings.Click
+        Dim FTCS As New FormTeamCenterSettings(Me.FMain)
+
+        FTCS.ShowDialog()
+
+        If FTCS.DialogResult = DialogResult.OK Then
+            Me.FMain.TCItemIDRx = FTCS.TCItemIDRx
+            Me.FMain.TCRevisionRx = FTCS.TCRevisionRx
+        End If
+
+    End Sub
+
 End Class

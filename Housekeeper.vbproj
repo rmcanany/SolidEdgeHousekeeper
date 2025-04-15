@@ -164,7 +164,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HCErrorLogger.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -175,6 +174,12 @@
       <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
     </Compile>
     <Compile Include="My Project\FormTeamCenterAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\FormTeamCenterSettings.Designer.vb">
+      <DependentUpon>FormTeamCenterSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\FormTeamCenterSettings.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\HCComObject.vb" />
@@ -205,6 +210,7 @@
     <Compile Include="My Project\FormTextPrompt.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\HCErrorLogger.vb" />
     <Compile Include="My Project\HCPropertiesData.vb" />
     <Compile Include="My Project\HCStructuredStorageDoc.vb" />
     <Compile Include="My Project\HCPropertyFilter.vb" />
@@ -371,6 +377,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormTeamCenterAdd.resx">
       <DependentUpon>FormTeamCenterAdd.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\FormTeamCenterSettings.resx">
+      <DependentUpon>FormTeamCenterSettings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\FormTextPrompt.resx">
       <DependentUpon>FormTextPrompt.vb</DependentUpon>

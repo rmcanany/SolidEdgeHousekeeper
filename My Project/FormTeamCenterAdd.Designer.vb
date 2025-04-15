@@ -26,7 +26,6 @@ Partial Class FormTeamCenterAdd
         Me.LabelStatus = New System.Windows.Forms.Label()
         Me.ButtonAddAndClose = New System.Windows.Forms.Button()
         Me.Cancel = New System.Windows.Forms.Button()
-        Me.Help = New System.Windows.Forms.Button()
         Me.ExTableLayoutPanel1 = New Housekeeper.ExTableLayoutPanel()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ListViewDownloadedFiles = New System.Windows.Forms.ListView()
@@ -34,7 +33,6 @@ Partial Class FormTeamCenterAdd
         Me.filePath = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ButtonDownloadAll = New System.Windows.Forms.Button()
-        Me.ButtonSearchAndAdd = New System.Windows.Forms.Button()
         Me.ListViewTeamCenterItems = New System.Windows.Forms.ListView()
         Me.fileName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.itemID = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -43,15 +41,21 @@ Partial Class FormTeamCenterAdd
         Me.DataGridViewItems = New System.Windows.Forms.DataGridView()
         Me.ItemIDs = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.rev = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.ButtonDownload = New System.Windows.Forms.Button()
+        Me.ButtonSearch = New System.Windows.Forms.Button()
+        Me.ButtonSearchAndAdd = New System.Windows.Forms.Button()
         Me.ToolStrip_List = New System.Windows.Forms.ToolStrip()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.CheckBoxAsm = New System.Windows.Forms.ToolStripButton()
         Me.CheckBoxPar = New System.Windows.Forms.ToolStripButton()
         Me.CheckBoxPsm = New System.Windows.Forms.ToolStripButton()
         Me.CheckBoxDft = New System.Windows.Forms.ToolStripButton()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.ButtonDownload = New System.Windows.Forms.Button()
-        Me.ButtonSearch = New System.Windows.Forms.Button()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
+        Me.ButtonSettings = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ButtonHelp = New System.Windows.Forms.ToolStripButton()
         Me.ExTableLayoutPanel2 = New Housekeeper.ExTableLayoutPanel()
         Me.ExTableLayoutPanel3 = New Housekeeper.ExTableLayoutPanel()
         Me.ExTableLayoutPanel1.SuspendLayout()
@@ -76,7 +80,7 @@ Partial Class FormTeamCenterAdd
         'ButtonAddAndClose
         '
         Me.ButtonAddAndClose.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtonAddAndClose.Location = New System.Drawing.Point(511, 3)
+        Me.ButtonAddAndClose.Location = New System.Drawing.Point(612, 3)
         Me.ButtonAddAndClose.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonAddAndClose.Name = "ButtonAddAndClose"
         Me.ButtonAddAndClose.Size = New System.Drawing.Size(92, 28)
@@ -87,23 +91,12 @@ Partial Class FormTeamCenterAdd
         'Cancel
         '
         Me.Cancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Cancel.Location = New System.Drawing.Point(610, 3)
+        Me.Cancel.Location = New System.Drawing.Point(711, 3)
         Me.Cancel.Name = "Cancel"
         Me.Cancel.Size = New System.Drawing.Size(94, 28)
         Me.Cancel.TabIndex = 6
         Me.Cancel.Text = "Cancel"
         Me.Cancel.UseVisualStyleBackColor = True
-        '
-        'Help
-        '
-        Me.Help.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Help.Location = New System.Drawing.Point(710, 3)
-        Me.Help.Name = "Help"
-        Me.Help.Size = New System.Drawing.Size(94, 28)
-        Me.Help.TabIndex = 42
-        Me.Help.TabStop = False
-        Me.Help.Text = "Help"
-        Me.Help.UseVisualStyleBackColor = True
         '
         'ExTableLayoutPanel1
         '
@@ -120,27 +113,26 @@ Partial Class FormTeamCenterAdd
         Me.ExTableLayoutPanel1.Controls.Add(Me.DataGridViewItems, 0, 1)
         Me.ExTableLayoutPanel1.Controls.Add(Me.Label4, 0, 0)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonDownload, 1, 2)
-        Me.ExTableLayoutPanel1.Controls.Add(Me.ToolStrip_List, 0, 4)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSearch, 0, 2)
         Me.ExTableLayoutPanel1.Controls.Add(Me.ButtonSearchAndAdd, 0, 3)
         Me.ExTableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(3, 3)
+        Me.ExTableLayoutPanel1.Location = New System.Drawing.Point(3, 43)
         Me.ExTableLayoutPanel1.Name = "ExTableLayoutPanel1"
-        Me.ExTableLayoutPanel1.RowCount = 5
+        Me.ExTableLayoutPanel1.RowCount = 4
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(807, 477)
-        Me.ExTableLayoutPanel1.TabIndex = 43
+        Me.ExTableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.ExTableLayoutPanel1.Size = New System.Drawing.Size(808, 425)
+        Me.ExTableLayoutPanel1.TabIndex = 21
         Me.ExTableLayoutPanel1.Task = Nothing
         '
         'Label3
         '
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(608, 2)
+        Me.Label3.Location = New System.Drawing.Point(610, 2)
         Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(77, 15)
@@ -149,14 +141,15 @@ Partial Class FormTeamCenterAdd
         '
         'ListViewDownloadedFiles
         '
+        Me.ListViewDownloadedFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewDownloadedFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.fileNam, Me.filePath})
         Me.ListViewDownloadedFiles.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewDownloadedFiles.HideSelection = False
-        Me.ListViewDownloadedFiles.Location = New System.Drawing.Point(608, 23)
+        Me.ListViewDownloadedFiles.Location = New System.Drawing.Point(610, 23)
         Me.ListViewDownloadedFiles.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ListViewDownloadedFiles.Name = "ListViewDownloadedFiles"
-        Me.ListViewDownloadedFiles.Size = New System.Drawing.Size(195, 361)
-        Me.ListViewDownloadedFiles.TabIndex = 5
+        Me.ListViewDownloadedFiles.Size = New System.Drawing.Size(194, 339)
+        Me.ListViewDownloadedFiles.TabIndex = 24
         Me.ListViewDownloadedFiles.TabStop = False
         Me.ListViewDownloadedFiles.UseCompatibleStateImageBehavior = False
         Me.ListViewDownloadedFiles.View = System.Windows.Forms.View.Details
@@ -175,7 +168,7 @@ Partial Class FormTeamCenterAdd
         '
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(205, 2)
+        Me.Label2.Location = New System.Drawing.Point(206, 2)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(110, 15)
@@ -185,36 +178,26 @@ Partial Class FormTeamCenterAdd
         'ButtonDownloadAll
         '
         Me.ButtonDownloadAll.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonDownloadAll.Location = New System.Drawing.Point(205, 420)
+        Me.ButtonDownloadAll.Location = New System.Drawing.Point(206, 398)
         Me.ButtonDownloadAll.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ButtonDownloadAll.Name = "ButtonDownloadAll"
-        Me.ButtonDownloadAll.Size = New System.Drawing.Size(150, 24)
+        Me.ButtonDownloadAll.Size = New System.Drawing.Size(175, 24)
         Me.ButtonDownloadAll.TabIndex = 4
         Me.ButtonDownloadAll.Text = "Add all to cache"
         Me.ButtonDownloadAll.UseVisualStyleBackColor = True
         '
-        'ButtonSearchAndAdd
-        '
-        Me.ButtonSearchAndAdd.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonSearchAndAdd.Location = New System.Drawing.Point(4, 420)
-        Me.ButtonSearchAndAdd.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.ButtonSearchAndAdd.Name = "ButtonSearchAndAdd"
-        Me.ButtonSearchAndAdd.Size = New System.Drawing.Size(150, 24)
-        Me.ButtonSearchAndAdd.TabIndex = 2
-        Me.ButtonSearchAndAdd.Text = "Search and add all to cache"
-        Me.ButtonSearchAndAdd.UseVisualStyleBackColor = True
-        '
         'ListViewTeamCenterItems
         '
+        Me.ListViewTeamCenterItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.ListViewTeamCenterItems.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.fileName, Me.itemID, Me.revision, Me.fileType})
         Me.ListViewTeamCenterItems.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListViewTeamCenterItems.HideSelection = False
-        Me.ListViewTeamCenterItems.Location = New System.Drawing.Point(205, 23)
+        Me.ListViewTeamCenterItems.Location = New System.Drawing.Point(206, 23)
         Me.ListViewTeamCenterItems.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.ListViewTeamCenterItems.Name = "ListViewTeamCenterItems"
-        Me.ListViewTeamCenterItems.Size = New System.Drawing.Size(395, 361)
+        Me.ListViewTeamCenterItems.Size = New System.Drawing.Size(396, 339)
         Me.ListViewTeamCenterItems.Sorting = System.Windows.Forms.SortOrder.Ascending
-        Me.ListViewTeamCenterItems.TabIndex = 3
+        Me.ListViewTeamCenterItems.TabIndex = 25
         Me.ListViewTeamCenterItems.TabStop = False
         Me.ListViewTeamCenterItems.UseCompatibleStateImageBehavior = False
         Me.ListViewTeamCenterItems.View = System.Windows.Forms.View.Details
@@ -246,8 +229,8 @@ Partial Class FormTeamCenterAdd
         Me.DataGridViewItems.Location = New System.Drawing.Point(4, 23)
         Me.DataGridViewItems.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.DataGridViewItems.Name = "DataGridViewItems"
-        Me.DataGridViewItems.Size = New System.Drawing.Size(193, 361)
-        Me.DataGridViewItems.TabIndex = 36
+        Me.DataGridViewItems.Size = New System.Drawing.Size(194, 339)
+        Me.DataGridViewItems.TabIndex = 20
         Me.DataGridViewItems.TabStop = False
         '
         'ItemIDs
@@ -262,17 +245,62 @@ Partial Class FormTeamCenterAdd
         Me.rev.Name = "rev"
         Me.rev.Width = 75
         '
+        'Label4
+        '
+        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(4, 2)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(75, 15)
+        Me.Label4.TabIndex = 39
+        Me.Label4.Text = "Search terms"
+        '
+        'ButtonDownload
+        '
+        Me.ButtonDownload.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonDownload.Location = New System.Drawing.Point(206, 368)
+        Me.ButtonDownload.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.ButtonDownload.Name = "ButtonDownload"
+        Me.ButtonDownload.Size = New System.Drawing.Size(175, 24)
+        Me.ButtonDownload.TabIndex = 3
+        Me.ButtonDownload.Text = "Add selected to cache"
+        Me.ButtonDownload.UseVisualStyleBackColor = True
+        '
+        'ButtonSearch
+        '
+        Me.ButtonSearch.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonSearch.Location = New System.Drawing.Point(4, 368)
+        Me.ButtonSearch.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.ButtonSearch.Name = "ButtonSearch"
+        Me.ButtonSearch.Size = New System.Drawing.Size(175, 24)
+        Me.ButtonSearch.TabIndex = 1
+        Me.ButtonSearch.Text = "Search"
+        Me.ButtonSearch.UseVisualStyleBackColor = True
+        '
+        'ButtonSearchAndAdd
+        '
+        Me.ButtonSearchAndAdd.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonSearchAndAdd.Location = New System.Drawing.Point(4, 398)
+        Me.ButtonSearchAndAdd.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.ButtonSearchAndAdd.Name = "ButtonSearchAndAdd"
+        Me.ButtonSearchAndAdd.Size = New System.Drawing.Size(175, 24)
+        Me.ButtonSearchAndAdd.TabIndex = 2
+        Me.ButtonSearchAndAdd.Text = "Search and add all to cache"
+        Me.ButtonSearchAndAdd.UseVisualStyleBackColor = True
+        '
         'ToolStrip_List
         '
         Me.ToolStrip_List.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.ToolStrip_List.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolStrip_List.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_List.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.CheckBoxAsm, Me.CheckBoxPar, Me.CheckBoxPsm, Me.CheckBoxDft})
-        Me.ToolStrip_List.Location = New System.Drawing.Point(0, 448)
+        Me.ToolStrip_List.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripLabel1, Me.CheckBoxAsm, Me.CheckBoxPar, Me.CheckBoxPsm, Me.CheckBoxDft, Me.ToolStripSeparator1, Me.ToolStripLabel2, Me.ButtonSettings, Me.ToolStripSeparator2, Me.ButtonHelp})
+        Me.ToolStrip_List.Location = New System.Drawing.Point(3, 6)
+        Me.ToolStrip_List.Margin = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.ToolStrip_List.Name = "ToolStrip_List"
         Me.ToolStrip_List.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.ToolStrip_List.Size = New System.Drawing.Size(155, 27)
+        Me.ToolStrip_List.Size = New System.Drawing.Size(264, 27)
         Me.ToolStrip_List.TabIndex = 34
         Me.ToolStrip_List.Text = "ToolStrip1"
         '
@@ -331,86 +359,90 @@ Partial Class FormTeamCenterAdd
         Me.CheckBoxDft.Size = New System.Drawing.Size(24, 24)
         Me.CheckBoxDft.Text = "Filter DFT"
         '
-        'Label4
+        'ToolStripSeparator1
         '
-        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(4, 2)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(75, 15)
-        Me.Label4.TabIndex = 39
-        Me.Label4.Text = "Search terms"
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 27)
         '
-        'ButtonDownload
+        'ToolStripLabel2
         '
-        Me.ButtonDownload.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonDownload.Location = New System.Drawing.Point(205, 390)
-        Me.ButtonDownload.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.ButtonDownload.Name = "ButtonDownload"
-        Me.ButtonDownload.Size = New System.Drawing.Size(150, 24)
-        Me.ButtonDownload.TabIndex = 3
-        Me.ButtonDownload.Text = "Add selected to cache"
-        Me.ButtonDownload.UseVisualStyleBackColor = True
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(49, 24)
+        Me.ToolStripLabel2.Text = "Settings"
         '
-        'ButtonSearch
+        'ButtonSettings
         '
-        Me.ButtonSearch.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonSearch.Location = New System.Drawing.Point(4, 390)
-        Me.ButtonSearch.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.ButtonSearch.Name = "ButtonSearch"
-        Me.ButtonSearch.Size = New System.Drawing.Size(150, 24)
-        Me.ButtonSearch.TabIndex = 1
-        Me.ButtonSearch.Text = "Search"
-        Me.ButtonSearch.UseVisualStyleBackColor = True
+        Me.ButtonSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonSettings.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonSettings.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonSettings.Name = "ButtonSettings"
+        Me.ButtonSettings.Size = New System.Drawing.Size(24, 24)
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(6, 27)
+        '
+        'ButtonHelp
+        '
+        Me.ButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ButtonHelp.Image = Global.Housekeeper.My.Resources.Resources.Help
+        Me.ButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ButtonHelp.Name = "ButtonHelp"
+        Me.ButtonHelp.Size = New System.Drawing.Size(24, 24)
+        Me.ButtonHelp.ToolTipText = "Help"
         '
         'ExTableLayoutPanel2
         '
+        Me.ExTableLayoutPanel2.BackColor = System.Drawing.Color.White
         Me.ExTableLayoutPanel2.ColumnCount = 1
         Me.ExTableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel1, 0, 0)
-        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 1)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel1, 0, 1)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ExTableLayoutPanel3, 0, 2)
+        Me.ExTableLayoutPanel2.Controls.Add(Me.ToolStrip_List, 0, 0)
         Me.ExTableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExTableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.ExTableLayoutPanel2.Name = "ExTableLayoutPanel2"
-        Me.ExTableLayoutPanel2.RowCount = 2
+        Me.ExTableLayoutPanel2.RowCount = 3
+        Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(813, 523)
-        Me.ExTableLayoutPanel2.TabIndex = 44
+        Me.ExTableLayoutPanel2.Size = New System.Drawing.Size(814, 511)
+        Me.ExTableLayoutPanel2.TabIndex = 22
         Me.ExTableLayoutPanel2.Task = Nothing
         '
         'ExTableLayoutPanel3
         '
         Me.ExTableLayoutPanel3.BackColor = System.Drawing.Color.White
-        Me.ExTableLayoutPanel3.ColumnCount = 4
+        Me.ExTableLayoutPanel3.ColumnCount = 3
         Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
         Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
-        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
-        Me.ExTableLayoutPanel3.Controls.Add(Me.ButtonAddAndClose, 1, 0)
+        Me.ExTableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.ExTableLayoutPanel3.Controls.Add(Me.LabelStatus, 0, 0)
-        Me.ExTableLayoutPanel3.Controls.Add(Me.Help, 3, 0)
         Me.ExTableLayoutPanel3.Controls.Add(Me.Cancel, 2, 0)
+        Me.ExTableLayoutPanel3.Controls.Add(Me.ButtonAddAndClose, 1, 0)
         Me.ExTableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 486)
+        Me.ExTableLayoutPanel3.Location = New System.Drawing.Point(3, 474)
         Me.ExTableLayoutPanel3.Name = "ExTableLayoutPanel3"
         Me.ExTableLayoutPanel3.RowCount = 1
         Me.ExTableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(807, 34)
-        Me.ExTableLayoutPanel3.TabIndex = 44
+        Me.ExTableLayoutPanel3.Size = New System.Drawing.Size(808, 34)
+        Me.ExTableLayoutPanel3.TabIndex = 23
         Me.ExTableLayoutPanel3.Task = Nothing
         '
         'FormTeamCenterAdd
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(813, 523)
+        Me.ClientSize = New System.Drawing.Size(814, 511)
         Me.Controls.Add(Me.ExTableLayoutPanel2)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.MinimumSize = New System.Drawing.Size(830, 550)
         Me.Name = "FormTeamCenterAdd"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Add TeamCenter Item"
         Me.ExTableLayoutPanel1.ResumeLayout(False)
         Me.ExTableLayoutPanel1.PerformLayout()
@@ -418,6 +450,7 @@ Partial Class FormTeamCenterAdd
         Me.ToolStrip_List.ResumeLayout(False)
         Me.ToolStrip_List.PerformLayout()
         Me.ExTableLayoutPanel2.ResumeLayout(False)
+        Me.ExTableLayoutPanel2.PerformLayout()
         Me.ExTableLayoutPanel3.ResumeLayout(False)
         Me.ExTableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
@@ -450,8 +483,12 @@ Partial Class FormTeamCenterAdd
     Friend WithEvents ItemIDs As DataGridViewTextBoxColumn
     Friend WithEvents rev As DataGridViewTextBoxColumn
     Friend WithEvents Cancel As Button
-    Friend WithEvents Help As Button
     Friend WithEvents ExTableLayoutPanel1 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel2 As ExTableLayoutPanel
     Friend WithEvents ExTableLayoutPanel3 As ExTableLayoutPanel
+    Friend WithEvents ButtonSettings As ToolStripButton
+    Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+    Friend WithEvents ToolStripLabel2 As ToolStripLabel
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents ButtonHelp As ToolStripButton
 End Class
