@@ -1,4 +1,4 @@
-Imports System.Runtime.InteropServices
+'Imports System.Runtime.InteropServices
 
 Public Class FormTeamCenterAdd
     Private FMain As Form_Main
@@ -52,12 +52,15 @@ Public Class FormTeamCenterAdd
             Cursor.Current = Cursors.WaitCursor
             LabelStatus.Text = "Connecting to Solid Edge..."
 
-            Try
-                objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            Catch ex As COMException When ex.ErrorCode = &H800401E3
-                objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-                objApp.Visible = True
-            End Try
+            'Try
+            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            'Catch ex As COMException When ex.ErrorCode = &H800401E3
+            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            '    objApp.Visible = True
+            'End Try
+
+            objApp = OpenSolidEdge(Visible:=True)
+
             TCE = objApp.SolidEdgeTCE
 
             LabelStatus.Text = "Adding to cache..."
@@ -89,14 +92,17 @@ Public Class FormTeamCenterAdd
             Cursor.Current = Cursors.WaitCursor
             ' Connect to Solid Edge, if not open then Open Solid Edge
 
-            Try
-                LabelStatus.Text = "Connecting to Solid Edge..."
-                objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            Catch ex As COMException When ex.ErrorCode = &H800401E3
-                LabelStatus.Text = "Opening Solid Edge..."
-                objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-                objApp.Visible = False
-            End Try
+            'Try
+            '    LabelStatus.Text = "Connecting to Solid Edge..."
+            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            'Catch ex As COMException When ex.ErrorCode = &H800401E3
+            '    LabelStatus.Text = "Opening Solid Edge..."
+            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            '    objApp.Visible = False
+            'End Try
+
+            LabelStatus.Text = "Connecting to Solid Edge..."
+            objApp = OpenSolidEdge(Visible:=False)
 
             TCE = objApp.SolidEdgeTCE
 
@@ -314,14 +320,17 @@ Public Class FormTeamCenterAdd
 
         Try
             Cursor.Current = Cursors.WaitCursor
-            LabelStatus.Text = "Connecting to Solid Edge..."
 
-            Try
-                objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            Catch ex As COMException When ex.ErrorCode = &H800401E3
-                objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-                objApp.Visible = True
-            End Try
+            'Try
+            '    objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            'Catch ex As COMException When ex.ErrorCode = &H800401E3
+            '    objApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            '    objApp.Visible = True
+            'End Try
+
+            LabelStatus.Text = "Connecting to Solid Edge..."
+            objApp = OpenSolidEdge(Visible:=True)
+
             TCE = objApp.SolidEdgeTCE
 
             LabelStatus.Text = "Adding to cache..."
@@ -363,10 +372,22 @@ Public Class FormTeamCenterAdd
         End Try
     End Sub
 
+    Private Function OpenSolidEdge(Visible As Boolean) As SolidEdgeFramework.Application
+        Dim SEApp As SolidEdgeFramework.Application = Nothing
+        Try
+            SEApp = CType(Runtime.InteropServices.Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+        Catch ex As Runtime.InteropServices.COMException When ex.ErrorCode = &H800401E3
+            SEApp = CType(CreateObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            SEApp.Visible = Visible
+        End Try
+
+        Return SEApp
+    End Function
+
     Private Sub CloseSolidEdge()
         Dim objApp As SolidEdgeFramework.Application = Nothing
         Try
-            objApp = CType(Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+            objApp = CType(Runtime.InteropServices.Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
             objApp.Quit()
         Catch ex As Exception
 
@@ -377,7 +398,7 @@ Public Class FormTeamCenterAdd
 
     Private Sub ReleaseComObject(ByVal obj As Object)
         If obj IsNot Nothing Then
-            Marshal.ReleaseComObject(obj)
+            Runtime.InteropServices.Marshal.ReleaseComObject(obj)
             obj = Nothing
         End If
     End Sub
@@ -385,11 +406,12 @@ Public Class FormTeamCenterAdd
     Private Sub ButtonAddAndClose_Click(sender As Object, e As EventArgs) Handles ButtonAddAndClose.Click
         If ListViewTeamCenterItems.Items.Count = 0 Then
             MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Me.Close()
-            Return
+            'Me.Close()
+            'Return
+            Me.DialogResult = DialogResult.Cancel
         End If
 
-        Dim NewWay As Boolean = True
+        Dim NewWay As Boolean = False
         If NewWay Then
             Dim tmpItem As New ListViewItem
 
@@ -436,7 +458,8 @@ Public Class FormTeamCenterAdd
             Next
         End If
 
-        Me.Close()
+        'Me.Close()
+        Me.DialogResult = DialogResult.OK
     End Sub
 
     Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridViewItems.KeyDown
@@ -497,7 +520,10 @@ Public Class FormTeamCenterAdd
 
     Private Sub Cancel_Click(sender As Object, e As EventArgs) Handles Cancel.Click
         CloseSolidEdge()
-        Me.Close()
+
+        Me.DialogResult = DialogResult.Cancel
+        'Me.DialogResult = DialogResult.OK
+        'Me.Close()
     End Sub
 
     Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
