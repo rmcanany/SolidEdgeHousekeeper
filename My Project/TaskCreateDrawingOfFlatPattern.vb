@@ -317,9 +317,14 @@ Public Class TaskCreateDrawingOfFlatPattern
             FlatPattern = FlatPatternModel.FlatPatterns.Item(1)
 
             Dim Documents As SolidEdgeFramework.Documents = SEApp.Documents
-            Dim DraftDoc As SolidEdgeDraft.DraftDocument
-            DraftDoc = CType(Documents.Add("SolidEdge.DraftDocument", Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
-            SEApp.DoIdle()
+            Dim DraftDoc As SolidEdgeDraft.DraftDocument = Nothing
+            Try
+                DraftDoc = CType(Documents.Add("SolidEdge.DraftDocument", Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
+                SEApp.DoIdle()
+            Catch ex As Exception
+                TaskLogger.AddMessage(String.Format("Could not create draft document with template '{0}'", Me.DraftTemplate))
+                Exit Sub
+            End Try
 
             Dim ModelLinks As SolidEdgeDraft.ModelLinks = DraftDoc.ModelLinks
             Dim ModelLink As SolidEdgeDraft.ModelLink = ModelLinks.Add(SEDoc.FullName)

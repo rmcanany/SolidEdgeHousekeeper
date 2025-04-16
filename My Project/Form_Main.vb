@@ -157,8 +157,10 @@ Public Class Form_Main
         End Get
         Set(value As String)
             _LinkManagementFilename = value
-            Dim UP As New UtilsPreferences
-            Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+            If IO.File.Exists(value) Then
+                Dim UP As New UtilsPreferences
+                Me.LinkManagementOrder = UP.GetLinkManagementOrder()
+            End If
             If Me.TabControl1 IsNot Nothing Then
                 TextBoxLinkManagementFilename.Text = value
             End If
@@ -1216,7 +1218,7 @@ Public Class Form_Main
 
         CarIcona()
 
-        If IO.File.Exists(Me.LinkManagementFilename) Then
+        If (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
             Me.LinkManagementOrder = UP.GetLinkManagementOrder()
         End If
 

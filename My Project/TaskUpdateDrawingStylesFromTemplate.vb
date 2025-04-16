@@ -130,7 +130,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         ByVal SEApp As SolidEdgeFramework.Application
         )
 
-        Dim SETemplateDoc As SolidEdgeDraft.DraftDocument
+        Dim SETemplateDoc As SolidEdgeDraft.DraftDocument = Nothing
 
         Dim DocStyleNames As New List(Of String)
         Dim TemplateStyleNames As New List(Of String)
@@ -141,25 +141,27 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
         'Open template
-        SETemplateDoc = CType(SEApp.Documents.Open(Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
-        SEApp.DoIdle()
+        Try
+            SETemplateDoc = CType(SEApp.Documents.Open(Me.DraftTemplate), SolidEdgeDraft.DraftDocument)
+            SEApp.DoIdle()
+        Catch ex As Exception
+            TaskLogger.AddMessage(String.Format("Could not open template '{0}'", Me.DraftTemplate))
+        End Try
 
         SEDoc.Activate()
         SEApp.DoIdle()
 
-        If Me.UpdateBorder Then
+        If Me.UpdateBorder And SETemplateDoc IsNot Nothing Then
             Dim TemplateSheetNames As New List(Of String)
 
             For Each Sheet In UC.GetSheets(SETemplateDoc, "Background")
                 TemplateSheetNames.Add(Sheet.Name)
             Next
 
-            'SETemplateDoc.Close()
-            'SEApp.DoIdle()
-
             For Each Sheet In UC.GetSheets(tmpSEDoc, "Background")
                 If TemplateSheetNames.Contains(Sheet.Name) Then
                     Sheet.ReplaceBackground(DraftTemplate, Sheet.Name)
+                    SEApp.DoIdle()
                 Else
                     TaskLogger.AddMessage(String.Format("Template has no background named '{0}'", Sheet.Name))
                 End If
@@ -179,7 +181,7 @@ Public Class TaskUpdateDrawingStylesFromTemplate
         ' DashStyles, FillStyles, HatchPatternStyles, SmartFrame2dStyles
 
 
-        If Me.UpdateStyles Then
+        If Me.UpdateStyles And SETemplateDoc IsNot Nothing Then
 
             ' ############ DimensionStyles ############
             Dim DocDimensionStyles As SolidEdgeFrameworkSupport.DimensionStyles
@@ -391,15 +393,17 @@ Public Class TaskUpdateDrawingStylesFromTemplate
             MissingStyles = ""
         End If
 
-
-        SETemplateDoc.Close()
-        SEApp.DoIdle()
-
-        If SEDoc.ReadOnly Then
-            TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
-        Else
-            SEDoc.Save()
+        If SETemplateDoc IsNot Nothing Then
+            SETemplateDoc.Close(False)
             SEApp.DoIdle()
+
+            If SEDoc.ReadOnly Then
+                TaskLogger.AddMessage("Cannot save document marked 'Read Only'")
+            Else
+                SEDoc.Save()
+                SEApp.DoIdle()
+            End If
+
         End If
 
     End Sub
