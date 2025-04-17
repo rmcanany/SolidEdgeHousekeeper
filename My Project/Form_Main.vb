@@ -1306,6 +1306,9 @@ Public Class Form_Main
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
+        If Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
+        If Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
+
         If Not Presets Then Splash.UpdateStatus("Wrapping up")
 
         UP.CheckVersionFormat(Me.Version)  ' Displays MsgBox for malformed string.
@@ -1696,7 +1699,7 @@ Public Class Form_Main
             For Each tmpFile As String In tmpFolderDialog.FileNames
                 FileLists = FileLists & tmpFile & ","
             Next
-            FileLists = FileLists.Remove(FileLists.Length - 1)
+            FileLists = FileLists.Remove(FileLists.Length - 1)  ' Remove trailing comma
 
             tmpItem.SubItems.Add(FileLists)
             tmpItem.Group = ListViewSources.Groups.Item("Sources")
@@ -1818,6 +1821,38 @@ Public Class Form_Main
 
         End If
 
+    End Sub
+
+    Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
+        Dim FTCA As New FormTeamCenterAdd(Me)
+        Dim Result As DialogResult = FTCA.ShowDialog()
+
+        If Result = DialogResult.OK Then
+            Dim tmpFilelist As List(Of String) = FTCA.Filelist
+
+            Dim tmpItem As New ListViewItem
+
+            tmpItem.Text = "TeamCenter"
+            tmpItem.ImageKey = "teamcenter"
+            tmpItem.Tag = "TeamCenter"
+
+            Dim FileLists As String = ""
+            For Each tmpFile As String In tmpFilelist
+                FileLists = FileLists & tmpFile & ","
+            Next
+            FileLists = FileLists.Remove(FileLists.Length - 1)  ' Remove trailing comma
+
+            tmpItem.SubItems.Add(FileLists)
+            tmpItem.Group = ListViewSources.Groups.Item("Sources")
+            tmpItem.Name = FileLists
+
+            If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then
+                ListViewSources.Items.Add(tmpItem)
+                ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+            End If
+
+            Me.ListViewFilesOutOfDate = True
+        End If
     End Sub
 
     Private Sub BT_AddFromlist_Click(sender As Object, e As EventArgs) Handles BT_AddFromlist.Click
@@ -2066,6 +2101,7 @@ Public Class Form_Main
         CaricaImmagine16x16(TabPage_ImageList, "Up", My.Resources.up)
         CaricaImmagine16x16(TabPage_ImageList, "Down", My.Resources.down)
         CaricaImmagine16x16(TabPage_ImageList, "Files", My.Resources.Files)
+        CaricaImmagine16x16(TabPage_ImageList, "teamcenter", My.Resources.teamcenter)
 
     End Sub
 
@@ -3834,13 +3870,13 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
-        Dim FTCA As New FormTeamCenterAdd(Me)
-        Dim Result As DialogResult = FTCA.ShowDialog()
-        If Result = DialogResult.OK Then
-            Me.ListViewFilesOutOfDate = False
-        End If
-    End Sub
+    'Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
+    '    Dim FTCA As New FormTeamCenterAdd(Me)
+    '    Dim Result As DialogResult = FTCA.ShowDialog()
+    '    If Result = DialogResult.OK Then
+    '        Me.ListViewFilesOutOfDate = False
+    '    End If
+    'End Sub
 End Class
 
 

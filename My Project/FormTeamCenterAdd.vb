@@ -1,11 +1,14 @@
-'Imports System.Runtime.InteropServices
 
 Public Class FormTeamCenterAdd
+
+    Public Property Filelist As List(Of String)
+
     Private FMain As Form_Main
 
     Public Sub New(_FMain As Form_Main)
         InitializeComponent()
         FMain = _FMain
+        Me.Filelist = New List(Of String)
     End Sub
 
     Private Sub FormTeamCenterAdd_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -145,8 +148,13 @@ Public Class FormTeamCenterAdd
 
                     ' ###### Does this apply to all TeamCenter sites? ######
 
-                    If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
-                        ErrorList.Add($"Invalid Item ID: {itemID}. It should be 8 digits.")
+                    'If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, "^\d{8}$") Then
+                    '    ErrorList.Add($"Invalid Item ID: {itemID}. It should be 8 digits.")
+                    '    'MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    '    Continue For
+                    'End If
+                    If Not System.Text.RegularExpressions.Regex.IsMatch(itemID, FMain.TCItemIDRx) Then
+                        ErrorList.Add($"Invalid Item ID: '{itemID}'. Not a Regex match to '{FMain.TCItemIDRx}'.")
                         'MessageBox.Show($"Invalid Item ID: {itemID}. It should be 8 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                         Continue For
                     End If
@@ -177,7 +185,10 @@ Public Class FormTeamCenterAdd
 
                                 ' ###### Does this apply to all TeamCenter sites? ######
 
-                                If System.Text.RegularExpressions.Regex.IsMatch(rev, "^[A-Z]$") Then
+                                'If System.Text.RegularExpressions.Regex.IsMatch(rev, "^[A-Z]$") Then
+                                '    filteredRevisions.Add(rev)
+                                'End If
+                                If System.Text.RegularExpressions.Regex.IsMatch(rev, FMain.TCRevisionRx) Then
                                     filteredRevisions.Add(rev)
                                 End If
                             Next
@@ -189,13 +200,13 @@ Public Class FormTeamCenterAdd
                             Else
                                 ' Throw an exception if no valid revisions are found
                                 'MessageBox.Show($"No valid revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                                ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
+                                ErrorList.Add($"No valid revisions found for Item ID: '{itemID}'.")
                                 Continue For
                             End If
                         Else
                             ' Throw an exception if no revisions are found
                             'MessageBox.Show($"No revisions found for Item ID: {itemID}.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                            ErrorList.Add($"No valid revisions found for Item ID: {itemID}.")
+                            ErrorList.Add($"No valid revisions found for Item ID: '{itemID}'.")
                             Continue For
                         End If
                     End If
@@ -224,7 +235,7 @@ Public Class FormTeamCenterAdd
 
                     If Not revisionExists Then
                         'MessageBox.Show($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                        ErrorList.Add($"Invalid Revision: {revision} for Item ID: {itemID}. Revision does not exist.")
+                        ErrorList.Add($"Invalid Revision: '{revision}' for Item ID: '{itemID}'. Revision does not exist.")
                         Continue For
                     End If
 
@@ -385,15 +396,18 @@ Public Class FormTeamCenterAdd
     End Function
 
     Private Sub CloseSolidEdge()
-        Dim objApp As SolidEdgeFramework.Application = Nothing
-        Try
-            objApp = CType(Runtime.InteropServices.Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
-            objApp.Quit()
-        Catch ex As Exception
+        If Not FMain.UseCurrentSession Then
+            Dim objApp As SolidEdgeFramework.Application = Nothing
+            Try
+                objApp = CType(Runtime.InteropServices.Marshal.GetActiveObject("SolidEdge.Application"), SolidEdgeFramework.Application)
+                objApp.Quit()
+            Catch ex As Exception
 
-        Finally
-            ReleaseComObject(objApp)
-        End Try
+            Finally
+                ReleaseComObject(objApp)
+            End Try
+
+        End If
     End Sub
 
     Private Sub ReleaseComObject(ByVal obj As Object)
@@ -404,62 +418,68 @@ Public Class FormTeamCenterAdd
     End Sub
 
     Private Sub ButtonAddAndClose_Click(sender As Object, e As EventArgs) Handles ButtonAddAndClose.Click
-        If ListViewTeamCenterItems.Items.Count = 0 Then
-            MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            'Me.Close()
-            'Return
+
+        Dim Proceed As Boolean = True
+
+        Dim NewWay As Boolean = True
+        If NewWay Then
+
+            Dim Testing As Boolean = False
+            If Testing Then
+                Filelist.AddRange({"C:\data\junk\80000500.asm", "C:\data\junk\80000500.dft", "C:\data\junk\80000501.par", "C:\data\junk\80000502.par"})
+            Else
+                If ListViewTeamCenterItems.Items.Count = 0 Then
+                    MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Proceed = False
+                Else
+                    For Each item As ListViewItem In ListViewDownloadedFiles.Items
+                        Dim fileName As String = item.Text
+                        Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
+
+                        If Not Me.Filelist.Contains(filePath) Then Filelist.Add(filePath)
+                    Next
+                End If
+            End If
+
+        Else
+            If ListViewTeamCenterItems.Items.Count = 0 Then
+                MessageBox.Show("No files to add.", "No Files", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Proceed = False
+            Else
+                For Each item As ListViewItem In ListViewDownloadedFiles.Items
+                    Dim fileName As String = item.Text
+                    Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
+
+                    ' Check if the file already exists in the ListView
+                    Dim exists As Boolean = False
+                    For Each existingItem As ListViewItem In FMain.ListViewFiles.Items
+                        If existingItem.Name = filePath Then
+                            exists = True
+                            Exit For
+                        End If
+                    Next
+
+                    ' Add the file to the ListView in the main form if it doesn't already exist
+                    If Not exists Then
+                        Dim tmpItem As New ListViewItem
+                        tmpItem.Text = fileName
+                        tmpItem.SubItems.Add(filePath)
+                        tmpItem.ImageKey = "Unchecked"
+                        tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
+                        tmpItem.Name = filePath
+                        tmpItem.Group = FMain.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
+                        FMain.ListViewFiles.Items.Add(tmpItem)
+                    End If
+                Next
+            End If
+        End If
+
+        If Proceed Then
+            Me.DialogResult = DialogResult.OK
+        Else
             Me.DialogResult = DialogResult.Cancel
         End If
 
-        Dim NewWay As Boolean = False
-        If NewWay Then
-            Dim tmpItem As New ListViewItem
-
-            tmpItem.Text = "Folder"
-            tmpItem.ImageKey = "Folder"
-            tmpItem.Tag = "Folder"
-
-            tmpItem.SubItems.Add(FMain.TCCachePath)
-            tmpItem.Group = FMain.ListViewSources.Groups.Item("Sources")
-            tmpItem.Name = FMain.TCCachePath
-
-            If Not FMain.ListViewSources.Items.ContainsKey(tmpItem.Name) Then
-                FMain.ListViewSources.Items.Add(tmpItem)
-                FMain.ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
-            End If
-
-            FMain.ListViewFilesOutOfDate = True
-
-        Else
-            For Each item As ListViewItem In ListViewDownloadedFiles.Items
-                Dim fileName As String = item.Text
-                Dim filePath As String = System.IO.Path.Combine(FMain.TCCachePath, fileName)
-
-                ' Check if the file already exists in the ListView
-                Dim exists As Boolean = False
-                For Each existingItem As ListViewItem In FMain.ListViewFiles.Items
-                    If existingItem.Name = filePath Then
-                        exists = True
-                        Exit For
-                    End If
-                Next
-
-                ' Add the file to the ListView in the main form if it doesn't already exist
-                If Not exists Then
-                    Dim tmpItem As New ListViewItem
-                    tmpItem.Text = fileName
-                    tmpItem.SubItems.Add(filePath)
-                    tmpItem.ImageKey = "Unchecked"
-                    tmpItem.Tag = IO.Path.GetExtension(filePath).ToLower
-                    tmpItem.Name = filePath
-                    tmpItem.Group = FMain.ListViewFiles.Groups.Item(IO.Path.GetExtension(filePath).ToLower)
-                    FMain.ListViewFiles.Items.Add(tmpItem)
-                End If
-            Next
-        End If
-
-        'Me.Close()
-        Me.DialogResult = DialogResult.OK
     End Sub
 
     Private Sub dataGridViewItems_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridViewItems.KeyDown
@@ -522,8 +542,6 @@ Public Class FormTeamCenterAdd
         CloseSolidEdge()
 
         Me.DialogResult = DialogResult.Cancel
-        'Me.DialogResult = DialogResult.OK
-        'Me.Close()
     End Sub
 
     Private Sub ButtonHelp_Click(sender As Object, e As EventArgs) Handles ButtonHelp.Click
@@ -544,6 +562,10 @@ Public Class FormTeamCenterAdd
             Me.FMain.TCItemIDRx = FTCS.TCItemIDRx
             Me.FMain.TCRevisionRx = FTCS.TCRevisionRx
         End If
+
+    End Sub
+
+    Private Sub FormTeamCenterAdd_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
     End Sub
 

@@ -127,9 +127,9 @@ Partial Class FormTeamCenterSettings
         Me.Label2.Location = New System.Drawing.Point(85, 10)
         Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(208, 15)
+        Me.Label2.Size = New System.Drawing.Size(201, 15)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Validation Regex [ .*  for no validation]"
+        Me.Label2.Text = "Validation Regex [ .*  = no validation]"
         '
         'Label3
         '
@@ -161,6 +161,7 @@ Partial Class FormTeamCenterSettings
         Me.TextBoxTCItemIDRx.Name = "TextBoxTCItemIDRx"
         Me.TextBoxTCItemIDRx.Size = New System.Drawing.Size(245, 23)
         Me.TextBoxTCItemIDRx.TabIndex = 6
+        Me.TextBoxTCItemIDRx.Text = ".*"
         '
         'TextBoxTCRevisionRx
         '
@@ -170,6 +171,7 @@ Partial Class FormTeamCenterSettings
         Me.TextBoxTCRevisionRx.Name = "TextBoxTCRevisionRx"
         Me.TextBoxTCRevisionRx.Size = New System.Drawing.Size(245, 23)
         Me.TextBoxTCRevisionRx.TabIndex = 7
+        Me.TextBoxTCRevisionRx.Text = ".*"
         '
         'FormTeamCenterSettings
         '

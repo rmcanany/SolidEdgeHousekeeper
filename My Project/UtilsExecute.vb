@@ -153,7 +153,7 @@ Public Class UtilsExecute
 
         FMain.ListViewFiles.BeginUpdate()
 
-        For Each Filename As ListViewItem In FMain.ListViewFiles.Items 'L-istBoxFiles.Items
+        For Each Filename As ListViewItem In FMain.ListViewFiles.Items
 
             FMain.TextBoxStatus.Text = String.Format("Checking file integrity: {0}", IO.Path.GetFileName(Filename.Name))
             Application.DoEvents()
@@ -201,6 +201,26 @@ Public Class UtilsExecute
 
                 If Not Task.CompatibleWithOtherTasks Then
                     IncompatibleTaskNamesList.Add(Task.Description)
+                End If
+
+                If Task.RequiresDraftTemplate Then
+                    For Each tmpItem As ListViewItem In FMain.ListViewSources.Items
+                        If tmpItem.Tag.ToString = "TeamCenter" Then
+                            If TypeOf Task Is TaskCreateDrawingOfFlatPattern Then
+                                Dim T As TaskCreateDrawingOfFlatPattern = CType(Task, TaskCreateDrawingOfFlatPattern)
+                                If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
+                                    StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
+                                End If
+                                Exit For
+                            ElseIf TypeOf Task Is TaskUpdateDrawingStylesFromTemplate Then
+                                Dim T As TaskUpdateDrawingStylesFromTemplate = CType(Task, TaskUpdateDrawingStylesFromTemplate)
+                                If Not T.DraftTemplate.Contains(FMain.TCCachePath) Then
+                                    StartLogger.AddMessage(String.Format("{0}: Template must be in TeamCenter cache folder", Task.Description))
+                                End If
+                                Exit For
+                            End If
+                        End If
+                    Next
                 End If
 
                 Dim SubLogger As Logger = StartLogger.AddLogger(Task.Description)
@@ -334,6 +354,9 @@ Public Class UtilsExecute
                 Exit Sub
             End If
 
+            msg = String.Format("{0}/{1} {2}", FilesToProcessCompleted + 1, FilesToProcessTotal, System.IO.Path.GetFileName(FileToProcess))
+            FMain.TextBoxStatus.Text = msg
+
             ProcessFile(FileToProcess, Filetype)
 
             If Me.ErrorLogger.FileLoggerHasErrors(FileToProcess) Then
@@ -348,10 +371,6 @@ Public Class UtilsExecute
 
             FilesToProcessCompleted += 1  ' This is for all files in the run
             idx += 1  ' This is for files in this loop
-
-            msg = FilesToProcessCompleted.ToString + "/" + FilesToProcessTotal.ToString + " "
-            msg += System.IO.Path.GetFileName(FileToProcess)
-            FMain.TextBoxStatus.Text = msg
 
         Next
 

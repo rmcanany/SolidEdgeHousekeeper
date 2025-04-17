@@ -153,6 +153,8 @@ You search by Item ID and Revision, pasting from Excel if desired.  Prompts for 
 
 The files are downloaded to your cache, then copied into Housekeeper's file list.  
 
+The options button ![Options](Resources/icons8_Tools_16.png) lets you enter a regular expression to use to validate the Item ID and Revision.  For no validation, enter `^.*$`.  Regular expressions are flexible and powerful, but explaining them is beyond the scope of this document. For more information see [<ins>**REGEX in .NET**</ins>](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference), or better yet find a programmer who uses them daily.  That's what I do.
+
 </details>
 
 <details open><summary><h4 style="margin:0px; display:inline-block">Select by Top Level Assembly</h4></summary>

@@ -373,7 +373,7 @@ Partial Class FormTeamCenterAdd
         'ButtonSettings
         '
         Me.ButtonSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ButtonSettings.Image = Global.Housekeeper.My.Resources.Resources.config
+        Me.ButtonSettings.Image = Global.Housekeeper.My.Resources.Resources.Tools
         Me.ButtonSettings.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ButtonSettings.Name = "ButtonSettings"
         Me.ButtonSettings.Size = New System.Drawing.Size(24, 24)

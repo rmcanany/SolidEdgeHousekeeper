@@ -348,6 +348,11 @@ Public Class UtilsFileList
                     tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
                     FoundFiles = tmpFoundFiles
 
+                Case = "TeamCenter"
+                    Dim tmpFoundFiles As New List(Of String)
+                    tmpFoundFiles.AddRange(Source.Name.Split(CChar(",")))
+                    FoundFiles = tmpFoundFiles
+
                 Case = "ASM_Folder"
                     ' Nothing to do here.  Dealt with in 'Case = "asm"'
 

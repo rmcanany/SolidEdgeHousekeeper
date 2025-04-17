@@ -114,6 +114,7 @@ Public MustInherit Class Task
     Public Property RequiresPartTemplate As Boolean = False
     Public Property RequiresSheetmetalTemplate As Boolean = False
     Public Property RequiresDraftTemplate As Boolean = False
+    'Public Property DraftTemplate As String = ""
     Public Property RequiresMaterialTable As Boolean = False
     Public Property Category As String
     Public Property SolidEdgeRequired As Boolean = True
