@@ -53,9 +53,9 @@ Oh, one last thing.  This is not a perfect program.  It processes a large number
 
 Once you've mastered the basics, getting good at the following can improve your productivity.
 
-- [<ins>**File Selection**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#file-selection-and-filtering)  Shows how to select files by top level assembly, by list, drag and drop, and more.
-- [<ins>**Filtering**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#filtering)  Explains how to refine the list using property and/or file wildcard filters.
-- [<ins>**Tasks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper#task-tab)  Provides details on the task interface, including how to customize it for your own needs.
+- [<ins>**File Selection**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#file-selection)  Shows how to select files by top level assembly, by list, drag and drop, and more.
+- [<ins>**Filtering**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#filtering)  Explains how to refine the list using property and/or file wildcard filters.
+- [<ins>**Tasks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#task-tab)  Provides details on the task interface, including how to customize it for your own needs.
 
 If you have some other topic in mind, try the [<ins>**Table of Contents**</ins>](https://github.com/rmcanany/solidedgehousekeeper#table-of-contents).  It has links to all the major sections in the documentation.
 

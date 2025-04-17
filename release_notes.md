@@ -20,19 +20,19 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 Sponsored by **@john.matthews3452 (Hatch)** Thank you!
 
-Contributed by **@aalian.khan8036**  Thank you!
+Contributed by **@aalian.khan8036** (with helpful input from **@SatyenB**) Thank you!
 
 Added the ability to select files from TeamCenter.  
 
 ![Selection Toolbar](My%20Project/media/selection_toolbar.png)
 
-Clicking ![Table of Contents](Resources/teamcenter.png) opens the form.
+Clicking ![TeamCenter Icon](Resources/teamcenter.png) opens the form.
 
 ![Add Teamcenter Items](My%20Project/media/add_teamcenter_items.png)
 
 You search by Item ID and Revision, pasting from Excel if desired.  Prompts for a login if required.  If the Revision field is blank, it returns the most recent.  You can filter by file type.  You can add all files, or select from the list. 
 
-The files are downloaded to your cache, then copied into Housekeeper's file list.  
+The files are downloaded to your cache if necessary, then copied into Housekeeper's file list.  
 
 ### Check Filename
 
@@ -68,11 +68,11 @@ See [<ins>**Thin Part to Sheetmetal**</ins>](https://github.com/rmcanany/Houseke
 
 ### Batch Importer
 
-Added a new bare-bones importer.  This is a separate program and not part of Housekeeper.  
+Added a new bare-bones batch importer.  This is a separate program and not part of Housekeeper.
 
 The first time the program runs, it creates a file, `program_settings.txt`, in the same directory as the executable.  That file is where you specify the template to use for the conversion, the type of file to import, and the input and output directories.
 
-See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter) for details.
+See [<ins>**Batch Importer**</ins>](https://github.com/rmcanany/BatchImporter#readme) for details.
 
 ### Structured Storage
 
