@@ -34,6 +34,8 @@ You search by Item ID and Revision, pasting from Excel if desired.  Prompts for 
 
 The files are downloaded to your cache if necessary, then copied into Housekeeper's file list.  
 
+See the [<ins>**Select from TeamCenter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#select-from-teamcenter) for details.
+
 ### Check Filename
 
 Renamed the command `Check part number does not match filename` to `Check filename`.

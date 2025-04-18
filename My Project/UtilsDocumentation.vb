@@ -176,6 +176,8 @@ Public Class UtilsDocumentation
             ReadmeOut.Add(msg)
             msg = "- *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files."
             ReadmeOut.Add(msg)
+            msg = "- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database."
+            ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
             msg = "**Some tasks cannot run on older Solid Edge versions**"

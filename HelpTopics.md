@@ -1198,6 +1198,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 - *Possible workaround*: Process the files in an unmanaged workspace.
 - *Update 10/10/2021* Some users have reported success with BiDM managed files.
 - *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
+- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database.
 
 **Some tasks cannot run on older Solid Edge versions**
 - *Cause*: Probably an API call not available in previous versions.
