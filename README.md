@@ -62,7 +62,7 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 
 </details>
 
-<details><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="Resources/TaskSaveAs.png" style="padding-right:10px">INSTALLATION</h2></summary>
+<details><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/readme_installation_image.png">INSTALLATION</h2></summary>
 
 The preferred method is to clone the project and compile it yourself.  The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
 
