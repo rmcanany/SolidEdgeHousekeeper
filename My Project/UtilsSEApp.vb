@@ -4,18 +4,20 @@ Imports System.Runtime.InteropServices
 
 Public Class UtilsSEApp
 
+
     Public Property SEApp As SolidEdgeFramework.Application
-    Public Property TextBoxStatus As TextBox
+    'Public Property TextBoxStatus As TextBox
+    Private Property FMain As Form_Main
 
-    Public Sub New()
-
+    Public Sub New(_FMain As Form_Main)
+        Me.FMain = _FMain
     End Sub
 
     Public Sub SEStart(RunInBackground As Boolean,
                         UseCurrentSession As Boolean,
                         NoUpdateMRU As Boolean)
 
-        TextBoxStatus.Text = "Starting Solid Edge..."
+        FMain.TextBoxStatus.Text = "Starting Solid Edge..."
 
         Try
 
@@ -78,7 +80,7 @@ Public Class UtilsSEApp
 
         If Not UseCurrentSession Then
 
-            TextBoxStatus.Text = "Closing Solid Edge..."
+            FMain.TextBoxStatus.Text = "Closing Solid Edge..."
             If (Not (SEApp Is Nothing)) Then
                 Try
                     SEApp.Quit()

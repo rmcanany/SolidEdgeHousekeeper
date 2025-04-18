@@ -1547,8 +1547,6 @@ Public Class Form_Main
 
     Private Sub ButtonProcess_Click(sender As Object, e As EventArgs) Handles ButtonProcess.Click
         Dim UE As New UtilsExecute(Me)
-        UE.TextBoxStatus = Me.TextBoxStatus
-
         UE.ProcessAll()
     End Sub
 
@@ -1827,7 +1825,7 @@ Public Class Form_Main
         Dim FTCA As New FormTeamCenterAdd(Me)
         Dim Result As DialogResult = FTCA.ShowDialog()
 
-        If Result = DialogResult.OK Then
+        If (Result = DialogResult.OK) And (FTCA.Filelist.Count > 0) Then
             Dim tmpFilelist As List(Of String) = FTCA.Filelist
 
             Dim tmpItem As New ListViewItem
@@ -1979,6 +1977,95 @@ Public Class Form_Main
 
                 ListViewFilesOutOfDate = True
             End If
+
+        End If
+
+    End Sub
+
+    Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
+
+        e.Effect = DragDropEffects.Copy
+
+    End Sub
+
+    Private Sub ListViewFiles_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragDrop
+
+        Dim UC As New UtilsCommon
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+            Dim DragDropGroupPresent As Boolean
+
+            DragDropGroupPresent = False
+            For Each g As ListViewGroup In ListViewSources.Groups 'ListViewFiles.Groups
+                If g.Name = "DragDrop" Then
+                    DragDropGroupPresent = True
+                    Exit For
+                End If
+            Next
+
+            If Not DragDropGroupPresent Then
+                Dim tmpItem As New ListViewItem
+                tmpItem.Text = "DragDrop"
+                'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
+                tmpItem.Group = ListViewSources.Groups.Item("Sources")
+                tmpItem.ImageKey = "ASM_Folder"
+                tmpItem.Tag = "DragDrop"
+                tmpItem.Name = "DragDrop"
+                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
+
+            End If
+
+            ListViewFiles.BeginUpdate()
+
+            Dim extFilter As New List(Of String)
+            If Me.FilterAsm Then extFilter.Add(".asm")
+            If Me.FilterPar Then extFilter.Add(".par")
+            If Me.FilterPsm Then extFilter.Add(".psm")
+            If Me.FilterDft Then extFilter.Add(".dft")
+
+            Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each FileName As String In Filenames
+
+                If UC.FilenameIsOK(FileName) Then
+
+                    If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
+
+                    If IO.File.Exists(FileName) Then
+
+                        If Not ListViewFiles.Items.ContainsKey(FileName) Then
+
+                            Dim tmpLVItem As New ListViewItem
+                            tmpLVItem.Text = IO.Path.GetFileName(FileName)
+                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FileName))
+                            tmpLVItem.ImageKey = "Unchecked"
+                            tmpLVItem.Tag = IO.Path.GetExtension(FileName).ToLower 'Backup gruppo
+                            tmpLVItem.Name = FileName
+                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FileName).ToLower)
+                            ListViewFiles.Items.Add(tmpLVItem)
+
+                            Dim ItemPresent As Boolean
+
+                            ItemPresent = False
+                            For Each CacheItem As ListViewItem In DragDropCache
+                                If tmpLVItem.Name = CacheItem.Name Then
+                                    ItemPresent = True
+                                    Exit For
+                                End If
+                            Next
+                            If Not ItemPresent Then
+                                DragDropCache.Add(tmpLVItem)
+                            End If
+
+                        End If
+
+                    End If
+
+                End If
+
+            Next
+
+            ListViewFiles.EndUpdate()
 
         End If
 
@@ -2256,98 +2343,10 @@ Public Class Form_Main
 
     End Sub
 
-    Private Sub ListViewFiles_DragEnter(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragEnter
-
-        e.Effect = DragDropEffects.Copy
-
-    End Sub
-
-    Private Sub ListViewFiles_DragDrop(sender As Object, e As DragEventArgs) Handles ListViewFiles.DragDrop
-
-        Dim UC As New UtilsCommon
-
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-
-            Dim DragDropGroupPresent As Boolean
-
-            DragDropGroupPresent = False
-            For Each g As ListViewGroup In ListViewSources.Groups 'ListViewFiles.Groups
-                If g.Name = "DragDrop" Then
-                    DragDropGroupPresent = True
-                    Exit For
-                End If
-            Next
-
-            If Not DragDropGroupPresent Then
-                Dim tmpItem As New ListViewItem
-                tmpItem.Text = "DragDrop"
-                'tmpItem.SubItems.Add(tmpFolderDialog.FileName)
-                tmpItem.Group = ListViewSources.Groups.Item("Sources")
-                tmpItem.ImageKey = "ASM_Folder"
-                tmpItem.Tag = "DragDrop"
-                tmpItem.Name = "DragDrop"
-                If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem)
-
-            End If
-
-            ListViewFiles.BeginUpdate()
-
-            Dim extFilter As New List(Of String)
-            If Me.FilterAsm Then extFilter.Add(".asm")
-            If Me.FilterPar Then extFilter.Add(".par")
-            If Me.FilterPsm Then extFilter.Add(".psm")
-            If Me.FilterDft Then extFilter.Add(".dft")
-
-            Dim Filenames As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-            For Each FileName As String In Filenames
-
-                If UC.FilenameIsOK(FileName) Then
-
-                    If Not extFilter.Contains(IO.Path.GetExtension(FileName).ToLower) Then Continue For
-
-                    If IO.File.Exists(FileName) Then
-
-                        If Not ListViewFiles.Items.ContainsKey(FileName) Then
-
-                            Dim tmpLVItem As New ListViewItem
-                            tmpLVItem.Text = IO.Path.GetFileName(FileName)
-                            tmpLVItem.SubItems.Add(IO.Path.GetDirectoryName(FileName))
-                            tmpLVItem.ImageKey = "Unchecked"
-                            tmpLVItem.Tag = IO.Path.GetExtension(FileName).ToLower 'Backup gruppo
-                            tmpLVItem.Name = FileName
-                            tmpLVItem.Group = ListViewFiles.Groups.Item(IO.Path.GetExtension(FileName).ToLower)
-                            ListViewFiles.Items.Add(tmpLVItem)
-
-                            Dim ItemPresent As Boolean
-
-                            ItemPresent = False
-                            For Each CacheItem As ListViewItem In DragDropCache
-                                If tmpLVItem.Name = CacheItem.Name Then
-                                    ItemPresent = True
-                                    Exit For
-                                End If
-                            Next
-                            If Not ItemPresent Then
-                                DragDropCache.Add(tmpLVItem)
-                            End If
-
-                        End If
-
-                    End If
-
-                End If
-
-            Next
-
-            ListViewFiles.EndUpdate()
-
-        End If
-
-    End Sub
 
     Private Sub BT_ProcessSelected_Click(sender As Object, e As EventArgs) Handles BT_ProcessSelected.Click
         Dim UE As New UtilsExecute(Me)
-        UE.TextBoxStatus = Me.TextBoxStatus
+        'UE.TextBoxStatus = Me.TextBoxStatus
 
         If Not ListViewFiles.SelectedItems.Count = 0 Then UE.ProcessAll()
 

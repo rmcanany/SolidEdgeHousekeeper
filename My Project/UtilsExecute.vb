@@ -10,7 +10,7 @@ Public Class UtilsExecute
     Public Property TotalAbortsMaximum As Integer = 4
     Public Property SEApp As SolidEdgeFramework.Application
     Public Property StartTime As DateTime
-    Public Property TextBoxStatus As TextBox
+    'Public Property TextBoxStatus As TextBox
     Public Property ErrorLogger As HCErrorLogger
 
     Public Sub New(_Form_Main As Form_Main)
@@ -45,8 +45,8 @@ Public Class UtilsExecute
 
         TotalAborts = 0
 
-        Dim USEA = New UtilsSEApp
-        USEA.TextBoxStatus = Me.TextBoxStatus
+        Dim USEA = New UtilsSEApp(FMain)
+        'USEA.TextBoxStatus = Me.TextBoxStatus
 
         If FMain.SolidEdgeRequired > 0 Then
             USEA.SEStart(FMain.RunInBackground, FMain.UseCurrentSession, FMain.NoUpdateMRU)
@@ -128,8 +128,8 @@ Public Class UtilsExecute
         Dim HeaderLogger As Logger = ErrorLogger.AddFile("Please correct the following before continuing")
         Dim StartLogger As Logger = HeaderLogger.AddLogger("")
 
-        Dim USEA = New UtilsSEApp
-        USEA.TextBoxStatus = Me.TextBoxStatus
+        Dim USEA = New UtilsSEApp(FMain)
+        'USEA.TextBoxStatus = Me.TextBoxStatus
 
         If Not FMain.UseCurrentSession Then
             If USEA.SEIsRunning() Then
@@ -544,8 +544,8 @@ Public Class UtilsExecute
                 AbortList.Add(String.Format("Total aborts exceed maximum of {0}.  Exiting...", TotalAbortsMaximum))
             Else
                 If FMain.SolidEdgeRequired > 0 Then
-                    Dim USEA = New UtilsSEApp
-                    USEA.TextBoxStatus = Me.TextBoxStatus
+                    Dim USEA = New UtilsSEApp(FMain)
+                    'USEA.TextBoxStatus = Me.TextBoxStatus
 
                     USEA.SEStop(FMain.UseCurrentSession)
                     SEApp = Nothing

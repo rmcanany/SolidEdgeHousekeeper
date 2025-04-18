@@ -395,7 +395,7 @@ Public Class TaskCreateDrawingOfFlatPattern
             End If
             SEApp.DoIdle()
 
-            DraftDoc.Close()
+            DraftDoc.Close(False)
             SEApp.DoIdle()
 
         End If

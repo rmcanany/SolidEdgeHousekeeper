@@ -57,7 +57,7 @@ Once you've mastered the basics, getting good at the following can improve your 
 - [<ins>**Filtering**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#filtering)  Explains how to refine the list using property and/or file wildcard filters.
 - [<ins>**Tasks**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#task-tab)  Provides details on the task interface, including how to customize it for your own needs.
 
-If you have some other topic in mind, try the [<ins>**Table of Contents**</ins>](https://github.com/rmcanany/solidedgehousekeeper#table-of-contents).  It has links to all the major sections in the documentation.
+If you have some other topic in mind, try the [<ins>**Table of Contents**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#task-tab#readme).  Click the button on the header bar of that page that looks like this ![Table of Contents](My%20Project/media/table_of_contents_icon.png).  It has links to all the major sections in the documentation.
 
 If you get stuck, head over to the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge).  There are lots of experienced users who are glad to help out.
 
