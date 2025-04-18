@@ -5,7 +5,7 @@
   <span class="description">Robert McAnany 2025</span>
 </div>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-gold-star-16.png" style="padding-right:10px">CREDITS</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_credits_image.png" >CREDITS</h2></summary>
 
 **Sponsors**
 @john.matthews3452 (Hatch)
@@ -64,21 +64,19 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 
 <details><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="Resources/TaskSaveAs.png" style="padding-right:10px">INSTALLATION</h2></summary>
 
-
-There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
-
-The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
+The preferred method is to clone the project and compile it yourself.  The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
 
 
 <p align="center">
   <img src="My%20Project/media/release_page.png">
 </p>
 
-Click the file `SolidEdgeHousekeeper-vYYYY.N.zip` (sometimes hidden under the Assets dropdown). It should prompt you to save it. Choose a convenient location on your machine. Extract the zip file (probably by right-clicking and selecting Extract All). Double-click the `.exe` file to run.
+Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (`YYYY` = Year, `N` = Release Number).  You may have to expand the Assets dropdown to see it.  Your browser should prompt you to save it. 
 
-The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
+Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the directory is not read-only (right-click > Properties).  The program needs write access to function properly.  
 
-If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in Housekeeper's Preferences folder. There is one exception.  Starting with v2024.2, property filters are stored in a `*.json` format.  The old `*.txt` format is no longer used.
+Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Windows Protected Your PC` message.  You can click `More Info` followed by `Run Anyway` to launch the program. 
+
 </details>
 
 <details>
@@ -1198,7 +1196,6 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 - *Possible workaround*: Process the files in an unmanaged workspace.
 - *Update 10/10/2021* Some users have reported success with BiDM managed files.
 - *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
-- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database.
 
 **Some tasks cannot run on older Solid Edge versions**
 - *Cause*: Probably an API call not available in previous versions.
