@@ -80,7 +80,7 @@ Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Wi
 </details>
 
 <details>
-<summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_help_16.png" style="padding-right:10px">GETTING HELP</h2></summary>
+<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_getting_help_image.png">GETTING HELP</h2></summary>
 
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
@@ -98,7 +98,7 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 </details>
 
 <details>
-<summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-key-16.png" style="padding-right:10px">OPERATION</h2></summary>
+<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_operation_image.png">OPERATION</h2></summary>
 
 ![Tabs](My%20Project/media/tabs.png)
 
@@ -113,9 +113,9 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_Folders_16.png" style="padding-right:10px">FILE SELECTION</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_file_selection_image.png">FILE SELECTION</h2></summary>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/icons8_Folder_16.png" style="padding-right:10px">Selection</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_selection_image.png">Selection</h3></summary>
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -275,7 +275,7 @@ If you select one or more files on the list, you can click the right mouse butto
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/icons8_list_view_16.png" style="padding-right:10px">Sorting</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_sorting_image.png">Sorting</h3></summary>
 
 You can sort the file list in a variety of ways.
 
@@ -293,7 +293,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSetDocumentStatus.png" style="padding-right:10px">Document Status Options</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_document_status_options_image.png">Document Status Options</h3></summary>
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
@@ -312,13 +312,13 @@ If you don't need to worry about document Status for your current task, it's not
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8-filter-16.png" style="padding-right:10px">FILTERING</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_filtering_image.png">FILTERING</h2></summary>
 
 Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/icons8-search-16.png" style="padding-right:10px">Property Filter</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_property_filter_image.png">Property Filter</h3></summary>
 
 The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page) section of this Readme.
 
@@ -432,7 +432,7 @@ The filters are saved in `property_filter_saved_settings.json` in the `Preferenc
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/wildcard_17.png" style="padding-right:10px">File Name Filter</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_file_name_filter_image.png">File Name Filter</h3></summary>
 
 The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png).
  
@@ -442,7 +442,7 @@ As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_Circled_Play_16.png" style="padding-right:10px">PROCESSING</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_processing_image.png">PROCESSING</h2></summary>
 
 
 ![Tabs](My%20Project/media/status_bar_running.png)
@@ -459,7 +459,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_list_view_16.png" style="padding-right:10px">TASK TAB</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_task_tab_image.png">TASK TAB</h2></summary>
 
 The Task Tab is where you choose what operations to perform.
 
@@ -531,7 +531,7 @@ For commands with variable information, such as the output directory for `Save A
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/Support_16.png" style="padding-right:10px">CONFIGURATION TAB</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_configuration_tab_image.png">CONFIGURATION TAB</h2></summary>
 
 
 Global options for the program are set on this tab.
@@ -633,7 +633,7 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/SE_asm.png" style="padding-right:10px">TASK DETAILS</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_task_details_image.png">TASK DETAILS</h2></summary>
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSetDocumentStatus.png" style="padding-right:10px">Set document status</h3></summary>
 
@@ -1185,7 +1185,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/icons8_help_16.png" style="padding-right:10px">KNOWN ISSUES</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_known_issues_image.png">KNOWN ISSUES</h2></summary>
 
 **The program is not perfect**
 - *Cause*: The programmer is not perfect.
@@ -1212,7 +1212,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/TaskRunExternalProgram.png" style="padding-right:10px">OPEN SOURCE PACKAGES</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_open_source_packages_image.png">OPEN SOURCE PACKAGES</h2></summary>
 
 This project uses these awesome open source packages.
 - JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
@@ -1224,7 +1224,7 @@ This project uses these awesome open source packages.
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="Resources/Info-16.png" style="padding-right:10px">CODE ORGANIZATION</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/readme_code_organization_image.png"><img src="My%20Project/media/spacer.png">CODE ORGANIZATION</h2></summary>
 
 Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there.
 
