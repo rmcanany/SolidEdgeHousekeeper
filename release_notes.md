@@ -13,8 +13,13 @@ Please note, the program has been tested on thousands of our files, but none of 
 
 Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge Forum**</ins>](https://community.sw.siemens.com/s/topic/0TO4O000000MihiWAC/solid-edge) or [<ins>**GitHub**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/issues).
 
-
 ## V2025.2 Enhancements/Fixes
+
+We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **sponsor!**  
+
+Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own, and newest **contributor**, **@aalian.khan8036** as a COOP student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
+
+Now to those highlights...
 
 ### TeamCenter Integration
 
@@ -84,7 +89,7 @@ Fixed an issue where certain missing links were not captured.
 
 ### Other
 
-Fixed an issue where the `List update frequency` was not properly initialized on startup.  (Thank you **@64Pacific!**)
+Fixed an issue where the `List update frequency` and `LinkMgt.txt` were not properly initialized on startup.  (Thank you **@64Pacific!** and **@john.matthews3452!**)
 
 Fixed an issue in Top Level Assembly Search where in certain cases folders could be searched more than once.
 

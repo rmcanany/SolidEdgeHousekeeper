@@ -1125,6 +1125,8 @@ You can optionally rename the file or create subdirectories using a formula simi
 - `Project %{System.Project Name}` 
 - `%{System.Material}\%{System.Sheet Metal Gage}` 
 
+You can enter a subdirectory formula even if `Original directory` is enabled. In that case, it is interpreted as a subdirectory under the original directory. 
+
 As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. For more information, refer to the [<ins>**Property Filter**</ins>](#property-filter) section in this Readme file. 
 
 It is possible that a property contains a character that cannot be used in a file name. If that happens, a replacement is read from `filename_charmap.txt` in the `Preferences` directory in the Housekeeper root folder. You can/should edit it to change the replacement characters to your preference. The file is created the first time you run Housekeeper.  For details, see the header comments in that file. 

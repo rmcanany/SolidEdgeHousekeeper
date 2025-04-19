@@ -1266,6 +1266,9 @@ Public Class TaskSaveModelAs
         HelpString += vbCrLf + "- `Project %{System.Project Name}` "
         HelpString += vbCrLf + "- `%{System.Material}\%{System.Sheet Metal Gage}` "
 
+        HelpString += vbCrLf + vbCrLf + "You can enter a subdirectory formula even if `Original directory` is enabled. "
+        HelpString += "In that case, it is interpreted as a subdirectory under the original directory. "
+
         HelpString += vbCrLf + vbCrLf + "As illustrated in the examples, a `Property set`, either `System` or `Custom`, is required. "
         HelpString += "For more information, refer to the "
         HelpString += "[<ins>**Property Filter**</ins>](#property-filter) section in this Readme file. "
