@@ -127,18 +127,29 @@ Public Class UtilsDocumentation
 
             ' html for collapsible sections
             '<details><summary><h2 style="display:inline-block">Task Details</h2></summary>
-            msg = String.Format(
-                "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/SE_asm.png{0} style={0}padding-right:10px{0}>TASK DETAILS</h2></summary>",
-                Chr(34))
+            'msg = String.Format(
+            '    "<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}My%20Project/media/spacer.png{0}><img src={0}Resources/SE_asm.png{0}><img src={0}My%20Project/media/spacer.png{0}>TASK DETAILS</h2></summary>",
+            '    Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}Resources/SE_asm.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}TASK DETAILS</h2></summary>", Chr(34), msg)
 
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
             For Each Task As Task In tmpTaskList
                 Dim ImageName As String = Task.Name
-                msg = String.Format(
-                    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/{2}.png{0} style={0}padding-right:10px{0}>{1}</h3></summary>",
-                    Chr(34), Task.Description, ImageName)
+                'msg = String.Format(
+                '    "<details><summary><h3 style={0}margin:0px; display:inline-block{0}><img src={0}My%20Project/media/spacer.png{0}><img src={0}Resources/{2}.png{0}><img src={0}My%20Project/media/spacer.png{0}>{1}</h3></summary>",
+                '    Chr(34), Task.Description, ImageName)
+                msg = String.Format("<details><summary><h3 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}<img src={0}Resources/{2}.png{0}>", Chr(34), msg, ImageName)
+                msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+                msg = String.Format("{1}{2}</h3></summary>", Chr(34), msg, Task.Description)
+
                 ReadmeOut.Add(msg)
                 ReadmeOut.Add("")
 
@@ -154,7 +165,13 @@ Public Class UtilsDocumentation
 
             ReadmeOut.Add("")
             'msg = "# KNOWN ISSUES"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/icons8_help_16.png{0} style={0}padding-right:10px{0}>KNOWN ISSUES</h2></summary>", Chr(34))
+            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/icons8_help_16.png{0} style={0}padding-right:10px{0}>KNOWN ISSUES</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}Resources/icons8_help_16.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}KNOWN ISSUES</h2></summary>", Chr(34), msg)
+
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -209,7 +226,13 @@ Public Class UtilsDocumentation
 
             ReadmeOut.Add("")
             'msg = "# OPEN SOURCE PACKAGES"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/TaskRunExternalProgram.png{0} style={0}padding-right:10px{0}>OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
+            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/TaskRunExternalProgram.png{0} style={0}padding-right:10px{0}>OPEN SOURCE PACKAGES</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}Resources/TaskRunExternalProgram.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}OPEN SOURCE PACKAGES</h2></summary>", Chr(34), msg)
+
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
 
@@ -236,7 +259,13 @@ Public Class UtilsDocumentation
             msg = ""
             ReadmeOut.Add("")
             'msg = "# CODE ORGANIZATION"
-            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/Info-16.png{0} style={0}padding-right:10px{0}>CODE ORGANIZATION</h2></summary>", Chr(34))
+            'msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}><img src={0}Resources/Info-16.png{0} style={0}padding-right:10px{0}>CODE ORGANIZATION</h2></summary>", Chr(34))
+            msg = String.Format("<details><summary><h2 style={0}margin:0px; display:inline-block{0}>", Chr(34))
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}Resources/Info-16.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}<img src={0}My%20Project/media/spacer.png{0}>", Chr(34), msg)
+            msg = String.Format("{1}CODE ORGANIZATION</h2></summary>", Chr(34), msg)
+
             ReadmeOut.Add(msg)
             ReadmeOut.Add("")
             msg = "Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there."

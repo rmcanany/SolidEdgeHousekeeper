@@ -5,7 +5,7 @@
   <span class="description">Robert McAnany 2025</span>
 </div>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_credits_image.png" >CREDITS</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-gold-star-16.png"><img src="My%20Project/media/spacer.png">CREDITS</h2></summary>
 
 **Sponsors**
 @john.matthews3452 (Hatch)
@@ -24,7 +24,7 @@
 
 </details>
 
-<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_description_image.png">DESCRIPTION</h2></summary>
+<details open><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/Info-16.png"><img src="My%20Project/media/spacer.png">DESCRIPTION</h2></summary>
 
 Solid Edge Housekeeper helps you find annoying little errors in your project. It can identify failed features in 3D models, detached dimensions in drawings, missing parts in assemblies, and more.  It can also update certain individual file settings to match those in a template you specify.
 
@@ -62,25 +62,27 @@ Responding to the prompt *"Heard any good jokes about Solid Edge Housekeeper?"*,
 
 </details>
 
-<details><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/readme_installation_image.png">INSTALLATION</h2></summary>
+<details><summary><h2 style="margin-bottom:-20px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSaveAs.png"><img src="My%20Project/media/spacer.png">INSTALLATION</h2></summary>
 
-The preferred method is to clone the project and compile it yourself.  The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
+
+There is no installation *per se*.  The preferred method is to download or clone the project and compile it yourself.
+
+The other option is to use the [<ins>**Latest Release**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/releases). It will be the top entry on the page. 
 
 
 <p align="center">
   <img src="My%20Project/media/release_page.png">
 </p>
 
-Click the file `SolidEdgeHousekeeper-VYYYY.N.zip` (`YYYY` = Year, `N` = Release Number).  You may have to expand the Assets dropdown to see it.  Your browser should prompt you to save it. 
+Click the file `SolidEdgeHousekeeper-vYYYY.N.zip` (sometimes hidden under the Assets dropdown). It should prompt you to save it. Choose a convenient location on your machine. Extract the zip file (probably by right-clicking and selecting Extract All). Double-click the `.exe` file to run.
 
-Choose a convenient location on your machine. Extract the zip file (right-click > Extract All).  Verify the directory is not read-only (right-click > Properties).  The program needs write access to function properly.  
+The first time you run it, you may encounter the following dialog.  You can click `More Info` followed by `Run Anyway` to launch the program. ![Run Anyway](My%20Project/media/run_anyway.png)
 
-Double-click `Housekeeper.exe` to run.  The first time you do, you may get a `Windows Protected Your PC` message.  You can click `More Info` followed by `Run Anyway` to launch the program. 
-
+If you are upgrading from a previous release, you should be able to copy the settings files from the old version to the new. The files are stored in Housekeeper's Preferences folder. There is one exception.  Starting with v2024.2, property filters are stored in a `*.json` format.  The old `*.txt` format is no longer used.
 </details>
 
 <details>
-<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_getting_help_image.png">GETTING HELP</h2></summary>
+<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_help_16.png"><img src="My%20Project/media/spacer.png">GETTING HELP</h2></summary>
 
 Start with the context-sensitive help icon ![Table of Contents](My%20Project/media/help.png).  Every command, and most dialogs, have one.  
 
@@ -98,7 +100,7 @@ If you know .NET, or want to learn, there's more to do!  If you're new to GitHub
 </details>
 
 <details>
-<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_operation_image.png">OPERATION</h2></summary>
+<summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-key-16.png"><img src="My%20Project/media/spacer.png">OPERATION</h2></summary>
 
 ![Tabs](My%20Project/media/tabs.png)
 
@@ -113,9 +115,9 @@ To start execution, click the `Process` button.  The status bar tracks progress.
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_file_selection_image.png">FILE SELECTION</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folders_16.png"><img src="My%20Project/media/spacer.png">FILE SELECTION</h2></summary>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_selection_image.png">Selection</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Folder_16.png"><img src="My%20Project/media/spacer.png">Selection</h3></summary>
 
 You can select files by folder, subfolder, top-level assembly, top-level folder, or list. There can be any number of each, in any combination.  
 
@@ -275,7 +277,7 @@ If you select one or more files on the list, you can click the right mouse butto
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_sorting_image.png">Sorting</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">Sorting</h3></summary>
 
 You can sort the file list in a variety of ways.
 
@@ -293,7 +295,7 @@ The `Random sample` option randomly selects and shuffles  a fraction of the tota
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_document_status_options_image.png">Document Status Options</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSetDocumentStatus.png"><img src="My%20Project/media/spacer.png">Document Status Options</h3></summary>
 
 If you use the document Status functionality, you know that some settings place the file in read-only mode. These cannot normally be processed by Housekeeper.
 
@@ -312,13 +314,13 @@ If you don't need to worry about document Status for your current task, it's not
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_filtering_image.png">FILTERING</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-filter-16.png"><img src="My%20Project/media/spacer.png">FILTERING</h2></summary>
 
 Filters are a way to refine the list of files to process.  You can filter on file properties, or filenames (with a wildcard search). They can be used alone or in combination.
 
 ![Filter Toolbar](My%20Project/media/filter_toolbar.png)
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_property_filter_image.png">Property Filter</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8-search-16.png"><img src="My%20Project/media/spacer.png">Property Filter</h3></summary>
 
 The property filter allows you to select files by their property values. Prior to using this tool, you first need to populate properties from your templates.  Please refer to instructions in the [<ins>**Configuration Tab -- Templates Page**</ins>](#templates-page) section of this Readme.
 
@@ -432,7 +434,7 @@ The filters are saved in `property_filter_saved_settings.json` in the `Preferenc
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_file_name_filter_image.png">File Name Filter</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/wildcard_17.png"><img src="My%20Project/media/spacer.png">File Name Filter</h3></summary>
 
 The wildcard filter operates on file names. Simply enter the wildcard pattern in the provided combobox.  Wildcard patterns are automatically saved for future use.  Delete a pattern that is no longer needed by selecting it and clicking ![Draft](Resources/icons8_Close_Window_16.png).
  
@@ -442,7 +444,7 @@ As suggested above, see [<ins>**VB Like Operator**</ins>](https://docs.microsoft
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_processing_image.png">PROCESSING</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_Circled_Play_16.png"><img src="My%20Project/media/spacer.png">PROCESSING</h2></summary>
 
 
 ![Tabs](My%20Project/media/status_bar_running.png)
@@ -459,7 +461,7 @@ To save some time, you can process files in the background, without graphics.  T
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_task_tab_image.png">TASK TAB</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_list_view_16.png"><img src="My%20Project/media/spacer.png">TASK TAB</h2></summary>
 
 The Task Tab is where you choose what operations to perform.
 
@@ -531,7 +533,7 @@ For commands with variable information, such as the output directory for `Save A
 
 </details>
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_configuration_tab_image.png">CONFIGURATION TAB</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/Support_16.png"><img src="My%20Project/media/spacer.png">CONFIGURATION TAB</h2></summary>
 
 
 Global options for the program are set on this tab.
@@ -633,9 +635,9 @@ Uses GitHub's API to get the most recent version and compare it to the running v
 <!-- Everything below this line is auto-generated.  Do not edit. -->
 <!-- Start -->
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_task_details_image.png">TASK DETAILS</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/SE_asm.png"><img src="My%20Project/media/spacer.png">TASK DETAILS</h2></summary>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSetDocumentStatus.png" style="padding-right:10px">Set document status</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSetDocumentStatus.png"><img src="My%20Project/media/spacer.png">Set document status</h3></summary>
 
 Sets document status. Select the new status on the Options pane. 
 
@@ -647,13 +649,13 @@ To eliminate potential confusion, it cannot run with the `Process as available` 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskOpenSave.png" style="padding-right:10px">Open save</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskOpenSave.png"><img src="My%20Project/media/spacer.png">Open save</h3></summary>
 
 Opens a document and saves in the current version.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskActivateAndUpdateAll.png" style="padding-right:10px">Activate and update all</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskActivateAndUpdateAll.png"><img src="My%20Project/media/spacer.png">Activate and update all</h3></summary>
 
 Loads all assembly occurrences' geometry into memory and does an update. Used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -661,7 +663,7 @@ Can run out of memory for very large assemblies.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateMaterialFromMaterialTable.png" style="padding-right:10px">Update material from material table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateMaterialFromMaterialTable.png"><img src="My%20Project/media/spacer.png">Update material from material table</h3></summary>
 
 Checks to see if the part's material name and properties match any material in your material table. 
 
@@ -681,7 +683,7 @@ There are several options for this command.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePartCopies.png" style="padding-right:10px">Update part copies</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdatePartCopies.png"><img src="My%20Project/media/spacer.png">Update part copies</h3></summary>
 
 In conjuction with `Assembly Activate and update all`, used mainly to eliminate the gray corners on assembly drawings. 
 
@@ -693,7 +695,7 @@ In many situations, only a few parts have part copies. Using this command with t
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdatePhysicalProperties.png" style="padding-right:10px">Update physical properties</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdatePhysicalProperties.png"><img src="My%20Project/media/spacer.png">Update physical properties</h3></summary>
 
 Updates mass, volume, etc.  Models with no assigned density are reported in the log file. 
 
@@ -705,7 +707,7 @@ Occasionally, the physical properties are updated correctly, but the results are
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelSizeInVariableTable.png" style="padding-right:10px">Update model size in variable table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateModelSizeInVariableTable.png"><img src="My%20Project/media/spacer.png">Update model size in variable table</h3></summary>
 
 Copies the model size to the variable table. 
 
@@ -723,7 +725,7 @@ The command reports sheet metal size in the formed state. For a flat pattern, in
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDesignForCost.png" style="padding-right:10px">Update design for cost</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDesignForCost.png"><img src="My%20Project/media/spacer.png">Update design for cost</h3></summary>
 
 Updates DesignForCost and saves the document.
 
@@ -731,13 +733,13 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingViews.png" style="padding-right:10px">Update drawing views</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
 Checks drawing views one by one, and updates them if needed.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateFlatPattern.png" style="padding-right:10px">Update flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateFlatPattern.png"><img src="My%20Project/media/spacer.png">Update flat pattern</h3></summary>
 
 Updates flat patterns. If the update was not successful, or no flat patterns were found, it is reported in the log file. 
 
@@ -745,7 +747,7 @@ Before updating the flat pattern, this command first regenerates the flat *model
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskBreakLinks.png" style="padding-right:10px">Break links</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskBreakLinks.png"><img src="My%20Project/media/spacer.png">Break links</h3></summary>
 
 Breaks external links to a file.  This is irreversible, so you know, think about it. 
 
@@ -769,7 +771,7 @@ Luckily, Solid Edge can take care of that. That's in the program, but only for C
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditProperties.png" style="padding-right:10px">Edit properties</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskEditProperties.png"><img src="My%20Project/media/spacer.png">Edit properties</h3></summary>
 
 Searches for text in a specified property and replaces it if found. 
 
@@ -839,7 +841,7 @@ Note, Solid Edge presents exposed variables as Custom properties.  You can chang
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditVariables.png" style="padding-right:10px">Edit variables</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskEditVariables.png"><img src="My%20Project/media/spacer.png">Edit variables</h3></summary>
 
 Adds, changes, and/or exposes variables. 
 
@@ -865,7 +867,7 @@ You can save a setup for future use. In the toolbar `Saved Settings` group, ente
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskEditInteractively.png" style="padding-right:10px">Edit interactively</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskEditInteractively.png"><img src="My%20Project/media/spacer.png">Edit interactively</h3></summary>
 
 Brings up files one at a time for manual processing. 
 
@@ -904,7 +906,7 @@ One last thing.  Macros interact with Solid Edge through something called the Wi
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateModelStylesFromTemplate.png" style="padding-right:10px">Update model styles from template</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateModelStylesFromTemplate.png"><img src="My%20Project/media/spacer.png">Update model styles from template</h3></summary>
 
 Updates the styles you select from a template you specify. 
 
@@ -922,7 +924,7 @@ The active view style of the file is changed to match the one active in the temp
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskUpdateDrawingStylesFromTemplate.png" style="padding-right:10px">Update drawing styles from template</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingStylesFromTemplate.png"><img src="My%20Project/media/spacer.png">Update drawing styles from template</h3></summary>
 
 Updates styles and/or background sheets from a template you specify. 
 
@@ -932,19 +934,19 @@ These styles are processed: `DimensionStyles`, `DrawingViewStyles`, `LinearStyle
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRemoveFaceStyleOverrides.png" style="padding-right:10px">Remove face style overrides</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRemoveFaceStyleOverrides.png"><img src="My%20Project/media/spacer.png">Remove face style overrides</h3></summary>
 
 Face style overrides change a part's appearance in the assembly. This command causes the part to appear the same in the part file and the assembly.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskHideConstructions.png" style="padding-right:10px">Hide constructions</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskHideConstructions.png"><img src="My%20Project/media/spacer.png">Hide constructions</h3></summary>
 
 Hides all non-model elements such as reference planes, PMI dimensions, etc.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskFitView.png" style="padding-right:10px">Fit view</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskFitView.png"><img src="My%20Project/media/spacer.png">Fit view</h3></summary>
 
 Maximizes the window, sets the view orientation for model files, and does a fit. 
 
@@ -954,7 +956,7 @@ Select the desired orientation on the Options panel. The setting is required, bu
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckInterference.png" style="padding-right:10px">Check interference</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckInterference.png"><img src="My%20Project/media/spacer.png">Check interference</h3></summary>
 
 Runs an interference check.  All parts are checked against all others. 
 
@@ -964,7 +966,7 @@ This can take a long time on large assemblies, so there is a limit to the number
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckLinks.png" style="padding-right:10px">Check links</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckLinks.png"><img src="My%20Project/media/spacer.png">Check links</h3></summary>
 
 Checks linked files.  
 
@@ -974,7 +976,7 @@ Checks linked files.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckRelationships.png" style="padding-right:10px">Check relationships</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckRelationships.png"><img src="My%20Project/media/spacer.png">Check relationships</h3></summary>
 
 Checks if the file has any failed, underconstrained, or suppressed relationships.
 
@@ -982,13 +984,13 @@ Checks if the file has any failed, underconstrained, or suppressed relationships
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFlatPattern.png" style="padding-right:10px">Check flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckFlatPattern.png"><img src="My%20Project/media/spacer.png">Check flat pattern</h3></summary>
 
 Checks for the existence of a flat pattern. If one is found, checks if it is up to date. 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMaterialNotInMaterialTable.png" style="padding-right:10px">Check material not in material table</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckMaterialNotInMaterialTable.png"><img src="My%20Project/media/spacer.png">Check material not in material table</h3></summary>
 
 Checks if the material in the file exists in the material table. 
 
@@ -998,13 +1000,13 @@ The material table is chosen on the Options panel. This command only checks the 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckMissingDrawing.png" style="padding-right:10px">Check missing drawing</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckMissingDrawing.png"><img src="My%20Project/media/spacer.png">Check missing drawing</h3></summary>
 
 Assumes drawing has the same name as the model, and is in the same directory
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckFilename.png" style="padding-right:10px">Check filename</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckFilename.png"><img src="My%20Project/media/spacer.png">Check filename</h3></summary>
 
 Checks the file name for the presence of a property (or combination of properties and other text). 
 
@@ -1029,19 +1031,19 @@ For `*.dft` files, there are two ways to search.  You can use either one, or bot
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckPartCopies.png" style="padding-right:10px">Check part copies</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckPartCopies.png"><img src="My%20Project/media/spacer.png">Check part copies</h3></summary>
 
 If the file has any Part Copies, checks if they are up to date.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawingPartsList.png" style="padding-right:10px">Check drawing parts list</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckDrawingPartsList.png"><img src="My%20Project/media/spacer.png">Check drawing parts list</h3></summary>
 
 Checks is there are any parts list in the drawing and if they are all up to date.
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCheckDrawings.png" style="padding-right:10px">Check drawings</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCheckDrawings.png"><img src="My%20Project/media/spacer.png">Check drawings</h3></summary>
 
 Checks draft files for various problems. 
 
@@ -1054,7 +1056,7 @@ The options are:
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskRunExternalProgram.png" style="padding-right:10px">Run external program</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRunExternalProgram.png"><img src="My%20Project/media/spacer.png">Run external program</h3></summary>
 
 Runs an `*.exe`, `*.vbs`, `*.ps1`, or `*.snp` file. 
 
@@ -1112,7 +1114,7 @@ To get around that, you can `Run External Program` once to create the PowerShell
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveModelAs.png" style="padding-right:10px">Save model as</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSaveModelAs.png"><img src="My%20Project/media/spacer.png">Save model as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1136,7 +1138,7 @@ For image file formats there are additional options. You can hide constructions 
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskSaveDrawingAs.png" style="padding-right:10px">Save drawing as</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskSaveDrawingAs.png"><img src="My%20Project/media/spacer.png">Save drawing as</h3></summary>
 
 Exports the file to either a non-Solid Edge format, or the same format in a different directory. 
 
@@ -1152,7 +1154,7 @@ When creating PDF files, there are two options, `PDF` and `PDF per Sheet`. The f
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskCreateDrawingOfFlatPattern.png" style="padding-right:10px">Create drawing of flat pattern</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskCreateDrawingOfFlatPattern.png"><img src="My%20Project/media/spacer.png">Create drawing of flat pattern</h3></summary>
 
 Creates a drawing of a flat pattern using the template you specify. If the file does not contain a flat pattern, the command reports an error. It does not check if the flat pattern is up to date. For that, run the `Check flat pattern` and/or `Update flat pattern` commands before running this one. 
 
@@ -1164,7 +1166,7 @@ You can save the drawing as a `*.dft` or `*.pdf` or both. If a file with the sam
 
 </details>
 
-<details><summary><h3 style="margin:0px; display:inline-block"><img src="Resources/TaskPrint.png" style="padding-right:10px">Print</h3></summary>
+<details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskPrint.png"><img src="My%20Project/media/spacer.png">Print</h3></summary>
 
 Prints drawings. 
 
@@ -1185,7 +1187,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_known_issues_image.png">KNOWN ISSUES</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/icons8_help_16.png"><img src="My%20Project/media/spacer.png">KNOWN ISSUES</h2></summary>
 
 **The program is not perfect**
 - *Cause*: The programmer is not perfect.
@@ -1196,6 +1198,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 - *Possible workaround*: Process the files in an unmanaged workspace.
 - *Update 10/10/2021* Some users have reported success with BiDM managed files.
 - *Update 1/25/2022* One user has reported success with Teamcenter 'cached' files.
+- *Update 4/18/2025* Now supports Teamcenter cached files, including the ability to download from the database.
 
 **Some tasks cannot run on older Solid Edge versions**
 - *Cause*: Probably an API call not available in previous versions.
@@ -1212,7 +1215,7 @@ This command may not work with PDF printers. Try the Save As PDF command instead
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/readme_open_source_packages_image.png">OPEN SOURCE PACKAGES</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskRunExternalProgram.png"><img src="My%20Project/media/spacer.png">OPEN SOURCE PACKAGES</h2></summary>
 
 This project uses these awesome open source packages.
 - JSON Converter [<ins>**Newtonsoft.Json**</ins>](https://github.com/JamesNK/Newtonsoft.Json)
@@ -1224,7 +1227,7 @@ This project uses these awesome open source packages.
 </details>
 
 
-<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="My%20Project/media/readme_code_organization_image.png"><img src="My%20Project/media/spacer.png">CODE ORGANIZATION</h2></summary>
+<details><summary><h2 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/Info-16.png"><img src="My%20Project/media/spacer.png">CODE ORGANIZATION</h2></summary>
 
 Processing starts in Form_Main.vb.  A short description of the code's so-called organization can be found there.
 
