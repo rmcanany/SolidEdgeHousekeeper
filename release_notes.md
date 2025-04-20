@@ -17,15 +17,15 @@ Feel free to report bugs and/or ideas for improvement on the [<ins>**Solid Edge 
 
 We'll get to the highlights in just a second, but first some big news...  Housekeeper has its first **sponsor!**  
 
-Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own, and newest **contributor**, **@aalian.khan8036** as a COOP student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
+Our very own **@john.matthews3452**, and his employer **Hatch**, brought on our very own **@aalian.khan8036** (our newest **contributor**) as a COOP student to integrate TeamCenter into the program.  It's a capability that many have asked for.  Can't wait for you to see their handywork!
 
 Now to those highlights...
 
 ### TeamCenter Integration
 
-Sponsored by **@john.matthews3452 (Hatch)** Thank you!
+Sponsored by **@john.matthews3452 (Hatch)**. Thank you!
 
-Contributed by **@aalian.khan8036** (with helpful input from **@SatyenB**) Thank you!
+Contributed by **@aalian.khan8036** (with helpful input from **@SatyenB**). Thank you!
 
 Added the ability to select files from TeamCenter.  
 
@@ -40,6 +40,12 @@ You search by Item ID and Revision, pasting from Excel if desired.  Prompts for 
 The files are downloaded to your cache if necessary, then copied into Housekeeper's file list.  
 
 See the [<ins>**Select from TeamCenter Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#select-from-teamcenter) for details.
+
+### Check Drawings
+
+Added checks for overridden or hidden dimension values, and for drawing views that have been modified with the Draw In View command.
+
+See the [<ins>**Check Drawing Views Help Topic**</ins>](https://github.com/rmcanany/SolidEdgeHousekeeper/blob/master/HelpTopics.md#check-drawings) for details.
 
 ### Check Filename
 

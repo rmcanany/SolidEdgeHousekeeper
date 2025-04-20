@@ -252,7 +252,6 @@ Public Class TaskSaveModelAs
         Me.HelpURL = GenerateHelpURL(Description)
         Me.Image = My.Resources.TaskSaveAs
         Me.Category = "Output"
-        'Me.RequiresTemplatePropertyDict = True
         Me.RequiresPropertiesData = True
         SetColorFromCategory(Me)
 
@@ -277,7 +276,6 @@ Public Class TaskSaveModelAs
         Me.ChangeViewStyle = False
         Me.ViewStyleName = ""
 
-        'Me.TemplatePropertyDict = New Dictionary(Of String, Dictionary(Of String, String))
         Me.PropertiesData = New HCPropertiesData
 
     End Sub
@@ -308,8 +306,6 @@ Public Class TaskSaveModelAs
 
         Dim ImageExtensions As List(Of String) = {".bmp", ".jpg", ".png", ".tif"}.ToList
 
-        Dim ExitMessage As String = ""
-
         Dim NewFilename As String = ""
         Dim NewExtension As String = ""
         Dim NewFileFormat As String = ""
@@ -330,7 +326,7 @@ Public Class TaskSaveModelAs
         If Not IsSaveCopyAs Then
             NewExtension = Me.NewFileTypeName
             NewExtension = NewExtension.Split("*"c)(1)  ' "Parasolid text (*.xt)" -> ".xt)"
-            NewExtension = NewExtension.Split(")"c)(0)  ' "Parasolid text (*.xt)" -> ".xt"
+            NewExtension = NewExtension.Split(")"c)(0)  ' ".xt)" -> ".xt"
         Else
             NewExtension = String.Format(".{0}", DocType)
         End If
@@ -766,6 +762,8 @@ Public Class TaskSaveModelAs
         WindowW As Integer
         )
 
+        ' See SolidEdgeHousekeeper\reference\crop_image_derivation
+
         Dim ModelX As Double
         Dim ModelY As Double
         Dim ModelZ As Double
@@ -845,8 +843,6 @@ Public Class TaskSaveModelAs
         Dim Button As Button
         Dim ControlWidth As Integer = 150
         Dim NewFileTypeLabelText = "(Sheetmetal only: PDF, DXF)"
-
-        'Dim IU As New InterfaceUtilities
 
         FormatTLPOptionsEx(tmpTLPOptions, "TLPOptions", 7, 75, 75)
 
@@ -1114,12 +1110,6 @@ Public Class TaskSaveModelAs
                 CType(ControlsDict(ControlNames.BrowseNewDir.ToString), Button).Visible = Not Me.SaveInOriginalDirectory
                 CType(ControlsDict(ControlNames.NewDir.ToString), TextBox).Visible = Not Me.SaveInOriginalDirectory
 
-                'Dim CheckBox2 = CType(ControlsDict(ControlNames.UseSubdirectoryFormula.ToString), CheckBox)
-                'CheckBox2.Visible = Not Me.SaveInOriginalDirectory
-                'Dim tf = (CheckBox2.Checked) And (Not Me.SaveInOriginalDirectory)
-                'CType(ControlsDict(ControlNames.Formula.ToString), TextBox).Visible = tf
-
-
             Case ControlNames.UseSubdirectoryFormula.ToString
                 Me.UseSubdirectoryFormula = Checkbox.Checked
 
@@ -1211,10 +1201,6 @@ Public Class TaskSaveModelAs
 
                 Label = CType(ControlsDict(ControlNames.ViewStyleNameLabel.ToString), Label)
                 Label.Visible = ImageFileTypeNames.Contains(Me.NewFileTypeName) And Me.ChangeViewStyle
-
-
-
-
 
             Case Else
                 MsgBox(String.Format("{0} Name '{1}' not recognized", Me.Name, Name))

@@ -42,6 +42,32 @@ Public Class TaskCheckDrawings
         End Set
     End Property
 
+    Private _DrawInView As Boolean
+    Public Property DrawInView As Boolean
+        Get
+            Return _DrawInView
+        End Get
+        Set(value As Boolean)
+            _DrawInView = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DrawInView.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
+    Private _DimensionsOverridden As Boolean
+    Public Property DimensionsOverridden As Boolean
+        Get
+            Return _DimensionsOverridden
+        End Get
+        Set(value As Boolean)
+            _DimensionsOverridden = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.DimensionsOverridden.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _AutoHideOptions As Boolean
     Public Property AutoHideOptions As Boolean
         Get
@@ -60,6 +86,8 @@ Public Class TaskCheckDrawings
         DrawingViewsOutOfDate
         DetachedDimensionsOrAnnotations
         DrawingViewOnBackgroundSheet
+        DrawInView
+        DimensionsOverridden
         AutoHideOptions
     End Enum
 
@@ -86,6 +114,8 @@ Public Class TaskCheckDrawings
         Me.DrawingViewsOutOfDate = False
         Me.DetachedDimensionsOrAnnotations = False
         Me.DrawingViewOnBackgroundSheet = False
+        Me.DrawInView = False
+        Me.DimensionsOverridden = False
 
     End Sub
 
@@ -123,113 +153,226 @@ Public Class TaskCheckDrawings
 
         Dim tmpSEDoc = CType(SEDoc, SolidEdgeDraft.DraftDocument)
 
-        If Me.DrawingViewsOutOfDate Then
-            Dim PartsList As SolidEdgeDraft.PartsList
+        If Me.DrawingViewsOutOfDate Then CheckDrawingViewsOutOfDate(tmpSEDoc)
 
-            Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
-            Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
-            Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
+        If DetachedDimensionsOrAnnotations Then CheckDetachedDimensionsOrAnnotations(tmpSEDoc)
 
-            ' Check Parts lists.
-            ' Not all draft files have PartsLists
-            Try
-                For Each PartsList In tmpSEDoc.PartsLists
-                    If Not PartsList.IsUpToDate Then
-                        s = "Parts list out of date"
-                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+        If DrawingViewOnBackgroundSheet Then CheckDrawingViewOnBackgroundSheet(tmpSEDoc)
 
-                    End If
-                Next
-            Catch ex As Exception
-            End Try
+        If Me.DrawInView Then CheckDrawInView(tmpSEDoc)
 
-            ' Check drawing views.
-            For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+        If Me.DimensionsOverridden Then CheckDimensionsOverridden(tmpSEDoc)
 
-                DrawingViews = Sheet.DrawingViews
-                For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
-                    If Not DrawingView.IsUpToDate Then
-                        s = "Drawing views out of date"
-                        If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+    End Sub
 
-                    End If
-                    ' Some drawing views do not have a ModelLink
-                    Try
-                        If DrawingView.ModelLink IsNot Nothing Then
-                            ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
-                            If ModelLink.ModelOutOfDate Then
-                                s = "Drawing views out of date"
-                                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
-                            End If
-                        End If
-                    Catch ex As Exception
-                    End Try
-                Next DrawingView
-            Next Sheet
+    Private Sub CheckDrawingViewsOutOfDate(tmpSEDoc As SolidEdgeDraft.DraftDocument)
 
-        End If
+        Dim UC As New UtilsCommon
 
-        If DetachedDimensionsOrAnnotations Then
-            Dim Balloons As SolidEdgeFrameworkSupport.Balloons
-            Dim Balloon As SolidEdgeFrameworkSupport.Balloon
+        Dim s As String
 
-            Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
-            Dim DimensionName As String
-            Dim Dimension As SolidEdgeFrameworkSupport.Dimension
+        Dim PartsList As SolidEdgeDraft.PartsList
 
-            Dim ParentSheet As SolidEdgeDraft.Sheet
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews = Nothing
+        Dim DrawingView As SolidEdgeDraft.DrawingView = Nothing
+        Dim ModelLink As SolidEdgeDraft.ModelLink = Nothing
 
-            ' Check callouts.  Callouts are 'Balloons' in Solid Edge.
-            For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
-                Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
-                For Each Balloon In Balloons
-                    'Doesn't always work
-                    Try
-                        If Balloon.Leader Then
-                            If Not Balloon.IsTerminatorAttachedToEntity Then
-                                s = String.Format("Detached annotation: Sheet {0}: {1}", Sheet.Name, Balloon.BalloonDisplayedText)
-                                TaskLogger.AddMessage(s)
-                            End If
-                        End If
-                    Catch ex As Exception
-                    End Try
-                Next Balloon
-            Next Sheet
-
-            ' Check dimensions.
-            DocDimensionDict = UC.GetDocDimensions(SEDoc)
-            If DocDimensionDict Is Nothing Then
-                TaskLogger.AddMessage("Unable to access dimensions")
-
-            Else
-                For Each DimensionName In DocDimensionDict.Keys
-                    Dimension = DocDimensionDict(DimensionName)
-
-                    tf = Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusDetached
-                    tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusError
-                    tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
-
-                    If tf Then
-                        ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
-                        s = String.Format("Detached dimension: Sheet {0}: {1}", ParentSheet.Name, Dimension.DisplayName)
-                        TaskLogger.AddMessage(s)
-                    End If
-
-                Next
-            End If
-        End If
-
-        If DrawingViewOnBackgroundSheet Then
-            Dim BackgroundSheet As SolidEdgeDraft.Sheet
-            For Each BackgroundSheet In UC.GetSheets(tmpSEDoc, "Background")
-                If BackgroundSheet.DrawingViews.Count > 0 Then
-                    s = String.Format("Drawing view found on background '{0}'.", BackgroundSheet.Name)
+        ' Check Parts lists.
+        ' Not all draft files have PartsLists
+        Try
+            For Each PartsList In tmpSEDoc.PartsLists
+                If Not PartsList.IsUpToDate Then
+                    s = "Parts list out of date"
                     If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
 
                 End If
             Next
+        Catch ex As Exception
+        End Try
+
+        ' Check drawing views.
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+
+            DrawingViews = Sheet.DrawingViews
+            For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
+                If Not DrawingView.IsUpToDate Then
+                    s = String.Format("Drawing views out of date on sheet '{0}'", Sheet.Name)
+                    If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                    Exit For
+                End If
+                ' Some drawing views do not have a ModelLink
+                Try
+                    If DrawingView.ModelLink IsNot Nothing Then
+                        ModelLink = CType(DrawingView.ModelLink, SolidEdgeDraft.ModelLink)
+                        If ModelLink.ModelOutOfDate Then
+                            s = String.Format("Model out of date on sheet '{0}'", Sheet.Name)
+                            If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+                            Exit For
+                        End If
+                    End If
+                Catch ex As Exception
+                End Try
+            Next DrawingView
+        Next Sheet
+    End Sub
+
+    Private Sub CheckDetachedDimensionsOrAnnotations(tmpSEDoc As SolidEdgeDraft.DraftDocument)
+
+        Dim UC As New UtilsCommon
+
+        Dim s As String
+        Dim tf As Boolean
+
+        Dim Balloons As SolidEdgeFrameworkSupport.Balloons
+        Dim Balloon As SolidEdgeFrameworkSupport.Balloon
+
+        Dim DocDimensionDict As New Dictionary(Of String, SolidEdgeFrameworkSupport.Dimension)
+        Dim DimensionName As String
+        Dim Dimension As SolidEdgeFrameworkSupport.Dimension
+
+        Dim ParentSheet As SolidEdgeDraft.Sheet
+
+        ' Check callouts.  Callouts are 'Balloons' in Solid Edge.
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+            Balloons = CType(Sheet.Balloons, SolidEdgeFrameworkSupport.Balloons)
+            For Each Balloon In Balloons
+                'Doesn't always work
+                Try
+                    If Balloon.Leader Then
+                        If Not Balloon.IsTerminatorAttachedToEntity Then
+                            s = String.Format("Detached annotation on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Balloon.BalloonDisplayedText)
+                            TaskLogger.AddMessage(s)
+                        End If
+                    End If
+                Catch ex As Exception
+                End Try
+            Next Balloon
+        Next Sheet
+
+        ' Check dimensions.
+        DocDimensionDict = UC.GetDocDimensions(CType(tmpSEDoc, SolidEdgeFramework.SolidEdgeDocument))
+        If DocDimensionDict Is Nothing Then
+            TaskLogger.AddMessage("Unable to access dimensions")
+
+        Else
+            For Each DimensionName In DocDimensionDict.Keys
+                Dimension = DocDimensionDict(DimensionName)
+
+                tf = Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusDetached
+                tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusError
+                tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
+
+                If tf Then
+                    ParentSheet = CType(Dimension.Parent, SolidEdgeDraft.Sheet)
+                    Dim DimValue As Double
+                    Dimension.GetValueEx(DimValue, SolidEdgeFramework.seUnitsTypeConstants.seUnitsType_Document)
+                    s = String.Format("Detached dimension on sheet '{0}'.  Displayed value is '{1}'", ParentSheet.Name, DimValue)
+                    TaskLogger.AddMessage(s)
+                End If
+
+            Next
         End If
+    End Sub
+
+    Private Sub CheckDrawingViewOnBackgroundSheet(tmpSEDoc As SolidEdgeDraft.DraftDocument)
+
+        Dim UC As New UtilsCommon
+        Dim s As String
+
+        Dim BackgroundSheet As SolidEdgeDraft.Sheet
+        For Each BackgroundSheet In UC.GetSheets(tmpSEDoc, "Background")
+            If BackgroundSheet.DrawingViews.Count > 0 Then
+                s = String.Format("Drawing view on background sheet '{0}'", BackgroundSheet.Name)
+                If Not TaskLogger.ContainsMessage(s) Then TaskLogger.AddMessage(s)
+
+            End If
+        Next
+
+    End Sub
+
+    Private Sub CheckDrawInView(tmpSEDoc As SolidEdgeDraft.DraftDocument)
+        Dim UC As New UtilsCommon
+
+        Dim s As String
+
+        Dim DrawingViews As SolidEdgeDraft.DrawingViews
+        Dim DVSheet As SolidEdgeDraft.Sheet
+
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+
+            DrawingViews = Sheet.DrawingViews
+            For Each DrawingView In DrawingViews.OfType(Of SolidEdgeDraft.DrawingView)()
+                If DrawingView.Sheet IsNot Nothing Then
+                    Dim Count As Integer = 0
+                    DVSheet = CType(DrawingView.Sheet, SolidEdgeDraft.Sheet)
+
+                    If DVSheet.Arcs2d IsNot Nothing Then Count += DVSheet.Arcs2d.Count
+                    If DVSheet.BsplineCurves2d IsNot Nothing Then Count += DVSheet.BsplineCurves2d.Count
+                    If DVSheet.Circles2d IsNot Nothing Then Count += DVSheet.Circles2d.Count
+                    If DVSheet.Conics2d IsNot Nothing Then Count += DVSheet.Conics2d.Count
+                    If DVSheet.Curves2d IsNot Nothing Then Count += DVSheet.Curves2d.Count
+                    If DVSheet.Ellipses2d IsNot Nothing Then Count += DVSheet.Ellipses2d.Count
+                    If DVSheet.EllipticalArcs2d IsNot Nothing Then Count += DVSheet.EllipticalArcs2d.Count
+                    If DVSheet.Lines2d IsNot Nothing Then Count += DVSheet.Lines2d.Count
+                    If DVSheet.LineStrings2d IsNot Nothing Then Count += DVSheet.LineStrings2d.Count
+                    If DVSheet.Points2d IsNot Nothing Then Count += DVSheet.Points2d.Count
+
+                    If Count > 0 Then
+                        s = String.Format("Draw-In-View graphics on sheet '{0}'", Sheet.Name)
+                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                        Exit For
+                    End If
+                End If
+            Next DrawingView
+        Next Sheet
+
+    End Sub
+
+    Private Sub CheckDimensionsOverridden(tmpSEDoc As SolidEdgeDraft.DraftDocument)
+
+        Dim UC As New UtilsCommon
+
+        Dim s As String
+
+        Dim Dimensions As SolidEdgeFrameworkSupport.Dimensions
+
+        For Each Sheet In UC.GetSheets(tmpSEDoc, "Working")
+
+            Dimensions = CType(Sheet.Dimensions, SolidEdgeFrameworkSupport.Dimensions)
+
+            If Dimensions IsNot Nothing Then
+
+                For Each Dimension As SolidEdgeFrameworkSupport.Dimension In Dimensions
+
+                    If Dimension.OverrideString IsNot Nothing AndAlso Not Dimension.OverrideString = "" Then
+                        s = String.Format("Not-To-Scale dimensions on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Dimension.OverrideString)
+                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                    End If
+
+                    If Dimension.DisplayType = SolidEdgeFrameworkSupport.DimDispTypeConstants.igDimDisplayTypeBlank Then
+                        s = String.Format("Hidden dimension values on sheet '{0}'.  Displayed text is '", Sheet.Name)
+                        Dim TextList As New List(Of String)
+                        TextList.AddRange({Dimension.PrefixString, Dimension.SuperfixString, Dimension.SubfixString, Dimension.SubfixString2, Dimension.SuffixString})
+                        Dim s1 As String = ""
+                        For Each s2 As String In TextList
+                            If Not s2 = "" Then
+                                If s1 = "" Then
+                                    s = String.Format("{0}{1}", s, s2)
+                                Else
+                                    s = String.Format("{0} {1}", s, s2)
+                                End If
+                            End If
+                        Next
+                        s = String.Format("{0}'", s)
+                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                    End If
+
+                Next
+
+            End If
+
+        Next Sheet
 
     End Sub
 
@@ -270,6 +413,22 @@ Public Class TaskCheckDrawings
 
         RowIndex += 1
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.DrawInView.ToString, "Drawing views have Draw In View graphics")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
+        CheckBox = FormatOptionsCheckBox(ControlNames.DimensionsOverridden.ToString, "Overridden or hidden dimension values")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.AutoHideOptions.ToString, ManualOptionsOnlyString)
         'CheckBox.Checked = True
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
@@ -282,12 +441,20 @@ Public Class TaskCheckDrawings
 
     Public Overrides Sub CheckStartConditions(ErrorLogger As Logger)
 
+        Dim tf As Boolean
+
         If Me.IsSelectedTask Then
             If Not (Me.IsSelectedAssembly Or Me.IsSelectedPart Or Me.IsSelectedSheetmetal Or Me.IsSelectedDraft) Then
                 ErrorLogger.AddMessage("Select at least one type of file to process")
             End If
 
-            If Not (Me.DrawingViewsOutOfDate Or Me.DetachedDimensionsOrAnnotations Or Me.DrawingViewOnBackgroundSheet) Then
+            tf = Me.DrawingViewsOutOfDate
+            tf = tf Or Me.DetachedDimensionsOrAnnotations
+            tf = tf Or Me.DrawingViewOnBackgroundSheet
+            tf = tf Or Me.DrawInView
+            tf = tf Or Me.DimensionsOverridden
+
+            If Not tf Then
                 ErrorLogger.AddMessage("Select at least one type of drawing error to check")
             End If
 
@@ -312,6 +479,12 @@ Public Class TaskCheckDrawings
             Case ControlNames.DrawingViewOnBackgroundSheet.ToString
                 Me.DrawingViewOnBackgroundSheet = Checkbox.Checked
 
+            Case ControlNames.DrawInView.ToString
+                Me.DrawInView = Checkbox.Checked
+
+            Case ControlNames.DimensionsOverridden.ToString
+                Me.DimensionsOverridden = Checkbox.Checked
+
             Case ControlNames.AutoHideOptions.ToString
                 Me.TaskControl.AutoHideOptions = Checkbox.Checked
                 If Not Me.AutoHideOptions = TaskControl.AutoHideOptions Then
@@ -324,7 +497,6 @@ Public Class TaskCheckDrawings
 
     End Sub
 
-
     Private Function GetHelpText() As String
         Dim HelpString As String
         HelpString = "Checks draft files for various problems. "
@@ -336,6 +508,8 @@ Public Class TaskCheckDrawings
         HelpString += vbCrLf + "- `Detached dimensions or annotations`: Checks that dimensions, "
         HelpString += "balloons, callouts, etc. are attached to geometry in the drawing. "
         HelpString += vbCrLf + "- `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. "
+        HelpString += vbCrLf + "- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. "
+        HelpString += vbCrLf + "- `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. "
 
         Return HelpString
     End Function

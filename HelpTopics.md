@@ -1052,6 +1052,8 @@ The options are:
 - `Drawing views out of date`: Checks if any drawing views are not up to date. 
 - `Detached dimensions or annotations`: Checks that dimensions, balloons, callouts, etc. are attached to geometry in the drawing. 
 - `Drawing view on background sheet`: Checks background sheets for the presence of drawing views. 
+- `Drawing view has Draw In View graphics`: Checks if any drawing view was modified with the Draw In View command. 
+- `Overridden dimensions`: Checks if any dimensions are not to scale, or have the value hidden. 
 
 </details>
 
