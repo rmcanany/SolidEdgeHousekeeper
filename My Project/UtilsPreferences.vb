@@ -229,6 +229,14 @@ Public Class UtilsPreferences
         Return String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
     End Function
 
+    'Public Function GetHelpfileBaseURLFilenameForDevs() As String
+    '    Dim s As String = String.Format("{0}\HelpfileBaseURL.txt", GetStartupDirectory)
+
+    '    s = s.Replace("\bin\Release", "")
+
+    '    Return s
+    'End Function
+
 
     '###### FILENAME CHARMAP ######
     Public Sub CreateFilenameCharmap()

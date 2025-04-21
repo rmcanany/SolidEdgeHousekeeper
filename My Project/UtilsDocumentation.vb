@@ -15,6 +15,7 @@ Public Class UtilsDocumentation
         ' To update the base URL, run Housekeeper in Release mode, then <CTRL><ALT>-click the main Help button.
 
         Dim UP As New UtilsPreferences
+
         Dim Filename As String = UP.GetHelpfileBaseURLFilename
         Dim VersionURL As String = ""
 
@@ -72,9 +73,13 @@ Public Class UtilsDocumentation
 
         BaseURL = String.Format("https://github.com/rmcanany/SolidEdgeHousekeeper/blob/{0}/HelpTopics.md", CommitString)
         Outlist.Add(BaseURL)
-        HelpfileBaseURLFilename = UP.GetHelpfileBaseURLFilename
 
+        HelpfileBaseURLFilename = UP.GetHelpfileBaseURLFilename
         IO.File.WriteAllLines(HelpfileBaseURLFilename, Outlist)
+
+        'Dim HelpfileBaseURLFilenameForDevs = UP.GetHelpfileBaseURLFilenameForDevs
+        'IO.File.WriteAllLines(HelpfileBaseURLFilenameForDevs, Outlist)
+
 
         If HelpfileBaseURLFilename.Contains(UP.GetHardCodedPath) Then
             MsgBox(String.Format("Updated BaseURL '{0}'", BaseURL))

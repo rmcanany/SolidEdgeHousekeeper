@@ -152,7 +152,7 @@ Public Class TaskUpdateDrawingViews
 
     Private Function GetHelpText() As String
         Dim HelpString As String
-        HelpString = "Checks drawing views one by one, and updates them if needed."
+        HelpString = "Checks drawing views and parts lists, and updates them if needed."
 
         Return HelpString
     End Function

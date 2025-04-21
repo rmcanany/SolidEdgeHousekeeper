@@ -3,6 +3,19 @@
 Public Class TaskCheckDrawings
     Inherits Task
 
+    Private _CheckAll As Boolean
+    Public Property CheckAll As Boolean
+        Get
+            Return _CheckAll
+        End Get
+        Set(value As Boolean)
+            _CheckAll = value
+            If Me.TaskOptionsTLP IsNot Nothing Then
+                CType(ControlsDict(ControlNames.CheckAll.ToString), CheckBox).Checked = value
+            End If
+        End Set
+    End Property
+
     Private _DrawingViewsOutOfDate As Boolean
     Public Property DrawingViewsOutOfDate As Boolean
         Get
@@ -83,6 +96,7 @@ Public Class TaskCheckDrawings
 
 
     Enum ControlNames
+        CheckAll
         DrawingViewsOutOfDate
         DetachedDimensionsOrAnnotations
         DrawingViewOnBackgroundSheet
@@ -389,6 +403,14 @@ Public Class TaskCheckDrawings
 
         RowIndex = 0
 
+        CheckBox = FormatOptionsCheckBox(ControlNames.CheckAll.ToString, "Check all")
+        AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
+        tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
+        tmpTLPOptions.SetColumnSpan(CheckBox, 2)
+        ControlsDict(CheckBox.Name) = CheckBox
+
+        RowIndex += 1
+
         CheckBox = FormatOptionsCheckBox(ControlNames.DrawingViewsOutOfDate.ToString, "Out of date drawing views")
         AddHandler CheckBox.CheckedChanged, AddressOf CheckBoxOptions_Check_Changed
         tmpTLPOptions.Controls.Add(CheckBox, 0, RowIndex)
@@ -466,10 +488,34 @@ Public Class TaskCheckDrawings
     Public Sub CheckBoxOptions_Check_Changed(sender As System.Object, e As System.EventArgs)
         Dim Checkbox = CType(sender, CheckBox)
         Dim Name = Checkbox.Name
-        'Dim Ctrl As Control
-        'Dim Button As Button
 
         Select Case Name
+
+            Case ControlNames.CheckAll.ToString
+                Me.CheckAll = Checkbox.Checked
+
+                If Me.CheckAll Then
+                    Me.DrawingViewsOutOfDate = True
+                    Me.DetachedDimensionsOrAnnotations = True
+                    Me.DrawingViewOnBackgroundSheet = True
+                    Me.DrawInView = True
+                    Me.DimensionsOverridden = True
+
+                    CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.DrawInView.ToString), CheckBox).Checked = True
+                    CType(ControlsDict(ControlNames.DimensionsOverridden.ToString), CheckBox).Checked = True
+
+                End If
+
+                CType(ControlsDict(ControlNames.DrawingViewsOutOfDate.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.DetachedDimensionsOrAnnotations.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.DrawingViewOnBackgroundSheet.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.DrawInView.ToString), CheckBox).Visible = Not Checkbox.Checked
+                CType(ControlsDict(ControlNames.DimensionsOverridden.ToString), CheckBox).Visible = Not Checkbox.Checked
+
+
             Case ControlNames.DrawingViewsOutOfDate.ToString
                 Me.DrawingViewsOutOfDate = Checkbox.Checked
 
