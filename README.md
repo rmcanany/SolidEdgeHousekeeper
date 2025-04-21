@@ -734,7 +734,7 @@ An annoyance of this command is that it opens the DesignForCost Edgebar pane, bu
 
 <details><summary><h3 style="margin:0px; display:inline-block"><img src="My%20Project/media/spacer.png"><img src="Resources/TaskUpdateDrawingViews.png"><img src="My%20Project/media/spacer.png">Update drawing views</h3></summary>
 
-Checks drawing views one by one, and updates them if needed.
+Checks drawing views and parts lists, and updates them if needed.
 
 </details>
 

@@ -348,6 +348,7 @@ Public Class TaskCheckDrawings
         Dim UC As New UtilsCommon
 
         Dim s As String
+        Dim tf As Boolean
 
         Dim Dimensions As SolidEdgeFrameworkSupport.Dimensions
 
@@ -359,27 +360,38 @@ Public Class TaskCheckDrawings
 
                 For Each Dimension As SolidEdgeFrameworkSupport.Dimension In Dimensions
 
-                    If Dimension.OverrideString IsNot Nothing AndAlso Not Dimension.OverrideString = "" Then
-                        s = String.Format("Not-To-Scale dimensions on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Dimension.OverrideString)
-                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
-                    End If
+                    ' Detached dimensions populate the override string with last known value.
+                    ' Suppressing double-reporting.
 
-                    If Dimension.DisplayType = SolidEdgeFrameworkSupport.DimDispTypeConstants.igDimDisplayTypeBlank Then
-                        s = String.Format("Hidden dimension values on sheet '{0}'.  Displayed text is '", Sheet.Name)
-                        Dim TextList As New List(Of String)
-                        TextList.AddRange({Dimension.PrefixString, Dimension.SuperfixString, Dimension.SubfixString, Dimension.SubfixString2, Dimension.SuffixString})
-                        Dim s1 As String = ""
-                        For Each s2 As String In TextList
-                            If Not s2 = "" Then
-                                If s1 = "" Then
-                                    s = String.Format("{0}{1}", s, s2)
-                                Else
-                                    s = String.Format("{0} {1}", s, s2)
+                    tf = Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusDetached
+                    tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seDimStatusError
+                    tf = tf Or Dimension.StatusOfDimension = SolidEdgeFrameworkSupport.DimStatusConstants.seOneEndDetached
+
+                    If Not tf Then
+
+                        If Dimension.OverrideString IsNot Nothing AndAlso Not Dimension.OverrideString = "" Then
+                            s = String.Format("Not-To-Scale dimensions on sheet '{0}'.  Displayed text is '{1}'", Sheet.Name, Dimension.OverrideString)
+                            If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                        End If
+
+                        If Dimension.DisplayType = SolidEdgeFrameworkSupport.DimDispTypeConstants.igDimDisplayTypeBlank Then
+                            s = String.Format("Hidden dimension values on sheet '{0}'.  Displayed text is '", Sheet.Name)
+                            Dim TextList As New List(Of String)
+                            TextList.AddRange({Dimension.PrefixString, Dimension.SuperfixString, Dimension.SubfixString, Dimension.SubfixString2, Dimension.SuffixString})
+                            Dim s1 As String = ""
+                            For Each s2 As String In TextList
+                                If Not s2 = "" Then
+                                    If s1 = "" Then
+                                        s = String.Format("{0}{1}", s, s2)
+                                    Else
+                                        s = String.Format("{0} {1}", s, s2)
+                                    End If
                                 End If
-                            End If
-                        Next
-                        s = String.Format("{0}'", s)
-                        If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                            Next
+                            s = String.Format("{0}'", s)
+                            If Not TaskLogger.GetMessages.Contains(s) Then TaskLogger.AddMessage(s)
+                        End If
+
                     End If
 
                 Next
