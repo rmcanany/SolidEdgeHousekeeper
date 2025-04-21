@@ -626,7 +626,8 @@ For details, see the [<ins>**Property Filter**</ins>](#property-filter) section
 - `Check for newer version at startup`
 Uses GitHub's API to get the most recent version and compare it to the running version.  Not everyone wants programs to access outside resources like that.  Feel free to disable it if desired; it won't hurt anything.
 - `Remind me if I need to update the file list`
-This is to tell the user that the file list is not automatically populated when folders are selected.  There are reasons, but it is confusing for new users.  It's very annoying and you'll want to disable it right away.
+This is to tell the user that the file list is not automatically populated when folders are selected.  There are reasons, but it is confusing for new users.  The constant reminder is very annoying.  You'll want to disable it right away.
+- 
 </details>
 
 </details>

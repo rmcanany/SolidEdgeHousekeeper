@@ -1318,8 +1318,8 @@ Public Class Form_Main
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
-        If Not Me.TCItemIDRx Is Nothing AndAlso Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
-        If Not Me.TCRevisionRx Is Nothing AndAlso Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
+        If Me.TCItemIDRx Is Nothing OrElse Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
+        If Me.TCRevisionRx Is Nothing OrElse Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
 
         If Not Presets Then Splash.UpdateStatus("Wrapping up")
 

@@ -95,7 +95,7 @@ Fixed an issue where certain missing links were not captured.
 
 ### Other
 
-Fixed an issue where the `List update frequency` and `LinkMgt.txt` were not properly initialized on startup.  (Thank you **@64Pacific!** and **@john.matthews3452!**)
+Fixed an issue where the `List update frequency` and several other variables were not properly initialized the first time running the program.  (Thank you **@64Pacific!** and **@john.matthews3452!**)
 
 Fixed an issue in Top Level Assembly Search where in certain cases folders could be searched more than once.
 
