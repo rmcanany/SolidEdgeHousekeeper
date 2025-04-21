@@ -907,6 +907,18 @@ Public Class Form_Main
         End Set
     End Property
 
+    Private _RemindFilelistUpdate As Boolean
+    Public Property RemindFilelistUpdate As Boolean
+        Get
+            Return _RemindFilelistUpdate
+        End Get
+        Set(value As Boolean)
+            _RemindFilelistUpdate = value
+            If Me.TabControl1 IsNot Nothing Then
+                CheckBoxRemindFilelistUpdate.Checked = value
+            End If
+        End Set
+    End Property
 
 
     '###### HOME TAB ######
@@ -1218,7 +1230,7 @@ Public Class Form_Main
 
         CarIcona()
 
-        If (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
+        If (Not Me.LinkManagementFilename Is Nothing) AndAlso (Not Me.LinkManagementFilename.Trim = "") AndAlso (IO.File.Exists(Me.LinkManagementFilename)) Then
             Me.LinkManagementOrder = UP.GetLinkManagementOrder()
         End If
 
@@ -1306,8 +1318,8 @@ Public Class Form_Main
 
         If Not IsNumeric(ListViewUpdateFrequency) Then ListViewUpdateFrequency = "1"
 
-        If Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
-        If Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
+        If Not Me.TCItemIDRx Is Nothing AndAlso Me.TCItemIDRx.Trim = "" Then TCItemIDRx = ".*"
+        If Not Me.TCRevisionRx Is Nothing AndAlso Me.TCRevisionRx.Trim = "" Then TCRevisionRx = ".*"
 
         If Not Presets Then Splash.UpdateStatus("Wrapping up")
 
@@ -1709,6 +1721,14 @@ Public Class Form_Main
             End If
 
             ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
+            End If
+
         End If
 
     End Sub
@@ -1741,6 +1761,13 @@ Public Class Form_Main
                 Next
 
                 ListViewFilesOutOfDate = True
+
+                If Me.RemindFilelistUpdate Then
+                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                    MsgBox(s, vbOKOnly)
+                End If
 
             End If
         Else
@@ -1796,6 +1823,14 @@ Public Class Form_Main
 
                 ListViewFilesOutOfDate = True
 
+                If Me.RemindFilelistUpdate Then
+                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                    MsgBox(s, vbOKOnly)
+                End If
+
+
             End If
 
         Else
@@ -1850,6 +1885,14 @@ Public Class Form_Main
             End If
 
             Me.ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
+            End If
+
         End If
     End Sub
 
@@ -1887,6 +1930,14 @@ Public Class Form_Main
             If Not ListViewSources.Items.ContainsKey(tmpItem.Name) Then ListViewSources.Items.Add(tmpItem) : ListViewSources.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
             ListViewFilesOutOfDate = True
+
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
+            End If
+
         End If
 
     End Sub
@@ -1925,6 +1976,14 @@ Public Class Form_Main
 
             ListViewFilesOutOfDate = True
 
+            If Me.RemindFilelistUpdate Then
+                Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                MsgBox(s, vbOKOnly)
+            End If
+
+
         End If
 
     End Sub
@@ -1957,6 +2016,14 @@ Public Class Form_Main
                 Next
 
                 ListViewFilesOutOfDate = True
+
+                If Me.RemindFilelistUpdate Then
+                    Dim s As String = String.Format("The file list is out of date.{0}", vbCrLf)
+                    s = String.Format("{0}When you are done with setup, press the orange Update button to populate the list.{1}{1}", s, vbCrLf)
+                    s = String.Format("{0}(Disable this message on the Configuration Tab -- General Page)", s, vbCrLf)
+                    MsgBox(s, vbOKOnly)
+                End If
+
 
             End If
 
@@ -3869,13 +3936,10 @@ Public Class Form_Main
 
     End Sub
 
-    'Private Sub BT_AddTeamCenter_Click(sender As Object, e As EventArgs) Handles BT_AddTeamCenter.Click
-    '    Dim FTCA As New FormTeamCenterAdd(Me)
-    '    Dim Result As DialogResult = FTCA.ShowDialog()
-    '    If Result = DialogResult.OK Then
-    '        Me.ListViewFilesOutOfDate = False
-    '    End If
-    'End Sub
+    Private Sub CheckBoxRemindFilelistUpdate_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxRemindFilelistUpdate.CheckedChanged
+        Me.RemindFilelistUpdate = CheckBoxRemindFilelistUpdate.Checked
+    End Sub
+
 End Class
 
 
